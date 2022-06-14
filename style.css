@@ -1,17 +1,19 @@
 /*
 Theme Name: ShopperExpress
-Theme URI: 
-Author: Anonymous
+Theme URI: https://github.com/shopperexpress/shopperexpress
+Author: ShopperExpress
 Author URI: 
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: 1
+Version: 1.1
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: shopperexpress
+GitHub Theme URI: shopperexpress/shopperexpress
+GitHub Theme URI: https://github.com/shopperexpress/shopperexpress
 */
 
 @font-face {
@@ -8070,4 +8072,4 @@ textarea.form-control {
 		box-shadow: 0 -2.6em 0 0 rgba(var(--primary-rgb), .2), 1.8em -1.8em 0 0 rgba(var(--primary-rgb), .2), 2.5em 0 0 0 rgba(var(--primary-rgb), .2), 1.75em 1.75em 0 0 rgba(var(--primary-rgb), .2), 0 2.5em 0 0 rgba(var(--primary-rgb), .2), -1.8em 1.8em 0 0 rgba(var(--primary-rgb), .5), -2.6em 0 0 0 rgba(var(--primary-rgb), .7), -1.8em -1.8em 0 0 var(--primary);
 	}
 }
-
+
