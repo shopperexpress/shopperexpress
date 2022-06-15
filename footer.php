@@ -72,7 +72,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 			<?php endif; ?>
 			<div class="row">
 				<div class="col-sm-6">
-					<span class="copyright">© <?php echo date('Y'); ?> <?php if( $link = get_field( 'copyright', 'options' ) ){ echo wps_get_link($link); } ?></span>
+					<span class="copyright"><?php _e('Version','shopperexpress'); ?> <?php echo wp_get_theme()->get( 'Version' ); ?> © <?php echo date('Y'); ?> <?php if( $link = get_field( 'copyright', 'options' ) ){ echo wps_get_link($link); } ?></span>
 				</div>
 				<div class="col-sm-6">
 					<?php if ( $text_right_side = get_field( 'text_right_side', 'options' ) ): ?>
