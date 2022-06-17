@@ -39,7 +39,6 @@ while ( $query->have_posts() ) : $query->the_post();
 	$payment[] = wps_get_term( get_the_id(), 'loan-payment');
 endwhile;
 wp_reset_query();
-
 $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 ?>
 <form action="<?php echo $permalink; ?>" class="filter-section">
@@ -56,29 +55,35 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 					<input type="checkbox" id="pre-owned" value="used" name="condition[]"<?php if( $condition == 'used' ): ?> checked<?php endif; ?>>
 				</label>
 			</div>
-			<div class="filter-row range-row">
-				<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
-				<div class="range-box">
-					<div class="value-row">
-						<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($price))); ?></span></span>
-						<span class="range-value">$<span class="max-price"><?php echo number_format(max($price)); ?></span></span>
+			<?php if ( !empty( $price ) ) : ?>
+				<div class="filter-row range-row">
+					<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
+					<div class="range-box">
+						<div class="value-row">
+							<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($price))); ?></span></span>
+							<span class="range-value">$<span class="max-price"><?php echo number_format(max($price)); ?></span></span>
+						</div>
+						<input id="range-price" value="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>, <?php echo max($price); ?>" min="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>" max="<?php echo max($price); ?>" step="10" type="range" multiple >
+						<input type="hidden" name="value">
 					</div>
-					<input id="range-price" value="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>, <?php echo max($price); ?>" min="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>" max="<?php echo max($price); ?>" step="10" type="range" multiple >
-					<input type="hidden" name="value">
 				</div>
-			</div>
-			<div class="filter-row range-row">
-				<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
-				<div class="range-box">
-					<div class="value-row">
-						<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($payment))); ?></span></span>
-						<span class="range-value">$<span class="max-price"><?php echo number_format(max($payment)); ?></span></span>
+				<?php
+			endif;
+			if ( !empty( $payment ) ) :
+				?>
+				<div class="filter-row range-row">
+					<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
+					<div class="range-box">
+						<div class="value-row">
+							<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($payment))); ?></span></span>
+							<span class="range-value">$<span class="max-price"><?php echo number_format(max($payment)); ?></span></span>
+						</div>
+						<input id="range-payment" value="<?php echo intval(min(array_filter($payment))); ?>, <?php echo intval(max($payment)); ?>" min="<?php echo min(array_filter($payment)); ?>" max="<?php echo max($payment); ?>" step="10" type="range" multiple >
+						<input type="hidden" name="payment">
 					</div>
-					<input id="range-payment" value="<?php echo intval(min(array_filter($payment))); ?>, <?php echo intval(max($payment)); ?>" min="<?php echo min(array_filter($payment)); ?>" max="<?php echo max($payment); ?>" step="10" type="range" multiple >
-					<input type="hidden" name="payment">
 				</div>
-			</div>
-			<?php 
+				<?php
+			endif;
 			echo child_automotive_listing_generate_search_dropdown(['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'],3);
 			?>
 		</aside>
