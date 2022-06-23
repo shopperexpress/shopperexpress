@@ -559,3 +559,7 @@
 .jcf-select-drop .jcf-list-content {
 	max-height: 300px !important;
 }
+
+.card-head{
+	text-transform: capitalize;
+}
