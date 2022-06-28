@@ -38,7 +38,7 @@ while (have_posts()) : the_post();
 						</ul>
 						<div class="detail-slider-holder">
 							<?php
-							if ( count($gallery) > 1 ) {
+							if ( is_array($gallery) && count($gallery) > 1 ) {
 								array_shift($gallery);
 							}
 							$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png'; ?>
