@@ -35,8 +35,8 @@ $price = $payment = [];
 
 while ( $query->have_posts() ) : $query->the_post();
 	$price[] = get_field( 'price' );
-	$payment[] = wps_get_term( get_the_id(), 'lease-payment');
-	$payment[] = wps_get_term( get_the_id(), 'loan-payment');
+	$payment[wps_get_term( get_the_id(), 'lease-payment')] = wps_get_term( get_the_id(), 'lease-payment');
+	$payment[wps_get_term( get_the_id(), 'loan-payment')] = wps_get_term( get_the_id(), 'loan-payment');
 endwhile;
 wp_reset_query();
 
@@ -57,7 +57,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 					<input type="checkbox" id="pre-owned" value="used" name="condition[]"<?php if( $condition == 'used' ): ?> checked<?php endif; ?>>
 				</label>
 			</div>
-			<?php if ( !empty($price) ) : ?>
+			<?php if ( !empty($price) && count(array_unique($price)) > 1 ) : ?>
 				<div class="filter-row range-row">
 					<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
 					<div class="range-box">
@@ -71,7 +71,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 				</div>
 				<?php
 			endif;
-			if ( !empty($payment) ) :
+			if ( !empty($payment) && count(array_unique($payment)) > 1 ) :
 				?>
 				<div class="filter-row range-row">
 					<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
@@ -125,13 +125,6 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 					'post_status' 		  => 'publish',
 					'ignore_sticky_posts' => true,
 					'posts_per_page'      => -1,
-					'meta_query' => [
-						[
-							'key' => 'sold',
-							'value' => 'Yes',
-							'compare' => '!='
-						]
-					]
 				);
 
 				if ( $condition ) {

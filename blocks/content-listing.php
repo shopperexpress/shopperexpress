@@ -9,11 +9,15 @@
 			<a href="<?php the_permalink(); ?>">
 				<div class="card-img">
 					<?php
-					if ( $gallery = get_field( 'gallery' ) ):
-						if( isset($gallery[0]) ):
-							echo '<img src="'.$gallery[0]['image_url'].'" alt="image">';
+					$gallery = get_field( 'gallery' );
+					if ( !empty( $gallery ) && count($gallery) >= 1 ) {
+						$gallery =  isset($gallery[0]) && !empty($gallery[0]['image_url']) ? $gallery[0]['image_url'] : $gallery[1]['image_url'];
+					}else{
+						$gallery = null;
+					}
 
-						endif;
+					if ( $gallery ):
+							echo '<img src="'.$gallery.'" alt="image">';
 					else:
 						$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png';
 						?>
