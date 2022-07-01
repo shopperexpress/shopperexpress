@@ -12,20 +12,6 @@ $args = array(
 	'post_status' => 'publish',
 	'ignore_sticky_posts' => true,
 	'posts_per_page'         => -1,
-	'meta_query' => [
-		[
-			'key' => 'sold',
-			'value' => 'Yes',
-			'compare' => '!='
-		],
-	],
-	'tax_query' => [
-		[
-			'taxonomy' => 'condition',
-			'terms'    => 'new',
-			'field'    => 'slug',
-		]
-	],
 	's' => $search
 );
 
