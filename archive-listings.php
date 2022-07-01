@@ -39,6 +39,8 @@ while ( $query->have_posts() ) : $query->the_post();
 	$payment[] = wps_get_term( get_the_id(), 'loan-payment');
 endwhile;
 wp_reset_query();
+
+
 $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 ?>
 <form action="<?php echo $permalink; ?>" class="filter-section">
@@ -55,7 +57,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 					<input type="checkbox" id="pre-owned" value="used" name="condition[]"<?php if( $condition == 'used' ): ?> checked<?php endif; ?>>
 				</label>
 			</div>
-			<?php if ( !empty( $price ) ) : ?>
+			<?php if ( !empty($price) ) : ?>
 				<div class="filter-row range-row">
 					<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
 					<div class="range-box">
@@ -69,7 +71,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 				</div>
 				<?php
 			endif;
-			if ( !empty( $payment ) ) :
+			if ( !empty($payment) ) :
 				?>
 				<div class="filter-row range-row">
 					<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
@@ -82,8 +84,8 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 						<input type="hidden" name="payment">
 					</div>
 				</div>
-				<?php
-			endif;
+			<?php endif; ?>
+			<?php 
 			echo child_automotive_listing_generate_search_dropdown(['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'],3);
 			?>
 		</aside>

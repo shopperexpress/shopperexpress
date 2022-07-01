@@ -207,7 +207,7 @@ while (have_posts()) : the_post();
 										switch ( $show_payment ) {
 											case 'lease-payment':
 											if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-												$lease_payment = !empty($lease_payment) && $lease_payment != 'None' ? '$' . number_format($lease_payment) : null;
+												$lease_payment = !empty($lease_payment) && $lease_payment != 'None' ? '$' . number_format(floatval($lease_payment)) : null;
 												$text = !empty($lease_payment) ? '<span class="savings">$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress') .'</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 											}else{
 												$text = null;
