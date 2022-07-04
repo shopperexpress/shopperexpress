@@ -26,7 +26,7 @@ while (have_posts()) : the_post();
 		$textCondition = __('MSRP','shopperexpress');
 		break;
 	}
- ?>
+	?>
 	<div class="detail-section">
 		<div class="container">
 			<div class="row">
@@ -91,23 +91,23 @@ while (have_posts()) : the_post();
 									
 									switch ( get_sub_field( 'event' ) ) {
 										case 1:
-											$event = "launchDM('" . $location . "','". $vin_number . "','Loan');";
-											break;
+										$event = "launchDM('" . $location . "','". $vin_number . "','Loan');";
+										break;
 										case 2:
-											$event = "launchTM('" . $location . "','". $vin_number ."');";
-											break;
+										$event = "launchTM('" . $location . "','". $vin_number ."');";
+										break;
 										case 3:
-											$event = "launchLOM('" . $location . "','". $vin_number ."');";
-											break;
+										$event = "launchLOM('" . $location . "','". $vin_number ."');";
+										break;
 										case 4:
-											$event = "launchLM('" . $location . "','". $vin_number ."');";
-											break;
+										$event = "launchLM('" . $location . "','". $vin_number ."');";
+										break;
 										case 5:
-											$event = "launchDM('" . $location . "','". $vin_number ."','Lease');";
-											break;
+										$event = "launchDM('" . $location . "','". $vin_number ."','Lease');";
+										break;
 										case 6:
-											$event = "launchECO('" . $location ."','','','','','". $vin_number ."');";
-											break;
+										$event = "launchECO('" . $location ."','','','','','". $vin_number ."');";
+										break;
 									}
 									?>
 									<li><a href="#" onclick="javascript:inticeAllEvents.<?php echo $event; ?>" data-toggle="tooltip" data-placement="top" title="<?php the_sub_field( 'tooltip' ); ?>"><?php echo wp_get_attachment_image($image['id'],'full'); ?><span class="decor-line"></span></a></li>
@@ -133,14 +133,14 @@ while (have_posts()) : the_post();
 						if ( $price>=0 ):
 							if($price>0){
 								$msrp = !empty(get_field( 'original_price' )) ? get_field( 'original_price' ) : $price;
-							 ?>
-							 <strong class="price"><span class="st">$<?php echo number_format($msrp); ?></span><sub><?php echo $textCondition; ?></sub></strong>
-						<?php }else{
-							?>
-							<strong class="price"><?php _e('Contact for Price', 'shopperexpress') ?></strong>
-							<?php 
-						} 
-					endif; ?>
+								?>
+								<strong class="price"><span class="st">$<?php echo number_format($msrp); ?></span><sub><?php echo $textCondition; ?></sub></strong>
+							<?php }else{
+								?>
+								<strong class="price"><?php _e('Contact for Price', 'shopperexpress') ?></strong>
+								<?php 
+							} 
+						endif; ?>
 						<?php if ( is_user_logged_in() && $price ){ ?>
 							<strong class="price savings">$<?php echo number_format($price) . '<sub>'.__('PRICE','shopperexpress').'</sub>'; ?></strong>
 						<?php }elseif( !is_user_logged_in() ){ ?>
@@ -182,23 +182,23 @@ while (have_posts()) : the_post();
 										
 										switch ( get_sub_field( 'event' ) ) {
 											case 1:
-												$event = "launchDM('" . $location . "','". $vin_number . "','Loan');";
-												break;
+											$event = "launchDM('" . $location . "','". $vin_number . "','Loan');";
+											break;
 											case 2:
-												$event = "launchTM('" . $location . "','". $vin_number ."');";
-												break;
+											$event = "launchTM('" . $location . "','". $vin_number ."');";
+											break;
 											case 3:
-												$event = "launchLOM('" . $location . "','". $vin_number ."');";
-												break;
+											$event = "launchLOM('" . $location . "','". $vin_number ."');";
+											break;
 											case 4:
-												$event = "launchLM('" . $location . "','". $vin_number ."');";
-												break;
+											$event = "launchLM('" . $location . "','". $vin_number ."');";
+											break;
 											case 5:
-												$event = "launchDM('" . $location . "','". $vin_number ."','Lease');";
-												break;
+											$event = "launchDM('" . $location . "','". $vin_number ."','Lease');";
+											break;
 											case 6:
-												$event = "launchECO('" . $location ."','','','','','". $vin_number ."');";
-												break;
+											$event = "launchECO('" . $location ."','','','','','". $vin_number ."');";
+											break;
 
 										}
 										
@@ -222,32 +222,41 @@ while (have_posts()) : the_post();
 										}
 										$title = get_sub_field( 'title' );
 										if( $condition != 'Used' || $title != 'Lease' ):
-											?>
-											<li>
-												<?php if( $lock == true && is_user_logged_in() ) echo '<a href="#" onclick="javascript:inticeAllEvents.' . $event . '">' ?>
-												<div class="text-holder">
-													<?php if ( $title ): ?>
-														<h4 class="h3"><?php echo $title; ?></h4>
-														<?php
-													endif;
-													the_sub_field( 'description' );
-													?>
-												</div>
-												<?php
-												if ( $lock == true && !is_user_logged_in() ) :
-													echo '<span class="unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><i class="material-icons">' . __('lock_open','shopperexpress') . '</i> ' . __('UNLOCK PAYMENT','shopperexpress') . '</span>';
-												elseif( $lock == true && is_user_logged_in() ):
-													echo '<strong class="price">' . $text . '</strong>';
-												endif;
-												if( $lock == true && is_user_logged_in() ) echo '</a>';
-												if( $lock == false  ):
-													?>
-													<a href="#" onclick="javascript:inticeAllEvents.<?php echo $event; ?>" class="btn btn-primary"><?php the_sub_field( 'text' ); ?></a>
-													<?php
-												endif;
+											if ( $lock == true && !empty($text) ) :
 												?>
-											</li>
-											<?php
+												<li>
+													<?php if( is_user_logged_in() ) echo '<a href="#" onclick="javascript:inticeAllEvents.' . $event . '">' ?>
+													<div class="text-holder">
+														<?php if ( $title ): ?>
+															<h4 class="h3"><?php echo $title; ?></h4>
+															<?php
+														endif;
+														the_sub_field( 'description' );
+														?>
+													</div>
+													<?php
+													if ( !is_user_logged_in() ) :
+														echo '<span class="unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><i class="material-icons">' . __('lock_open','shopperexpress') . '</i> ' . __('UNLOCK PAYMENT','shopperexpress') . '</span>';
+													elseif( is_user_logged_in() ):
+														echo '<strong class="price">' . $text . '</strong>';
+													endif;
+													if( is_user_logged_in() ) echo '</a>';
+													?>
+												</li>
+											<?php elseif( $lock == false ): ?>
+												<li>
+													<div class="text-holder">
+														<?php if ( $title ): ?>
+															<h4 class="h3"><?php echo $title; ?></h4>
+															<?php
+														endif;
+														the_sub_field( 'description' );
+														?>
+													</div>
+													<a href="#" onclick="javascript:inticeAllEvents.<?php echo $event; ?>" class="btn btn-primary"><?php the_sub_field( 'text' ); ?></a>
+												</li>
+												<?php
+											endif;
 										endif;
 									endwhile;
 									?>
