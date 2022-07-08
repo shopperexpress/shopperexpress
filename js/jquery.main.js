@@ -449,10 +449,8 @@ function initAjaxFiltering() {
 
 			updateSelects(dataItem, this.filterSelects);
 
-			inticeEvents.init({dealerGuid:DealerguID,dealerId:DealerID,lmprotocoldomain: 'https://tools.inticeinc.com',tmprotocoldomain: 'https://gettradevalue.com',dmprotocoldomain: 'https://my-dealmaker.com',lomprotocoldomain: 'https://my-loanmaker.com/'});
-			inticeAllEvents.init({dealerId:DealerID,lmprotocoldomain: 'https://tools.inticeinc.com',tmprotocoldomain: 'https://gettradevalue.com',dmprotocoldomain: 'https://my-dealmaker.com',lomprotocoldomain: 'https://my-loanmaker.com/'});
-			blockFrame.init({dealerGuId:DealerguID,dealerId:DealerID,lmprotocoldomain: 'https://tools.inticeinc.com',tmprotocoldomain: 'https://gettradevalue.com',dmprotocoldomain: 'https://my-dealmaker.com',lomprotocoldomain: 'https://my-loanmaker.com/'});
-		}
+			window.blockFrame.GetDealerInfoForMiniTools();
+					}
 	});
 
 	function updateSelects(dataItem, filterSelects) {

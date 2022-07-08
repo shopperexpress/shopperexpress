@@ -53,8 +53,6 @@
 			js: 'js/',
 			swf: 'swf/',
 		}
-		var DealerID = '<?php the_field('dealerId', 'option') ?>';
-		var DealerguID = '<?php the_field('dealerguid', 'option') ?>';
 	</script>
 	<?php
 endif;
