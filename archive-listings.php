@@ -25,24 +25,11 @@ while ( $query->have_posts() ) : $query->the_post();
 	$payment[wps_get_term( get_the_id(), 'loan-payment')] = wps_get_term( get_the_id(), 'loan-payment');
 endwhile;
 wp_reset_query();
-
-
-$condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 ?>
 <form action="<?php echo $permalink; ?>" class="filter-section">
 	<div class="main-holder">
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
-			<div class="filter-switcher">
-				<label class="item new" for="new">
-					<?php _e('New','shopperexpress'); ?>
-					<input type="checkbox" id="new" value="new" name="condition[]"<?php if( $condition == 'new' ): ?> checked<?php endif; ?>>
-				</label>
-				<label class="item pre-owned" for="pre-owned">
-					<?php _e('Pre-Owned','shopperexpress'); ?>
-					<input type="checkbox" id="pre-owned" value="used" name="condition[]"<?php if( $condition == 'used' ): ?> checked<?php endif; ?>>
-				</label>
-			</div>
 			<?php if ( !empty($price) && count(array_unique($price)) > 1 ) : ?>
 				<div class="filter-row range-row">
 					<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
@@ -72,7 +59,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 				</div>
 			<?php endif; ?>
 			<?php 
-			echo child_automotive_listing_generate_search_dropdown(['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'],3);
+			echo child_automotive_listing_generate_search_dropdown(['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'],3);
 			?>
 		</aside>
 		<div class="card-wrapp container-fluid">
@@ -113,21 +100,11 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null;
 					'posts_per_page'      => -1,
 				);
 
-				if ( $condition ) {
-					$args['tax_query'] = [
-						[
-							'taxonomy' => 'condition',
-							'field'    => 'slug',
-							'terms'    => [$condition],
-						]
-					];
-				}
-
 				if ( !empty(filter_args()) ) {
 					$args['tax_query'] = filter_args();
 				}
 
-				$terms = ['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
+				$terms = ['condition' ,'year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
 				$filter = [];
 				$query1 = new WP_Query( $args );
 

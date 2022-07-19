@@ -296,11 +296,11 @@ function filter_args(){
 
 		$term_value = !empty($_GET[$term]) ? $_GET[$term] : null;
 
-		if( !empty($term_value) && $term_value != 'all' && $term != 'condition' ){
+		if( !empty($term_value) && $term_value != 'all' ){
 
 			$term_value = !empty($_GET['ajax']) ? $term_value : explode(',', $term_value[0]);
 
-			if ( !in_array('all' , $term_value) ) {
+			if ( !in_array('all' , $term_value) && !empty( $term_value ) ) {
 
 				$array[] = [
 					'taxonomy' => $term,
@@ -310,15 +310,6 @@ function filter_args(){
 
 			}
 		}
-	}
-
-	if ( !empty($_GET['condition']) && !isset($_GET['condition'][1]) ) {
-
-		$array[] = [
-			'taxonomy' => 'condition',
-			'terms'    => [$_GET['condition'][0]],
-			'field'    => 'slug',
-		];
 	}
 
 	if ( !empty($_GET['yr']) && $_GET['yr'] != 'all' ) {
