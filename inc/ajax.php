@@ -405,7 +405,9 @@ function wps_listing_dropdown( $category, $prefix_text, $select_class, $other_op
 	echo '<label for="select-'. $select_name .'" class="filter-title">' . $label . '</label>';
 	echo'<select id="select-'. $select_name .'" multiple name="'. $select_name .'[]" class="filter" data-jcf=\'{"fakeDropInBody": false , "multipleCompactStyle": true}\'>';
 
-	echo "<option value='all'>All</option>\n";
+	if ( $category->name != 'condition' ) {
+		echo "<option value='all'>All</option>\n";
+	}
 
 	$args = ['taxonomy' => $category->name,'hide_empty' => true];
 	if( $category->name == 'year' ) $args['order'] = 'DESC';
