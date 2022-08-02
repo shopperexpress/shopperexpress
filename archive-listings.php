@@ -30,7 +30,7 @@ wp_reset_query();
 	<div class="main-holder">
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
-			<?php if ( !empty($price) && count(array_unique($price)) > 2 ) : ?>
+			<?php if ( !empty($price) && count(array_unique($price)) > 1 ) : ?>
 				<div class="filter-row range-row">
 					<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
 					<div class="range-box">
