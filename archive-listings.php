@@ -53,7 +53,7 @@ wp_reset_query();
 							<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($payment))); ?></span></span>
 							<span class="range-value">$<span class="max-price"><?php echo number_format(max($payment)); ?></span></span>
 						</div>
-						<input id="range-payment" value="<?php echo intval(min(array_filter($payment))); ?>, <?php echo intval(max($payment)); ?>" min="<?php echo min(array_filter($payment)); ?>" max="<?php echo max($payment); ?>" step="10" type="range" multiple >
+						<input id="range-payment" value="<?php echo intval(min(array_filter($payment))); ?>, <?php echo intval(max($payment)); ?>" min="<?php echo intval(min(array_filter($payment))); ?>" max="<?php echo intval(max($payment)); ?>" step="10" type="range" multiple >
 						<input type="hidden" name="payment">
 					</div>
 				</div>
