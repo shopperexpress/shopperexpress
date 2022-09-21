@@ -24,6 +24,7 @@
 					<dl class="card-detail"><?php echo offers_card_detail($post_id); ?></dl>
 				<?php endif; ?>
 				<?php
+				$price = get_field( 'price' );
 				$down_payment = wps_get_term( $post_id, 'down-payment');
 				$lease_payment = wps_get_term( $post_id, 'lease-payment');
 				$loan_payment = wps_get_term( $post_id, 'loan-payment');
@@ -49,7 +50,8 @@
 								switch ( $show_payment ) {
 									case 'lease-payment':
 									if ( $down_payment && $lease_payment ) {
-										$lease_payment = !empty($lease_payment) ? '$' . number_format($lease_payment) : null;
+	
+										$lease_payment = !empty($lease_payment) ? '$' . $lease_payment : null;
 										$text = !empty($lease_payment) ? '$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress') .'<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
 									}else{
 										$text = null;
