@@ -28,7 +28,7 @@ function register_user() {
 		<adf>
 		<prospect>
 		<id source="shopperexpress" sequence="1"></id>
-		<requestdate>' . date() . '</requestdate>
+		<requestdate>' . date( 'm-d-Y' ) . '</requestdate>
 		<customer>
 		<contact primarycontact="1">
 		<name part="first">' . $first_name . '</name>
