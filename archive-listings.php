@@ -107,8 +107,26 @@ wp_reset_query();
 				$terms = ['condition' ,'year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
 				$filter = [];
 				$query1 = new WP_Query( $args );
-
+				$payment = explode(',',$_GET['payment']);
+				$posts = [];
 				while ( $query1->have_posts() ) : $query1->the_post();
+
+					if ( $payment ) {
+						$lease_payment = wps_get_term( get_the_id(), 'lease-payment');
+						$loan_payment = wps_get_term( get_the_id(), 'loan-payment');
+
+						if ( (intval($payment[0]) <= intval($loan_payment) && intval($payment[1]) >= intval($loan_payment))  ) {
+							$posts[] = get_the_id();
+						}else{
+							$posts[] = null;
+						}
+						if ( intval($payment[0]) <= intval($lease_payment) && intval($payment[1]) >= intval($lease_payment) ) {
+							$posts[] = get_the_id();
+						}else{
+							$posts[] = null;
+						}
+					}
+					
 					foreach ( $terms as $term ) {
 						$taxonomy = get_the_terms( get_the_id(), $term );
 						if ( !empty( $taxonomy ) ){
@@ -123,6 +141,8 @@ wp_reset_query();
 				echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
 
 				$args['posts_per_page']	= 24;
+
+				if ( !empty( $posts ) ) $args['post__in'] = $posts;
 
 				$query = new WP_Query( $args );
 
