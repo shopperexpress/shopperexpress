@@ -46,8 +46,8 @@ wp_reset_query();
 			endif;
 			if ( !empty($payment) && count(array_unique($payment)) > 2 ) :
 				$val = explode(',',$_GET['payment']);
-				$val_min = !empty( $val ) ? $val[0] : number_format(min(array_filter($payment)));
-				$val_max = !empty( $val ) ? $val[1] : number_format(max($payment));
+				$val_min = !empty( $val[0] ) ? $val[0] : number_format(min(array_filter($payment)));
+				$val_max = !empty( $val[1] ) ? $val[1] : number_format(max($payment));
 				?>
 				<div class="filter-row range-row">
 					<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
@@ -56,7 +56,7 @@ wp_reset_query();
 							<span class="range-value">$<span class="min-price"><?php echo $val_min; ?></span></span>
 							<span class="range-value">$<span class="max-price"><?php echo $val_max; ?></span></span>
 						</div>
-						<?php $val_1 = !empty( $val ) ? $val[0] . ', ' . $val[1] : intval(min(array_filter($payment))) . ', ' . intval(max($payment)); ?>
+						<?php $val_1 = !empty( $val[0] ) ? $val[0] . ', ' . $val[1] : intval(min(array_filter($payment))) . ', ' . intval(max($payment)); ?>
 						<input id="range-payment" value="<?php echo $val_1; ?>" min="<?php echo intval(min(array_filter($payment))); ?>" max="<?php echo intval(max($payment)); ?>" step="10" type="range" multiple >
 						<input type="hidden" name="payment">
 					</div>
