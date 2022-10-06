@@ -153,6 +153,7 @@ function offers_card_detail( $post_id = null){
 
 register_nav_menus( array(
 	'drop-down' => __( 'Drop-down', 'shopperexpress' ),
+	'header' => __( 'Header Navigation', 'shopperexpress' ),
 ) );
 
 

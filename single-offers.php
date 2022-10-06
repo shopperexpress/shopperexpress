@@ -328,9 +328,9 @@ while (have_posts()) : the_post();
 		<?php
 	endif;
 
-	$title = get_field( 'offers_title_slider', 'options' );
+	$title = get_field( 'title_slider', 'options' );
 
-	if ( have_rows( 'offers_slider' , 'options' ) ) :
+	if ( have_rows( 'slider' , 'options' ) ) :
 		?>
 		<section class="shop-section filter-section">
 			<div class="container-fluid">
@@ -340,7 +340,7 @@ while (have_posts()) : the_post();
 				<ul class="models-filter list-unstyled" data-filter-group="car-type">
 					<li class="active"><a href="#" data-filter="all"><?php _e('all vehicles','shopperexpress'); ?></a></li>
 					<?php
-					while ( have_rows( 'offers_slider' , 'options' ) ) : the_row();
+					while ( have_rows( 'slider' , 'options' ) ) : the_row();
 						$type = get_sub_field( 'type' );
 						$type_list[seoUrl($type)] = $type;
 					endwhile;
@@ -350,7 +350,7 @@ while (have_posts()) : the_post();
 					<?php endforeach; ?>
 				</ul>
 				<div class="model-slider">
-					<?php while ( have_rows( 'offers_slider' , 'options' ) ) : the_row(); ?>
+					<?php while ( have_rows( 'slider' , 'options' ) ) : the_row(); ?>
 						<div class="slide">
 							<a class="model-card" href="<?php echo esc_url(get_sub_field( 'url' )); ?>">
 								<?php if ( $image = get_sub_field( 'image' ) ): ?>

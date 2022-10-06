@@ -78,6 +78,66 @@ endif;
 						</a>
 					<?php endif; ?>
 				</div>
+				<div class="header-frame">
+					<?php
+					if( has_nav_menu( 'header' ) ){
+						wp_nav_menu( array(
+							'container' 	 => false,
+							'theme_location' => 'header',
+							'menu_class'     => 'main-navigation',
+							'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+							'walker'         => new Header_Walker_Nav_Menu
+						));
+					}
+					$title = get_field( 'title_slider', 'options' );
+					if ( have_rows( 'slider' , 'options' ) ) :
+						?>
+						<div class="drop-models-popup group-models">
+							<?php if ( $title ): ?>
+								<a class="btn-models" href="#"><?php echo str_replace( [ '<mark>', '</mark>' ], [ '<span>', '</span>' ], $title ); ?></a>
+							<?php endif; ?>
+							<div class="dropdown-models">
+								<div class="scroll-holder">
+									<div class="jcf-scrollable">
+										<ul class="drop-model-slider" data-filter-group="car-type">
+											<li class="active"><a href="#" data-filter="all"><?php _e('all vehicles','shopperexpress'); ?></a></li>
+											<?php
+											while ( have_rows( 'slider' , 'options' ) ) : the_row();
+												$type = get_sub_field( 'type' );
+												$type_list[seoUrl($type)] = $type;
+											endwhile;
+											foreach( $type_list as $id => $value ):
+												?>
+												<li><a href="#" data-filter="<?php echo $id; ?>"><?php echo $value; ?></a></li>
+											<?php endforeach; ?>
+										</ul>
+									</div>
+								</div>
+								<ul class="drop-model-list list-unstyled">
+									<?php while ( have_rows( 'slider' , 'options' ) ) : the_row(); ?>
+										<li>
+											<a href="<?php echo esc_url(get_sub_field( 'url' )); ?>">
+												<?php if ( $image = get_sub_field( 'image' ) ): ?>
+													<div class="img-box">
+														<?php echo wp_get_attachment_image( $image['id'], 'full' ); ?>
+													</div>
+												<?php endif; ?>
+												<?php if ( $model = get_sub_field( 'model' ) ): ?>
+													<strong class="model"><?php echo $model; ?></strong>
+												<?php endif; ?>
+												<span class="car-type hidden"><?php echo seoUrl(get_sub_field( 'type' )); ?></span>
+											</a>
+										</li>
+									<?php endwhile; ?>
+								</ul>
+							</div>
+						</div>
+					<?php endif; ?>
+				</div>
+				<a class="navigation-opener" href="#">
+					<i class="menu-close material-icons">menu</i>
+					<i class="menu-open material-icons">menu_open</i>
+				</a>
 				<div class="btn-toolbar">
 					<?php if( has_nav_menu( 'drop-down' ) ):?>
 						<div class="btn-group">

@@ -21,7 +21,7 @@ function shopperexpress_scripts_styles() {
 
 	// Loads our main stylesheet.
 	wp_enqueue_style( 'shopperexpress-fonts_material', 'https://fonts.googleapis.com/css2?family=Material+Icons', array() );
-	wp_enqueue_style( 'shopperexpress-fonts-Montserrat', 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Roboto:wght@400;500&display=swap', array() );
+	wp_enqueue_style( 'shopperexpress-fonts-Montserrat', 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Roboto:wght@400;500;700&display=swap', array() );
 	wp_enqueue_style( 'shopperexpress-fonts-Roboto', 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap', array() );
 	wp_enqueue_style( 'shopperexpress-bootstrap_css', get_template_directory_uri() . '/css/bootstrap.css', array() );
 	wp_enqueue_style( 'shopperexpress-main_css', get_template_directory_uri() . '/css/main.css', array() );
