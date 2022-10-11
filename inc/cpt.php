@@ -82,10 +82,7 @@ function custom_taxonomy() {
 			'show_admin_column'          => false,
 			'show_in_nav_menus'          => false,
 			'show_tagcloud'              => false,
-			'has_archive' => false,
-			'rewrite' => array(
-				'feeds' => true
-			),
+			'rewrite'                    => false,
 		);
 		register_taxonomy( $slug, array( 'listings'), $args );
 
