@@ -121,7 +121,7 @@ wp_reset_query();
 								<h3 class="se-sbp-widget__range-title"><?php esc_html_e( 'Target Payment Range', 'shopperexpress' ); ?></h3>
 								<input class="se-sbp-widget__range-input" type="text" readonly value="$450-$500">
 							</div>
-							<input class="se-sbp-widget__range-slider" id="se-sbp-widget-range" data-jcf='{"range": "min"}' data-currency="$" data-range-value="50" value="<?php echo $val_min; ?>" min="<?php echo intval(min(array_filter($payment))); ?>" max="<?php echo intval(max($payment)); ?>" step="10" type="range">
+							<input class="se-sbp-widget__range-slider" id="se-sbp-widget-range" data-jcf='{"range": "min"}' data-currency="$" data-range-value="50" value="450" min="<?php echo intval(min(array_filter($payment))); ?>" max="<?php echo intval(max($payment)); ?>" step="10" type="range">
 						</div>
 					<?php endif; ?>
 					<div class="se-sbp-widget__btn-holder">
