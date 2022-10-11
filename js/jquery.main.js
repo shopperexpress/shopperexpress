@@ -552,7 +552,7 @@ function initAjaxFiltering() {
 function initFiltering() {
 	jQuery('.filter-section, .dropdown-models').filteringItems({
 		items: '.slide, .drop-model-list > li',
-		filterHolder: '.drop-model-slider',
+		filterHolder: '.models-filter, .drop-model-slider',
 		filterItems: 'a[data-filter]',
 		onInit: function() {
 			this.slider = this.holder.find('.model-slider');
