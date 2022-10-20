@@ -30,15 +30,21 @@ wp_reset_query();
 	<div class="main-holder">
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
-			<?php if ( !empty($price) && count(array_unique($price)) > 1 ) : ?>
+			<?php
+			if ( !empty($price) && count(array_unique($price)) > 1 ) :
+				$val = explode(',',$_GET['value']);
+			$val_min = !empty( $val[0] ) ? number_format($val[0]) : number_format(min(array_filter($price)));
+			$val_max = !empty( $val[1] ) ? number_format($val[1]) : number_format(max($price));
+			?>
 			<div class="filter-row range-row">
 				<label for="range-price" class="filter-title"><?php _e('Price','shopperexpress'); ?></label>
 				<div class="range-box">
 					<div class="value-row">
-						<span class="range-value">$<span class="min-price"><?php echo number_format(min(array_filter($price))); ?></span></span>
-						<span class="range-value">$<span class="max-price"><?php echo number_format(max($price)); ?></span></span>
+						<span class="range-value">$<span class="min-price"><?php echo $val_min; ?></span></span>
+						<span class="range-value">$<span class="max-price"><?php echo $val_max; ?></span></span>
 					</div>
-					<input id="range-price" value="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>, <?php echo max($price); ?>" min="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>" max="<?php echo max($price); ?>" step="10" type="range" multiple >
+					<?php $val_1 = !empty( $val[0] ) ? $val[0] . ', ' . $val[1] : intval(min(array_filter($price))) . ', ' . intval(max($price)); ?>
+					<input id="range-price" value="<?php echo $val_1; ?>" min="<?php echo str_replace(',', '',number_format(min(array_filter($price)))); ?>" max="<?php echo max($price); ?>" step="10" type="range" multiple >
 					<input type="hidden" name="value">
 				</div>
 			</div>
@@ -137,9 +143,9 @@ endif;
 ?>
 <div class="search-panel">
 	<div class="sticky-panel">
-		<div class="search-row" data-action="<?php echo add_query_arg( ['autocomplete' => 1] , get_permalink() ); ?>">
+		<div class="search-row" data-action="<?php echo add_query_arg( ['autocomplete' => 1] , $permalink ); ?>">
 			<i class="icon material-icons">search</i>
-			<input type="search" name="search" class="form-control form-control-lg autocomplete" data-src="<?php echo add_query_arg( ['autocomplete' => 1] , get_permalink() ); ?>" placeholder="<?php _e('Search Makes, Models or Keywords','shopperexpress'); ?>">
+			<input type="search" name="search" class="form-control form-control-lg autocomplete" data-src="<?php echo add_query_arg( ['autocomplete' => 1] , $permalink ); ?>" placeholder="<?php _e('Search Makes, Models or Keywords','shopperexpress'); ?>">
 			<div class="ajax-drop">
 				<strong><?php _e('sugestions','shopperexpress'); ?></strong>
 				<ul class="autocomplete-results"></ul>
@@ -161,68 +167,9 @@ endif;
 	</div>
 </div>
 <div class="row" id="load">
-	<?php 
-	$args = array(
-		'post_type'   		  => 'listings',
-		'post_status' 		  => 'publish',
-		'ignore_sticky_posts' => true,
-		'posts_per_page'      => -1,
-	);
-
-	if ( !empty(filter_args()) ) {
-		$args['tax_query'] = filter_args();
-	}
-
-	$terms = ['condition' ,'year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
-	$filter = [];
-	$query1 = new WP_Query( $args );
-	$payment = explode(',',$_GET['payment']);
-	$posts = [];
-	while ( $query1->have_posts() ) : $query1->the_post();
-
-		if ( $payment ) {
-			$lease_payment = wps_get_term( get_the_id(), 'lease-payment');
-			$loan_payment = wps_get_term( get_the_id(), 'loan-payment');
-
-			if ( (intval($payment[0]) <= intval($loan_payment) && intval($payment[1]) >= intval($loan_payment))  ) {
-				$posts[] = get_the_id();
-			}else{
-				$posts[] = null;
-			}
-			if ( intval($payment[0]) <= intval($lease_payment) && intval($payment[1]) >= intval($lease_payment) ) {
-				$posts[] = get_the_id();
-			}else{
-				$posts[] = null;
-			}
-		}
-
-		foreach ( $terms as $term ) {
-			$taxonomy = get_the_terms( get_the_id(), $term );
-			if ( !empty( $taxonomy ) ){
-				$taxonomy = array_shift( $taxonomy );
-				$slug = $term == 'year' ? 'yr' : $term;
-				$filter[$slug][$taxonomy->slug] = $taxonomy->name;
-			}
-		}
-	endwhile;
-	wp_reset_query();
-
-	echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
-
-	$args['posts_per_page']	= 24;
-
-	if ( !empty( $posts ) ) $args['post__in'] = $posts;
-
-	$query = new WP_Query( $args );
-
-	while ( $query->have_posts() ) : $query->the_post();
-		get_template_part( 'blocks/content-listing');
-	endwhile;
-	wp_reset_query();
-	?>
+	<?php wps_listings(); ?>
 </div>
 <?php if ( $query->max_num_pages > 1 ): ?>
-	<a href="<?php echo add_query_arg(['next' => 2] , $permalink); ?>" class="btn-more hidden"></a>
 	<div class="loader-holder">
 		<div class="loader"><?php _e('Loading','shopperexpress'); ?>...</div>
 	</div>

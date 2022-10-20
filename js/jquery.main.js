@@ -1056,81 +1056,8 @@ function initFiltering() {
 			});
 
 			this.filterSelect.on('change', function(e) {
-				self.filtersArr = [];
-
-				self.filterSelect.each(function() {
-					var currSelect = $(this);
-
-					if ((typeof currSelect.val() === 'string' && currSelect.val().toLowerCase() === 'all') || currSelect.val().length === 0) return;
-
-					if (typeof currSelect.val() === 'object') {
-						for (var i = 0; i < currSelect.val().length; i++) {
-							self.filtersArr.push({
-								select: currSelect,
-								name: currSelect.val()[i]
-							});
-						}
-					} else {
-						self.filtersArr.push({
-							select: currSelect,
-							name: currSelect.val()
-						});
-					}
-				});
-
 				self.sendRequest($(e.target));
-				self.selectedFiltersHolder.empty();
-
-				var items = $();
-				var btnClear = $();
-				var counterItem = $();
-
-				if (self.filtersArr.length > 0) {
-					for (var i = 0; i < self.filtersArr.length; i++) {
-						var select = self.filtersArr[i].select;
-						var item = $('<li><span>' + self.filtersArr[i].name + '</span><a href="#" class="remove"><span class="material-icons">clear</span></a></li>').appendTo(self.selectedFiltersHolder);
-						var btnRemove = item.find('.remove').data('select', select);
-					}
-
-					counterItem = $('<li class="counter-item"><a href="#"><span class="num"></span><span class="hide-text">Hide</span></a></li>').hide().appendTo(self.selectedFiltersHolder);
-					btnClear = $('<li class="clear-item"><a href="#" class="btn-clear">Clear all filters</a></li>').appendTo(self.selectedFiltersHolder);
-					items = self.selectedFiltersHolder.find('li').not('.counter-item').not('.clear-item');
-
-					if (self.selectedFiltersHolder.height <= 35) {
-						counterItem.remove();
-					} else {
-						hideItems();
-
-						counterItem.on('click', function(e) {
-							e.preventDefault();
-
-							if (!self.selectedFiltersHolder.hasClass(self.options.activeClass)) {
-								self.selectedFiltersHolder.addClass(self.options.activeClass);
-								items.removeClass(self.options.hiddenClass);
-							} else {
-								self.selectedFiltersHolder.removeClass(self.options.activeClass);
-								hideItems();
-							}
-						});
-					}
-				}
-
-				function hideItems() {
-					var count = 1;
-
-					hide();
-
-					function hide() {
-						if (btnClear.position().top > 0) {
-							counterItem.show();
-							items.eq(items.length - count).addClass(self.options.hiddenClass);
-							counterItem.find('.num').text('+' + items.filter('.' + self.options.hiddenClass).length + ' more');
-							count++;
-
-							hide();
-						}
-					}
-				}
+				self.createFiltersList();
 			});
 
 			this.selectedFiltersHolder.on('click', '.remove', function(e) {
@@ -1196,7 +1123,86 @@ function initFiltering() {
 				self.checkPosition();
 			};
 
+			this.createFiltersList();
+
 			this.win.on('scroll resize orientationchange', this.scrollHandler);
+		},
+		createFiltersList: function() {
+			var self = this;
+
+			this.filtersArr = [];
+			this.selectedFiltersHolder.empty();
+
+			this.filterSelect.each(function() {
+				var currSelect = $(this);
+
+				if ((typeof currSelect.val() === 'string' && currSelect.val().toLowerCase() === 'all') || currSelect.val().length === 0) return;
+
+				if (typeof currSelect.val() === 'object') {
+					for (var i = 0; i < currSelect.val().length; i++) {
+						self.filtersArr.push({
+							select: currSelect,
+							name: currSelect.val()[i]
+						});
+					}
+				} else {
+					self.filtersArr.push({
+						select: currSelect,
+						name: currSelect.val()
+					});
+				}
+			});
+
+			var items = $();
+			var btnClear = $();
+			var counterItem = $();
+
+			if (this.filtersArr.length > 0) {
+				for (var i = 0; i < this.filtersArr.length; i++) {
+					var select = this.filtersArr[i].select;
+					var item = $('<li><span>' + this.filtersArr[i].name + '</span><a href="#" class="remove"><span class="material-icons">clear</span></a></li>').appendTo(this.selectedFiltersHolder);
+					var btnRemove = item.find('.remove').data('select', select);
+				}
+
+				counterItem = $('<li class="counter-item"><a href="#"><span class="num"></span><span class="hide-text">Hide</span></a></li>').hide().appendTo(this.selectedFiltersHolder);
+				btnClear = $('<li class="clear-item"><a href="#" class="btn-clear">Clear all filters</a></li>').appendTo(this.selectedFiltersHolder);
+				items = this.selectedFiltersHolder.find('li').not('.counter-item').not('.clear-item');
+
+				if (this.selectedFiltersHolder.height <= 35) {
+					counterItem.remove();
+				} else {
+					hideItems();
+
+					counterItem.on('click', function(e) {
+						e.preventDefault();
+
+						if (!this.selectedFiltersHolder.hasClass(this.options.activeClass)) {
+							this.selectedFiltersHolder.addClass(this.options.activeClass);
+							items.removeClass(this.options.hiddenClass);
+						} else {
+							this.selectedFiltersHolder.removeClass(this.options.activeClass);
+							hideItems();
+						}
+					});
+				}
+			}
+
+			function hideItems() {
+				var count = 1;
+
+				hide();
+
+				function hide() {
+					if (btnClear.position().top > 0) {
+						counterItem.show();
+						items.eq(items.length - count).addClass(self.options.hiddenClass);
+						counterItem.find('.num').text('+' + items.filter('.' + self.options.hiddenClass).length + ' more');
+						count++;
+
+						hide();
+					}
+				}
+			}
 		},
 		resetForm: function() {
 			this.rangeFields.each(function() {
@@ -1250,11 +1256,11 @@ function initFiltering() {
 			if (!this.isChangePrice) {
 				var tmp = serialize.slice(serialize.indexOf('value='));
 
-				serialize = serialize.slice(0, serialize.indexOf('&value=')) + tmp.slice(tmp.indexOf('&'));
+				serialize = serialize.slice(0, serialize.indexOf('value=')) + tmp.slice(tmp.indexOf('&'));
 
 				var tmp2 = serialize.slice(serialize.indexOf('payment='));
 
-				serialize = serialize.slice(0, serialize.indexOf('&payment=')) + tmp2.slice(tmp2.indexOf('&'));
+				serialize = serialize.slice(0, serialize.indexOf('&payment=')) + tmp2.slice(tmp2.indexOf('&') + 1);
 			}
 
 			console.log(serialize);

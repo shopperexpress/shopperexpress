@@ -112,177 +112,182 @@ function auto_login_new_user( $user, $permalink ) {
 	exit;
 }
 
+function wps_listings() {
+	$posts = [];
+	$search = !empty($_GET['search']) ? $_GET['search'] : null;
+	$_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
+	$permalink = get_post_type_archive_link($_post_type);
+	$args = array(
+		'post_type'   => $_post_type,
+		'post_status' => 'publish',
+		'ignore_sticky_posts' => true,
+		'posts_per_page'         => -1,
+	);
+
+	if($_post_type == 'listings'){
+		$args['meta_query'] = [
+			[
+				'key' => 'sold',
+				'value' => 'Yes',
+				'compare' => '!='
+			]
+		];
+	} 
+
+	$query = new WP_Query( $args );
+	while ( $query->have_posts() ) : $query->the_post();
+
+		$loan_payment = get_field( 'loan_payment' );
+		$lease_payment = get_field( 'lease_payment' );
+
+		if ( is_user_logged_in() ) {
+			$original = get_field( 'price' );
+			$term_price =  $original;
+		}else{
+			$value = get_field( 'original_price' );
+			$term_price =  $value;
+		}
+
+		if ( !empty($_GET['autocomplete']) ) {
+			echo '<li><a href="#">' . get_the_title() . '</a></li>';
+		}
+
+		if ( is_user_logged_in() ) {
+			if ( !empty($_GET['value']) ) {
+
+				$price = explode(',',$_GET['value']);
+
+				if ( intval($price[0]) <= intval($term_price) && intval($price[1]) >= intval($term_price) ) {
+					$posts[] = get_the_id();
+				}else{
+					$posts[] = null;
+				}
+			}
+		}else{
+
+			if ( !empty($_GET['value']) ) {
+
+				$price = explode(',',$_GET['value']);
+
+				if ( intval($price[0]) <= intval($term_price) && intval($price[1]) >= intval($term_price) ) {
+					$posts[] = get_the_id();
+				}else{
+					$posts[] = null;
+				}
+			}
+		}
+
+	endwhile;
+
+	wp_reset_query();
+
+	$args = array(
+		'post_type'   => $_post_type,
+		'post_status' => 'publish',
+		'ignore_sticky_posts' => true,
+		'posts_per_page'         => -1,
+	);
+
+	if( !empty($posts) ) $args['post__in'] = $posts;
+
+	$query = new WP_Query( $args );
+	if ( $query->have_posts() && !empty($_GET['payment']) ) {
+		$posts = [];
+		$payment = explode(',',$_GET['payment']);
+		while ( $query->have_posts() ) : $query->the_post();
+
+			$lease_payment = wps_get_term( get_the_id(), 'lease-payment');
+			$loan_payment = wps_get_term( get_the_id(), 'loan-payment');
+
+			if ( (intval($payment[0]) <= intval($loan_payment) && intval($payment[1]) >= intval($loan_payment))  ) {
+				$posts[] = get_the_id();
+			}else{
+				$posts[] = null;
+			}
+			if ( intval($payment[0]) <= intval($lease_payment) && intval($payment[1]) >= intval($lease_payment) ) {
+				$posts[] = get_the_id();
+			}else{
+				$posts[] = null;
+			}
+
+		endwhile;
+	}
+	wp_reset_query();
+
+	if ( empty($_GET['autocomplete']) ) {
+
+		$next = !empty($_GET['next']) ? $_GET['next'] : 1;
+		$args = null;
+		$args = array(
+			'post_type'   		  => $_post_type,
+			'post_status' 		  => 'publish',
+			'ignore_sticky_posts' => true,
+			'posts_per_page'      => -1,
+			'post__in'     		  => $posts,
+			's' => $search
+		);
+
+		if ( !empty($_GET['sort']) ) {
+			switch ( $_GET['sort'] ) {
+				case 'highest':
+				$args['order'] = 'DESC';
+				$args['orderby'] = 'meta_value_num';
+				$args['meta_key'] = 'price';
+				break;
+				case 'lowest':
+				$args['order'] = 'ASC';
+				$args['orderby'] = 'meta_value_num';
+				$args['meta_key'] = 'price';
+				break;
+			}
+		}
+
+		if ( !empty(filter_args()) ) {
+			$args['tax_query'] = filter_args();
+		}
+
+		$terms = ['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
+		$filter = [];
+		$query1 = new WP_Query( $args );
+
+		while ( $query1->have_posts() ) : $query1->the_post();
+			foreach ( $terms as $term ) {
+				$taxonomy = get_the_terms( get_the_id(), $term );
+				if ( !empty( $taxonomy ) ){
+					$taxonomy = array_shift( $taxonomy );
+					$slug = $term == 'year' ? 'yr' : $term;
+					$filter[$slug][$taxonomy->slug] = $taxonomy->name;
+				}
+			}
+		endwhile;
+		wp_reset_query();
+
+		echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
+
+		$args['posts_per_page']	= 24;
+		$args['paged'] = $next;
+
+		$query = new WP_Query( $args );
+		$pname = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listing';
+
+		while ( $query->have_posts() ) : $query->the_post();
+			get_template_part( 'blocks/content-'.$pname);
+		endwhile;
+
+		if ( $query->max_num_pages > $next):
+			?>
+			<a href="<?php echo add_query_arg(['next' => $next + 1] , $permalink); ?>" class="btn-more"></a>
+			<?php
+		endif;
+	}
+}
+
 
 add_action( 'template_redirect', 'wps_load_more');
 function wps_load_more(){
 
 	if (!empty($_GET['ajax']) ) {
-		
-		$permalink = get_the_permalink();
-		$posts = [];
-		$search = !empty($_GET['search']) ? $_GET['search'] : null;
-		$_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
-		$args = array(
-			'post_type'   => $_post_type,
-			'post_status' => 'publish',
-			'ignore_sticky_posts' => true,
-			'posts_per_page'         => -1,
-		);
-		if($_post_type == 'listings'){
-			$args['meta_query'] = [
-				[
-					'key' => 'sold',
-					'value' => 'Yes',
-					'compare' => '!='
-				]
-			];
-		} 
-		$query = new WP_Query( $args );
-		while ( $query->have_posts() ) : $query->the_post();
-
-			$loan_payment = get_field( 'loan_payment' );
-			$lease_payment = get_field( 'lease_payment' );
-
-			if ( is_user_logged_in() ) {
-				$original = get_field( 'price' );
-				$term_price =  $original;
-			}else{
-				$value = get_field( 'original_price' );
-				$term_price =  $value;
-			}
-
-			if ( !empty($_GET['autocomplete']) ) {
-				echo '<li><a href="#">' . get_the_title() . '</a></li>';
-			}
-
-			if ( is_user_logged_in() ) {
-				if ( !empty($_GET['value']) ) {
-
-					$price = explode(',',$_GET['value']);
-
-					if ( intval($price[0]) <= intval($term_price) && intval($price[1]) >= intval($term_price) ) {
-						$posts[] = get_the_id();
-					}else{
-						$posts[] = null;
-					}
-				}
-			}else{
-
-				if ( !empty($_GET['value']) ) {
-
-					$price = explode(',',$_GET['value']);
-
-					if ( intval($price[0]) <= intval($term_price) && intval($price[1]) >= intval($term_price) ) {
-						$posts[] = get_the_id();
-					}else{
-						$posts[] = null;
-					}
-				}
-			}
-
-		endwhile;
-
-		wp_reset_query();
-
-		$args = array(
-			'post_type'   => $_post_type,
-			'post_status' => 'publish',
-			'ignore_sticky_posts' => true,
-			'posts_per_page'         => -1,
-		);
-
-		if( !empty($posts) ) $args['post__in'] = $posts;
-
-		$query = new WP_Query( $args );
-		if ( $query->have_posts() && !empty($_GET['payment']) ) {
-			$posts = [];
-			$payment = explode(',',$_GET['payment']);
-			while ( $query->have_posts() ) : $query->the_post();
-
-				$lease_payment = wps_get_term( get_the_id(), 'lease-payment');
-				$loan_payment = wps_get_term( get_the_id(), 'loan-payment');
-				
-				if ( (intval($payment[0]) <= intval($loan_payment) && intval($payment[1]) >= intval($loan_payment))  ) {
-					$posts[] = get_the_id();
-				}else{
-					$posts[] = null;
-				}
-				if ( intval($payment[0]) <= intval($lease_payment) && intval($payment[1]) >= intval($lease_payment) ) {
-					$posts[] = get_the_id();
-				}else{
-					$posts[] = null;
-				}
-
-			endwhile;
-		}
-		wp_reset_query();
-
-		if ( empty($_GET['autocomplete']) ) {
-
-			$next = !empty($_GET['next']) ? $_GET['next'] : 1;
-			$args = null;
-			$args = array(
-				'post_type'   		  => $_post_type,
-				'post_status' 		  => 'publish',
-				'ignore_sticky_posts' => true,
-				'posts_per_page'      => -1,
-				'post__in'     		  => $posts,
-				's' => $search
-			);
-
-			if ( !empty($_GET['sort']) ) {
-				switch ( $_GET['sort'] ) {
-					case 'highest':
-					$args['order'] = 'DESC';
-					$args['orderby'] = 'meta_value_num';
-					$args['meta_key'] = 'price';
-					break;
-					case 'lowest':
-					$args['order'] = 'ASC';
-					$args['orderby'] = 'meta_value_num';
-					$args['meta_key'] = 'price';
-					break;
-				}
-			}
-
-			if ( !empty(filter_args()) ) {
-				$args['tax_query'] = filter_args();
-			}
-
-			$terms = ['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
-			$filter = [];
-			$query1 = new WP_Query( $args );
-			
-			while ( $query1->have_posts() ) : $query1->the_post();
-				foreach ( $terms as $term ) {
-					$taxonomy = get_the_terms( get_the_id(), $term );
-					if ( !empty( $taxonomy ) ){
-						$taxonomy = array_shift( $taxonomy );
-						$slug = $term == 'year' ? 'yr' : $term;
-						$filter[$slug][$taxonomy->slug] = $taxonomy->name;
-					}
-				}
-			endwhile;
-			wp_reset_query();
-
-			echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
-
-			$args['posts_per_page']	= 24;
-			$args['paged'] = $next;
-			
-			$query = new WP_Query( $args );
-			$pname = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listing';
-			
-			while ( $query->have_posts() ) : $query->the_post();
-				get_template_part( 'blocks/content-'.$pname);
-			endwhile;
-			
-			if ( $query->max_num_pages > $next):
-				?>
-				<a href="<?php echo add_query_arg(['next' => $next + 1] , $permalink); ?>" class="btn-more"></a>
-				<?php
-			endif;
-		}
+		wps_listings();
 		exit;
 	}
 }
