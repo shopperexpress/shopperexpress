@@ -295,8 +295,9 @@ while (have_posts()) : the_post();
 								<p><?php _e('Cash Price','shopperexpress'); ?></p>
 								<?php
 								$price = get_field( 'price' );
+								$original_price = get_field( 'original_price' );
 
-								$price_original = !empty($price['price_original']) ? $price['price_original'] : $price;
+								$price_original = !empty($original_price) ? $original_price : $price;
 
 								if ( !empty($price_original) ):
 									?>
