@@ -6,7 +6,7 @@ Author: ShopperExpress
 Author URI: 
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.5.8
+Version: v1.5.9
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -2602,7 +2602,7 @@ table td {
 .se-sbp-widget a {
 	-webkit-transition: color .15s linear;
 	transition: color .15s linear;
-	color: #d61a21;
+	color: var(--primary);
 	text-decoration: none;
 }
 
@@ -2676,7 +2676,7 @@ table td {
 	width: 46px;
 	height: 46px;
 	border-radius: 50%;
-	background-color: #d61a21;
+	background-color: var(--primary);
 	margin-right: 12px;
 	-ms-flex-negative: 0;
 	flex-shrink: 0;
@@ -2826,9 +2826,11 @@ table td {
 	font-size: 17px;
 	line-height: 1.2;
 	text-align: center;
-	background-color: #d61a21;
+	background-color: var(--primary);
 	color: #fff;
 	display: block;
+	position: relative;
+	overflow: hidden;
 }
 
 .se-sbp-widget .se-sbp-widget__btn span {
@@ -2839,7 +2841,7 @@ table td {
 
 .se-sbp-widget .se-sbp-widget__btn:hover {
 	text-decoration: none;
-	background-color: #bf171d;
+	background-color: #000;
 }
 
 .se-sbp-widget .se-sbp-widget__body {
@@ -2858,7 +2860,7 @@ table td {
 }
 
 .se-sbp-widget .se-sbp-widget__info a {
-	color: #d61a21;
+	color: var(--primary);
 }
 
 .se-sbp-widget .se-sbp-widget__info a:hover {
@@ -2920,7 +2922,7 @@ table td {
 }
 
 .se-sbp-widget .se-sbp-widget__check:checked {
-	background-color: #d61a21;
+	background-color: var(--primary);
 	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3e%3cpath fill='none' stroke='%23fff' stroke-linejoin='round' stroke-width='2' d='m3 7 3 3 7-7'/%3e%3c/svg%3e");
 }
 
@@ -2948,7 +2950,7 @@ table td {
 
 .se-sbp-widget .jcf-range .jcf-range-wrapper .jcf-range-display {
 	position: absolute;
-	background-color: #d61a21;
+	background-color: var(--primary);
 	height: 100%;
 }
 
@@ -2964,7 +2966,7 @@ table td {
 	top: 0;
 	bottom: 0;
 	width: 15px;
-	background-color: #d61a21;
+	background-color: var(--primary);
 }
 
 .se-sbp-widget .jcf-range .jcf-range-handle {
@@ -2980,7 +2982,7 @@ table td {
 
 .se-sbp-widget .jcf-range .jcf-range-handle:hover {
 	background-color: #fff;
-	border-color: #d61a21;
+	border-color: var(--primary);
 }
 
 .se-sbp-widget .jcf-range .jcf-range-handle::after,

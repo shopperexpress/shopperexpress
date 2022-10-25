@@ -366,14 +366,18 @@ function initShopButton() {
 			});
 
 			if (rangePayment.length && hiddenPayment.length) {
-				hiddenPayment.val(rangeMin + ',' + (rangeMin + rangeValue));
-				jcf.getInstance(rangePayment).values = [rangeMin, rangeMin + rangeValue];
+				hiddenPayment.val(rangeMin + ', ' + (rangeMin + rangeValue));
+				jcf.getInstance(rangePayment).values = [rangeMin, ' ' + (rangeMin + rangeValue)];
 				jcf.refresh(rangePayment);
 				rangePayment.trigger('input');
 
 				if (window.history && window.history.pushState) {
 					window.StorageHistory.set(hiddenPayment.attr('name'), hiddenPayment.val());
 				}
+
+				var filterAPI = jQuery('.filter-section').data('AjaxFiltering');
+
+				filterAPI.isChangePrice = true;
 			}
 
 			if (bodyTypeSelect.length) {
@@ -390,12 +394,6 @@ function initShopButton() {
 
 				bodyTypeSelect.trigger('change');
 			}
-
-			// var filterAPI = jQuery('.filter-section').data('AjaxFiltering');
-
-			// if (filterAPI) {
-			// 	filterAPI.sendRequest();
-			// }
 		});
 	});
 }
@@ -1262,6 +1260,17 @@ function initFiltering() {
 
 				serialize = serialize.slice(0, serialize.indexOf('&payment=')) + tmp2.slice(tmp2.indexOf('&') + 1);
 			}
+
+			var serializeArr = serialize.split('&');
+			var newArr = [];
+
+			serializeArr.forEach(function(item) {
+				if (jQuery.inArray(item, newArr) === -1) {
+					newArr.push(item);
+				}
+			});
+
+			serialize = newArr.join('&');
 
 			console.log(serialize);
 
