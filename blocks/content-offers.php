@@ -44,8 +44,10 @@
 							while ( have_rows( 'payment_list' ) ) : the_row();
 								$lock = get_sub_field( 'lock' );
 								$show_payment = $lock  ? get_sub_field( 'show_payment' ) : false;
-	
-								$down_payment = !empty($down_payment) ? $down_payment : number_format($price);
+								if ( $price ) {
+									$down_payment = !empty($down_payment) ? $down_payment : number_format($price);
+								}
+								
 
 								switch ( $show_payment ) {
 									case 'lease-payment':
@@ -87,6 +89,7 @@
 									break;
 
 									default:
+									
 									$loan_payment = !empty($loan_payment) && $loan_payment != 'None' ? '$' . number_format($loan_payment) . ' <sub>/mo</sub>' : null;
 									$text = !empty($loan_payment) ? '$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress') .'<span class="savings">' . $loan_payment . '</span>' : null;
 									break;
