@@ -31,7 +31,7 @@ flush_rewrite_rules();
 add_action( 'wp', function () {
 	global $wp_query;
 
-	if( !get_the_id() && !is_archive() ) {
+	if( !get_the_id() && !is_archive() && !is_admin() ) {
 		header("HTTP/1.1 301 Moved Permanently"); 
 		header("Location: /" . $wp_query->query['post_type']);
 	}
