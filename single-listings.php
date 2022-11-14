@@ -147,6 +147,12 @@ while (have_posts()) : the_post();
 							<span class="unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><i class="material-icons"><?php _e('lock_open','shopperexpress'); ?></i><?php _e('UNLOCK SAVINGS','shopperexpress'); ?></span>
 						<?php } ?>
 					</div>
+					<div class="info-block">
+						<div class="heading">
+							<h3><?php _e('Shopping Tools','shopperexpress'); ?></h3>
+						</div>
+						<span  class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
+					</div>
 					<?php while ( have_rows('flexible_content' , 'options' ) ) : the_row(); ?>
 						<div class="info-block" id="block-<?php echo get_row_index(); ?>">
 							<div class="heading">
@@ -289,7 +295,6 @@ while (have_posts()) : the_post();
 						<div class="heading">
 							<h3><?php _e('Summary','shopperexpress'); ?></h3>
 						</div>
-						<span  class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
 						<div class="summary-block text-center">
 							<div class="summary-holder">
 								<p><?php _e('Cash Price','shopperexpress'); ?></p>
