@@ -7,22 +7,25 @@
 				<strong class="card-model"><?php echo wps_get_term($post_id, 'model'); ?> <?php echo wps_get_term($post_id, 'trim'); ?></strong>
 			</div>
 			<a href="<?php the_permalink(); ?>">
-				<div class="card-img">
-					<?php
-					$gallery = get_field( 'gallery' );
-					if ( !empty( $gallery ) && count($gallery) >= 1 ) {
-						$gallery =  isset($gallery[0]) && !empty($gallery[0]['image_url']) ? $gallery[0]['image_url'] : $gallery[1]['image_url'];
-					}else{
-						$gallery = null;
-					}
-
-					if ( $gallery ):
-							echo '<img src="'.$gallery.'" alt="image">';
-					else:
-						$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png';
-						?>
-						<img src="<?php echo $def_img; ?>" alt="" class="img-fluid">
-					<?php endif; ?>
+				<div class="detail-slider-holder">
+					<div class="detail-slider">
+						<?php
+						if ( $gallery = get_field( 'gallery' ) ):
+							foreach ( $gallery as $image ) :
+								if ( !empty( $image['image_url'] ) ) :
+									?>
+									<div>
+										<img src="<?php echo $image['image_url']; ?>" srcset="<?php echo $image['image_url']; ?> 2x" alt="image description">
+									</div>
+									<?php
+								endif;
+							endforeach;
+						else:
+							$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png';
+							?>
+							<div><img src="<?php echo $def_img; ?>" alt="" class="img-fluid"></div>
+						<?php endif; ?>
+					</div>
 				</div>
 			</a>
 			<?php if ( function_exists('card_detail') ): ?>

@@ -64,6 +64,11 @@ while (have_posts()) : the_post();
 								</div>
 							<?php endif; ?>
 						</div>
+						<?php if ( $for_html_left = get_field( 'for_html_left', 'options' ) ) : ?>
+							<div class="details-html">
+								<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number'), $for_html_left ); ?>
+							</div>
+						<?php endif; ?>
 						<?php if ( function_exists('card_detail') ): ?>
 							<dl class="detail-info"><?php echo card_detail($post_id); ?></dl>
 						<?php endif; ?>
@@ -151,7 +156,12 @@ while (have_posts()) : the_post();
 						<div class="heading">
 							<h3><?php _e('Shopping Tools','shopperexpress'); ?></h3>
 						</div>
-						<span  class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
+						<span class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
+						<?php if ( $for_html_right = get_field( 'for_html_right', 'options' ) ) : ?>
+							<div class="info-html">
+								<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number'), $for_html_right ); ?>
+							</div>
+						<?php endif; ?>
 					</div>
 					<?php while ( have_rows('flexible_content' , 'options' ) ) : the_row(); ?>
 						<div class="info-block" id="block-<?php echo get_row_index(); ?>">
