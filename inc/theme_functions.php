@@ -320,3 +320,5 @@ add_action( 'pmxi_after_xml_import ', function(){
 		}
 	}  
 }, 10 );
+
+add_filter( 'auto_update_plugin', '__return_true' );

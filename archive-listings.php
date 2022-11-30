@@ -25,14 +25,16 @@ while ( $query->have_posts() ) : $query->the_post();
 	$payment[wps_get_term( get_the_id(), 'loan-payment')] = wps_get_term( get_the_id(), 'loan-payment');
 endwhile;
 wp_reset_query();
+$get_query = wps_listings( 1 );
 ?>
 <form action="<?php echo $permalink; ?>" class="filter-section">
 	<div class="main-holder">
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
+			<span class="filter-result">Showing <strong class="result-current"><?php if ( $get_query > 0 ) : echo 1; else : 0; endif; ?>-<?php if ( $get_query > 23 ) : echo 24; else: echo $get_query; endif; ?></strong> of <strong class="result-total"><?php echo $get_query; ?></strong> Vehicles</span>
 			<?php
 			if ( !empty($price) && count(array_unique($price)) > 1 ) :
-				$val = explode(',',$_GET['value']);
+			$val = explode(',',$_GET['value']);
 			$val_min = !empty( $val[0] ) ? number_format($val[0]) : number_format(min(array_filter($price)));
 			$val_max = !empty( $val[1] ) ? number_format($val[1]) : number_format(max($price));
 			?>
@@ -68,8 +70,8 @@ wp_reset_query();
 			</div>
 		</div>
 	<?php endif; ?>
-	<?php 
-	echo child_automotive_listing_generate_search_dropdown(['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'],3);
+	<?php
+	new_filter();
 	?>
 </aside>
 
@@ -177,4 +179,7 @@ endif;
 </div>
 </div>
 </form>
-<?php get_footer(); ?>
+<?php
+add_action('wp_footer', 'new_filter_modal');
+get_footer();
+?>

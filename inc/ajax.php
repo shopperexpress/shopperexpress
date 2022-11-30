@@ -112,7 +112,7 @@ function auto_login_new_user( $user, $permalink ) {
 	exit;
 }
 
-function wps_listings() {
+function wps_listings( $show = 0 ) {
 	$posts = [];
 	$search = !empty($_GET['search']) ? $_GET['search'] : null;
 	$_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
@@ -132,7 +132,7 @@ function wps_listings() {
 				'compare' => '!='
 			]
 		];
-	} 
+	}
 
 	$query = new WP_Query( $args );
 	while ( $query->have_posts() ) : $query->the_post();
@@ -246,39 +246,59 @@ function wps_listings() {
 			$args['tax_query'] = filter_args();
 		}
 
-		$terms = ['year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
-		$filter = [];
-		$query1 = new WP_Query( $args );
 
-		while ( $query1->have_posts() ) : $query1->the_post();
-			foreach ( $terms as $term ) {
-				$taxonomy = get_the_terms( get_the_id(), $term );
-				if ( !empty( $taxonomy ) ){
-					$taxonomy = array_shift( $taxonomy );
-					$slug = $term == 'year' ? 'yr' : $term;
-					$filter[$slug][$taxonomy->slug] = $taxonomy->name;
-				}
-			}
-		endwhile;
+		$args['posts_per_page']	= -1;
+		$query = new WP_Query( array_merge( $args, ['fields' => 'ids']) );
 		wp_reset_query();
 
-		echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
+		$filter['total'] = $query->found_posts;
+		foreach ( ['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'] as $taxonomy ) {
+			if ( $options = get_terms( ['taxonomy' => $taxonomy,'hide_empty' => true] ) ) {
+				foreach ( $options as $term ) {
+					$query1 = new WP_Query( array(
+						'post__in'     	      => $query->posts,
+						'post_type'   		  => 'listings',
+						'post_status' 		  => 'publish',
+						'ignore_sticky_posts' => true,
+						'posts_per_page'      => -1,
+						'tax_query' => [
+							[
+								'taxonomy' => $taxonomy,
+								'field'    => 'slug',
+								'terms'    => $term->slug,
+							]
+						]
+					) );
+
+					$filter['taxonomies'][$taxonomy][] = [ 'name' => $term->slug,'count' => $query1->found_posts ];
+
+					wp_reset_query();
+				}
+			}
+		}
+
 
 		$args['posts_per_page']	= 24;
 		$args['paged'] = $next;
-
 		$query = new WP_Query( $args );
 		$pname = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listing';
 
-		while ( $query->have_posts() ) : $query->the_post();
-			get_template_part( 'blocks/content-'.$pname);
-		endwhile;
+		if ( $show != 1 ) {
+			echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
 
-		if ( $query->max_num_pages > $next):
-			?>
-			<a href="<?php echo add_query_arg(['next' => $next + 1] , $permalink); ?>" class="btn-more"></a>
-			<?php
-		endif;
+			while ( $query->have_posts() ) : $query->the_post();
+				get_template_part( 'blocks/content-'.$pname);
+			endwhile;
+
+			if ( $query->max_num_pages > $next):
+				?>
+				<a href="<?php echo add_query_arg(['next' => $next + 1] , $permalink); ?>" class="btn-more"></a>
+				<?php
+			endif;
+		}else{
+			return $query->found_posts;
+		}
+
 	}
 }
 
@@ -303,7 +323,7 @@ function filter_args(){
 
 		if( !empty($term_value) && $term_value != 'all' ){
 
-			$term_value = !empty($_GET['ajax']) ? $term_value : explode(',', $term_value[0]);
+			$term_value = is_array( $term_value ) ? $term_value : explode(',', $term_value);
 
 			if ( !in_array('all' , $term_value) && !empty( $term_value ) ) {
 
@@ -316,18 +336,155 @@ function filter_args(){
 			}
 		}
 	}
+	if ( !empty( $_GET['yr'] ) ) {
 
-	if ( !empty($_GET['yr']) && $_GET['yr'] != 'all' ) {
-		$array[] = [
-			'taxonomy' => 'year',
-			'field'    => 'slug',
-			'terms'    => $_GET['yr'],
-		];
+		$year = !empty($_GET['yr']) && is_array( $_GET['yr'] ) ? $_GET['yr'] : explode(',', $_GET['yr']);
+
+		if ( $year && !in_array('all' , $year) ) {
+			$array[] = [
+				'taxonomy' => 'year',
+				'field'    => 'slug',
+				'terms'    => $year,
+			];
+		}
 	}
-
 	return array_merge(['relation' => 'AND'], $array);
 }
 
+
+function new_filter(){
+
+	?>
+	<div class="filter-list list-unstyled">
+		<?php
+		foreach ( ['yr', 'make','model', 'engine' , 'exterior-color', 'body-style' ,'trim' ,'drivetrain', 'transmission' , 'condition', ] as $column_item ) :
+
+			$tax = $column_item == 'yr' ? 'year' : $column_item;
+
+			$category = get_taxonomy( $tax );
+			$icon = $column_item;
+			switch ( $category->name ) {
+				case 'exterior-color':
+				$label = __('Color','shopperexpress');
+				break;
+
+				case 'year':
+				$label = __('Year','shopperexpress');
+				$icon = 'year';
+				break;
+
+				case 'body-style':
+				$label = __('Body Type','shopperexpress');
+				break;
+
+				case 'engine':
+				$label = __('Engine Type','shopperexpress');
+				break;
+
+				default:
+				$label = ucfirst($category->name);
+				break;
+			}
+			?>
+			<li>
+				<a data-tab="tab-<?php echo $column_item; ?>" href="#filterSchedule" data-modal>
+					<?php the_field( $icon . '_icon', 'options' ); ?>
+					<span class="category-title"><?php echo $label; ?></span>
+				</a>
+			</li>
+		<?php endforeach; ?>
+	</div>
+	<?php
+}
+
+function new_filter_modal(){
+	$taxonomies = ['condition','yr','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
+	?>
+	<div class="modal modal-filter" id="filterSchedule" tabindex="-1" aria-labelledby="filterSchedule" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-scrollable">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Select
+						<span class="tab-title">
+							<?php foreach ( $taxonomies as $taxonomy ) : ?>
+								<span data-id="tab-<?php echo $taxonomy; ?>"><?php echo ucfirst($taxonomy) == 'yr' ? 'year' : ucfirst($taxonomy); ?></span>
+							<?php endforeach; ?>
+						</span>
+					</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span class="material-icons" aria-hidden="true">close</span>
+					</button>
+				</div>
+				<div class="modal-body-wrap">
+					<form action="#" class="modal-filter-form">
+						<div class="modal-body">
+							<div class="tab-content">
+								<?php foreach ( $taxonomies as $taxonomy ) : ?>
+									<div data-id="tab-<?php echo $taxonomy; ?>">
+										<ul class="modal-filter-list list-unstyled">
+											<?php
+											$select_name = $taxonomy == 'yr' ? 'year' : $taxonomy;
+											$args = ['taxonomy' => $select_name,'hide_empty' => true];
+											if( $select_name == 'year' ) $args['order'] = 'DESC';
+
+											if ( $options = get_terms( $args ) ) :
+												foreach ( $options as $term ) :
+
+													$args = array(
+														'post_type'   		  => 'listings',
+														'post_status' 		  => 'publish',
+														'ignore_sticky_posts' => true,
+														'posts_per_page'      => -1,
+														'tax_query' => [
+															[
+																'taxonomy' => $select_name,
+																'field'    => 'slug',
+																'terms'    => $term->slug,
+															]
+														]
+													);
+
+													$query = new WP_Query( $args );
+
+													if( $query->have_posts() ) :
+
+														$is_selected = in_array( $term->slug, explode(',', $_GET[$taxonomy])) ? true : false;
+
+														?>
+														<li>
+															<label class="custom-check">
+																<input class="fake-input" type="checkbox" name="<?php echo $taxonomy; ?>" value="<?php echo $term->slug; ?>" <?php if ( $is_selected ) checked( true ); ?>>
+																<span class="fake-label">
+																	<span class="name"><?php echo $term->name; ?></span>
+																	<span class="detail"><span class="detail-count"><?php echo $query->found_posts; ?></span> available</span>
+																</span>
+																<span class="fake-checkbox">
+																	<i class="material-icons">check</i>
+																</span>
+															</label>
+														</li>
+														<?php
+													endif;
+												endforeach;
+											endif;
+											?>
+										</ul>
+									</div>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link btn-lg d-lg-none btn-back" data-dismiss="modal">Go back</button>
+					<button type="button" class="btn btn-link btn-lg d-none d-lg-inline-block btn-clear" disabled>Clear Vehicles</button>
+					<button type="button" class="btn btn-primary btn-lg" data-dismiss="modal" aria-label="Close">View <span class="total-counts">0</span> matches</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
 
 function child_automotive_listing_generate_search_dropdown( $items, $min_max, $options = array() ) {
 
@@ -343,7 +500,7 @@ function child_automotive_listing_generate_search_dropdown( $items, $min_max, $o
 		foreach ( $items as $column_item ) {
 
 			$current_category = get_taxonomy($column_item);
-			
+
 			$prefix_text = (isset($options['prefix_text']) && !empty($options['prefix_text']) ? $options['prefix_text'] : "");
 			$prefix_term = (!empty($prefix_text) ? $prefix_text . " " : "") . $current_category->label;
 
@@ -417,7 +574,7 @@ function wps_listing_dropdown( $category, $prefix_text, $select_class, $other_op
 	$args = ['taxonomy' => $category->name,'hide_empty' => true];
 	if( $category->name == 'year' ) $args['order'] = 'DESC';
 	$options = get_terms( $args );
-	
+
 	if ( ! empty( $options ) ) {
 
 		foreach ( $options as $term ) {
@@ -427,7 +584,7 @@ function wps_listing_dropdown( $category, $prefix_text, $select_class, $other_op
 					'post_status' 		  => 'publish',
 					'ignore_sticky_posts' => true,
 					'posts_per_page'      => 1,
-					
+
 				);
 				$args['tax_query'] = [
 					[
@@ -443,7 +600,7 @@ function wps_listing_dropdown( $category, $prefix_text, $select_class, $other_op
 					'post_status' 		  => 'publish',
 					'ignore_sticky_posts' => true,
 					'posts_per_page'      => 1,
-					
+
 				);
 				$args['tax_query'] = [
 					[
@@ -457,16 +614,16 @@ function wps_listing_dropdown( $category, $prefix_text, $select_class, $other_op
 			if($query->have_posts()){
 				if ( $term_key != "auto_term_order" ) {
 					$term_value_safe = htmlentities( $term->slug, ENT_QUOTES, 'UTF-8' );
-					
+
 					$is_selected = in_array( $term->slug, explode(',', $_GET[$select_name][0])) ? true : false;
-					
+
 					echo "\t<option value='" . $term_value_safe . "'" . ($is_selected ? "selected='selected' class='checked'" : "") . " data-key='" . $term_key . "'>";
 					echo htmlentities( $term->name, false, 'UTF-8' );
-					
+
 					if(!empty($show_amount)){
 						echo " (" . (isset($show_amount[$term_key]) && !empty($show_amount[$term_key]) ? $show_amount[$term_key] : 0) . ")";
 					}
-					
+
 					echo "</option>\n";
 				}
 			}

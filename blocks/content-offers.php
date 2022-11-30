@@ -7,18 +7,25 @@
 					<span class="card-brand"><?php echo wps_get_term($post_id, 'year'); ?> <?php echo wps_get_term($post_id, 'make'); ?></span>
 					<strong class="card-model"><?php echo wps_get_term($post_id, 'model'); ?> <?php echo wps_get_term($post_id, 'trim'); ?></strong>
 				</div>
-				<div class="card-img">
-					<?php
-					if ( $gallery = get_field( 'gallery' ) ):
-						if( isset($gallery[0]) ):
-							echo '<img src="'.$gallery[0]['image_url'].'" alt="image">';
-
-						endif;
-					else:
-						$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png';
-						?>
-						<img src="<?php echo $def_img; ?>" alt="" class="img-fluid">
-					<?php endif; ?>
+				<div class="detail-slider-holder">
+					<div class="detail-slider">
+						<?php
+						if ( $gallery = get_field( 'gallery' ) ):
+							foreach ( $gallery as $image ) :
+								if ( !empty( $image['image_url'] ) ) :
+									?>
+									<div>
+										<img src="<?php echo $image['image_url']; ?>" srcset="<?php echo $image['image_url']; ?> 2x" alt="image description">
+									</div>
+									<?php
+								endif;
+							endforeach;
+						else:
+							$def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png';
+							?>
+							<div><img src="<?php echo $def_img; ?>" alt="" class="img-fluid"></div>
+						<?php endif; ?>
+					</div>
 				</div>
 				<?php if ( function_exists('card_detail') ): ?>
 					<dl class="card-detail"><?php echo offers_card_detail($post_id); ?></dl>

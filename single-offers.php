@@ -39,20 +39,18 @@ while (have_posts()) : the_post();
 							<li><?php _e('Model','shopperexpress'); ?>: <?php echo $model; ?></li>
 						</ul>
 						<div class="detail-slider-holder">
-							<?php $def_img = get_field('default_image', 'option') ? wp_get_attachment_image_url(get_field('default_image', 'option'), 'full') : get_stylesheet_directory_uri().'/images/image-placeholder.png'; ?>
-							<?php $full_images_array = !empty($gallery[0]['image_url']) ? $gallery : $gallery = [ 0 => [ 'image_url' => $def_img ]] ?>
-							<div class="detail-slider">
-								<?php foreach ($gallery as $value): ?>
-									<div>
-										<?php
-										if( $value['image_url'] ):
-											echo '<a href="'.$value['image_url'].'" data-fancybox="img-gallery"><img src="'.$value['image_url'].'" alt="image"></a>';
-
-										endif; ?>
-									</div>
-								<?php endforeach ?>
-							</div>
 							<?php if ( $gallery ): ?>
+								<div class="detail-slider">
+									<?php foreach ($gallery as $value): ?>
+										<div>
+											<?php
+											if( $value['image_url'] ):
+												echo '<a href="'.$value['image_url'].'" data-fancybox="img-gallery"><img src="'.$value['image_url'].'" alt="image"></a>';
+
+											endif; ?>
+										</div>
+									<?php endforeach ?>
+								</div>
 								<div class="detail-slider-nav jcf-scrollable">
 									<?php foreach ($gallery as $value): ?>
 										<div class="slide">
