@@ -448,7 +448,8 @@ function new_filter_modal(){
 
 													if( $query->have_posts() ) :
 
-														$is_selected = in_array( $term->slug, explode(',', $_GET[$taxonomy])) ? true : false;
+														$t =  is_array($_GET[$taxonomy]) ? $_GET[$taxonomy] : explode(',', $_GET[$taxonomy]);
+														$is_selected = in_array( $term->slug, $t) ? true : false;
 
 														?>
 														<li>
