@@ -30,8 +30,8 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null; ?>
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
 			<input type="hidden" name="ptype" value="offers">
-			<?php 
-			echo child_automotive_listing_generate_search_dropdown(['year','body-style' , 'make', 'model'],3);
+			<?php
+			new_filter( [ 'year', 'make', 'model', 'body-style' ] );
 			?>
 		</aside>
 		<div class="card-wrapp container-fluid">
@@ -104,4 +104,7 @@ $condition = !empty($_GET['condition']) ? $_GET['condition'] : null; ?>
 		</div>
 	</div>
 </form>
-<?php get_footer(); ?>
+<?php
+add_action('wp_footer', 'new_filter_modal');
+get_footer();
+?>

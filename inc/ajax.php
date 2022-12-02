@@ -257,7 +257,7 @@ function wps_listings( $show = 0 ) {
 				foreach ( $options as $term ) {
 					$query1 = new WP_Query( array(
 						'post__in'     	      => $query->posts,
-						'post_type'   		  => 'listings',
+						'post_type'   		  => $_post_type,
 						'post_status' 		  => 'publish',
 						'ignore_sticky_posts' => true,
 						'posts_per_page'      => -1,
@@ -352,12 +352,14 @@ function filter_args(){
 }
 
 
-function new_filter(){
+function new_filter( $taxonomies = [] ){
+
+	$taxonomies = !empty( $taxonomies ) ? $taxonomies : ['yr', 'make','model', 'engine' , 'exterior-color', 'body-style' ,'trim' ,'drivetrain', 'transmission' , 'condition', ];
 
 	?>
 	<div class="filter-list list-unstyled">
 		<?php
-		foreach ( ['yr', 'make','model', 'engine' , 'exterior-color', 'body-style' ,'trim' ,'drivetrain', 'transmission' , 'condition', ] as $column_item ) :
+		foreach ( $taxonomies as $column_item ) :
 
 			$tax = $column_item == 'yr' ? 'year' : $column_item;
 
@@ -398,7 +400,8 @@ function new_filter(){
 }
 
 function new_filter_modal(){
-	$taxonomies = ['condition','yr','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
+	$post_type = get_post_type();
+	$taxonomies = $post_type == 'offers' ? [ 'year', 'make', 'model', 'body-style' ] : ['condition','yr','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
 	?>
 	<div class="modal modal-filter" id="filterSchedule" tabindex="-1" aria-labelledby="filterSchedule" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -431,7 +434,7 @@ function new_filter_modal(){
 												foreach ( $options as $term ) :
 
 													$args = array(
-														'post_type'   		  => 'listings',
+														'post_type'   		  => $post_type,
 														'post_status' 		  => 'publish',
 														'ignore_sticky_posts' => true,
 														'posts_per_page'      => -1,
