@@ -20,6 +20,26 @@
             "endpoint": 0
         },
         {
+            "key": "field_638f1122e6715",
+            "label": "Post type name",
+            "name": "post_type_name",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_5ffc659ae2ddb",
             "label": "Menu",
             "name": "menu",
@@ -1221,5 +1241,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1669643840
+    "modified": 1670320441
 }

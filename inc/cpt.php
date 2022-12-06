@@ -176,9 +176,11 @@ function listings() {
 		'has_archive'           => true,
 		'exclude_from_search'   => false,
 		'publicly_queryable'    => true,
-		'rewrite' => array('slug' => 'inventory','with_front' => true),
 		'capability_type'       => 'page',
 	);
+	if ( $post_type_name = get_field( 'post_type_name', 'options' ) ) {
+		$args['rewrite'] = array('slug' => $post_type_name,'with_front' => true);
+	}
 	register_post_type( 'listings', $args );
 
 	$labels = array(
