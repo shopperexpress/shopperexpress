@@ -107,14 +107,20 @@ $get_query = wps_listings( 1 );
 						</div>
 					</div>
 					<div class="se-sbp-widget__body">
-						<?php while ( have_rows( 'widget', 'options' ) ) : the_row(); ?>
+						<?php
+						$body = !empty( $_GET['body-style'] ) ? $_GET['body-style'] : null;
+						if ( $body ) {
+							$body = is_array( $body ) ? $body : explode( ',', $body );
+						}
+						while ( have_rows( 'widget', 'options' ) ) : the_row();
+							?>
 							<div class="se-sbp-widget__check-list">
 								<?php
 								foreach ( get_sub_field( 'body_style' ) as $term ) :
 									?>
 									<div class="se-sbp-widget__check-list-item">
 										<label class="se-sbp-widget__check-list-label">
-											<input class="se-sbp-widget__check" type="checkbox" name="body-style[]" value="<?php echo $term->slug; ?>" <?php if ( !empty( $_GET['body-style'] ) && in_array( $term->slug, $_GET['body-style']) ) checked( true );  ?>>
+											<input class="se-sbp-widget__check" type="checkbox" name="body-style" value="<?php echo $term->slug; ?>" <?php if ( $body && in_array( $term->slug, $body) ) checked( true );  ?>>
 											<?php echo $term->name; ?>
 										</label>
 									</div>

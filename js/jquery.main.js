@@ -436,7 +436,7 @@ function initShopButton() {
 		var holder = jQuery(this);
 		var btnShop = holder.find('.btn-shop-by-payment, .se-sbp-widget__info a');
 		var checkItems = holder.find('.se-sbp-widget__check-list :checkbox');
-		var bodyTypeCheckboxes = jQuery(':checkbox[name="body-style[]"]');
+		var bodyTypeCheckboxes = jQuery(':checkbox[name="body-style"]');
 		var rangePayment = jQuery('#range-payment');
 		var rangeField = holder.find('.se-sbp-widget__range-slider');
 		var hiddenPayment = jQuery('[name="payment"]');
@@ -458,8 +458,9 @@ function initShopButton() {
 			});
 
 			if (rangePayment.length && hiddenPayment.length) {
-				hiddenPayment.val(rangeMin + ', ' + (rangeMin + rangeValue));
-				jcf.getInstance(rangePayment).values = [rangeMin, ' ' + (rangeMin + rangeValue)];
+				console.log(333);
+				hiddenPayment.val(rangeMin + ',' + (rangeMin + rangeValue));
+				jcf.getInstance(rangePayment).values = [rangeMin, (rangeMin + rangeValue)];
 				jcf.refresh(rangePayment);
 				rangePayment.trigger('input');
 
@@ -488,6 +489,9 @@ function initShopButton() {
 						}, 100);
 					}
 				});
+			} else {
+				console.log(222);
+				rangePayment.trigger('change');
 			}
 		});
 	});
@@ -1172,7 +1176,7 @@ function initFiltering() {
 				if (field.attr('id') === 'range-price' || field.attr('id') === 'range-payment') {
 					self.isChangePrice = true;
 				}
-
+console.log(111);
 				self.sendRequest(field.closest('.range-box').find('[type="hidden"]'));
 			});
 
