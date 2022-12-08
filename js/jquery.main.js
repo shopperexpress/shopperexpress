@@ -436,7 +436,7 @@ function initShopButton() {
 		var holder = jQuery(this);
 		var btnShop = holder.find('.btn-shop-by-payment, .se-sbp-widget__info a');
 		var checkItems = holder.find('.se-sbp-widget__check-list :checkbox');
-		var bodyTypeCheckboxes = jQuery(':checkbox[name="body-style"]');
+		var bodyTypeCheckboxes = jQuery('.modal-filter :checkbox[name="body-style"]');
 		var rangePayment = jQuery('#range-payment');
 		var rangeField = holder.find('.se-sbp-widget__range-slider');
 		var hiddenPayment = jQuery('[name="payment"]');
@@ -458,7 +458,6 @@ function initShopButton() {
 			});
 
 			if (rangePayment.length && hiddenPayment.length) {
-				console.log(333);
 				hiddenPayment.val(rangeMin + ',' + (rangeMin + rangeValue));
 				jcf.getInstance(rangePayment).values = [rangeMin, (rangeMin + rangeValue)];
 				jcf.refresh(rangePayment);
@@ -471,28 +470,30 @@ function initShopButton() {
 				var filterAPI = jQuery('.filter-section').data('AjaxFiltering');
 
 				filterAPI.isChangePrice = true;
+				// filterAPI.currFilterGroup = 'body-style';
+				filterAPI.filterBodyStyle = true;
 			}
 
 			if (bodyTypeCheckboxes.length) {
-				var timer = null;
-
-				bodyTypeCheckboxes.each(function() {
+				bodyTypeCheckboxes.each(function(i) {
 					var item = jQuery(this);
 					var value = item.val();
 
 					if (checkedArr.includes(value)) {
 						item.prop('checked', true);
-						clearTimeout(timer);
-
-						timer = setTimeout(function() {
-							item.trigger('change');
-						}, 100);
+					} else {
+						item.prop('checked', false);
 					}
 				});
-			} else {
-				console.log(222);
-				rangePayment.trigger('change');
+
+				if (checkItems.filter(':checked').length) {
+					window.StorageHistory.set('body-style', checkedArr.join(','));
+				} else {
+					window.StorageHistory.remove('body-style', '');
+				}
 			}
+
+			rangePayment.trigger('change');
 		});
 	});
 }
@@ -608,11 +609,11 @@ function initAjaxFiltering() {
 			this.visibleCount = this.holder.find('.result-current');
 
 			this.updateCounters = function(dataItem) {
-				console.log(dataItem);
-
 				if (dataItem.length) {
 					var data = JSON.parse(dataItem.text().trim())[0];
 					var visibleItems = jQuery('#load .col-sm-6');
+
+					console.log(data);
 
 					if (data) {
 						self.totalCount.text(data.total);
@@ -648,7 +649,13 @@ function initAjaxFiltering() {
 									}
 								}
 							}
+
+							if (name === 'body-style' && self.filterBodyStyle) {
+								parent.show();
+							}
 						});
+
+						self.filterBodyStyle = false;
 					}
 
 					if (visibleItems.length > 1) {
@@ -1176,8 +1183,9 @@ function initFiltering() {
 				if (field.attr('id') === 'range-price' || field.attr('id') === 'range-payment') {
 					self.isChangePrice = true;
 				}
-console.log(111);
+
 				self.sendRequest(field.closest('.range-box').find('[type="hidden"]'));
+				self.createFiltersList();
 			});
 
 			this.sortSelect.on('change', function(e) {
@@ -1409,7 +1417,7 @@ console.log(111);
 
 			serialize = serialize + filterSerialize;
 
-			console.log(serialize);
+			// console.log(serialize);
 
 			$.ajax({
 				url: src ? src : this.holder.attr('action'),
@@ -1522,24 +1530,33 @@ console.log(111);
 				var arr = newLocation[1].split('&');
 				var index = getItemIndex(arr, name);
 
-				if (index >= 0) {
-					var item = arr[index].split('=');
-					var valArray = item[1].split(',');
+				if (value === '') {
+					var newArr = arr.filter(function(value, index, arr) {
+						return value.indexOf(name) === -1;
+					});
 
-					var getItem = getItemIndex(valArray, value);
+					window.history.pushState(stateObject, name, '?' + newArr.join('&'));
+				} else {
+					if (index >= 0) {
+						var item = arr[index].split('=');
+						var valArray = item[1].split(',');
 
-					valArray.splice(getItem, 1);
+						var getItem = getItemIndex(valArray, value);
 
-					if (valArray.length === 0) {
-						if (arr.length === 1) {
-							window.history.replaceState({}, null, newLocation[0]);
+						valArray.splice(getItem, 1);
+
+						if (valArray.length === 0) {
+							if (arr.length === 1) {
+								window.history.replaceState({}, null, newLocation[0]);
+							} else {
+								arr.splice(index, 1);
+								window.history.pushState(stateObject, name, '?' + arr.join('&'));
+							}
 						} else {
-							arr.splice(index, 1);
+							arr[index] = item[0] + '=' + valArray.join(',');
+
 							window.history.pushState(stateObject, name, '?' + arr.join('&'));
 						}
-					} else {
-						arr[index] = item[0] + '=' + valArray.join(',');
-						window.history.pushState(stateObject, name, '?' + arr.join('&'));
 					}
 				}
 			}

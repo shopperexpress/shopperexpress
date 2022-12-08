@@ -11,8 +11,8 @@
 					<div class="detail-slider">
 						<?php
 						if ( $gallery = get_field( 'gallery' ) ):
-							foreach ( $gallery as $image ) :
-								if ( !empty( $image['image_url'] ) ) :
+							foreach ( $gallery as $index => $image ) :
+								if ( !empty( $image['image_url'] ) && $index <= 4 ) :
 									?>
 									<div>
 										<img src="<?php echo $image['image_url']; ?>" srcset="<?php echo $image['image_url']; ?> 2x" alt="image description">

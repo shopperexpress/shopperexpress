@@ -39,7 +39,6 @@ while (have_posts()) : the_post();
 						<div class="detail-slider-holder">
 							<?php
 							if ( is_array($gallery) && count($gallery) > 1 ) :
-								array_shift($gallery);
 							?>
 							<div class="detail-slider">
 								<?php foreach ($gallery as $value): ?>
