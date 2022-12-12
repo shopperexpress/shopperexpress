@@ -12,7 +12,7 @@ if(!in_array( $_id, $hide)){ ?>
 			<div class="row">
 				<div class="col-lg-3 item-col item-left">
 					<?php if ( is_singular('listings') && !empty($model) ): ?>
-						<p><a href="<?php echo esc_url(add_query_arg('model[]',$model[0]->slug ,home_url('listings/'))); ?>"><?php _e('All','shopperexpress'); ?> <?php echo $model[0]->name; ?> <?php _e('Inventory','shopperexpress'); ?></a></p>
+						<p><a href="<?php echo esc_url(add_query_arg('model[]',$model[0]->slug , get_post_type_archive_link('listings'))); ?>"><?php _e('All','shopperexpress'); ?> <?php echo $model[0]->name; ?> <?php _e('Inventory','shopperexpress'); ?></a></p>
 					<?php endif; ?>
 					<?php if ( is_singular('offers') && !empty($model) ): ?>
 						<p><a href="<?php echo esc_url(home_url('offers/')); ?>"><?php _e('All Offers','shopperexpress'); ?></a></p>
