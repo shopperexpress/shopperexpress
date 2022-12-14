@@ -322,3 +322,49 @@ add_action( 'pmxi_after_xml_import ', function(){
 }, 10 );
 
 add_filter( 'auto_update_plugin', '__return_true' );
+remove_action ('wp_head', 'wp_site_icon', 99);
+
+function wps_site_icon() {
+	if ( ! has_site_icon() && ! is_customize_preview() ) {
+		return;
+	}
+
+	$meta_tags = array();
+	$icon_32   = get_site_icon_url( 32 );
+	if ( empty( $icon_32 ) && is_customize_preview() ) {
+		$icon_32 = '/favicon.ico'; // Serve default favicon URL in customizer so element can be updated for preview.
+	}
+
+	$meta_tags[] = sprintf( '<link rel="icon" href="%s" type="image/png" />', esc_url( get_site_icon_url() ) );
+
+	if ( $icon_32 ) {
+		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="32x32" type="image/png" />', esc_url( $icon_32 ) );
+	}
+	$icon_192 = get_site_icon_url( 192 );
+	if ( $icon_192 ) {
+		$meta_tags[] = sprintf( '<link rel="icon" href="%s" sizes="192x192" type="image/png" />', esc_url( $icon_192 ) );
+	}
+	$icon_180 = get_site_icon_url( 180 );
+	if ( $icon_180 ) {
+		$meta_tags[] = sprintf( '<link rel="apple-touch-icon" href="%s" type="image/png" />', esc_url( $icon_180 ) );
+	}
+	$icon_270 = get_site_icon_url( 270 );
+	if ( $icon_270 ) {
+		$meta_tags[] = sprintf( '<meta name="msapplication-TileImage" content="%s" />', esc_url( $icon_270 ) );
+	}
+
+	/**
+	 * Filters the site icon meta tags, so plugins can add their own.
+	 *
+	 * @since 4.3.0
+	 *
+	 * @param string[] $meta_tags Array of Site Icon meta tags.
+	 */
+	$meta_tags = apply_filters( 'site_icon_meta_tags', $meta_tags );
+	$meta_tags = array_filter( $meta_tags );
+
+	foreach ( $meta_tags as $meta_tag ) {
+		echo "$meta_tag\n";
+	}
+}
+apply_filters( 'site_icon_meta_tags', wps_site_icon() );
