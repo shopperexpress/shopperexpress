@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.5.27
+Version: v1.5.28
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -3780,6 +3780,7 @@ textarea.form-control {
 	-ms-flex-align: center;
 	align-items: center;
 	text-align: center;
+	text-transform: capitalize;
 	background-color: #f2f2f2;
 	padding: 5px;
 	color: #000;
@@ -4684,6 +4685,10 @@ textarea.form-control {
 
 .detail-slider:not(.slick-initialized) > div:not(:first-child) {
 	display: none;
+}
+
+.detail-slider .slick-slide {
+	height: auto;
 }
 
 .detail-slider img {
