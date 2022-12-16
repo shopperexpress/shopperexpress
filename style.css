@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.5.28
+Version: v1.5.29
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -3844,6 +3844,7 @@ textarea.form-control {
 .range-box {
 	width: 100%;
 	padding-top: 3px;
+	position: relative;
 }
 
 .range-box .value-row {
@@ -3868,6 +3869,22 @@ textarea.form-control {
 
 .range-box .range-value.value-max {
 	padding-left: 5px;
+}
+
+.loading .aside .range-box {
+	opacity: .5;
+	pointer-events: none;
+	cursor: pointer;
+}
+
+.loading .aside .range-box:after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1;
 }
 
 .jcf-range {
