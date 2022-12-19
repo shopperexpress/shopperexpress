@@ -328,6 +328,9 @@ function wps_site_icon() {
 	if ( ! has_site_icon() && ! is_customize_preview() ) {
 		return;
 	}
+	
+	if (is_admin() || defined( 'DOING_AJAX' ))
+		return;
 
 	$meta_tags = array();
 	$icon_32   = get_site_icon_url( 32 );
