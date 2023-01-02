@@ -217,7 +217,8 @@ while (have_posts()) : the_post();
 												break;
 											case 'Disclosure_Cash':
 												if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-													$cash_offer = get_field('cash_offer') ? '$'. number_format(get_field('cash_offer')) : null;
+													$cash_offer = get_field('cash_offer');
+													$cash_offer = is_int( $cash_offer ) ? '$'. number_format($cash_offer) : $cash_offer;
 													$cash_offer_label = get_field('cash_offer_label');
 													$text = !empty($cash_offer) ? '<span class="savings">' . $cash_offer_label . '</span>' . $cash_offer : null;
 												}else{

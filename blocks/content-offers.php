@@ -38,7 +38,8 @@
 				$leaseterm = wps_get_term( $post_id, 'leaseterm');
 				$loanterm = get_field('loanterm');
 				$loanapr = get_field('loanapr');
-				$cash_offer = get_field('cash_offer') ? '$'. number_format(get_field('cash_offer')) : null;
+				$cash_offer = get_field('cash_offer');
+				$cash_offer = is_int( $cash_offer ) ? '$'. number_format($cash_offer) : $cash_offer;
 				$cash_offer_label = get_field('cash_offer_label'); ?>
 
 				<ul class="payment-info">
