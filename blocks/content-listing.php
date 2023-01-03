@@ -59,7 +59,7 @@
 				?>
 			<strong class="card-price price-current"><span><?php _e('PRICE','shopperexpress'); ?></span> <?php echo '$'.number_format($price); ?></strong>
 			<?php endif; ?>
-			<span  class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
+			<span  class='intice_bFramev2' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
 		</div>
 	</div>
 </div>
