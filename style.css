@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.5.32
+Version: v1.5.33
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -4706,12 +4706,22 @@ textarea.form-control {
 
 .detail-slider .slick-slide {
 	height: auto;
+	position: relative;
+}
+
+.detail-slider .slick-slide::before {
+	content: "";
+	padding-bottom: 75%;
+	display: block;
 }
 
 .detail-slider img {
-	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
-	height: auto;
+	height: 100%;
+	object-fit: contain;
 }
 
 .detail-slider .slick-arrow {
@@ -4788,6 +4798,13 @@ textarea.form-control {
 	border-bottom: 4px solid transparent;
 	width: calc(33.33% - 6px);
 	min-width: calc(33.33% - 6px);
+	position: relative;
+}
+
+.detail-slider-nav .slide::before {
+	content: "";
+	padding-bottom: 75%;
+	display: block;
 }
 
 .detail-slider-nav .slide.active,
@@ -4797,9 +4814,12 @@ textarea.form-control {
 }
 
 .detail-slider-nav .slide img {
-	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
-	height: auto;
+	height: calc(100% - 6px);
+	object-fit: contain;
 }
 
 .wistia_popover_embed {
