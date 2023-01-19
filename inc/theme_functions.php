@@ -365,3 +365,5 @@ function wps_site_icon() {
 }
 apply_filters( 'site_icon_meta_tags', function(){} );
 add_action('wp_head', 'wps_site_icon');
+
+add_filter( 'wpcf7_load_js', '__return_false' );

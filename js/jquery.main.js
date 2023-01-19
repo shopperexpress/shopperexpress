@@ -443,6 +443,14 @@ function initShopButton() {
 
 		btnShop.on('click', function(e) {
 			e.preventDefault();
+			// filterItems();
+		});
+
+		checkItems.add(rangeField).on('change', function(e) {
+			filterItems();
+		});
+
+		function filterItems() {
 			var checkedArr = [];
 			var rangeValues = rangeField.data('jcfInstance').values;
 			var rangeValue = rangeField.data('range-value');
@@ -470,7 +478,6 @@ function initShopButton() {
 				var filterAPI = jQuery('.filter-section').data('AjaxFiltering');
 
 				filterAPI.isChangePrice = true;
-				// filterAPI.currFilterGroup = 'body-style';
 				filterAPI.filterBodyStyle = true;
 			}
 
@@ -494,7 +501,7 @@ function initShopButton() {
 			}
 
 			rangePayment.trigger('change');
-		});
+		}
 	});
 }
 
@@ -682,6 +689,37 @@ function initAjaxFiltering() {
 			this.updateCounters(dataItem);
 
 			window.blockFrame.GetDealerInfoForMiniTools();
+
+			items.find('.detail-slider-holder').each(function() {
+				var holder = jQuery(this);
+				var slider = holder.find('.detail-slider');
+				var thumbs = holder.find('.detail-slider-nav .slide');
+
+				slider.slick({
+					slidesToScroll: 1,
+					rows: 0,
+					infinite: false,
+					prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
+					nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
+					focusOnSelect: true
+				});
+
+				slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+					thumbs.removeClass(activeClass);
+					thumbs.eq(nextSlide).addClass(activeClass);
+				});
+
+				thumbs.on('click', function(e) {
+					e.preventDefault();
+					var item = jQuery(this);
+					var index = thumbs.index(item);
+
+					thumbs.removeClass(activeClass);
+					item.addClass(activeClass);
+
+					slider.slick('slickGoTo', index);
+				});
+			});
 		}
 	});
 }
@@ -1614,12 +1652,14 @@ function initCheckedClasses() {
 
 	// refresh classes
 	function refreshState(input, label) {
-		if(input.is(':checked')) {
-			input.parent().addClass(parentCheckedClass);
-			label.addClass(checkedClass);
-		} else {
-			input.parent().removeClass(parentCheckedClass);
-			label.removeClass(checkedClass);
+		if (input.length) {
+			if(input.is(':checked')) {
+				input.parent().addClass(parentCheckedClass);
+				label.addClass(checkedClass);
+			} else {
+				input.parent().removeClass(parentCheckedClass);
+				label.removeClass(checkedClass);
+			}
 		}
 	}
 }

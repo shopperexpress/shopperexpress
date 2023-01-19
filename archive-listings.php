@@ -142,7 +142,7 @@ $get_query = wps_listings( 1 );
 						<a class="se-sbp-widget__btn btn-shop-by-payment" onclick="javascript:inticeAllEvents.launchLOM('519','VEH-INTEREST VIN');" href="#"><?php esc_html_e( 'Get Pre-Qualifed', 'shopperexpress' ); ?> &<span><?php esc_html_e( 'Shop by Payment', 'shopperexpress' ); ?></span></a>
 					</div>
 				</div>
-				<span class="se-sbp-widget__info"><?php esc_html_e( 'Skip pre-qualify', 'shopperexpress' ); ?> <a href="#"><?php esc_html_e( 'and just shop by payment', 'shopperexpress' ); ?></a>.</span>
+				<!-- <span class="se-sbp-widget__info"><?php esc_html_e( 'Skip pre-qualify', 'shopperexpress' ); ?> <a href="#"><?php esc_html_e( 'and just shop by payment', 'shopperexpress' ); ?></a>.</span> -->
 			</div>
 		</div>
 		<?php
