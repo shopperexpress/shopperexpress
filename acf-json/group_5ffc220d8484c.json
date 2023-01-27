@@ -839,6 +839,26 @@
             "maxlength": ""
         },
         {
+            "key": "field_63d3a3cd8cbe1",
+            "label": "Slider First Heading",
+            "name": "slider_first_heading",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_604a1a3d7da2a",
             "label": "Slider",
             "name": "slider",
@@ -1241,5 +1261,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1670320441
+    "modified": 1674814474
 }
