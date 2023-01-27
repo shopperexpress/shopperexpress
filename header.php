@@ -100,7 +100,7 @@ endif;
 								<div class="scroll-holder">
 									<div class="jcf-scrollable">
 										<ul class="drop-model-slider" data-filter-group="car-type">
-											<li class="active"><a href="#" data-filter="all"><?php _e('all vehicles','shopperexpress'); ?></a></li>
+											<li class="active"><a href="#" data-filter="all"><?php if ( $slider_first_heading = get_field( 'slider_first_heading', 'options' ) ){ echo $slider_first_heading; }else{ _e('all vehicles','shopperexpress'); } ?></a></li>
 											<?php
 											while ( have_rows( 'slider' , 'options' ) ) : the_row();
 												$type = get_sub_field( 'type' );

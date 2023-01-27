@@ -76,7 +76,7 @@ function custom_taxonomy() {
 		);
 		$args = array(
 			'labels'                     => $labels,
-			'hierarchical'               => true,
+			'hierarchical'               => false,
 			'public'                     => false,
 			'show_ui'                    => true,
 			'show_admin_column'          => false,
@@ -113,7 +113,7 @@ function custom_taxonomy() {
 		);
 		$args = array(
 			'labels'                     => $labels,
-			'hierarchical'               => true,
+			'hierarchical'               => false,
 			'public'                     => true,
 			'show_ui'                    => true,
 			'show_admin_column'          => false,
