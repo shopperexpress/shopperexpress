@@ -693,7 +693,8 @@ function initAjaxFiltering() {
 			items.find('.detail-slider-holder').each(function() {
 				var holder = jQuery(this);
 				var slider = holder.find('.detail-slider');
-				var thumbs = holder.find('.detail-slider-nav .slide');
+
+				console.log(slider);
 
 				slider.slick({
 					slidesToScroll: 1,
@@ -702,22 +703,6 @@ function initAjaxFiltering() {
 					prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
 					nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
 					focusOnSelect: true
-				});
-
-				slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
-					thumbs.removeClass(activeClass);
-					thumbs.eq(nextSlide).addClass(activeClass);
-				});
-
-				thumbs.on('click', function(e) {
-					e.preventDefault();
-					var item = jQuery(this);
-					var index = thumbs.index(item);
-
-					thumbs.removeClass(activeClass);
-					item.addClass(activeClass);
-
-					slider.slick('slickGoTo', index);
 				});
 			});
 		}
