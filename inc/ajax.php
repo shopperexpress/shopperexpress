@@ -277,7 +277,9 @@ function wps_listings( $show = 0 ) {
 			}
 		}
 
-
+		$args['orderby'] = 'meta_value_num';
+		$args['meta_key'] = 'price';
+		$args['order'] = 'ASC';
 		$args['posts_per_page']	= 24;
 		$args['paged'] = $next;
 		$query = new WP_Query( $args );

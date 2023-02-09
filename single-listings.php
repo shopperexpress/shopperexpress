@@ -138,9 +138,12 @@ while (have_posts()) : the_post();
 						if ( $price>=0 ):
 							if($price>0){
 								$msrp = !empty(get_field( 'original_price' )) ? get_field( 'original_price' ) : $price;
-								?>
-								<strong class="price"><span class="st">$<?php echo number_format($msrp); ?></span><sub><?php echo $textCondition; ?></sub></strong>
-							<?php }else{
+								if ( get_field( 'show_market_price', 'options' ) ) :
+									?>
+									<strong class="price"><span class="st">$<?php echo number_format($msrp); ?></span><sub><?php echo $textCondition; ?></sub></strong>
+									<?php
+								endif;
+							 }else{
 								?>
 								<strong class="price"><?php _e('Contact for Price', 'shopperexpress') ?></strong>
 								<?php 

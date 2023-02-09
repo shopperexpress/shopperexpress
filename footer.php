@@ -184,7 +184,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 	</div>
 
 	<!-- Disclosure_lease Modal -->
-	<div class="modal fade content-scrollable" id="Disclosure_lease" tabindex="-1" aria-labelledby="DisclosureLeaseLabel" aria-hidden="true">
+	<div class="modal fade content-scrollable modal-offer" id="Disclosure_lease" tabindex="-1" aria-labelledby="DisclosureLeaseLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
@@ -195,7 +195,18 @@ $footer_style = get_field( 'footer_style', 'options' );
 				</div>
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
-						<?php the_field( 'disclosure_lease' ); ?>
+						<?php
+						the_field( 'disclosure_lease' );
+						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
+							?>
+							<h4><?php echo $heading_save_offer; ?></h4>
+							<?php
+						endif;
+						if ( is_singular( 'offers' ) ) {
+							if ( $form_lease_special = get_field( 'form_lease_special', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_lease_special->ID.'" html_class="form-unlock"]');
+						}
+						?>
+
 					</div>
 				</div>
 			</div>
@@ -203,7 +214,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 	</div>
 
 	<!-- Disclosure_loan Modal -->
-	<div class="modal fade content-scrollable" id="Disclosure_loan" tabindex="-1" aria-labelledby="DisclosureLoanLabel" aria-hidden="true">
+	<div class="modal fade content-scrollable modal-offer" id="Disclosure_loan" tabindex="-1" aria-labelledby="DisclosureLoanLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
@@ -214,7 +225,17 @@ $footer_style = get_field( 'footer_style', 'options' );
 				</div>
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
-						<?php the_field( 'disclosure_finance' ); ?>
+						<?php
+						the_field( 'disclosure_finance' );
+						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
+							?>
+							<h4><?php echo $heading_save_offer; ?></h4>
+							<?php
+						endif;
+						if ( is_singular( 'offers' ) ) {
+							if ( $form_special_apr = get_field( 'form_special_apr', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_special_apr->ID.'" html_class="form-unlock"]');
+						}
+						?>
 					</div>
 				</div>
 			</div>
@@ -222,7 +243,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 	</div>
 
 	<!-- Disclosure_Cash Modal -->
-	<div class="modal fade content-scrollable" id="Disclosure_Cash" tabindex="-1" aria-labelledby="DisclosureCashLabel" aria-hidden="true">
+	<div class="modal fade content-scrollable modal-offer" id="Disclosure_Cash" tabindex="-1" aria-labelledby="DisclosureCashLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
@@ -233,7 +254,17 @@ $footer_style = get_field( 'footer_style', 'options' );
 				</div>
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
-						<?php the_field( 'disclosure_cash' ); ?>
+						<?php
+						the_field( 'disclosure_cash' );
+						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
+							?>
+							<h4><?php echo $heading_save_offer; ?></h4>
+							<?php
+						endif;
+						if ( is_singular( 'offers' ) ) {
+							if ( $form_cash = get_field( 'form_cash', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_cash->ID.'" html_class="form-unlock"]');
+						}
+						?>
 					</div>
 				</div>
 			</div>
@@ -274,10 +305,8 @@ $footer_style = get_field( 'footer_style', 'options' );
 		<?php
 	}?>
 
-	<?php
-endif;
-wp_footer();
-?>
+<?php endif; ?>
+
 <div class="modal fade modal-login" id="login_modal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
 	<div class="modal-dialog modal-md modal-dialog-centered">
 		<div class="modal-content">
@@ -315,6 +344,7 @@ wp_footer();
 		</div>
 	</div>
 </div>
-</body>
+<?php wp_footer(); ?>
 <?php the_field( 'for_script_footer', 'options' ); ?>
+</body>
 </html>

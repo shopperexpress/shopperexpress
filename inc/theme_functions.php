@@ -221,9 +221,18 @@ function wps_get_term( $post, $taxonomy, $field = 'name' ){
 	return $value;
 }
 
+function shortcode_callback_page_id( $atts = array() ) {
+	global $post;
+	return $post->ID;
+}
+add_shortcode( 'page_id', 'shortcode_callback_page_id' );
+
 add_action( 'wpcf7_mail_sent', 'wps_wpcf7_mail_sent_function' ); 
 function wps_wpcf7_mail_sent_function( $contact_form ) {
-	$submission = WPCF7_Submission::get_instance();  
+	$submission = WPCF7_Submission::get_instance();
+	$contact_form = WPCF7_ContactForm::get_current();
+	$contact_form_id = $contact_form->id;
+
 	if ( $submission ) {
 		$posted_data = $submission->get_posted_data();
 	}
@@ -231,16 +240,20 @@ function wps_wpcf7_mail_sent_function( $contact_form ) {
 	$first_name = $posted_data['firstName'];
 	$last_name = $posted_data['lastName'];
 	$email = $posted_data['your-email'];
-	$phone = $posted_data['phone'];
-	$zip = $posted_data['zip'];
-	$comments = $posted_data['message'];
+	$phone = !empty( $posted_data['phone'] ) ? $posted_data['phone'] : '';
+	$zip = !empty( $posted_data['zip'] ) ? $posted_data['zip'] : '';
+	$comments = !empty( $posted_data['message'] ) ? $posted_data['message'] : '';
+
+	if ( !empty( $posted_data['get_page_id'] ) ) {
+		$comments = get_the_title( $posted_data['get_page_id'] );
+	}
 
 	$message = '<?xml version="1.0" encoding="utf-8"?>
 	<?ADF version="1.0"?>
 	<adf>
 	<prospect>
 	<id source="shopperexpress" sequence="1"></id>
-	<requestdate>' . date() . '</requestdate>
+	<requestdate>' . date( 'm-d-Y' ) . '</requestdate>
 	<customer>
 	<contact primarycontact="1">
 	<name part="first">' . $first_name . '</name>
@@ -366,4 +379,108 @@ function wps_site_icon() {
 apply_filters( 'site_icon_meta_tags', function(){} );
 add_action('wp_head', 'wps_site_icon');
 
-add_filter( 'wpcf7_load_js', '__return_false' );
+#add_filter( 'wpcf7_load_js', '__return_false' );
+
+function shortcode_callback_offer_payment( $atts = array() ) {
+	global $post;
+	$post_id = $post->ID;
+
+	$location = wps_get_term( $post_id, 'location');
+	$condition = wps_get_term( $post_id, 'condition');
+	$loanterm = get_field('loanterm', $post_id);
+	$loanapr = get_field('loanapr', $post_id);
+	$down_payment = wps_get_term( $post_id, 'down-payment');
+	$lease_payment = wps_get_term( $post_id, 'lease-payment');
+	$loan_payment = wps_get_term( $post_id, 'loan-payment');
+	$leaseterm = wps_get_term( $post_id, 'leaseterm');
+	while ( have_rows('offers_flexible_content' , 'options' ) ) : the_row();
+		if ( get_row_layout() == 'payment' && have_rows( 'payment_list' ) ){
+			while ( have_rows( 'payment_list' ) ) : the_row();
+				$link = get_sub_field( 'link' );
+				$lock = get_sub_field( 'lock' );
+				$show_payment = $lock  ? get_sub_field( 'show_payment' ) : false;
+				$show_event = get_sub_field('show_event');
+
+				$down_payment = !empty($down_payment) ? $down_payment : number_format($price);
+
+				switch ( $atts['type'] ) {
+					case 'lease-payment':
+					if ( $down_payment && $lease_payment ) {
+						$lease_payment = !empty($lease_payment) ? '$' . number_format($lease_payment) : null;
+						$output = !empty($lease_payment) ? '<span class="savings">$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress') .'</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
+					}else{
+						$output = null;
+					}
+
+					break;
+
+					case 'Disclosure_loan':
+					if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
+						$output = $loanterm ? '<span class="savings">' . $loanterm . ' ' . __('mos.' , 'shopperexpress') .'</span>' : '';
+						if($loanapr) $output .= $loanapr . '% <sub>APR</sub>';
+					}else{
+						$output = 2;
+					}
+					break;
+
+					case 'Disclosure_lease':
+					if ( $down_payment && $lease_payment ) {
+						$lease_payment = !empty($lease_payment) && $lease_payment != 'None' && $lease_payment>0 ? '$' . number_format($lease_payment) : null;
+						$output = !empty($lease_payment) ? '<span class="savings">$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress').' '. $leaseterm . ' ' . __('mos.' , 'shopperexpress') . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
+					}else{
+						$output = null;
+					}
+					break;
+					case 'Disclosure_Cash':
+					if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
+						$cash_offer = get_field('cash_offer');
+						$cash_offer = is_int( $cash_offer ) ? '$'. number_format($cash_offer) : $cash_offer;
+						$cash_offer_label = get_field('cash_offer_label');
+						$output = !empty($cash_offer) ? '<span class="savings">' . $cash_offer_label . '</span>' . $cash_offer : null;
+					}else{
+						$output = null;
+					}
+					break;
+
+					default:
+					$loan_payment = !empty($loan_payment) && $loan_payment != 'None' ? '$' . number_format($loan_payment) . ' <sub>/mo</sub>' : null;
+					$output = !empty($loan_payment) ? '<span class="savings">$' . $down_payment . ' ' . __('DOWN' , 'shopperexpress') .'</span>' . $loan_payment : null;
+					break;
+				}
+				
+			endwhile;
+		}
+	endwhile;
+
+	return strip_tags($output);
+}
+add_shortcode( 'offer_payment', 'shortcode_callback_offer_payment' );
+
+
+function shortcode_callback_offer_content( $atts = array() ) {
+	global $post;
+	$post_id = $post->ID;
+		switch ( $atts['type'] ) {
+		case 'lease':
+			$output = get_field( 'disclosure_lease', $post_id );
+		break;
+		case 'loan':
+			$output = get_field( 'disclosure_finance', $post_id );
+		break;
+		case 'cash':
+			$output = get_field( 'disclosure_cash', $post_id );
+		break;
+	}
+
+	return strip_tags($output);
+}
+add_shortcode( 'offer_content', 'shortcode_callback_offer_content' );
+
+add_action( 'pre_get_posts', function ($query){
+    if ( ! is_admin() && $query->is_main_query() && is_post_type_archive('listings')) {
+        $query->set( 'order', 'ASC' );
+        $query->set( 'orderby', 'meta_value_num' );
+        $query->set( 'meta_key', 'price' );
+    } 
+    return $query;
+});
