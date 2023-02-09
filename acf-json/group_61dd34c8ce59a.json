@@ -6,6 +6,7 @@
             "key": "field_61dd34c8d58d7",
             "label": "Main",
             "name": "",
+            "aria-label": "",
             "type": "tab",
             "instructions": "",
             "required": 0,
@@ -22,6 +23,7 @@
             "key": "field_62568e2fb23af",
             "label": "Default image",
             "name": "default_image",
+            "aria-label": "",
             "type": "image",
             "instructions": "",
             "required": 1,
@@ -46,6 +48,7 @@
             "key": "field_61dd34c8d58e7",
             "label": "Menu",
             "name": "offers_menu",
+            "aria-label": "",
             "type": "repeater",
             "instructions": "",
             "required": 0,
@@ -59,12 +62,13 @@
             "min": 0,
             "max": 0,
             "layout": "block",
-            "button_label": "",
+            "button_label": "Add Row",
             "sub_fields": [
                 {
                     "key": "field_61dd34c8de9a1",
                     "label": "Image",
                     "name": "image",
+                    "aria-label": "",
                     "type": "image",
                     "instructions": "",
                     "required": 0,
@@ -83,12 +87,14 @@
                     "max_width": "",
                     "max_height": "",
                     "max_size": "",
-                    "mime_types": ""
+                    "mime_types": "",
+                    "parent_repeater": "field_61dd34c8d58e7"
                 },
                 {
                     "key": "field_61dd34c8de9b4",
                     "label": "Tooltip",
                     "name": "tooltip",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "",
                     "required": 0,
@@ -102,12 +108,14 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "maxlength": ""
+                    "maxlength": "",
+                    "parent_repeater": "field_61dd34c8d58e7"
                 },
                 {
                     "key": "field_61dd34c8de9ad",
                     "label": "Event",
                     "name": "event",
+                    "aria-label": "",
                     "type": "select",
                     "instructions": "",
                     "required": 0,
@@ -131,14 +139,17 @@
                     "ui": 0,
                     "return_format": "value",
                     "ajax": 0,
-                    "placeholder": ""
+                    "placeholder": "",
+                    "parent_repeater": "field_61dd34c8d58e7"
                 }
-            ]
+            ],
+            "rows_per_page": 20
         },
         {
             "key": "field_61dd34c8d58ef",
             "label": "Flexible Content",
             "name": "offers_flexible_content",
+            "aria-label": "",
             "type": "flexible_content",
             "instructions": "",
             "required": 0,
@@ -159,6 +170,7 @@
                             "key": "field_61dd34c8f3665",
                             "label": "Image",
                             "name": "image",
+                            "aria-label": "",
                             "type": "image",
                             "instructions": "",
                             "required": 0,
@@ -183,6 +195,7 @@
                             "key": "field_61dd34c8f366d",
                             "label": "Title",
                             "name": "title",
+                            "aria-label": "",
                             "type": "text",
                             "instructions": "",
                             "required": 0,
@@ -202,6 +215,7 @@
                             "key": "field_61dd34c8f3677",
                             "label": "Description",
                             "name": "description",
+                            "aria-label": "",
                             "type": "wysiwyg",
                             "instructions": "",
                             "required": 0,
@@ -221,6 +235,7 @@
                             "key": "field_61dd34c8f3681",
                             "label": "Payment list",
                             "name": "payment_list",
+                            "aria-label": "",
                             "type": "repeater",
                             "instructions": "",
                             "required": 0,
@@ -234,12 +249,13 @@
                             "min": 0,
                             "max": 0,
                             "layout": "block",
-                            "button_label": "",
+                            "button_label": "Add Row",
                             "sub_fields": [
                                 {
                                     "key": "field_61dd34c90e382",
                                     "label": "Title",
                                     "name": "title",
+                                    "aria-label": "",
                                     "type": "text",
                                     "instructions": "",
                                     "required": 0,
@@ -253,12 +269,14 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": ""
+                                    "maxlength": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e39d",
                                     "label": "Description",
                                     "name": "description",
+                                    "aria-label": "",
                                     "type": "textarea",
                                     "instructions": "",
                                     "required": 0,
@@ -272,12 +290,14 @@
                                     "placeholder": "",
                                     "maxlength": "",
                                     "rows": 1,
-                                    "new_lines": "wpautop"
+                                    "new_lines": "wpautop",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e3a7",
                                     "label": "Lock",
                                     "name": "lock",
+                                    "aria-label": "",
                                     "type": "true_false",
                                     "instructions": "",
                                     "required": 0,
@@ -291,12 +311,14 @@
                                     "default_value": 0,
                                     "ui": 1,
                                     "ui_on_text": "",
-                                    "ui_off_text": ""
+                                    "ui_off_text": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e3ae",
                                     "label": "Show event",
                                     "name": "show_event",
+                                    "aria-label": "",
                                     "type": "true_false",
                                     "instructions": "",
                                     "required": 0,
@@ -318,12 +340,14 @@
                                     "default_value": 0,
                                     "ui": 1,
                                     "ui_on_text": "",
-                                    "ui_off_text": ""
+                                    "ui_off_text": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e3c6",
                                     "label": "Event",
                                     "name": "event",
+                                    "aria-label": "",
                                     "type": "select",
                                     "instructions": "",
                                     "required": 0,
@@ -363,12 +387,14 @@
                                     "ui": 0,
                                     "return_format": "value",
                                     "ajax": 0,
-                                    "placeholder": ""
+                                    "placeholder": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e3cf",
                                     "label": "Show payment",
                                     "name": "show_payment",
+                                    "aria-label": "",
                                     "type": "select",
                                     "instructions": "",
                                     "required": 0,
@@ -399,12 +425,14 @@
                                     "ui": 0,
                                     "return_format": "value",
                                     "ajax": 0,
-                                    "placeholder": ""
+                                    "placeholder": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61dd34c90e3d9",
                                     "label": "Text",
                                     "name": "text",
+                                    "aria-label": "",
                                     "type": "text",
                                     "instructions": "",
                                     "required": 0,
@@ -443,12 +471,14 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": ""
+                                    "maxlength": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 },
                                 {
                                     "key": "field_61e1776495e75",
                                     "label": "Show Popup",
                                     "name": "show_popup",
+                                    "aria-label": "",
                                     "type": "select",
                                     "instructions": "",
                                     "required": 1,
@@ -477,9 +507,11 @@
                                     "ui": 0,
                                     "return_format": "value",
                                     "ajax": 0,
-                                    "placeholder": ""
+                                    "placeholder": "",
+                                    "parent_repeater": "field_61dd34c8f3681"
                                 }
-                            ]
+                            ],
+                            "rows_per_page": 20
                         }
                     ],
                     "min": "",
@@ -495,6 +527,7 @@
                             "key": "field_61dd34c8f368b",
                             "label": "Image",
                             "name": "image",
+                            "aria-label": "",
                             "type": "image",
                             "instructions": "",
                             "required": 0,
@@ -519,6 +552,7 @@
                             "key": "field_61dd34c8f3694",
                             "label": "Title",
                             "name": "title",
+                            "aria-label": "",
                             "type": "text",
                             "instructions": "",
                             "required": 0,
@@ -538,6 +572,7 @@
                             "key": "field_61dd34c8f369d",
                             "label": "Description",
                             "name": "description",
+                            "aria-label": "",
                             "type": "textarea",
                             "instructions": "",
                             "required": 0,
@@ -557,6 +592,7 @@
                             "key": "field_61dd34c8f36a6",
                             "label": "Video list",
                             "name": "video_list",
+                            "aria-label": "",
                             "type": "repeater",
                             "instructions": "",
                             "required": 0,
@@ -570,12 +606,13 @@
                             "min": 0,
                             "max": 0,
                             "layout": "block",
-                            "button_label": "",
+                            "button_label": "Add Row",
                             "sub_fields": [
                                 {
                                     "key": "field_61dd34c9385e2",
                                     "label": "Title",
                                     "name": "title",
+                                    "aria-label": "",
                                     "type": "text",
                                     "instructions": "",
                                     "required": 0,
@@ -589,12 +626,14 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": ""
+                                    "maxlength": "",
+                                    "parent_repeater": "field_61dd34c8f36a6"
                                 },
                                 {
                                     "key": "field_61dd34c9385ed",
                                     "label": "Description",
                                     "name": "description",
+                                    "aria-label": "",
                                     "type": "wysiwyg",
                                     "instructions": "",
                                     "required": 0,
@@ -608,12 +647,14 @@
                                     "tabs": "all",
                                     "toolbar": "full",
                                     "media_upload": 1,
-                                    "delay": 0
+                                    "delay": 0,
+                                    "parent_repeater": "field_61dd34c8f36a6"
                                 },
                                 {
                                     "key": "field_61dd34c9385f6",
                                     "label": "Video id",
                                     "name": "video_id",
+                                    "aria-label": "",
                                     "type": "text",
                                     "instructions": "",
                                     "required": 0,
@@ -627,9 +668,11 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
-                                    "maxlength": ""
+                                    "maxlength": "",
+                                    "parent_repeater": "field_61dd34c8f36a6"
                                 }
-                            ]
+                            ],
+                            "rows_per_page": 20
                         }
                     ],
                     "min": "",
@@ -644,6 +687,7 @@
             "key": "field_61dd34c8d58f4",
             "label": "Phone",
             "name": "offers_phone",
+            "aria-label": "",
             "type": "text",
             "instructions": "",
             "required": 0,
@@ -663,6 +707,7 @@
             "key": "field_61dd34c8d58fd",
             "label": "Link",
             "name": "offers_link",
+            "aria-label": "",
             "type": "link",
             "instructions": "If you select a form below this link will open a popup with that form.",
             "required": 0,
@@ -675,9 +720,27 @@
             "return_format": "array"
         },
         {
+            "key": "field_63da4dc8cede3",
+            "label": "Popup",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
             "key": "field_61dd34c8d5905",
             "label": "Popup form",
             "name": "offers_popup_form",
+            "aria-label": "",
             "type": "post_object",
             "instructions": "",
             "required": 0,
@@ -700,6 +763,7 @@
             "key": "field_61dd34c8d590d",
             "label": "Popup form top text",
             "name": "offers_popup_form_top_text",
+            "aria-label": "",
             "type": "wysiwyg",
             "instructions": "",
             "required": 0,
@@ -726,6 +790,7 @@
             "key": "field_61dd34c8d5913",
             "label": "Popup form bottom text",
             "name": "offers_popup_form_bottom_text",
+            "aria-label": "",
             "type": "wysiwyg",
             "instructions": "",
             "required": 0,
@@ -752,6 +817,7 @@
             "key": "field_61dd34c8d5918",
             "label": "Comment footer",
             "name": "offers_comment_footer",
+            "aria-label": "",
             "type": "textarea",
             "instructions": "",
             "required": 0,
@@ -766,6 +832,113 @@
             "maxlength": "",
             "rows": "",
             "new_lines": "wpautop"
+        },
+        {
+            "key": "field_63da4dd1cede4",
+            "label": "Save Offer Popup",
+            "name": "",
+            "aria-label": "",
+            "type": "message",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "new_lines": "",
+            "esc_html": 0
+        },
+        {
+            "key": "field_63da4e3475953",
+            "label": "Heading",
+            "name": "heading_save_offer",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_63da4e3b75954",
+            "label": "Form Lease Special",
+            "name": "form_lease_special",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "wpcf7_contact_form"
+            ],
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
+        },
+        {
+            "key": "field_63db8bccb1025",
+            "label": "Form Special APR",
+            "name": "form_special_apr",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "wpcf7_contact_form"
+            ],
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
+        },
+        {
+            "key": "field_63db8bd0b1026",
+            "label": "Form Cash",
+            "name": "form_cash",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "wpcf7_contact_form"
+            ],
+            "taxonomy": "",
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 1
         }
     ],
     "location": [
@@ -786,5 +959,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1665050822
+    "modified": 1675332609
 }

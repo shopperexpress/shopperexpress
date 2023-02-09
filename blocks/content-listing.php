@@ -51,9 +51,12 @@
 			}
 			$price = get_field( 'price' );
 			$msrp = get_field( 'original_price' ) ? get_field( 'original_price' ) : $price;
-			$_price_text = $msrp > 0 ? '<span>'.$text.'</span> <span class="st">$'.number_format($msrp).'</span>' : __('Contact for Price', 'shopperexpress');
+			$msrp = $msrp > 0 && is_float( $msrp ) ? number_format($msrp) : $msrp;
+			$_price_text = $msrp > 0 ? '<span>'.$text.'</span> <span class="st">$'. $msrp .'</span>' : __('Contact for Price', 'shopperexpress');
 			?>
-			<strong class="card-price"><?php echo $_price_text; ?></strong>
+			<?php if ( get_field( 'show_market_price', 'options' ) ) : ?>
+				<strong class="card-price"><?php echo $_price_text; ?></strong>
+			<?php endif; ?>
 			<?php
 			if( is_user_logged_in() && $price > 0 ) :
 				?>
