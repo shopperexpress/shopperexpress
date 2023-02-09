@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.5.36
+Version: v1.5.38
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -2402,6 +2402,12 @@ table td {
 	width: auto !important;
 }
 
+.jcf-select.jcf-select-sort.jcf-drop-active .jcf-select-opener::before {
+	-webkit-transform: translateY(-50%) rotate(-180deg);
+	-ms-transform: translateY(-50%) rotate(-180deg);
+	transform: translateY(-50%) rotate(-180deg);
+}
+
 .jcf-select.jcf-select-sort .jcf-opener-holder {
 	display: block;
 	max-width: 100%;
@@ -4701,6 +4707,21 @@ textarea.form-control {
 	display: block;
 }
 
+.single-offers .detail-slider .slick-slide::before,
+.post-type-archive-offers .detail-slider .slick-slide::before {
+	display: none;
+}
+
+.single-offers .detail-slider img,
+.post-type-archive-offers .detail-slider img {
+	position: static;
+	top: auto;
+	left: auto;
+	width: 100%;
+	height: auto;
+	object-fit: inherit;
+}
+
 .detail-slider {
 	margin-bottom: 10px;
 }
@@ -5014,6 +5035,23 @@ textarea.form-control {
 .modal.modal-get-book .close:hover {
 	opacity: 1;
 	background-color: transparent;
+}
+
+.modal.modal-offer .modal-title {
+	margin-bottom: 40px;
+}
+
+.modal.modal-offer .lead {
+	padding-bottom: 46px;
+}
+
+.modal.modal-offer h4 {
+	text-align: center;
+	margin-bottom: 25px;
+}
+
+.modal.modal-offer .btn-holder {
+	padding-bottom: 20px;
 }
 
 .modal .form-check {
