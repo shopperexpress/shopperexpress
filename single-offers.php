@@ -232,42 +232,41 @@ while (have_posts()) : the_post();
 											break;
 										}
 										$title = get_sub_field( 'title' );
-										if( $condition != 'Used'):
-											$html = null;
-											if ( $lock == true && !is_user_logged_in() && $event != 'popup' ) :
-												$html = '<span class="price" data-toggle="modal" data-target="#Disclosure_lease">' . $text . '</span>';
-											elseif( $lock == true && is_user_logged_in() && $event != 'popup' && $text ):
-												$html = '<strong class="price">' . $text . '</strong>';
-											elseif($event == 'popup' && $text):
-												$html = '<strong class="price">' . $text . '</strong>';
-											endif; 
-
-											if ( $text ) :
-												?>
-												<li>
-													<?php 
-														echo '<a href="#" data-toggle="modal" data-target="#'.$show_payment.'">';
-													?>
-													<div class="text-holder">
-														<?php if ( $title ): ?>
-															<h4 class="h3"><?php echo $title; ?></h4>
-															<?php
-														endif;
-														the_sub_field( 'description' );
-														?>
-													</div>
-													<?php
-													echo $html;
-													if( $lock == false ):
-														?>
-														<a href="#" onclick="javascript:inticeAllEvents.<?php echo $event; ?>" class="btn btn-primary"><?php the_sub_field( 'text' ); ?></a>
+										if( $condition != 'Used'): ?>
+											<li>
+												<?php if($event == 'popup' && $text){ 
+													$show_popup = get_sub_field('show_popup');
+													if($show_popup) echo '<a href="#" data-toggle="modal" data-target="#'.$show_popup.'">';
+												}
+												if( $lock == true && is_user_logged_in() && $event != 'popup' && $text){
+													echo '<a href="#" onclick="javascript:inticeAllEvents.' . $event . '">';
+												} ?>
+												<div class="text-holder">
+													<?php if ( $title ): ?>
+														<h4 class="h3"><?php echo $title; ?></h4>
 														<?php
 													endif;
-													if(($event == 'popup' && $text) || ( $lock == true && is_user_logged_in() && $event != 'popup' && $text )) echo '</a>';
+													the_sub_field( 'description' );
 													?>
-												</li>
+												</div>
 												<?php
-											endif;
+												if ( $lock == true && !is_user_logged_in() && $event != 'popup' ) :
+													echo '<span class="unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><i class="material-icons">' . __('lock_open','shopperexpress') . '</i> ' . __('UNLOCK PAYMENT','shopperexpress') . '</span>';
+												elseif( $lock == true && is_user_logged_in() && $event != 'popup' && $text ):
+													echo '<strong class="price">' . $text . '</strong>';
+												elseif($event == 'popup' && $text):
+													echo '<strong class="price">' . $text . '</strong>';
+												endif;
+
+												if( $lock == false ):
+													?>
+													<a href="#" onclick="javascript:inticeAllEvents.<?php echo $event; ?>" class="btn btn-primary"><?php the_sub_field( 'text' ); ?></a>
+													<?php
+												endif;
+												if(($event == 'popup' && $text) || ( $lock == true && is_user_logged_in() && $event != 'popup' && $text )) echo '</a>';
+												?>
+											</li>
+											<?php
 										endif;
 									endwhile;
 									?>
