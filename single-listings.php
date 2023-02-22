@@ -241,7 +241,7 @@ while (have_posts()) : the_post();
 										}
 										$title = get_sub_field( 'title' );
 										if( $condition != 'Used' || $title != 'Lease' ):
-											if ( $lock == true && !empty($text) ) :
+											if ( $lock == true && !empty($text) && ( $loan_payment > 0 || $lease_payment > 0 ) ) :
 												?>
 												<li>
 													<?php if( is_user_logged_in() ) echo '<a href="#" onclick="javascript:inticeAllEvents.' . $event . '">' ?>
