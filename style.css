@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.6.4
+Version: v1.6.5
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -3175,10 +3175,12 @@ table td {
 }
 
 .modal.modal-filter .tab-content {
+	position: relative;
 	overflow: hidden;
 }
 
 .modal.modal-filter .js-tab-hidden {
+	width: 100%;
 	display: block !important;
 	left: -9999px !important;
 	position: absolute !important;
@@ -3743,16 +3745,42 @@ textarea.form-control {
 }
 
 .filter-result {
-	display: block;
 	margin: 0 -15px 30px;
 	padding: 0 15px 20px;
+	border-bottom: 1px solid #d8d8d8;
+}
+
+.filter-result .result-detail {
 	font-size: 13px;
 	font-weight: 500;
-	border-bottom: 1px solid #d8d8d8;
+	display: block;
+	margin-bottom: 10px;
 }
 
 .filter-result strong {
 	font-weight: 700;
+}
+
+.filter-result .btn.btn-secondary {
+	background-color: #f2f2f2;
+	border-color: #f2f2f2;
+	text-transform: uppercase;
+	color: #000;
+	font-size: 16px;
+	line-height: 1;
+	padding: 10px 15px;
+	font-weight: 700;
+}
+
+.filter-result .btn.btn-secondary:hover {
+	background-color: #d9d8d8;
+	border-color: #d9d8d8;
+}
+
+.filter-result .btn.btn-secondary:active {
+	background-color: #ccc;
+	border-color: #ccc;
+	color: #000;
 }
 
 .filter-list {

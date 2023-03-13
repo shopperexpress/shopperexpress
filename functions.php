@@ -24,8 +24,6 @@ include( get_template_directory() . '/inc/scripts.php' );
 
 include( get_template_directory() . '/inc/cpt.php' );
 
-include( get_template_directory() . '/inc/cron.php' );
-
 flush_rewrite_rules();
 
 add_action( 'wp', function () {

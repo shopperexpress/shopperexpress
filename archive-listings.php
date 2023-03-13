@@ -31,7 +31,10 @@ $get_query = wps_listings( 1 );
 	<div class="main-holder">
 		<a class="filter-opener" href="#"><i class="material-icons"><?php _e('filter_alt','shopperexpress'); ?></i></a>
 		<aside class="aside">
-			<span class="filter-result">Showing <strong class="result-current"><?php if ( $get_query > 0 ) : echo 1; else : 0; endif; ?>-<?php if ( $get_query > 23 ) : echo 24; else: echo $get_query; endif; ?></strong> of <strong class="result-total"><?php echo $get_query; ?></strong> Vehicles</span>
+			<div class="filter-result">
+				<span class="result-detail">Showing <strong class="result-current"><?php if ( $get_query > 0 ) : echo 1; else : 0; endif; ?>-<?php if ( $get_query > 23 ) : echo 24; else: echo $get_query; endif; ?></strong> of <strong class="result-total"><?php echo $get_query; ?></strong> Vehicles</span>
+				<button type="button" class="btn btn-secondary btn-block btn-reset"><?php _e('show all vehicles','shopperexpress'); ?></button>
+			</div>
 			<?php
 			if ( !empty($price) && count(array_unique($price)) > 1 && is_float(floatval(min(array_filter($price)))) ) :
 			$val = explode(',',$_GET['value']);

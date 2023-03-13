@@ -251,28 +251,30 @@ function wps_listings( $show = 0 ) {
 		$query = new WP_Query( array_merge( $args, ['fields' => 'ids']) );
 		wp_reset_query();
 
-		$filter['total'] = $query->found_posts;
-		foreach ( ['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'] as $taxonomy ) {
-			if ( $options = get_terms( ['taxonomy' => $taxonomy,'hide_empty' => true] ) ) {
-				foreach ( $options as $term ) {
-					$query1 = new WP_Query( array(
-						'post__in'     	      => $query->posts,
-						'post_type'   		  => $_post_type,
-						'post_status' 		  => 'publish',
-						'ignore_sticky_posts' => true,
-						'posts_per_page'      => -1,
-						'tax_query' => [
-							[
-								'taxonomy' => $taxonomy,
-								'field'    => 'slug',
-								'terms'    => $term->slug,
+		if ( $show != 1 ) {
+			$filter['total'] = $query->found_posts;
+			foreach ( ['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color', 'features'] as $taxonomy ) {
+				if ( $options = get_terms( ['taxonomy' => $taxonomy,'hide_empty' => true] ) ) {
+					foreach ( $options as $term ) {
+						$query1 = new WP_Query( array(
+							'post__in'     	      => $query->posts,
+							'post_type'   		  => $_post_type,
+							'post_status' 		  => 'publish',
+							'ignore_sticky_posts' => true,
+							'posts_per_page'      => -1,
+							'tax_query' => [
+								[
+									'taxonomy' => $taxonomy,
+									'field'    => 'slug',
+									'terms'    => $term->slug,
+								]
 							]
-						]
-					) );
+						) );
 
-					$filter['taxonomies'][$taxonomy][] = [ 'name' => $term->slug,'count' => $query1->found_posts ];
+						$filter['taxonomies'][$taxonomy][] = [ 'name' => $term->slug,'count' => $query1->found_posts ];
 
-					wp_reset_query();
+						wp_reset_query();
+					}
 				}
 			}
 		}
@@ -356,7 +358,7 @@ function filter_args(){
 
 function new_filter( $taxonomies = [] ){
 
-	$taxonomies = !empty( $taxonomies ) ? $taxonomies : ['yr', 'make','model', 'engine' , 'exterior-color', 'body-style' ,'trim' ,'drivetrain', 'transmission' , 'condition', ];
+	$taxonomies = !empty( $taxonomies ) ? $taxonomies : ['yr', 'make','model', 'engine' , 'exterior-color', 'body-style' ,'trim' ,'drivetrain', 'transmission' , 'condition', 'features' ];
 
 	?>
 	<div class="filter-list list-unstyled">
@@ -403,7 +405,7 @@ function new_filter( $taxonomies = [] ){
 
 function new_filter_modal(){
 	$post_type = get_post_type();
-	$taxonomies = $post_type == 'offers' ? [ 'year', 'make', 'model', 'body-style' ] : ['condition','yr','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color'];
+	$taxonomies = $post_type == 'offers' ? [ 'year', 'make', 'model', 'body-style' ] : ['condition','yr','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color', 'features'];
 	?>
 	<div class="modal modal-filter" id="filterSchedule" tabindex="-1" aria-labelledby="filterSchedule" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-scrollable">
@@ -461,7 +463,7 @@ function new_filter_modal(){
 															<label class="custom-check">
 																<input class="fake-input" type="checkbox" name="<?php echo $taxonomy; ?>" value="<?php echo $term->slug; ?>" <?php if ( $is_selected ) checked( true ); ?>>
 																<span class="fake-label">
-																	<span class="name"><?php echo $term->name; ?></span>
+																	<span class="name"><?php echo esc_html($term->name); ?></span>
 																	<span class="detail"><span class="detail-count"><?php echo $query->found_posts; ?></span> available</span>
 																</span>
 																<span class="fake-checkbox">

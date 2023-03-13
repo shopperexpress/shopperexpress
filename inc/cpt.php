@@ -21,6 +21,7 @@ function list_taxonomies(){
 		'loan-payment'   => __('Loan Payment', 'shopperexpress'),
 		'down-payment'   => __('Down Payment', 'shopperexpress'),
 		'leaseterm'      => __('LeaseTerm', 'shopperexpress'),
+		'features'		 => __('Features', 'shopperexpress'),
 	];
 }
 

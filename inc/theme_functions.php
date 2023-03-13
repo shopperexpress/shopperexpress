@@ -186,30 +186,6 @@ function auto_redirect_after_logout(){
 	exit;
 }
 
-add_action( 'wps_update_listing_trigger', 'wps_update_listing_trigger_function' );
-
-function wps_update_listing_trigger_function(){
-	if ( $trigger_url = get_field( 'trigger_url', 'options' ) ) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $trigger_url);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_exec($ch);
-		curl_close($ch);
-	}
-}
-
-add_action( 'wps_update_listing_processing', 'wps_update_listing_processing_fucntion' );
-
-function wps_update_listing_processing_fucntion(){
-	if ( $processing_url = get_field( 'processing_url', 'options' ) ) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $processing_url);
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_exec($ch);
-		curl_close($ch);
-	}
-}
-
 function wps_get_term( $post, $taxonomy, $field = 'name' ){
 
 	if ( $term = get_the_terms( $post, $taxonomy ) ) {

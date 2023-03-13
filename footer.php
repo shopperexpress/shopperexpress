@@ -116,9 +116,22 @@ $footer_style = get_field( 'footer_style', 'options' );
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
 						<ul class="modal-content-list">
-							<?php while ( have_rows( 'features_options' ) ) : the_row(); ?>
-								<li><i class="fa-li fa fa-check"></i> <?php the_sub_field( 'text' ); ?></li>
-							<?php endwhile; ?>
+							<?php
+							if ( is_singular( 'listings' ) ) :
+								if ( $terms = get_the_terms( get_the_id(), 'features' ) ) :
+									foreach ( $terms as $term ) :
+										?>
+										<li><i class="fa-li fa fa-check"></i> <?php echo $term->name; ?></li>
+										<?php
+									endforeach;
+								endif;
+							else:
+								while ( have_rows( 'features_options' ) ) : the_row(); ?>
+									<li><i class="fa-li fa fa-check"></i> <?php the_sub_field( 'text' ); ?></li>
+									<?php
+								endwhile;
+							endif;
+							?>
 						</ul>
 					</div>
 				</div>
