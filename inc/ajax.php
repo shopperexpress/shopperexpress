@@ -253,6 +253,7 @@ function wps_listings( $show = 0 ) {
 
 		if ( $show != 1 ) {
 			$filter['total'] = $query->found_posts;
+			
 			foreach ( ['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color', 'features'] as $taxonomy ) {
 				if ( $options = get_terms( ['taxonomy' => $taxonomy,'hide_empty' => true] ) ) {
 					foreach ( $options as $term ) {
@@ -261,6 +262,8 @@ function wps_listings( $show = 0 ) {
 							'post_type'   		  => $_post_type,
 							'post_status' 		  => 'publish',
 							'ignore_sticky_posts' => true,
+							'fields' 			  => 'ids',
+							'no_found_rows' 	  => true,
 							'posts_per_page'      => -1,
 							'tax_query' => [
 								[
@@ -271,7 +274,7 @@ function wps_listings( $show = 0 ) {
 							]
 						) );
 
-						$filter['taxonomies'][$taxonomy][] = [ 'name' => $term->slug,'count' => $query1->found_posts ];
+						$filter['taxonomies'][$taxonomy][] = [ 'name' => $term->slug,'count' => count( $query1->posts ) ];
 
 						wp_reset_query();
 					}
@@ -435,6 +438,7 @@ function new_filter_modal(){
 											if( $select_name == 'year' ) $args['order'] = 'DESC';
 
 											if ( $options = get_terms( $args ) ) :
+												
 												foreach ( $options as $term ) :
 
 													$args = array(
@@ -442,6 +446,8 @@ function new_filter_modal(){
 														'post_status' 		  => 'publish',
 														'ignore_sticky_posts' => true,
 														'posts_per_page'      => -1,
+														'fields' => 'ids',
+														'no_found_rows' => true,
 														'tax_query' => [
 															[
 																'taxonomy' => $select_name,
@@ -452,8 +458,9 @@ function new_filter_modal(){
 													);
 
 													$query = new WP_Query( $args );
+													$count = count( $query->posts );
 
-													if( $query->have_posts() ) :
+													if( $count > 0 ) :
 
 														$t =  is_array($_GET[$taxonomy]) ? $_GET[$taxonomy] : explode(',', $_GET[$taxonomy]);
 														$is_selected = in_array( $term->slug, $t) ? true : false;
@@ -464,7 +471,7 @@ function new_filter_modal(){
 																<input class="fake-input" type="checkbox" name="<?php echo $taxonomy; ?>" value="<?php echo $term->slug; ?>" <?php if ( $is_selected ) checked( true ); ?>>
 																<span class="fake-label">
 																	<span class="name"><?php echo esc_html($term->name); ?></span>
-																	<span class="detail"><span class="detail-count"><?php echo $query->found_posts; ?></span> available</span>
+																	<span class="detail"><span class="detail-count"><?php echo $count; ?></span> available</span>
 																</span>
 																<span class="fake-checkbox">
 																	<i class="material-icons">check</i>
@@ -474,6 +481,7 @@ function new_filter_modal(){
 														<?php
 													endif;
 												endforeach;
+												wp_reset_query();
 											endif;
 											?>
 										</ul>

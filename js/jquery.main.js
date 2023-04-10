@@ -1531,7 +1531,7 @@ function initCheckedClasses() {
 
 	jcf.addModule({
 		name: 'Select',
-		selector: 'select',
+		selector: 'select:not(.eco-widget__form select)',
 		options: {
 			element: null,
 			multipleCompactStyle: false
@@ -5214,12 +5214,14 @@ tpl:'<div class="fancybox-share"><h1>{{SHARE}}</h1><p><a class="fancybox-share__
 
 // content tabs init
 function initTabs() {
-	jQuery('.filter-list').tabset({
-		tabLinks: 'a',
-		attrib: 'data-tab',
-		tabAttrib: 'data-id',
-		defaultTab: false
-	});
+	if (jQuery('.filter-list').length) {
+		jQuery('.filter-list').tabset({
+			tabLinks: 'a',
+			attrib: 'data-tab',
+			tabAttrib: 'data-id',
+			defaultTab: false
+		});
+	}
 }
 
 function initRemoveBlock() {
@@ -5908,14 +5910,16 @@ function initAjaxFiltering() {
 				var holder = jQuery(this);
 				var slider = holder.find('.detail-slider');
 
-				slider.slick({
-					slidesToScroll: 1,
-					rows: 0,
-					infinite: false,
-					prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
-					nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
-					focusOnSelect: true
-				});
+				if (slider.length) {
+					slider.slick({
+						slidesToScroll: 1,
+						rows: 0,
+						infinite: false,
+						prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
+						nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
+						focusOnSelect: true
+					});
+				}
 			});
 		}
 	});
