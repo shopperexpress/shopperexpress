@@ -209,7 +209,6 @@ $footer_style = get_field( 'footer_style', 'options' );
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
 						<?php
-						the_field( 'disclosure_lease' );
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
 							<h4><?php echo $heading_save_offer; ?></h4>
@@ -218,6 +217,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_lease_special = get_field( 'form_lease_special', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_lease_special->ID.'" html_class="form-unlock"]');
 						}
+						the_field( 'disclosure_lease' );
 						?>
 
 					</div>
@@ -239,7 +239,6 @@ $footer_style = get_field( 'footer_style', 'options' );
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
 						<?php
-						the_field( 'disclosure_finance' );
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
 							<h4><?php echo $heading_save_offer; ?></h4>
@@ -248,6 +247,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_special_apr = get_field( 'form_special_apr', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_special_apr->ID.'" html_class="form-unlock"]');
 						}
+						the_field( 'disclosure_finance' );
 						?>
 					</div>
 				</div>
@@ -268,7 +268,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 				<div class="modal-body">
 					<div class="text-holder jcf-scrollable">
 						<?php
-						the_field( 'disclosure_cash' );
+						
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
 							<h4><?php echo $heading_save_offer; ?></h4>
@@ -277,6 +277,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_cash = get_field( 'form_cash', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_cash->ID.'" html_class="form-unlock"]');
 						}
+						the_field( 'disclosure_cash' );
 						?>
 					</div>
 				</div>
