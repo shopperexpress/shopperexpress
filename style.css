@@ -2,10 +2,10 @@
 Theme Name: ShopperExpress
 Theme URI: https://github.com/shopperexpress/shopperexpress
 Author: ShopperExpress
-Author URI:
+Author URI: 
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.6.9
+Version: v1.7.0
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -5100,9 +5100,17 @@ textarea.form-control {
 
 .modal .modal-form .form-description {
 	margin: 0 -10px;
-	font-size: 10px;
+	font-size: 11px;
 	line-height: 1.2142;
 	font-weight: 500;
+}
+
+.modal .modal-form .form-description .jcf-scrollable-wrapper {
+	margin-bottom: 0;
+}
+
+.modal .modal-form .form-description .jcf-scrollable {
+	padding: 0 1rem;
 }
 
 .modal-header {
@@ -5161,6 +5169,10 @@ textarea.form-control {
 	line-height: 1.2;
 }
 
+.modal .text-wrapp .jcf-scrollable-wrapper {
+	margin-bottom: 0;
+}
+
 .modal .text-holder {
 	font-weight: 500;
 	font-size: 14px;
@@ -5170,12 +5182,16 @@ textarea.form-control {
 	width: calc(100% - 20px) !important;
 }
 
-.modal .jcf-scrollable-wrapper {
-	width: 100% !important;
+.modal .text-holder.h-sm {
+	height: 150px;
+	max-height: 150px;
+	font-size: 11px;
+	padding: 0 1rem;
 }
 
 .modal .jcf-scrollable-wrapper {
 	margin-bottom: 20px;
+	width: 100% !important;
 }
 
 .modal .jcf-scrollable-wrapper:hover .jcf-scrollbar-vertical .jcf-scrollbar-handle {
@@ -5208,7 +5224,24 @@ textarea.form-control {
 }
 
 .form-unlock .btn-holder {
-	padding: 16px 0 25px;
+	padding: 16px 0 0;
+}
+
+.form-unlock .btn-holder p {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+.form-unlock .btn-holder .wpcf7-spinner {
+	margin: 1rem;
 }
 
 .form-unlock .btn-lg {
@@ -7995,10 +8028,6 @@ textarea.form-control {
 		padding-bottom: 45px;
 	}
 
-	.modal .modal-form .form-description {
-		font-size: 14px;
-	}
-
 	.modal-header {
 		min-height: 100px;
 	}
@@ -8007,10 +8036,19 @@ textarea.form-control {
 		font-size: 29px;
 	}
 
+	.modal .text-wrapp .jcf-scrollable-wrapper {
+		margin-bottom: 0;
+	}
+
 	.modal .text-holder {
 		font-size: 16px;
 		height: 460px;
 		max-height: 460px;
+	}
+
+	.modal .text-holder.h-sm {
+		max-height: 150px;
+		font-size: 11px;
 	}
 
 	.modal .jcf-scrollable-wrapper {
@@ -8024,10 +8062,6 @@ textarea.form-control {
 
 	.form-unlock {
 		padding: 0 36px;
-	}
-
-	.form-unlock .btn-holder {
-		padding: 16px 0 56px;
 	}
 
 	.form-unlock .btn-lg {
@@ -9697,4 +9731,4 @@ textarea.form-control {
 		box-shadow: 0 -2.6em 0 0 rgba(var(--primary-rgb), .2), 1.8em -1.8em 0 0 rgba(var(--primary-rgb), .2), 2.5em 0 0 0 rgba(var(--primary-rgb), .2), 1.75em 1.75em 0 0 rgba(var(--primary-rgb), .2), 0 2.5em 0 0 rgba(var(--primary-rgb), .2), -1.8em 1.8em 0 0 rgba(var(--primary-rgb), .5), -2.6em 0 0 0 rgba(var(--primary-rgb), .7), -1.8em -1.8em 0 0 var(--primary);
 	}
 }
-
+

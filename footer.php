@@ -198,7 +198,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 
 	<!-- Disclosure_lease Modal -->
 	<div class="modal fade content-scrollable modal-offer" id="Disclosure_lease" tabindex="-1" aria-labelledby="DisclosureLeaseLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-dialog modal-md modal-form modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
 					<h3 class="modal-title"><?php _e('Additional Information','shopperexpress'); ?></h3>
@@ -207,7 +207,6 @@ $footer_style = get_field( 'footer_style', 'options' );
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="text-holder jcf-scrollable">
 						<?php
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
@@ -216,11 +215,12 @@ $footer_style = get_field( 'footer_style', 'options' );
 						endif;
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_lease_special = get_field( 'form_lease_special', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_lease_special->ID.'" html_class="form-unlock"]');
-						}
-						the_field( 'disclosure_lease' );
-						?>
-
-					</div>
+						} ?>
+						<div class="text-wrapp">
+						<div class="text-holder jcf-scrollable h-sm">
+						<?php the_field( 'disclosure_lease' ); ?>
+						</div>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -228,7 +228,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 
 	<!-- Disclosure_loan Modal -->
 	<div class="modal fade content-scrollable modal-offer" id="Disclosure_loan" tabindex="-1" aria-labelledby="DisclosureLoanLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-dialog modal-md modal-form modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
 					<h3 class="modal-title"><?php _e('Additional Information','shopperexpress'); ?></h3>
@@ -237,7 +237,6 @@ $footer_style = get_field( 'footer_style', 'options' );
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="text-holder jcf-scrollable">
 						<?php
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
@@ -246,10 +245,12 @@ $footer_style = get_field( 'footer_style', 'options' );
 						endif;
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_special_apr = get_field( 'form_special_apr', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_special_apr->ID.'" html_class="form-unlock"]');
-						}
-						the_field( 'disclosure_finance' );
-						?>
-					</div>
+						} ?>
+						<div class="text-wrapp">
+						<div class="text-holder jcf-scrollable h-sm">
+						<?php the_field( 'disclosure_finance' ); ?>
+						</div>
+						</div>
 				</div>
 			</div>
 		</div>
@@ -257,7 +258,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 
 	<!-- Disclosure_Cash Modal -->
 	<div class="modal fade content-scrollable modal-offer" id="Disclosure_Cash" tabindex="-1" aria-labelledby="DisclosureCashLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-dialog modal-md modal-form modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header justify-content-center">
 					<h3 class="modal-title"><?php _e('Additional Information','shopperexpress'); ?></h3>
@@ -266,7 +267,6 @@ $footer_style = get_field( 'footer_style', 'options' );
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="text-holder jcf-scrollable">
 						<?php
 						
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
@@ -276,10 +276,12 @@ $footer_style = get_field( 'footer_style', 'options' );
 						endif;
 						if ( is_singular( 'offers' ) ) {
 							if ( $form_cash = get_field( 'form_cash', 'options' ) ) echo do_shortcode('[contact-form-7 id="'.$form_cash->ID.'" html_class="form-unlock"]');
-						}
-						the_field( 'disclosure_cash' );
-						?>
-					</div>
+						} ?>
+						<div class="text-wrapp">
+						<div class="text-holder jcf-scrollable h-sm">
+						<?php the_field( 'disclosure_cash' ); ?>
+						</div>
+						</div>
 				</div>
 			</div>
 		</div>
