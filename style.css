@@ -5,7 +5,7 @@ Author: ShopperExpress
 Author URI: 
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: v1.7.0
+Version: v1.7.1
 Requires at least: 5.0
 Tested up to: 5.4
 Requires PHP: 7.0
@@ -9731,4 +9731,4 @@ textarea.form-control {
 		box-shadow: 0 -2.6em 0 0 rgba(var(--primary-rgb), .2), 1.8em -1.8em 0 0 rgba(var(--primary-rgb), .2), 2.5em 0 0 0 rgba(var(--primary-rgb), .2), 1.75em 1.75em 0 0 rgba(var(--primary-rgb), .2), 0 2.5em 0 0 rgba(var(--primary-rgb), .2), -1.8em 1.8em 0 0 rgba(var(--primary-rgb), .5), -2.6em 0 0 0 rgba(var(--primary-rgb), .7), -1.8em -1.8em 0 0 var(--primary);
 	}
 }
-
+
