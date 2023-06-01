@@ -73,7 +73,12 @@ endif;
 				<div class="navbar-holder">
 					<a class="nav-opener" href="#"><span></span></a>
 					<?php if ( $logo = get_field( 'logo', 'options' ) ): ?>
-						<a class="navbar-brand" href="<?php echo esc_url(home_url()); ?>">
+						<?php if (get_field( 'logo_url', 'options' )) {
+							$logo_url = get_field( 'logo_url', 'options' );
+						} else {
+							$logo_url = esc_url(home_url());
+						}; ?>
+						<a class="navbar-brand" href="<?php echo $logo_url; ?>">
 							<?php echo wp_get_attachment_image($logo['id'],'full', false , ['class' => 'brand-img']); ?>
 						</a>
 					<?php endif; ?>
