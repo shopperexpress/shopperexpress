@@ -255,7 +255,7 @@ function defer_js( $tag, $handle, $src ){
 	return $tag;
 }
 # commented block below, because there may be errors with js, if need you can uncomment this block
-add_filter( 'script_loader_tag', 'defer_js', 99, 3 );
+#add_filter( 'script_loader_tag', 'defer_js', 99, 3 );
 
 remove_action( 'wp_head', 'rest_output_link_wp_head', 10 );
 remove_action( 'wp_head', 'wp_oembed_add_discovery_links', 10 );
