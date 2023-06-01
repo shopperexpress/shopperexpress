@@ -17,7 +17,7 @@ function shopperexpress_scripts_styles() {
 	wp_enqueue_script( 'shopperexpress-external', 'https://fast.wistia.com/assets/external/E-v1.js', array( 'jquery' ), $theme_version, false );
 	wp_enqueue_script( 'shopperexpress-popper', 'https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js', array( 'jquery' ), $theme_version, false );
 	wp_enqueue_script( 'shopperexpress-bootstrap-js', get_template_directory_uri() . '/js/bootstrap.min.js', array( 'jquery' ), $theme_version, false );
-	wp_enqueue_script( 'shopperexpress-jquery', get_template_directory_uri() . '/js/jquery.main.js', array( 'jquery' ), time(), false );
+	wp_enqueue_script( 'shopperexpress-jquery', get_template_directory_uri() . '/js/jquery.main.js', array( 'jquery' ), time(), true );
 	wp_enqueue_script( 'shopperexpress-impl', get_template_directory_uri() . '/js/impl.js', array( 'jquery' ), $theme_version, false );
 	wp_localize_script( 'shopperexpress-jquery', 'ajax', array( 'admin' =>  admin_url( 'admin-ajax.php' ) ) );
 
