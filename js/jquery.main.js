@@ -5605,9 +5605,9 @@ function initCustomForms() {
 		field.on('input', function() {
 			var values = field.data('jcfInstance').values;
 
-			minPrice.text(formatToMoney(values[0]));
-			maxPrice.text(formatToMoney(values[1]));
-			hiddenField.val(values[0] + ',' + values[1]);
+			minPrice.text(formatToMoney(values[0].trim()));
+			maxPrice.text(formatToMoney(values[1].trim()));
+			hiddenField.val(values[0].trim() + ',' + values[1].trim());
 		});
 	});
 
