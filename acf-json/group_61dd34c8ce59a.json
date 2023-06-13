@@ -63,6 +63,7 @@
             "max": 0,
             "layout": "block",
             "button_label": "Add Row",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_61dd34c8de9a1",
@@ -142,8 +143,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_61dd34c8d58e7"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_61dd34c8d58ef",
@@ -250,6 +250,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_61dd34c90e382",
@@ -510,8 +511,7 @@
                                     "placeholder": "",
                                     "parent_repeater": "field_61dd34c8f3681"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -607,6 +607,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_61dd34c9385e2",
@@ -671,8 +672,7 @@
                                     "maxlength": "",
                                     "parent_repeater": "field_61dd34c8f36a6"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -939,6 +939,59 @@
             "multiple": 0,
             "allow_null": 0,
             "ui": 1
+        },
+        {
+            "key": "field_648837961b9ba",
+            "label": "Slider",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_648837b41b9bb",
+            "label": "Section Background Color",
+            "name": "section_bg_offers",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 1,
+            "return_format": "string"
+        },
+        {
+            "key": "field_648837d61b9bc",
+            "label": "Slide Box Background Color",
+            "name": "slide_bg_offers",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "40",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 1,
+            "return_format": "string"
         }
     ],
     "location": [
@@ -959,5 +1012,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1675332609
+    "modified": 1686648869
 }

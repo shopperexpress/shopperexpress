@@ -364,10 +364,12 @@ while (have_posts()) : the_post();
 	endif;
 
 	$title = get_field( 'title_slider', 'options' );
+	$section_bg = get_field( 'section_bg', 'options' );
+	$slide_bg = get_field( 'slide_bg', 'options' );
 
 	if ( have_rows( 'slider' , 'options' ) ) :
 		?>
-		<section class="shop-section filter-section">
+		<section class="shop-section filter-section" <?php if ($section_bg) echo 'style="background-color:'.$section_bg.';"' ?>>
 			<div class="container-fluid">
 				<?php if ( $title ): ?>
 					<h2 class="text-center"><?php echo $title; ?></h2>
@@ -389,7 +391,7 @@ while (have_posts()) : the_post();
 						<div class="slide">
 							<a class="model-card" href="<?php echo esc_url(get_sub_field( 'url' )); ?>">
 								<?php if ( $image = get_sub_field( 'image' ) ): ?>
-									<div class="img-box">
+									<div class="img-box" <?php if ($slide_bg) echo 'style="background-color:'.$slide_bg.';"'?>>
 										<?php echo wp_get_attachment_image( $image['id'], 'full' ); ?>
 									</div>
 								<?php endif; ?>

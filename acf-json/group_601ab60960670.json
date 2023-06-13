@@ -219,6 +219,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_606c2cc5a5f09",
@@ -283,8 +284,7 @@
                                     "new_lines": "wpautop",
                                     "parent_repeater": "field_606c2cbba5f08"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         },
                         {
                             "key": "field_60cc7a1019132",
@@ -1486,6 +1486,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_601be0b071d87",
@@ -1546,8 +1547,7 @@
                                     "return_format": "array",
                                     "parent_repeater": "field_601bdff771d6f"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -1578,6 +1578,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "add button",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_601bc1fee9c6f",
@@ -1600,8 +1601,7 @@
                                     "new_lines": "",
                                     "parent_repeater": "field_601bc0f0e9c6e"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -2141,6 +2141,7 @@
                             "max": 0,
                             "layout": "table",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_6047672c21de3",
@@ -2189,8 +2190,7 @@
                                     "new_lines": "wpautop",
                                     "parent_repeater": "field_6047672221de2"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -2404,6 +2404,45 @@
                             "maxlength": ""
                         },
                         {
+                            "key": "field_6488320dcf03f",
+                            "label": "Logos Backgorund",
+                            "name": "logos_backgorund",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 1,
+                            "return_format": "string"
+                        },
+                        {
+                            "key": "field_6488322fcf040",
+                            "label": "Logos per Row",
+                            "name": "logos_per_row",
+                            "aria-label": "",
+                            "type": "range",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 4,
+                            "min": 1,
+                            "max": 5,
+                            "step": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
                             "key": "field_6257187117b49",
                             "label": "logos",
                             "name": "logos",
@@ -2422,6 +2461,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_6257187e17b4a",
@@ -2467,8 +2507,7 @@
                                     "placeholder": "",
                                     "parent_repeater": "field_6257187117b49"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -2501,5 +2540,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1672826420
+    "modified": 1686647371
 }

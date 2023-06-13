@@ -78,6 +78,7 @@
             "max": 0,
             "layout": "table",
             "button_label": "Add Row",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_5ffc65b8e2ddc",
@@ -157,8 +158,7 @@
                     "maxlength": "",
                     "parent_repeater": "field_5ffc659ae2ddb"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_637c9f6e8220b",
@@ -305,6 +305,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_5ffc27571c559",
@@ -515,8 +516,7 @@
                                     "maxlength": "",
                                     "parent_repeater": "field_5ffc27431c558"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -612,6 +612,7 @@
                             "max": 0,
                             "layout": "block",
                             "button_label": "Add Row",
+                            "rows_per_page": 20,
                             "sub_fields": [
                                 {
                                     "key": "field_5ffc28701c563",
@@ -676,8 +677,7 @@
                                     "maxlength": "",
                                     "parent_repeater": "field_5ffc28701c562"
                                 }
-                            ],
-                            "rows_per_page": 20
+                            ]
                         }
                     ],
                     "min": "",
@@ -879,6 +879,42 @@
             "append": ""
         },
         {
+            "key": "field_648832a2a3037",
+            "label": "Section Background Color",
+            "name": "section_bg",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 1,
+            "return_format": "string"
+        },
+        {
+            "key": "field_648832c9a3038",
+            "label": "Slide Box Background Color",
+            "name": "slide_bg",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 1,
+            "return_format": "string"
+        },
+        {
             "key": "field_604a1a3d7da2a",
             "label": "Slider",
             "name": "slider",
@@ -897,6 +933,7 @@
             "max": 0,
             "layout": "block",
             "button_label": "Add Row",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_604a1b707da2f",
@@ -984,8 +1021,7 @@
                     "mime_types": "",
                     "parent_repeater": "field_604a1a3d7da2a"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_63345aff8566a",
@@ -1281,5 +1317,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1675695795
+    "modified": 1686647535
 }
