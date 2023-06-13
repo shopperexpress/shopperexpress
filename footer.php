@@ -1,6 +1,6 @@
 <?php
 $logo = get_field( 'logo', 'options' );
-$footer_style = get_field( 'footer_style', 'options' );
+$footer_style = get_field( 'footer_style', 'options' ); 
 ?>
 </main>
 <footer id="footer">
@@ -86,58 +86,60 @@ $footer_style = get_field( 'footer_style', 'options' );
 </div>
 <?php if ( is_single() ): ?>
 	<!-- Overview Modal -->
-	<div class="modal fade content-scrollable" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
+	<div class="modal fade modal-info" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
-				<div class="modal-header justify-content-center">
-					<h3 class="modal-title"><?php _e('Overview','shopperexpress'); ?></h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<i class="material-icons"><?php _e('close','shopperexpress'); ?></i>
+				<div class="modal-header">
+					<h5 class="modal-title"><?php _e('Overview','shopperexpress'); ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>">
+						<span class="material-icons" aria-hidden="true">close</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div class="text-holder jcf-scrollable">
-						<?php the_field( 'vehicle_overview' ); ?>
+				<div class="modal-body-wrap">
+					<div class="modal-body">
+						<div class="text-holder">
+							<?php the_field( 'vehicle_overview' ); ?>
+						</div>
 					</div>
+				</div>
+				<div class="modal-footer justify-content-center justify-content-md-end">
+					<button type="button" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>" class="btn btn-primary btn-lg"><?php esc_html_e( 'Close', 'shopperexpress' ); ?></button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<!-- Features And Options Modal -->
-	<div class="modal fade content-scrollable" id="featuresAndOptionsModal" tabindex="-1" aria-labelledby="featuresAndOptionsModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-centered">
+	<div class="modal fade modal-info" id="featuresAndOptionsModal" tabindex="-1" aria-labelledby="featuresAndOptionsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
-				<div class="modal-header justify-content-center">
-					<h3 class="modal-title"><?php _e('Features & Options','shopperexpress'); ?></h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<i class="material-icons"><?php _e('close','shopperexpress'); ?></i>
+				<div class="modal-header">
+					<h5 class="modal-title"><?php esc_html_e( 'Features & Options', 'shopperexpress' ); ?></h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>">
+						<span class="material-icons" aria-hidden="true">close</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<div class="text-holder jcf-scrollable">
+				<div class="modal-body-wrap">
+					<div class="modal-body">
 						<ul class="modal-content-list">
 							<?php
-							if ( is_singular( 'listings' ) ) :
-								if ( $terms = get_the_terms( get_the_id(), 'features' ) ) :
-									foreach ( $terms as $term ) :
-										?>
-										<li><i class="fa-li fa fa-check"></i> <?php echo $term->name; ?></li>
-										<?php
-									endforeach;
-								endif;
-							else:
-								while ( have_rows( 'features_options' ) ) : the_row(); ?>
-									<li><i class="fa-li fa fa-check"></i> <?php the_sub_field( 'text' ); ?></li>
+							while ( have_rows( 'features_options' ) ) : the_row();
+								if ( $text = get_sub_field( 'text' ) ) :
+									?>
+									<li><?php echo $text; ?></li>
 									<?php
-								endwhile;
-							endif;
+								endif;
+							endwhile;
 							?>
 						</ul>
 					</div>
 				</div>
+				<div class="modal-footer justify-content-center justify-content-md-end">
+					<button type="button" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>" class="btn btn-primary btn-lg"><?php esc_html_e( 'Close', 'shopperexpress' ); ?></button>
+				</div>
 			</div>
 		</div>
 	</div>
+
 	<!-- Unlock savings Modal -->
 	<div class="modal fade" id="unlockSavingsModal" tabindex="-1" aria-labelledby="unlockSavingsModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-md modal-form modal-dialog-centered">

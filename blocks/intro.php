@@ -20,7 +20,7 @@ if(!in_array( $_id, $hide)){ ?>
 				</div>
 				<div class="col-lg-6 text-center">
 					<div class="text-holder<?php if( is_array($large_button) ) if(in_array($_id, $large_button)) echo 'btns-large'; ?>">
-						<?php $pid = get_page_by_slug('offers');
+						<?php $pid = get_page_by_title('Special Offers');
 						if(is_post_type_archive('offers')){
 							the_field('information', $pid->ID);
 						}else{
