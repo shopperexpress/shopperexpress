@@ -5161,6 +5161,647 @@ ResponsiveHelper = (function($) {
 	};
 }(jQuery, jQuery(window)));
 
+/*
+* jQuery custom map plugin
+*/
+;(function($) {
+	function CustomMap(options) {
+		this.options = $.extend({
+			zoom: 17,
+			coordinates: null,
+			stylesAttr: null,
+			markerImage: null,
+			scrollwheel: false
+		}, options);
+
+		this.init();
+	}
+
+	CustomMap.prototype = {
+		init: function() {
+			if (!window.google || !window.google.maps) return;
+
+			if (this.options.holder) {
+				this.findElements();
+				this.attachEvents();
+				this.makeCallback('onInit', this);
+			}
+		},
+		findElements: function() {
+			this.win = $(window);
+			this.holder = $(this.options.holder);
+			this.location = this.holder.data('coordinates') ? this.holder.data('coordinates').split(',') : [0, 0];
+			this.stylesUrl = this.holder.attr(this.options.stylesAttr);
+			this.markersArr = [];
+		},
+		attachEvents: function() {
+			var self = this;
+
+			this.mapOptions = {
+				zoom: this.options.zoom,
+				scrollwheel: this.options.scrollwheel,
+				mapTypeControl: false
+			};
+
+			this.map = new google.maps.Map(this.holder[0], this.mapOptions);
+			this.bounds = new google.maps.LatLngBounds();
+
+			if (this.stylesUrl) this.stylingMap();
+
+			$.getJSON(this.holder.data('markers'), function(data) {
+				self.drawMarkers(data.markers);
+			});
+
+			if (this.location) {
+				this.createMarker({
+					lat: this.location[0].trim(),
+					lng: this.location[1].trim(),
+				});
+			}
+
+			this.resizeHandler = function() {
+				self.refreshMap();
+			};
+
+			this.resizeHandler();
+
+			this.win.on('resize orientationchange', this.resizeHandler);
+		},
+		drawMarkers: function(data) {
+			for (var i = 0; i < data.length; i++) {
+				this.createMarker(data[i]);
+			}
+
+			this.refreshMap();
+		},
+		createMarker: function(item) {
+			var self = this;
+			var coordinates = new google.maps.LatLng(item.lat, item.lng);
+
+			var marker = new google.maps.Marker({
+				position: coordinates,
+				map: this.map
+			});
+
+			this.markersArr.push(marker);
+
+			var content = document.createElement('div');
+
+			content.innerHTML = item.tooltip;
+
+			var infowindow = new google.maps.InfoWindow({
+				content: content
+			});
+
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(self.map, marker);
+			});
+
+			this.bounds.extend(coordinates);
+		},
+		removeMarkers: function() {
+			if (!this.markersArr.length) return;
+
+			for (var i = 0; i < this.markersArr.length; i++) {
+				this.markersArr[i].setMap(null);
+			}
+
+			this.markersArr.length = 0;
+			this.bounds = new google.maps.LatLngBounds();
+		},
+		stylingMap: function() {
+			var self = this;
+
+			$.getJSON(this.stylesUrl, function(styles) {
+				self.map.setOptions({
+					styles: styles
+				});
+			});
+		},
+		refreshMap: function() {
+			var self = this;
+
+			google.maps.event.trigger(this.map, 'resize');
+
+			this.map.fitBounds(this.bounds);
+
+			var listener = google.maps.event.addListener(this.map, 'idle', function() {
+				if (self.map.getZoom() > self.options.zoom) {
+					self.map.setZoom(self.options.zoom);
+				}
+
+				google.maps.event.removeListener(listener);
+			});
+		},
+		makeCallback: function(name) {
+			if (typeof this.options[name] === 'function') {
+				var args = Array.prototype.slice.call(arguments);
+
+				args.shift();
+				this.options[name].apply(this, args);
+			}
+		}
+	};
+
+	$.fn.customMap = function(opt) {
+		return this.each(function() {
+			$(this).data('CustomMap', new CustomMap($.extend(opt, {
+				holder: this
+			})));
+		});
+	};
+}(jQuery));
+
+/* video plugin */
+;(function($) {
+    'use strict';
+
+    function BgVideo(options) {
+        this.options = $.extend({
+            containerClass: 'js-video',
+            btnPlay: '.btn-play',
+            btnPause: '.btn-pause',
+            popupBtnClose: '<a href="#" class="close"></a>',
+            loadedClass: 'video-loaded',
+            playingClass: 'playing',
+            pausedClass: 'paused',
+            popupClass: 'js-video-popup',
+            activePopupClass: 'active-popup',
+            activePageClass: 'active-video-popup',
+            fluidVideoClass: 'fluid-video',
+            autoplayVideoClass: 'bg-video',
+            vimeoAPI: '//player.vimeo.com/api/player.js',
+            wistiaAPI: '//fast.wistia.com/assets/external/E-v1.js',
+            youtubeAPI: '//www.youtube.com/iframe_api'
+        }, options);
+
+        this.init();
+    }
+
+    BgVideo.prototype = {
+        init: function() {
+            if (this.options.holder) {
+                this.findElements();
+                this.attachEvents();
+                this.makeCallback('onInit', this);
+            }
+        },
+        findElements: function() {
+            this.win = $(window);
+            this.page = $('body');
+            this.holder = $(this.options.holder);
+            this.videoContainer = null;
+            this.player = null;
+            this.videoData = this.holder.data('video');
+            this.btnPlay = this.holder.find(this.options.btnPlay);
+            this.btnPause = this.holder.find(this.options.btnPause);
+            this.autoplay = this.videoData.autoplay === undefined ? true : this.videoData.autoplay;
+            this.fluidWidth = this.videoData.fluidWidth === undefined ? false : this.videoData.fluidWidth;
+            this.isPopup = this.holder.is('a');
+            this.resizeTimer = null;
+
+            if (this.isPopup) {
+                this.popup = $('<div class="' + this.options.popupClass + '"/>').append($(this.options.popupBtnClose)).appendTo(this.page);
+                this.holder = this.popup;
+                this.btnOpen = $(this.options.holder);
+                this.btnClose = this.popup.find('> a');
+                this.autoplay = false;
+            } else {
+                if (this.autoplay) {
+                    this.holder.addClass(this.options.autoplayVideoClass);
+                }
+
+                if (this.fluidWidth) {
+                    this.holder.addClass(this.options.fluidVideoClass);
+                }
+
+                this.initPlayer();
+            }
+        },
+        initPlayer: function() {
+            switch (this.videoData.type) {
+                case 'youtube':
+                    this.initYoutube();
+                    break;
+                case 'vimeo':
+                    this.initVimeo();
+                    break;
+                case 'wistia':
+                    this.initWistia();
+                    break;
+                case 'html5':
+                    this.initHTML5();
+                    break;
+                default:
+                    return false;
+            }
+        },
+        attachEvents: function() {
+            var self = this;
+
+            this.playClickHandler = function(e) {
+                e.preventDefault();
+                self.playVideo();
+            };
+
+            this.pauseClickHandler = function(e) {
+                e.preventDefault();
+                self.pauseVideo();
+            };
+
+            this.openClickHandler = function(e) {
+                e.preventDefault();
+                self.showPopup();
+            };
+
+            this.closeClickHandler = function(e) {
+                e.preventDefault();
+                self.hidePopup();
+            };
+
+            this.resizeHandler = function() {
+                if (self.videoContainer !== null && !self.fluidWidth) {
+                    clearTimeout(self.resizeTimer);
+
+                    self.resizeTimer = setTimeout(function() {
+                        self.resizeVideo();
+                    }, 200);
+                }
+            };
+
+            this.holder.on('loaded.video', function() {
+                self.resizeHandler();
+                self.holder.addClass(self.options.loadedClass);
+            }).on('playing.video', function() {
+                self.pauseAllVideos();
+                self.holder.addClass(self.options.playingClass).removeClass(self.options.pausedClass).trigger('playingVideo');
+                self.makeCallback('playingVideo', self);
+            }).on('paused.video', function() {
+                self.holder.addClass(self.options.pausedClass).trigger('pauseVideo');
+                self.makeCallback('pauseVideo', self);
+            }).on('ended.video', function() {
+                self.holder.removeClass(self.options.playingClass + ' ' + self.options.pausedClass).trigger('endedVideo');
+                self.makeCallback('endedVideo', self);
+            });
+
+            if (this.isPopup) {
+                this.btnOpen.on('click', this.openClickHandler);
+                this.btnClose.on('click', this.closeClickHandler);
+            }
+
+            this.btnPlay.on('click', this.playClickHandler);
+            this.btnPause.on('click', this.pauseClickHandler);
+            this.resizeHandler();
+            this.win.on('load resize orientationchange', this.resizeHandler);
+        },
+        initYoutube: function() {
+            var self = this;
+            var container = $('<div />').addClass(this.options.containerClass).appendTo(this.holder);
+
+            var opt = {
+                playlist: this.autoplay ? this.videoData.video : null,
+                autoplay: this.autoplay || this.isPopup ? 1 : 0,
+                loop: this.autoplay ? 1 : 0,
+                controls: this.autoplay ? 0 : 1,
+                showinfo: 0,
+                modestbranding: 1,
+                disablekb: 1,
+                fs: this.autoplay ? 0 : 1,
+                cc_load_policy: 0,
+                iv_load_policy: 3
+            };
+
+            var loadPlayer = function() {
+                var player = new YT.Player(container[0], {
+                    videoId: self.videoData.video,
+                    playerVars: opt,
+                    events: {
+                        onReady: function() {
+                            if (self.autoplay) {
+                                player.mute();
+                            }
+
+                            self.videoContainer = self.holder.find('iframe');
+                            self.holder.trigger('loaded.video');
+
+                            self.player = {
+                                play: function() {
+                                    player.playVideo();
+                                },
+                                pause: function() {
+                                    player.pauseVideo();
+                                }
+                            };
+                        },
+                        onStateChange: function(state) {
+                            switch (state.data) {
+                                case 0:
+                                    self.holder.trigger('ended.video');
+                                    break;
+                                case 1:
+                                    self.holder.trigger('playing.video');
+                                    break;
+                                case 2:
+                                    self.holder.trigger('paused.video');
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+                });
+            };
+
+            if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
+                var youtubeReady = window.onYouTubeIframeAPIReady;
+
+                window.onYouTubeIframeAPIReady = function() {
+                    if (youtubeReady) youtubeReady();
+                    loadPlayer();
+                };
+
+                $.getScript(this.options.youtubeAPI);
+            } else {
+                loadPlayer();
+            }
+        },
+        initVimeo: function() {
+            var self = this;
+            var blockId = this.getRandomId();
+
+            var opt = {
+                id: this.videoData.video,
+                autoplay: this.autoplay || this.isPopup,
+                autopause: this.autoplay ? false : true,
+                muted: this.autoplay ? true : false,
+                loop: this.autoplay ? true : false,
+                controls: this.autoplay ? false : true,
+                byline: this.autoplay ? false : true,
+                title: this.autoplay ? false : true
+            };
+
+            var loadPlayer = function() {
+                self.holder.attr('id', blockId);
+
+                var player = new Vimeo.Player(blockId, opt);
+
+                player.ready().then(function() {
+                    self.videoContainer = self.holder.find('iframe').addClass(self.options.containerClass);
+
+                    self.holder.trigger('loaded.video');
+
+                    player.on('play', function() {
+                        self.holder.trigger('playing.video');
+                    });
+
+                    player.on('pause', function() {
+                        self.holder.trigger('paused.video');
+                    });
+
+                    player.on('ended', function() {
+                        self.holder.trigger('ended.video');
+                    });
+
+                    self.player = {
+                        play: function() {
+                            player.play();
+                        },
+                        pause: function() {
+                            player.pause();
+                        }
+                    };
+                });
+            };
+
+            if (typeof Vimeo === 'undefined' || typeof Vimeo.Player === 'undefined') {
+                $.getScript(this.options.vimeoAPI, loadPlayer);
+            } else {
+                loadPlayer();
+            }
+        },
+        initWistia: function() {
+            var self = this;
+            var blockId = this.getRandomId();
+
+            var opt = {
+                autoplay: this.isPopup ? true : this.autoplay,
+                loop: this.autoplay ? 'loop' : false,
+                volume: this.autoplay ? 0 : 1,
+                controls: this.autoplay ? false : true
+            };
+
+            var loadPlayer = function() {
+                var src = '//fast.wistia.net/embed/iframe/' + self.videoData.video + '?controlsVisibleOnLoad=false&playbar=' + opt.controls + '&playButton=' + opt.controls + '&autoPlay=' + opt.autoplay + '&endVideoBehavior=' + opt.loop + '&fullscreenButton=' + opt.controls + '&smallPlayButton=false&volume=' + opt.volume + '&volumeControl=' + opt.controls;
+
+                self.videoContainer = $('<iframe allowtransparency="true" id="' + blockId + '" frameborder="0" scrolling="no" class="wistia_embed" name="wistia_embed" />')
+                    .addClass(self.options.containerClass)
+                    .appendTo(self.holder)
+                    .attr('src', src);
+
+                window._wq = window._wq || [];
+
+                _wq.push({
+                    id: blockId,
+                    onReady: function(video) {
+                        self.holder.trigger('loaded.video');
+
+                        self.player = {
+                            play: function() {
+                                video.play();
+                            },
+                            pause: function() {
+                                video.pause();
+                            },
+                            mute: function() {
+                                video.mute();
+                                video.volume(0);
+                            },
+                            unmute: function() {
+                                video.unmute();
+                                video.volume(100);
+                            }
+                        };
+
+                        video.bind('play', function() {
+                            self.holder.trigger('playing.video');
+                        }).bind('pause', function() {
+                            self.holder.trigger('paused.video');
+                        }).bind('end', function() {
+                            self.holder.trigger('ended.video');
+                        });
+                    }
+                });
+            };
+
+            if (typeof Wistia === 'undefined') {
+                $.getScript(this.options.wistiaAPI, loadPlayer);
+            } else {
+                loadPlayer();
+            }
+        },
+        initHTML5: function() {
+            var self = this;
+
+            var opt = {
+                controls: this.autoplay ? '' : 'controls',
+                autoplay: this.isPopup ? 'autoplay playsinline' : this.autoplay ? 'autoplay playsinline loop muted' : ''
+            };
+
+            this.videoContainer = $('<video ' + opt.controls + ' ' + opt.autoplay + ' />').addClass(this.options.containerClass).appendTo(this.holder);
+
+            this.videoContainer[0].addEventListener('loadeddata', function() {
+                self.holder.trigger('loaded.video');
+            }, false);
+
+            this.videoContainer[0].addEventListener('progress', function() {
+                self.holder.trigger('loaded.video');
+            }, false);
+
+            this.videoContainer.prop('src', this.videoData.video);
+
+            this.videoContainer.on('play', function() {
+                self.holder.trigger('playing.video');
+            }).on('pause', function() {
+                self.holder.trigger('paused.video');
+            }).on('ended', function() {
+                self.holder.trigger('ended.video');
+            });
+
+            self.player = {
+                play: function() {
+                    self.videoContainer[0].play();
+                },
+                pause: function() {
+                    self.videoContainer[0].pause();
+                }
+            };
+        },
+        pauseAllVideos: function() {
+            if (this.autoplay && this.videoData.type === 'html5') {
+                return;
+            }
+
+            $('[data-video].' + this.options.playingClass).not(this.holder).not('.' + this.options.autoplayVideoClass).each(function() {
+                var holder = $(this);
+
+                holder.data('BgVideo').player.pause();
+            });
+        },
+        getDimensions: function(data) {
+            var ratio = data.videoRatio || (data.videoWidth / data.videoHeight);
+            var slideWidth = data.maskWidth;
+            var slideHeight = slideWidth / ratio;
+
+            if (slideHeight < data.maskHeight) {
+                slideHeight = data.maskHeight;
+                slideWidth = slideHeight * ratio;
+            }
+
+            return {
+                width: slideWidth,
+                height: slideHeight,
+                top: (data.maskHeight - slideHeight) / 2,
+                left: (data.maskWidth - slideWidth) / 2
+            };
+        },
+        getRatio: function() {
+            if (this.videoContainer.attr('width') && this.videoContainer.attr('height')) {
+                return this.videoContainer.attr('width') / this.videoContainer.attr('height');
+            } else {
+                return 16 / 9;
+            }
+        },
+        resizeVideo: function() {
+            var styles = this.getDimensions({
+                videoRatio: this.getRatio(this.videoContainer),
+                maskWidth: this.holder.width(),
+                maskHeight: this.holder.height()
+            });
+
+            this.videoContainer.css({
+                width: styles.width,
+                height: styles.height,
+                marginTop: styles.top,
+                marginLeft: styles.left
+            });
+        },
+        playVideo: function() {
+            if (!this.holder.hasClass(this.options.loadedClass)) return;
+
+            if (!this.holder.hasClass(this.options.playingClass) || this.holder.hasClass(this.options.pausedClass)) {
+                this.player.play();
+                this.holder.blur();
+            } else {
+                if (!this.btnPause.length) {
+                    this.player.pause();
+                }
+            }
+        },
+        pauseVideo: function() {
+            this.player.pause();
+        },
+        showPopup: function() {
+            var self = this;
+
+            if (this.holder.hasClass(this.options.loadedClass)) {
+                setTimeout(function() {
+                    self.player.play();
+                }, 500);
+            } else {
+                this.initPlayer();
+            }
+
+            this.page.addClass(this.options.activePageClass);
+            this.popup.addClass(this.options.activePopupClass);
+        },
+        hidePopup: function() {
+            if (this.player) {
+                this.player.pause();
+            }
+
+            this.page.removeClass(this.options.activePageClass);
+            this.popup.removeClass(this.options.activePopupClass);
+        },
+        getRandomId: function() {
+            var s4 = function() {
+                return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+            };
+
+            return (s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4());
+        },
+        makeCallback: function(name) {
+            if (typeof this.options[name] === 'function') {
+                var args = Array.prototype.slice.call(arguments);
+
+                args.shift();
+                this.options[name].apply(this, args);
+            }
+        },
+        destroy: function() {
+            this.videoContainer.remove();
+            this.btnPlay.off('click', this.playClickHandler);
+            this.btnPause.off('click', this.pauseClickHandler);
+            this.win.off('load resize orientationchange', this.resizeHandler);
+
+            if (this.isPopup) {
+                this.popup.remove();
+                this.btnOpen.off('click', this.openClickHandler);
+                this.btnClose.off('click', this.closeClickHandler);
+            }
+
+            this.holder.removeClass(this.options.loadedClass + ' ' + this.options.playingClass).off('.video').removeData('BgVideo');
+        }
+    };
+
+    $.fn.bgVideo = function(opt) {
+        return this.each(function() {
+            $(this).data('BgVideo', new BgVideo($.extend(opt, {
+                holder: this
+            })));
+        });
+    };
+})(jQuery);
+
 // jQuery Mask Plugin v1.14.16
 // github.com/igorescobar/jQuery-Mask-Plugin
 var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.findInternal=function(a,n,f){a instanceof String&&(a=String(a));for(var p=a.length,k=0;k<p;k++){var b=a[k];if(n.call(f,b,k,a))return{i:k,v:b}}return{i:-1,v:void 0}};$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.SIMPLE_FROUND_POLYFILL=!1;
@@ -5289,6 +5930,27 @@ function initAnchors() {
 		extraOffset: 0,
 		wheelBehavior: 'none'
 	});
+
+	new SmoothScroll({
+		anchorLinks: 'a.btn-anchor',
+		extraOffset: function() {
+			var totalHeight = 0;
+			jQuery('#header').each(function() {
+				var $box = jQuery(this);
+				var stickyInstance = $box.data('StickyScrollBlock');
+				if (stickyInstance) {
+					stickyInstance.stickyFlag = false;
+					stickyInstance.stickyOn();
+					totalHeight += $box.outerHeight();
+					stickyInstance.onResize();
+				} else {
+					totalHeight += $box.css('position') === 'fixed' ? $box.outerHeight() : 0;
+				}
+			});
+			return totalHeight;
+		},
+		wheelBehavior: 'none'
+	});
 }
 
 // search autocomplete
@@ -5353,7 +6015,6 @@ function initOfferForm() {
 	});
 }
 
-// initialize fixed blocks on scroll
 function initStickyScrollBlock() {
 	jQuery('.sticky-box').stickyScrollBlock({
 		setBoxHeight: false,
@@ -5385,10 +6046,27 @@ function initStickyScrollBlock() {
 			return totalHeight;
 		}
 	});
+
+	jQuery('.bh-page #header').stickyScrollBlock({
+		setBoxHeight: false,
+		activeClass: 'fixed-position',
+		positionType: 'fixed',
+		extraTop: function() {
+			var totalHeight = 0;
+
+			jQuery('0').each(function() {
+				totalHeight += jQuery(this).outerHeight();
+			});
+
+			return totalHeight;
+		}
+	});
 }
 
 function initTooltip() {
-	jQuery('[data-toggle="tooltip"]').tooltip();
+	if (jQuery('[data-toggle="tooltip"]').length && bootstrap.Tooltip) {
+		jQuery('[data-toggle="tooltip"]').tooltip();
+	}
 }
 
 function initRegistration() {
@@ -5501,6 +6179,57 @@ function initSlickCarousel() {
 			initSlider();
 		});
 	});
+
+	jQuery('.visual-slider').slick({
+		slidesToScroll: 1,
+		rows: 0,
+		prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
+		nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
+		dots: true,
+		dotsClass: 'slick-dots',
+		autoplay: true
+	});
+
+	jQuery('.specails-slider').each(function() {
+        var slider = jQuery(this);
+        var slides = slider.find('> div');
+
+        slider.slick({
+            slidesToScroll: 1,
+			rows: 0,
+			prevArrow: '<button class="slick-prev"><i class="material-icons">chevron_left</i></button>',
+			nextArrow: '<button class="slick-next"><i class="material-icons">chevron_right</i></button>',
+			dots: true,
+			dotsClass: 'slick-dots',
+			autoplay: false
+        });
+
+        if (slider.slick('slickGetOption', 'autoplay')) {
+            slider.find('[data-video]').each(function() {
+                var holder = jQuery(this);
+
+                holder.on('playingVideo', function() {
+                    slider.slick('slickPause');
+                }).on('pauseVideo', function() {
+                    slider.slick('slickPlay');
+                }).on('endedVideo', function() {
+                    slider.slick('slickPlay');
+                });
+            });
+        }
+
+        slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+            var currVideoBlock = slides.eq(currentSlide).find('[data-video]');
+
+            if (currVideoBlock.length && currVideoBlock.data('BgVideo').player) {
+                currVideoBlock.data('BgVideo').player.pause();
+            }
+        });
+    });
+}
+
+function initVideo() {
+    jQuery('[data-video]').bgVideo();
 }
 
 // filtering modal init
@@ -5947,7 +6676,66 @@ function initFiltering() {
 	});
 }
 
+// locations section init
+function initLocationsSection() {
+	jQuery('.section-find-us').each(function() {
+		const holder = jQuery(this);
+		const mapHolder = holder.find('.map-holder');
+		const locationsSelect = holder.find('.locations-select');
+		const btnDirection = holder.find('.btn-direction');
+		const options = locationsSelect.find('option');
+		let coordinatesArr = [];
+
+		mapHolder.customMap({
+			zoom: 16,
+			coordinates: 'data-coordinates',
+			stylesAttr: 'data-styles'
+		});
+
+		const mapAPI = mapHolder.data('CustomMap');
+
+		options.each(function() {
+			const option = jQuery(this);
+			const coordinates = option.data('coordinates');
+			const tooltip = option.data('tooltip');
+
+			if (coordinates) {
+				const arr = coordinates.split(',');
+
+				coordinatesArr.push({
+					lat: arr[0].trim(),
+					lng: arr[1].trim(),
+					tooltip
+				});
+			}
+		});
+
+		locationsSelect.on('change', function() {
+			const option = options.eq(locationsSelect.prop('selectedIndex'));
+			const coordinates = option.data('coordinates');
+
+			if (coordinates) {
+				mapAPI.removeMarkers();
+
+				const arr = coordinates.split(',');
+				const tooltip = option.data('tooltip');
+
+				mapAPI.drawMarkers([{
+					lat: arr[0].trim(),
+					lng: arr[1].trim(),
+					tooltip
+				}]);
+			}
+
+			btnDirection.attr('href', locationsSelect.val()).removeClass('disabled');
+		});
+
+		mapAPI.drawMarkers(coordinatesArr);
+	});
+}
+
 jQuery(function() {
+	initVideo();
 	initTabs();
 	initRemoveBlock();
 	initFiltering();
@@ -5970,6 +6758,8 @@ jQuery(function() {
 	initCustomForms();
 	initShopButton();
 	initFilteringModal();
+	initLocationsSection();
+	initTooltip();
 
 	jQuery('.payment-info .btn.btn-primary').on('click', function(e) {
 		e.preventDefault();
