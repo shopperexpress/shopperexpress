@@ -5245,17 +5245,19 @@ ResponsiveHelper = (function($) {
 
 			this.markersArr.push(marker);
 
-			var content = document.createElement('div');
+			if (item.tooltip) {
+				var content = document.createElement('div');
 
-			content.innerHTML = item.tooltip;
+				content.innerHTML = item.tooltip;
 
-			var infowindow = new google.maps.InfoWindow({
-				content: content
-			});
+				var infowindow = new google.maps.InfoWindow({
+					content: content
+				});
 
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.open(self.map, marker);
-			});
+				google.maps.event.addListener(marker, 'click', function() {
+					infowindow.open(self.map, marker);
+				});
+			}
 
 			this.bounds.extend(coordinates);
 		},
@@ -5461,7 +5463,7 @@ ResponsiveHelper = (function($) {
             var opt = {
                 playlist: this.autoplay ? this.videoData.video : null,
                 autoplay: this.autoplay || this.isPopup ? 1 : 0,
-                loop: this.autoplay ? 1 : 0,
+                loop: this.autoplay ? 0 : 0,
                 controls: this.autoplay ? 0 : 1,
                 showinfo: 0,
                 modestbranding: 1,
@@ -5534,7 +5536,7 @@ ResponsiveHelper = (function($) {
                 autoplay: this.autoplay || this.isPopup,
                 autopause: this.autoplay ? false : true,
                 muted: this.autoplay ? true : false,
-                loop: this.autoplay ? true : false,
+                loop: this.autoplay ? false : false,
                 controls: this.autoplay ? false : true,
                 byline: this.autoplay ? false : true,
                 title: this.autoplay ? false : true
@@ -5585,7 +5587,8 @@ ResponsiveHelper = (function($) {
 
             var opt = {
                 autoplay: this.isPopup ? true : this.autoplay,
-                loop: this.autoplay ? 'loop' : false,
+                // loop: this.autoplay ? 'loop' : false,
+                loop: this.autoplay ? false : false,
                 volume: this.autoplay ? 0 : 1,
                 controls: this.autoplay ? false : true
             };
@@ -5644,7 +5647,8 @@ ResponsiveHelper = (function($) {
 
             var opt = {
                 controls: this.autoplay ? '' : 'controls',
-                autoplay: this.isPopup ? 'autoplay playsinline' : this.autoplay ? 'autoplay playsinline loop muted' : ''
+                autoplay: this.isPopup ? 'autoplay playsinline' : this.autoplay ? 'autoplay playsinline muted' : ''
+                // autoplay: this.isPopup ? 'autoplay playsinline' : this.autoplay ? 'autoplay playsinline loop muted' : ''
             };
 
             this.videoContainer = $('<video ' + opt.controls + ' ' + opt.autoplay + ' />').addClass(this.options.containerClass).appendTo(this.holder);
@@ -6047,7 +6051,7 @@ function initStickyScrollBlock() {
 		}
 	});
 
-	jQuery('.bh-page #header').stickyScrollBlock({
+	jQuery('.new-landing #header').stickyScrollBlock({
 		setBoxHeight: false,
 		activeClass: 'fixed-position',
 		positionType: 'fixed',
@@ -6220,9 +6224,14 @@ function initSlickCarousel() {
 
         slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
             var currVideoBlock = slides.eq(currentSlide).find('[data-video]');
+			var nextVideoBlock = slides.eq(nextSlide).find('[data-video]');
 
             if (currVideoBlock.length && currVideoBlock.data('BgVideo').player) {
                 currVideoBlock.data('BgVideo').player.pause();
+            }
+
+			if (nextVideoBlock.length && nextVideoBlock.data('BgVideo').player) {
+                nextVideoBlock.data('BgVideo').player.play();
             }
         });
     });
@@ -6676,6 +6685,33 @@ function initFiltering() {
 	});
 }
 
+function initSwitchModalText() {
+	var currID = null;
+
+	jQuery('.section-specials .payment-info a[data-target]').each(function() {
+		var link = jQuery(this);
+		var modal = jQuery(link.data('target'));
+		var ID = link.data('vehicle-id');
+
+		link.on('click', (e) => {
+			currID = ID;
+
+			if (modal.length) {
+				var textHolder = modal.find('.text-holder');
+				var textBoxes = textHolder.find('> div');
+
+				textBoxes.hide();
+
+				if (currID !== null) {
+					jQuery('#' + currID).show();
+				}
+
+				jcf.refresh(textHolder);
+			}
+		});
+	});
+}
+
 // locations section init
 function initLocationsSection() {
 	jQuery('.section-find-us').each(function() {
@@ -6759,6 +6795,7 @@ jQuery(function() {
 	initShopButton();
 	initFilteringModal();
 	initLocationsSection();
+	initSwitchModalText();
 	initTooltip();
 
 	jQuery('.payment-info .btn.btn-primary').on('click', function(e) {
