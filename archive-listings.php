@@ -4,7 +4,16 @@ Template Name: Listings Template
 */
 get_header();
 
-$permalink = get_post_type_archive_link('listings');
+// $permalink = get_post_type_archive_link('listings');
+
+$listings_name = str_replace(get_home_url(), '', get_post_type_archive_link('listings'));
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    $protocol = 'https://';
+} else {
+    $protocol = 'http://';
+}
+
+$permalink = $protocol . $_SERVER['HTTP_HOST'] . $listings_name;
 $search = !empty($_GET['search']) ? $_GET['search'] : null;
 
 $args = array(
