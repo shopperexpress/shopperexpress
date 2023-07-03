@@ -14,6 +14,7 @@ if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
 }
 
 $permalink = $protocol . $_SERVER['HTTP_HOST'] . $listings_name;
+
 $search = !empty($_GET['search']) ? $_GET['search'] : null;
 
 $args = array(
@@ -66,18 +67,22 @@ $get_query = wps_listings( 1 );
 		endif;
 		if ( !empty($payment) && count(array_unique($payment)) > 2 && is_float(floatval(min(array_filter($payment)))) ) :
 			$val = explode(',',$_GET['payment']);
+		$payment_min = intval(min(array_filter($payment)));
+		$payment_max = intval(max($payment));
 		$val_min = !empty( $val[0] ) ? $val[0] : number_format(min(array_filter($payment)));
 		$val_max = !empty( $val[1] ) ? $val[1] : number_format(max($payment));
+		$val_min = intval($val_min) >= $payment_min && intval($val_min) <= $payment_max ? $val_min : $payment_min;
+		$val_max = intval($val_max) <= $payment_max && intval($val_max) >= $payment_min ? $val_max : $payment_max;
 		?>
 		<div class="filter-row range-row">
 			<label for="range-payment" class="filter-title"><?php _e('Payment','shopperexpress'); ?></label>
 			<div class="range-box">
 				<div class="value-row">
-					<span class="range-value">$<span class="min-price"><?php echo $val_min; ?></span></span>
-					<span class="range-value">$<span class="max-price"><?php echo $val_max; ?></span></span>
+					<span class="range-value">$<span class="min-price"><?php echo number_format( $payment_min ); ?></span></span>
+					<span class="range-value">$<span class="max-price"><?php echo number_format( $payment_max ); ?></span></span>
 				</div>
-				<?php $val_1 = !empty( $val[0] ) ? $val[0] . ', ' . $val[1] : intval(min(array_filter($payment))) . ', ' . intval(max($payment)); ?>
-				<input id="range-payment" value="<?php echo $val_1; ?>" min="<?php echo intval(min(array_filter($payment))); ?>" max="<?php echo intval(max($payment)); ?>" step="10" type="range" multiple >
+				<?php $val_1 = !empty( $val_min ) ? $val_min . ', ' . $val_max : $payment_min . ', ' . $payment_max; ?>
+				<input id="range-payment" value="<?php echo $val_1; ?>" min="<?php echo $payment_min; ?>" max="<?php echo $payment_max; ?>" step="10" type="range" multiple >
 				<input type="hidden" name="payment">
 			</div>
 		</div>
