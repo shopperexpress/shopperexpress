@@ -2,18 +2,19 @@
 get_header();
 
 while (have_posts()) : the_post();
+	$post_type = get_post_type();
 	$post_id = get_the_id();
 	$gallery = get_field( 'gallery' );
-	$vin_number = wps_get_term( $post_id, 'vin-number');
-	$location = wps_get_term( $post_id, 'location');
-	$year = wps_get_term( $post_id, 'year');
-	$make = wps_get_term( $post_id, 'make');
-	$model = wps_get_term( $post_id, 'model');
-	$trim = wps_get_term( $post_id, 'trim');
-	$down_payment = wps_get_term( $post_id, 'down-payment');
-	$lease_payment = wps_get_term( $post_id, 'lease-payment');
-	$loan_payment = wps_get_term( $post_id, 'loan-payment');
-	$condition = wps_get_term( $post_id, 'condition');
+	$vin_number = wps_get_term( $post_id, 'vin-number_' . $post_type);
+	$location = wps_get_term( $post_id, 'location_' . $post_type);
+	$year = wps_get_term( $post_id, 'year_' . $post_type);
+	$make = wps_get_term( $post_id, 'make_' . $post_type);
+	$model = wps_get_term( $post_id, 'model_' . $post_type);
+	$trim = wps_get_term( $post_id, 'trim_' . $post_type);
+	$down_payment = wps_get_term( $post_id, 'down-payment_' . $post_type);
+	$lease_payment = wps_get_term( $post_id, 'lease-payment_' . $post_type);
+	$loan_payment = wps_get_term( $post_id, 'loan-payment_' . $post_type);
+	$condition = wps_get_term( $post_id, 'condition_' . $post_type);
 
 	switch ($condition) {
 		case 'Slightly Used':
@@ -34,7 +35,7 @@ while (have_posts()) : the_post();
 					<div class="sticky-box">
 						<ul class="code-list text-right list-unstyled">
 							<li><?php _e('VIN','shopperexpress'); ?>: <?php echo $vin_number; ?></li>
-							<li><?php _e('Stock','shopperexpress'); ?>: <?php echo wps_get_term( $post_id, 'stock-number'); ?></li>
+							<li><?php _e('Stock','shopperexpress'); ?>: <?php echo wps_get_term( $post_id, 'stock-number_' . $post_type); ?></li>
 						</ul>
 						<div class="detail-slider-holder">
 							<?php
@@ -66,11 +67,11 @@ while (have_posts()) : the_post();
 					</div>
 					<?php if ( $for_html_left = get_field( 'for_html_left', 'options' ) ) : ?>
 						<div class="details-html">
-							<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number'), $for_html_left ); ?>
+							<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number_' . $post_type), $for_html_left ); ?>
 						</div>
 					<?php endif; ?>
 					<?php if ( function_exists('card_detail') ): ?>
-						<dl class="detail-info"><?php echo card_detail($post_id); ?></dl>
+						<dl class="detail-info"><?php echo card_detail($post_id, $post_type); ?></dl>
 					<?php endif; ?>
 					<ul class="details-list list-inline">
 						<li class="list-inline-item"><a href="#" data-toggle="modal" data-target="#overviewModal">+<?php _e('Overview','shopperexpress'); ?></a></li>
@@ -185,10 +186,10 @@ while (have_posts()) : the_post();
 					<div class="heading">
 						<h3><?php _e('Shopping Tools','shopperexpress'); ?></h3>
 					</div>
-					<span class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number'); ?>'>&nbsp;</span>
+					<span class='intice_bFrame' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number_' . $post_type); ?>'>&nbsp;</span>
 					<?php if ( $for_html_right = get_field( 'for_html_right', 'options' ) ) : ?>
 						<div class="info-html">
-							<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number'), $for_html_right ); ?>
+							<?php echo str_replace( '{VIN}', wps_get_term($post_id, 'vin-number_' . $post_type), $for_html_right ); ?>
 						</div>
 					<?php endif; ?>
 				</div>
@@ -384,7 +385,7 @@ while (have_posts()) : the_post();
 set_query_var( 'vin_number', $vin_number );
 get_template_part( 'blocks/accordion-detail-info' );
 
-if( $comment_footer  = get_field( 'comment_footer', 'options' ) ):
+if( $comment_footer  = get_field( 'comment_footer', 'options' ) ) :
 	?>
 	<div class="description-box">
 		<div class="container-fluid text-muted">

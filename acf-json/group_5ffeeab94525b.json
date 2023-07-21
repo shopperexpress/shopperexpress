@@ -593,6 +593,7 @@
             "max": 0,
             "layout": "table",
             "button_label": "Add Row",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_602a46280626c",
@@ -614,8 +615,7 @@
                     "append": "",
                     "parent_repeater": "field_602258cedb5d8"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_603b8a28a30cd",
@@ -653,6 +653,7 @@
             "max": 0,
             "layout": "table",
             "button_label": "Add Row",
+            "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_611b6b711485a",
@@ -672,8 +673,7 @@
                     "placeholder": "",
                     "parent_repeater": "field_603b8a36a30ce"
                 }
-            ],
-            "rows_per_page": 20
+            ]
         },
         {
             "key": "field_603b8a4da30cf",
@@ -863,6 +863,83 @@
             "maxlength": "",
             "rows": "",
             "new_lines": ""
+        },
+        {
+            "key": "field_64ba7696de6c9",
+            "label": "Chrome API",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_64ba76aade6ca",
+            "label": "Url",
+            "name": "url_chromedata",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_64ba76c5de6cb",
+            "label": "chromedata app id",
+            "name": "chromedata_app_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_64ba76d1de6cc",
+            "label": "shared secret",
+            "name": "shared_secret",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [
@@ -883,5 +960,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1685615532
+    "modified": 1689941747
 }

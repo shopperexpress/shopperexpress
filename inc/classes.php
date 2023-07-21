@@ -35,7 +35,7 @@ class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
 		$attributes .= ! empty( $item->url )        ? ' href="'   . esc_attr( $item->url        ) . '"' : '';
 
 		$item_output = $args->before;
-		$item_output .= '<a' . $attributes . '><i class="material-icons">' . get_field( 'icon', $item->ID ) . '</i>';
+		$item_output .= '<a' . $attributes . '>' . wps_get_icon( get_field( 'icon', $item->ID ) );
 		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 		$item_output .= '</a>';
 		$item_output .= $args->after;
@@ -90,7 +90,7 @@ class Header_Walker_Nav_Menu extends Walker_Nav_Menu {
 		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 
 		if ( $icon = get_field( 'icon', $item->ID ) ) {
-			$item_output .= '<i class="material-icons">' . $icon . '</i>';
+			$item_output .= wps_get_icon( $icon );
 		}
 
 		$item_output .= '</a>';

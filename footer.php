@@ -1,6 +1,6 @@
 <?php
 $logo = get_field( 'logo', 'options' );
-$footer_style = get_field( 'footer_style', 'options' ); 
+$footer_style = get_field( 'footer_style', 'options' );
 ?>
 </main>
 <footer id="footer">
@@ -185,7 +185,10 @@ $footer_style = get_field( 'footer_style', 'options' );
 							</div>
 						</div>
 						<div class="text-center btn-holder">
-							<input id="register-button" class="btn btn-primary btn-lg" type="submit" value="<?php _e('UNLOCK SAVINGS','shopperexpress'); ?>">
+							<p>
+								<input id="register-button" class="btn btn-primary btn-lg" type="submit" value="<?php _e('UNLOCK SAVINGS','shopperexpress'); ?>">
+								<span class="wpcf7-spinner"></span>
+							</p>
 						</div>
 					</form>
 					<?php if ( $form_description = get_field( 'form_description', 'options' ) ): ?>
@@ -270,7 +273,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 				</div>
 				<div class="modal-body">
 						<?php
-						
+
 						if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
 							?>
 							<h4><?php echo $heading_save_offer; ?></h4>
@@ -289,10 +292,10 @@ $footer_style = get_field( 'footer_style', 'options' );
 		</div>
 	</div>
 
-	<?php $popup_form = get_field( 'popup_form', 'options'); 
+	<?php $popup_form = get_field( 'popup_form', 'options');
 	if($popup_form){
-		$link = get_field( 'link', 'options'); 
-		$popup_form_before = get_field( 'popup_form_top_text', 'options'); 
+		$link = get_field( 'link', 'options');
+		$popup_form_before = get_field( 'popup_form_top_text', 'options');
 		$popup_form_after = get_field( 'popup_form_bottom_text', 'options'); ?>
 		<!-- Contact Modal -->
 		<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">

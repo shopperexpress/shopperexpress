@@ -59,6 +59,8 @@ endif;
 ?>
 </head>
 <?php $class = $font != 1 ? 'theme-inner' : null; ?>
+<?php $is_new_home_page_styles = get_field( 'new_home_page_styles' ); ?>
+<?php if ($is_new_home_page_styles) $class .= ' new-landing'; ?>
 <body <?php body_class($class); ?>>
 	<?php
 	wp_body_open();
@@ -71,7 +73,10 @@ endif;
 		<header id="header">
 			<nav class="navbar navbar-light">
 				<div class="navbar-holder">
-					<a class="nav-opener" href="#"><span></span></a>
+					<a class="nav-opener" href="#">
+						<i class="menu-close material-icons">menu</i>
+						<i class="menu-open material-icons">close</i>
+					</a>
 					<?php if ( $logo = get_field( 'logo', 'options' ) ): ?>
 						<?php if (get_field( 'logo_url', 'options' )) {
 							$logo_url = get_field( 'logo_url', 'options' );
@@ -212,4 +217,4 @@ endif;
 			</nav>
 		</header>
 		<main id="main">
-			<?php get_template_part( 'blocks/intro' ); ?>
+			<?php if (!$is_new_home_page_styles ) get_template_part( 'blocks/intro' ); ?>

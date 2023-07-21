@@ -18,7 +18,9 @@ function register_user() {
 		'last_name'       => $last_name,
 	);
 
-	$user_id = wp_insert_user($user_data);
+	$user_id = get_user_by( 'email', $email );
+
+	$user_id = !empty( $user_id->ID ) ? $user_id->ID : wp_insert_user($user_data);
 	if (!is_wp_error($user_id)) {
 		update_field( 'phone', $phone, 'user_' . $user_id );
 		update_field( 'zip', $zip, 'user_' . $user_id );
@@ -112,10 +114,12 @@ function auto_login_new_user( $user, $permalink ) {
 	exit;
 }
 
-function wps_listings( $show = 0 ) {
+function wps_listings( $show = 0, $_post_type = '' ) {
 	$posts = [];
 	$search = !empty($_GET['search']) ? $_GET['search'] : null;
-	$_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
+
+	if ( empty ( $_post_type ) ) $_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
+	
 	$permalink = get_post_type_archive_link($_post_type);
 	$args = array(
 		'post_type'   => $_post_type,
@@ -124,7 +128,7 @@ function wps_listings( $show = 0 ) {
 		'posts_per_page'         => -1,
 	);
 
-	if($_post_type == 'listings'){
+	if($_post_type == 'listings' || $_post_type == 'used-listings'){
 		$args['meta_query'] = [
 			[
 				'key' => 'sold',
@@ -133,6 +137,8 @@ function wps_listings( $show = 0 ) {
 			]
 		];
 	}
+
+	$field_post_type = $_post_type == 'used-listings' ? '_used-listings' : null;
 
 	$query = new WP_Query( $args );
 	while ( $query->have_posts() ) : $query->the_post();
@@ -149,7 +155,13 @@ function wps_listings( $show = 0 ) {
 		}
 
 		if ( !empty($_GET['autocomplete']) ) {
-			echo '<li><a href="#">' . get_the_title() . '</a></li>';
+			if ( $_post_type == 'offers') {
+				$model = wps_get_term( get_the_id(), 'model');
+				echo '<li><a href="#">' . get_the_title() . ' ' . $model . '</a></li>';
+			}else{
+				$link = is_front_page() ? get_permalink() : '#';
+				echo '<li><a href="' . $link . '">' . get_the_title() . '</a></li>';
+			}
 		}
 
 		if ( is_user_logged_in() ) {
@@ -196,8 +208,8 @@ function wps_listings( $show = 0 ) {
 		$payment = explode(',',$_GET['payment']);
 		while ( $query->have_posts() ) : $query->the_post();
 
-			$lease_payment = wps_get_term( get_the_id(), 'lease-payment');
-			$loan_payment = wps_get_term( get_the_id(), 'loan-payment');
+			$lease_payment = wps_get_term( get_the_id(), 'lease-payment' . $field_post_type );
+			$loan_payment = wps_get_term( get_the_id(), 'loan-payment' . $field_post_type );
 
 			if ( (intval($payment[0]) <= intval($loan_payment) && intval($payment[1]) >= intval($loan_payment))  ) {
 				$posts[] = get_the_id();
@@ -243,7 +255,7 @@ function wps_listings( $show = 0 ) {
 		}
 
 		if ( !empty(filter_args()) ) {
-			$args['tax_query'] = filter_args();
+			$args['tax_query'] = filter_args( $field_post_type );
 		}
 
 
@@ -255,6 +267,7 @@ function wps_listings( $show = 0 ) {
 			$filter['total'] = $query->found_posts;
 			
 			foreach ( ['condition','year','body-style' , 'make', 'model','drivetrain', 'trim' , 'engine' , 'transmission' , 'exterior-color', 'features'] as $taxonomy ) {
+				$taxonomy = $taxonomy . $field_post_type;
 				if ( $options = get_terms( ['taxonomy' => $taxonomy,'hide_empty' => true] ) ) {
 					foreach ( $options as $term ) {
 						$query1 = new WP_Query( array(
@@ -288,7 +301,7 @@ function wps_listings( $show = 0 ) {
 		$args['posts_per_page']	= 24;
 		$args['paged'] = $next;
 		$query = new WP_Query( $args );
-		$pname = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listing';
+		$pname = !empty($_post_type) && $_post_type != 'listings' ? $_post_type : 'listing';
 
 		if ( $show != 1 ) {
 			echo '<div class="json-data" style="display: none;">' . json_encode([$filter]) . '</div>';
@@ -319,7 +332,7 @@ function wps_load_more(){
 	}
 }
 
-function filter_args(){
+function filter_args( $post_type = '' ){
 
 	$terms = list_taxonomies();
 	$array = [];
@@ -333,7 +346,7 @@ function filter_args(){
 			$term_value = is_array( $term_value ) ? $term_value : explode(',', $term_value);
 
 			if ( !in_array('all' , $term_value) && !empty( $term_value ) ) {
-
+				$term = $term . $post_type;
 				$array[] = [
 					'taxonomy' => $term,
 					'field'    => 'slug',
@@ -349,7 +362,7 @@ function filter_args(){
 
 		if ( $year && !in_array('all' , $year) ) {
 			$array[] = [
-				'taxonomy' => 'year',
+				'taxonomy' => 'year' . $post_type,
 				'field'    => 'slug',
 				'terms'    => $year,
 			];
@@ -394,6 +407,8 @@ function new_filter( $taxonomies = [] ){
 				$label = ucfirst($category->name);
 				break;
 			}
+			$field_type = get_post_type() == 'used-listings' ? '_used-listings' : null;
+			$column_item = $column_item . $field_type;
 			?>
 			<li>
 				<a data-tab="tab-<?php echo $column_item; ?>" href="#filterSchedule" data-modal>
@@ -416,8 +431,11 @@ function new_filter_modal(){
 				<div class="modal-header">
 					<h5 class="modal-title">Select
 						<span class="tab-title">
-							<?php foreach ( $taxonomies as $taxonomy ) : ?>
-								<span data-id="tab-<?php echo $taxonomy; ?>"><?php echo ucfirst($taxonomy) == 'yr' ? 'year' : ucfirst($taxonomy); ?></span>
+							<?php
+							$field_type = $post_type == 'used-listings' ? '_used-listings' : null;
+							foreach ( $taxonomies as $taxonomy ) :
+								?>
+								<span data-id="tab-<?php echo $taxonomy . $field_type; ?>"><?php echo ucfirst($taxonomy) == 'yr' ? 'year' : ucfirst($taxonomy); ?></span>
 							<?php endforeach; ?>
 						</span>
 					</h5>
@@ -429,13 +447,16 @@ function new_filter_modal(){
 					<form action="#" class="modal-filter-form">
 						<div class="modal-body">
 							<div class="tab-content">
-								<?php foreach ( $taxonomies as $taxonomy ) : ?>
-									<div data-id="tab-<?php echo $taxonomy; ?>">
+								<?php
+								foreach ( $taxonomies as $taxonomy ) :
+									$taxonomy_field = $taxonomy . $field_type;
+									$select_name = $taxonomy_field == 'yr' . $field_type ? 'year' . $field_type : $taxonomy_field;
+									?>
+									<div data-id="tab-<?php echo $taxonomy . $field_type; ?>">
 										<ul class="modal-filter-list list-unstyled">
 											<?php
-											$select_name = $taxonomy == 'yr' ? 'year' : $taxonomy;
 											$args = ['taxonomy' => $select_name,'hide_empty' => true];
-											if( $select_name == 'year' ) $args['order'] = 'DESC';
+											if( $taxonomy == 'year' ) $args['order'] = 'DESC';
 
 											if ( $options = get_terms( $args ) ) :
 												

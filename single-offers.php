@@ -16,6 +16,7 @@ while (have_posts()) : the_post();
 	$loanterm = get_field('loanterm');
 	$loanapr = get_field('loanapr');
 	$condition = wps_get_term( $post_id, 'condition');
+	$search_inventory_button = get_field('search_inventory_button');
 
 	switch ($condition) {
 		case 'Slightly Used':
@@ -125,7 +126,7 @@ while (have_posts()) : the_post();
 						</div>
 					<?php endif; ?>
 
-					
+					<?php $counter_for_button = 0; ?>
 					<?php while ( have_rows('offers_flexible_content' , 'options' ) ) : the_row(); ?>
 						<div class="info-block" id="block-<?php echo get_row_index(); ?>">
 							<div class="heading">
@@ -142,6 +143,10 @@ while (have_posts()) : the_post();
 							</div>
 							<?php
 							the_sub_field( 'description' );
+							if ($search_inventory_button && $counter_for_button == 0) {
+								echo '<a href="'.$search_inventory_button.'" class="btn btn-primary btn-custom btn-block">'.__('Search inventory','shopperexpress').'</a>';
+							}
+							$counter_for_button++;
 							if ( get_row_layout() == 'payment' && have_rows( 'payment_list' ) ){
 								?>
 								<ul class="payment-info">

@@ -110,15 +110,18 @@ add_action( 'wp_print_styles', function()
 
 } );
 
-function card_detail( $post_id = null){
+function card_detail( $post_id = null, $post_type = '' ){
+
+	$post_type = !empty( $post_type ) ? '_' . $post_type : null;
+
 	$terms = [
-		'mileage' 		  => __('Mileage','shopperexpress'),
-		'engine' 		  => __('Engine','shopperexpress'),
-		'transmission'   => __('Transmission','shopperexpress'),
-		'drivetrain' 	  => __('Drivetrain','shopperexpress'),
-		'exterior-color' => __('Exterior color','shopperexpress'),
-		'interior-color' => __('Interior color','shopperexpress'),
-		'trim' 			  => __('Trim','shopperexpress')
+		'mileage' 		  . $post_type => __('Mileage','shopperexpress'),
+		'engine' 		  . $post_type => __('Engine','shopperexpress'),
+		'transmission'   . $post_type => __('Transmission','shopperexpress'),
+		'drivetrain' 	  . $post_type => __('Drivetrain','shopperexpress'),
+		'exterior-color' . $post_type => __('Exterior color','shopperexpress'),
+		'interior-color' . $post_type => __('Interior color','shopperexpress'),
+		'trim' 			  . $post_type => __('Trim','shopperexpress')
 
 	];
 
@@ -436,15 +439,15 @@ add_shortcode( 'offer_payment', 'shortcode_callback_offer_payment' );
 function shortcode_callback_offer_content( $atts = array() ) {
 	global $post;
 	$post_id = $post->ID;
-		switch ( $atts['type'] ) {
+	switch ( $atts['type'] ) {
 		case 'lease':
-			$output = get_field( 'disclosure_lease', $post_id );
+		$output = get_field( 'disclosure_lease', $post_id );
 		break;
 		case 'loan':
-			$output = get_field( 'disclosure_finance', $post_id );
+		$output = get_field( 'disclosure_finance', $post_id );
 		break;
 		case 'cash':
-			$output = get_field( 'disclosure_cash', $post_id );
+		$output = get_field( 'disclosure_cash', $post_id );
 		break;
 	}
 
@@ -453,10 +456,94 @@ function shortcode_callback_offer_content( $atts = array() ) {
 add_shortcode( 'offer_content', 'shortcode_callback_offer_content' );
 
 add_action( 'pre_get_posts', function ($query){
-    if ( ! is_admin() && $query->is_main_query() && is_post_type_archive('listings')) {
-        $query->set( 'order', 'ASC' );
-        $query->set( 'orderby', 'meta_value_num' );
-        $query->set( 'meta_key', 'price' );
-    } 
-    return $query;
+	if ( ! is_admin() && $query->is_main_query() && is_post_type_archive('listings')) {
+		$query->set( 'order', 'ASC' );
+		$query->set( 'orderby', 'meta_value_num' );
+		$query->set( 'meta_key', 'price' );
+	} 
+	return $query;
 });
+
+function wps_get_icon( $icon = '' ){
+	return '<i class="material-icons">' . str_replace( ' ', '_', $icon) . '</i>';
+}
+
+add_shortcode( 'stock', function ( $atts = array() ) {
+
+	$condition = !empty( $atts['condition'] ) ? strtolower($atts['condition']) : 'new';
+	$post_type = $condition == 'used' ? 'used-listings' : 'listings';
+
+	$args = array(
+		'post_type'   => $post_type,
+		'post_status' => 'publish',
+		'posts_per_page' => -1,
+		'fields' 	=> 'ids',
+	);
+
+	$query = new WP_Query( $args );
+
+	return $query->found_posts;
+} );
+
+function CallAPI($method, $url, $data = false)
+{
+	$curl = curl_init();
+	switch ($method)
+	{
+		case "POST":
+		curl_setopt($curl, CURLOPT_POST, 1);
+		if ($data)
+			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		break;
+		case "PUT":
+		curl_setopt($curl, CURLOPT_PUT, 1);
+		break;
+		default:
+		if ($data)
+			$url = sprintf("%s?%s", $url, http_build_query($data));
+	}
+	$mt = explode(' ', microtime());
+
+	$chromedata_timestamp = ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
+
+	$chromedata_noonce = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(32))), 0, 32);
+	$realm = 'http://chromedata.com';
+
+	$chromedata_app_id = get_field( 'chromedata_app_id', 'options' );
+	$shared_secret = get_field( 'shared_secret', 'options' );
+	$chromedata_secret_digest_original = $chromedata_noonce . $chromedata_timestamp . $shared_secret;
+	$chromedata_secret_digest = base64_encode(sha1($chromedata_secret_digest_original,true));
+	$token = "Atmosphere realm=\"{$realm}\",";
+	$token .= "chromedata_app_id=\"{$chromedata_app_id}\",";
+	$token .= "chromedata_nonce=\"{$chromedata_noonce}\",";
+	$token .= "chromedata_secret_digest=\"{$chromedata_secret_digest}\",";
+	$token .= "chromedata_digest_method=SHA1,";
+	$token .= "chromedata_version=1.0,";
+	$token .= "chromedata_timestamp=\"{$chromedata_timestamp}\"";
+
+	$headers = array(
+		"Accept: application/json",
+		"Content-Type: application/x-www-form-urlencoded",
+		"Authorization: {$token}",
+	);
+
+	curl_setopt($curl, CURLOPT_HEADER, 0);
+	curl_setopt($curl, CURLOPT_HTTPHEADER , $headers);
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_VERBOSE, 1);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	$result = curl_exec($curl);
+	curl_close($curl);
+	$result = json_decode( $result, true );
+
+	if ( !empty( $result['result'] ) ) {
+		foreach ( $result['result']['features'] as $item ) {
+			$output[$item['sectionName']][] = $item;
+		}
+	}else{
+		$output = null;
+	}
+
+	return $output;
+}
+

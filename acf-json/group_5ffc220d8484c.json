@@ -201,6 +201,303 @@
             "new_lines": ""
         },
         {
+            "key": "field_64a3f86657ae2",
+            "label": "Payment list",
+            "name": "payment_list",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_64a3f87a57ae3",
+                    "label": "Payment type",
+                    "name": "payment_type",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "price": "Price",
+                        "original_price": "MSRP",
+                        "invoiceamount": "InvoiceAmount",
+                        "defaultbookvalue": "DefaultBookValue",
+                        "internetprice": "InternetPrice",
+                        "customprice1": "CustomPrice1",
+                        "customprice2": "CustomPrice2",
+                        "customprice3": "CustomPrice3",
+                        "cost": "Cost",
+                        "holdback": "HoldBack",
+                        "pack": "Pack",
+                        "comment1": "Comment1",
+                        "comment2": "Comment2"
+                    },
+                    "default_value": "Price",
+                    "return_format": "array",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a3f9a057ae4",
+                    "label": "Show payment",
+                    "name": "show_payment",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "visible": "visible",
+                        "lock": "lock",
+                        "hidden": "hidden"
+                    },
+                    "default_value": "visible",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64b95dbb16e42",
+                    "label": "Text Cross Through",
+                    "name": "text_cross_through",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1,
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a3f9af57ae5",
+                    "label": "Vehicle Type",
+                    "name": "vehicle_type",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "All": "All",
+                        "Used": "Used",
+                        "New": "New"
+                    },
+                    "default_value": "New",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a401fc00f00",
+                    "label": "Lock icon",
+                    "name": "lock_icon",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_64a3f9a057ae4",
+                                "operator": "==",
+                                "value": "lock"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "lock_open",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a4022300f01",
+                    "label": "Lock text",
+                    "name": "lock_text",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_64a3f9a057ae4",
+                                "operator": "==",
+                                "value": "lock"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "UNLOCK PAYMENT",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a3f9d757ae6",
+                    "label": "Heading",
+                    "name": "heading",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                },
+                {
+                    "key": "field_64a3f9e357ae7",
+                    "label": "Description",
+                    "name": "description",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "60",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_64a3f86657ae2"
+                }
+            ]
+        },
+        {
+            "key": "field_64a403dc54aad",
+            "label": "Unlock button",
+            "name": "unlock_button",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_64a403ed54aae",
+                    "label": "Icon",
+                    "name": "icon",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "lock_open",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_64a403f454aaf",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Unlock Best Price",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
             "key": "field_5ffc23b21c555",
             "label": "Flexible Content",
             "name": "flexible_content",
@@ -888,7 +1185,7 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "50",
+                "width": "33",
                 "class": "",
                 "id": ""
             },
@@ -906,13 +1203,33 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "50",
+                "width": "33",
                 "class": "",
                 "id": ""
             },
             "default_value": "",
             "enable_opacity": 1,
             "return_format": "string"
+        },
+        {
+            "key": "field_649152f635503",
+            "label": "Show Count",
+            "name": "show_count",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
         },
         {
             "key": "field_604a1a3d7da2a",
@@ -975,6 +1292,48 @@
                     "parent_repeater": "field_604a1a3d7da2a"
                 },
                 {
+                    "key": "field_64915292354ff",
+                    "label": "Year",
+                    "name": "year",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
+                    "key": "field_649152a635500",
+                    "label": "Make",
+                    "name": "make",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
                     "key": "field_604a1b547da2e",
                     "label": "Model",
                     "name": "model",
@@ -993,6 +1352,48 @@
                     "prepend": "",
                     "append": "",
                     "maxlength": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
+                    "key": "field_649152b935501",
+                    "label": "Condition",
+                    "name": "condition",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
+                    "key": "field_649152cb35502",
+                    "label": "Label",
+                    "name": "label",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
                     "parent_repeater": "field_604a1a3d7da2a"
                 },
                 {
@@ -1297,6 +1698,26 @@
             "rows": "",
             "placeholder": "",
             "new_lines": ""
+        },
+        {
+            "key": "field_64a2c4ca2e8ae",
+            "label": "Features icon",
+            "name": "features_icon",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
         }
     ],
     "location": [
@@ -1317,5 +1738,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1686647535
+    "modified": 1689869817
 }
