@@ -28,39 +28,58 @@
 					</div>
 				</div>
 			</a>
-			<?php if ( function_exists('card_detail') ): ?>
-				<dl class="card-detail"><?php echo card_detail($post_id,'used-listings'); ?></dl>
-			<?php endif; ?>
 			<dl class="card-detail">
+				<dt><?php _e('Stock','shopperexpress'); ?>:</dt>
+				<dd><?php echo wps_get_term($post_id, 'stock-number_used-listings'); ?></dd>
 				<dt><?php _e('VIN','shopperexpress'); ?>:</dt>
 				<dd><?php echo wps_get_term($post_id, 'vin-number_used-listings'); ?></dd>
-				<dt><?php _e('STOCK','shopperexpress'); ?>:</dt>
-				<dd><?php echo wps_get_term($post_id, 'stock-number_used-listings'); ?></dd>
+				<?php if ( function_exists('archive_card_detail') ): ?>
+					<?php echo archive_card_detail($post_id,'used-listings'); ?>
+				<?php endif; ?>
 			</dl>
-			<?php 
-			switch (wps_get_term($post_id, 'condition_used-listings')) {
-				case 'Slightly Used':
-				$text = __('Market Value','shopperexpress');
-				break;
-				case 'Used':
-				$text = __('Market Value','shopperexpress');
-				break;
-				default:
-				$text = __('MSRP','shopperexpress');
-				break;
-			}
-			$price = get_field( 'price' );
-			$msrp = get_field( 'original_price' ) ? get_field( 'original_price' ) : $price;
-			$msrp = $msrp > 0 && is_float( $msrp ) ? number_format($msrp) : $msrp;
-			$_price_text = $msrp > 0 ? '<span>'.$text.'</span> <span class="st">$'. $msrp .'</span>' : __('Contact for Price', 'shopperexpress');
-			?>
-			<?php if ( get_field( 'show_market_price', 'options' ) ) : ?>
-				<strong class="card-price"><?php echo $_price_text; ?></strong>
-			<?php endif; ?>
-			<?php
-			if( is_user_logged_in() && $price > 0 ) :
-				?>
-			<strong class="card-price price-current"><span><?php _e('PRICE','shopperexpress'); ?></span> <?php echo '$'.number_format($price); ?></strong>
+			<?php if ( have_rows( 'payment_list', 'options' ) ) : ?>
+				<ul class="payment-info">
+					<?php
+					while ( have_rows( 'payment_list', 'options' ) ) : the_row();
+						$show_payment = get_sub_field( 'show_payment' );
+						$vehicle_type = get_sub_field( 'vehicle_type' );
+						if ( $condition == $vehicle_type || $vehicle_type == 'All' ) :
+							if ( $show_payment != 'hidden' || is_user_logged_in() ) :
+
+								$payment_type = get_sub_field( 'payment_type' );
+								
+								$heading = get_sub_field( 'heading' ) ? get_sub_field( 'heading' ) : $payment_type['label'];
+
+								if ( $payment_type['value'] == 'original_price' ) {
+									$payment = '$' . number_format( intval( get_field( $payment_type['value'] ) ) );
+									if (get_sub_field( 'text_cross_through' )) {
+										$payment = '<span class="price-spr line-through"><s>' . $payment . '</s></span>';
+									} else {
+										$payment = '<span class="price-spr">' . $payment . '</span>';
+									}
+								}elseif( $payment_type['value'] == 'comment1' || $payment_type['value'] == 'comment2' ){
+									$payment = '<span class="price-spr-primary">' . get_field( $payment_type['value'] ) . '</span>';
+								}else{
+									$payment = '<span class="price-spr-primary">$' . number_format( intval( get_field( $payment_type['value'] ) ) ) . '</span>';
+								}
+								?>
+								<li>
+									<strong class="dt"><?php echo $heading; ?></strong>
+									<?php if ( $show_payment == 'visible' || is_user_logged_in() ) : ?>
+										<strong class="price"><?php echo $payment; ?></strong>
+									<?php else: ?>
+										<span class="btn btn-primary unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><i class="material-icons"><?php the_sub_field( 'lock_icon' ); ?></i><?php the_sub_field( 'lock_text' ); ?></span>
+									<?php endif; ?>
+								</li>
+								<?php
+							endif;
+						endif;
+					endwhile;
+					?>
+				</ul>
+				<?php while ( have_rows( 'unlock_button', 'options' ) ) : the_row(); ?>
+					<button type="button" class="btn btn-primary btn-custom btn-block" data-toggle="modal" data-target="#contactModal"><i class="material-icons"><?php the_sub_field( 'icon' ); ?></i><?php the_sub_field( 'title' ); ?></button>
+				<?php endwhile; ?>
 			<?php endif; ?>
 			<span  class='intice_bFramev2' data-vdp-vin='<?php echo wps_get_term($post_id, 'vin-number_used-listings'); ?>'>&nbsp;</span>
 		</div>

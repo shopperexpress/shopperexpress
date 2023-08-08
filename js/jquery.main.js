@@ -4650,6 +4650,7 @@ ResponsiveHelper = (function($) {
 			resultsBox: '.ajax-drop',
 			resultsHolder: '.autocomplete-results',
 			inputField: 'input.text-input',
+			searchDrop: '.results-search-drop',
 			hideDelay: 200,
 			urlAttr: 'data-action',
 			noResultBox: '.no-results',
@@ -4674,6 +4675,7 @@ ResponsiveHelper = (function($) {
 			this.resultsBox = this.form.find(this.options.resultsBox).hide();
 			this.resultsHolder = this.form.find(this.options.resultsHolder);
 			this.noResultBox = this.form.find(this.options.noResultBox);
+			this.searchDrop = this.form.find(this.options.searchDrop);
 			this.currentIndex = 0;
 			this.isDropShow = false;
 
@@ -4682,12 +4684,19 @@ ResponsiveHelper = (function($) {
 		attachEvents: function() {
 			var self = this;
 
+			if (this.searchDrop.length) {
+				this.searchDrop.hide();
+			}
+
 			self.input.keyup(function(e) {
 				// skip system keys
 				if (e.keyCode === 27 || e.keyCode === 13 || e.keyCode === 38 || e.keyCode === 40) return;
 
 				// load data
-				if (self.input.val().length < self.options.startCount) self.hideDrop();
+				if (self.input.val().length <= self.options.startCount) {
+					self.hideDrop();
+				}
+
 				if (self.options.alwaysRefresh) {
 					self.loadData();
 				} else {
@@ -4744,8 +4753,11 @@ ResponsiveHelper = (function($) {
 				if (!self.options.showOnFocus) {
 					self.focusTimer = setTimeout(function() {
 						self.hideDrop();
+						self.searchDrop.hide();
 					}, self.options.hideDelay);
 				}
+			}).on('input', function() {
+				self.makeCallback('onKeyup', self.input.val());
 			});
 
 			if (self.options.showOnFocus) {
@@ -4892,6 +4904,7 @@ ResponsiveHelper = (function($) {
 			this.resultsBox.hide();
 			this.isDropShow = false;
 			this.noResultBox.show();
+			this.searchDrop.show();
 		},
 		hideNoResult: function() {
 			this.resultsHolder.show();
@@ -5969,13 +5982,50 @@ function initAnchors() {
 
 // search autocomplete
 function initSearchForms() {
-	jQuery('.search-row').autoCompleteForm({
+	jQuery('.search-row:not(.js-search-bar search-row)').autoCompleteForm({
 		resultsBox: '.ajax-drop',
 		resultsHolder: '.autocomplete-results',
 		inputField: '.autocomplete',
 		alwaysRefresh: false,
 		redirectOnLink: true,
 		highlightMatches: true
+	});
+
+	jQuery('.js-search-bar .search-row').each(function() {
+		var holder = jQuery(this);
+		var searchLinkNew = holder.find('.search-link-new');
+		var searchLinkUsed = holder.find('.search-link-used');
+		var newItemURL = searchLinkNew.attr('href');
+		var usedItemURL = searchLinkUsed.attr('href');
+		var searchText = holder.find('.search-text');
+
+		holder.autoCompleteForm({
+			resultsBox: '.ajax-drop',
+			resultsHolder: '.autocomplete-results',
+			inputField: '.autocomplete',
+			searchDrop: '.results-search-drop',
+			alwaysRefresh: false,
+			redirectOnLink: true,
+			highlightMatches: true,
+			onInit: function() {
+				changeURL('');
+			},
+			onKeyup: function(value) {
+				changeURL(value);
+			}
+		});
+
+		function changeURL(value) {
+			searchText.text(value);
+
+			if (value !== '') {
+				searchLinkNew.attr('href', newItemURL + ((newItemURL.indexOf('?') !== -1 ? '&' : '?') + 'search=' +  value));
+				searchLinkUsed.attr('href', usedItemURL + ((newItemURL.indexOf('?') !== -1 ? '&' : '?') + 'search=' + value));
+			} else {
+				searchLinkNew.attr('href', newItemURL);
+				searchLinkUsed.attr('href', usedItemURL);
+			}
+		}
 	});
 }
 

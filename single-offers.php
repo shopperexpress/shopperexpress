@@ -68,7 +68,7 @@ while (have_posts()) : the_post();
 						$featuresAndOptionsModal = get_field('features_options');
 						if($overviewModal || $featuresAndOptionsModal){ ?>
 						<ul class="details-list list-inline">
-							<li class="list-inline-item"><a href="#" data-toggle="modal" data-target="#overviewModal">+<?php _e('Overview','shopperexpress'); ?></a></li>
+							<li class="list-inline-item"><a href="#" data-toggle="modal" data-target="#overviewModal">+<?php _e('See Details','shopperexpress'); ?></a></li>
 							<li class="list-inline-item"><a href="#" data-toggle="modal" data-target="#featuresAndOptionsModal">+<?php _e('Features & Options','shopperexpress'); ?></a></li>
 						</ul>
 						<?php } ?>
@@ -325,7 +325,7 @@ while (have_posts()) : the_post();
 	</div>
 	<?php if( $comment_footer  = get_field( 'offers_comment_footer', 'options' ) ): ?>
 		<div class="description-box">
-			<div class="container-fluid text-muted">
+			<div class="container-fluid">
 				<?php echo $comment_footer; ?>
 			</div>
 		</div>

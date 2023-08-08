@@ -119,8 +119,13 @@ function wps_listings( $show = 0, $_post_type = '' ) {
 	$search = !empty($_GET['search']) ? $_GET['search'] : null;
 
 	if ( empty ( $_post_type ) ) $_post_type = isset($_GET['ptype']) && !empty($_GET['ptype']) ? $_GET['ptype'] : 'listings';
+
+	if ( $_post_type == ['listings', 'used-listings'] ) {
+		$permalink = '';
+	} else {
+		$permalink = get_post_type_archive_link($_post_type);
+	}
 	
-	$permalink = get_post_type_archive_link($_post_type);
 	$args = array(
 		'post_type'   => $_post_type,
 		'post_status' => 'publish',

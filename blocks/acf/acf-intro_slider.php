@@ -31,15 +31,21 @@ if ($query->have_posts()): ?>
 					<a class="btn btn-primary btn-pill btn-icon btn-detail" href="<?php echo esc_url( $details_button['url'] ); ?>" target="<?php echo esc_attr( $link_target ); ?>"><i class="material-icons"><?php _e('info','shopperexpress'); ?></i><?php echo esc_html( $details_button['title'] ); ?></a>
 				<?php endif; ?>
 			</div>
-			<div class="search-bar">
-				<form action="<?php echo home_url( 'vehicles' ); ?>" class="search-bar-form search-row" data-action="<?php echo add_query_arg( ['autocomplete' => 1] , home_url() ); ?>">
+			<div class="search-bar js-search-bar">
+				<form action="<?php echo home_url( 'vehicles' ); ?>" class="search-bar-form search-row" data-action="<?php echo add_query_arg( ['autocomplete' => 1, 'ptype' => ['listings', 'used-listings']] , home_url() ); ?>">
 					<i class="icon material-icons">search</i>
 					<input class="form-control autocomplete" type="search" placeholder="<?php esc_html_e( 'Search Anything', 'shopperexpress' ); ?>" name="search" data-src="<?php echo add_query_arg( ['autocomplete' => 1] , home_url() ); ?>"/>
+					<div class="results-search-drop">
+						<div class="search-buttons-holder">
+							<a class="search-link-new search-link" href="<?php echo get_post_type_archive_link( 'listings' ); ?>"><?php esc_html_e( 'Click Here to Search All New:', 'shopperexpress' ); ?> <span class="search-text"></span></a>
+							<a class="search-link-used search-link" href="<?php echo get_post_type_archive_link( 'used-listings' ); ?>"><?php esc_html_e( 'Click Here to Search All Used:', 'shopperexpress' ); ?> <span class="search-text"></span></a>
+						</div>
 						<div class="ajax-drop">
 							<strong><?php _e('sugestions','shopperexpress'); ?></strong>
 							<ul class="autocomplete-results"></ul>
 						</div>
-					</form>
+					</div>
+				</form>
 				<?php if ( have_rows( 'buttons' ) ) : ?>
 					<ul class="btn-list list-unstyled">
 						<?php

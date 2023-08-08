@@ -485,65 +485,65 @@ add_shortcode( 'stock', function ( $atts = array() ) {
 	return $query->found_posts;
 } );
 
-function CallAPI($method, $url, $data = false)
+function CallAPI($url, $data, $post_id)
 {
-	$curl = curl_init();
-	switch ($method)
-	{
-		case "POST":
-		curl_setopt($curl, CURLOPT_POST, 1);
-		if ($data)
-			curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-		break;
-		case "PUT":
-		curl_setopt($curl, CURLOPT_PUT, 1);
-		break;
-		default:
-		if ($data)
-			$url = sprintf("%s?%s", $url, http_build_query($data));
-	}
-	$mt = explode(' ', microtime());
+	if ( !have_rows( 'features_list', $post_id ) ) {
 
-	$chromedata_timestamp = ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
+		$curl = curl_init();
 
-	$chromedata_noonce = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(32))), 0, 32);
-	$realm = 'http://chromedata.com';
+		$url = sprintf("%s?%s", $url, http_build_query($data));
 
-	$chromedata_app_id = get_field( 'chromedata_app_id', 'options' );
-	$shared_secret = get_field( 'shared_secret', 'options' );
-	$chromedata_secret_digest_original = $chromedata_noonce . $chromedata_timestamp . $shared_secret;
-	$chromedata_secret_digest = base64_encode(sha1($chromedata_secret_digest_original,true));
-	$token = "Atmosphere realm=\"{$realm}\",";
-	$token .= "chromedata_app_id=\"{$chromedata_app_id}\",";
-	$token .= "chromedata_nonce=\"{$chromedata_noonce}\",";
-	$token .= "chromedata_secret_digest=\"{$chromedata_secret_digest}\",";
-	$token .= "chromedata_digest_method=SHA1,";
-	$token .= "chromedata_version=1.0,";
-	$token .= "chromedata_timestamp=\"{$chromedata_timestamp}\"";
+		$mt = explode(' ', microtime());
 
-	$headers = array(
-		"Accept: application/json",
-		"Content-Type: application/x-www-form-urlencoded",
-		"Authorization: {$token}",
-	);
+		$chromedata_timestamp = ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
 
-	curl_setopt($curl, CURLOPT_HEADER, 0);
-	curl_setopt($curl, CURLOPT_HTTPHEADER , $headers);
-	curl_setopt($curl, CURLOPT_URL, $url);
-	curl_setopt($curl, CURLOPT_VERBOSE, 1);
-	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	$result = curl_exec($curl);
-	curl_close($curl);
-	$result = json_decode( $result, true );
+		$chromedata_noonce = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(32))), 0, 32);
+		$realm = 'http://chromedata.com';
 
-	if ( !empty( $result['result'] ) ) {
-		foreach ( $result['result']['features'] as $item ) {
-			$output[$item['sectionName']][] = $item;
+		$chromedata_app_id = get_field( 'chromedata_app_id', 'options' );
+		$shared_secret = get_field( 'shared_secret', 'options' );
+		$chromedata_secret_digest_original = $chromedata_noonce . $chromedata_timestamp . $shared_secret;
+		$chromedata_secret_digest = base64_encode(sha1($chromedata_secret_digest_original,true));
+		$token = "Atmosphere realm=\"{$realm}\",";
+		$token .= "chromedata_app_id=\"{$chromedata_app_id}\",";
+		$token .= "chromedata_nonce=\"{$chromedata_noonce}\",";
+		$token .= "chromedata_secret_digest=\"{$chromedata_secret_digest}\",";
+		$token .= "chromedata_digest_method=SHA1,";
+		$token .= "chromedata_version=1.0,";
+		$token .= "chromedata_timestamp=\"{$chromedata_timestamp}\"";
+
+		$headers = array(
+			"Accept: application/json",
+			"Content-Type: application/json",
+			"Authorization: {$token}",
+		);
+		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode( $data ) );
+		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
+		curl_setopt($curl, CURLOPT_HEADER, false);
+		curl_setopt($curl, CURLOPT_HTTPHEADER , $headers);
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_VERBOSE, 1);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+		$result = curl_exec($curl);
+		curl_close($curl);
+
+		$result = json_decode( $result, true );
+
+		if ( !empty( $result['result'] ) ) {
+			foreach ( $result['result']['features'] as $item ) {
+				$output[$item['sectionName']][] = $item;
+			}
 		}
-	}else{
-		$output = null;
+		foreach ( $output as $index => $item ) {
+			$list = [];
+			foreach( $item as $value){
+				$description = $value['description'] != $value['nameNoBrand'] ? $value['description'] . ': ' . $value['nameNoBrand'] : $value['description'];
+				$list[] = [ 'feature' => $description ];
+			}
+			add_row( 'features_list', [ 'heading' => $index, 'features' => $list ], $post_id);
+		}
+		
+
 	}
-
-	return $output;
 }
-

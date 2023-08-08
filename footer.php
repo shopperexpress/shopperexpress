@@ -84,7 +84,7 @@ $footer_style = get_field( 'footer_style', 'options' );
 	</div>
 </footer>
 </div>
-<?php if ( is_single() ): ?>
+<?php if ( is_single() || is_archive() ): ?>
 	<!-- Overview Modal -->
 	<div class="modal fade modal-info" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
