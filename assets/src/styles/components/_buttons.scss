@@ -1,0 +1,48 @@
+.simplefavorite-button {
+  border: 0;
+  background-color: transparent;
+  color: $black;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+
+  span {
+    font-size: 12px;
+    line-height: 1.3333;
+    margin-left: 4px;
+  }
+
+  &.active {
+    opacity: 1 !important;
+  }
+
+  .sf-icon-star-empty,
+  .sf-icon-star-full {
+    width: 24px;
+    height: 24px;
+    aspect-ratio: 1;
+    display: block;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    border: none;
+
+    &::before {
+      display: none !important;
+    }
+  }
+
+  .sf-icon-star-empty {
+    background-color: $black;
+    mask-image: url('images/icon-favorite-outline.svg');
+    -webkit-mask-image: url('images/icon-favorite-outline.svg');
+  }
+
+  .sf-icon-star-full {
+    background-color: var(--primary);
+    mask-image: url('images/icon-favorite-fill.svg');
+    -webkit-mask-image: url('images/icon-favorite-fill.svg');
+  }
+}

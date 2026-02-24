@@ -1,17 +1,28 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Template part for displaying archive
+ *
+ * @package Shopperexpress
+ */
+
+get_header();
+?>
 <div class="container-fluid">
 	<div id="content">
 		<?php if ( have_posts() ) : ?>
 			<div class="title">
 				<?php the_archive_title( '<h1>', '</h1>' ); ?>
 			</div>
-			<?php while ( have_posts() ) : the_post(); ?>
-				<?php get_template_part( 'blocks/content', get_post_type() ); ?>
-			<?php endwhile; ?>
-			<?php get_template_part( 'blocks/pager' ); ?>
-		<?php else : ?>
-			<?php get_template_part( 'blocks/not_found' ); ?>
-		<?php endif; ?>
+			<?php
+			while ( have_posts() ) :
+				the_post();
+				get_template_part( 'template-parts/content', get_post_type() );
+			endwhile;
+			get_template_part( 'template-parts/pager' );
+		else :
+			get_template_part( 'template-parts/not_found' );
+		endif;
+		?>
 	</div>
 	<?php get_sidebar(); ?>
 </div>

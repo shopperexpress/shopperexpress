@@ -5,7 +5,7 @@
         {
             "key": "field_64c27279063df",
             "label": "Features",
-            "name": "features_list",
+            "name": "features_items",
             "aria-label": "",
             "type": "repeater",
             "instructions": "",
@@ -16,6 +16,7 @@
                 "class": "",
                 "id": ""
             },
+            "acfe_repeater_stylised_button": 0,
             "layout": "block",
             "pagination": 0,
             "min": 0,
@@ -43,7 +44,8 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_64c27279063df"
+                    "parent_repeater": "field_64c27279063df",
+                    "wpml_cf_preferences": 2
                 },
                 {
                     "key": "field_64c272e0063e2",
@@ -66,7 +68,53 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_64c27279063df",
+                    "wpml_cf_preferences": 1,
                     "sub_fields": [
+                        {
+                            "key": "field_66b5ecd3980d8",
+                            "label": "Id",
+                            "name": "id",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_64c272e0063e2"
+                        },
+                        {
+                            "key": "field_66b4db648f78d",
+                            "label": "Ranking",
+                            "name": "ranking",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_64c272e0063e2"
+                        },
                         {
                             "key": "field_64c272e8063e3",
                             "label": "Feature",
@@ -86,10 +134,11 @@
                             "placeholder": "",
                             "prepend": "",
                             "append": "",
-                            "parent_repeater": "field_64c272e0063e2"
+                            "parent_repeater": "field_64c272e0063e2",
+                            "wpml_cf_preferences": 2
                         }
                     ],
-                    "parent_repeater": "field_64c27279063df"
+                    "acfe_repeater_stylised_button": 0
                 }
             ]
         }
@@ -108,6 +157,20 @@
                 "operator": "==",
                 "value": "used-listings"
             }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "research"
+            }
+        ],
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "offers"
+            }
         ]
     ],
     "menu_order": 2,
@@ -119,5 +182,12 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1690465038
+    "acfe_display_title": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1762427307
 }

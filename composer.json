@@ -1,0 +1,31 @@
+{
+    "name": "base/base",
+    "description": "A WordPress theme.",
+    "type": "wordpress-theme",
+    "autoload": {
+        "psr-4": {
+            "App\\": "inc/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.2.5"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+       "php": ">=7.2.5",
+    "symfony/var-dumper": "^5.1",
+    "wp-coding-standards/wpcs": "*",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.1.2",
+    "squizlabs/php_codesniffer": "*"
+    },
+    "require": {
+        "rdlowrey/auryn": "^1.4"
+    },
+    "scripts": {
+        "cs": "phpcs --standard=phpcs.xml ."
+    }
+}

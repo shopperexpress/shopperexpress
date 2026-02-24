@@ -1,0 +1,34 @@
+.section-404 {
+  .container {
+    max-width: 1768px;
+  }
+
+  .section-location {
+    padding-top: 0;
+  }
+
+  .location-logos {
+    @include media('>=desktop') {
+      margin: 0 -5px;
+    }
+
+    @include media('>=xxl') {
+      margin: 0 -12px !important;
+    }
+  }
+
+  .section-html {
+
+    ul,
+    ol {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul,
+    ol,
+    p {
+      margin-bottom: 1.125rem;
+    }
+  }
+}

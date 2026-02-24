@@ -1,0 +1,52 @@
+{
+  "src": "src",
+  "dest": "dist",
+  "debug": false,
+  "cache_boost": false,
+  "minimizeCSS": true,
+  "minimizeJS": false,
+  "linters": false,
+  "webp": false,
+  "server": {
+    "open": true,
+    "index": "__routes.html"
+  },
+  "styles": {
+    "bundle": "style",
+    "src": "styles",
+    "dest": "./",
+    "extension": "scss"
+  },
+  "scripts": {
+    "bundle": "app",
+    "src": "js",
+    "dest": "js",
+    "extension": "js",
+    "static": true
+  },
+  "templates": {
+    "src": "views",
+    "dest": "./",
+    "extension": "html"
+  },
+  "static": {
+    "fonts": {
+      "src": "fonts"
+    },
+    "js": {
+      "src": "js/static",
+      "dest": "js"
+    },
+    "images": {
+      "src": "images"
+    },
+    "ajax": {
+      "src": "inc"
+    },
+    "bootstrap": {
+      "src": "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "dest": "js"
+    }
+  },
+  "minimize": false
+}

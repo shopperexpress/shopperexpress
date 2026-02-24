@@ -1,0 +1,12 @@
+.widgetbox__popup-text {
+  color: $black;
+  font-size: 12px;
+
+  ul {
+    @extend %listreset;
+  }
+
+  p {
+    margin: 0;
+  }
+}

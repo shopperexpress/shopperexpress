@@ -1,0 +1,48 @@
+.pagination-holder {
+  &.hidden {
+    display: none;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+
+    @include media ('>=tablet') {
+      justify-content: flex-end;
+    }
+  }
+
+  .btn-next,
+  .btn-prev {
+    @include transition(color background-color border-color);
+    @include size(40px);
+    border-radius: 50rem;
+    background-color: $white;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $gray-400;
+
+    &.disabled {
+      pointer-events: none;
+
+      svg {
+        opacity: 0.5;
+      }
+    }
+
+    svg {
+      width: 36px;
+      height: auto;
+      flex-shrink: 0;
+      fill: var(--primary);
+    }
+  }
+
+  .pagination-text {
+    padding: 0 10px;
+  }
+}

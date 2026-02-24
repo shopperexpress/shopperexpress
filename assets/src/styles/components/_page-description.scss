@@ -1,0 +1,39 @@
+.page-description {
+  background-color: $white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 10px;
+  margin-bottom: 24px;
+  font-size: 14px;
+
+  .breadcrumbs {
+    margin-bottom: 8px;
+
+    @include media('>=desktop') {
+      margin-bottom: 16px;
+    }
+
+    li {
+      &:last-child {
+        a {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  h1 {
+    font-weight: 600;
+    font-size: 24px;
+
+    @include media('>=desktop') {
+      font-size: 32px;
+    }
+  }
+
+  p {
+    &:last-child {
+      margin: 0;
+    }
+  }
+}

@@ -1,0 +1,451 @@
+$vertical-rhythm: 1.2em !default;
+$btn-background: var(--primary);
+$btn-color: #fff !default;
+
+#main {
+  @extend %clearfix;
+}
+
+#content {
+  @include media ('>=desktop') {
+    float: left;
+    width: 70%;
+    padding-right: 30px;
+  }
+
+  &:only-child {
+    width: 100%;
+    float: none;
+  }
+}
+
+#content,
+#sidebar {
+  padding: 40px 0;
+
+  @include media ('>=desktop') {
+    padding: 100px 0;
+  }
+}
+
+#sidebar {
+  @include media ('>=desktop') {
+    float: right;
+    width: 30%;
+  }
+}
+
+#content {
+  @include media('>=desktop') {
+    padding-right: 50px;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='search'],
+input[type='password'],
+input[type='url'],
+input[type='date'],
+textarea {
+  @include animate(border-color);
+
+  .comment-form &,
+  .search-form &,
+  .post-password-form & {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border: 1px solid #999;
+    padding: .5em .7em;
+
+    // &:hover {
+
+    // }
+
+    &:focus {
+      border-color: #333;
+    }
+
+    @include placeholder {
+      color: #ccc;
+    }
+  }
+}
+
+.wp-block-quote,
+.wp-block-pullquote {
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  border-width: 0 0 0 2px;
+  border-style: solid;
+  border-color: var(--primary);
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
+
+  p {
+    margin-bottom: 1rem;
+  }
+}
+
+.wp-block-pullquote {
+  blockquote {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.widget_block {
+
+  &:has(.widget-banner),
+  &:has(.widget-news) {
+    padding: 0;
+    background-color: transparent;
+  }
+}
+
+.widget,
+.widget_block {
+  padding: 20px;
+  background-color: $gray-200;
+  margin-bottom: 30px;
+  @extend %clearfix;
+
+  ul {
+    padding-left: 1rem;
+
+    a {
+      color: $black;
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+
+    li {
+      &::marker {
+        color: var(--primary);
+      }
+    }
+  }
+
+  select {
+    min-width: 150px;
+  }
+}
+
+.comment-form {
+  label {
+    display: block;
+    padding-bottom: 4px;
+  }
+
+  textarea {
+    overflow: auto;
+    margin: 0;
+    height: 120px;
+    min-height: 120px;
+  }
+
+  textarea,
+  input[type='text'] {
+    margin: 0 4px 0 0;
+    width: 300px;
+  }
+
+  input[type='submit'] {
+    display: block;
+    float: none;
+  }
+}
+
+.post-password-form {
+  label {
+    display: block;
+  }
+
+  input[type='password'] {
+    margin: 0 4px 0 0;
+    width: 300px;
+  }
+}
+
+.search-form {
+  @extend %clearfix;
+
+  input {
+    float: left;
+    height: 2em;
+
+    &[type='search'] {
+      margin: 0 4px 0 0;
+      width: 150px;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.post-password-form {
+  p {
+    @extend %clearfix;
+  }
+
+  input {
+    float: left;
+    height: 2em;
+
+    &[type='password'] {
+      width: 150px;
+    }
+  }
+}
+
+.comment-form,
+.post-password-form,
+.search-form {
+  input[type='submit'] {
+    @include animate(opacity);
+    background-color: var(--primary);
+    color: #fff;
+    height: 2em;
+    border: none;
+    padding: 0 .5em;
+
+    &:hover {
+      opacity: .8;
+    }
+  }
+}
+
+.commentlist {
+  margin: 0 0 1.2em;
+
+  .edit-link {
+    margin: 0;
+  }
+
+  .avatar-holder {
+    float: left;
+    margin: 0 1.2em 4px 0;
+  }
+}
+
+.commentlist-item {
+  .commentlist-item {
+    padding: 0;
+
+    @include media(">=tablet") {
+      padding: 0 0 0 2em;
+
+    }
+  }
+}
+
+.comment,
+.commentlist-holder {
+  overflow: hidden;
+}
+
+.commentlist-item .commentlist-item,
+.commentlist-item+.commentlist-item {
+  padding-top: 1.2em;
+}
+
+.widget_calendar {
+  #next {
+    text-align: right;
+  }
+}
+
+.gallery-item {
+  dt {
+    float: none;
+    padding: 0;
+  }
+}
+
+.navigation,
+.navigation-comments {
+  position: relative;
+  vertical-align: middle;
+  margin-bottom: $vertical-rhythm;
+
+  .screen-reader-text {
+    position: absolute;
+    left: -99999px;
+  }
+
+  .page-numbers {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 .4em;
+
+    @include media('<tablet') {
+      padding: 0;
+    }
+  }
+
+  .next,
+  .prev {
+    @include animate(background-color);
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 50%;
+    background: $btn-background;
+    color: $btn-color;
+    padding: .4em;
+    text-decoration: none;
+
+    @include media('<tablet') {
+      padding: .2em;
+    }
+
+    &:hover {
+      background-color: darken($primary, 5%);
+    }
+  }
+}
+
+.navigation-single {
+  @extend %clearfix;
+  margin-bottom: $vertical-rhythm;
+
+  .next,
+  .prev {
+    @include animate(background-color);
+    float: left;
+    vertical-align: middle;
+    max-width: 49%;
+    background: var(--primary);
+    color: $btn-color;
+    text-decoration: none;
+
+    &:hover {
+      background-color: color-mix(in srgb, rgb(var(--primary-rgb)) 95%, $black);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      padding: .4em;
+      display: block;
+
+      @include media('<tablet') {
+        padding: .2em;
+      }
+    }
+  }
+
+  .next {
+    float: right;
+  }
+}
+
+.wp-caption {
+  max-width: 100%;
+  clear: both;
+  border: 1px solid #ccc;
+  padding: .4em;
+  margin-bottom: 1.2em;
+
+  img {
+    margin: 0;
+    vertical-align: top;
+  }
+
+  p {
+    margin: .4em 0 0;
+  }
+}
+
+div.aligncenter {
+  margin: 0 auto 1.2em;
+}
+
+img.aligncenter {
+  display: block;
+  margin: 0 auto;
+}
+
+.alignleft {
+  float: left;
+  margin: 0 1.2em 4px 0;
+}
+
+.alignright {
+  float: right;
+  margin: 0 0 4px 1.2em;
+}
+
+.mejs-container {
+  margin-bottom: 1.2em;
+}
+
+.wp-caption-text,
+.gallery,
+.alignnone,
+.gallery-caption,
+.sticky,
+.bypostauthor {
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+#wp-calendar {
+  width: 100%;
+
+  th,
+  td {
+    padding: .2em;
+    border: 1px solid #999;
+  }
+}
+
+table {
+
+  th,
+  td {
+    padding: .2em;
+    border: 1px solid #999;
+  }
+}
+
+img.wp-smiley,
+img.emoji {
+  display: inline !important;
+  border: none !important;
+  box-shadow: none !important;
+  height: 1em !important;
+  width: 1em !important;
+  margin: 0 0.07em !important;
+  vertical-align: -0.1em !important;
+  background: none !important;
+  padding: 0 !important;
+}
+
+.share-this {
+  .st-btn {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--primary);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 3rem;
+
+    img {
+      display: inline-block;
+      vertical-align: middle;
+      width: 2rem;
+      height: auto;
+    }
+  }
+}

@@ -1,0 +1,7 @@
+.acf-field[data-width].wp-admin-tab-item-left {
+    clear: both;
+}
+
+.acf-field[data-width].wp-admin-tab-item-right {
+    clear: none;
+}

@@ -20,7 +20,8 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "maxlength": ""
+            "maxlength": "",
+            "wpml_cf_preferences": 2
         },
         {
             "key": "field_5ffd72e46d89a",
@@ -40,7 +41,8 @@
             "placeholder": "",
             "maxlength": "",
             "rows": "",
-            "new_lines": "wpautop"
+            "new_lines": "wpautop",
+            "wpml_cf_preferences": 2
         }
     ],
     "location": [
@@ -75,5 +77,6 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1689100352
+    "acfml_field_group_mode": "translation",
+    "modified": 1694619949
 }

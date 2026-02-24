@@ -1,0 +1,45 @@
+.section-key-features {
+  padding: 30px 0 14px;
+  border-top: 1px solid #e6e6e6;
+
+  .heading {
+    padding: 0 10px 10px;
+
+    @include media('>=tablet') {
+      padding: 0 20px 16px;
+    }
+  }
+}
+
+.key-features-list {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+
+  @include media ('>=tablet') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media ('>=desktop') {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  li {
+    text-align: center;
+    border: 1px solid $gray-400;
+    padding: 15px;
+  }
+
+  .icon {
+    @include size(50px);
+    display: block;
+    margin: 0 auto 15px;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}

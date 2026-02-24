@@ -1,0 +1,464 @@
+// .modal.modal-info {
+  // &.modal-share {
+  //   .modal-footer {
+  //     @include media ('<tablet') {
+  //       padding-bottom: 20px;
+  //     }
+  //   }
+  // }
+
+  // &.modal-edit {
+  //   .modal-header {
+  //     flex-direction: column;
+  //     padding: 15px 30px;
+
+  //     @include media('>=tablet') {
+  //       flex-direction: row;
+  //       justify-content: space-between;
+  //       align-items: center;
+  //     }
+
+  //     .modal-title {
+  //       align-self: center;
+  //       text-align: center;
+
+  //       @include media('>=tablet') {
+  //         text-align: left;
+  //       }
+  //     }
+
+  //     .alert {
+  //       @include animate(opacity transform, .2s, ease);
+  //       position: absolute;
+  //       top: calc(100% + 10px);
+  //       left: 20%;
+  //       right: 20%;
+  //       margin: 0;
+  //       border-radius: 6px;
+  //       z-index: 10;
+
+  //       strong {
+  //         display: block;
+  //         font-weight: 500;
+  //       }
+
+  //       &:not(.show) {
+  //         visibility: hidden;
+  //         transform: translateY(-20px);
+  //       }
+
+  //       &.alert-success {
+  //         border-color: $success;
+  //         color: $success;
+  //       }
+
+  //       &.alert-danger {
+  //         border-color: $red;
+  //         color: $red;
+  //       }
+
+  //       .close {
+  //         width: 40px;
+  //         border: 0;
+  //         font-weight: 500;
+  //         color: $white;
+
+  //         &:hover {
+  //           background-color: transparent;
+  //           color: $dark-gray !important;
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   .modal-dialog {
+  //     @include media('>=tablet', '<desktop') {
+  //       max-width: calc(100vw - 1rem);
+  //     }
+
+  //     @include media('>=desktop') {
+  //       max-width: 1060px;
+  //     }
+  //   }
+
+  //   .modal-body {
+  //     background-color: $white;
+  //   }
+
+  //   .btn-row {
+  //     display: flex;
+  //     gap: 6px;
+  //     width: 100%;
+  //     padding-top: 16px;
+
+  //     @include media('>=tablet') {
+  //       padding-top: 0;
+  //       width: auto;
+  //     }
+
+  //     @include media('>=desktop') {
+  //       gap: 12px;
+  //     }
+
+  //     .btn {
+  //       position: static;
+  //       flex-shrink: 0;
+  //       border-radius: 4px;
+  //       border: 0;
+  //       display: flex;
+  //       align-items: center;
+  //       justify-content: center;
+  //       flex: 1 0 auto;
+  //       gap: 6px;
+  //       font-size: 14px;
+
+  //       @include media('>=tablet') {
+  //         flex: inherit;
+  //       }
+
+  //       @include media('>=desktop') {
+  //         font-size: 20px;
+  //         padding: 6px 10px;
+  //       }
+
+  //       &:disabled {
+  //         &:hover {
+  //           opacity: 0.65;
+  //         }
+  //       }
+
+  //       svg {
+  //         width: 24px;
+  //         height: auto;
+  //         fill: currentColor;
+  //       }
+  //     }
+  //   }
+  // }
+
+  // .text-holder {
+  //   height: auto;
+  //   min-height: 0;
+  //   padding: 30px;
+  //   max-height: none;
+  //   background-color: $white;
+  //   width: 100% !important;
+  //   margin: 0;
+
+  //   h1,
+  //   h2,
+  //   h3 {
+  //     font-size: 14px;
+  //     font-weight: 500;
+  //     line-height: 1.375;
+  //     margin: 0;
+  //     display: inline;
+
+  //     @include media('>=tablet') {
+  //       font-size: 16px;
+  //     }
+  //   }
+  // }
+
+  // .modal-content-list {
+  //   margin: 0;
+  //   padding: 0;
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   font-size: 16px;
+  //   font-weight: 700;
+  //   color: $black;
+
+  //   @include media ('>=tablet') {
+  //     margin: 0 -5px;
+  //   }
+
+  //   li {
+  //     margin: 0 0 10px;
+  //     width: 100%;
+  //     padding: 10px 15px;
+  //     background-color: $white;
+  //     min-height: 70px;
+  //     display: flex;
+  //     align-items: center;
+
+  //     @include media ('>=tablet') {
+  //       width: calc(50% - 10px);
+  //       margin: 5px;
+  //     }
+
+  //     @include media ('>=widescreen') {
+  //       width: calc(33.33% - 10px);
+  //     }
+  //   }
+  // }
+// }
+
+.share-info {
+  &__img {
+    padding-bottom: 25px;
+
+    @include media ('>=tablet') {
+      padding-bottom: 0;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .row {
+    padding-bottom: 25px;
+
+    @include media ('>=tablet') {
+      align-items: center;
+    }
+
+    @include media ('>=desktop') {
+      padding-bottom: 30px;
+    }
+  }
+
+  h3 {
+    font-weight: $font-weight-bold;
+  }
+
+  .detail-info {
+    color: $gray-700;
+    font-size: 13px;
+    padding-bottom: 0;
+
+    dt,
+    dd {
+      margin-bottom: 2px;
+    }
+
+    dt {
+      width: 100px;
+      font-weight: $font-weight-normal;
+    }
+
+    dd {
+      width: calc(100% - 100px);
+    }
+  }
+
+  .btn-holder {
+    background-color: $white;
+    margin: 0 -25px -25px;
+    padding: 15px;
+    position: relative;
+    z-index: 10;
+
+    @include media ('>=desktop') {
+      margin: 0 -30px -30px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      padding: 15px 15px;
+      font-size: 14px;
+      text-transform: none;
+      text-align: left;
+      font-weight: $font-weight-normal;
+
+      &.btn-secondary {
+        &:not(:hover) {
+          background-color: #cdcdcd;
+          border-color: #cdcdcd;
+          color: $gray-900;
+        }
+      }
+
+      svg {
+        width: 24px;
+        height: auto;
+        fill: currentColor;
+        margin-right: 7px;
+        transform: rotate(-45deg);
+      }
+
+      i {
+        margin-right: 7px;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+.info-tabs-wrapp {
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  padding: 16px 0 0;
+  margin: 0 -25px;
+
+  @include media('>=desktop') {
+    margin: 0 -30px;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    background-image: linear-gradient(to right, rgba($white, 0) 0%, rgba($white, 1) 100%);
+    pointer-events: none;
+
+    @include media('>=tablet') {
+      width: 30px;
+    }
+  }
+}
+
+.info-tabs-holder {
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin-bottom: 15px;
+  padding: 0 25px;
+
+  @include media('>=desktop') {
+    padding: 0 30px;
+  }
+}
+
+.info-tabs {
+  flex-wrap: nowrap;
+  padding-bottom: 6px;
+
+  li {
+    padding-right: 24px;
+
+    @include media('>=desktop') {
+      padding-right: 42px;
+    }
+  }
+
+  button {
+    @include animate(color border-color);
+    background-color: transparent;
+    color: $gray-600;
+    text-transform: capitalize;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    border: 0;
+    padding: 6px 0;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+
+    @include media('>=desktop') {
+      font-size: 18px;
+    }
+
+    &:hover {
+      color: $black;
+      border-bottom-color: $black;
+    }
+
+    &.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+  }
+}
+
+.modal.modal-confirm {
+  z-index: 1055;
+
+  .modal-dialog {
+    transform: translate(0) !important;
+  }
+
+  .modal-content {
+    box-shadow: 0 0 10px rgba($black, .5);
+  }
+
+  .modal-body {
+    padding: 0.75rem;
+    background-color: $white;
+  }
+
+  .modal-footer {
+    padding: 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    border: 0;
+
+    .btn {
+      border-radius: 4px;
+      margin: 0;
+      display: block;
+      font-size: 14px;
+      padding: 10px;
+      min-width: 0;
+    }
+  }
+}
+
+.modal-backdrop.confirm-delete-backdrop {
+  background-color: rgba($white, 0.7);
+  z-index: 1054;
+}
+
+.popup-holder {
+  position: relative;
+  overflow: hidden;
+  height: 0;
+}
+
+.fancybox-container.spin-360.evo {
+  .fancybox-toolbar {
+    .fancybox-button--close {
+      display: none !important;
+    }
+  }
+
+  .fancybox-content {
+    width: 100%;
+    max-width: 1100px;
+    padding: 0;
+
+    .fancybox-close-small {
+      @include media('>=tablet') {
+        width: 50px;
+        height: 50px;
+        padding: 0;
+      }
+    }
+
+    .container {
+      padding: 0;
+      max-width: none;
+    }
+
+    .evo-slider-wrapp {
+      border-top: 0;
+      padding: 0;
+
+      .heading {
+        top: 0;
+        margin: 0;
+      }
+
+      .decor-icon {
+        @include media('<tablet') {
+          width: 30px;
+          margin-bottom: -2px;
+        }
+      }
+
+      h3 {
+        @include media('<tablet') {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}

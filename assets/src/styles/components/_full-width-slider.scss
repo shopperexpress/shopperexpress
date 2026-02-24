@@ -1,0 +1,22 @@
+.section-full-width-slider {
+  padding: 50px 0;
+}
+
+.full-width-image-slider {
+  .slick-dots {
+    button {
+      border: 1px solid var(--primary) !important;
+    }
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+
+    @include media('>=tablet') {
+      border-radius: 12px;
+    }
+  }
+}

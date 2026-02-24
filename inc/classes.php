@@ -87,12 +87,7 @@ class Header_Walker_Nav_Menu extends Walker_Nav_Menu {
 
 		$item_output = $args->before;
 		$item_output .= '<a' . $attributes . '>';
-		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
-
-		if ( $icon = get_field( 'icon', $item->ID ) ) {
-			$item_output .= wps_get_icon( $icon );
-		}
-
+		$item_output .= $args->link_before . display_svg_icon(get_field('svg_icon', $item->ID), false) . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
 		$item_output .= '</a>';
 		$item_output .= $args->after;
 
