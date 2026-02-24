@@ -1958,6 +1958,10 @@ if ( ! is_admin() ) {
 	add_filter( 'wpseo_twitter_desc', 'do_shortcode' );
 }
 
+add_action('admin_init', function() {
+    delete_site_transient('update_themes');
+});
+
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) {
         return $transient;
