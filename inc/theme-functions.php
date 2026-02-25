@@ -1958,42 +1958,48 @@ if ( ! is_admin() ) {
 	add_filter( 'wpseo_twitter_desc', 'do_shortcode' );
 }
 
-add_action('admin_init', function() {
-    delete_site_transient('update_themes');
-});
+add_action(
+	'admin_init',
+	function () {
+		delete_site_transient( 'update_themes' );
+	}
+);
 
-add_filter('pre_set_site_transient_update_themes', function($transient) {
-    if (empty($transient->checked)) {
-        return $transient;
-    }
+add_filter(
+	'pre_set_site_transient_update_themes',
+	function ( $transient ) {
+		if ( empty( $transient->checked ) ) {
+			return $transient;
+		}
 
-    $theme_slug = 'shopperexpress';
-    $current_version = $transient->checked[$theme_slug];
+		$theme_slug      = 'shopperexpress';
+		$current_version = $transient->checked[ $theme_slug ];
 
-    // GitHub API
-    $repo = 'shopperexpress/shopperexpress';
-    $response = wp_remote_get("https://api.github.com/repos/$repo/releases/latest");
+		// GitHub API
+		$repo     = 'shopperexpress/shopperexpress';
+		$response = wp_remote_get( "https://api.github.com/repos/$repo/releases/latest" );
 
-    if (is_wp_error($response)) {
-        return $transient;
-    }
+		if ( is_wp_error( $response ) ) {
+			return $transient;
+		}
 
-    $body = json_decode(wp_remote_retrieve_body($response));
-    if (!$body || empty($body->tag_name)) {
-        return $transient;
-    }
+		$body = json_decode( wp_remote_retrieve_body( $response ) );
+		if ( ! $body || empty( $body->tag_name ) ) {
+			return $transient;
+		}
 
-    $new_version = ltrim($body->tag_name, 'v');
-    $zip_url = $body->zipball_url;
+		$new_version = ltrim( $body->tag_name, 'v' );
+		$zip_url     = $body->zipball_url;
 
-    if (version_compare($current_version, $new_version, '<')) {
-        $transient->response[$theme_slug] = [
-            'theme'       => $theme_slug,
-            'new_version' => $new_version,
-            'package'     => $zip_url,
-            'url'         => "https://github.com/$repo",
-        ];
-    }
+		if ( version_compare( $current_version, $new_version, '<' ) ) {
+			$transient->response[ $theme_slug ] = array(
+				'theme'       => $theme_slug,
+				'new_version' => $new_version,
+				'package'     => $zip_url,
+				'url'         => "https://github.com/$repo",
+			);
+		}
 
-    return $transient;
-});
+		return $transient;
+	}
+);

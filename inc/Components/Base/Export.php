@@ -270,10 +270,10 @@ class Export implements Theme_Component {
 
 				if ( is_array( $val ) && ( array_keys( $val ) === range( 0, count( $val ) - 1 ) ) ) {
 					foreach ( $val as $item ) {
-						add_post_meta( $post_id, $key, do_shortcode( $item ) );
+						add_post_meta( $post_id, $key, $item );
 					}
 				} else {
-					update_post_meta( $post_id, $key, do_shortcode( $val ) );
+					update_post_meta( $post_id, $key, $val );
 				}
 			}
 		}
@@ -281,11 +281,12 @@ class Export implements Theme_Component {
 		// Update ACF fields (if present).
 		if ( ! empty( $data['acf'] ) && is_array( $data['acf'] ) && function_exists( 'update_field' ) ) {
 			foreach ( $data['acf'] as $acf_key => $acf_val ) {
-				update_field( $acf_key, do_shortcode( $acf_val ), $post_id );
+				update_field( $acf_key, $acf_val, $post_id );
 			}
 		}
 
 		// Update taxonomies.
+		/*
 		if ( ! empty( $data['taxonomies'] ) && is_array( $data['taxonomies'] ) ) {
 			foreach ( $data['taxonomies'] as $tax => $terms ) {
 				if ( taxonomy_exists( $tax ) ) {
@@ -317,7 +318,7 @@ class Export implements Theme_Component {
 				}
 			}
 		}
-
+		*/
 		// Redirect back to the edit page for this post
 		$redirect_to = isset( $_POST['redirect_to'] ) ? sanitize_text_field( wp_unslash( $_POST['redirect_to'] ) ) : '';
 

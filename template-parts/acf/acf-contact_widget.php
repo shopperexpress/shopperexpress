@@ -134,7 +134,7 @@
 					$rand = mt_rand( 1, 9999 );
 					if ( have_rows( 'tabs' ) ) :
 						?>
-						<ul class="widget-tabs nav" id="infoTab" role="tablist">
+						<ul class="widget-tabs nav" id="infoTab-<?php echo esc_attr( $rand ); ?>" role="tablist">
 							<?php
 							while ( have_rows( 'tabs' ) ) :
 								the_row();
@@ -147,7 +147,7 @@
 									?>
 								active<?php endif; ?>" id="<?php echo esc_attr( $row ); ?>tab" data-toggle="tab" data-target="#tab<?php echo esc_attr( $row ); ?>" type="button" role="tab" aria-controls="tab-<?php echo esc_attr( $row ); ?>" aria-selected="
 								<?php
-								if ( 1 === $row ) {
+								if ( 1 === get_row_index() ) {
 									echo 'true';
 								} else {
 									echo 'false';
@@ -159,7 +159,7 @@
 								</li>
 							<?php endwhile; ?>
 						</ul>
-						<div class="tab-content" id="infoTabContent">
+						<div class="tab-content" id="infoTabContent-<?php echo esc_attr( $rand ); ?>">
 							<?php
 							while ( have_rows( 'tabs' ) ) :
 								the_row();

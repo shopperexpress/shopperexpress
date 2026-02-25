@@ -11,7 +11,7 @@ if ( $popup ) :
 	?>
 	<!-- Cookie Modal -->
 	<div data-show="true" data-cookie-expire-days="<?php echo esc_attr( $cookie_expiration_days ); ?>" class="modal fade" id="<?php echo esc_attr( $cookie_name ); ?>" tabindex="-1" aria-labelledby="CookieModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+		<div class="modal-dialog modal-lg modal-form modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
 					<?php if ( ! empty( $title ) ) : ?>
@@ -26,7 +26,6 @@ if ( $popup ) :
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="content-holder">
 					<?php
 					if ( ! empty( $content ) ) {
 						echo wp_kses_post( $content ); }
@@ -34,7 +33,6 @@ if ( $popup ) :
 						echo do_shortcode( '[wpforms id="' . $form . '"]' );
 					}
 					?>
-					</div>
 				</div>
 			</div>
 		</div>

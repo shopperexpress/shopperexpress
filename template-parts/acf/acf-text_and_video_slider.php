@@ -39,7 +39,7 @@ switch ( $sort_offers_by ) {
 
 $query              = new WP_Query( $args );
 $form_lease_special = get_field( 'form_lease_special', 'options' );
-$form_special_apr   = get_field( 'form_special_apr', 'options' );
+$form_special_apr   = get_field( 'form_id_special_apr', 'options' );
 $slider_speed       = get_sub_field( 'slider_speed' ) ? get_sub_field( 'slider_speed' ) : 500;
 $autoplay_speed     = get_sub_field( 'autoplay_speed' ) ? get_sub_field( 'autoplay_speed' ) : 5000;
 if ( get_sub_field( 'hide_block' ) == false && $query->posts ) :
@@ -310,7 +310,7 @@ if ( get_sub_field( 'hide_block' ) == false && $query->posts ) :
 						<h4><?php echo esc_html( $heading_save_offer ); ?></h4>
 						<?php
 					endif;
-					if ( $form_special_apr = get_field( 'form_special_apr', 'options' ) ) {
+					if ( $form_special_apr = get_field( 'form_id_special_apr', 'options' ) ) {
 						$form_id = absint( $form_special_apr );
 						echo do_shortcode( '[wpforms id="' . $form_id . '"]' );
 					}
@@ -351,7 +351,7 @@ if ( get_sub_field( 'hide_block' ) == false && $query->posts ) :
 						<h4><?php echo esc_html( $heading_save_offer ); ?></h4>
 						<?php
 					endif;
-					if ( $form_cash = get_field( 'form_cash', 'options' ) ) {
+					if ( $form_cash = get_field( 'offers_form_cash', 'options' ) ) {
 						$form_id = absint( $form_special_apr );
 						echo do_shortcode( '[wpforms id="' . $form_id . '"]' );
 					}
