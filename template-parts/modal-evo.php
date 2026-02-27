@@ -35,12 +35,6 @@
 									endif;
 								endwhile;
 							?>
-							<div>
-								<img src="<?php echo esc_url( App\asset_url( 'images/img_0_0_18.png' ) ); ?>" alt="image description" />
-							</div>
-							<div>
-								<img src="<?php echo esc_url( App\asset_url( 'images/img_0_0_9.png' ) ); ?>" alt="image description" />
-							</div>
 						</div>
 					</div>
 			<?php endif; ?>

@@ -2038,7 +2038,7 @@ function initFancybox() {
 // Cookie modal init
 function initCookieModal() {
 	document.querySelectorAll('.modal').forEach((modal) => {
-		const ID = modal.dataset.id;
+		const ID = modal.getAttribute('id');
 		const cookieKey = ID + '-is-cashed';
 		const isShow = modal.dataset.show === 'true';
 		const cookieExpireDays = modal.dataset.cookieExpireDays !== undefined ? Number(modal.dataset.cookieExpireDays) : 7;
