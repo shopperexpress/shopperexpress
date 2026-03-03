@@ -23,12 +23,7 @@ class Options_Page implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action(
-			'acf/init',
-			function () {
-				$this->add_options_page();
-			}
-		);
+		add_action( 'acf/init', array( $this, 'add_options_page' ) );
 	}
 
 	/**
@@ -37,8 +32,8 @@ class Options_Page implements Theme_Component {
 	 * @link https://www.advancedcustomfields.com/resources/acf_add_options_sub_page/
 	 * @return void
 	 */
-	private function add_options_page(): void {
-		if ( class_exists( 'ACF' ) ) {
+	public function add_options_page(): void {
+		if ( function_exists( 'acf_add_options_page' ) ) {
 			$parent = acf_add_options_page(
 				array(
 					'page_title' => 'Theme General Options',
@@ -47,21 +42,26 @@ class Options_Page implements Theme_Component {
 				)
 			);
 
+			if ( ! $parent ) {
+				return;
+			}
+
 			$sub_pages = array(
-				__( 'Listings', 'shopperexpress' ),
-				__( 'Special Offers', 'shopperexpress' ),
-				__( 'Research', 'shopperexpress' ),
-				__( 'Service Offers', 'shopperexpress' ),
-				__( 'Finance Offers', 'shopperexpress' ),
-				__( 'Lease Offers', 'shopperexpress' ),
-				__( 'Conditional Offers', 'shopperexpress' ),
+				'listings'           => __( 'Listings', 'shopperexpress' ),
+				'special-offers'     => __( 'Special Offers', 'shopperexpress' ),
+				'research'           => __( 'Research', 'shopperexpress' ),
+				'service-offers'     => __( 'Service Offers', 'shopperexpress' ),
+				'finance-offers'     => __( 'Finance Offers', 'shopperexpress' ),
+				'lease-offers'       => __( 'Lease Offers', 'shopperexpress' ),
+				'conditional-offers' => __( 'Conditional Offers', 'shopperexpress' ),
 			);
 
-			foreach ( $sub_pages as $item ) {
-				$child = acf_add_options_sub_page(
+			foreach ( $sub_pages as $slug => $title ) {
+				acf_add_options_sub_page(
 					array(
-						'page_title'  => $item,
-						'menu_title'  => $item,
+						'page_title'  => $title,
+						'menu_title'  => $title,
+						'menu_slug'   => $slug,
 						'parent_slug' => $parent['menu_slug'],
 					)
 				);
