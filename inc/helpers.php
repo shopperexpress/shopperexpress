@@ -52,28 +52,32 @@ function asset_url_old( string $asset_path ): string {
  * @param array  $classes array of button classes.
  * @param string $icon button icon html.
  */
-function the_acf_button( array $button, array $classes = [], string $icon = '' ) {
+function the_acf_button( array $button, array $classes = array(), string $icon = '' ) {
 	$attributes  = ( $button['url'] ) ? ' href="' . $button['url'] . '"' : '';
 	$attributes .= ( $button['target'] ) ? ' target="' . $button['target'] . '" rel="noreferrer"' : '';
 	$attributes .= ( ! empty( $classes ) ) ? ' class="' . implode( ' ', $classes ) . '"' : '';
 
 	$title = ( $button['title'] ) ? $button['title'] : '';
 
-	$button = sprintf( '<a %s>%s %s</a>',
+	$button = sprintf(
+		'<a %s>%s %s</a>',
 		$attributes,
 		$title,
 		$icon
 	);
 
-	echo wp_kses( $button, [
-		'a' => [
-			'href'   => true,
-			'target' => true,
-			'rel'    => true,
-			'class'  => true,
-		],
-		'i' => [
-			'class' => true,
-		],
-	] );
+	echo wp_kses(
+		$button,
+		array(
+			'a' => array(
+				'href'   => true,
+				'target' => true,
+				'rel'    => true,
+				'class'  => true,
+			),
+			'i' => array(
+				'class' => true,
+			),
+		)
+	);
 }

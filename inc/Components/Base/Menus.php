@@ -22,7 +22,7 @@ class Menus implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'after_setup_theme', [ $this, 'register_nav_menus' ] );
+		add_action( 'after_setup_theme', array( $this, 'register_nav_menus' ) );
 	}
 
 	/**
@@ -32,9 +32,11 @@ class Menus implements Theme_Component {
 	 * @return void
 	 */
 	public function register_nav_menus(): void {
-		register_nav_menus( [
-			'drop-down' => esc_html__( 'Drop-down', 'shopperexpress' ),
-			'header' => esc_html__( 'Header Navigation', 'shopperexpress' ),
-		] );
+		register_nav_menus(
+			array(
+				'drop-down' => esc_html__( 'Drop-down', 'shopperexpress' ),
+				'header'    => esc_html__( 'Header Navigation', 'shopperexpress' ),
+			)
+		);
 	}
 }

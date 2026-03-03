@@ -38,11 +38,16 @@ class CPT implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		if ( $this->set_post_types ) {
-			foreach ( $this->set_post_types as $slug => $name ) {
-				register_post_type( $slug, $this->get_args( $name ) );
+		add_action(
+			'init',
+			function () {
+				if ( $this->set_post_types ) {
+					foreach ( $this->set_post_types as $slug => $name ) {
+						register_post_type( $slug, $this->get_args( $name ) );
+					}
+				}
 			}
-		}
+		);
 	}
 
 	/**

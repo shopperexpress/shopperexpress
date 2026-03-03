@@ -23,8 +23,8 @@ class Admin implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'admin_notices', [ $this, 'seo_warning' ] );
-		add_action( 'add_admin_bar_menus', [ $this, 'fix_admin_menu_search' ] );
+		add_action( 'admin_notices', array( $this, 'seo_warning' ) );
+		add_action( 'add_admin_bar_menus', array( $this, 'fix_admin_menu_search' ) );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Admin implements Theme_Component {
 	 */
 	public function fix_admin_menu_search(): void {
 		remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 4 );
-		add_action( 'admin_bar_menu', [ $this, 'wp_admin_bar_valid_search_menu' ], 4 );
+		add_action( 'admin_bar_menu', array( $this, 'wp_admin_bar_valid_search_menu' ), 4 );
 	}
 
 	/**
@@ -70,14 +70,16 @@ class Admin implements Theme_Component {
 		$form .= '<input type="submit" class="adminbar-button" value="' . esc_html__( 'Search', 'base' ) . '"/>';
 		$form .= '</div></form>';
 
-		$wp_admin_bar->add_menu( [
-			'parent' => 'top-secondary',
-			'id'     => 'search',
-			'title'  => $form,
-			'meta'   => [
-				'class'    => 'admin-bar-search',
-				'tabindex' => -1,
-			],
-		] );
+		$wp_admin_bar->add_menu(
+			array(
+				'parent' => 'top-secondary',
+				'id'     => 'search',
+				'title'  => $form,
+				'meta'   => array(
+					'class'    => 'admin-bar-search',
+					'tabindex' => -1,
+				),
+			)
+		);
 	}
 }

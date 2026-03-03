@@ -796,24 +796,29 @@ add_filter(
 	'wpforms_smart_tag_process',
 	function ( $content, $tag ) {
 
-		$post_id   = get_the_ID();
-		$post_type = get_post_type( $post_id );
+		$post_id = get_the_ID();
 
 		switch ( $tag ) {
 
 			case 'service_disclaimer':
 				$offerdisclaimer = get_field( 'offerdisclaimer', $post_id ) ? get_field( 'offerdisclaimer', $post_id ) : null;
-				$content         = str_replace( '{service_disclaimer}', $offerdisclaimer, $content );
+				if ( $offerdisclaimer ) {
+					$content = str_replace( '{service_disclaimer}', $offerdisclaimer, $content );
+				}
 				break;
 
 			case 'msrp':
-				$price   = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				$content = str_replace( '{msrp}', $price, $content );
+				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
+				if ( $price ) {
+					$content = str_replace( '{msrp}', $price, $content );
+				}
 				break;
 
 			case 'best_price':
-				$price   = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				$content = str_replace( '{best_price}', $price, $content );
+				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
+				if ( $price ) {
+					$content = str_replace( '{best_price}', $price, $content );
+				}
 				break;
 
 			case 'internet_price':
@@ -824,99 +829,170 @@ add_filter(
 				break;
 
 			case 'offer_year':
-				$content = str_replace( '{offer_year}', get_field( 'year', $post_id ), $content );
+				$year = get_field( 'year', $post_id );
+				if ( $year ) {
+					$content = str_replace( '{offer_year}', $year, $content );
+				}
 				break;
 
 			case 'offer_make':
-				$content = str_replace( '{offer_make}', get_field( 'make', $post_id ), $content );
+				$make = get_field( 'make', $post_id );
+				if ( $make ) {
+					$content = str_replace( '{offer_make}', $make, $content );
+				}
 				break;
 
 			case 'offer_model':
-				$content = str_replace( '{offer_model}', get_field( 'model', $post_id ), $content );
+				$model = get_field( 'model', $post_id );
+				if ( $model ) {
+					$content = str_replace( '{offer_model}', $model, $content );
+				}
 				break;
 
 			case 'offer_trim':
-				$content = str_replace( '{offer_trim}', get_field( 'trim', $post_id ), $content );
+				$trim = get_field( 'trim', $post_id );
+				if ( $trim ) {
+					$content = str_replace( '{offer_trim}', $trim, $content );
+				}
 				break;
 
 			case 'offer_image':
-				$image   = get_field( 'gallery', $post_id ) ? get_field( 'gallery', $post_id )[0]['image_url'] : null;
-				$content = str_replace( '{offer_image}', $image, $content );
+				$image = get_field( 'gallery', $post_id ) ? get_field( 'gallery', $post_id )[0]['image_url'] : null;
+				if ( $image ) {
+					$content = str_replace( '{offer_image}', $image, $content );
+				}
 				break;
 
 			case 'service_title':
-				$content = str_replace( '{service_title}', get_field( 'title', $post_id ), $content );
+				$title = get_field( 'title', $post_id );
+				if ( $title ) {
+					$content = str_replace( '{service_title}', $title, $content );
+				}
 				break;
 
 			case 'service_offer':
-				$content = str_replace( '{service_offer}', get_field( 'offertext', $post_id ), $content );
+				$offer = get_field( 'offertext', $post_id );
+				if ( $offer ) {
+					$content = str_replace( '{service_offer}', $offer, $content );
+				}
 				break;
 
 			case 'service_dept':
-				$content = str_replace( '{service_dept}', get_field( 'dept', $post_id ), $content );
+				$dept = get_field( 'dept', $post_id );
+				if ( $dept ) {
+					$content = str_replace( '{service_dept}', $dept, $content );
+				}
 				break;
 
 			case 'service_type':
-				$content = str_replace( '{service_type}', get_field( 'type', $post_id ), $content );
+				$type = get_field( 'type', $post_id );
+				if ( $type ) {
+					$content = str_replace( '{service_type}', $type, $content );
+				}
 				break;
 
 			case 'service_expiration':
-				$content = str_replace( '{service_expiration}', get_field( 'expiration', $post_id ), $content );
+				$expiration = get_field( 'expiration', $post_id );
+				if ( $expiration ) {
+					$content = str_replace( '{service_expiration}', $expiration, $content );
+				}
 				break;
 
 			case 'service_info':
-				$content = str_replace( '{service_info}', get_field( 'additioninfo', $post_id ), $content );
+				$info = get_field( 'additioninfo', $post_id );
+				if ( $info ) {
+					$content = str_replace( '{service_info}', $info, $content );
+				}
 				break;
 
 			case 'service_image':
-				$content = str_replace( '{service_image}', get_field( 'offerimage', $post_id ), $content );
+				$image = get_field( 'offerimage', $post_id );
+				if ( $image ) {
+					$content = str_replace( '{service_image}', $image, $content );
+				}
 				break;
 
 			case 'disclosure_lease':
-				$content = str_replace( '{disclosure_lease}', get_field( 'disclosure_lease', $post_id ), $content );
+				$lease = get_field( 'disclosure_lease', $post_id );
+				if ( $lease ) {
+					$content = str_replace( '{disclosure_lease}', $lease, $content );
+				}
 				break;
 
 			case 'disclosure_finance':
-				$content = str_replace( '{disclosure_finance}', get_field( 'disclosure_finance', $post_id ), $content );
+				$finance = get_field( 'disclosure_finance', $post_id );
+				if ( $finance ) {
+					$content = str_replace( '{disclosure_finance}', $finance, $content );
+				}
 				break;
 
 			case 'disclosure_cash':
-				$content = str_replace( '{disclosure_cash}', get_field( 'disclosure_cash', $post_id ), $content );
+				$cash = get_field( 'disclosure_cash', $post_id );
+				if ( $cash ) {
+					$content = str_replace( '{disclosure_cash}', $cash, $content );
+				}
 				break;
 
 			case 'year':
-				$content = str_replace( '{year}', get_field( 'year', $post_id ), $content );
+				$year = get_field( 'year', $post_id );
+				if ( $year ) {
+					$content = str_replace( '{year}', $year, $content );
+				}
 				break;
 
 			case 'make':
-				$content = str_replace( '{make}', get_field( 'make', $post_id ), $content );
+				$make = get_field( 'make', $post_id );
+				if ( $make ) {
+					$content = str_replace( '{make}', $make, $content );
+				}
 				break;
 
 			case 'model':
-				$content = str_replace( '{model}', get_field( 'model', $post_id ), $content );
+				$model = get_field( 'model', $post_id );
+				if ( $model ) {
+					$content = str_replace( '{model}', $model, $content );
+				}
 				break;
 
 			case 'trim':
-				$content = str_replace( '{trim}', get_field( 'trim', $post_id ), $content );
+				$trim = get_field( 'trim', $post_id );
+				if ( $trim ) {
+					$content = str_replace( '{trim}', $trim, $content );
+				}
 				break;
 
 			case 'miles':
-				$content = str_replace( '{miles}', get_field( 'mileage', $post_id ), $content );
+				$miles = get_field( 'mileage', $post_id );
+				if ( $miles ) {
+					$content = str_replace( '{miles}', $miles, $content );
+				}
 				break;
 
 			case 'vin':
-				$content = str_replace( '{vin}', get_field( 'vin_number', $post_id ), $content );
+				$vin = get_field( 'vin_number', $post_id );
+				if ( $vin ) {
+					$content = str_replace( '{vin}', $vin, $content );
+				}
 				break;
 
 			case 'stock':
-				$content = str_replace( '{stock}', get_field( 'stock-number', $post_id ), $content );
+				$stock = get_field( 'stock-number', $post_id );
+				if ( $stock ) {
+					$content = str_replace( '{stock}', $stock, $content );
+				}
 				break;
 
 			case 'type':
-				$content = str_replace( '{type}', get_field( 'condition', $post_id ), $content );
+				$type = get_field( 'condition', $post_id );
+				if ( $type ) {
+					$content = str_replace( '{type}', $type, $content );
+				}
 				break;
 			case 'url':
-				$content = str_replace( '{url}', get_the_permalink( $post_id ), $content );
+				$url = get_the_permalink( $post_id );
+				if ( $url ) {
+					$content = str_replace( '{url}', $url, $content );
+				}
 				break;
 		}
 
@@ -935,8 +1011,9 @@ add_filter(
 						$get_field = get_field( $tag, $post_id ) ? get_field( $tag, $post_id ) : null;
 						break;
 				}
-
-				$content = str_replace( '{' . $tag . '}', $get_field, $content );
+				if ( $get_field ) {
+					$content = str_replace( '{' . $tag . '}', $get_field, $content );
+				}
 			}
 
 			endwhile;

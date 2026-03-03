@@ -4,34 +4,39 @@
  * Conversion Block
  */
 
-class ConversionBlock
-{
+class ConversionBlock {
+
 	public $vin;
 	public $post_type;
 	public $post_id;
 
-	public function __construct($vin = '', $post_type = '', $post_id = '')
-	{
-		$this->vin = $vin;
+	public function __construct( $vin = '', $post_type = '', $post_id = '' ) {
+		$this->vin       = $vin;
 		$this->post_type = $post_type;
-		$this->post_id = $post_id;
+		$this->post_id   = $post_id;
 	}
 
-	public function render()
-	{
+	public function render() {
 
 		ob_start();
-		get_template_part('template-parts/ConversionBlock', null, ['vin' => $this->vin, 'location' => $this->getLocation(), 'post_id' => $this->post_id]);
+		get_template_part(
+			'template-parts/ConversionBlock',
+			null,
+			array(
+				'vin'      => $this->vin,
+				'location' => $this->getLocation(),
+				'post_id'  => $this->post_id,
+			)
+		);
 		$output = ob_get_contents();
 		ob_end_clean();
 
 		return $output;
 	}
 
-	public function getLocation()
-	{
+	public function getLocation() {
 
-		switch ($this->post_type) {
+		switch ( $this->post_type ) {
 			case 'offers':
 				$output = 'service-offers_';
 				break;
@@ -53,7 +58,9 @@ class ConversionBlock
 				break;
 		}
 
-		if (is_single()) $output = $output . 'single_';
+		if ( is_single() ) {
+			$output = $output . 'single_';
+		}
 
 		return $output;
 	}
@@ -61,34 +68,38 @@ class ConversionBlock
 
 
 
-add_action('wp_head', function () {
+add_action(
+	'wp_head',
+	function () {
 
-	if (is_singular(['offers', 'used-listings', 'listings', 'conditional-offers', 'lease-offers', 'finance-offers']) || is_page_template('pages/template-saved.php') || is_page_template('pages/template-srp.php') || is_post_type_archive(['offers', 'used-listings', 'listings', 'conditional-offers', 'lease-offers', 'finance-offers'])) :
-		$ConversionBlock = new ConversionBlock(0, get_post_type());
+		if ( is_singular( array( 'offers', 'used-listings', 'listings', 'conditional-offers', 'lease-offers', 'finance-offers' ) ) || is_page_template( 'pages/template-saved.php' ) || is_page_template( 'pages/template-srp.php' ) || is_post_type_archive( array( 'offers', 'used-listings', 'listings', 'conditional-offers', 'lease-offers', 'finance-offers' ) ) ) :
+			$ConversionBlock = new ConversionBlock( 0, get_post_type() );
 
-		$font_styling = $font_size_1 = $weight_1 = $font_size_2 = $weight_2 = $font_size_3 = $weight_3 = $font_size_4 = $weight_4 = $font_size_5 = $weight_5 = $primary_color = $color_2 = $color_3 = $text_color = null;
+			$font_styling = $font_size_1 = $weight_1 = $font_size_2 = $weight_2 = $font_size_3 = $weight_3 = $font_size_4 = $weight_4 = $font_size_5 = $weight_5 = $primary_color = $color_2 = $color_3 = $text_color = null;
 
-		while (have_rows($ConversionBlock->getLocation() . 'colors', 'options')) : the_row();
-			$primary_color = get_sub_field('primary_color');
-			$color_2 = get_sub_field('color_2');
-			$color_3 = get_sub_field('color_3');
-			$text_color = get_sub_field('text_color');
-		endwhile;
+			while ( have_rows( $ConversionBlock->getLocation() . 'colors', 'options' ) ) :
+				the_row();
+				$primary_color = get_sub_field( 'primary_color' );
+				$color_2       = get_sub_field( 'color_2' );
+				$color_3       = get_sub_field( 'color_3' );
+				$text_color    = get_sub_field( 'text_color' );
+			endwhile;
 
-		while (have_rows($ConversionBlock->getLocation() . 'fonts', 'options')) : the_row();
-			$font_styling = get_sub_field('font_styling');
-			$font_size_1 = get_sub_field('font_size_1');
-			$weight_1 = get_sub_field('weight_1');
-			$font_size_2 = get_sub_field('font_size_2');
-			$weight_2 = get_sub_field('weight_2');
-			$font_size_3 = get_sub_field('font_size_3');
-			$weight_3 = get_sub_field('weight_3');
-			$font_size_4 = get_sub_field('font_size_4');
-			$weight_4 = get_sub_field('weight_4');
-			$font_size_5 = get_sub_field('font_size_5');
-			$weight_5 = get_sub_field('weight_5');
-		endwhile;
-?>
+			while ( have_rows( $ConversionBlock->getLocation() . 'fonts', 'options' ) ) :
+				the_row();
+				$font_styling = get_sub_field( 'font_styling' );
+				$font_size_1  = get_sub_field( 'font_size_1' );
+				$weight_1     = get_sub_field( 'weight_1' );
+				$font_size_2  = get_sub_field( 'font_size_2' );
+				$weight_2     = get_sub_field( 'weight_2' );
+				$font_size_3  = get_sub_field( 'font_size_3' );
+				$weight_3     = get_sub_field( 'weight_3' );
+				$font_size_4  = get_sub_field( 'font_size_4' );
+				$weight_4     = get_sub_field( 'weight_4' );
+				$font_size_5  = get_sub_field( 'font_size_5' );
+				$weight_5     = get_sub_field( 'weight_5' );
+			endwhile;
+			?>
 		<style>
 			a:hover {
 				text-decoration: none;
@@ -431,6 +442,7 @@ add_action('wp_head', function () {
 				font-weight: <?php echo $weight_5; ?>;
 			}
 		</style>
-<?php
+			<?php
 	endif;
-});
+	}
+);

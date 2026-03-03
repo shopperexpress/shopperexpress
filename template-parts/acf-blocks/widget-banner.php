@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Title: Widget banner
  * Keywords: Keyword 1, Keyword 2
@@ -13,24 +12,24 @@
  * @package ThemeName
  */
 
-$block_id = ! empty($block['id']) ? 'block-' . $block['id'] : '';
-if (! empty($block['anchor'])) {
-    $block_id = $block['anchor'];
+$block_id = ! empty( $block['id'] ) ? 'block-' . $block['id'] : '';
+if ( ! empty( $block['anchor'] ) ) {
+	$block_id = $block['anchor'];
 }
 
-$class_names = ['widget-banner'];
-if (! empty($block['className'])) {
-    $class_names[] = $block['className'];
+$class_names = array( 'widget-banner' );
+if ( ! empty( $block['className'] ) ) {
+	$class_names[] = $block['className'];
 }
 
-$image = get_field('image');
-$url = get_field('url');
+$image = get_field( 'image' );
+$url   = get_field( 'url' );
 
-if ($url && $image) :
-?>
-    <div id="<?php echo esc_attr($block_id); ?>" class="<?php echo esc_attr(implode(' ', $class_names)); ?>">
-        <a href="<?php echo esc_url($url); ?>" target="_blank">
-            <?php echo get_attachment_image($image['id']); ?>
-        </a>
-    </div>
+if ( $url && $image ) :
+	?>
+	<div id="<?php echo esc_attr( $block_id ); ?>" class="<?php echo esc_attr( implode( ' ', $class_names ) ); ?>">
+		<a href="<?php echo esc_url( $url ); ?>" target="_blank">
+			<?php echo get_attachment_image( $image['id'] ); ?>
+		</a>
+	</div>
 <?php endif; ?>

@@ -134,7 +134,12 @@ $class        = 1 !== $footer_style ? 'container-fluid' : 'container';
 			<div class="modal-body-wrap">
 				<div class="modal-body">
 					<div class="content-holder">
-						<?php echo wp_kses_post( str_replace( array( '<div>', '</div>' ), '', get_field( 'vehicle_overview' ) ) ); ?>
+						<?php
+						$vehicle_overview = get_field( 'vehicle_overview' );
+						if ( $vehicle_overview ) {
+							echo wp_kses_post( str_replace( array( '<div>', '</div>' ), '', $vehicle_overview ) );
+						}
+						?>
 					</div>
 				</div>
 			</div>

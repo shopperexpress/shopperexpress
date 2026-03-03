@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Register custom blocks category.
  *
@@ -15,17 +14,16 @@ use App\Components\Theme_Component;
  *
  * @package App\Components\Gutenberg
  */
-class Custom_Blocks_Category implements Theme_Component
-{
+class Custom_Blocks_Category implements Theme_Component {
+
 
 	/**
 	 * Register hooks.
 	 *
 	 * @return void
 	 */
-	public function register(): void
-	{
-		add_filter('block_categories_all', [$this, 'register_category'], 10, 2);
+	public function register(): void {
+		add_filter( 'block_categories_all', array( $this, 'register_category' ), 10, 2 );
 	}
 
 	/**
@@ -35,13 +33,15 @@ class Custom_Blocks_Category implements Theme_Component
 	 * @param \WP_Post $post Post being loaded.
 	 * @return array
 	 */
-	public function register_category(array $categories, $block_editor_context): array
-	{
-		return array_merge($categories, [
-			[
-				'slug'  => 'custom-acf-blocks',
-				'title' => esc_html__('Custom ACF Blocks', 'base'),
-			],
-		]);
+	public function register_category( array $categories, $block_editor_context ): array {
+		return array_merge(
+			$categories,
+			array(
+				array(
+					'slug'  => 'custom-acf-blocks',
+					'title' => esc_html__( 'Custom ACF Blocks', 'base' ),
+				),
+			)
+		);
 	}
 }

@@ -20,19 +20,26 @@ class ACF implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		if ( get_field( 'use_new_databse_table', 'option' ) ) {
-			if ( ! get_option( 'custom_tables_created' ) ) {
 
-				update_option( 'custom_tables_created', 1 );
-				$this->create_custom_tables();
+		add_action(
+			'acf/init',
+			function () {
+
+				if ( get_field( 'use_new_databse_table', 'option' ) ) {
+
+					if ( ! get_option( 'custom_tables_created' ) ) {
+						update_option( 'custom_tables_created', 1 );
+						$this->create_custom_tables();
+					}
+
+					add_action( 'acf/save_post', array( $this, 'save_acf_to_custom_table' ), 20 );
+					add_action( 'pmxi_saved_post', array( $this, 'save_acf_to_custom_table' ), 10, 3 );
+					add_action( 'before_delete_post', array( $this, 'acf_listings_delete' ) );
+					add_action( 'acf/pre_load_value', array( $this, 'acf_listings_load' ), 20, 3 );
+					add_filter( 'acf/load_field/name=acf_field_selector', array( $this, 'acf_field_selector' ), 10 );
+				}
 			}
-
-			add_action( 'acf/save_post', array( $this, 'save_acf_to_custom_table' ), 20 );
-			add_action( 'pmxi_saved_post', array( $this, 'save_acf_to_custom_table' ), 10, 3 );
-			add_action( 'before_delete_post', array( $this, 'acf_listings_delete' ) );
-			add_action( 'acf/pre_load_value', array( $this, 'acf_listings_load' ), 20, 3 );
-			add_filter( 'acf/load_field/name=acf_field_selector', array( $this, 'acf_field_selector' ), 10, 1 );
-		}
+		);
 	}
 
 	/**
