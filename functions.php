@@ -8,6 +8,102 @@
  * @package Shopperexpress
  */
 
+$theme_slug = 'shopperexpress';
+$backup_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug . '_vendor_backup';
+
+add_filter(
+	'upgrader_pre_install',
+	function ( $return, $hook_extra, $upgrader = null ) use ( $theme_slug, $backup_dir ) {
+		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $theme_slug ) {
+			$theme_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug;
+			if ( file_exists( $theme_dir . '/vendor' ) ) {
+				if ( file_exists( $backup_dir ) ) {
+					function rrmdir( $dir ) {
+						if ( is_dir( $dir ) ) {
+							$objects = scandir( $dir );
+							foreach ( $objects as $object ) {
+								if ( $object != '.' && $object != '..' ) {
+									if ( is_dir( $dir . '/' . $object ) && ! is_link( $dir . '/' . $object ) ) {
+										rrmdir( $dir . '/' . $object );
+									} else {
+										unlink( $dir . '/' . $object );
+									}
+								}
+							}
+							rmdir( $dir );
+						}
+					}
+					rrmdir( $backup_dir );
+				}
+				rename( $theme_dir . '/vendor', $backup_dir );
+			}
+		}
+		return $return;
+	},
+	10,
+	3
+);
+
+add_filter(
+	'upgrader_post_install',
+	function ( $response, $hook_extra, $result = null ) use ( $theme_slug, $backup_dir ) {
+		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $theme_slug ) {
+			$theme_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug;
+
+			$new_theme_dir = $result['destination'] ?? $theme_dir;
+
+			if ( $new_theme_dir !== $theme_dir ) {
+				if ( file_exists( $theme_dir ) ) {
+					rrmdir( $theme_dir );
+				}
+				rename( $new_theme_dir, $theme_dir );
+			}
+
+			if ( file_exists( $backup_dir ) ) {
+				rename( $backup_dir, $theme_dir . '/vendor' );
+			}
+		}
+		return $response;
+	},
+	10,
+	3
+);
+
+add_filter(
+	'pre_set_site_transient_update_themes',
+	function ( $transient ) use ( $theme_slug ) {
+		if ( empty( $transient->checked ) ) {
+			return $transient;
+		}
+
+		$current_version = $transient->checked[ $theme_slug ];
+		$repo            = 'shopperexpress/shopperexpress';
+		$response        = wp_remote_get( "https://api.github.com/repos/$repo/releases/latest" );
+
+		if ( is_wp_error( $response ) ) {
+			return $transient;
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ) );
+		if ( ! $body || empty( $body->tag_name ) ) {
+			return $transient;
+		}
+
+		$new_version = ltrim( $body->tag_name, 'v' );
+		$zip_url     = $body->zipball_url;
+
+		if ( version_compare( $current_version, $new_version, '<' ) ) {
+			$transient->response[ $theme_slug ] = array(
+				'theme'       => $theme_slug,
+				'new_version' => $new_version,
+				'package'     => $zip_url,
+				'url'         => "https://github.com/$repo",
+			);
+		}
+
+		return $transient;
+	}
+);
 /**
  * Check PHP version.
  */

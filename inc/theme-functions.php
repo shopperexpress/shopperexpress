@@ -2041,7 +2041,7 @@ add_action(
 		delete_site_transient( 'update_themes' );
 	}
 );
-
+/*
 add_filter(
 	'pre_set_site_transient_update_themes',
 	function ( $transient ) {
@@ -2080,3 +2080,4 @@ add_filter(
 		return $transient;
 	}
 );
+*/
