@@ -160,7 +160,7 @@
 								$layout = get_row_layout();
 								$active = 1 === get_row_index() ? ' show active' : '';
 								?>
-								<div class="tab-pane fade <?php echo esc_attr( $active ); ?>" id="tab<?php echo esc_attr( $row ); ?>" role="tabpanel" aria-labelledby="tab<?php echo esc_attr( $row ); ?>">
+								<div class="tab-pane fade <?php echo esc_attr( $active ); ?>" id="tab<?php echo esc_attr( $row ); ?>" role="tabpanel" aria-labelledby="<?php echo esc_attr( $row ); ?>tab">
 									<?php
 									if ( $layout == 'hours' ) :
 										$heading = get_sub_field( 'heading' );
