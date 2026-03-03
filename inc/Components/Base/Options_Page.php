@@ -23,7 +23,7 @@ class Options_Page implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'acf/init', array( $this, 'add_options_page' ) );
+		$this->add_options_page();
 	}
 
 	/**
@@ -47,13 +47,13 @@ class Options_Page implements Theme_Component {
 			}
 
 			$sub_pages = array(
-				'listings'           => __( 'Listings', 'shopperexpress' ),
-				'special-offers'     => __( 'Special Offers', 'shopperexpress' ),
-				'research'           => __( 'Research', 'shopperexpress' ),
-				'service-offers'     => __( 'Service Offers', 'shopperexpress' ),
-				'finance-offers'     => __( 'Finance Offers', 'shopperexpress' ),
-				'lease-offers'       => __( 'Lease Offers', 'shopperexpress' ),
-				'conditional-offers' => __( 'Conditional Offers', 'shopperexpress' ),
+				'listings'           => 'Listings',
+				'special-offers'     => 'Special Offers',
+				'research'           => 'Research',
+				'service-offers'     => 'Service Offers',
+				'finance-offers'     => 'Finance Offers',
+				'lease-offers'       => 'Lease Offers',
+				'conditional-offers' => 'Conditional Offers',
 			);
 
 			foreach ( $sub_pages as $slug => $title ) {

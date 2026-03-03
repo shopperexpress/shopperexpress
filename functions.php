@@ -11,6 +11,23 @@
 $theme_slug = 'shopperexpress';
 $backup_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug . '_vendor_backup';
 
+function rrmdir( $dir ) {
+	if ( is_dir( $dir ) ) {
+		$objects = scandir( $dir );
+		foreach ( $objects as $object ) {
+			if ( $object != '.' && $object != '..' ) {
+				$path = $dir . '/' . $object;
+				if ( is_dir( $path ) && ! is_link( $path ) ) {
+					rrmdir( $path );
+				} else {
+					unlink( $path );
+				}
+			}
+		}
+		rmdir( $dir );
+	}
+}
+
 add_filter(
 	'upgrader_pre_install',
 	function ( $return, $hook_extra, $upgrader = null ) use ( $theme_slug, $backup_dir ) {
@@ -18,21 +35,6 @@ add_filter(
 			$theme_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug;
 			if ( file_exists( $theme_dir . '/vendor' ) ) {
 				if ( file_exists( $backup_dir ) ) {
-					function rrmdir( $dir ) {
-						if ( is_dir( $dir ) ) {
-							$objects = scandir( $dir );
-							foreach ( $objects as $object ) {
-								if ( $object != '.' && $object != '..' ) {
-									if ( is_dir( $dir . '/' . $object ) && ! is_link( $dir . '/' . $object ) ) {
-										rrmdir( $dir . '/' . $object );
-									} else {
-										unlink( $dir . '/' . $object );
-									}
-								}
-							}
-							rmdir( $dir );
-						}
-					}
 					rrmdir( $backup_dir );
 				}
 				rename( $theme_dir . '/vendor', $backup_dir );
@@ -48,8 +50,7 @@ add_filter(
 	'upgrader_post_install',
 	function ( $response, $hook_extra, $result = null ) use ( $theme_slug, $backup_dir ) {
 		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $theme_slug ) {
-			$theme_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug;
-
+			$theme_dir     = WP_CONTENT_DIR . '/themes/' . $theme_slug;
 			$new_theme_dir = $result['destination'] ?? $theme_dir;
 
 			if ( $new_theme_dir !== $theme_dir ) {
