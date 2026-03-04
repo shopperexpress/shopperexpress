@@ -8,6 +8,14 @@
  * @package Shopperexpress
  */
 
+add_action(
+	'admin_init',
+	function () {
+		delete_site_transient( 'update_themes' );
+	}
+);
+
+
 add_filter(
 	'pre_set_site_transient_update_themes',
 	function ( $transient ) {
@@ -47,33 +55,29 @@ add_filter(
 
 		$new_version = ltrim( $release->tag_name, 'v' );
 
-		if ( version_compare( $current_version, $new_version, '>=' ) ) {
-			return $transient;
-		}
-
-		// ищем zip asset
-		$package = '';
-
+		$package_url = '';
 		if ( ! empty( $release->assets ) ) {
 			foreach ( $release->assets as $asset ) {
 				if ( str_ends_with( $asset->name, '.zip' ) ) {
-					$package = $asset->browser_download_url;
+					$package_url = $asset->browser_download_url;
 					break;
 				}
 			}
 		}
 
-		if ( ! $package ) {
-			return $transient;
+		if ( ! $package_url ) {
+			$package_url = "https://github.com/$repo/archive/refs/tags/{$release->tag_name}.zip";
 		}
 
-		$transient->response[ $theme_slug ] = array(
-			'theme'       => $theme_slug,
-			'slug'        => $theme_slug,
-			'new_version' => $new_version,
-			'package'     => $package,
-			'url'         => "https://github.com/$repo",
-		);
+		if ( version_compare( $current_version, $new_version, '<' ) ) {
+			$transient->response[ $theme_slug ] = array(
+				'theme'       => $theme_slug,
+				'slug'        => $theme_slug,
+				'new_version' => $new_version,
+				'package'     => $package_url,
+				'url'         => "https://github.com/$repo",
+			);
+		}
 
 		return $transient;
 	}
