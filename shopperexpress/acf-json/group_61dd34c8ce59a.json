@@ -805,7 +805,6 @@
             "acfe_flexible_layouts_previews": false,
             "acfe_flexible_layouts_placeholder": false,
             "acfe_flexible_layouts_thumbnails": false,
-            "acfe_flexible_layouts_settings": false,
             "acfe_flexible_async": [],
             "acfe_flexible_add_actions": [],
             "acfe_flexible_remove_button": [],
@@ -820,7 +819,15 @@
                 "acfe_flexible_modal_size": "full",
                 "acfe_flexible_modal_col": "4",
                 "acfe_flexible_modal_categories": false
-            }
+            },
+            "acfe_flexible_modal_settings": {
+                "acfe_flexible_modal_settings_enabled": false,
+                "acfe_flexible_modal_settings_size": "large",
+                "acfe_flexible_modal_settings_close": true,
+                "acfe_flexible_modal_settings_close_label": ""
+            },
+            "acfe_flexible_close_button_label": "",
+            "acfe_flexible_remove_top_actions": []
         },
         {
             "key": "field_67bc32c59d77b",
@@ -959,7 +966,10 @@
                     "default_value": "",
                     "enable_opacity": 0,
                     "return_format": "string",
-                    "allow_in_bindings": 1
+                    "allow_in_bindings": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": "",
+                    "show_color_wheel": true
                 },
                 {
                     "key": "field_67bc340a9d784",
@@ -978,7 +988,10 @@
                     "default_value": "",
                     "enable_opacity": 0,
                     "return_format": "string",
-                    "allow_in_bindings": 1
+                    "allow_in_bindings": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": "",
+                    "show_color_wheel": true
                 },
                 {
                     "key": "field_67bc855c43e9d",
@@ -1404,7 +1417,10 @@
                     "default_value": "",
                     "enable_opacity": 0,
                     "return_format": "string",
-                    "allow_in_bindings": 1
+                    "allow_in_bindings": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": "",
+                    "show_color_wheel": true
                 },
                 {
                     "key": "field_67bc36bb4e8ab",
@@ -1423,7 +1439,10 @@
                     "default_value": "",
                     "enable_opacity": 0,
                     "return_format": "string",
-                    "allow_in_bindings": 1
+                    "allow_in_bindings": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": "",
+                    "show_color_wheel": true
                 },
                 {
                     "key": "field_67bc858d43e9e",
@@ -2524,7 +2543,10 @@
             },
             "default_value": "",
             "enable_opacity": 1,
-            "return_format": "string"
+            "return_format": "string",
+            "custom_palette_source": "",
+            "palette_colors": "",
+            "show_color_wheel": true
         },
         {
             "key": "field_648837d61b9bc",
@@ -2542,7 +2564,10 @@
             },
             "default_value": "",
             "enable_opacity": 1,
-            "return_format": "string"
+            "return_format": "string",
+            "custom_palette_source": "",
+            "palette_colors": "",
+            "show_color_wheel": true
         },
         {
             "key": "field_64d52d61337c8",
@@ -2688,7 +2713,7 @@
             {
                 "param": "options_page",
                 "operator": "==",
-                "value": "acf-options-special-offers"
+                "value": "special-offers"
             }
         ]
     ],
@@ -2701,12 +2726,12 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1767779455
+    "modified": 1772626671
 }
