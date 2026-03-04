@@ -8,103 +8,77 @@
  * @package Shopperexpress
  */
 
-$theme_slug = 'shopperexpress';
-$backup_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug . '_vendor_backup';
-
-function rrmdir( $dir ) {
-	if ( is_dir( $dir ) ) {
-		$objects = scandir( $dir );
-		foreach ( $objects as $object ) {
-			if ( $object != '.' && $object != '..' ) {
-				$path = $dir . '/' . $object;
-				if ( is_dir( $path ) && ! is_link( $path ) ) {
-					rrmdir( $path );
-				} else {
-					unlink( $path );
-				}
-			}
-		}
-		rmdir( $dir );
-	}
-}
-
-add_filter(
-	'upgrader_pre_install',
-	function ( $return, $hook_extra, $upgrader = null ) use ( $theme_slug, $backup_dir ) {
-		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $theme_slug ) {
-			$theme_dir = WP_CONTENT_DIR . '/themes/' . $theme_slug;
-			if ( file_exists( $theme_dir . '/vendor' ) ) {
-				if ( file_exists( $backup_dir ) ) {
-					rrmdir( $backup_dir );
-				}
-				rename( $theme_dir . '/vendor', $backup_dir );
-			}
-		}
-		return $return;
-	},
-	10,
-	3
-);
-
-add_filter(
-	'upgrader_post_install',
-	function ( $response, $hook_extra, $result = null ) use ( $theme_slug, $backup_dir ) {
-		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $theme_slug ) {
-			$theme_dir     = WP_CONTENT_DIR . '/themes/' . $theme_slug;
-			$new_theme_dir = $result['destination'] ?? $theme_dir;
-
-			if ( $new_theme_dir !== $theme_dir ) {
-				if ( file_exists( $theme_dir ) ) {
-					rrmdir( $theme_dir );
-				}
-				rename( $new_theme_dir, $theme_dir );
-			}
-
-			if ( file_exists( $backup_dir ) ) {
-				rename( $backup_dir, $theme_dir . '/vendor' );
-			}
-		}
-		return $response;
-	},
-	10,
-	3
-);
-
 add_filter(
 	'pre_set_site_transient_update_themes',
-	function ( $transient ) use ( $theme_slug ) {
+	function ( $transient ) {
+
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
 
+		$theme_slug = 'shopperexpress';
+		$repo       = 'shopperexpress/shopperexpress';
+
+		if ( ! isset( $transient->checked[ $theme_slug ] ) ) {
+			return $transient;
+		}
+
 		$current_version = $transient->checked[ $theme_slug ];
-		$repo            = 'shopperexpress/shopperexpress';
-		$response        = wp_remote_get( "https://api.github.com/repos/$repo/releases/latest" );
+
+		$response = wp_remote_get(
+			"https://api.github.com/repos/$repo/releases/latest",
+			array(
+				'headers' => array(
+					'Accept'     => 'application/vnd.github+json',
+					'User-Agent' => 'WordPress',
+				),
+			)
+		);
 
 		if ( is_wp_error( $response ) ) {
 			return $transient;
 		}
 
-		$body = json_decode( wp_remote_retrieve_body( $response ) );
-		if ( ! $body || empty( $body->tag_name ) ) {
+		$release = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( empty( $release->tag_name ) ) {
 			return $transient;
 		}
 
-		$new_version = ltrim( $body->tag_name, 'v' );
-		$zip_url     = $body->zipball_url;
+		$new_version = ltrim( $release->tag_name, 'v' );
 
-		if ( version_compare( $current_version, $new_version, '<' ) ) {
-			$transient->response[ $theme_slug ] = array(
-				'theme'       => $theme_slug,
-				'new_version' => $new_version,
-				'package'     => $zip_url,
-				'url'         => "https://github.com/$repo",
-			);
+		if ( version_compare( $current_version, $new_version, '>=' ) ) {
+			return $transient;
 		}
+
+		// ищем zip asset
+		$package = '';
+
+		if ( ! empty( $release->assets ) ) {
+			foreach ( $release->assets as $asset ) {
+				if ( str_ends_with( $asset->name, '.zip' ) ) {
+					$package = $asset->browser_download_url;
+					break;
+				}
+			}
+		}
+
+		if ( ! $package ) {
+			return $transient;
+		}
+
+		$transient->response[ $theme_slug ] = array(
+			'theme'       => $theme_slug,
+			'slug'        => $theme_slug,
+			'new_version' => $new_version,
+			'package'     => $package,
+			'url'         => "https://github.com/$repo",
+		);
 
 		return $transient;
 	}
 );
+
 /**
  * Check PHP version.
  */
