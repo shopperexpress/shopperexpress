@@ -18,7 +18,10 @@
             },
             "placement": "left",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_5ffc4185064a9",
@@ -40,7 +43,10 @@
             "rows": 1,
             "new_lines": "wpautop",
             "wpml_cf_preferences": 2,
-            "acfe_textarea_code": 0
+            "acfe_textarea_code": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_5ff8795c7df04",
@@ -61,7 +67,10 @@
             "toolbar": "full",
             "media_upload": 1,
             "delay": 0,
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406ead4f2ee",
@@ -82,7 +91,10 @@
             "prepend": "",
             "append": "",
             "maxlength": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_66a24d4a076de",
@@ -103,7 +115,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071821d12f",
@@ -124,7 +139,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_671fa4d0c1578",
@@ -144,7 +162,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75717c46b",
@@ -164,7 +185,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75787c46c",
@@ -184,7 +208,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857850a6d5",
@@ -204,7 +231,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8578c0a6d6",
@@ -224,7 +254,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857900a6d7",
@@ -244,7 +277,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75677c469",
@@ -264,7 +300,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75307c465",
@@ -284,7 +323,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071f41d13a",
@@ -305,7 +347,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f743c7c450",
@@ -325,7 +370,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071ff1d13b",
@@ -345,7 +393,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140718b1d130",
@@ -366,7 +417,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74187c44f",
@@ -387,7 +441,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140717a1d12e",
@@ -408,7 +465,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614072281d13f",
@@ -429,7 +489,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140714a1d12c",
@@ -450,7 +513,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614070f99a813",
@@ -471,7 +537,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140709d4f692",
@@ -492,7 +561,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071a91d132",
@@ -513,7 +585,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614072151d13d",
@@ -533,7 +608,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140721e1d13e",
@@ -554,7 +632,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f73867c44e",
@@ -575,7 +656,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_66212f31b17a3",
@@ -619,9 +703,15 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_66212f31b17a3"
+                    "parent_repeater": "field_66212f31b17a3",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 }
-            ]
+            ],
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140705d639b8",
@@ -639,7 +729,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61278f409698f",
@@ -659,7 +752,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61278f399698e",
@@ -679,7 +775,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e855150a6c3",
@@ -699,7 +798,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65989694f8402",
@@ -720,7 +822,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857fe0a6d9",
@@ -738,7 +843,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75637c468",
@@ -759,7 +867,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75217c462",
@@ -779,7 +890,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e858aa0a6dc",
@@ -799,7 +913,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e858bb0a6dd",
@@ -819,7 +936,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f748b7c453",
@@ -840,7 +960,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f749b7c454",
@@ -860,7 +983,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071e11d138",
@@ -881,7 +1007,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74c87c455",
@@ -901,7 +1030,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071d21d136",
@@ -922,7 +1054,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856500a6c9",
@@ -940,7 +1075,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614072321d140",
@@ -962,7 +1100,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6140723e1d141",
@@ -984,7 +1125,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_655cf3849f20c",
@@ -1006,7 +1150,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8566c0a6ca",
@@ -1028,7 +1175,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614072481d142",
@@ -1048,7 +1198,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614072521d143",
@@ -1068,7 +1221,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75987c46d",
@@ -1089,7 +1245,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75a07c46e",
@@ -1110,7 +1269,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e855ab0a6c8",
@@ -1130,7 +1292,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61407046639b7",
@@ -1149,7 +1314,10 @@
             "placement": "top",
             "endpoint": 0,
             "wpml_cf_preferences": 1,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6127757881f1f",
@@ -1171,7 +1339,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e854dd0a6c2",
@@ -1193,7 +1364,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406f2d4f2ef",
@@ -1215,7 +1389,10 @@
             "placeholder": "",
             "step": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74e87c457",
@@ -1236,7 +1413,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74ec7c458",
@@ -1256,7 +1436,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74f17c459",
@@ -1277,7 +1460,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74f67c45a",
@@ -1297,7 +1483,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74fb7c45b",
@@ -1317,7 +1506,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75007c45c",
@@ -1337,7 +1529,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75107c45f",
@@ -1358,7 +1553,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f750c7c45e",
@@ -1378,7 +1576,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75067c45d",
@@ -1398,7 +1599,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61407033639b6",
@@ -1416,7 +1620,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f745c7c451",
@@ -1437,7 +1644,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f74e17c456",
@@ -1458,7 +1668,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_694469ea00ad9",
@@ -1484,7 +1697,10 @@
             "other_choice": 0,
             "allow_in_bindings": 0,
             "layout": "horizontal",
-            "save_other_choice": 0
+            "save_other_choice": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6127758081f20",
@@ -1525,7 +1741,10 @@
                     },
                     "default_value": "",
                     "placeholder": "",
-                    "parent_repeater": "field_6127758081f20"
+                    "parent_repeater": "field_6127758081f20",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 },
                 {
                     "key": "field_68398672e6f1e",
@@ -1547,7 +1766,10 @@
                     "ui_on_text": "",
                     "ui_off_text": "",
                     "ui": 1,
-                    "parent_repeater": "field_6127758081f20"
+                    "parent_repeater": "field_6127758081f20",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 },
                 {
                     "key": "field_683ec83e0c7b6",
@@ -1569,9 +1791,15 @@
                     "ui_on_text": "",
                     "ui_off_text": "",
                     "ui": 1,
-                    "parent_repeater": "field_6127758081f20"
+                    "parent_repeater": "field_6127758081f20",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 }
-            ]
+            ],
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6942ce2ae14d2",
@@ -1613,7 +1841,10 @@
                     "default_value": "",
                     "allow_in_bindings": 1,
                     "placeholder": "",
-                    "parent_repeater": "field_6942ce2ae14d2"
+                    "parent_repeater": "field_6942ce2ae14d2",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 },
                 {
                     "key": "field_6942ce2ae14d4",
@@ -1635,7 +1866,10 @@
                     "ui_on_text": "",
                     "ui_off_text": "",
                     "ui": 1,
-                    "parent_repeater": "field_6942ce2ae14d2"
+                    "parent_repeater": "field_6942ce2ae14d2",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 },
                 {
                     "key": "field_6942ce2ae14d5",
@@ -1657,9 +1891,15 @@
                     "ui_on_text": "",
                     "ui_off_text": "",
                     "ui": 1,
-                    "parent_repeater": "field_6942ce2ae14d2"
+                    "parent_repeater": "field_6942ce2ae14d2",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 }
-            ]
+            ],
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406fa9396c5",
@@ -1678,7 +1918,10 @@
             "placement": "top",
             "endpoint": 0,
             "wpml_cf_preferences": 1,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406e1d21f1b",
@@ -1699,7 +1942,10 @@
             "toolbar": "full",
             "media_upload": 1,
             "delay": 0,
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f756c7c46a",
@@ -1720,7 +1966,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e858220a6da",
@@ -1740,7 +1989,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e858290a6db",
@@ -1760,7 +2012,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f755c7c467",
@@ -1780,7 +2035,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75357c466",
@@ -1800,7 +2058,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_68dcf030ab670",
@@ -1821,7 +2082,10 @@
             "allow_in_bindings": 1,
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f752b7c464",
@@ -1842,7 +2106,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75267c463",
@@ -1862,7 +2129,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f751c7c461",
@@ -1883,7 +2153,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_647f75167c460",
@@ -1904,7 +2177,10 @@
             "placeholder": "",
             "prepend": "",
             "append": "",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_6407345ca1c32",
@@ -1949,9 +2225,15 @@
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
-                    "parent_repeater": "field_6407345ca1c32"
+                    "parent_repeater": "field_6407345ca1c32",
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 }
-            ]
+            ],
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8556c0a6c4",
@@ -1971,7 +2253,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e855810a6c5",
@@ -1991,7 +2276,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8558b0a6c6",
@@ -2011,7 +2299,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e855930a6c7",
@@ -2031,7 +2322,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406fb3396c6",
@@ -2049,7 +2343,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_61406e4421f1c",
@@ -2096,9 +2393,15 @@
                     "new_lines": "",
                     "parent_repeater": "field_61406e4421f1c",
                     "wpml_cf_preferences": 2,
-                    "acfe_textarea_code": 0
+                    "acfe_textarea_code": 0,
+                    "acfict_enabled": false,
+                    "acfict_use_prefix": true,
+                    "acfict_table_name": null
                 }
-            ]
+            ],
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856db0a6cb",
@@ -2116,7 +2419,10 @@
             },
             "placement": "top",
             "endpoint": 0,
-            "selected": 0
+            "selected": 0,
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_614071b21d133",
@@ -2136,7 +2442,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856e60a6cc",
@@ -2156,7 +2465,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856eb0a6cd",
@@ -2176,7 +2488,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856f40a6ce",
@@ -2196,7 +2511,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e856fb0a6cf",
@@ -2216,7 +2534,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857020a6d0",
@@ -2236,7 +2557,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857080a6d1",
@@ -2256,7 +2580,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8570f0a6d2",
@@ -2276,7 +2603,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e857140a6d3",
@@ -2296,7 +2626,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_65e8571b0a6d4",
@@ -2316,7 +2649,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         },
         {
             "key": "field_660c0a562a03a",
@@ -2336,7 +2672,10 @@
             "maxlength": "",
             "placeholder": "",
             "prepend": "",
-            "append": ""
+            "append": "",
+            "acfict_enabled": 1,
+            "acfict_use_prefix": 1,
+            "acfict_table_name": "listings"
         }
     ],
     "location": [
@@ -2362,7 +2701,10 @@
         "json"
     ],
     "acfe_form": 0,
+    "acfict_enabled": 1,
+    "acfict_use_prefix": 1,
+    "acfict_table_name": "listings",
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1770047644
+    "modified": 1773054061
 }

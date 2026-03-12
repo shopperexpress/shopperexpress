@@ -146,7 +146,7 @@
 								<?php
 								if ( 1 === get_row_index() ) :
 									?>
-								active<?php endif; ?>" id="<?php echo esc_attr( $row ); ?>tab" data-toggle="tab" data-target="#tab<?php echo esc_attr( $row ); ?>" type="button" role="tab" aria-controls="tab-<?php echo esc_attr( $row ); ?>" aria-selected="<?php echo esc_attr( $active ); ?>">
+								active<?php endif; ?>" id="<?php echo esc_attr( $row ); ?>tab" data-toggle="tab" data-target="#tab<?php echo esc_attr( $row ); ?>" type="button" role="tab" aria-controls="tab<?php echo esc_attr( $row ); ?>" aria-selected="<?php echo esc_attr( $active ); ?>">
 										<?php the_sub_field( 'tab_title' ); ?>
 									</button>
 								</li>

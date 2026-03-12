@@ -451,7 +451,6 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
-                    "parent_repeater": "field_65039657a9044",
                     "sub_fields": [
                         {
                             "key": "field_686515163ad74",
@@ -522,7 +521,6 @@
                             "collapsed": "",
                             "button_label": "Add Row",
                             "rows_per_page": 20,
-                            "parent_repeater": "field_66267a77fd4ad",
                             "sub_fields": [
                                 {
                                     "key": "field_66267a9dfd4b1",
@@ -566,9 +564,11 @@
                                     "append": "",
                                     "parent_repeater": "field_66267a93fd4b0"
                                 }
-                            ]
+                            ],
+                            "parent_repeater": "field_66267a77fd4ad"
                         }
-                    ]
+                    ],
+                    "parent_repeater": "field_65039657a9044"
                 }
             ]
         },
@@ -789,7 +789,6 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
-                    "parent_repeater": "field_66267abf24dec",
                     "sub_fields": [
                         {
                             "key": "field_66267abf24df4",
@@ -859,7 +858,6 @@
                             "collapsed": "",
                             "button_label": "Add Row",
                             "rows_per_page": 20,
-                            "parent_repeater": "field_66267abf24df3",
                             "sub_fields": [
                                 {
                                     "key": "field_66267abf24df7",
@@ -903,9 +901,11 @@
                                     "append": "",
                                     "parent_repeater": "field_66267abf24df6"
                                 }
-                            ]
+                            ],
+                            "parent_repeater": "field_66267abf24df3"
                         }
-                    ]
+                    ],
+                    "parent_repeater": "field_66267abf24dec"
                 }
             ]
         },
@@ -1528,26 +1528,6 @@
             "acfe_textarea_code": 0
         },
         {
-            "key": "field_676e9207c8ce4",
-            "label": "Hide search form",
-            "name": "hide_search_form_footer",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
-        },
-        {
             "key": "field_651afd2c9ca52",
             "label": "Unlock Savings Form",
             "name": "unlock_savings_form",
@@ -1610,6 +1590,26 @@
             "bidirectional_target": [],
             "save_post_type": "",
             "save_post_status": ""
+        },
+        {
+            "key": "field_676e9207c8ce4",
+            "label": "Hide search form",
+            "name": "hide_search_form_footer",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
         },
         {
             "key": "field_672b85a01e598",
@@ -3281,24 +3281,6 @@
             "selected": 0
         },
         {
-            "key": "field_699c23c5b17a3",
-            "label": "Cookie Modal",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
             "key": "field_699c23d2b17a4",
             "label": "Cookie Modal",
             "name": "cookie_modal",
@@ -3532,304 +3514,6 @@
             "placement": "top",
             "endpoint": 0,
             "selected": 0
-        },
-        {
-            "key": "field_699c23d2b17a4",
-            "label": "Cookie Modal",
-            "name": "cookie_modal",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "acfe_repeater_stylised_button": 0,
-            "layout": "block",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add modal",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_699c252db17aa",
-                    "label": "Enable Popup",
-                    "name": "enable_popup",
-                    "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 0,
-                    "allow_in_bindings": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
-                    "ui": 1,
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c35581989f",
-                    "label": "Cookie name",
-                    "name": "cookie_name",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c2413b17a7",
-                    "label": "Cookie Expiration (Days)",
-                    "name": "cookie_expiration_days",
-                    "aria-label": "",
-                    "type": "number",
-                    "instructions": "Works only if the “Cookie Name” field is not empty",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": 7,
-                    "min": "",
-                    "max": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "step": "",
-                    "prepend": "",
-                    "append": "Days",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c35481989d",
-                    "label": "Title",
-                    "name": "title",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c23e9b17a5",
-                    "label": "Content",
-                    "name": "content",
-                    "aria-label": "",
-                    "type": "wysiwyg",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "allow_in_bindings": 0,
-                    "tabs": "all",
-                    "toolbar": "full",
-                    "media_upload": 1,
-                    "delay": 0,
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c256bb17ac",
-                    "label": "Form",
-                    "name": "form",
-                    "aria-label": "",
-                    "type": "post_object",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "post_type": [
-                        "wpforms"
-                    ],
-                    "post_status": [
-                        "publish"
-                    ],
-                    "taxonomy": "",
-                    "return_format": "id",
-                    "multiple": 0,
-                    "save_custom": 0,
-                    "save_post_status": "publish",
-                    "acfe_bidirectional": {
-                        "acfe_bidirectional_enabled": "0"
-                    },
-                    "allow_null": 0,
-                    "allow_in_bindings": 0,
-                    "bidirectional": 0,
-                    "ui": 1,
-                    "bidirectional_target": [],
-                    "save_post_type": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c2403b17a6",
-                    "label": "Show Only On URLs Containing",
-                    "name": "include_urls",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c2541b17ab",
-                    "label": "Exclude URLs Containing",
-                    "name": "exclude_urls",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                }
-            ]
-        },
-        {
-            "key": "field_699dbb041bef3",
-            "label": "Twilio account sid",
-            "name": "twilio_account_sid",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_699dbb211bef4",
-            "label": "Twilio auth token",
-            "name": "twilio_auth_token",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_699dbafa1bef2",
-            "label": "Twilio",
-            "name": "",
-            "aria-label": "",
-            "type": "tab",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "placement": "top",
-            "endpoint": 0,
-            "selected": 0
-        },
-        {
-            "key": "field_699dbb311bef5",
-            "label": "Twilio number",
-            "name": "twilio_number",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
         },
         {
             "key": "field_699dbb041bef3",
@@ -3920,5 +3604,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1772626649
+    "modified": 1771944770
 }

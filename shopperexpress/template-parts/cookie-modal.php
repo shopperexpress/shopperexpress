@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying cookie modal.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $popup = \App\Components\Base\PopupResolver::instance()->get();
 
 if ( $popup ) :
@@ -10,7 +18,7 @@ if ( $popup ) :
 	$cookie_name            = $popup['cookie_name'] ? $popup['cookie_name'] : '';
 	?>
 	<!-- Cookie Modal -->
-	<div data-show="true" data-cookie-expire-days="<?php echo esc_attr( $cookie_expiration_days ); ?>" class="modal fade" id="<?php echo str_replace( ' ', '', esc_attr( $cookie_name ) ); ?>" tabindex="-1" aria-labelledby="CookieModalLabel" aria-hidden="true">
+	<div data-show="true" data-cookie-expire-days="<?php echo esc_attr( $cookie_expiration_days ); ?>" class="modal fade" id="<?php echo str_replace( ' ', '', esc_attr( $cookie_name ) ); ?>" tabindex="-1">
 		<div class="modal-dialog modal-lg modal-form modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">

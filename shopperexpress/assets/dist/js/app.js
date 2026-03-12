@@ -2743,6 +2743,7 @@ function formatPhoneNumber(phone) {
 			this.filterTemplate = this.modalFilterHolder.data('template');
 			this.products = {};
 			this.allProducts = {};
+			this.cardsByPosition = {};
 			this.filters = {};
 			this.activeFilters = {};
 			this.activeItems = {};
@@ -2786,9 +2787,12 @@ function formatPhoneNumber(phone) {
 					}
 				}
 
-				jQuery.getJSON(vehiclesURL, ({vehicles}) => {
+				jQuery.getJSON(vehiclesURL, ({vehicles, cards}) => {
 					this.allProducts = vehicles;
+					this.cardsByPosition = this.groupCardsByPosition(Array.isArray(cards) ? cards : []);
+
 					console.log(this.allProducts);
+					console.log(cards);
 
 					// set values if payment or price not filled
 					for (let i = 0; i < this.allProducts.length; i++) {
@@ -3518,6 +3522,39 @@ function formatPhoneNumber(phone) {
 					break;
 			}
 		},
+		/**
+		 * Groups an array of cards by their position in the final rendered list
+		 *
+		 * @param {Array} cards - The array of cards to group
+		 * @returns {Object} - A map where the keys are the positions and the values are arrays of card HTML
+		 */
+		groupCardsByPosition: function(cards) {
+			const map = {};
+
+			for (let i = 0; i < cards.length; i++) {
+				const card = cards[i];
+				const position = parseInt(card && card.position, 10);
+
+				if (!position || position < 1 || !card.html) continue;
+
+				if (!map[position]) {
+					map[position] = [];
+				}
+
+				map[position].push(card.html);
+			}
+
+			return map;
+		},
+		/**
+		 * Checks whether this final list position is occupied by one or more cards
+		 *
+		 * @param {number} position - The position in the final rendered list
+		 * @returns {boolean} - Whether the position is occupied by one or more cards
+		 */
+		hasCardsAtPosition: function(position) {
+			return Boolean(this.cardsByPosition[position] && this.cardsByPosition[position].length);
+		},
 		loadItems: function(items) {
 			this.updateResultCounters();
 			this.updateFilterValues();
@@ -3531,9 +3568,39 @@ function formatPhoneNumber(phone) {
 			this.holder.addClass(this.options.loadingClass);
 			this.container.empty();
 
+			const pageStartIndex = this.count || 0;
+			let outputPosition = 1;
+			let skippedProducts = 0;
+
+			// Appends cards that belong to current final-list position
+			const appendCardsAtPosition = () => {
+				const cardsAtPosition = this.cardsByPosition[outputPosition];
+
+				if (!cardsAtPosition || !cardsAtPosition.length) return;
+
+				for (let j = 0; j < cardsAtPosition.length; j++) {
+					jQuery(cardsAtPosition[j]).appendTo(this.container);
+					outputPosition++;
+				}
+			};
+
+			while (skippedProducts < pageStartIndex) {
+				// Move through final-list positions until we skip required number of products
+				if (!this.hasCardsAtPosition(outputPosition)) {
+					skippedProducts++;
+				}
+
+				outputPosition++;
+			}
+
 			for (let i = 0; i < items.length; i++) {
+				// Insert cards that belong to current final-list position before product
+				while (this.hasCardsAtPosition(outputPosition)) appendCardsAtPosition();
+
 				// Append items to container
 				jQuery(items[i].html).appendTo(this.container);
+
+				outputPosition++;
 			}
 
 			this.makeCallback('onLoadItems', this.container.find(this.options.items));
