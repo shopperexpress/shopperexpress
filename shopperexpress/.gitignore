@@ -1,6 +1,0 @@
-*.DS_Store
-
-vendor/
-.vscode/
-.idea/
-composer.lock

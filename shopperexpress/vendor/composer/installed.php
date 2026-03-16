@@ -3,7 +3,7 @@
         'name' => 'base/base',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '8646f88365f96596665c042ef06c978f70b5598d',
+        'reference' => 'd4a4a7341d46a0858ea45731da6abf57dd212e8e',
         'type' => 'wordpress-theme',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'base/base' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '8646f88365f96596665c042ef06c978f70b5598d',
+            'reference' => 'd4a4a7341d46a0858ea45731da6abf57dd212e8e',
             'type' => 'wordpress-theme',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -90,6 +90,15 @@
             'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '8.11.2',
+            'version' => '8.11.2.0',
+            'reference' => 'f4536d588823f1b1e9f4f26cbf7164cb23e07c10',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'wp-coding-standards/wpcs' => array(
             'pretty_version' => '3.3.0',
