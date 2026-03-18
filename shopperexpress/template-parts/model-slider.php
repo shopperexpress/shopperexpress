@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying model slider.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $title      = ! empty( $args['title'] ) ? $args['title'] : null;
 $section_bg = ! empty( $args['section_bg'] ) ? $args['section_bg'] : null;
 $slide_bg   = ! empty( $args['slide_bg'] ) ? $args['slide_bg'] : null;

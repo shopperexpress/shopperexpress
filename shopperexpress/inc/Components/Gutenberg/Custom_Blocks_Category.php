@@ -2,7 +2,7 @@
 /**
  * Register custom blocks category.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Gutenberg;

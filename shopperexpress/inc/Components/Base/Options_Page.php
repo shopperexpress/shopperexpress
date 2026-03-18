@@ -3,7 +3,7 @@
  * Options Page.
  * Setup options page using ACF plugin.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;
@@ -46,26 +46,26 @@ class Options_Page implements Theme_Component {
 				return;
 			}
 
-			$sub_pages = array(
-				'listings'           => 'Listings',
-				'special-offers'     => 'Special Offers',
-				'research'           => 'Research',
-				'service-offers'     => 'Service Offers',
-				'finance-offers'     => 'Finance Offers',
-				'lease-offers'       => 'Lease Offers',
-				'conditional-offers' => 'Conditional Offers',
-			);
+					$sub_pages = array(
+						'listings'           => 'Listings',
+						'special-offers'     => 'Special Offers',
+						'research'           => 'Research',
+						'service-offers'     => 'Service Offers',
+						'finance-offers'     => 'Finance Offers',
+						'lease-offers'       => 'Lease Offers',
+						'conditional-offers' => 'Conditional Offers',
+					);
 
-			foreach ( $sub_pages as $slug => $title ) {
-				acf_add_options_sub_page(
-					array(
-						'page_title'  => $title,
-						'menu_title'  => $title,
-						'menu_slug'   => $slug,
-						'parent_slug' => $parent['menu_slug'],
-					)
-				);
-			}
+					foreach ( $sub_pages as $slug => $title ) {
+						acf_add_options_sub_page(
+							array(
+								'page_title'  => $title,
+								'menu_title'  => $title,
+								'menu_slug'   => $slug,
+								'parent_slug' => $parent['menu_slug'],
+							)
+						);
+					}
 		}
 	}
 }

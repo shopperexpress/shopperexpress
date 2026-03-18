@@ -1,4 +1,12 @@
 <?php
+/**
+ * Modal template
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ *
+ * @package Shopperexpress
+ */
+
 $json = ! empty( $args['json'] ) ? $args['json'] : '';
 if ( ! empty( $json ) ) :
 	foreach ( $json as $index => $item ) :

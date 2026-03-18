@@ -2,7 +2,7 @@
 /**
  * Popup Resolver.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

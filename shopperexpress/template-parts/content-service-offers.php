@@ -1,14 +1,22 @@
 <?php
+/**
+ * Template for displaying vehicle offer card.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $post_id        = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$dept           = wps_get_term( $post_id, 'department' );
-$type           = wps_get_term( $post_id, 'type' );
-$title          = wps_get_term( $post_id, 'title' );
-$expirationdate = wps_get_term( $post_id, 'expirationdate' );
+$dept           = get_field( 'department', $post_id );
+$type           = get_field( 'type', $post_id );
+$title          = get_field( 'title', $post_id );
+$expirationdate = get_field( 'expirationdate', $post_id );
 ?>
 <div class="col-sm-6 col-lg-4 col-xxl-3">
 	<div class="card">
 		<div class="card-body">
-			<a href="<?php echo get_the_permalink( $post_id ); ?>">
+			<a href="<?php echo esc_url( get_the_permalink( $post_id ) ); ?>">
 				<?php if ( $dept || $type ) : ?>
 					<div class="card-head">
 						<?php if ( $dept ) : ?>
@@ -22,8 +30,11 @@ $expirationdate = wps_get_term( $post_id, 'expirationdate' );
 					</div>
 				<?php endif; ?>
 				<div class="detail-slider-holder">
-					<?php if ( $image = get_field( 'offerimage', $post_id ) ) : ?>
-						<img src="<?php echo $image; ?>" srcset="<?php echo $image; ?> 2x" alt="image description">
+					<?php
+					$image = get_field( 'offerimage', $post_id );
+					if ( $image ) :
+						?>
+						<img src="<?php echo esc_url( $image ); ?>" srcset="<?php echo esc_url( $image ); ?> 2x" alt="image description">
 						<?php
 					elseif ( function_exists( 'default_image' ) ) :
 							echo default_image();

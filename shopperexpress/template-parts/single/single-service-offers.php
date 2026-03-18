@@ -13,10 +13,10 @@ while ( have_posts() ) :
 	the_post();
 	$post_type  = get_post_type();
 	$post_id    = get_the_id();
-	$dept       = wps_get_term( $post_id, 'dept-' . $post_type );
-	$type       = wps_get_term( $post_id, 'type-' . $post_type );
-	$expiration = wps_get_term( $post_id, 'expiration-' . $post_type );
-	$title      = wps_get_term( $post_id, 'title-' . $post_type );
+	$dept       = get_field( 'dept' );
+	$type       = get_field( 'type' );
+	$expiration = get_field( 'expiration' );
+	$title      = get_field( 'title' );
 	?>
 	<div class="detail-section">
 		<div class="container">
@@ -25,7 +25,7 @@ while ( have_posts() ) :
 					<div class="sticky-box">
 						<div class="detail-top-row">
 							<ol class="breadcrumbs">
-								<li><a href="<?php echo get_post_type_archive_link( $post_type ); ?>"><?php _e( 'All Offers', 'shopperexpress' ); ?></a></li>
+								<li><a href="<?php echo esc_url( get_post_type_archive_link( $post_type ) ); ?>"><?php _e( 'All Offers', 'shopperexpress' ); ?></a></li>
 							</ol>
 							<?php if ( $dept || $type ) : ?>
 								<ul class="code-list text-right text-capitalize list-unstyled">

@@ -833,7 +833,8 @@ class Api implements Theme_Component {
 				foreach ( $this->get_meta_fields( $post_id ) as $field ) {
 					if ( isset( $field['key'], $field['value'] ) ) {
 						$field                = $field['key'];
-						$query_data[ $field ] = strtolower( wps_get_term( $post_id, $field ) );
+						$query_data[ $field ] = strtolower( get_field( $field, $post_id ) );
+
 					}
 				}
 

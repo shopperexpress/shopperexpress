@@ -1,4 +1,13 @@
-<?php if ( $images = get_sub_field( 'images' ) ) : ?>
+<?php
+/**
+ * Images
+ *
+ * @package ShopperExpress
+ */
+
+$images = get_sub_field( 'images' );
+if ( $images ) :
+	?>
 	<section class="section">
 		<div class="container">
 			<?php

@@ -2562,6 +2562,10 @@ function initUnlockSavings() {
 
 				// Handle the form pages
 				initFormPagesHandler(form);
+
+				form.find('select').each(function() {
+					jcf.replace(jQuery(this));
+				});
 			}
 		});
 	}
@@ -5264,7 +5268,7 @@ function initCheckedClasses() {
 				let moduleOptions,
 					element = $(this);
 
-				instance = element.data(commonOptions.dataKey);
+					instance = element.data(commonOptions.dataKey);
 
 				if (instance) {
 					instance.refresh();

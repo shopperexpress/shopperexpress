@@ -2,7 +2,7 @@
 /**
  * App\Components\Theme_Component interface.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components;

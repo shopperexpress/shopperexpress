@@ -371,7 +371,4 @@ if ( $key && $value ) :
 		</div>
 	</div>
 </div>
-<?php
-get_footer();
-get_template_part( 'template-parts/detail', 'modal', array( 'post_type' => $post_type ) );
-?>
+<?php get_footer(); ?>

@@ -2,7 +2,7 @@
 /**
  * WordPress Ajax.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

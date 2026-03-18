@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Theme sidebars.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

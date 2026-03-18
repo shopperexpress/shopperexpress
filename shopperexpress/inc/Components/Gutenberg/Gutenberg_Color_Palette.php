@@ -2,7 +2,7 @@
 /**
  * Custom Gutenberg color palette.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Gutenberg;

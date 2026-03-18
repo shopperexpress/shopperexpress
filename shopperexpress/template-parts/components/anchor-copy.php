@@ -1,3 +1,13 @@
+<?php
+/**
+ * Template part for displaying anchor copy
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <ul class="anchor-list right-list">
 	<li>
 		<a href="#" onclick="jQuery('#copyLinkModal').modal('show');" data-toggle="tooltip" data-placement="top" title="Share this vehicle" aria-label="Share this vehicle">

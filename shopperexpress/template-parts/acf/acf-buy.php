@@ -1,4 +1,10 @@
 <?php
+/**
+ * Buy
+ *
+ * @package ShopperExpress
+ */
+
 $text   = get_sub_field( 'text' );
 $slogan = get_sub_field( 'slogan' );
 

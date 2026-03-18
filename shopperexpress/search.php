@@ -5,8 +5,9 @@
  * @package Shopperexpress
  */
 
-if ( have_posts() ) : ?>
-	<?php get_header(); ?>
+if ( have_posts() ) :
+	get_header();
+	?>
 	<div class="container-fluid">
 		<div id="content">
 			<div class="title">
@@ -15,14 +16,16 @@ if ( have_posts() ) : ?>
 			<?php
 			while ( have_posts() ) :
 				the_post();
-				?>
-				<?php get_template_part( 'template-parts/content', get_post_type() ); ?>
-			<?php endwhile; ?>
-			<?php get_template_part( 'template-parts/pager' ); ?>
+				get_template_part( 'template-parts/content', get_post_type() );
+			endwhile;
+			get_template_part( 'template-parts/pager' );
+			?>
 		</div>
 		<?php get_sidebar(); ?>
 	</div>
-	<?php get_footer(); ?>
-<?php else : ?>
-	<?php get_template_part( '404' ); ?>
-<?php endif; ?>
+	<?php
+	get_footer();
+else :
+	get_template_part( '404' );
+endif;
+?>

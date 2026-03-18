@@ -1,3 +1,11 @@
+<?php
+/**
+ * Template for displaying pager single.
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <?php $prev = get_previous_post_link( __( '%link', 'shopperexpress' ), '&laquo;&nbsp;%title' ); ?>
 <?php $next = get_next_post_link( __( '%link', 'shopperexpress' ), '%title&nbsp;&raquo;' ); ?>
 <?php if ( $prev || $next ) : ?>

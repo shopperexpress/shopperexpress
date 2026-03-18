@@ -1,4 +1,10 @@
 <?php
+/**
+ * Offers
+ *
+ * @package ShopperExpress
+ */
+
 $is_remove_paddings = get_sub_field( 'remove_paddings' );
 if ( have_rows( 'offers' ) ) : ?>
 	<div class="offer-section-wrapper">

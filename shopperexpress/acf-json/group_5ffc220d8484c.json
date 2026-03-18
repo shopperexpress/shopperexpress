@@ -8525,7 +8525,7 @@
                 },
                 {
                     "key": "field_69b189e04c3cf",
-                    "label": "Show after",
+                    "label": "Card position",
                     "name": "show_after",
                     "aria-label": "",
                     "type": "number",
@@ -8538,13 +8538,13 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "min": "",
+                    "min": 0,
                     "max": "",
                     "allow_in_bindings": 0,
                     "placeholder": "",
                     "step": "",
                     "prepend": "",
-                    "append": "card",
+                    "append": "",
                     "parent_repeater": "field_69b18934ca86b"
                 },
                 {
@@ -10285,5 +10285,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1773243174
+    "modified": 1773330175
 }

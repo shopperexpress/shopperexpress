@@ -90,23 +90,13 @@ if ( function_exists( 'CallAPI' ) && $vin_number ) :
 					$i = 1;
 					while ( have_rows( $type . 'features_items' ) ) :
 						the_row();
+						$aria      = $i == 1 ? 'true' : 'false';
+						$collapsed = $i == 1 ? '' : 'collapsed';
 						?>
 						<li>
 							<div id="heading-<?php echo $i; ?>">
 								<h3>
-									<button class="accordion-detail-opener
-									<?php
-									if ( $i != 1 ) :
-										?>
-										collapsed<?php endif; ?>" type="button" data-toggle="collapse" data-target="#collapse-<?php echo $i; ?>" aria-expanded="
-										<?php
-										if ( $i == 1 ) :
-											?>
-										true
-																				<?php
-																			else :
-																				?>
-	false<?php endif; ?>" aria-controls="collapse-<?php echo $i; ?>">
+									<button class="accordion-detail-opener <?php echo esc_attr( $collapsed ); ?>" type="button" data-toggle="collapse" data-target="#collapse-<?php echo esc_attr( $i ); ?>" aria-expanded="<?php echo esc_attr( $aria ); ?>" aria-controls="collapse-<?php echo esc_attr( $i ); ?>">
 										<?php the_sub_field( 'heading' ); ?>
 										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
 											<path

@@ -24,49 +24,50 @@
 	<?php
 	wp_head();
 	the_field( 'for_script_header', 'options' );
-
+	$font                        = '';
 	$theme_color                 = get_field( 'theme_color', 'options' );
 	$overlay_color               = get_field( 'overlay_color', 'options' );
 	$overlay_opacity             = get_field( 'overlay_opacity', 'options' );
 	$header_nav_drop_bg          = get_field( 'header_nav_drop_bg', 'options' ) ? get_field( 'header_nav_drop_bg', 'options' ) : 'rgba(248, 246, 246, 1)';
 	$header_nav_link_color       = get_field( 'header_nav_link_color', 'options' ) ? get_field( 'header_nav_link_color', 'options' ) : 'rgba(26, 26, 26, 1)';
 	$header_nav_link_hover_color = get_field( 'header_nav_link_hover_color', 'options' ) ? get_field( 'header_nav_link_hover_color', 'options' ) : 'rgba(0, 116, 179, 1)';
+	$theme_color                 = get_field( 'theme_color', 'options' );
 
-	if ( $theme_color = get_field( 'theme_color', 'options' ) ) :
+	if ( $theme_color ) :
 		?>
 		<style type="text/css">
 			:root {
 				<?php
 				if ( $theme_color ) :
 					?>
-					--primary: <?php echo $theme_color; ?> !important;
-				--primary-rgb: <?php echo hexToRgb( $theme_color ); ?> !important;
-				--primary-rgba: <?php echo hexToRgb( $theme_color ); ?> !important;
+					--primary: <?php echo esc_attr( $theme_color ); ?> !important;
+				--primary-rgb: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
+				--primary-rgba: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
 					<?php
 				endif;
 				if ( $overlay_color ) :
 					?>
-				--overlay-color-rgb: <?php echo hexToRgb( $overlay_color ); ?> !important;
+				--overlay-color-rgb: <?php echo esc_attr( hexToRgb( $overlay_color ) ); ?> !important;
 					<?php
 				endif;
 				if ( $overlay_opacity ) :
 					?>
-				--overlay-opacity: <?php echo $overlay_opacity; ?> !important;
+				--overlay-opacity: <?php echo esc_attr( $overlay_opacity ); ?> !important;
 					<?php
 				endif;
 				if ( $header_nav_drop_bg ) :
 					?>
-				--header-nav-drop-bg: <?php echo $header_nav_drop_bg; ?> !important;
+				--header-nav-drop-bg: <?php echo esc_attr( $header_nav_drop_bg ); ?> !important;
 					<?php
 				endif;
 				if ( $header_nav_link_color ) :
 					?>
-				--header-nav-link-color: <?php echo $header_nav_link_color; ?> !important;
+				--header-nav-link-color: <?php echo esc_attr( $header_nav_link_color ); ?> !important;
 					<?php
 				endif;
 				if ( $header_nav_link_hover_color ) :
 					?>
-				--header-nav-link-hover-color: <?php echo $header_nav_link_hover_color; ?> !important;
+				--header-nav-link-hover-color: <?php echo esc_attr( $header_nav_link_hover_color ); ?> !important;
 					<?php
 				endif;
 				$font = get_field( 'font', 'options' );
@@ -95,18 +96,7 @@
 	endif;
 	?>
 </head>
-<?php
-$class                   = $font != 1 ? 'theme-inner' : null;
-$is_new_home_page_styles = get_field( 'new_home_page_styles' );
-if ( $is_new_home_page_styles ) {
-	$class .= ' new-landing';
-}
-if ( is_front_page() || is_single() ) {
-	$class .= ' page-loaded';
-}
-?>
-
-<body <?php body_class( $class ); ?>>
+<body <?php body_class(); ?>>
 	<?php wp_body_open(); ?>
 	<div id="wrapper">
 		<header id="header">
@@ -154,7 +144,8 @@ if ( is_front_page() || is_single() ) {
 								?>
 								<a class="slider-item" href="<?php the_sub_field( 'url' ); ?>">
 									<?php
-									if ( $image = get_sub_field( 'image' ) ) {
+									$image = get_sub_field( 'image' );
+									if ( $image ) {
 										echo get_attachment_image( $image['id'] );}
 									?>
 								</a>
@@ -288,9 +279,10 @@ if ( is_front_page() || is_single() ) {
 						'offers'             => esc_html__( 'Saved Offers', 'shopperexpress' ),
 					);
 					if ( get_field( 'hide_favorite_icon', 'options' ) != true ) :
-						$html                = '';
-						$favorites_count_all = $favorites_count = 0;
-						if ( $page_for_saved_vehicles = get_field( 'page_for_saved_vehicles', 'options' ) ) :
+						$html                    = '';
+						$favorites_count_all     = $favorites_count = 0;
+						$page_for_saved_vehicles = get_field( 'page_for_saved_vehicles', 'options' );
+						if ( $page_for_saved_vehicles ) :
 							ob_start();
 							foreach ( $favorites as $post_type => $label ) :
 								$favorites_count     = get_user_favorites_count( null, null, array( 'post_type' => array( $post_type ) ) );
@@ -343,7 +335,8 @@ if ( is_front_page() || is_single() ) {
 													<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4d4d4d">
 														<path d="M478-240q21 0 35.5-14.5T528-290q0-21-14.5-35.5T478-340q-21 0-35.5 14.5T428-290q0 21 14.5 35.5T478-240Zm-36-154h74q0-33 7.5-52t42.5-52q26-26 41-49.5t15-56.5q0-56-41-86t-97-30q-57 0-92.5 30T342-618l66 26q5-18 22.5-39t53.5-21q32 0 48 17.5t16 38.5q0 20-12 37.5T506-526q-44 39-54 59t-10 73Zm38 314q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"></path>
 													</svg>
-													<?php echo $link['title']; ?></a>
+													<?php echo $link['title']; ?>
+												</a>
 											</li>
 										</ul>
 									</li>
@@ -351,10 +344,15 @@ if ( is_front_page() || is_single() ) {
 								elseif ( get_row_layout() == 'menu' && $menu ) :
 									?>
 									<li class="active">
-										<?php if ( $title = get_sub_field( 'title' ) ) : ?>
-											<a class="slide-opener" href="#"><?php echo $title; ?> <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">
+										<?php
+										$title = get_sub_field( 'title' );
+										if ( $title ) :
+											?>
+											<a class="slide-opener" href="#"><?php echo $title; ?>
+												<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#999999">
 													<path d="M480-344 240-584l56-56 184 184 184-184 56 56-240 240Z" />
-												</svg></a>
+												</svg>
+											</a>
 											<?php
 										endif;
 										wp_nav_menu(
@@ -376,5 +374,8 @@ if ( is_front_page() || is_single() ) {
 			</nav>
 		</header>
 		<main id="main">
-			<?php if ( ! $is_new_home_page_styles ) {
-				get_template_part( 'template-parts/intro' );} ?>
+			<?php
+			if ( ! get_field( 'new_home_page_styles' ) ) {
+				get_template_part( 'template-parts/intro' );
+			}
+			?>

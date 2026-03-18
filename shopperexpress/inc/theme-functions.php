@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Theme functions.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 /**
@@ -17,23 +16,6 @@ function clean_phone( $phone = '' ) {
 		return;
 	}
 	return preg_replace( '/[^0-9]/', '', $phone );
-}
-
-/**
- * Contact form 7 helper function
- *
- * @param  int $form_id form id.
- * @return string
- */
-function get_form( int $form_id ): string {
-
-	$form_id = absint( $form_id );
-
-	if ( ! $form_id ) {
-		return '';
-	}
-
-	return do_shortcode( '[contact-form-7 id="' . $form_id . '"]' );
 }
 
 /**
@@ -55,38 +37,10 @@ function get_attachment_image( int $id, string $size = 'full', array $attr = arr
 }
 
 /**
- * Get theme backgroun image (in style attribute)
+ * Get date archive link
  *
- * @param  int    $id image id.
- * @param  string $size image size.
  * @return string
  */
-function get_bg_image( int $id, string $size = 'full' ): string {
-	$image = wp_get_attachment_image_src( $id, $size );
-
-	if ( ! $image[0] ) {
-		return '';
-	}
-
-	return ' style="background-image: url(' . esc_url( $image[0] ) . ');"';
-}
-
-/**
- * Get featured image alt attribute.
- *
- * @param  int $attachment_id attachment id, alt of which will be displayed.
- * @return string $image_alt
- */
-function get_attachment_alt( int $attachment_id ): string {
-	$img_alt = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
-
-	if ( ! empty( $img_alt ) ) {
-		return $img_alt;
-	} else {
-		return esc_html__( 'image description', 'shopperexpress' );
-	}
-}
-
 function get_date_archive_link() {
 	if ( get_option( 'eg_date_archive_link_type' ) == 'year' ) {
 		$res = get_year_link( get_the_date( 'Y' ) );
@@ -98,6 +52,15 @@ function get_date_archive_link() {
 	return $res;
 }
 
+/**
+ * Get link
+ *
+ * @param  array  $link link array.
+ * @param  string $class class name.
+ * @param  string $before before link text.
+ * @param  string $attr additional attributes.
+ * @return string
+ */
 function wps_get_link( $link, $class = null, $before = null, $attr = null ) {
 	if ( $link ) {
 
@@ -130,68 +93,16 @@ add_action(
 	}
 );
 
-function card_detail( $post_id = null, $post_type = '' ) {
-
-	$post_type = ! empty( $post_type ) ? '-' . $post_type : null;
-
-	$terms = array(
-		'vin-number' . $post_type     => __( 'Vin', 'shopperexpress' ),
-		'stock-number' . $post_type   => __( 'Stock', 'shopperexpress' ),
-		'mileage' . $post_type        => __( 'Mileage', 'shopperexpress' ),
-		'engine' . $post_type         => __( 'Engine/Fuel', 'shopperexpress' ),
-		'transmission' . $post_type   => __( 'Transmission', 'shopperexpress' ),
-		'drivetrain' . $post_type     => __( 'Drivetrain', 'shopperexpress' ),
-		'exterior-color' . $post_type => __( 'Exterior color', 'shopperexpress' ),
-		'interior-color' . $post_type => __( 'Interior color', 'shopperexpress' ),
-		'trim' . $post_type           => __( 'Trim', 'shopperexpress' ),
-
-	);
-
-	foreach ( $terms as $key => $value ) :
-		?>
-		<dt><?php echo $value; ?>:</dt>
-		<?php
-		if ( str_contains( $key, 'vin-number' ) ) :
-			?>
-			<dd class="vin"><?php else : ?>
-			<dd><?php endif; ?>
-			<?php
-			if ( $key == 'engine' ) {
-				echo wps_get_term( $post_id, $key ) . ' / ' . wps_get_term( $post_id, 'fuel-type' . $post_type );
-			} else {
-				echo wps_get_term( $post_id, $key );
-			}
-			?>
-			</dd>
-		<?php
-	endforeach;
-}
-
-function offers_card_detail( $post_id = null ) {
-	$terms = array(
-		'year'  => __( 'Year', 'shopperexpress' ),
-		'make'  => __( 'Make', 'shopperexpress' ),
-		'model' => __( 'Model', 'shopperexpress' ),
-		'trim'  => __( 'Trim', 'shopperexpress' ),
-
-	);
-
-	foreach ( $terms as $key => $value ) :
-		?>
-			<dt><?php echo $value; ?>:</dt>
-			<dd><?php echo wps_get_term( $post_id, $key . '-' . get_post_type( $post_id ) ); ?></dd>
-		<?php
-	endforeach;
-	if ( $add_info = get_field( 'addinfo' ) ) {
-		?>
-			<dt><?php echo _e( 'Add`l Info', 'shopperexpress' ); ?>:</dt>
-			<dd><?php echo $add_info; ?></dd>
-		<?php
-	}
-}
-
-
+/**
+ * SEO URL
+ *
+ * @param string $string string.
+ * @return string
+ */
 function seoUrl( $string ) {
+	if ( empty( $string ) ) {
+		return;
+	}
 	$string = strtolower( $string );
 	$string = preg_replace( '/[^a-z0-9_\s-]/', '', $string );
 	$string = preg_replace( '/[\s-]+/', ' ', $string );
@@ -199,6 +110,13 @@ function seoUrl( $string ) {
 	return $string;
 }
 
+/**
+ * Hex to RGB
+ *
+ * @param  string $hex hex color.
+ * @param  bool   $alpha alpha.
+ * @return string
+ */
 function hexToRgb( $hex, $alpha = false ) {
 	$hex      = str_replace( '#', '', $hex );
 	$length   = strlen( $hex );
@@ -211,45 +129,21 @@ function hexToRgb( $hex, $alpha = false ) {
 	return implode( ',', $rgb );
 }
 
-add_action( 'wp_logout', 'auto_redirect_after_logout' );
+add_action(
+	'wp_logout',
+	function () {
+		wp_safe_redirect( home_url() );
+		exit;
+	}
+);
 
-function auto_redirect_after_logout() {
-	wp_safe_redirect( home_url() );
-	exit;
-}
-
-/**
- * Retrieves the specified field value from a taxonomy term or a custom field.
- *
- * This function checks if a given taxonomy exists and retrieves the specified field value
- * (e.g., name, slug) from the first term associated with the post. If the taxonomy doesn't exist,
- * it tries to retrieve a custom field value using the provided taxonomy name,
- * which may be altered to fit the custom field naming convention.
- *
- * @param int|WP_Post $post The post ID or object.
- * @param string      $taxonomy The taxonomy name.
- * @param string      $field Optional. The field to retrieve from the term. Default is 'name'.
- * @return string|null The sanitized term field value or custom field value, or null if not found.
- */
-function wps_get_term( $post, string $taxonomy, string $field = 'name', $field_type = 'taxonomy' ): ?string {
-
-	$value = null;
-
-	// Adjust the taxonomy name to match custom field format
-	$field = str_replace( '-' . get_post_type( $post ), '', $taxonomy );
-
-	// Get the custom field value
-	$value = get_field( $field, $post, true, true );
-
-	// Return the sanitized value, or null if value is empty
-	return $value !== null ? $value : null;
-}
-
-function shortcode_callback_page_id( $atts = array() ) {
-	global $post;
-	return $post->ID;
-}
-add_shortcode( 'page_id', 'shortcode_callback_page_id' );
+add_shortcode(
+	'page_id',
+	function ( $atts = array() ) {
+		global $post;
+		return $post->ID;
+	}
+);
 
 function adf_email( $fields = array() ) {
 	$first_name = ! empty( $fields['first_name'] ) ? sanitize_text_field( $fields['first_name'] ) : '';
@@ -352,11 +246,9 @@ function adf_email( $fields = array() ) {
 	}
 }
 
-
 function wps_esc_xml( $data ) {
 	return htmlspecialchars( $data, ENT_XML1 | ENT_COMPAT, 'UTF-8' );
 }
-
 
 add_action(
 	'register_new_user',
@@ -366,13 +258,6 @@ add_action(
 	9
 );
 
-/*
-add_action('init', function () {
-	if (!session_id() && session_status() !== PHP_SESSION_ACTIVE && !is_admin()) {
-		session_start();
-	}
-});
-*/
 add_action(
 	'wpforms_process_complete',
 	function ( $fields, $entry, $form_data, $entry_id ) {
@@ -503,32 +388,6 @@ function allow_programmatic_login( $user, $username, $password ) {
 }
 
 add_action(
-	'wpcf7_mail_sent',
-	function ( $contact_form ) {
-		$submission      = WPCF7_Submission::get_instance();
-		$contact_form    = WPCF7_ContactForm::get_current();
-		$contact_form_id = $contact_form->id;
-
-		if ( $submission ) {
-			$posted_data = $submission->get_posted_data();
-		} else {
-			return;
-		}
-
-		adf_email(
-			array(
-				'first_name' => $posted_data['firstName'],
-				'last_name'  => $posted_data['lastName'],
-				'email'      => $posted_data['your-email'],
-				'zip'        => $posted_data['zip'],
-				'comments'   => $posted_data['message'],
-			)
-		);
-	}
-);
-
-
-add_action(
 	'pmxi_after_xml_import ',
 	function () {
 		$query = new WP_Query(
@@ -598,109 +457,6 @@ function wps_site_icon() {
 apply_filters( 'site_icon_meta_tags', function () {} );
 add_action( 'wp_head', 'wps_site_icon' );
 
-
-function shortcode_callback_offer_payment( $atts = array() ) {
-	$acf_prefix = 'service-';
-
-	global $post;
-	$post_id = $post->ID;
-
-	$location      = wps_get_term( $post_id, 'location' );
-	$condition     = wps_get_term( $post_id, 'condition' );
-	$loanterm      = get_field( 'loanterm', $post_id );
-	$loanapr       = get_field( 'loanapr', $post_id );
-	$down_payment  = wps_get_term( $post_id, 'down-payment' );
-	$lease_payment = wps_get_term( $post_id, 'lease-payment' );
-	$loan_payment  = wps_get_term( $post_id, 'loan-payment' );
-	$leaseterm     = wps_get_term( $post_id, 'leaseterm' );
-	while ( have_rows( $acf_prefix . 'offers_flexible_content', 'options' ) ) :
-		the_row();
-		if ( get_row_layout() == 'payment' && have_rows( 'payment_list' ) ) {
-			while ( have_rows( 'payment_list' ) ) :
-				the_row();
-				$link         = get_sub_field( 'link' );
-				$lock         = get_sub_field( 'lock' );
-				$show_payment = $lock ? get_sub_field( 'show_payment' ) : false;
-				$show_event   = get_sub_field( 'show_event' );
-
-				$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
-
-				switch ( $atts['type'] ) {
-					case 'lease-payment':
-						if ( $down_payment && $lease_payment ) {
-							$lease_payment = ! empty( $lease_payment ) ? '$' . number_format( $lease_payment ) : null;
-							$output        = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
-						} else {
-							$output = null;
-						}
-
-						break;
-
-					case 'Disclosure_loan':
-						if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-							$output = $loanterm ? '<span class="savings">' . $loanterm . ' ' . __( 'mos.', 'shopperexpress' ) . '</span>' : '';
-							if ( $loanapr ) {
-								$output .= $loanapr . '% <sub>APR</sub>';
-							}
-						} else {
-							$output = 2;
-						}
-						break;
-
-					case 'Disclosure_lease':
-						if ( $down_payment && $lease_payment ) {
-							$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
-							$output        = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . ' ' . $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
-						} else {
-							$output = null;
-						}
-						break;
-					case 'Disclosure_Cash':
-						if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-							$cash_offer       = get_field( 'cash_offer' );
-							$cash_offer       = is_int( $cash_offer ) ? '$' . number_format( $cash_offer ) : $cash_offer;
-							$cash_offer_label = get_field( 'cash_offer_label' );
-							$output           = ! empty( $cash_offer ) ? '<span class="savings">' . $cash_offer_label . '</span>' . $cash_offer : null;
-						} else {
-							$output = null;
-						}
-						break;
-
-					default:
-						$loan_payment = ! empty( $loan_payment ) && $loan_payment != 'None' ? '$' . number_format( $loan_payment ) . ' <sub>/mo</sub>' : null;
-						$output       = ! empty( $loan_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $loan_payment : null;
-						break;
-				}
-
-			endwhile;
-		}
-	endwhile;
-
-	return strip_tags( $output );
-}
-add_shortcode( 'offer_payment', 'shortcode_callback_offer_payment' );
-
-
-function shortcode_callback_offer_content( $atts = array() ) {
-	global $post;
-	$post_id = $post->ID;
-	switch ( $atts['type'] ) {
-		case 'lease':
-			$output = get_field( 'disclosure_lease', $post_id );
-			break;
-		case 'loan':
-			$output = get_field( 'disclosure_finance', $post_id );
-			break;
-		case 'cash':
-			$output = get_field( 'disclosure_cash', $post_id );
-			break;
-	}
-
-	return strip_tags( $output );
-}
-add_shortcode( 'offer_content', 'shortcode_callback_offer_content' );
-
-
 add_action(
 	'pre_get_posts',
 	function ( $query ) {
@@ -710,412 +466,6 @@ add_action(
 			$query->set( 'meta_key', 'price' );
 		}
 		return $query;
-	}
-);
-
-function wps_get_icon( $icon = '' ) {
-	return '<i class="material-symbols-rounded">' . str_replace( ' ', '_', $icon ) . '</i>';
-}
-
-add_shortcode(
-	'stock',
-	function ( $atts = array() ) {
-
-		$condition = ! empty( $atts['condition'] ) ? strtolower( $atts['condition'] ) : 'new';
-		$post_type = $condition == 'used' ? 'used-listings' : 'listings';
-
-		$args = array(
-			'post_type'      => $post_type,
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-		);
-
-		$query = new WP_Query( $args );
-
-		return $query->found_posts;
-	}
-);
-
-add_filter(
-	'wpforms_smart_tags',
-	function ( $tags ) {
-
-		$items = array(
-			'disclosure_lease'   => 'Disclosure lease',
-			'disclosure_finance' => 'Disclosure finance',
-			'disclosure_cash'    => 'Disclosure cach',
-			'year'               => 'Year',
-			'make'               => 'Make',
-			'model'              => 'Model',
-			'trim'               => 'Trim',
-			'miles'              => 'Miles',
-			'vin'                => 'Vin',
-			'stock'              => 'Stock',
-			'type'               => 'Type',
-			'offer_year'         => 'Offer-Year',
-			'offer_make'         => 'Offer-Make',
-			'offer_model'        => 'Offer-Model',
-			'offer_trim'         => 'Offer-Trim',
-			'offer_image'        => 'Offer Primary Image URL',
-			'service_title'      => 'Service-Title',
-			'service_offer'      => 'Service-Offer',
-			'service_dept'       => 'Service-Dept',
-			'service_type'       => 'Service-Type',
-			'service_expiration' => 'Service-Expiration',
-			'service_info'       => 'Service-Info',
-			'service_image'      => 'Service Primary Image URL',
-			'msrp'               => 'MSRP',
-			'best_price'         => 'Best Price',
-			'internet_price'     => 'Internet Price',
-			'service_disclaimer' => 'Service Disclaimer',
-			'url'                => 'Page URL',
-
-		);
-
-		while ( have_rows( 'smart_tags', 'options' ) ) :
-			the_row();
-			$field = get_sub_field( 'acf_field_selector' );
-
-			if ( $field ) {
-				$items[ $field['value'] ] = $field['label'];
-			}
-
-		endwhile;
-
-		foreach ( $items as $slug => $item ) {
-			$tags[ $slug ] = $item;
-		}
-
-		return $tags;
-	}
-);
-
-
-add_filter(
-	'wpforms_smart_tag_process',
-	function ( $content, $tag ) {
-
-		$post_id = get_the_ID();
-
-		switch ( $tag ) {
-
-			case 'service_disclaimer':
-				$offerdisclaimer = get_field( 'offerdisclaimer', $post_id ) ? get_field( 'offerdisclaimer', $post_id ) : null;
-				if ( $offerdisclaimer ) {
-					$content = str_replace( '{service_disclaimer}', $offerdisclaimer, $content );
-				}
-				break;
-
-			case 'msrp':
-				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				if ( $price ) {
-					$content = str_replace( '{msrp}', $price, $content );
-				}
-				break;
-
-			case 'best_price':
-				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				if ( $price ) {
-					$content = str_replace( '{best_price}', $price, $content );
-				}
-				break;
-
-			case 'internet_price':
-				$price = get_field( 'customprice2', $post_id );
-				if ( is_float( $price ) ) {
-					$content = str_replace( '{internet_price}', number_format( $price ), $content );
-				}
-				break;
-
-			case 'offer_year':
-				$year = get_field( 'year', $post_id );
-				if ( $year ) {
-					$content = str_replace( '{offer_year}', $year, $content );
-				}
-				break;
-
-			case 'offer_make':
-				$make = get_field( 'make', $post_id );
-				if ( $make ) {
-					$content = str_replace( '{offer_make}', $make, $content );
-				}
-				break;
-
-			case 'offer_model':
-				$model = get_field( 'model', $post_id );
-				if ( $model ) {
-					$content = str_replace( '{offer_model}', $model, $content );
-				}
-				break;
-
-			case 'offer_trim':
-				$trim = get_field( 'trim', $post_id );
-				if ( $trim ) {
-					$content = str_replace( '{offer_trim}', $trim, $content );
-				}
-				break;
-
-			case 'offer_image':
-				$image = get_field( 'gallery', $post_id ) ? get_field( 'gallery', $post_id )[0]['image_url'] : null;
-				if ( $image ) {
-					$content = str_replace( '{offer_image}', $image, $content );
-				}
-				break;
-
-			case 'service_title':
-				$title = get_field( 'title', $post_id );
-				if ( $title ) {
-					$content = str_replace( '{service_title}', $title, $content );
-				}
-				break;
-
-			case 'service_offer':
-				$offer = get_field( 'offertext', $post_id );
-				if ( $offer ) {
-					$content = str_replace( '{service_offer}', $offer, $content );
-				}
-				break;
-
-			case 'service_dept':
-				$dept = get_field( 'dept', $post_id );
-				if ( $dept ) {
-					$content = str_replace( '{service_dept}', $dept, $content );
-				}
-				break;
-
-			case 'service_type':
-				$type = get_field( 'type', $post_id );
-				if ( $type ) {
-					$content = str_replace( '{service_type}', $type, $content );
-				}
-				break;
-
-			case 'service_expiration':
-				$expiration = get_field( 'expiration', $post_id );
-				if ( $expiration ) {
-					$content = str_replace( '{service_expiration}', $expiration, $content );
-				}
-				break;
-
-			case 'service_info':
-				$info = get_field( 'additioninfo', $post_id );
-				if ( $info ) {
-					$content = str_replace( '{service_info}', $info, $content );
-				}
-				break;
-
-			case 'service_image':
-				$image = get_field( 'offerimage', $post_id );
-				if ( $image ) {
-					$content = str_replace( '{service_image}', $image, $content );
-				}
-				break;
-
-			case 'disclosure_lease':
-				$lease = get_field( 'disclosure_lease', $post_id );
-				if ( $lease ) {
-					$content = str_replace( '{disclosure_lease}', $lease, $content );
-				}
-				break;
-
-			case 'disclosure_finance':
-				$finance = get_field( 'disclosure_finance', $post_id );
-				if ( $finance ) {
-					$content = str_replace( '{disclosure_finance}', $finance, $content );
-				}
-				break;
-
-			case 'disclosure_cash':
-				$cash = get_field( 'disclosure_cash', $post_id );
-				if ( $cash ) {
-					$content = str_replace( '{disclosure_cash}', $cash, $content );
-				}
-				break;
-
-			case 'year':
-				$year = get_field( 'year', $post_id );
-				if ( $year ) {
-					$content = str_replace( '{year}', $year, $content );
-				}
-				break;
-
-			case 'make':
-				$make = get_field( 'make', $post_id );
-				if ( $make ) {
-					$content = str_replace( '{make}', $make, $content );
-				}
-				break;
-
-			case 'model':
-				$model = get_field( 'model', $post_id );
-				if ( $model ) {
-					$content = str_replace( '{model}', $model, $content );
-				}
-				break;
-
-			case 'trim':
-				$trim = get_field( 'trim', $post_id );
-				if ( $trim ) {
-					$content = str_replace( '{trim}', $trim, $content );
-				}
-				break;
-
-			case 'miles':
-				$miles = get_field( 'mileage', $post_id );
-				if ( $miles ) {
-					$content = str_replace( '{miles}', $miles, $content );
-				}
-				break;
-
-			case 'vin':
-				$vin = get_field( 'vin_number', $post_id );
-				if ( $vin ) {
-					$content = str_replace( '{vin}', $vin, $content );
-				}
-				break;
-
-			case 'stock':
-				$stock = get_field( 'stock-number', $post_id );
-				if ( $stock ) {
-					$content = str_replace( '{stock}', $stock, $content );
-				}
-				break;
-
-			case 'type':
-				$type = get_field( 'condition', $post_id );
-				if ( $type ) {
-					$content = str_replace( '{type}', $type, $content );
-				}
-				break;
-			case 'url':
-				$url = get_the_permalink( $post_id );
-				if ( $url ) {
-					$content = str_replace( '{url}', $url, $content );
-				}
-				break;
-		}
-
-		while ( have_rows( 'smart_tags', 'options' ) ) :
-				the_row();
-				$field      = get_sub_field( 'acf_field_selector' );
-				$field_type = get_sub_field( 'field_type' );
-			if ( $tag === $field['value'] ) {
-
-				switch ( $field_type ) {
-					case 'price':
-						$get_field = get_field( $tag, $post_id ) ? number_format( get_field( $tag, $post_id ) ) : null;
-						break;
-					case 'text':
-					default:
-						$get_field = get_field( $tag, $post_id ) ? get_field( $tag, $post_id ) : null;
-						break;
-				}
-				if ( $get_field ) {
-					$content = str_replace( '{' . $tag . '}', $get_field, $content );
-				}
-			}
-
-			endwhile;
-
-		return $content;
-	},
-	10,
-	2
-);
-
-add_shortcode(
-	'show',
-	function ( $atts = array() ) {
-
-		if ( ! is_singular() ) {
-			return;
-		}
-
-		$post_id = get_the_id();
-
-		if ( ! empty( $atts['tax'] ) ) {
-			return wps_get_term( $post_id, $atts['tax'] . '-' . get_post_type( $post_id ) );
-		} elseif ( ! empty( $atts['field'] ) ) {
-			$output = get_field( $atts['field'], $post_id );
-			if ( is_array( $output ) ) {
-				return;
-			}
-			return $output;
-		}
-
-		return;
-	}
-);
-
-add_shortcode(
-	'price',
-	function ( $atts = array() ) {
-
-		$post_id = ! empty( $atts['id'] ) && $atts['id'] != 'post_id' ? $atts['id'] : get_the_ID();
-
-		$output = '<span class="js-is-empty">';
-		if ( $price = get_field( 'price', $post_id ) ) {
-			$output .= $price;
-		}
-		$output .= '</span>';
-		return $output;
-	}
-);
-
-add_shortcode(
-	'loan-term',
-	function ( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && $atts['id'] != 'post_id' ? $atts['id'] : get_the_ID();
-
-		$output = '<span class="js-is-empty">';
-		if ( $price = get_field( 'loanterm', $post_id ) ) {
-			$output .= $price;
-		}
-		$output .= '</span>';
-		return $output;
-	}
-);
-
-add_shortcode(
-	'lease-term',
-	function ( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && $atts['id'] != 'post_id' ? $atts['id'] : get_the_ID();
-
-		$output = '<span class="js-is-empty">';
-		if ( $price = get_field( 'leaseterm', $post_id ) ) {
-			$output .= $price;
-		}
-		$output .= '</span>';
-		return $output;
-	}
-);
-
-add_shortcode(
-	'due-at-signing',
-	function ( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && $atts['id'] != 'post_id' ? $atts['id'] : get_the_ID();
-
-		$output = '<span class="js-is-empty">';
-		if ( $price = get_field( 'down_payment', $post_id ) ) {
-			$output .= $price;
-		}
-		$output .= '</span>';
-		return $output;
-	}
-);
-
-add_shortcode(
-	'total-of-payments',
-	function ( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && $atts['id'] != 'post_id' ? $atts['id'] : get_the_ID();
-
-		$output = '<span class="js-is-empty">';
-		if ( $price = get_field( 'totalofpmts', $post_id ) ) {
-			$output .= $price;
-		}
-		$output .= '</span>';
-		return $output;
 	}
 );
 
@@ -1195,36 +545,6 @@ add_action(
 	}
 );
 
-add_filter( 'acf/format_value/type=textarea', 'do_shortcode' );
-
-
-add_filter(
-	'acf/format_value',
-	function ( $value, $post_id, $field ) {
-
-		if ( in_array( $field['type'], array( 'textarea', 'text' ) ) ) {
-			if ( is_array( $value ) ) {
-				$value = implode( '', $value );
-			}
-			$value = do_shortcode( $value );
-		}
-
-		return $value;
-	},
-	10,
-	3
-);
-
-add_filter(
-	'acf/the_field/allow_unsafe_html',
-	function ( $allowed, $selector ) {
-		return true;
-	},
-	10,
-	2
-);
-
-
 add_action(
 	'admin_init',
 	function () {
@@ -1247,10 +567,6 @@ add_action(
 	}
 );
 
-add_filter( 'comments_open', '__return_false', 20, 2 );
-add_filter( 'pings_open', '__return_false', 20, 2 );
-add_filter( 'comments_array', '__return_empty_array', 10, 2 );
-
 add_action(
 	'admin_menu',
 	function () {
@@ -1265,22 +581,6 @@ add_action(
 			remove_action( 'admin_bar_menu', 'wp_admin_bar_comments_menu', 60 );
 		}
 	}
-);
-
-add_shortcode(
-	'site_url',
-	function ( $atts = array(), $content = '' ) {
-		return get_template_directory_uri() . '/assets/dist/';
-	}
-);
-
-add_filter(
-	'wp_all_import_use_wp_set_object_terms',
-	function ( $use_wp_set_object_terms, $tx_name ) {
-		return true;
-	},
-	10,
-	2
 );
 
 function get_vehicle_spin( $vin = null ) {
@@ -1301,6 +601,9 @@ function get_vehicle_spin( $vin = null ) {
 		if ( isset( $row[1] ) && $row[1] === $vin ) {
 			if ( isset( $row[2] ) ) {
 				$link = $row[2];
+				if ( empty( $link ) ) {
+					return;
+				}
 				$link = preg_replace( '#/NLP\??#', '/NLP/?', $link );
 				return $link;
 			}
@@ -1338,7 +641,7 @@ function search_relevent_vehicles( $post_id = null ) {
 				'key'   => $field,
 				'value' => $item,
 			);
-			$query_data[ $field ] = strtolower( wps_get_term( $post_id, $field ) );
+			$query_data[ $field ] = strtolower( get_field( $field, $post_id ) );
 		}
 	}
 
@@ -1497,18 +800,6 @@ function get_event_script( $event_id, $location, $vin_number ) {
 	}
 }
 
-add_filter( 'big_image_size_threshold', '__return_false' );
-
-add_filter(
-	'body_class',
-	function ( $classes ) {
-		if ( is_user_logged_in() ) {
-			$classes[] = 'logged-in';
-		}
-		return $classes;
-	}
-);
-
 function get_url_with_fields( $post_id = '', $post_type = '', $url = '' ) {
 	if ( empty( $post_id ) && empty( $post_type ) ) {
 		return;
@@ -1528,7 +819,7 @@ function get_url_with_fields( $post_id = '', $post_type = '', $url = '' ) {
 		if ( $field == 'url' ) {
 			$url = str_replace( '[' . $field . ']', get_permalink( $post_id ), $url );
 		} else {
-			$url = str_replace( '[' . $field . ']', wps_get_term( $post_id, $field . $post_type ), $url );
+			$url = str_replace( '[' . $field . ']', get_field( $field, $post_id ), $url );
 		}
 	}
 
@@ -1594,18 +885,6 @@ function get_listings_count( $year, $make, $model, $condition, $index, $row ) {
 	return $count;
 }
 
-add_filter(
-	'redirect_canonical',
-	function ( $redirect_url, $requested_url ) {
-		if ( isset( $_GET['year'] ) ) {
-			return $requested_url;
-		}
-		return $redirect_url;
-	},
-	10,
-	2
-);
-
 add_action(
 	'pre_get_posts',
 	function ( $query ) {
@@ -1655,62 +934,6 @@ function CallAPI( $url, $data, $post_id ) {
 		if ( function_exists( 'run_callapi_in_background' ) ) {
 			run_callapi_in_background( $url, $data, $post_id );
 		}
-		/*
-		$curl = curl_init();
-
-		$url = sprintf("%s?%s", $url, http_build_query($data));
-
-		$mt = explode(' ', microtime());
-
-		$chromedata_timestamp = ((int)$mt[1]) * 1000 + ((int)round($mt[0] * 1000));
-
-		$chromedata_noonce = substr(str_replace(['+', '/', '='], '', base64_encode(random_bytes(32))), 0, 32);
-		$realm = 'http://chromedata.com';
-
-		$chromedata_app_id = get_field('chromedata_app_id', 'options');
-		$shared_secret = get_field('shared_secret', 'options');
-		$chromedata_secret_digest_original = $chromedata_noonce . $chromedata_timestamp . $shared_secret;
-		$chromedata_secret_digest = base64_encode(sha1($chromedata_secret_digest_original, true));
-		$token = "Atmosphere realm=\"{$realm}\",";
-		$token .= "chromedata_app_id=\"{$chromedata_app_id}\",";
-		$token .= "chromedata_nonce=\"{$chromedata_noonce}\",";
-		$token .= "chromedata_secret_digest=\"{$chromedata_secret_digest}\",";
-		$token .= "chromedata_digest_method=SHA1,";
-		$token .= "chromedata_version=1.0,";
-		$token .= "chromedata_timestamp=\"{$chromedata_timestamp}\"";
-
-		$headers = array(
-			"Accept: application/json",
-			"Content-Type: application/json",
-			"Authorization: {$token}",
-		);
-		curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PUT');
-		curl_setopt($curl, CURLOPT_HEADER, false);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-		curl_setopt($curl, CURLOPT_URL, $url);
-		curl_setopt($curl, CURLOPT_VERBOSE, 1);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-		$result = curl_exec($curl);
-		curl_close($curl);
-
-		$result = json_decode($result, true);
-
-		if (!empty($result['result'])) {
-			foreach ($result['result']['features'] as $item) {
-				$output[$item['sectionName']][] = $item;
-			}
-		}
-		foreach ($output as $index => $item) {
-			$list = [];
-			foreach ($item as $value) {
-				$description = $value['description'] != $value['nameNoBrand'] ? $value['description'] . ': ' . $value['nameNoBrand'] : $value['description'];
-				$list[] = ['feature' => $description, 'ranking' => $value['rankingValue'], 'id' => $value['id']];
-			}
-			add_row($type . 'features_items', ['heading' => $index, 'features' => $list], $post_id);
-		}
-		*/
 	}
 }
 
@@ -1952,7 +1175,7 @@ function set_backup_images( $vin_number, $gallery ) {
 			array( '%s' )
 		);
 
-		return ( $updated !== false );
+		return ( false !== $updated );
 	}
 
 	$inserted = $wpdb->insert(
@@ -1967,8 +1190,9 @@ function set_backup_images( $vin_number, $gallery ) {
 		)
 	);
 
-	return ( $inserted !== false );
+	return ( false !== $inserted );
 }
+
 add_action(
 	'init',
 	function () {
@@ -2014,23 +1238,3 @@ add_action(
 	},
 	20
 );
-
-add_filter( 'wpseo_title', 'do_shortcode' );
-
-add_filter( 'wpseo_title', 'my_wpseo_title_shortcodes' );
-function my_wpseo_title_shortcodes( $title ) {
-	return do_shortcode( $title );
-}
-
-add_filter( 'wpseo_metadesc', 'my_wpseo_metadesc_shortcodes' );
-function my_wpseo_metadesc_shortcodes( $desc ) {
-	return do_shortcode( $desc );
-}
-if ( ! is_admin() ) {
-	add_filter( 'wpseo_title', 'do_shortcode' );
-	add_filter( 'wpseo_metadesc', 'do_shortcode' );
-	add_filter( 'wpseo_opengraph_title', 'do_shortcode' );
-	add_filter( 'wpseo_opengraph_desc', 'do_shortcode' );
-	add_filter( 'wpseo_twitter_title', 'do_shortcode' );
-	add_filter( 'wpseo_twitter_desc', 'do_shortcode' );
-}

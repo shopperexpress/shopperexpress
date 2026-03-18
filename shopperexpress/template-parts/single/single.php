@@ -1,4 +1,11 @@
-<?php get_header(); ?>
+<?php
+/**
+ * Template for displaying single.
+ *
+ * @package Shopperexpress
+ */
+
+get_header(); ?>
 <div class="blog-detail">
 	<div class="container">
 		<div id="content">
@@ -13,7 +20,7 @@
 						echo '<ol class="breadcrumb">';
 						foreach ( $parts as $index => $part ) {
 							$part   = trim( $part );
-							$isLast = ( $index === array_key_last( $parts ) );
+							$isLast = ( array_key_last( $parts ) === $index );
 
 							if ( $isLast ) {
 								echo '<li class="breadcrumb-item active" aria-current="page">' . strip_tags( $part ) . '</li>';

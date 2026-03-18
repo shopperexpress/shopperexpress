@@ -272,7 +272,9 @@ if ( wps_check_current_usser() ) :
 												);
 												$form_html = ob_get_clean();
 
-												echo preg_replace( '#<div id="acf-form-data".*?</div>#s', '', $form_html );
+												if ( $form_html ) {
+													echo preg_replace( '#<div id="acf-form-data".*?</div>#s', '', $form_html );
+												}
 											} else {
 												$field          = get_field_object( $field, $post_id );
 												$field['value'] = get_field( $field['name'], $post_id );

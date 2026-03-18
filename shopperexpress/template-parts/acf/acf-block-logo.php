@@ -1,3 +1,11 @@
+<?php
+/**
+ * Block Logo
+ *
+ * @package ShopperExpress
+ */
+
+?>
 <section class="block-logo">
 	<div class="container">
 		<?php

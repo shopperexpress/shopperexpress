@@ -1,4 +1,10 @@
 <?php
+/**
+ * Info Accordion
+ *
+ * @package ShopperExpress
+ */
+
 $section_row = get_row_index();
 
 $faq_items = array();

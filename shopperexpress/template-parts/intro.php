@@ -1,4 +1,10 @@
 <?php
+/**
+ * Template for displaying intro.
+ *
+ * @package Shopperexpress
+ */
+
 $_id       = get_the_ID();
 $post_type = get_post_type();
 
@@ -6,8 +12,8 @@ if ( is_singular( 'research' ) ) {
 	$make  = get_the_terms( $_id, 'make-research' );
 	$model = get_the_terms( $_id, 'model-research' );
 } elseif ( in_array( get_post_type( $_id ), array( 'conditional-offers', 'lease-offers', 'finance-offers' ) ) ) {
-	$make  = wps_get_term( $_id, 'make', '', 'field' );
-	$model = wps_get_term( $_id, 'model', '', 'field' );
+	$make  = get_field( 'make', $_id );
+	$model = get_field( 'model', $_id );
 } else {
 	$model = get_the_terms( $_id, 'model-' . $post_type );
 	$make  = get_the_terms( $_id, 'make-' . $post_type );

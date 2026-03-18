@@ -1,5 +1,10 @@
-<!-- section location -->
 <?php
+/**
+ * Logo Section
+ *
+ * @package ShopperExpress
+ */
+
 $heading          = get_sub_field( 'heading' );
 $logos_backgorund = get_sub_field( 'logos_backgorund' );
 $logos_per_row    = get_sub_field( 'logos_per_row' );

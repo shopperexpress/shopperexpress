@@ -9,6 +9,9 @@ namespace App\Components\Base;
 
 use App\Components\Theme_Component;
 
+/**
+ * WordPress Export and Import.
+ */
 class Export implements Theme_Component {
 
 

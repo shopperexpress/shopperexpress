@@ -1,6 +1,12 @@
 <?php
-	$is_container = get_sub_field( 'is_container' );
-	$css_class    = get_sub_field( 'css_class' );
+/**
+ * HTML
+ *
+ * @package ShopperExpress
+ */
+
+$is_container = get_sub_field( 'is_container' );
+$css_class    = get_sub_field( 'css_class' );
 ?>
 <section class="section-html 
 <?php

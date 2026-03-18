@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying button
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package Shopperexpress
+ */
+
 $post_id = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
 $show    = is_single( $post_id ) ? get_sub_field( 'show_single' ) : get_sub_field( 'show' );
 $link    = ! empty( $args['link'] ) ? $args['link'] : '';

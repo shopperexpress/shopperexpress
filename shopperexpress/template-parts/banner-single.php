@@ -1,4 +1,12 @@
 <?php
+/**
+ * Banner template
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ *
+ * @package Shopperexpress
+ */
+
 $post_type      = ! empty( $args['post_type'] ) ? $args['post_type'] : get_post_type();
 $post_id        = get_the_id();
 $vehicle_status = get_field( 'vehicle-status', $post_id );
@@ -11,7 +19,7 @@ if ( get_field( 'show_banner_single-' . $post_type, 'options' ) == true ) :
 		$show   = true;
 		$filter = get_sub_field( 'filter' );
 		$value  = get_sub_field( 'value' );
-		if ( $value && $field != 'none' ) {
+		if ( $value ) {
 			$field = get_field( $filter, $post_id );
 			$show  = $field == $value ? true : false;
 		}

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying drop menu.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $show_count = get_field( 'show_count_in_menu', 'options' );
 if ( have_rows( 'slider', 'options' ) ) :
 	$type_list = array();

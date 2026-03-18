@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying vehicle offer card.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $vin      = ! empty( $args['vin'] ) ? $args['vin'] : null;
 $location = $args['location'];
 $post_id  = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();

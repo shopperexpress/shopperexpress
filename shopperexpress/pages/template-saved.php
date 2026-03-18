@@ -1,7 +1,10 @@
 <?php
-/*
-Template Name: Saved Page Template
-*/
+/**
+ * Template Name: Saved Page Template
+ *
+ * @package Shopperexpress
+ */
+
 get_header(); ?>
 <div class="main-holder">
 	<div class="card-wrapp container-fluid">

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Intro Slider
+ *
+ * @package ShopperExpress
+ */
+
 $buttons        = get_sub_field( 'buttons' );
 $show_slider    = get_sub_field( 'show_slider' );
 $sort_offers_by = get_sub_field( 'sort_offers_by' );

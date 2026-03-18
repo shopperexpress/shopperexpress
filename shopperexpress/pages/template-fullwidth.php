@@ -1,7 +1,10 @@
 <?php
-/*
-Template Name: Full-Width Page Template
-*/
+/**
+ * Template Name: Full-Width Page Template
+ *
+ * @package Shopperexpress
+ */
+
 get_header(); ?>
 <div id="page-container" class="full-width-page">
 	<?php

@@ -1,4 +1,12 @@
-<?php if ( have_rows( 'buttons' ) ) : ?>
+<?php
+/**
+ * Buttons
+ *
+ * @package ShopperExpress
+ */
+
+if ( have_rows( 'buttons' ) ) :
+	?>
 	<section class="info-section">
 		<div class="container">
 			<div class="info-wrapp">

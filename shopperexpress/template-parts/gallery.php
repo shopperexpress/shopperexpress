@@ -2,8 +2,7 @@
 /**
  * Displays the appropriate image or gallery based on the post type and settings.
  *
- * @param string $post_type The type of post to check.
- * @param int    $post_id   The current post ID.
+ * @package Shopperexpress
  */
 
 $post_id         = ! empty( $args['post_id'] ) ? absint( $args['post_id'] ) : get_the_id();

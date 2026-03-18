@@ -1,7 +1,8 @@
 <?php
-
 /**
  * Conversion Block
+ *
+ * @package Shopperexpress
  */
 
 class ConversionBlock {

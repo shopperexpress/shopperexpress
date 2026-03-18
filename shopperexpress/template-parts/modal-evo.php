@@ -1,3 +1,11 @@
+<?php
+/**
+ * Template for displaying evo slider modal.
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <!-- Evo slider modal -->
 <div class="popup-holder">
 	<div id="evo-slider-modal" class="lightbox">

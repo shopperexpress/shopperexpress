@@ -710,7 +710,7 @@
         line-height: 1.5;
         color: $black;
         background-color: $white;
-        border: 1px solid #999;
+        border: 1px solid $gray-500;
         border-radius: 0 !important;
 
         @include media('>=tablet') {

@@ -34,7 +34,8 @@ $class        = 1 !== $footer_style ? 'container-fluid' : 'container';
 					<?php endif; ?>
 					<span class="copyright">© <?php echo date( 'Y' ); ?>
 					<?php
-					if ( $copyright = get_field( 'copyright', 'options' ) ) {
+					$copyright = get_field( 'copyright', 'options' );
+					if ( $copyright ) {
 						echo wps_get_link( $copyright );}
 					?>
 					</span>
@@ -99,17 +100,21 @@ $class        = 1 !== $footer_style ? 'container-fluid' : 'container';
 			<?php endif; ?>
 			<div class="row">
 				<div class="col-sm-6">
-					<span class="copyright"><?php _e( 'Version', 'shopperexpress' ); ?> <?php echo wp_get_theme()->get( 'Version' ); ?> © <?php echo date( 'Y' ); ?>
-					<?php
-					if ( $link = get_field( 'copyright', 'options' ) ) {
-																																									echo wps_get_link( $link );
-					}
-					?>
-																																								</span>
+					<span class="copyright"><?php esc_html_e( 'Version', 'shopperexpress' ); ?> <?php echo wp_get_theme()->get( 'Version' ); ?> © <?php echo date( 'Y' ); ?>
+						<?php
+						$link = get_field( 'copyright', 'options' );
+						if ( $link ) {
+							echo wps_get_link( $link );
+						}
+						?>
+					</span>
 				</div>
 				<div class="col-sm-6">
-					<?php if ( $text_right_side = get_field( 'text_right_side', 'options' ) ) : ?>
-						<span class="by"><?php echo $text_right_side; ?></span>
+					<?php
+					$text_right_side = get_field( 'text_right_side', 'options' );
+					if ( $text_right_side ) :
+						?>
+						<span class="by"><?php echo wp_kses_post( $text_right_side ); ?></span>
 					<?php endif; ?>
 				</div>
 			</div>
@@ -118,437 +123,9 @@ $class        = 1 !== $footer_style ? 'container-fluid' : 'container';
 </footer>
 </div>
 
-<!-- Overview Modal -->
-<div class="modal fade" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title"><?php _e( 'Overview', 'shopperexpress' ); ?></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body-wrap">
-				<div class="modal-body">
-					<div class="content-holder">
-						<?php
-						$vehicle_overview = get_field( 'vehicle_overview' );
-						if ( $vehicle_overview ) {
-							echo wp_kses_post( str_replace( array( '<div>', '</div>' ), '', $vehicle_overview ) );
-						}
-						?>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-center justify-content-md-end">
-				<button type="button" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>" class="btn btn-primary btn-lg"><?php esc_html_e( 'Close', 'shopperexpress' ); ?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Features And Options Modal -->
-<div class="modal fade" id="featuresAndOptionsModal" tabindex="-1" aria-labelledby="featuresAndOptionsModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title"><?php esc_html_e( 'Features & Options', 'shopperexpress' ); ?></h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body-wrap">
-				<div class="modal-body">
-					<div class="content-holder">
-						<ul class="modal-content-list">
-							<?php
-							while ( have_rows( 'features_options' ) ) :
-								the_row();
-								if ( $text = get_sub_field( 'text' ) ) :
-									?>
-									<li><?php echo $text; ?></li>
-									<?php
-								endif;
-							endwhile;
-							?>
-						</ul>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer justify-content-center justify-content-md-end">
-				<button type="button" data-dismiss="modal" aria-label="<?php esc_html_e( 'Close', 'shopperexpress' ); ?>" class="btn btn-primary btn-lg"><?php esc_html_e( 'Close', 'shopperexpress' ); ?></button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Unlock savings Modal -->
-<div class="modal fade" id="unlockSavingsModal" tabindex="-1" aria-labelledby="unlockSavingsModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title">
-					<?php
-					$post_type = get_post_type();
-					if ( is_single() ) {
-						$post_type = get_post_type( get_the_id() );
-					} elseif ( get_queried_object() ) {
-						if ( isset( get_queried_object()->name ) ) {
-							$post_type = get_queried_object()->name;
-						} else {
-							$post_type = get_field( 'post_type' );
-						}
-					}
-					if ( ! wps_auth() ) {
-						while ( have_rows( 'unlock_button_' . $post_type, 'options' ) ) :
-							the_row();
-							the_sub_field( 'title' );
-						endwhile;
-					} else {
-						while ( have_rows( 'contact_button_' . $post_type, 'options' ) ) :
-							the_row();
-							the_sub_field( 'title' );
-						endwhile;
-					}
-					?>
-				</h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div id="savings-form">
-					<?php
-					$form_id = '';
-					if ( is_post_type_archive( 'offers' ) || is_singular( 'offers' ) ) {
-						$form_id = is_user_logged_in() ? get_field( 'contact_button_offers', 'options' )['form_id'] : get_field( 'unlock_button_offers', 'options' )['form_id'];
-					} elseif ( is_post_type_archive( 'service-offers' ) || is_singular( 'service-offers' ) ) {
-						$form_id = is_user_logged_in() ? get_field( 'contact_button_service-offers', 'options' )['form_id'] : get_field( 'unlock_button_service-offers', 'options' )['form_id'];
-					} elseif ( is_single() && get_field( 'unlock_savings_form', 'options' ) ) {
-						$form_id = get_field( 'unlock_savings_form', 'options' );
-					}
-					if ( $form_id ) {
-						echo do_shortcode( '[wpforms id="' . $form_id . '"]' );
-					}
-					?>
-				</div>
-				<?php if ( $form_description = get_field( 'form_description', 'options' ) ) : ?>
-					<div class="form-description text-center">
-						<?php echo wp_kses_post( $form_description ); ?>
-					</div>
-				<?php endif; ?>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="buttonModal" tabindex="-1" aria-labelledby="buttonModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title" data-title></h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<div id="button-form">
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Disclosure_lease Modal -->
-<div class="modal fade modal-offer" id="Disclosure_lease" tabindex="-1" aria-labelledby="DisclosureLeaseLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title"><?php _e( 'Additional Information', 'shopperexpress' ); ?></h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<?php
-				if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
-					?>
-					<h4><?php echo $heading_save_offer; ?></h4>
-					<?php
-				endif;
-				if ( $form_lease_special = get_field( 'form_lease_special', 'options' ) ) {
-					echo do_shortcode( '[wpforms id="' . $form_lease_special . '"]' );
-				}
-				?>
-				<div class="text-wrapp">
-					<div class="text-holder scrollable h-sm">
-						<?php echo wp_kses_post( get_field( 'disclosure_lease' ) ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Disclosure_loan Modal -->
-<div class="modal fade modal-offer" id="Disclosure_loan" tabindex="-1" aria-labelledby="DisclosureLoanLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title"><?php _e( 'Additional Information', 'shopperexpress' ); ?></h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<?php
-				if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
-					?>
-					<h4><?php echo $heading_save_offer; ?></h4>
-					<?php
-				endif;
-				if ( is_singular( 'offers' ) ) {
-					$form_special_apr = get_field( 'form_id_special_apr', 'options' ) ? get_field( 'form_id_special_apr', 'options' ) : get_field( 'form_special_apr', 'options' );
-					if ( $form_special_apr ) {
-						echo do_shortcode( '[wpforms id="' . $form_special_apr . '"]' );
-					}
-				}
-				?>
-				<div class="text-wrapp">
-					<div class="text-holder scrollable h-sm">
-						<?php echo wp_kses_post( get_field( 'disclosure_finance' ) ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Disclosure_Cash Modal -->
-<div class="modal fade modal-offer" id="Disclosure_Cash" tabindex="-1" aria-labelledby="DisclosureCashLabel" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title"><?php _e( 'Additional Information', 'shopperexpress' ); ?></h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<?php
-				if ( $heading_save_offer = get_field( 'heading_save_offer', 'options' ) ) :
-					?>
-					<h4><?php echo $heading_save_offer; ?></h4>
-					<?php
-				endif;
-				if ( is_singular( 'offers' ) ) {
-					$form_special_apr = get_field( 'offers_form_cash', 'options' ) ? get_field( 'offers_form_cash', 'options' ) : get_field( 'form_cash', 'options' );
-					if ( $form_special_apr ) {
-						echo do_shortcode( '[wpforms id="' . $form_special_apr . '"]' );
-					}
-				}
-				?>
-				<div class="text-wrapp">
-					<div class="text-holder scrollable h-sm">
-						<?php echo wp_kses_post( get_field( 'disclosure_cash' ) ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 <?php
-while ( have_rows( 'popup_form-service-offers', 'options' ) ) :
-	the_row();
-
-	$heading = get_sub_field( 'heading' );
-	$form_id = get_sub_field( 'form_id' );
-	$text    = get_sub_field( 'text' );
-
-	if ( $heading || $form_id || $text ) :
-		?>
-		<div class="modal fade" id="sendtoemail" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<?php if ( $heading ) : ?>
-							<h3 class="modal-title"><?php echo esc_html( $heading ); ?></h3>
-						<?php endif; ?>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-								<path
-									d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-							</svg>
-						</button>
-					</div>
-					<div class="modal-body">
-						<?php
-						if ( $form_id ) {
-							echo do_shortcode( '[wpforms id="' . $form_id . '" ]' );
-						}
-						if ( $text ) :
-							?>
-							<div class="form-description text-center">
-								<?php echo wp_kses_post( $text ); ?>
-							</div>
-						<?php endif; ?>
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
-	endif;
-endwhile;
-?>
-<?php
-$popup_form = get_field( 'popup_form', 'options' );
-if ( $popup_form ) {
-	$link              = get_field( 'link', 'options' );
-	$popup_form_before = get_field( 'popup_form_top_text', 'options' );
-	$popup_form_after  = get_field( 'popup_form_bottom_text', 'options' );
-	?>
-	<!-- Contact Modal -->
-	<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title"><?php echo $link['title']; ?></h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-							<path
-								d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-						</svg>
-					</button>
-				</div>
-				<div class="modal-body">
-					<?php if ( $popup_form_before ) { ?>
-						<div class="lead text-center">
-							<?php echo $popup_form_before; ?>
-						</div>
-					<?php } ?>
-					<?php echo do_shortcode( '[wpforms id="' . $popup_form . '" ]' ); ?>
-					<?php if ( $popup_form_after ) { ?>
-						<div class="form-description text-center">
-							<?php echo $popup_form_after; ?>
-						</div>
-					<?php } ?>
-				</div>
-			</div>
-		</div>
-	</div>
-	<?php
-}
-?>
-<?php if ( is_post_type_archive( array( 'listings', 'used-listings' ) ) || is_singular( array( 'listings', 'used-listings' ) ) ) : ?>
-	<!-- Details Modal -->
-	<div class="modal fade" id="popUpDetails" tabindex="-1" aria-labelledby="popUpDetails" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title"><?php esc_html_e( 'DETAILS', 'shopperexpress' ); ?></h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-							<path
-								d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-						</svg>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="content-holder">
-						<p id="popUpDetailsText"></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-<?php endif; ?>
-<div class="modal fade modal-login" id="login_modal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
-	<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h3 class="modal-title" id="exampleModalLabel"><?php _e( 'Login to access different features', 'shopperexpress' ); ?></h3>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-						<path
-							d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-					</svg>
-				</button>
-			</div>
-			<div class="modal-body">
-				<form method="POST" id="automotive_login_form" action="<?php echo esc_url( home_url() ); ?>">
-					<strong class="login-message"></strong>
-					<div class="row row-sm">
-						<div class="col-sm-6">
-							<div class="form-group">
-								<input type="text" class="form-control username_input" placeholder="<?php _e( 'Username', 'shopperexpress' ); ?>">
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group">
-								<input type="password" class="form-control password_input" placeholder="<?php _e( 'Password', 'shopperexpress' ); ?>">
-							</div>
-						</div>
-					</div>
-					<div class="form-check">
-						<input type="hidden" class="url" name="url" value="<?php the_permalink(); ?>">
-						<input class="form-check-input ajax_login" type="checkbox" value="yes" id="remember_me" name="remember_me" data-nonce="<?php echo wp_create_nonce( 'ajax_login_none' ); ?>">
-						<label class="form-check-label" for="remember_me"><?php _e( 'Remember Me', 'shopperexpress' ); ?></label>
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer justify-content-center">
-				<button type="submit" formmethod="POST" formaction="<?php echo esc_url( home_url() ); ?>" form="automotive_login_form" class="btn btn-primary btn-lg"><?php _e( 'Login', 'shopperexpress' ); ?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<?php get_template_part( 'template-parts/cookie', 'modal' ); ?>
-<?php if ( is_post_type_archive( 'offers' ) ) : ?>
-	<!-- Details Modal -->
-	<div class="modal fade" id="detailModal-offers" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title"><?php esc_html_e( 'DETAILS', 'shopperexpress' ); ?></h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
-							<path
-								d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-						</svg>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="content-holder">
-						<?php echo wp_kses_post( get_field( 'custom_content' ) ); ?>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<?php
-endif;
+get_template_part( 'template-parts/modals' );
+get_template_part( 'template-parts/cookie', 'modal' );
 do_action( 'filter_modal' );
 wp_footer();
 if ( is_singular( array( 'listings', 'used-listings' ) ) ) {
@@ -557,7 +134,7 @@ if ( is_singular( array( 'listings', 'used-listings' ) ) ) {
 if ( is_singular( 'offers' ) ) {
 	echo do_shortcode( get_field( 'offers_script', 'options' ) );
 }
-the_field( 'for_script_footer', 'options' );
+	the_field( 'for_script_footer', 'options' );
 ?>
 </body>
 

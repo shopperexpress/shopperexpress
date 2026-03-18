@@ -451,7 +451,7 @@
   }
 
   svg {
-    fill: currentColor;
+    fill: var(--primary);
     width: 25px;
     height: 25px;
     margin-right: 7px;
