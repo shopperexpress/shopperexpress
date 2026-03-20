@@ -690,6 +690,13 @@
       @include media('>=tablet') {
         padding-bottom: 18px;
       }
+
+      &.wpforms-field-select {
+        .choices + .jcf-select {
+          display: none !important;
+          clip-path: rect(0 0 0 0);
+        }
+      }
     }
 
     .wpforms-field-container {
@@ -710,7 +717,7 @@
         line-height: 1.5;
         color: $black;
         background-color: $white;
-        border: 1px solid #999;
+        border: 1px solid $gray-500;
         border-radius: 0 !important;
 
         @include media('>=tablet') {

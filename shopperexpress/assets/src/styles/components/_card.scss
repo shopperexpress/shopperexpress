@@ -335,7 +335,7 @@
   .payment-info {
     padding-top: 0;
     font-size: 14px;
-    margin-top: auto;
+    // margin-top: auto;
     background-color: $gray-200;
     border-radius: 4px;
 
@@ -429,6 +429,7 @@
 
   .payment-info + .payment-info {
     margin-top: 10px;
+    margin-bottom: auto;
   }
 
   .payment-info + .intice_bFrame {
@@ -437,9 +438,21 @@
     }
   }
 
+  .payment-info + .animate-btn,
+  .payment-info + .animate-img {
+    margin-top: auto;
+  }
+
   .payment-info ~ .btn.btn-custom {
     margin-top: 7px;
     margin-bottom: 7px;
+  }
+
+  .animate-btn + .intice_bFrame,
+  .animate-btn + .intice_bFramev2,
+  .animate-img + .intice_bFrame,
+  .animate-img + .intice_bFramev2 {
+    margin-top: 0;
   }
 
   .btn {

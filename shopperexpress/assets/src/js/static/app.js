@@ -2494,6 +2494,21 @@ function initUnlockSavings() {
 		});
 	});
 
+	function showUnlockedPrices(modal) {
+		jQuery('.payment-info a').each(function() {
+			jQuery(this).closest('li').addClass('show');
+		});
+	}
+
+	const unlockSavingsModal = jQuery('#unlockSavingsModal');
+
+	unlockSavingsModal.on('click', `.wpforms-confirmation-container-full a[href^="${window.location.href}"]`, (e) => {
+		e.preventDefault();
+		unlockSavingsModal.modal('hide');
+	}).on('hide.bs.modal', () => {
+		showUnlockedPrices(unlockSavingsModal);
+	});
+
 	function unlockHandler(button) {
 		const post_id = button.data('post') || ''; // some buttons have post_id
 		const form_id = button.data('form') || ''; // some buttons have form
@@ -2502,6 +2517,7 @@ function initUnlockSavings() {
 		if (form_id && target === '#buttonModal') {
 			const linkText = button.text().trim();
 			const dataTitleElement = jQuery('[data-title]');
+
 			if (dataTitleElement.length) {
 				dataTitleElement.text(linkText);
 			}
@@ -2562,6 +2578,10 @@ function initUnlockSavings() {
 
 				// Handle the form pages
 				initFormPagesHandler(form);
+
+				form.find('select').each(function() {
+					jcf.replace(jQuery(this));
+				});
 			}
 		});
 	}
@@ -2792,7 +2812,6 @@ function formatPhoneNumber(phone) {
 					this.cardsByPosition = this.groupCardsByPosition(Array.isArray(cards) ? cards : []);
 
 					console.log(this.allProducts);
-					console.log(cards);
 
 					// set values if payment or price not filled
 					for (let i = 0; i < this.allProducts.length; i++) {
@@ -5264,7 +5283,7 @@ function initCheckedClasses() {
 				let moduleOptions,
 					element = $(this);
 
-				instance = element.data(commonOptions.dataKey);
+					instance = element.data(commonOptions.dataKey);
 
 				if (instance) {
 					instance.refresh();
