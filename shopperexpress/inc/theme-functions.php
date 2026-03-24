@@ -604,7 +604,7 @@ function get_vehicle_spin( $vin = null ) {
 				if ( empty( $link ) ) {
 					return;
 				}
-				$link = preg_replace( '#/NLP\??#', '/NLP/?', $link );
+				$link = preg_replace( '#/NLP\??#', '/NLP', $link );
 				return $link;
 			}
 			return false;
