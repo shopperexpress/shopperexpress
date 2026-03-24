@@ -1,10 +1,9 @@
 <?php
-
 /**
  * Theme main class.
  * Main theme class takes care about initalizing theme features.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components;
@@ -58,6 +57,7 @@ class Theme {
 			\App\Components\Base\JSON_LD::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
+			\App\Components\Base\Shortcode::class,
 		);
 
 		$gutenberg_components = array(

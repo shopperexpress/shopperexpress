@@ -1,4 +1,10 @@
 <?php
+/**
+ * Content and Video
+ *
+ * @package ShopperExpress
+ */
+
 $top_image = get_sub_field( 'top_image' );
 $html      = get_sub_field( 'html' );
 $wistia_id = get_sub_field( 'wistia_id' );

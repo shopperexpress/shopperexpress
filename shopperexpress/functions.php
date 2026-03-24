@@ -15,74 +15,6 @@ add_action(
 	}
 );
 
-
-add_filter(
-	'pre_set_site_transient_update_themes',
-	function ( $transient ) {
-
-		if ( empty( $transient->checked ) ) {
-			return $transient;
-		}
-
-		$theme_slug = 'shopperexpress';
-		$repo       = 'shopperexpress/shopperexpress';
-
-		if ( ! isset( $transient->checked[ $theme_slug ] ) ) {
-			return $transient;
-		}
-
-		$current_version = $transient->checked[ $theme_slug ];
-
-		$response = wp_remote_get(
-			"https://api.github.com/repos/$repo/releases/latest",
-			array(
-				'headers' => array(
-					'Accept'     => 'application/vnd.github+json',
-					'User-Agent' => 'WordPress',
-				),
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return $transient;
-		}
-
-		$release = json_decode( wp_remote_retrieve_body( $response ) );
-
-		if ( empty( $release->tag_name ) ) {
-			return $transient;
-		}
-
-		$new_version = ltrim( $release->tag_name, 'v' );
-
-		$package_url = '';
-		if ( ! empty( $release->assets ) ) {
-			foreach ( $release->assets as $asset ) {
-				if ( str_ends_with( $asset->name, '.zip' ) ) {
-					$package_url = $asset->browser_download_url;
-					break;
-				}
-			}
-		}
-
-		if ( ! $package_url ) {
-			$package_url = "https://github.com/$repo/archive/refs/tags/{$release->tag_name}.zip";
-		}
-
-		if ( version_compare( $current_version, $new_version, '<' ) ) {
-			$transient->response[ $theme_slug ] = array(
-				'theme'       => $theme_slug,
-				'slug'        => $theme_slug,
-				'new_version' => $new_version,
-				'package'     => $package_url,
-				'url'         => "https://github.com/$repo",
-			);
-		}
-
-		return $transient;
-	}
-);
-
 /**
  * Check PHP version.
  */
@@ -156,7 +88,7 @@ array_map(
 			);
 		}
 	},
-	array( 'helpers', 'theme-functions', 'ConversionBlock', 'Walker_Nav', 'Widget', 'Evox', 'Twilio' )
+	array( 'helpers', 'theme-functions', 'ConversionBlock', 'Walker_Nav', 'Widget', 'Evox', 'Twilio', 'theme-filters' )
 );
 
 /**

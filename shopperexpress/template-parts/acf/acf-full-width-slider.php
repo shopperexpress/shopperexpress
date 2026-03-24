@@ -1,4 +1,10 @@
 <?php
+/**
+ * Full Width Slider
+ *
+ * @package ShopperExpress
+ */
+
 $remove_paddings = get_sub_field( 'remove_paddings' );
 $slider_speed    = get_sub_field( 'slider_speed' ) ? get_sub_field( 'slider_speed' ) : 500;
 $autoplay_speed  = get_sub_field( 'autoplay_speed' ) ? get_sub_field( 'autoplay_speed' ) : 5000;

@@ -1,13 +1,16 @@
 <?php
 /**
- * Evox
+ * Class Evox
+ *
+ * @package Shopperexpress
  */
-class Evox {
 
+class Evox {
 
 	public $VIFID;
 	public $ProductID;
 	public $ProductTypeID;
+
 
 	public function __construct( $VIFID, $ProductID, $ProductTypeID ) {
 		$this->VIFID         = $VIFID;
@@ -16,6 +19,11 @@ class Evox {
 		$this->api_key       = get_field( 'evox_api_key', 'options' );
 	}
 
+	/**
+	 * Get images from Evox
+	 *
+	 * @return array
+	 */
 	public function get_images() {
 
 		$ch = curl_init();

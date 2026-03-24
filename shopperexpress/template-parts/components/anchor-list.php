@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying anchor list
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package Shopperexpress
+ */
+
 $post_type  = ! empty( $args['post_type'] ) && ! in_array( $args['post_type'], array( 'listings', 'used-listings' ) ) ? $args['post_type'] . '_' : '';
 $location   = ! empty( $args['location'] ) ? $args['location'] : '';
 $vin_number = ! empty( $args['vin_number'] ) ? $args['vin_number'] : '';

@@ -1,3 +1,11 @@
+<?php
+/**
+ * Template for displaying 404 page.
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <div class="post">
 	<div class="head">
 		<h1><?php _e( 'Not Found', 'shopperexpress' ); ?></h1>

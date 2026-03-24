@@ -14,10 +14,10 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	$post_id                 = get_the_id();
-	$year                    = wps_get_term( $post_id, 'year', '', 'field' );
-	$make                    = wps_get_term( $post_id, 'make', '', 'field' );
-	$model                   = wps_get_term( $post_id, 'model', '', 'field' );
-	$title                   = wps_get_term( $post_id, 'title', '', 'field' );
+	$year                    = get_field( 'year', $post_id );
+	$make                    = get_field( 'make', $post_id );
+	$model                   = get_field( 'model', $post_id );
+	$title                   = get_field( 'title', $post_id );
 	$condition               = get_field( 'condition', $post_id );
 	$disclaimer              = get_field( 'disclaimer' );
 	$bulletPoints            = get_field( 'bulletpoints' );
@@ -27,6 +27,9 @@ while ( have_posts() ) :
 	$search_inventory_button = get_field( 'search_inventory_button' );
 	$custom_content          = '';
 	$vin_number              = '';
+	$trim                    = '';
+	$shownas                 = '';
+
 
 	$data_id = get_posts(
 		array(
@@ -93,9 +96,9 @@ while ( have_posts() ) :
 
 	switch ( get_post_type( $post_id ) ) {
 		case 'lease-offers':
-			$payment     = wps_get_term( $post_id, 'payment', '', 'field' );
-			$description = wps_get_term( $post_id, 'conditional_description', '', 'field' );
-			$term        = wps_get_term( $post_id, 'term', '', 'field' );
+			$payment     = get_field( 'payment', $post_id );
+			$description = get_field( 'conditional_description', $post_id );
+			$term        = get_field( 'term', $post_id );
 
 			if ( ! empty( $payment ) && ! empty( $term ) ) {
 				$text_1 = sprintf(
@@ -108,9 +111,9 @@ while ( have_posts() ) :
 			break;
 
 		case 'finance-offers':
-			$apr         = wps_get_term( $post_id, 'apr', '', 'field' );
-			$description = wps_get_term( $post_id, 'apr_description', '', 'field' );
-			$term        = wps_get_term( $post_id, 'term', '', 'field' );
+			$apr         = get_field( 'apr', $post_id );
+			$description = get_field( 'apr_description', $post_id );
+			$term        = get_field( 'term', $post_id );
 
 			if ( ! empty( $apr ) && ! empty( $term ) ) {
 				$text_1 = sprintf(
@@ -123,8 +126,8 @@ while ( have_posts() ) :
 			break;
 
 		case 'conditional-offers':
-			$description      = wps_get_term( $post_id, 'conditional_description', '', 'field' );
-			$conditional_cash = wps_get_term( $post_id, 'conditional_cash', '', 'field' );
+			$description      = get_field( 'conditional_description', $post_id );
+			$conditional_cash = get_field( 'conditional_cash', $post_id );
 
 			if ( ! empty( $conditional_cash ) ) {
 				$text_1 = sprintf(

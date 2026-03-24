@@ -1,3 +1,11 @@
+<?php
+/**
+ * Template for displaying search form.
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <div class="search-bar js-search-bar">
 	<form action="<?php echo get_post_type_archive_link( 'listings' ); ?>" role="search" class="search-bar-form search-row" data-url="<?php echo home_url( 'wp-json/v1/search' ); ?>" data-redirect-url="<?php echo get_post_type_archive_link( 'listings' ); ?>">
 		<div class="icon">

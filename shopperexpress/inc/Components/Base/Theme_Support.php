@@ -3,7 +3,7 @@
  * Base theme support class.
  * Add theme support for some default WordPress options.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

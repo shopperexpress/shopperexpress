@@ -3,15 +3,17 @@
  * Template for displaying vehicle offer card.
  *
  * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
  */
 
 $post_id = ! empty( $args['post_id'] ) ? absint( $args['post_id'] ) : get_the_id();
-$year    = wps_get_term( $post_id, 'year', '', 'field' );
-$make    = wps_get_term( $post_id, 'make', '', 'field' );
-$model   = wps_get_term( $post_id, 'model', '', 'field' );
-$trim    = wps_get_term( $post_id, 'trim', '', 'field' );
-$title   = wps_get_term( $post_id, 'title', '', 'field' );
-$vehicle = wps_get_term( $post_id, 'vehicle', '', 'field' );
+$year    = get_field( 'year', $post_id );
+$make    = get_field( 'make', $post_id );
+$model   = get_field( 'model', $post_id );
+$trim    = get_field( 'trim', $post_id );
+$title   = get_field( 'title', $post_id );
+$vehicle = get_field( 'vehicle', $post_id );
 $text_1  = $text_2 = '';
 
 $data_id = get_posts(
@@ -43,10 +45,10 @@ $data_id = ! empty( $data_id ) ? $data_id[0] : '';
 
 switch ( get_post_type( $post_id ) ) {
 	case 'lease-offers':
-		$payment = wps_get_term( $post_id, 'payment', '', 'field' );
+		$payment = get_field( 'payment', $post_id );
 
-		$conditional_description = wps_get_term( $post_id, 'conditional_description', '', 'field' );
-		$term                    = wps_get_term( $post_id, 'term', '', 'field' );
+		$conditional_description = get_field( 'conditional_description', $post_id );
+		$term                    = get_field( 'term', $post_id );
 
 		if ( ! empty( $payment ) && ! empty( $term ) ) {
 			$text_1 = sprintf(
@@ -63,9 +65,9 @@ switch ( get_post_type( $post_id ) ) {
 		break;
 
 	case 'finance-offers':
-		$apr             = wps_get_term( $post_id, 'apr', '', 'field' );
-		$apr_description = wps_get_term( $post_id, 'apr_description', '', 'field' );
-		$term            = wps_get_term( $post_id, 'term', '', 'field' );
+		$apr             = get_field( 'apr', $post_id );
+		$apr_description = get_field( 'apr_description', $post_id );
+		$term            = get_field( 'term', $post_id );
 
 		if ( ( ! empty( $apr ) || $apr >= 0 ) && ! empty( $term ) ) {
 			$text_1 = sprintf(
@@ -82,8 +84,8 @@ switch ( get_post_type( $post_id ) ) {
 		break;
 
 	case 'conditional-offers':
-		$conditional_description = wps_get_term( $post_id, 'conditional_description', '', 'field' );
-		$conditional_cash        = wps_get_term( $post_id, 'conditional_cash', '', 'field' );
+		$conditional_description = get_field( 'conditional_description', $post_id );
+		$conditional_cash        = get_field( 'conditional_cash', $post_id );
 
 		if ( ! empty( $conditional_cash ) ) {
 			$text_1 = sprintf(

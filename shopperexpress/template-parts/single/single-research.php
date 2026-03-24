@@ -17,6 +17,7 @@ while ( have_posts() ) :
 	$make      = get_field( 'make' );
 	$model     = get_field( 'model' );
 	$trims     = get_field( 'trims' );
+	$condition = '';
 	?>
 	<div class="detail-section">
 		<div class="container">
@@ -145,7 +146,7 @@ while ( have_posts() ) :
 										$link         = get_sub_field( 'link' );
 										$show_payment = get_sub_field( 'show_payment' );
 										$lock         = get_sub_field( 'lock' );
-										$event        = get_event_script( get_sub_field( 'event' ), $location, $vin_number );
+										$event        = get_event_script( get_sub_field( 'event' ), '', '' );
 										$down_payment = ! empty( $down_payment ) ? $down_payment : null;
 
 										switch ( $show_payment ) {
@@ -327,15 +328,15 @@ while ( have_posts() ) :
 	$pageTitle[] = $year;
 	$pageTitle[] = $make;
 	$pageTitle[] = $model;
-	$pageTitle[] = $trim;
+	$pageTitle[] = ! empty( $trim[0] ) ? $trim[0] : '';
 	$pageTitle   = implode( ' ', $pageTitle );
 	$gallery     = get_field( 'imagelistpath' );
 	$firstImage  = $gallery[0]['image_url'];
-	$vin_number  = null;
-	$args        = array(
+
+	$args = array(
 		'image'        => $firstImage,
 		'title'        => $pageTitle,
-		'vin'          => $vin_number,
+		'vin'          => '',
 		'stock_number' => get_field( 'stock_number' ),
 	);
 	// end

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Template for displaying modal filter schedule.
+ *
+ * @package Shopperexpress
+ */
+
 $post_type       = get_field( 'post_type' ) ? get_field( 'post_type' ) : get_queried_object()->name;
 $list_taxonomies = wps_tax( $post_type );
 ?>

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Contact Information
+ *
+ * @package ShopperExpress
+ */
+
 $main_title     = get_sub_field( 'main_title' );
 $addresses_list = get_sub_field( 'addresses_list' );
 $schedule_title = get_sub_field( 'schedule_title' );

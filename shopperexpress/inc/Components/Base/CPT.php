@@ -2,7 +2,7 @@
 /**
  * WordPress CPT.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

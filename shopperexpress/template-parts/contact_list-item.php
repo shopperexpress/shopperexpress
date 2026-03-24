@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template part for displaying contact list item
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ *
+ * @package Shopperexpress
+ */
+
 $icon  = get_sub_field( 'icon' );
 $title = get_sub_field( 'title' );
 $link  = get_sub_field( 'link' );

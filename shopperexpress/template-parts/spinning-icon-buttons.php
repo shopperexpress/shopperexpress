@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying spinning icon buttons.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $post_id = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_ID();
 if ( have_rows( 'buttons', $post_id ) ) : ?>
 	<ul class="btn-list list-unstyled">

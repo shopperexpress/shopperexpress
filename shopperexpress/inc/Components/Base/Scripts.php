@@ -1,9 +1,8 @@
 <?php
-
 /**
  * Enqueue theme scripts.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

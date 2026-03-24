@@ -9,7 +9,7 @@
  * @param  bool $is_preview True during AJAX preview.
  * @param  (int|string) $post_id The post ID this block is saved to.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 $block_id = ! empty( $block['id'] ) ? 'block-' . $block['id'] : '';

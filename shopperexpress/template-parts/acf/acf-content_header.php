@@ -1,4 +1,10 @@
 <?php
+/**
+ * Content Header
+ *
+ * @package ShopperExpress
+ */
+
 $logo  = get_sub_field( 'logo_image' );
 $title = get_sub_field( 'title' );
 $text  = get_sub_field( 'text' );

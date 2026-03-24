@@ -1,3 +1,11 @@
+<?php
+/**
+ * Blocks
+ *
+ * @package ShopperExpress
+ */
+
+?>
 <div class="block">
 	<div class="container">
 		<section class="content-block intro-block">

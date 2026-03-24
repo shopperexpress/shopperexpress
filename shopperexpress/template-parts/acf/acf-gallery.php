@@ -1,4 +1,10 @@
 <?php
+/**
+ * Gallery
+ *
+ * @package ShopperExpress
+ */
+
 $gray_background = get_sub_field( 'gray_background' ) ? ' bg-gray' : null;
 $full_width      = get_sub_field( 'full_width' ) ? null : ' container';
 $size            = $full_width ? array( 328, 250 ) : 'full';

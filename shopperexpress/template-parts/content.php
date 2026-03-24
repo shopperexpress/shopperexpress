@@ -1,3 +1,13 @@
+<?php
+/**
+ * Template for displaying vehicle offer card.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
+?>
 <div <?php post_class(); ?> id="post-<?php the_ID(); ?>">
 	<div class="title">
 		<?php

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class Custom_Walker_Nav_Menu
+ *
+ * @package Shopperexpress
+ */
+
 class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
 	function start_lvl( &$output, $depth = 0, $args = array() ) {
 		$indent  = str_repeat( "\t", $depth );
@@ -46,6 +52,11 @@ class Custom_Walker_Nav_Menu extends Walker_Nav_Menu {
 	}
 }
 
+/**
+ * Class Header_Walker_Nav_Menu
+ *
+ * @package Shopperexpress
+ */
 class Header_Walker_Nav_Menu extends Walker_Nav_Menu {
 
 	public $show_drop = false;
@@ -130,6 +141,11 @@ class Header_Walker_Nav_Menu extends Walker_Nav_Menu {
 	}
 }
 
+/**
+ * Class Drop_Down_Walker_Nav_Menu
+ *
+ * @package Shopperexpress
+ */
 class Drop_Down_Walker_Nav_Menu extends Walker_Nav_Menu {
 
 	function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {

@@ -1,5 +1,12 @@
 <?php
-if ( $image = get_sub_field( 'image' ) ) :
+/**
+ * Full Width Image Section
+ *
+ * @package ShopperExpress
+ */
+
+$image = get_sub_field( 'image' );
+if ( $image ) :
 	$image_mobile = get_sub_field( 'image_mobile' ) ? get_sub_field( 'image_mobile' ) : $image;
 	?>
 	<div class="section-full-width-image

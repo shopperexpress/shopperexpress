@@ -1,4 +1,10 @@
 <?php
+/**
+ * Offer Cards
+ *
+ * @package ShopperExpress
+ */
+
 $show_offers_from = get_sub_field( 'show_offers_from' );
 switch ( $show_offers_from ) {
 	case 'both':

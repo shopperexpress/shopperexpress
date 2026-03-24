@@ -4,7 +4,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
  *
- * @package Shop_Express
+ * @package Shopperexpress
  */
 
 $args          = array(

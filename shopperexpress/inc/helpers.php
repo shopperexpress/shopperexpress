@@ -2,7 +2,7 @@
 /**
  * Theme related helper functions.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App;

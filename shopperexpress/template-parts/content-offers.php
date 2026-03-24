@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying vehicle offer card.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
 $post_type = '-' . get_post_type( $post_id );
 ?>
@@ -7,13 +15,13 @@ $post_type = '-' . get_post_type( $post_id );
 		<div class="card-body">
 			<div class="card-head">
 				<div class="card-head__holder">
-					<span class="card-brand"><?php echo wps_get_term( $post_id, 'year' . $post_type ); ?> <?php echo wps_get_term( $post_id, 'make' . $post_type ); ?></span>
+					<span class="card-brand"><?php echo get_field( 'year', $post_id ); ?> <?php echo get_field( 'make', $post_id ); ?></span>
 					<?php
 					if ( shortcode_exists( 'favorite_button' ) ) {
 						echo do_shortcode( '[favorite_button post_id="' . $post_id . '"]' );}
 					?>
 				</div>
-				<strong class="card-model"><?php echo wps_get_term( $post_id, 'model' . $post_type ); ?> <?php echo wps_get_term( $post_id, 'trim' . $post_type ); ?></strong>
+				<strong class="card-model"><?php echo get_field( 'model', $post_id ); ?> <?php echo get_field( 'trim', $post_id ); ?></strong>
 			</div>
 			<?php
 			get_template_part(

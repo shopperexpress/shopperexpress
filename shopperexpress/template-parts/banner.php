@@ -1,4 +1,12 @@
 <?php
+/**
+ * Banner template
+ *
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
+ *
+ * @package Shopperexpress
+ */
+
 $post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : get_post_type();
 
 if ( get_field( 'show_banner-' . $post_type, 'options' ) == true ) :

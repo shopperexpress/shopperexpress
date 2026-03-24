@@ -3,7 +3,7 @@
  * Admin calss.
  * Add some options to the WordPress admin dashboard.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

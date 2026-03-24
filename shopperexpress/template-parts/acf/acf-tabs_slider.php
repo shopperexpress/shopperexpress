@@ -14,12 +14,13 @@ $sort_by_number_of_vehicles = get_sub_field( 'sort_by_number_of_vehicles' );
 
 if ( have_rows( 'slider', 'options' ) ) :
 	?>
-	<section class="shop-section filter-section" 
-	<?php
-	if ( $section_bg ) {
-		echo 'style="background-color:' . $section_bg . ';"';}
-	?>
-	>
+	<section class="shop-section filter-section"
+		<?php
+		if ( $section_bg ) {
+			echo 'style="background-color:' . $section_bg . ';"';
+		}
+		?>
+		>
 		<div class="container-fluid">
 			<?php if ( $title ) : ?>
 				<h2 class="text-center"><?php echo $title; ?></h2>
@@ -96,31 +97,40 @@ if ( have_rows( 'slider', 'options' ) ) :
 							$slide['label'],
 							seoUrl( $slide['type'] )
 						);
-						?>
-						<div class="slide">
-							<a class="model-card" href="<?php echo esc_url( $slide['url'] ); ?>" aria-label="<?php echo esc_attr( $label ); ?>">
-								<?php if ( $slide['image'] ) : ?>
-									<div class="img-box" 
-									<?php
-									if ( $slide_bg ) {
-										echo 'style="background-color:' . $slide_bg . ';"';}
-									?>
-									>
-										<?php if ( $show_count && $slide['count'] ) : ?>
-											<strong class="num"><?php echo $slide['count']; ?></strong>
-										<?php endif; ?>
-										<img src="<?php echo esc_url( $slide['image']['url'] ); ?>" alt="image description">
-									</div>
-								<?php endif; ?>
-								<?php if ( $slide['label'] ) : ?>
-									<strong class="model"><?php echo esc_html( $slide['label'] ); ?></strong>
-								<?php endif; ?>
-								<span class="car-type hidden">
-									<?php echo seoUrl( $slide['type'] ); ?>
-								</span>
-							</a>
-						</div>
-				<?php endforeach; ?>
+						$show  = true;
+						if ( $show_count ) {
+							$show = ! empty( $slide['count'] ) ? true : false;
+						}
+						if ( $show ) :
+							?>
+							<div class="slide">
+								<a class="model-card" href="<?php echo esc_url( $slide['url'] ); ?>" aria-label="<?php echo esc_attr( $label ); ?>">
+									<?php if ( $slide['image'] ) : ?>
+										<div class="img-box"
+											<?php
+											if ( $slide_bg ) {
+												echo 'style="background-color:' . $slide_bg . ';"';
+											}
+											?>
+											>
+											<?php if ( $show_count && $slide['count'] ) : ?>
+												<strong class="num"><?php echo $slide['count']; ?></strong>
+											<?php endif; ?>
+											<img src="<?php echo esc_url( $slide['image']['url'] ); ?>" alt="image description">
+										</div>
+									<?php endif; ?>
+									<?php if ( $slide['label'] ) : ?>
+										<strong class="model"><?php echo esc_html( $slide['label'] ); ?></strong>
+									<?php endif; ?>
+									<span class="car-type hidden">
+										<?php echo seoUrl( $slide['type'] ); ?>
+									</span>
+								</a>
+							</div>
+							<?php
+						endif;
+					endforeach;
+					?>
 			</div>
 		</div>
 	</section>

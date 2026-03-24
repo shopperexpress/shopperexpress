@@ -1,4 +1,10 @@
 <?php
+/**
+ * Image Left and Text Right
+ *
+ * @package ShopperExpress
+ */
+
 $icon               = get_sub_field( 'icon' );
 $title              = get_sub_field( 'title' );
 $subtitle           = get_sub_field( 'subtitle' );

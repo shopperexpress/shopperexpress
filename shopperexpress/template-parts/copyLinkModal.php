@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying copy link modal.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $firstImage   = ! empty( $args['image'] ) ? $args['image'] : null;
 $title        = ! empty( $args['title'] ) ? $args['title'] : null;
 $vin_number   = ! empty( $args['vin'] ) ? $args['vin'] : null;

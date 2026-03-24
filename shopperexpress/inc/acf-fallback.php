@@ -2,7 +2,7 @@
 /**
  * Acf fallback functions, in case if ACF plugin is not installed.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 // phpcs:ignoreFile
 function get_field_reference( $field_name, $post_id ) { return ''; }

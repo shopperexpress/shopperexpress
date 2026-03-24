@@ -2,7 +2,7 @@
 /**
  * WordPress Nav Menus component.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;

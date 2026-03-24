@@ -2,7 +2,7 @@
 /**
  * WordPress JSON LD.
  *
- * @package ThemeName
+ * @package Shopperexpress
  */
 
 namespace App\Components\Base;
@@ -15,7 +15,6 @@ use App\Components\Theme_Component;
  * @package App\Base\Component
  */
 class JSON_LD implements Theme_Component {
-
 
 	/**
 	 * Register hooks.
@@ -88,30 +87,36 @@ class JSON_LD implements Theme_Component {
 					"@type": "ListItem",
 					"name": "<?php echo esc_attr( $item['title'] ); ?>",
 					"url": "<?php echo esc_url( $item['link'] ); ?>",
-					<?php if ( $item['photo'] ) : ?>
+					<?php if ( ! empty( $item['photo'] ) ) : ?>
 						"image": "<?php echo esc_url( $item['photo'] ); ?>",
 					<?php endif; ?>
-				<?php if ( $item['terms']['make'][0] ) : ?>
+				<?php if ( ! empty( $item['terms']['make'][0] ) ) : ?>
 					"brand": { "@type": "Brand", "name": "<?php echo esc_attr( $item['terms']['make'][0] ); ?>" },
 				<?php endif; ?>
-				<?php if ( $item['terms']['model'][0] ) : ?>
-					"model": "<?php echo esc_attr( $item['terms']['model'][0] ); ?> <?php echo esc_attr( $item['terms']['trim'][0] ); ?>",
+				<?php if ( ! empty( $item['terms']['model'][0] ) ) : ?>
+					"model": "<?php echo esc_attr( $item['terms']['model'][0] ); ?>
+					<?php
+					if ( ! empty( $item['terms']['trim'][0] ) ) {
+						echo esc_attr( $item['terms']['trim'][0] );
+					}
+					?>
+					",
 				<?php endif; ?>
-				<?php if ( $item['year'] ) : ?>
+				<?php if ( ! empty( $item['year'] ) ) : ?>
 					"vehicleModelDate": "<?php echo esc_attr( $item['year'] ); ?>",
 				<?php endif; ?>
-				<?php if ( $item['terms']['vin'][0] ) : ?>
+				<?php if ( ! empty( $item['terms']['vin'][0] ) ) : ?>
 					"vehicleIdentificationNumber": "<?php echo esc_attr( $item['terms']['vin'][0] ); ?>",
 				<?php endif; ?>
 					"offers": {
 						"@type": "Offer",
-				<?php if ( $item['price'] ) : ?>
+				<?php if ( ! empty( $item['price'] ) ) : ?>
 						"price": "<?php echo esc_attr( $item['price'] ); ?>",
 				<?php endif; ?>
 						"priceCurrency": "USD",
 						"availability": "https://schema.org/InStock",
 						"itemCondition": "https://schema.org/NewCondition",
-						<?php if ( $item['dealer_name'] ) : ?>
+						<?php if ( ! empty( $item['dealer_name'] ) ) : ?>
 							"seller": {
 								"@type": "AutoDealer",
 								"name": "<?php echo esc_attr( $item['dealer_name'] ); ?>",

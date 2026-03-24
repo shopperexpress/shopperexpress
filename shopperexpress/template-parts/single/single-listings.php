@@ -22,21 +22,21 @@ while ( have_posts() ) :
 	$post_id         = get_the_id();
 	$gallery         = 'alternative' === $use_images_list ? get_field( 'gallery_srp' ) : get_field( 'gallery' );
 	$vin_number      = get_field( 'vin_number' );
-	$location        = wps_get_term( $post_id, 'location' );
-	$year            = wps_get_term( $post_id, 'year' );
-	$make            = wps_get_term( $post_id, 'make' );
-	$model           = wps_get_term( $post_id, 'model' );
-	$trim            = wps_get_term( $post_id, 'trim' );
-	$down_payment    = get_field( 'down_payment', $post_id );
-	$lease_payment   = get_field( 'lease_payment', $post_id );
-	$loan_payment    = get_field( 'loan_payment', $post_id );
-	$condition       = wps_get_term( $post_id, 'condition' );
+	$location        = get_field( 'location' );
+	$year            = get_field( 'year' );
+	$make            = get_field( 'make' );
+	$model           = get_field( 'model' );
+	$trim            = get_field( 'trim' );
+	$down_payment    = get_field( 'down_payment' );
+	$lease_payment   = get_field( 'lease_payment' );
+	$loan_payment    = get_field( 'loan_payment' );
+	$condition       = get_field( 'condition' );
 	$archive_link    = get_post_type_archive_link( $post_type );
-	$make_slug       = wps_get_term( $post_id, 'make' );
-	$model_slug      = wps_get_term( $post_id, 'model' );
-	$condition_slug  = wps_get_term( $post_id, 'condition' );
-	$drivetrain      = get_field( 'drivetrain', $post_id );
-	$dealer_name     = get_field( 'dealer_name', $post_id );
+	$make_slug       = get_field( 'make' );
+	$model_slug      = get_field( 'model' );
+	$condition_slug  = get_field( 'condition' );
+	$drivetrain      = get_field( 'drivetrain' );
+	$dealer_name     = get_field( 'dealer_name' );
 
 	switch ( $condition ) {
 		case 'Slightly Used':
@@ -73,8 +73,9 @@ while ( have_posts() ) :
 										$text[] = get_sub_field( 'text' );
 										while ( have_rows( 'fields' ) ) :
 											the_row();
-											if ( $field_slug = get_sub_field( 'field_slug' ) ) {
-												$text[] = wps_get_term( $post_id, $field_slug . $get_post_type );
+											$field_slug = get_sub_field( 'field_slug' );
+											if ( $field_slug ) {
+												$text[] = get_field( $field_slug, $post_id );
 											}
 										endwhile;
 
@@ -90,7 +91,7 @@ while ( have_posts() ) :
 						</div>
 						<div class="badges-wrapp">
 							<?php
-							$status = wps_get_term( $post_id, 'vehicle-status-' . $post_type ) ? wps_get_term( $post_id, 'vehicle-status-' . $post_type ) : null;
+							$status = get_field( 'vehicle-status', $post_id ) ? get_field( 'vehicle-status', $post_id ) : null;
 							if ( $status ) :
 								?>
 								<div class="badges-list">

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Template for displaying detail info.
+ *
+ * @param array $args Array of arguments containing post ID and other data.
+ *
+ * @package Shopperexpress
+ */
+
 $post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
 $class     = ! empty( $args['class'] ) ? $args['class'] : 'detail-info';
 $post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : get_post_type( $post_id );

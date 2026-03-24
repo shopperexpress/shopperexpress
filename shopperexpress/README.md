@@ -62,7 +62,6 @@ themes/base/                        # → Root of your theme.
 ├── page.php                        # → Page template file.
 ├── phpcs.xml                       # → Custom PHP Coding Standards.
 ├── README.md                       # → Readme MD for GitHub repository.
-├── readme.txt                      # → Readme TXT for the wp.org repository.
 ├── screenshot.png                  # → Theme screenshot image file.
 ├── search.php                      # → Search template file.
 ├── searchform.php                  # → Search form template file.

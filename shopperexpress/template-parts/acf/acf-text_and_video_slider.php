@@ -3,8 +3,9 @@
  * Block Name: Text & Video Slider
  *
  * This is the template that displays the testimonial slider block.
+ *
+ * @package Shopperexpress
  */
-
 
 $args = array(
 	'post_type'      => 'offers',

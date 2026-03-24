@@ -1,4 +1,10 @@
 <?php
+/**
+ * Class WPS_Nav_Menu_Widget
+ *
+ * @package Shopperexpress
+ */
+
 class WPS_Nav_Menu_Widget extends WP_Widget {
 
 	/**

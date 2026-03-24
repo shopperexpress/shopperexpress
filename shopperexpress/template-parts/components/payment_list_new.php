@@ -27,36 +27,36 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			$tax = array();
 			switch ( get_sub_field( 'search_in' ) ) {
 				case 1:
-					$tax[] = 'year-' . $post_type;
+					$tax[] = 'year';
 					break;
 				case 2:
-					$tax[] = 'make-' . $post_type;
+					$tax[] = 'make';
 					break;
 				case 3:
-					$tax[] = 'model-' . $post_type;
-					$tax[] = 'trim-' . $post_type;
+					$tax[] = 'model';
+					$tax[] = 'trim';
 					break;
 				case 4:
-					$tax[] = 'year-' . $post_type;
-					$tax[] = 'make-' . $post_type;
+					$tax[] = 'year';
+					$tax[] = 'make';
 					break;
 				case 5:
-					$tax[] = 'year-' . $post_type;
-					$tax[] = 'make-' . $post_type;
-					$tax[] = 'model-' . $post_type;
+					$tax[] = 'year';
+					$tax[] = 'make';
+					$tax[] = 'model';
 					break;
 				case 6:
-					$tax[] = 'year-' . $post_type;
-					$tax[] = 'make-' . $post_type;
-					$tax[] = 'model-' . $post_type;
-					$tax[] = 'trim-' . $post_type;
+					$tax[] = 'year';
+					$tax[] = 'make';
+					$tax[] = 'model';
+					$tax[] = 'trim';
 					break;
 			}
 
 			switch ( get_sub_field( 'rule_to_show' ) ) {
 				case 1:
 					foreach ( $tax as $item ) {
-						$result = strpos( strtolower( $search ), strtolower( wps_get_term( $post_id, $item ) ) ) !== false;
+						$result = strpos( strtolower( $search ), strtolower( get_field( $item, $post_id ) ) ) !== false;
 						if ( $result == true ) {
 							break;
 						}
@@ -64,7 +64,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 					break;
 				case 2:
 					foreach ( $tax as $item ) {
-						$result = strtolower( wps_get_term( $post_id, $item ) ) === $search;
+						$result = strtolower( get_field( $item, $post_id ) ) === $search;
 						if ( $result == true ) {
 							$result = false;
 							break;
@@ -78,7 +78,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 				case 3:
 					$taxItems = array();
 					foreach ( $tax as $item ) {
-						$taxItems[] = wps_get_term( $post_id, $item );
+						$taxItems[] = get_field( $item, $post_id );
 					}
 					$result = ! empty( $taxItems ) && strtolower( implode( ' ', $taxItems ) ) == strtolower( $search ) ? true : false;
 					break;
@@ -91,7 +91,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			$value = get_sub_field( 'value' );
 
 			if ( get_sub_field( 'select_value_type' ) == 2 ) {
-				$calculated_value = wps_get_term( $post_id, strtolower( get_sub_field( 'calculated_value' ) ) );
+				$calculated_value = get_field( strtolower( get_sub_field( 'calculated_value' ) ), $post_id );
 
 				switch ( get_sub_field( 'operator' ) ) {
 					case 'Subtract':
@@ -105,8 +105,8 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 				$value = ! empty( $value ) && $value != 0 && $value > 0 ? $value : null;
 			} elseif ( get_sub_field( 'select_value_type' ) == 3 ) {
-				$calculated_value = wps_get_term( $post_id, strtolower( get_sub_field( 'calculated_value' ) ) );
-				$value_from_field = wps_get_term( $post_id, strtolower( get_sub_field( 'value_from_field' ) ) );
+				$calculated_value = get_field( strtolower( get_sub_field( 'calculated_value' ) ), $post_id );
+				$value_from_field = get_field( strtolower( get_sub_field( 'value_from_field' ) ), $post_id );
 				$value_1          = get_sub_field( 'value_1' );
 				$result           = '';
 				switch ( get_sub_field( 'operator_1' ) ) {

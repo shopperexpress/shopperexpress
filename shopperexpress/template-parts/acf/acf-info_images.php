@@ -1,4 +1,11 @@
-<?php $title = get_sub_field( 'title' );
+<?php
+/**
+ * Info Images
+ *
+ * @package ShopperExpress
+ */
+
+$title = get_sub_field( 'title' );
 if ( $images = get_sub_field( 'images' ) ) { ?>
 <section class="section">
 	<div class="container">

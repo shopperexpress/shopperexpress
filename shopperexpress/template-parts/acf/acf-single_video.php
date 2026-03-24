@@ -1,5 +1,13 @@
-<!-- video section -->
-<?php if ( $video_code = get_sub_field( 'video_code' ) ) : ?>
+<?php
+/**
+ * Video
+ *
+ * @package ShopperExpress
+ */
+
+$video_code = get_sub_field( 'video_code' );
+if ( $video_code ) :
+	?>
 	<div class="video-section
 	<?php
 	if ( get_sub_field( 'remove_margin' ) ) :

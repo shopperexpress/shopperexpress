@@ -1,7 +1,10 @@
 <?php
-/*
-Template Name: Flexible Page Template
-*/
+/**
+ * Template Name: Flexible Page Template
+ *
+ * @package Shopperexpress
+ */
+
 get_header();
 
 $is_new_home_page_styles = get_field( 'new_home_page_styles' );
