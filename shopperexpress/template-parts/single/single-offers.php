@@ -30,7 +30,7 @@ while ( have_posts() ) :
 	$loanapr                 = get_field( 'loanapr' );
 	$condition               = get_field( 'condition' );
 	$search_inventory_button = get_field( 'search_inventory_button' );
-	$vin_number              = null;
+	$vin_number              = get_field( 'chrome' );
 	$custom_content          = get_field( 'custom_content' );
 
 	switch ( $condition ) {
@@ -55,9 +55,9 @@ while ( have_posts() ) :
 								<li><a href="<?php echo get_post_type_archive_link( $post_type ); ?>"><?php _e( 'All Offers', 'shopperexpress' ); ?></a></li>
 							</ol>
 							<ul class="code-list text-right text-capitalize list-unstyled">
-								<li><?php _e( 'Year & Model', 'shopperexpress' ); ?>: <?php echo $year . ' ' . $model; ?></li>
+								<li><?php esc_html_e( 'Year & Model', 'shopperexpress' ); ?>: <?php echo $year . ' ' . $model; ?></li>
 								<?php if ( $trim ) : ?>
-									<li><?php _e( 'Trim', 'shopperexpress' ); ?>: <?php echo $trim; ?></li>
+									<li><?php esc_html_e( 'Trim', 'shopperexpress' ); ?>: <?php echo $trim; ?></li>
 								<?php endif; ?>
 							</ul>
 						</div>
@@ -213,6 +213,9 @@ while ( have_posts() ) :
 								echo $custom_content;
 							} else {
 								the_sub_field( 'description' );
+							}
+							if ( 1 === $row){
+								get_template_part( 'template-parts/conditional', 'offers', [ 'make' => $make, 'vin_number' => $vin_number ] );
 							}
 
 							if ( $search_inventory_button && $counter_for_button == 0 ) {

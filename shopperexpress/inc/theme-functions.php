@@ -583,20 +583,30 @@ add_action(
 	}
 );
 
+/**
+ * Retrieves the vehicle spin link for a given VIN.
+ *
+ * This function checks if the given VIN is empty and returns early if it is.
+ * It then retrieves the URL for the CSV file containing vehicle data from ACF options.
+ * If the URL is empty, it returns false.
+ *
+ * @param string $vin The Vehicle Identification Number (VIN) for which to retrieve the spin link.
+ * @return string|bool The vehicle spin link if found, or false if the VIN is empty or the URL is missing.
+ */
 function get_vehicle_spin( $vin = null ) {
 	if ( empty( $vin ) ) {
 		return;
 	}
 
-	$csvUrl   = get_field( 'url_for_csv_360', 'options' );
-	$response = wp_remote_get( $csvUrl );
+	$csv_url  = get_field( 'url_for_csv_360', 'options' );
+	$response = wp_remote_get( $csv_url );
 
 	if ( is_wp_error( $response ) ) {
 		return false;
 	}
 
-	$csvContent = wp_remote_retrieve_body( $response );
-	$rows       = array_map( 'str_getcsv', explode( "\n", $csvContent ) );
+	$csv_content = wp_remote_retrieve_body( $response );
+	$rows        = array_map( 'str_getcsv', explode( "\n", $csv_content ) );
 	foreach ( $rows as $row ) {
 		if ( isset( $row[1] ) && $row[1] === $vin ) {
 			if ( isset( $row[2] ) ) {
@@ -605,6 +615,7 @@ function get_vehicle_spin( $vin = null ) {
 					return;
 				}
 				$link = preg_replace( '#/NLP\??#', '/NLP', $link );
+				$link = str_replace( 'NLPvehicle_fkey', 'NLP/?vehicle_fkey', $link );
 				return $link;
 			}
 			return false;
@@ -1238,3 +1249,47 @@ add_action(
 	},
 	20
 );
+
+add_filter(
+	'wpseo_breadcrumb_output_wrapper',
+	function () {
+		return 'ol';
+	}
+);
+add_filter(
+	'wpseo_breadcrumb_output_class',
+	function () {
+		return 'breadcrumb';
+	}
+);
+add_filter(
+	'wpseo_breadcrumb_single_link',
+	function ( $link_output ) {
+
+		if ( strpos( $link_output, 'breadcrumb_last' ) !== false ) {
+			$link_output = str_replace(
+				'<span',
+				'<li class="breadcrumb-item active"',
+				$link_output
+			);
+			$link_output = str_replace( '</span>', '</li>', $link_output );
+		} else {
+			$link_output = str_replace(
+				'<span',
+				'<li class="breadcrumb-item"',
+				$link_output
+			);
+			$link_output = str_replace( '</span>', '</li>', $link_output );
+		}
+
+		return $link_output;
+	}
+);
+add_filter(
+	'wpseo_breadcrumb_separator',
+	function () {
+		return '';
+	}
+);
+
+add_image_size( '454x255', 454, 255, true );

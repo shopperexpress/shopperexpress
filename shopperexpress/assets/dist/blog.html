@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ShopperExpress.com</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- include jQuery library -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <!-- include jQuery library local file if cdn link doesn't work -->
+    <script>
+      window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+    </script>
+    <!-- include minified bootstrap bundle js -->
+    <script src="js/bootstrap.bundle.min.js" defer></script>
+    <!-- include app js file  -->
+    <script src="js/app.js" defer></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=marker&loading=async&callback=initCustomMap" defer async></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <style>
+      :root {
+        --primary: #5100bb;
+        --primary-rgb: 81, 0, 187;
+        --header-nav-drop-bg: #f00;
+        --header-nav-link-color: #0f0;
+        --header-nav-link-hover-color: #00f;
+      }
+    </style>
+    <div id="wrapper">
+      <main id="main">
+        <div class="blog-section">
+          <div class="container">
+            <div class="blog-section__header">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                </ol>
+              </nav>
+              <h1>Burns Honda Blog</h1>
+            </div>
+            <div id="content">
+              <div class="blog-list">
+                <article class="card-blog-post">
+                  <div class="card-blog-post__img">
+                    <img src="images/img-1.png" alt="image description" />
+                  </div>
+                  <div class="card-blog-post__body">
+                    <h3 class="card-blog-post__title"><a href="#">Post title example</a></h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus qui earum aperiam commodi alias ad tempora repudiandae dolorum nemo dignissimos.</p>
+                    <div class="card-blog-post__meta">
+                      <img class="card-blog-post__avatar" src="images/img-1.png" alt="image description" />
+                      <p>
+                        <a href="#">John Doe</a>
+                        <br />
+                        <a href="#" rel="bookmark">
+                          <time datetime="2025-06-09">June 9, 2025</time>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </article>
+                <article class="card-blog-post">
+                  <div class="card-blog-post__img">
+                    <img src="images/img-1.png" alt="image description" />
+                  </div>
+                  <div class="card-blog-post__body">
+                    <h3 class="card-blog-post__title"><a href="#">Post title example</a></h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus qui earum aperiam commodi alias ad tempora repudiandae dolorum nemo dignissimos.</p>
+                    <div class="card-blog-post__meta">
+                      <img class="card-blog-post__avatar" src="images/img-1.png" alt="image description" />
+                      <p>
+                        <a href="#">John Doe</a>
+                        <br />
+                        <a href="#" rel="bookmark">
+                          <time datetime="2025-06-09">June 9, 2025</time>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </article>
+                <article class="card-blog-post">
+                  <div class="card-blog-post__img">
+                    <img src="images/img-1.png" alt="image description" />
+                  </div>
+                  <div class="card-blog-post__body">
+                    <h3 class="card-blog-post__title"><a href="#">Post title example</a></h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus qui earum aperiam commodi alias ad tempora repudiandae dolorum nemo dignissimos.</p>
+                    <div class="card-blog-post__meta">
+                      <img class="card-blog-post__avatar" src="images/img-1.png" alt="image description" />
+                      <p>
+                        <a href="#">John Doe</a>
+                        <br />
+                        <a href="#" rel="bookmark">
+                          <time datetime="2025-06-09">June 9, 2025</time>
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <aside id="sidebar">
+              <div class="widget_block">
+                <div class="widget-news">
+                  <h3>Latest news</h3>
+                  <ul class="latest-news">
+                    <li>
+                      <article class="card-post">
+                        <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                        <div class="card-post__body">
+                          <strong class="card-post__category">Category</strong>
+                          <h4 class="card-post__title"><a href="#">Card title</a></h4>
+                          <div class="card-post__meta">
+                            <p>
+                              <a href="#">John Doe</a>
+                              <br />
+                              <a href="#" rel="bookmark">
+                                <time datetime="2025-06-09">June 9, 2025</time>
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                    <li>
+                      <article class="card-post">
+                        <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                        <div class="card-post__body">
+                          <strong class="card-post__category">Category</strong>
+                          <h4 class="card-post__title"><a href="#">Card title</a></h4>
+                          <div class="card-post__meta">
+                            <p>
+                              <a href="#">John Doe</a>
+                              <br />
+                              <a href="#" rel="bookmark">
+                                <time datetime="2025-06-09">June 9, 2025</time>
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                    <li>
+                      <article class="card-post">
+                        <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                        <div class="card-post__body">
+                          <strong class="card-post__category">Category</strong>
+                          <h4 class="card-post__title"><a href="#">Card title</a></h4>
+                          <div class="card-post__meta">
+                            <p>
+                              <a href="#">John Doe</a>
+                              <br />
+                              <a href="#" rel="bookmark">
+                                <time datetime="2025-06-09">June 9, 2025</time>
+                              </a>
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    </li>
+                  </ul>
+                  <div class="widget-news__footer">
+                    <a href="#">See all latest news</a>
+                  </div>
+                </div>
+              </div>
+              <div class="widget_block">
+                <div class="widget-banner">
+                  <a href="#">
+                    <img src="images/thumbnail-2.jpg" alt="image description" />
+                  </a>
+                </div>
+              </div>
+              <div class="widget widget_meta">
+                <h3>Meta</h3>
+                <ul>
+                  <li><a href="http://widgets.demo.w3.ua/wp-login.php">Log in</a></li>
+                  <li>
+                    <a title="Syndicate this site using RSS 2.0" href="#">Entries <abbr title="Really Simple Syndication">RSS</abbr></a>
+                  </li>
+                  <li>
+                    <a title="The latest comments to all posts in RSS" href="#">Comments <abbr title="Really Simple Syndication">RSS</abbr></a>
+                  </li>
+                  <li><a title="Powered by WordPress, state-of-the-art semantic personal publishing platform." href="https://wordpress.org/">WordPress.org</a></li>
+                </ul>
+              </div>
+              <div class="widget widget_categories">
+                <h3>Categories (dropdown)</h3>
+                <select class="postform" id="cat" name="cat">
+                  <option value="-1">Select Category</option>
+                  <option value="1" class="level-0">Uncategorized</option>
+                </select>
+              </div>
+              <div class="widget widget_categories">
+                <h3>Categories (hierarchy)</h3>
+                <ul>
+                  <li class="cat-item cat-item-1"><a href="#">Uncategorized</a></li>
+                  <li class="cat-item cat-item-2"><a href="#">Category 2</a></li>
+                </ul>
+              </div>
+              <div class="widget widget_categories">
+                <h3>Categories (counts)</h3>
+                <ul>
+                  <li class="cat-item cat-item-1"><a href="#">Uncategorized</a> (3)</li>
+                  <li class="cat-item cat-item-2"><a href="#">Category 2</a> (15)</li>
+                </ul>
+              </div>
+              <div class="widget widget_archive">
+                <h3>Archives_counts</h3>
+                <ul>
+                  <li><a href="#">June 2014</a> (1)</li>
+                  <li><a href="#">May 2014</a> (1)</li>
+                  <li><a href="#">April 2014</a> (1)</li>
+                </ul>
+              </div>
+              <div class="widget widget_archive">
+                <h3>Archives</h3>
+                <select name="archive-dropdown">
+                  <option value="">Select Month</option>
+                  <option value="">June 2014</option>
+                  <option value="">May 2014</option>
+                  <option value="">April 2014</option>
+                </select>
+              </div>
+              <div class="widget widget_recent_comments">
+                <h3>Recent Comments</h3>
+                <ul id="recentcomments">
+                  <li class="recentcomments"><a class="url" rel="external nofollow" href="https://wordpress.org/">Mr WordPress</a> on <a href="#">Hello world!</a></li>
+                  <li class="recentcomments"><a class="url" rel="external nofollow" href="https://wordpress.org/">Mr WordPress</a> on <a href="#">Hello world2.</a></li>
+                </ul>
+              </div>
+              <div id="text-2" class="widget widget_text">
+                <h3>Text</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                  exercitation ullamco laboris nisi ut aliquip ex ea commodo.
+                </p>
+              </div>
+              <div class="widget widget_search">
+                <h3>Search</h3>
+                <form action="#" class="search-form" method="get">
+                  <fieldset>
+                    <input type="search" placeholder="Enter search terms..." name="s" />
+                    <input type="submit" value="Search" />
+                  </fieldset>
+                </form>
+              </div>
+              <div class="widget widget_calendar">
+                <h3>Calendar</h3>
+                <div id="calendar_wrap">
+                  <table id="wp-calendar">
+                    <caption>
+                      May 2014
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th title="Monday" scope="col">M</th>
+                        <th title="Tuesday" scope="col">T</th>
+                        <th title="Wednesday" scope="col">W</th>
+                        <th title="Thursday" scope="col">T</th>
+                        <th title="Friday" scope="col">F</th>
+                        <th title="Saturday" scope="col">S</th>
+                        <th title="Sunday" scope="col">S</th>
+                      </tr>
+                    </thead>
+                    <tfoot>
+                      <tr>
+                        <td id="prev" colspan="3"><a title="View posts for April 2014" href="#">&laquo; Apr</a></td>
+                        <td class="pad">&nbsp;</td>
+                        <td id="next" colspan="3"><a title="View posts for June 2014" href="#">Jun &raquo;</a></td>
+                      </tr>
+                    </tfoot>
+                    <tbody>
+                      <tr>
+                        <td class="pad" colspan="3">&nbsp;</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>10</td>
+                        <td>11</td>
+                      </tr>
+                      <tr>
+                        <td>12</td>
+                        <td>13</td>
+                        <td>14</td>
+                        <td>15</td>
+                        <td>16</td>
+                        <td>17</td>
+                        <td>18</td>
+                      </tr>
+                      <tr>
+                        <td>19</td>
+                        <td>20</td>
+                        <td>21</td>
+                        <td>22</td>
+                        <td>23</td>
+                        <td>24</td>
+                        <td>25</td>
+                      </tr>
+                      <tr>
+                        <td><a title="post" href="#">26</a></td>
+                        <td>27</td>
+                        <td>28</td>
+                        <td>29</td>
+                        <td>30</td>
+                        <td>31</td>
+                        <td colspan="1" class="pad">&nbsp;</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="widget widget_pages">
+                <h3>Pages</h3>
+                <ul>
+                  <li class="page_item page-item-2"><a href="#">Sample Page</a></li>
+                  <li class="page_item page-item-3"><a href="#">Sample Page2</a></li>
+                </ul>
+              </div>
+              <div id="tag_cloud-2" class="widget widget_tag_cloud">
+                <h3>Tag</h3>
+                <div class="tagcloud">
+                  <a style="font-size: 8px" title="1 topic" class="tag-link-2" href="#">test</a>
+                  <a style="font-size: 16px" title="1 topic" class="tag-link-3" href="#">test_2</a>
+                  <a style="font-size: 12px" title="1 topic" class="tag-link-5" href="#">test_4</a>
+                  <a style="font-size: 20px" title="1 topic" class="tag-link-6" href="#">test_5</a>
+                  <a style="font-size: 8px" title="1 topic" class="tag-link-4" href="#">test__3</a>
+                </div>
+              </div>
+            </aside>
+          </div>
+          <div class="section-featured">
+            <div class="container">
+              <h2>Featured posts</h2>
+              <div class="row">
+                <div class="col-md-4">
+                  <article class="card-post">
+                    <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                    <div class="card-post__body">
+                      <strong class="card-post__category">Category</strong>
+                      <h3 class="card-post__title"><a href="#">Card title</a></h3>
+                      <div class="card-post__meta">
+                        <img class="card-post__avatar" src="images/img-1.png" alt="image description" />
+                        <p>
+                          <a href="#">John Doe</a>
+                          <br />
+                          <a href="#" rel="bookmark">
+                            <time datetime="2025-06-09">June 9, 2025</time>
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+                <div class="col-md-4">
+                  <article class="card-post">
+                    <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                    <div class="card-post__body">
+                      <strong class="card-post__category">Category</strong>
+                      <h3 class="card-post__title"><a href="#">Card title</a></h3>
+                      <div class="card-post__meta">
+                        <img class="card-post__avatar" src="images/img-1.png" alt="image description" />
+                        <p>
+                          <a href="#">John Doe</a>
+                          <br />
+                          <a href="#" rel="bookmark">
+                            <time datetime="2025-06-09">June 9, 2025</time>
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+                <div class="col-md-4">
+                  <article class="card-post">
+                    <div class="card-post__img"><img src="images/img-1.png" alt="image description" /></div>
+                    <div class="card-post__body">
+                      <strong class="card-post__category">Category</strong>
+                      <h3 class="card-post__title"><a href="#">Card title</a></h3>
+                      <div class="card-post__meta">
+                        <img class="card-post__avatar" src="images/img-1.png" alt="image description" />
+                        <p>
+                          <a href="#">John Doe</a>
+                          <br />
+                          <a href="#" rel="bookmark">
+                            <time datetime="2025-06-09">June 9, 2025</time>
+                          </a>
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer id="footer">
+        <div class="container-fluid">
+          <div class="row footer-holder">
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h5>Express Car Buying</h5>
+              <ul class="list-unstyled">
+                <li><a href="#">Explore All Models</a></li>
+                <li><a href="#">How it Works</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h5>ABC Toyota</h5>
+              <ul class="list-unstyled">
+                <li><a href="#">Main Website</a></li>
+                <li><a href="#">Financing</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Parts</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h5>Customer Help</h5>
+              <ul class="list-unstyled">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Hours & Map</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Site Map</a></li>
+                <li><a href="#">Accessibility</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h5>Manufacture</h5>
+              <ul class="list-unstyled">
+                <li><a href="#">Toyota</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <span class="copyright">© 2020 <a href="#">INTICE - All Rights Reserved</a></span>
+            </div>
+            <div class="col-sm-6">
+              <span class="by">ShopperExpress by <a href="#">INTICE</a></span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

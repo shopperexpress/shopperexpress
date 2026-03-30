@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class WPS_Nav_Menu_Widget
  *
@@ -6,6 +7,8 @@
  */
 
 class WPS_Nav_Menu_Widget extends WP_Widget {
+
+
 
 	/**
 	 * Sets up a new Navigation Menu widget instance.
@@ -168,7 +171,7 @@ class WPS_Nav_Menu_Widget extends WP_Widget {
 		<div class="nav-menu-widget-form-controls" <?php echo $empty_menus_style; ?>>
 			<p>
 				<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>"/>
+				<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr( $title ); ?>" />
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id( 'nav_menu' ); ?>"><?php _e( 'Select Menu:' ); ?></label>
@@ -196,5 +199,178 @@ add_action(
 	function () {
 		unregister_widget( 'WP_Nav_Menu_Widget' );
 		register_widget( 'WPS_Nav_Menu_Widget' );
+	}
+);
+
+/**
+ * Class WPS_Latest_Posts_Widget
+ *
+ * Adds a Latest Posts widget to display recent blog posts in the sidebar.
+ */
+class WPS_Latest_Posts_Widget extends WP_Widget {
+
+
+
+	/**
+	 * Sets up a new Latest Posts widget instance.
+	 */
+	public function __construct() {
+		parent::__construct(
+			'wps_latest_posts_widget',
+			__( 'Latest Posts', 'shopperexpress' ),
+			array( 'description' => __( 'Displays a list of your most recent posts.', 'shopperexpress' ) )
+		);
+	}
+
+	/**
+	 * Outputs the content for the current Latest Posts widget instance.
+	 *
+	 * @param array $args
+	 * @param array $instance
+	 */
+	public function widget( $args, $instance ) {
+		$title  = apply_filters( 'widget_title', empty( $instance['title'] ) ? __( 'Latest Posts', 'shopperexpress' ) : $instance['title'], $instance, $this->id_base );
+		$number = ! empty( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+
+		echo $args['before_widget'];
+
+		$latest_posts = new WP_Query(
+			array(
+				'posts_per_page'      => $number,
+				'post_status'         => 'publish',
+				'ignore_sticky_posts' => 1,
+			)
+		);
+
+		?>
+		<div class="widget_block">
+			<div class="widget-news">
+				<?php if ( ! empty( $title ) ) : ?>
+					<h3><?php echo $args['before_title'] . $title . $args['after_title']; ?></h3>
+					<?php
+				endif;
+				if ( $latest_posts->have_posts() ) :
+					?>
+					<ul class="latest-news">
+						<?php
+						while ( $latest_posts->have_posts() ) :
+							$latest_posts->the_post();
+							?>
+							<li>
+								<article class="card-post">
+									<div class="card-post__img">
+										<a href="<?php the_permalink(); ?>">
+											<?php
+											if ( has_post_thumbnail() ) {
+													the_post_thumbnail(
+														'thumbnail',
+														array(
+															'class' => 'card-post__thumb',
+														)
+													);
+											} else {
+												$default_post_image = get_field( 'default_post_image', 'option' );
+												if ( $default_post_image ) {
+													echo wp_kses_post(
+														get_attachment_image(
+															$default_post_image,
+															'454x255',
+															array(
+																'class' => 'card-post__thumb',
+															)
+														)
+													);
+												}
+											}
+											?>
+										</a>
+									</div>
+									<div class="card-post__body">
+										<strong class="card-post__category">
+											<?php
+											$category = get_the_category();
+											if ( ! empty( $category ) ) {
+												echo esc_html( $category[0]->name );
+											} else {
+												_e( 'Uncategorized', 'shopperexpress' );
+											}
+											?>
+										</strong>
+										<h4 class="card-post__title">
+											<a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+										</h4>
+										<div class="card-post__meta">
+											<p>
+												<a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>"><?php the_author(); ?></a>
+												<br>
+												<a href="<?php the_permalink(); ?>" rel="bookmark">
+													<time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+												</a>
+											</p>
+										</div>
+									</div>
+								</article>
+							</li>
+						<?php endwhile; ?>
+					</ul>
+					<?php wp_reset_postdata(); ?>
+				<?php else : ?>
+					<p><?php _e( 'No posts found.', 'shopperexpress' ); ?></p>
+					<?php
+				endif;
+				?>
+				<div class="widget-news__footer">
+					<a href="<?php echo esc_url( get_permalink( get_option( 'page_for_posts' ) ) ); ?>"><?php _e( 'See all latest news', 'shopperexpress' ); ?></a>
+				</div>
+			</div>
+		</div>
+		<?php
+
+		echo $args['after_widget'];
+	}
+
+	/**
+	 * Outputs the options form on admin.
+	 *
+	 * @param array $instance
+	 */
+	public function form( $instance ) {
+		$title  = isset( $instance['title'] ) ? $instance['title'] : __( 'Latest Posts', 'shopperexpress' );
+		$number = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+			<input class="tiny-text" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" step="1" min="1" value="<?php echo esc_attr( $number ); ?>" size="3" />
+		</p>
+		<?php
+	}
+
+	/**
+	 * Processes widget options to be saved.
+	 *
+	 * @param array $new_instance
+	 * @param array $old_instance
+	 *
+	 * @return array
+	 */
+	public function update( $new_instance, $old_instance ) {
+		$instance           = array();
+		$instance['title']  = sanitize_text_field( $new_instance['title'] );
+		$instance['number'] = (int) $new_instance['number'];
+		if ( $instance['number'] <= 0 ) {
+			$instance['number'] = 5;
+		}
+		return $instance;
+	}
+}
+
+add_action(
+	'widgets_init',
+	function () {
+		register_widget( 'WPS_Latest_Posts_Widget' );
 	}
 );

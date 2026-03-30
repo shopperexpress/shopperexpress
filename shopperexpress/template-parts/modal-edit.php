@@ -259,7 +259,7 @@ if ( wps_check_current_usser() ) :
 									<?php
 									if ( ! empty( $tab['fields'] ) ) {
 										foreach ( $tab['fields'] as $field ) {
-											if ( in_array( $field, array( 'gallery', 'features', 'vdp_description' ) ) ) {
+											if ( in_array( $field, array( 'gallery', 'features', 'vdp_description', 'gallery_srp' ) ) ) {
 												ob_start();
 												acf_form(
 													array(

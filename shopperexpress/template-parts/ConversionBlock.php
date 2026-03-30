@@ -7,9 +7,10 @@
  * @package Shopperexpress
  */
 
-$vin      = ! empty( $args['vin'] ) ? $args['vin'] : null;
-$location = $args['location'];
-$post_id  = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$vin       = ! empty( $args['vin'] ) ? $args['vin'] : null;
+$location  = $args['location'];
+$post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$post_type = get_post_type( $post_id );
 
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();
@@ -31,7 +32,20 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 						$active   = get_sub_field( 'active' );
 						$active_1 = get_sub_field( 'active_1' );
 						$active_2 = get_sub_field( 'active_2' );
-						if ( $active || $active_1 || $active_2 ) :
+						$show     = true;
+
+						if ( in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
+							$show_on = get_sub_field( 'show_on' );
+
+							if ( $show_on ) {
+								if ( 'both' === $show_on ) {
+									$show = true;
+								} else {
+									$show = $show_on === $post_type;
+								}
+							}
+						}
+						if ( ( $active || $active_1 || $active_2 ) && $show ) :
 							?>
 							<div class="widget--buttons__holder showWidget fonttype1" style="box-sizing: border-box;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;width: calc(100% + 6px);margin: 0 -3px;">
 								<?php
