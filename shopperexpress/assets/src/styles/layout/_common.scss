@@ -1916,6 +1916,19 @@ textarea.form-control {
     padding-bottom: 88px;
   }
 
+  &__description {
+    background-color: $gray-200;
+    padding: 15px 22px;
+    border-radius: 3px;
+    margin: 12px 0;
+
+    p {
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
   &.info-block--top {
     border: none;
     padding: 0 0 16px;

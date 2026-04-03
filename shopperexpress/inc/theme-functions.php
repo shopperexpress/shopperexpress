@@ -1000,9 +1000,22 @@ function custom_yoast_breadcrumbs_as_ol() {
 		yoast_breadcrumb( '', '' );
 		$breadcrumbs_html = ob_get_clean();
 
-		preg_match_all( '/<a [^>]+>.*?<\/a>|<span class="breadcrumb_last"[^>]*>(.*?)<\/span>/', $breadcrumbs_html, $matches );
+		preg_match_all(
+			'/<a [^>]+>.*?<\/a>|<span class="breadcrumb_last"[^>]*>.*?<\/span>|<li[^>]*class="[^"]*breadcrumb-item[^"]*"[^>]*>.*?<\/li>/s',
+			$breadcrumbs_html,
+			$matches
+		);
 
 		if ( ! empty( $matches[0] ) ) {
+
+			foreach ( $matches[0] as &$crumb ) {
+				if ( preg_match( '/<li[^>]*>(.*?)<\/li>/s', $crumb, $inner ) ) {
+					$crumb = $inner[1];
+				}
+				if ( strpos( $crumb, '<a' ) === false ) {
+					$crumb = '<a href="#">' . $crumb . '</a>';
+				}
+			}
 			$items = $matches[0];
 
 			// array_shift($items);

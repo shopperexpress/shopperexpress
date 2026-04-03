@@ -18,34 +18,55 @@ if ( is_single( $post_id ) || get_post_type( $post_id ) == 'append-data' || get_
 
 if ( have_rows( $field, 'options' ) ) :
 	?>
-	<dl class="<?php echo $class; ?>">
+	<dl class="<?php echo esc_attr( $class ); ?>">
 		<?php
 		while ( have_rows( $field, 'options' ) ) :
 			the_row();
-			if ( $label = get_sub_field( 'label' ) ) :
+			$label = get_sub_field( 'label' );
+			if ( $label ) :
 				?>
 				<dt><?php echo esc_html( $label ); ?></dt>
 				<?php
 			endif;
-			if ( $value = get_sub_field( 'value' ) ) :
+			$value = get_sub_field( 'value' );
+			if ( $value ) :
 				$value = explode( ' ', $value );
 				?>
 				<dd
-				<?php
-				if ( str_contains( strtolower( $label ), 'vin' ) ) :
-					?>
-					class="vin"<?php endif; ?>>
 					<?php
-					$terms = array();
-					foreach ( $value as $item ) {
-						$item    = str_replace( '-', '_', $item );
-						$term    = get_field( $item, $post_id );
-						$terms[] = $term ? $term : get_field( $item, $post_id );
+					if ( str_contains( strtolower( $label ), 'vin' ) ) :
+						?>
+					class="vin" <?php endif; ?>>
+					<?php
+
+					if ( ! empty( $value ) ) {
+
+						if ( is_array( $value ) ) {
+							$value = implode( ' ', $value );
+						}
+
+						$result = preg_replace_callback(
+							'/\b([a-z_]+)\b/',
+							function ( $match ) use ( $post_id ) {
+
+								$field = $match[1];
+
+								if ( function_exists( 'get_field_object' ) && get_field_object( $field, $post_id ) ) {
+									$acf_value = get_field( $field, $post_id );
+
+									if ( $acf_value !== null && $acf_value !== '' ) {
+										return $acf_value;
+									}
+								}
+
+								return $match[0];
+							},
+							$value
+						);
+
+						echo str_replace( ' ', '&nbsp;', esc_html( $result ) );
 					}
 
-					if ( $terms ) {
-						echo implode( ' ', $terms );
-					}
 					?>
 				</dd>
 				<?php
