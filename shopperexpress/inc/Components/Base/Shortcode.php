@@ -96,7 +96,7 @@ class Shortcode implements Theme_Component {
 	 * @return string
 	 */
 	public function price( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && 'post_id' !== $atts['id'] ? $atts['id'] : get_the_ID();
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
 
 		$output = "<span class='js-is-empty'>";
 		$price  = get_field( 'price', $post_id );
@@ -114,7 +114,7 @@ class Shortcode implements Theme_Component {
 	 * @return string
 	 */
 	public function loan_term( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && 'post_id' !== $atts['id'] ? $atts['id'] : get_the_ID();
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
 
 		$output = "<span class='js-is-empty'>";
 		$price  = get_field( 'loanterm', $post_id );
@@ -132,7 +132,7 @@ class Shortcode implements Theme_Component {
 	 * @return string
 	 */
 	public function lease_term( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && 'post_id' !== $atts['id'] ? $atts['id'] : get_the_ID();
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
 
 		$output = "<span class='js-is-empty'>";
 		$price  = get_field( 'leaseterm', $post_id );
@@ -150,7 +150,7 @@ class Shortcode implements Theme_Component {
 	 * @return string
 	 */
 	public function due_at_signing( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && 'post_id' !== $atts['id'] ? $atts['id'] : get_the_ID();
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
 
 		$output = "<span class='js-is-empty'>";
 		$price  = get_field( 'down_payment', $post_id );
@@ -168,7 +168,7 @@ class Shortcode implements Theme_Component {
 	 * @return string
 	 */
 	public function total_of_payments( $atts = array() ) {
-		$post_id = ! empty( $atts['id'] ) && 'post_id' !== $atts['id'] ? $atts['id'] : get_the_ID();
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
 
 		$output = "<span class='js-is-empty'>";
 		$price  = get_field( 'totalofpmts', $post_id );

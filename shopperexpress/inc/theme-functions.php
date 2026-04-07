@@ -1306,3 +1306,45 @@ add_filter(
 );
 
 add_image_size( '454x255', 454, 255, true );
+
+/**
+ * Get font family from font styling.
+ *
+ * @param string $font_styling Font styling.
+ */
+function get_font_family( $font_styling = '' ) {
+	$fonts_family = '';
+
+	if ( $font_styling ) :
+		switch ( $font_styling ) {
+			case 'Roboto Condensed':
+				$fonts_family = 'Roboto+Condensed:wght@100..900';
+				break;
+			case 'Roboto Mono':
+				$fonts_family = 'Roboto+Mono:wght@100..700';
+				break;
+			case 'Poppins':
+				$fonts_family = 'Poppins:wght@400;600;700';
+				break;
+			case 'Lato':
+				$fonts_family = 'Lato:wght@400;700';
+				break;
+			case 'PT Sans':
+				$fonts_family = 'PT+Sans:ital,wght@0,400;0,700;1,400;1,700';
+				break;
+			case 'PT Sans Narrow':
+				$fonts_family = 'PT+Sans+Narrow:wght@400;700';
+				break;
+			case 'Inter':
+				$fonts_family = 'Inter:opsz,wght@14..32,100..900';
+				break;
+		}
+		if ( ! empty( $fonts_family ) ) :
+			?>
+			<style>
+				@import url('https://fonts.googleapis.com/css2?family=<?php echo $fonts_family; ?>&display=swap');
+			</style>
+			<?php
+			endif;
+	endif;
+}

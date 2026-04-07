@@ -462,15 +462,18 @@ while ( have_posts() ) :
 							?>
 						</ul>
 						<?php
-						get_template_part(
-							'template-parts/conditional',
-							'offers',
-							array(
-								'make'       => $make,
-								'vin_number' => $vin_number,
-							)
-						);
+						if ( 'listings' === $post_type ) {
+							get_template_part(
+								'template-parts/conditional',
+								'offers',
+								array(
+									'make'       => $make,
+									'vin_number' => $vin_number,
+								)
+							);
+						}
 
+						get_template_part( 'template-parts/description', 'block', ['post_type' => $post_type, 'type' => 'vdp'] );
 						get_template_part( 'template-parts/unlock', 'button' );
 						?>
 					</div>

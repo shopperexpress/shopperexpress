@@ -14,8 +14,8 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 
 	$url = get_field( 'api_url', 'option' );
 	$url = str_replace(
-		array( '[dealerID]', '[vin]' ),
-		array( get_field( 'location' ), $vin_number ),
+		array( '[dealerID]', '[vin]', '[type]' ),
+		array( get_field( 'location' ), $vin_number, get_field( 'condition' ) ),
 		$url
 	);
 

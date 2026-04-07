@@ -264,9 +264,23 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									the_row();
 									$onclick[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
+								$events_finance = array();
+								while ( have_rows( 'events_finance' ) ) :
+									the_row();
+									$events_finance[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
+								endwhile;
+								$events_finance = ! empty( $events_finance ) ? ' onclick="' . implode( ' ', $events_finance ) . '"' : '';
+								$events_lease   = array();
+								while ( have_rows( 'events_lease' ) ) :
+									the_row();
+									$events_lease[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
+								endwhile;
+								$events_lease  = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
 								$popup_text    = get_sub_field( 'popup_text', false, false );
 								$popup_text    = wpautop( do_shortcode( str_replace( 'post_id', $post_id, $popup_text ) ) );
 								$show_banner_1 = $show_banner_2 = false;
+
+								$onclick = ( ( $show_finance && $loan_payment ) || $show_lease && $lease_payment ) ? '' : ' onclick="' . implode( ' ', $onclick ) . '"';
 
 								?>
 								<div style="position: relative;width: 100%;margin-bottom: 6px;" class="showWidget <?php echo $hide_on_mobile; ?>">
@@ -274,26 +288,16 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										<span class="showWidget" style="position: absolute;right:0%;top: 10px;width: 40px;height: 40px;text-align: center;z-index: 1;cursor: pointer;"><i class="fa fa-question-circle-o" aria-hidden="true" style="font-size: 19px;color: #bfbfbf !important;" onclick="document.getElementById('block-<?php echo $post_id; ?>').style.display = 'block';"></i></span>
 										<div id="block-<?php echo $post_id; ?>" class="block_popup block-<?php echo $post_id; ?>">
 											<span onclick="document.getElementById('block-<?php echo $post_id; ?>').style.display = 'none';" style="color: black;position: absolute;top: -6px;right: -2px;"><i class="fa fa-times-circle" aria-hidden="true" style="font-size: 24px;"></i></span>
-											<div class="widgetbox__popup-text js-is-empty-parent">
+											<div class="widgetbox__popup-text js-is-empty-parent1">
 												<?php echo $popup_text; ?>
 											</div>
 										</div>
 									<?php endif; ?>
-									<button
-										<?php
-										if ( $onclick ) :
-											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="widget--btn paymentbtn showWidget" type="button" style="cursor:pointer;"
-										<?php
-										if ( $onclick ) :
-											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?>>
+									<button class="widget--btn paymentbtn showWidget" type="button" style="cursor:pointer;" <?php echo $onclick; ?>>
 										<span class="widget--btn__body widget--btn__body">
 											<span class="widget--btn__row">
-												<?php
-												if ( $show_finance && $loan_payment ) :
-													?>
-													<span class="widget--btn__col">
+												<?php if ( $show_finance && $loan_payment ) : ?>
+													<span class="widget--btn__col" <?php echo $events_finance; ?>>
 														<span class="widget--btn__text" style="font-size: 11px;"><?php the_sub_field( 'loan_header' ); ?></span>
 														<span class="widget--btn__price">
 															<span class="widget--btn__price-sup widget--btn__price-sup">$</span>
@@ -307,7 +311,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 												endif;
 												if ( $show_lease && $lease_payment ) :
 													?>
-													<span class="widget--btn__col">
+													<span class="widget--btn__col" <?php echo $events_lease; ?>>
 														<span class="widget--btn__text" style="font-size: 11px;"><?php the_sub_field( 'lease_header' ); ?></span>
 														<span class="widget--btn__price">
 															<span class="widget--btn__price-sup widget--btn__price-sup">$</span>

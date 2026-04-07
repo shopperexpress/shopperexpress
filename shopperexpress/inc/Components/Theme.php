@@ -44,6 +44,7 @@ class Theme {
 	public function get_theme_components(): array {
 		$components = array(
 			\App\Components\Base\Theme_Support::class,
+			\App\Components\Base\Shortcode::class,
 			\App\Components\Base\Admin::class,
 			\App\Components\Base\Options_Page::class,
 			\App\Components\Base\Scripts::class,
@@ -57,7 +58,6 @@ class Theme {
 			\App\Components\Base\JSON_LD::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
-			\App\Components\Base\Shortcode::class,
 		);
 
 		$gutenberg_components = array(

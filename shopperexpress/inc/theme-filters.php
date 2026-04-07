@@ -126,9 +126,11 @@ add_filter(
 add_filter(
 	'redirect_canonical',
 	function ( $redirect_url, $requested_url ) {
+
 		if ( isset( $_GET['year'] ) ) {
-			return $requested_url;
+			return false;
 		}
+
 		return $redirect_url;
 	},
 	10,

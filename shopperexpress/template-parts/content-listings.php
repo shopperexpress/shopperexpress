@@ -106,6 +106,14 @@ $similar_url = ! empty( $args['similar_url'] ) ? $args['similar_url'] : null;
 				?>
 			</ul>
 			<?php
+			get_template_part(
+				'template-parts/description',
+				'block',
+				array(
+					'post_type' => $post_type,
+					'type'      => 'srp',
+				)
+			);
 			$loged = ! empty( $args['loged'] ) ? $args['loged'] : '';
 			get_template_part(
 				'template-parts/unlock',
