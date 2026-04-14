@@ -637,6 +637,22 @@
       object-position: left center;
     }
   }
+
+  .btn-disclosure {
+    position: absolute;
+    bottom: 38px;
+    right: 16px;
+    z-index: 20;
+    margin: 0;
+
+    @include media('>=tablet') {
+      bottom: 13px;
+    }
+
+    @include media('>=desktop') {
+      bottom: 70px;
+    }
+  }
 }
 
 .section-awards {

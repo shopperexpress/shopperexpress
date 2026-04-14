@@ -32,6 +32,7 @@
 	$header_nav_link_color       = get_field( 'header_nav_link_color', 'options' ) ? get_field( 'header_nav_link_color', 'options' ) : 'rgba(26, 26, 26, 1)';
 	$header_nav_link_hover_color = get_field( 'header_nav_link_hover_color', 'options' ) ? get_field( 'header_nav_link_hover_color', 'options' ) : 'rgba(0, 116, 179, 1)';
 	$theme_color                 = get_field( 'theme_color', 'options' );
+	$active_ai                   = get_field( 'active_ai', 'option' );
 
 	if ( $theme_color ) :
 		?>
@@ -40,7 +41,7 @@
 				<?php
 				if ( $theme_color ) :
 					?>
-					--primary: <?php echo esc_attr( $theme_color ); ?> !important;
+				--primary: <?php echo esc_attr( $theme_color ); ?> !important;
 				--primary-rgb: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
 				--primary-rgba: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
 					<?php
@@ -96,6 +97,7 @@
 	endif;
 	?>
 </head>
+
 <body <?php body_class(); ?>>
 	<?php wp_body_open(); ?>
 	<div id="wrapper">
@@ -146,7 +148,8 @@
 									<?php
 									$image = get_sub_field( 'image' );
 									if ( $image ) {
-										echo get_attachment_image( $image['id'] );}
+										echo get_attachment_image( $image['id'] );
+									}
 									?>
 								</a>
 							<?php endwhile; ?>
@@ -192,14 +195,14 @@
 									<div class="jcf-scrollable">
 										<ul class="drop-model-slider" data-filter-group="car-type">
 											<li class="active"><a href="#" data-filter="all">
-											<?php
-											if ( $slider_first_heading = get_field( 'slider_first_heading', 'options' ) ) {
-																									echo $slider_first_heading;
-											} else {
-												_e( 'all vehicles', 'shopperexpress' );
-											}
-											?>
-																								</a></li>
+													<?php
+													if ( $slider_first_heading = get_field( 'slider_first_heading', 'options' ) ) {
+														echo $slider_first_heading;
+													} else {
+														_e( 'all vehicles', 'shopperexpress' );
+													}
+													?>
+												</a></li>
 											<?php
 											while ( have_rows( 'slider', 'options' ) ) :
 												the_row();
@@ -240,6 +243,17 @@
 						</div>
 					<?php endif; ?>
 				</div>
+				<?php if ( $active_ai ) : ?>
+					<button type="button" class="btn ai-chat__opener" aria-label="AI chat toggle">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.89 35.44" width="28px" fill="#fff">
+							<path d="M22.3800049 16.6599693c-.289978.2900391-.4400024.6500244-.4400024 1.0600586 0 .4099731.1500244.7699585.4400024 1.0599976.289978.289978.6500244.4400024 1.0599976.4400024.4199829 0 .7700195-.1500244 1.0599976-.4400024.289978-.2900391.4400024-.6500244.4400024-1.0599976 0-.4100342-.1500244-.7700195-.4400024-1.0600586-.289978-.289978-.6500244-.4399414-1.0599976-.4399414s-.7700195.1499634-1.0599976.4399414Z
+								M25.9500122 15.1099815v5.1000366h-14v-5h13c-.9000244 0-1.7300415-.1799927-2.5-.5400391-.7700195-.3599854-1.4299927-.8399658-1.9800415-1.4599609h-7.7299805l1.0499878-3h5.2300415c-.0300293-.1700439-.0500488-.3300171-.0599976-.4899902-.0100098-.1600342-.0100098-.3300171-.0100098-.5100098s0-.3500366.0100098-.5100098c.0099487-.1600342.0299683-.3200073.0599976-.4899902h-5.5800171c-.3099976 0-.5999756.0899658-.8599854.2799683s-.4400024.4299927-.5400391.7300415l-2.0999756 6v8c0 .2799683.0999756.5199585.289978.7099609s.4299927.2900391.710022.2900391l.0200195-.0100098h1c.2799683 0 .5199585-.1000366.7099609-.2900391s.2900391-.4299927.2900391-.7099609v-1h12v1c0 .2799683.0999756.5199585.289978.7099609s.4299927.2900391.710022.2900391h1c.2799683 0 .5199585-.1000366.7099609-.2900391s.2900391-.4299927.2900391-.7099609v-8.8300171c-.3200073.1799927-.6400146.3300171-.9800415.4500122-.3399658.1199951-.6799927.2099609-1.0299683.2799683Z
+								M13.3800049 16.6599693c-.289978.2900391-.4400024.6500244-.4400024 1.0600586 0 .4099731.1500244.7699585.4400024 1.0599976.289978.289978.6500244.4400024 1.0599976.4400024.4199829 0 .7700195-.1500244 1.0599976-.4400024.289978-.2900391.4400024-.6500244.4400024-1.0599976 0-.4100342-.1500244-.7700195-.4400024-1.0600586-.289978-.289978-.6500244-.4399414-1.0599976-.4399414s-.7700195.1499634-1.0599976.4399414Z
+								M25 4.8099937c-2.460022 0-4.460022 2-4.460022 4.460022 0 2.4599609 2 4.4599609 4.460022 4.4599609s4.460022-2 4.460022-4.4599609c0-2.460022-2-4.460022-4.460022-4.460022ZM25 11.9500084v.1300049l-.0100098-.1300049c-.0599976-1.4500122-1.2199707-2.6099854-2.6699829-2.6699829 1.4500122-.0599976 2.6099854-1.2200317 2.6699829-2.6700439v-.1300049l.0100098.1300049c.0599976 1.4500122 1.2199707 2.6100464 2.6699829 2.6700439-1.4500122.0599976-2.6099854 1.2199707-2.6699829 2.6699829Z
+								M19.289978-.0000038C9.039978-.0000038.7000122 7.1199913.7000122 15.8800011c0 3.9500122 1.7199707 7.5499878 4.5299683 10.3300171-1.3299561 2.5199585-2.9699707 5.1599731-4.9699707 7.5100098-.2999878.3499756-.3300171.8499756-.0900269 1.2399902.1900024.3099976.5300293.4899902.8900146.4899902.0900269 0 .1799927-.0100098.2600098-.0300293.25-.0699463 4.7299805-1.2699585 10.0599976-5.1799927 2.4099731.9800415 5.0900269 1.5300293 7.9199829 1.5300293 10.25 0 18.6000366-7.1199951 18.6000366-15.8800049S29.5499878-.0000038 19.289978-.0000038ZM19.289978 29.6500206v.0199585c-2.9899902 0-5.789978-.6799927-8.2099609-1.8499756l-1.9000244 1.3699951c-1.8999634 1.289978-3.6499634 2.2399902-5.0499878 2.8900146 1.0200195-1.4700317 1.9099731-2.9700317 2.710022-4.4400024h.0099487l1-1.8599854c-3.1199951-2.5100098-5.0599976-6.0200195-5.0599976-9.9200439 0-7.5999756 7.4000244-13.789978 16.5-13.789978 9.1000366 0 16.5 6.1900024 16.5 13.789978 0 7.6000366-7.3999634 13.7900391-16.5 13.7900391Z"></path>
+						</svg>
+					</button>
+				<?php endif; ?>
 				<button type="button" class="navigation-opener" aria-label="<?php _e( 'Main navigation toggle', 'shopperexpress' ); ?>">
 					<svg class="menu-close" xmlns="http://www.w3.org/2000/svg" height="24px" aria-hidden="true" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 						<path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path>
@@ -304,7 +318,8 @@
 							<button type="button" class="btn header-btn btn-user dropdown-toggle 
 							<?php
 							if ( $favorites_count_all > 0 ) {
-								echo 'active';}
+								echo 'active';
+							}
 							?>
 							" aria-label="<?php _e( 'Toggle Dropdown', 'shopperexpress' ); ?>" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF" aria-hidden="true">
@@ -369,6 +384,48 @@
 								<?php endif ?>
 							<?php endwhile; ?>
 						</ul>
+					</div>
+				<?php endif; ?>
+				<?php
+				if ( $active_ai ) :
+					$heading_ai = get_field( 'heading_ai', 'options' );
+
+					?>
+					<div class="ai-chat-wrap">
+						<span class="overlay"></span>
+						<div class="ai-chat">
+							<div class="ai-chat__holder">
+								<div class="ai-chat__header">
+								<?php if ( $heading_ai ) : ?>
+									<h2><?php echo esc_html( $heading_ai ); ?></h2>
+								<?php endif; ?>
+									<button type="button" class="ai-chat__close" aria-label="Close">
+										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24" viewBox="0 -960 960 960" width="24" fill="#000">
+											<path
+												d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"></path>
+										</svg>
+									</button>
+								</div>
+								<div class="ai-chat__body" data-ai-message>
+								</div>
+								<div class="ai-chat__footer">
+									<div class="ai-chat__footer-holder">
+										<div class="ai-chat__input-row">
+											<div class="ai-chat__input" data-ai-input contenteditable="true" translate="no" role="textbox" aria-multiline="true" aria-label="Chat with AI">
+												<p class="ai-chat__input-placeholder" data-placeholder="Ask anything"></p>
+												<br />
+											</div>
+											<button type="button" aria-label="Send" class="ai-chat__submit" data-ai-button>
+												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" aria-hidden="true" fill="currentColor">
+													<path
+														d="M9 16V6.414L5.707 9.707a1 1 0 1 1-1.414-1.414l5-5 .076-.068a1 1 0 0 1 1.338.068l5 5 .068.076a1 1 0 0 1-1.406 1.406l-.076-.068L11 6.414V16a1 1 0 1 1-2 0"></path>
+												</svg>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				<?php endif; ?>
 			</nav>

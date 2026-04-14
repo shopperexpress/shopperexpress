@@ -309,6 +309,8 @@
 
   .info-block__description {
     margin: 3px 0;
+    padding: 14px 12px;
+    text-transform: none;
   }
 
   .payment-info + .info-block__description {
@@ -356,7 +358,7 @@
     border-radius: 4px;
 
     li {
-      padding: 10px 8px;
+      padding: 10px 12px;
       margin-bottom: 0;
       background-color: transparent;
       border-radius: 0;
@@ -454,6 +456,8 @@
     }
   }
 
+  .info-block__description + .animate-img,
+  .info-block__description + .animate-btn,
   .payment-info + .animate-btn,
   .payment-info + .animate-img {
     margin-top: auto;

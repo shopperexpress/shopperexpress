@@ -420,7 +420,7 @@ while ( have_posts() ) :
 					</div>
 					<h2><?php echo implode( ' ', array_filter( array( $year, $make, $model, $drivetrain, $trim ) ) ); ?></h2>
 					<div class="detail-info-row">
-						<?php if ( get_field( 'comment_footer', 'options' ) ) : ?>
+						<?php if ( get_field( 'comment_footer', 'options' ) && ! get_field( 'hide_disclosure_vdp', 'option' ) ) : ?>
 							<button class="btn-disclosure" data-toggle="modal" data-target="#detailModal">
 								<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 									<path
@@ -473,7 +473,14 @@ while ( have_posts() ) :
 							);
 						}
 
-						get_template_part( 'template-parts/description', 'block', ['post_type' => $post_type, 'type' => 'vdp'] );
+						get_template_part(
+							'template-parts/description',
+							'block',
+							array(
+								'post_type' => $post_type,
+								'type'      => 'vdp',
+							)
+						);
 						get_template_part( 'template-parts/unlock', 'button' );
 						?>
 					</div>

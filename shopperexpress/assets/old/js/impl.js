@@ -49,35 +49,126 @@
 
 })(jQuery);
 
-// jQuery(document).ready(function($) {
+document.addEventListener("DOMContentLoaded", () => {
+    const button = document.querySelector('[data-ai-button]');
+    const input = document.querySelector('[data-ai-input]');
+    const messageContainer = document.querySelector('[data-ai-message]');
 
+    let isWaitingResponse = false;
 
-// 	$(document).on('wpformsAjaxSubmitSuccess', function(event, formData) {
+    function getInputText(el) {
+        const text = el.innerText || '';
+        return text.replace(/\s+/g, ' ').trim();
+    }
 
-// 		var form = $('<div>').html(formData.data.confirmation);
-// 		var fieldBlock = form.find('.fields');
+    function typeText(element, text, speed = 30) {
+        let i = 0;
+        element.textContent = '';
+        return new Promise(resolve => {
+            const interval = setInterval(() => {
+                if (!text || !text[i]) {
+                    clearInterval(interval);
+                    resolve();
+                    return;
+                }
+                element.textContent += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, speed);
+        });
+    }
 
-// 		if ( fieldBlock ){
-// 			try {
-// 				var fieldData = JSON.parse(fieldBlock.text());
-// 				console.log(fieldData)
-// 				var customer_email = sha256(fieldData.fields['data-email'].toLowerCase().trim());
-// 				var customer_phone = sha256(fieldData.fields['data-phone'].toLowerCase().trim().replace(/[^\w\s]/gi, '').replace(/\s+/g, ''));
-// 				var customer_first_name = sha256(fieldData.fields['data-firstname'].toLowerCase().trim().replace(/[^\w\s]/gi, '').replace(/\s+/g, ''));
-// 				var customer_last_name = sha256(fieldData.fields['data-lastname'].toLowerCase().trim().replace(/[^\w\s]/gi, '').replace(/\s+/g, ''));
+    async function typeTextSafe(element, html, speed = 30) {
+        const temp = document.createElement('div');
+        temp.innerHTML = html;
 
-// 				utag.link({
-// 					'tealium_event': fieldData.fields['data-id'],
-// 					'customer_email': customer_email,
-// 					'customer_phone': customer_phone,
-// 					'customer_first_name': customer_first_name,
-// 					'customer_last_name': customer_last_name
-// 				});
-// 			} catch (error) {
-// 				console.error("JSON:", error);
-// 			}
-// 		} else {
-// 			console.error(".fields empty.");
-// 		}
-// 	});
-// });
+        const plainText = temp.textContent || temp.innerText || '';
+
+        await typeText(element, plainText, speed);
+
+        element.innerHTML = html;
+    }
+
+    function createLoadingDots() {
+        const waitDiv = document.createElement('div');
+        waitDiv.classList.add('ai-chat__message', 'answer', 'loading');
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('span');
+            dot.classList.add('ai-chat__dot-pulse');
+            waitDiv.appendChild(dot);
+        }
+        messageContainer.appendChild(waitDiv);
+        return waitDiv;
+    }
+
+    function scrollToBottom() {
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    button.addEventListener('click', () => {
+
+        if (isWaitingResponse) return;
+
+        const userText = getInputText(input);
+        if (!userText) return;
+
+        isWaitingResponse = true;
+
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('ai-chat__message');
+        userMessage.textContent = userText;
+        messageContainer.appendChild(userMessage);
+        scrollToBottom();
+
+        input.innerHTML = '<div><br></div>';
+
+        const loading = createLoadingDots();
+        scrollToBottom();
+
+        fetch('/wp-admin/admin-ajax.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                action: 'ai',
+                question: userText,
+                nonce: ajax.nonce,
+                type: 'faq'
+            })
+        })
+        .then(res => res.json())
+        .then(async data => {
+
+            const loadingBlock = messageContainer.querySelector('.ai-chat__message.loading');
+
+            if (loadingBlock && loadingBlock.parentNode) {
+                loadingBlock.parentNode.removeChild(loadingBlock);
+            }
+
+            const answer = document.createElement('div');
+            answer.classList.add('ai-chat__message', 'answer');
+            messageContainer.appendChild(answer);
+
+            scrollToBottom();
+
+            await typeTextSafe(answer, data.data.message || '');
+
+            scrollToBottom();
+
+            isWaitingResponse = false;
+        })
+        .catch(() => {
+            loading.remove();
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('ai-chat__message', 'answer');
+            errorDiv.textContent = 'Error receiving response';
+
+            messageContainer.appendChild(errorDiv);
+            scrollToBottom();
+
+            isWaitingResponse = false;
+        });
+    });
+});

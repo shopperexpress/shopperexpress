@@ -58,6 +58,7 @@ class Theme {
 			\App\Components\Base\JSON_LD::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
+			\App\Components\Base\AI::class,
 		);
 
 		$gutenberg_components = array(

@@ -9,6 +9,18 @@
     }
   }
 
+  .slick-slide {
+    position: relative;
+  }
+
+  .slick-dots {
+    pointer-events: none;
+
+    li {
+      pointer-events: initial;
+    }
+  }
+
   img {
     display: block;
     width: 100%;
@@ -17,6 +29,18 @@
 
     @include media('>=tablet') {
       border-radius: 12px;
+    }
+  }
+
+  .btn-disclosure {
+    position: absolute;
+    bottom: 24px;
+    right: 10px;
+    z-index: 10;
+    margin: 0;
+
+    @include media('>=tablet') {
+      bottom: 10px;
     }
   }
 }

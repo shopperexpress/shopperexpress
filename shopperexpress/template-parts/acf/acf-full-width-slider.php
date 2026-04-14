@@ -53,6 +53,13 @@ if ( have_rows( 'slider' ) ) :
 							<?php else : ?>
 								<?php echo $output; ?>
 							<?php endif; ?>
+						<?php
+						$disclosure = get_sub_field( 'disclosure' );
+
+						if ( $disclosure ) {
+							get_template_part( 'template-parts/components/btn', 'disclosure', array( 'disclosure' => $disclosure ) );
+						}
+						?>
 						</div>
 						<?php
 					endif;

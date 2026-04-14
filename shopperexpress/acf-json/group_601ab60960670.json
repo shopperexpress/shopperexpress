@@ -3787,6 +3787,28 @@
                                     "ui_off_text": "",
                                     "ui": 1,
                                     "parent_repeater": "field_65b7875dfcf9b"
+                                },
+                                {
+                                    "key": "field_69de1a985d335",
+                                    "label": "Disclosure",
+                                    "name": "disclosure",
+                                    "aria-label": "",
+                                    "type": "wysiwyg",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "allow_in_bindings": 0,
+                                    "tabs": "all",
+                                    "toolbar": "full",
+                                    "media_upload": 1,
+                                    "delay": 0,
+                                    "parent_repeater": "field_65b7875dfcf9b"
                                 }
                             ]
                         },
@@ -4667,6 +4689,28 @@
                                     "placeholder": "",
                                     "prepend": "",
                                     "append": "",
+                                    "parent_repeater": "field_683eca97d0ead"
+                                },
+                                {
+                                    "key": "field_69de1b8d5e57e",
+                                    "label": "Disclosure",
+                                    "name": "disclosure",
+                                    "aria-label": "",
+                                    "type": "wysiwyg",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "allow_in_bindings": 0,
+                                    "tabs": "all",
+                                    "toolbar": "full",
+                                    "media_upload": 1,
+                                    "delay": 0,
                                     "parent_repeater": "field_683eca97d0ead"
                                 }
                             ]
@@ -7110,5 +7154,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1772531436
+    "modified": 1776163780
 }

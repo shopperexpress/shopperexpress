@@ -1065,6 +1065,26 @@
             "wpml_cf_preferences": 2
         },
         {
+            "key": "field_649d7d2b6d0f3",
+            "label": "Search Inventory Button",
+            "name": "search_inventory_button",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_61dd34e3086da",
             "label": "Down Payment",
             "name": "down_payment",
@@ -1207,6 +1227,27 @@
             "acfe_textarea_code": 0
         },
         {
+            "key": "field_69de1762eebed",
+            "label": "Disclosure Slider",
+            "name": "disclosure_slider",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
             "key": "field_61dd39209c05b",
             "label": "Disclosure Finance",
             "name": "disclosure_finance",
@@ -1247,26 +1288,6 @@
             "media_upload": 1,
             "delay": 0,
             "wpml_cf_preferences": 2
-        },
-        {
-            "key": "field_649d7d2b6d0f3",
-            "label": "Search Inventory Button",
-            "name": "search_inventory_button",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "placeholder": "",
-            "prepend": "",
-            "append": ""
         },
         {
             "key": "field_61dd394d9c05d",
@@ -1328,12 +1349,12 @@
     "active": true,
     "description": "",
     "show_in_rest": 1,
-    "acfe_display_title": "",
+    "display_title": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1762427503
+    "modified": 1776163437
 }

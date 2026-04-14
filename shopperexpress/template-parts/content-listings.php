@@ -52,7 +52,7 @@ $similar_url = ! empty( $args['similar_url'] ) ? $args['similar_url'] : null;
 			);
 			?>
 			<div class="card-info-row">
-				<?php if ( get_field( 'comment_footer', 'options' ) ) : ?>
+				<?php if ( get_field( 'comment_footer', 'options' ) && ! get_field( 'hide_disclosure_srp', 'option' ) ) : ?>
 					<button class="btn-disclosure" data-toggle="modal" data-target="#detailModal">
 						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 							<path

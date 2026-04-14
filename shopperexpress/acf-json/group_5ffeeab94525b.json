@@ -451,6 +451,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_65039657a9044",
                     "sub_fields": [
                         {
                             "key": "field_686515163ad74",
@@ -521,6 +522,7 @@
                             "collapsed": "",
                             "button_label": "Add Row",
                             "rows_per_page": 20,
+                            "parent_repeater": "field_66267a77fd4ad",
                             "sub_fields": [
                                 {
                                     "key": "field_66267a9dfd4b1",
@@ -564,11 +566,9 @@
                                     "append": "",
                                     "parent_repeater": "field_66267a93fd4b0"
                                 }
-                            ],
-                            "parent_repeater": "field_66267a77fd4ad"
+                            ]
                         }
-                    ],
-                    "parent_repeater": "field_65039657a9044"
+                    ]
                 }
             ]
         },
@@ -789,6 +789,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_66267abf24dec",
                     "sub_fields": [
                         {
                             "key": "field_66267abf24df4",
@@ -858,6 +859,7 @@
                             "collapsed": "",
                             "button_label": "Add Row",
                             "rows_per_page": 20,
+                            "parent_repeater": "field_66267abf24df3",
                             "sub_fields": [
                                 {
                                     "key": "field_66267abf24df7",
@@ -901,11 +903,9 @@
                                     "append": "",
                                     "parent_repeater": "field_66267abf24df6"
                                 }
-                            ],
-                            "parent_repeater": "field_66267abf24df3"
+                            ]
                         }
-                    ],
-                    "parent_repeater": "field_66267abf24dec"
+                    ]
                 }
             ]
         },
@@ -1560,6 +1560,26 @@
             "save_post_type": ""
         },
         {
+            "key": "field_676e9207c8ce4",
+            "label": "Hide search form",
+            "name": "hide_search_form_footer",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_651c1c4973f13",
             "label": "Contact Savings Form",
             "name": "contact_savings_form",
@@ -1590,26 +1610,6 @@
             "bidirectional_target": [],
             "save_post_type": "",
             "save_post_status": ""
-        },
-        {
-            "key": "field_676e9207c8ce4",
-            "label": "Hide search form",
-            "name": "hide_search_form_footer",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
         },
         {
             "key": "field_672b85a01e598",
@@ -3577,6 +3577,109 @@
             "placeholder": "",
             "prepend": "",
             "append": ""
+        },
+        {
+            "key": "field_69cbc3cce0247",
+            "label": "AI API",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_69d65e1c5462c",
+            "label": "Active AI",
+            "name": "active_ai",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_69d65ec933667",
+            "label": "Heading",
+            "name": "heading_ai",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69cbc3d5e0248",
+            "label": "AI Key",
+            "name": "ai_api_key",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69d66a3f458da",
+            "label": "AI Promt",
+            "name": "ai_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
         }
     ],
     "location": [
@@ -3604,5 +3707,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1771944770
+    "modified": 1775659606
 }

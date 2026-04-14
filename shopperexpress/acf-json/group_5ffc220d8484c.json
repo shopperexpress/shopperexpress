@@ -5377,6 +5377,27 @@
             "selected": 0
         },
         {
+            "key": "field_69d51a5462a65",
+            "label": "Hide disclosure",
+            "name": "hide_disclosure_srp",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_66040ffc58a45",
             "label": "Label",
             "name": "as_label_used",
@@ -8961,6 +8982,27 @@
             "selected": 0
         },
         {
+            "key": "field_69d51a9362a66",
+            "label": "Hide disclosure",
+            "name": "hide_disclosure_vdp",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_6880f1916bb39",
             "label": "Banner",
             "name": "",
@@ -10627,5 +10669,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1775566818
+    "modified": 1775573715
 }

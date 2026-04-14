@@ -173,6 +173,7 @@ class Scripts implements Theme_Component {
 				'admin'   => admin_url( 'admin-ajax.php' ),
 				'request' => $_GET,
 				'loged'   => is_user_logged_in(),
+				'nonce'   => wp_create_nonce( 'shopperexpress_nonce' ),
 			)
 		);
 	}
