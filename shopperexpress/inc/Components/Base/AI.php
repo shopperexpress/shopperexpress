@@ -136,7 +136,20 @@ class AI implements Theme_Component {
 			return;
 		}
 
-		$text = $post->post_title . ' ' . wp_strip_all_tags( $post->post_content );
+		$fields = array(
+			$post->post_title,
+			wp_strip_all_tags( $post->post_content ),
+			get_field( 'dealer_id', $post_id ),
+			get_field( 'type', $post_id ),
+			get_field( 'intent', $post_id ),
+			get_field( 'page', $post_id ),
+			get_field( 'context', $post_id ),
+			get_field( 'cta_type', $post_id ),
+			get_field( 'category', $post_id ),
+			get_field( 'oem', $post_id ),
+			get_field( 'model', $post_id ),
+		);
+		$text   = implode( ' ', array_filter( $fields ) );
 
 		$embedding = $this->get_embedding( $text );
 
@@ -153,7 +166,7 @@ class AI implements Theme_Component {
 	 */
 	private function get_faq_embeddings(): array {
 
-		$cache = wp_cache_get( 'faq_embeddings', 'ai' );
+		$cache = wp_cache_get( 'faq_embedding', 'ai' );
 
 		if ( false !== $cache ) {
 			return $cache;
@@ -175,7 +188,7 @@ class AI implements Theme_Component {
 
 			if ( ! $embedding ) {
 
-				$text = $post->post_title . ' ' . wp_strip_all_tags( $post->post_content );
+				$text = $post->post_title . ' ' . wp_kses_post( $post->post_content );
 
 				$vector = $this->get_embedding( $text );
 
@@ -190,14 +203,20 @@ class AI implements Theme_Component {
 
 			$faqs[] = array(
 				'question'  => $post->post_title,
-				'answer'    => wp_strip_all_tags( $post->post_content ),
+				'answer'    => wp_kses_post( $post->post_content ),
 				'embedding' => json_decode( $embedding, true ),
+				'intent'    => get_field( 'intent', $post->ID ),
+				'category'  => get_field( 'category', $post->ID ),
+				'oem'       => get_field( 'oem', $post->ID ),
+				'model'     => get_field( 'model', $post->ID ),
+				'cta_type'  => get_field( 'cta_type', $post->ID ),
+				'page'      => get_field( 'page', $post->ID ),
 			);
 		}
 
 		wp_reset_postdata();
 
-		wp_cache_set( 'faq_embeddings', $faqs, 'ai', HOUR_IN_SECONDS );
+		wp_cache_set( 'faq_embedding', $faqs, 'ai', HOUR_IN_SECONDS );
 
 		return $faqs;
 	}
@@ -281,9 +300,34 @@ class AI implements Theme_Component {
 		$context = '';
 
 		foreach ( $faqs as $faq ) {
+			$context .= "Question: {$faq['question']}\n";
+			$context .= "Answer: {$faq['answer']}\n";
 
-			$context .= "Q: {$faq['question']}\n";
-			$context .= "A: {$faq['answer']}\n\n";
+			if ( ! empty( $faq['intent'] ) ) {
+				$context .= "Intent: {$faq['intent']}\n";
+			}
+
+			if ( ! empty( $faq['category'] ) ) {
+				$context .= "Category: {$faq['category']}\n";
+			}
+
+			if ( ! empty( $faq['oem'] ) ) {
+				$context .= "OEM: {$faq['oem']}\n";
+			}
+
+			if ( ! empty( $faq['model'] ) ) {
+				$context .= "Model: {$faq['model']}\n";
+			}
+
+			if ( ! empty( $faq['cta_type'] ) ) {
+				$context .= "CTA: {$faq['cta_type']}\n";
+			}
+
+			if ( ! empty( $faq['page'] ) ) {
+				$context .= "Page: {$faq['page']}\n";
+			}
+
+			$context .= "\n---\n\n";
 		}
 
 		return $context;

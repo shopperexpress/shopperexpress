@@ -1,0 +1,67 @@
+{
+	"key": "group_asc_page_type",
+	"title": "ASC Page Type",
+	"fields": [
+		{
+			"key": "field_asc_page_type",
+			"label": "ASC Page Type",
+			"name": "asc_page_type",
+			"type": "select",
+			"instructions": "Manually assign the ASC page type for this page. Used by the page type resolver when no system mapping applies.",
+			"required": 0,
+			"conditional_logic": 0,
+			"wrapper": {
+				"width": "",
+				"class": "",
+				"id": ""
+			},
+			"choices": {
+				"contact": "Contact",
+				"directions": "Directions",
+				"service": "Service",
+				"parts": "Parts",
+				"accessories": "Accessories",
+				"body_shop": "Body Shop",
+				"build_to_order": "Build to Order",
+				"custom": "Custom",
+				"complaint": "Complaint",
+				"employment": "Employment",
+				"recall": "Recall",
+				"finance": "Finance",
+				"credit": "Credit",
+				"trade": "Trade",
+				"commercial": "Commercial",
+				"showroom": "Showroom",
+				"thank_you": "Thank You",
+				"specials": "Specials",
+				"unknown": "Unknown"
+			},
+			"default_value": "",
+			"allow_null": 1,
+			"multiple": 0,
+			"ui": 1,
+			"return_format": "value",
+			"ajax": 0,
+			"placeholder": "— Select page type —"
+		}
+	],
+	"location": [
+		[
+			{
+				"param": "post_type",
+				"operator": "==",
+				"value": "page"
+			}
+		]
+	],
+	"menu_order": 0,
+	"position": "side",
+	"style": "default",
+	"label_placement": "top",
+	"instruction_placement": "label",
+	"hide_on_screen": "",
+	"active": true,
+	"description": "Manual ASC page type override for custom/flexible WordPress pages.",
+	"show_in_rest": 0,
+	"modified": 1745193600
+}

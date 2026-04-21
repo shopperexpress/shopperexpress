@@ -144,6 +144,20 @@ class Scripts implements Theme_Component {
 			false
 		);
 		wp_enqueue_script(
+			'shopperexpress/asc-cta',
+			\App\asset_url( 'js/asc-cta.js' ),
+			array(),
+			filemtime( get_stylesheet_directory() . '/assets/dist/js/asc-cta.js' ),
+			true
+		);
+		wp_enqueue_script(
+			'shopperexpress/asc-datalayer',
+			\App\asset_url( 'js/asc-datalayer.js' ),
+			array(),
+			filemtime( get_stylesheet_directory() . '/assets/dist/js/asc-datalayer.js' ),
+			true
+		);
+		wp_enqueue_script(
 			'shopperexpress/google-map',
 			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker&loading=async&callback=initCustomMap',
 			array( 'jquery' ),
@@ -154,9 +168,10 @@ class Scripts implements Theme_Component {
 			'shopperexpress/jquery',
 			'ajax',
 			array(
-				'admin'   => admin_url( 'admin-ajax.php' ),
-				'request' => $_GET,
-				'nonce'   => wp_create_nonce( 'shopperexpress_nonce' ),
+				'admin'          => admin_url( 'admin-ajax.php' ),
+				'request'        => $_GET,
+				'nonce'          => wp_create_nonce( 'shopperexpress_nonce' ),
+				'adf_lead_nonce' => wp_create_nonce( 'submit_adf_lead' ),
 			)
 		);
 		wp_enqueue_script(

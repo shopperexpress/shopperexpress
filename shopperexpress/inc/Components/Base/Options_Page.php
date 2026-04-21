@@ -54,6 +54,7 @@ class Options_Page implements Theme_Component {
 						'finance-offers'     => 'Finance Offers',
 						'lease-offers'       => 'Lease Offers',
 						'conditional-offers' => 'Conditional Offers',
+						'asc-settings'       => 'ASC Settings',
 					);
 
 					foreach ( $sub_pages as $slug => $title ) {

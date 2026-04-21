@@ -29,10 +29,13 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 					$layout = get_row_layout();
 
 					if ( $layout == 'button_1' ) :
-						$active   = get_sub_field( 'active' );
-						$active_1 = get_sub_field( 'active_1' );
-						$active_2 = get_sub_field( 'active_2' );
-						$show     = true;
+						$active           = get_sub_field( 'active' );
+						$active_1         = get_sub_field( 'active_1' );
+						$active_2         = get_sub_field( 'active_2' );
+						$asc_element_type = get_sub_field( 'asc_element_type' );
+						$asc_type         = ( $asc_element_type ) ? $asc_element_type : 'banner';
+						$asc_type_attr    = ' data-asc-type="' . esc_attr( $asc_type ) . '"';
+						$show             = true;
 
 						if ( in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
 							$show_on = get_sub_field( 'show_on' );
@@ -71,7 +74,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url_1;
 										if ( ! empty( $onclick ) ) :
 											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="mobile-button" style="-webkit-transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;">
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="-webkit-transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;">
 										<?php echo esc_html( $mobile_button_text_1 ); ?>
 									</a>
 									<?php
@@ -99,7 +102,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url_2;
 										if ( ! empty( $onclick ) ) :
 											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="mobile-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $mobile_button_text_2 ); ?></a>
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $mobile_button_text_2 ); ?></a>
 									<?php
 								endif;
 
@@ -124,7 +127,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url;
 									if ( ! empty( $onclick ) ) :
 										?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="desktop-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $desktop_button_text ); ?></a>
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="desktop-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $desktop_button_text ); ?></a>
 							</div>
 									<?php
 							endif;
@@ -153,7 +156,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 											$onclick[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 										endwhile;
 										?>
-										<button type="button" class="iconhover widget--buttons__item showWidget"
+										<button type="button" data-asc-type="banner" class="iconhover widget--buttons__item showWidget"
 											<?php
 											if ( $onclick ) :
 												?>
@@ -215,7 +218,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 													<?php endif; ?>
 												</div>
 											<?php else : ?>
-												<button type="button"
+												<button type="button" data-asc-type="banner"
 													<?php
 													if ( $onclick ) :
 														?>
@@ -293,7 +296,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 											</div>
 										</div>
 									<?php endif; ?>
-									<button class="widget--btn paymentbtn showWidget" type="button" style="cursor:pointer;" <?php echo $onclick; ?>>
+									<button class="widget--btn paymentbtn showWidget" type="button" data-asc-type="banner" style="cursor:pointer;" <?php echo $onclick; ?>>
 										<span class="widget--btn__body widget--btn__body">
 											<span class="widget--btn__row">
 												<?php if ( $show_finance && $loan_payment ) : ?>

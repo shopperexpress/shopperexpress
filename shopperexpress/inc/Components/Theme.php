@@ -56,6 +56,7 @@ class Theme {
 			\App\Components\Base\Rest::class,
 			\App\Components\Base\ACF::class,
 			\App\Components\Base\JSON_LD::class,
+			\App\Components\Base\ASC_Datalayer::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
 			\App\Components\Base\AI::class,

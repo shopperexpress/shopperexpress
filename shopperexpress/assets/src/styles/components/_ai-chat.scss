@@ -4,7 +4,7 @@
 
 .chat-active {
   #header {
-    z-index: 9999999;
+    z-index: 9999999999;
 
     .alert-contact,
     .navbar {
@@ -20,8 +20,12 @@
   right: 0;
   left: 0;
   top: var(--header-height);
-  z-index: 9999999;
-  pointer-events: initial;
+  z-index: 9999999999;
+  pointer-events: none;
+
+  .chat-active & {
+    pointer-events: initial;
+  }
 
   @include media('>=tablet') {
     left: auto;
@@ -31,7 +35,7 @@
     @include animate(opacity visibility);
     position: absolute;
     width: 100vw;
-    top: 0;
+    top: -200px;
     bottom: 0;
     right: 0;
     background-color: rgba($black, 0.3);
@@ -46,17 +50,8 @@
 }
 
 .ai-chat {
-  @include animate(width);
   height: 100%;
-  width: 0;
-
-  .chat-active & {
-    width: 100%;
-
-    @include media('>=tablet') {
-      width: 500px;
-    }
-  }
+  width: 100%;
 
   &__opener {
     @include animate(background-color);

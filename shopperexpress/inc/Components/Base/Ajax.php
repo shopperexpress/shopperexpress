@@ -46,11 +46,12 @@ class Ajax implements Theme_Component {
 	public function wp_end_point() {
 		return array(
 			'ajax'              => array(
-				'register_user' => 'register_user',
-				'ajax_login'    => 'ajax_login',
-				'adf'           => 'adf_action',
-				'favorite'      => 'favorite_action',
-				'get_pdf'       => 'get_pdf',
+				'register_user'   => 'register_user',
+				'ajax_login'      => 'ajax_login',
+				'adf'             => 'adf_action',
+				'submit_adf_lead' => 'submit_adf_lead',
+				'favorite'        => 'favorite_action',
+				'get_pdf'         => 'get_pdf',
 			),
 			'admin-ajax'        => array(
 				'save_listing'    => 'save_listing',
@@ -345,7 +346,7 @@ class Ajax implements Theme_Component {
 		$template = null;
 
 		if ( ! empty( $_REQUEST['template'] ) ) {
-			$dump_output = '1';
+
 			while ( have_rows( 'adf_templates', 'options' ) ) :
 				the_row();
 				if ( get_row_index() == $_REQUEST['template'] ) {
@@ -396,8 +397,59 @@ class Ajax implements Theme_Component {
 
 					wp_mail( implode( ', ', $mail_to ), $subject, $template, array( 'content-type: text/plain' ) );
 			}
+
+			wp_send_json_success(
+				array(
+					'message'   => 'Lead submitted.',
+					'asc_event' => array(
+						'event'       => 'asc_lead_submit',
+						'event_owner' => 'intice',
+						'lead'        => array(
+							'first_name' => sanitize_text_field( $_REQUEST['first_name'] ?? '' ),
+							'last_name'  => sanitize_text_field( $_REQUEST['last_name'] ?? '' ),
+							'email'      => sanitize_email( $_REQUEST['email'] ?? '' ),
+							'phone'      => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
+						),
+					),
+				)
+			);
 		}
 		exit;
+	}
+
+	/**
+	 * Accept raw lead data and dispatch it via adf_email().
+	 *
+	 * Expected POST params: first_name, last_name, email, phone, comments, zip, nonce.
+	 *
+	 * @return void
+	 */
+	public function submit_adf_lead(): void {
+		if ( ! check_ajax_referer( 'submit_adf_lead', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce.' ), 403 );
+		}
+
+		$first_name = sanitize_text_field( wp_unslash( $_POST['first_name'] ?? '' ) );
+		$last_name  = sanitize_text_field( wp_unslash( $_POST['last_name'] ?? '' ) );
+		$email      = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
+		$phone      = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+
+		if ( '' === $first_name || '' === $last_name || ! is_email( $email ) || '' === $phone ) {
+			wp_send_json_error( array( 'message' => 'Missing required fields.' ), 422 );
+		}
+
+		adf_email(
+			array(
+				'first_name' => $first_name,
+				'last_name'  => $last_name,
+				'email'      => $email,
+				'phone'      => $phone,
+				'comments'   => sanitize_text_field( wp_unslash( $_POST['comments'] ?? '' ) ),
+				'zip'        => sanitize_text_field( wp_unslash( $_POST['zip'] ?? '' ) ),
+			)
+		);
+
+		wp_send_json_success( array( 'message' => 'Lead submitted.' ) );
 	}
 
 	public function unlock_form() {
