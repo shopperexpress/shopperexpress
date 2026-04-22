@@ -64,7 +64,7 @@ if ( have_rows( $field, 'options' ) ) :
 							$value
 						);
 
-						echo str_replace( ' ', '&nbsp;', esc_html( $result ) );
+						echo str_replace( '&nbsp;', ' ', esc_html( $result ) );
 					}
 
 					?>
