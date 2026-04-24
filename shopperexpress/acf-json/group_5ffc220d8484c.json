@@ -683,7 +683,7 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "25",
+                                "width": "20",
                                 "class": "",
                                 "id": ""
                             },
@@ -691,9 +691,56 @@
                             "enable_opacity": 0,
                             "return_format": "string",
                             "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
                             "custom_palette_source": "",
-                            "palette_colors": "",
-                            "show_color_wheel": true
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69e9e5cdc00ea",
+                            "label": "SRP Font Size",
+                            "name": "srp_font_size",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "15",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69e9e5e4c00eb",
+                            "label": "VDP Font Size",
+                            "name": "vdp_font_size",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "15",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
                         },
                         {
                             "key": "field_660d3aebf5e9a",
@@ -1261,7 +1308,7 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "33",
                         "class": "",
                         "id": ""
                     },
@@ -1269,9 +1316,58 @@
                     "enable_opacity": 0,
                     "return_format": "string",
                     "allow_in_bindings": 0,
+                    "show_custom_palette": 0,
+                    "show_color_wheel": 1,
                     "custom_palette_source": "",
                     "palette_colors": "",
-                    "show_color_wheel": true,
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69e9e421c00e8",
+                    "label": "SRP Font Size",
+                    "name": "srp_font_size",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "33",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "step": "",
+                    "prepend": "",
+                    "append": "px",
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69e9e43ac00e9",
+                    "label": "VDP Font Size",
+                    "name": "vdp_font_size",
+                    "aria-label": "",
+                    "type": "number",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "33",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "min": "",
+                    "max": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "step": "",
+                    "prepend": "",
+                    "append": "px",
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -1411,6 +1507,7 @@
                     "choices": {
                         "1": "Entered Value",
                         "2": "Calculated Value",
+                        "4": "Calculated Field",
                         "3": "Greater than"
                     },
                     "default_value": 1,
@@ -1443,6 +1540,13 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "3"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
                             }
                         ]
                     ],
@@ -1500,6 +1604,13 @@
                                 "operator": "==",
                                 "value": "3"
                             }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
+                            }
                         ]
                     ],
                     "wrapper": {
@@ -1526,6 +1637,55 @@
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
+                    "key": "field_69e89686eed01",
+                    "label": "Field",
+                    "name": "calculated_field",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "original_price": "MSRP",
+                        "InvoiceAmount": "InvoiceAmount",
+                        "DefaultBookValue": "DefaultBookValue",
+                        "InternetPrice": "InternetPrice",
+                        "CustomPrice1": "CustomPrice1",
+                        "CustomPrice2": "CustomPrice2",
+                        "CustomPrice3": "CustomPrice3",
+                        "Pack": "Pack",
+                        "Holdback": "Holdback",
+                        "Cost": "Cost",
+                        "price": "price"
+                    },
+                    "default_value": 1,
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "allow_in_bindings": 1,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0,
+                    "allow_custom": 0,
+                    "search_placeholder": "",
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
                     "key": "field_667c2ca40eda4",
                     "label": "Value",
                     "name": "value",
@@ -1533,7 +1693,15 @@
                     "type": "text",
                     "instructions": "",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "!=",
+                                "value": "4"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "25",
                         "class": "",
@@ -1541,6 +1709,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
+                    "allow_in_bindings": 1,
                     "placeholder": "",
                     "prepend": "",
                     "append": "",
@@ -10712,5 +10881,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776680878
+    "modified": 1776936439
 }

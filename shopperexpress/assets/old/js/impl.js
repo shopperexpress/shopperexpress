@@ -54,7 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.querySelector('[data-ai-input]');
     const messageContainer = document.querySelector('[data-ai-message]');
 
+    if (!button || !input || !messageContainer) return;
+
     let isWaitingResponse = false;
+
+    // --- UI helpers ---
 
     function getInputText(el) {
         const text = el.innerText || '';
@@ -84,11 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
     async function typeTextSafe(element, html, speed = 30) {
         const temp = document.createElement('div');
         temp.innerHTML = html;
-
         const plainText = temp.textContent || temp.innerText || '';
-
         await typeText(element, plainText, speed);
-
         element.innerHTML = html;
     }
 
@@ -108,14 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
         messageContainer.scrollTop = messageContainer.scrollHeight;
     }
 
-    button.addEventListener('click', () => {
+    // --- Submit handler ---
 
+    button.addEventListener('click', () => {
         if (isWaitingResponse) return;
 
         const userText = getInputText(input);
         if (!userText) return;
-
-        isWaitingResponse = true;
 
         const userMessage = document.createElement('div');
         userMessage.classList.add('ai-chat__message');
@@ -124,6 +124,8 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollToBottom();
 
         input.innerHTML = '<div><br></div>';
+
+        isWaitingResponse = true;
 
         const loading = createLoadingDots();
         scrollToBottom();
@@ -140,21 +142,19 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(res => res.json())
         .then(async data => {
-
             const loadingBlock = messageContainer.querySelector('.ai-chat__message.loading');
-
             if (loadingBlock && loadingBlock.parentNode) {
                 loadingBlock.parentNode.removeChild(loadingBlock);
             }
 
+            const payload = data.data || {};
+            const message = payload.message || '';
+
             const answer = document.createElement('div');
             answer.classList.add('ai-chat__message', 'answer');
             messageContainer.appendChild(answer);
-
             scrollToBottom();
-
-            await typeTextSafe(answer, data.data.message || '');
-
+            await typeTextSafe(answer, message);
             scrollToBottom();
 
             isWaitingResponse = false;
@@ -164,10 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
             const errorDiv = document.createElement('div');
             errorDiv.classList.add('ai-chat__message', 'answer');
             errorDiv.textContent = 'Error receiving response';
-
             messageContainer.appendChild(errorDiv);
             scrollToBottom();
-
             isWaitingResponse = false;
         });
     });

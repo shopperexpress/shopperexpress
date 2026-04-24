@@ -1266,6 +1266,9 @@
                   <div class="ai-chat__message answer">
                     Answer Lorem <a href="#">ipsum dolor sit ame</a>t <strong>consectetur adipisicing</strong> <i>elit. Voluptatibus</i>, ullam.
                   </div>
+                  <div class="ai-chat__contact-btn-wrap">
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#aiContactModal">Contact me</button>
+                  </div>
                   <div class="ai-chat__message answer loading">
                     <span class="ai-chat__dot-pulse"></span>
                     <span class="ai-chat__dot-pulse"></span>
@@ -1286,6 +1289,64 @@
                           ></path>
                         </svg>
                       </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Ai Contact Modal -->
+              <div class="modal fade ai-form-modal" id="aiContactModal" tabindex="-1" aria-labelledby="aiContactModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-form modal-dialog-scrollable modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+                          <path
+                            d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="modal-text text-center">
+                        <h3 class="modal-title" id="aiContactModalLabel">Contact form</h3>
+                        <p>Fill out the form and our team will get back to you soon!</p>
+                      </div>
+                      <div class="wpforms-container">
+                        <form action="#" class="wpforms-form">
+                          <div class="wpforms-field-container">
+                            <div class="wpforms-field">
+                              <label class="wpforms-field-label" for="popup-first-name">First name (optional)</label>
+                              <input type="text" id="popup-first-name" class="wpforms-field-large" />
+                            </div>
+                            <div class="wpforms-field">
+                              <label class="wpforms-field-label" for="popup-last-name">Last name (optional)</label>
+                              <input type="text" id="popup-last-name" class="wpforms-field-large" />
+                            </div>
+                            <div class="wpforms-field">
+                              <label class="wpforms-field-label" for="popup-email">Email (optional)</label>
+                              <input type="email" id="popup-email" class="wpforms-field-large" />
+                            </div>
+                            <div class="wpforms-field">
+                              <label class="wpforms-field-label" for="popup-phone">Phone number (optional)</label>
+                              <input type="tel" id="popup-phone" class="wpforms-field-large" />
+                            </div>
+                            <div class="wpforms-field">
+                              <label class="wpforms-field-label" for="popup-contact-method">Preferred method of contact</label>
+                              <select id="popup-contact-method">
+                                <option value="0"></option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                                <option value="4">Option 4</option>
+                                <option value="5">Option 5</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="wpforms-submit-container">
+                            <button type="submit" class="wpforms-submit Get Best Price Submit">Submit</button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
                   </div>
                 </div>

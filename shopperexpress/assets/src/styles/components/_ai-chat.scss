@@ -304,6 +304,17 @@
       }
     }
   }
+
+  &__contact-btn-wrap {
+    padding: 16px 0;
+    text-align: left;
+
+    .btn {
+      font-size: 14px;
+      border-radius: 6px;
+      border: 0;
+    }
+  }
 }
 
 .ai-chat__dot-pulse {
@@ -322,6 +333,88 @@
 
   &:last-child {
     animation-delay: 0.5s;
+  }
+}
+
+.chat-active.modal-open {
+  .modal-backdrop {
+    opacity: 0;
+  }
+}
+
+.modal.ai-form-modal {
+  position: absolute;
+  background-color: rgba($black, 0.6);
+  padding: 24px;
+
+  .modal-dialog {
+    margin-block: 0;
+    min-height: 100%;
+    max-height: calc(100% - 48px);
+  }
+
+  .modal-content {
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: flex-end;
+    border: 0;
+    padding: 16px 16px 0;
+
+    .close {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border: 0;
+      border-radius: 50rem;
+
+      svg {
+        width: 24px;
+      }
+    }
+  }
+
+  .modal-title {
+    text-transform: capitalize;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+
+  .modal-body {
+    padding: 16px 40px 40px;
+  }
+
+  .modal-text {
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 500;
+
+    p {
+      color: $gray-700;
+    }
+  }
+
+  .wpforms-container {
+    margin: 0 !important;
+    padding: 0;
+  }
+
+  .wpforms-form {
+    .wpforms-field-container {
+      //
+    }
+
+    .wpforms-submit-container {
+      button[type="submit"] {
+        border: 0;
+        font-size: 14px;
+        min-width: 200px;
+        border-radius: 6px;
+        padding: 15px 20px;
+      }
+    }
   }
 }
 

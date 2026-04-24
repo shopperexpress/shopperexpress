@@ -88,7 +88,7 @@ array_map(
 			);
 		}
 	},
-	array( 'helpers', 'theme-functions', 'ConversionBlock', 'Walker_Nav', 'Widget', 'Evox', 'Twilio', 'theme-filters' )
+	array( 'helpers', 'theme-functions', 'class-conversion-block', 'class-walker-nav', 'class-widget', 'class-evox', 'class-twilio', 'theme-filters' )
 );
 
 /**

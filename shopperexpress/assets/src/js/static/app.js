@@ -2233,7 +2233,7 @@ function initMobileNav() {
 	jQuery('body').mobileNav({
 		menuActiveClass: 'chat-active',
 		menuOpener: '.ai-chat__opener, .ai-chat__close',
-		hideOnClickOutside: true,
+		hideOnClickOutside: false,
 		menuDrop: '.ai-chat'
 	});
 

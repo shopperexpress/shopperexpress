@@ -31,7 +31,19 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 		$add_asterisk = get_sub_field( 'add_asterisk' ) ? '*' : null;
 		$price        = get_sub_field( 'show_text_if_less_than' ) ? get_sub_field( 'price' ) : 0;
 		$show_symbol  = get_sub_field( 'show_symbol' ) ? '- ' : '';
-		$text_color   = get_sub_field( 'text_color' ) ? ' style="color: ' . esc_attr( get_sub_field( 'text_color' ) ) . '"' : '';
+		$font_size    = is_single() ? get_sub_field( 'vdp_font_size' ) : get_sub_field( 'srp_font_size' );
+		$text_color   = get_sub_field( 'text_color' );
+		$style_attr   = '';
+		if ( $text_color || $font_size ) {
+			$style_attr .= ' style="';
+			if ( $text_color ) {
+				$style_attr .= 'color: ' . esc_attr( $text_color ) . '; ';
+			}
+			if ( $font_size ) {
+				$style_attr .= 'font-size: ' . esc_attr( $font_size ) . 'px; ';
+			}
+			$style_attr .= '"';
+		}
 
 		if ( ( $post_type === $vehicle_type || 'All' === $vehicle_type ) && $show && 'hidden' !== $show_payment ) :
 			$payment_type     = get_sub_field( 'payment_type' );
@@ -39,26 +51,26 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 			$is_cross_through = get_sub_field( 'text_cross_through' );
 
 			if ( 'comment1' === $payment_type['value'] || 'comment2' === $payment_type['value'] ) {
-				$payment = '<span class="price-spr-primary" ' . $text_color . '>' . get_field( $payment_type['value'], $post_id ) . '</span>';
+				$payment = '<span class="price-spr-primary" ' . $style_attr . '>' . get_field( $payment_type['value'], $post_id ) . '</span>';
 			} elseif ( get_field( $payment_type['value'], $post_id ) == false || intval( get_field( $payment_type['value'], $post_id ) ) <= $price ) {
 					$payment = get_sub_field( 'svg_icon_condition' ) . get_sub_field( 'title_condition' );
 				if ( 'original_price' === $payment_type['value'] ) {
-					$payment = '<span class="price-spr">' . $payment . '</span>';
+					$payment = '<span class="price-spr" ' . $style_attr . '>' . $payment . '</span>';
 				} else {
-					$payment = '<span class="price-spr-primary" ' . $text_color . '>' . $payment . '</span>';
+					$payment = '<span class="price-spr-primary" ' . $style_attr . '>' . $payment . '</span>';
 				}
 			} else {
 				$payment = $show_symbol . '$' . number_format( intval( get_field( $payment_type['value'], $post_id ) ) ) . $add_asterisk;
 				if ( $is_cross_through ) {
 					if ( 'original_price' === $payment_type['value'] ) {
-						$payment = '<s class="price-spr" ' . $text_color . '>' . $payment . '</s>';
+						$payment = '<s class="price-spr" ' . $style_attr . '>' . $payment . '</s>';
 					} else {
-						$payment = '<s class="price-spr-primary" ' . $text_color . ' ' . $text_color . '>' . $payment . '</s>';
+						$payment = '<s class="price-spr-primary" ' . $style_attr . ' ' . $style_attr . '>' . $payment . '</s>';
 					}
 				} elseif ( 'original_price' === $payment_type['value'] ) {
-						$payment = '<span class="price-spr">' . $payment . '</s>';
+						$payment = '<span class="price-spr" ' . $style_attr . '>' . $payment . '</s>';
 				} else {
-					$payment = '<span class="price-spr-primary" ' . $text_color . '>' . $payment . '</s>';
+					$payment = '<span class="price-spr-primary" ' . $style_attr . '>' . $payment . '</s>';
 				}
 			}
 			?>
@@ -71,7 +83,7 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 					<h4><?php echo $heading; ?></h4>
 					<div class="summary-list__row">
 						<?php echo wpautop( get_sub_field( 'description' ) ); ?>
-						<strong class="price" <?php echo $text_color; ?>><?php echo $payment; ?></strong>
+						<strong class="price" <?php echo $style_attr; ?>><?php echo $payment; ?></strong>
 					</div>
 				<?php else : ?>
 					<a href="#" data-post="<?php echo $post_id; ?>" data-toggle="modal" data-target="#unlockSavingsModal">
@@ -81,13 +93,13 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 								<?php echo wpautop( get_sub_field( 'description' ) ); ?>
 							</div>
 							<?php if ( $show_payment == 'visible' || wps_auth() ) : ?>
-								<strong class="price" <?php echo $text_color; ?>><?php echo $payment; ?></strong>
+								<strong class="price" <?php echo $style_attr; ?>><?php echo $payment; ?></strong>
 							<?php else : ?>
 								<span class="btn btn-primary unlock-item" data-toggle="modal" data-target="#unlockSavingsModal"><?php the_sub_field( 'lock_svg_icon' ); ?><?php the_sub_field( 'lock_text' ); ?></span>
 							<?php endif; ?>
 						<?php else : ?>
 							<strong class="dt"><?php echo $heading; ?></strong>
-							<strong class="price" <?php echo $text_color; ?>><?php echo $payment; ?></strong>
+							<strong class="price" <?php echo $style_attr; ?>><?php echo $payment; ?></strong>
 							<span class="btn btn-primary unlock-item"><?php the_sub_field( 'lock_svg_icon' ); ?><?php the_sub_field( 'lock_text' ); ?></span>
 						<?php endif ?>
 					</a>

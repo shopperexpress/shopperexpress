@@ -30,7 +30,6 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
         'A' => 
         array (
             'Auryn\\' => 6,
-            'App\\' => 4,
         ),
     );
 
@@ -59,15 +58,38 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
         array (
             0 => __DIR__ . '/..' . '/rdlowrey/auryn/lib',
         ),
-        'App\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/inc',
-        ),
     );
 
     public static $classMap = array (
+        'App\\Components\\Base\\ACF' => __DIR__ . '/../..' . '/inc/Components/Base/class-acf.php',
+        'App\\Components\\Base\\AI' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai.php',
+        'App\\Components\\Base\\ASC_Datalayer' => __DIR__ . '/../..' . '/inc/Components/Base/class-asc-datalayer.php',
+        'App\\Components\\Base\\Admin' => __DIR__ . '/../..' . '/inc/Components/Base/class-admin.php',
+        'App\\Components\\Base\\Ajax' => __DIR__ . '/../..' . '/inc/Components/Base/class-ajax.php',
+        'App\\Components\\Base\\Api' => __DIR__ . '/../..' . '/inc/Components/Base/class-api.php',
+        'App\\Components\\Base\\CPT' => __DIR__ . '/../..' . '/inc/Components/Base/class-cpt.php',
+        'App\\Components\\Base\\Export' => __DIR__ . '/../..' . '/inc/Components/Base/class-export.php',
+        'App\\Components\\Base\\JSON_LD' => __DIR__ . '/../..' . '/inc/Components/Base/class-json-ld.php',
+        'App\\Components\\Base\\Menus' => __DIR__ . '/../..' . '/inc/Components/Base/class-menus.php',
+        'App\\Components\\Base\\Options_Page' => __DIR__ . '/../..' . '/inc/Components/Base/class-options-page.php',
+        'App\\Components\\Base\\PopupResolver' => __DIR__ . '/../..' . '/inc/Components/Base/class-popup-resolver.php',
+        'App\\Components\\Base\\Rest' => __DIR__ . '/../..' . '/inc/Components/Base/class-rest.php',
+        'App\\Components\\Base\\Scripts' => __DIR__ . '/../..' . '/inc/Components/Base/class-scripts.php',
+        'App\\Components\\Base\\Shortcode' => __DIR__ . '/../..' . '/inc/Components/Base/class-shortcode.php',
+        'App\\Components\\Base\\Sidebars' => __DIR__ . '/../..' . '/inc/Components/Base/class-sidebars.php',
+        'App\\Components\\Base\\Theme_Support' => __DIR__ . '/../..' . '/inc/Components/Base/class-theme-support.php',
+        'App\\Components\\Gutenberg\\Custom_Blocks_Category' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-custom-blocks-category.php',
+        'App\\Components\\Gutenberg\\Gutenberg_Color_Palette' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-gutenberg-color-palette.php',
+        'App\\Components\\Gutenberg\\Register_Gutenberg_Blocks' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-register-gutenberg-blocks.php',
+        'App\\Components\\Theme' => __DIR__ . '/../..' . '/inc/Components/class-theme.php',
+        'App\\Components\\Theme_Component' => __DIR__ . '/../..' . '/inc/Components/class-theme-component.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'ConversionBlock' => __DIR__ . '/../..' . '/inc/class-conversion-block.php',
+        'Custom_Walker_Nav_Menu' => __DIR__ . '/../..' . '/inc/class-walker-nav.php',
+        'Drop_Down_Walker_Nav_Menu' => __DIR__ . '/../..' . '/inc/class-walker-nav.php',
+        'Evox' => __DIR__ . '/../..' . '/inc/class-evox.php',
+        'Header_Walker_Nav_Menu' => __DIR__ . '/../..' . '/inc/class-walker-nav.php',
         'PHPCSUtils\\AbstractSniffs\\AbstractArrayDeclarationSniff' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/AbstractSniffs/AbstractArrayDeclarationSniff.php',
         'PHPCSUtils\\BackCompat\\BCFile' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/BackCompat/BCFile.php',
         'PHPCSUtils\\BackCompat\\BCTokens' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/BackCompat/BCTokens.php',
@@ -124,6 +146,9 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
+        'WPS_Latest_Posts_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
+        'WPS_Nav_Menu_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
+        'WP_Auto_Import' => __DIR__ . '/../..' . '/inc/classes.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

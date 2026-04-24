@@ -12,5 +12,4 @@ return array(
     'Symfony\\Component\\VarDumper\\' => array($vendorDir . '/symfony/var-dumper'),
     'PHPCSStandards\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\' => array($vendorDir . '/dealerdirect/phpcodesniffer-composer-installer/src'),
     'Auryn\\' => array($vendorDir . '/rdlowrey/auryn/lib'),
-    'App\\' => array($baseDir . '/inc'),
 );

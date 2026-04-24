@@ -21,6 +21,7 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap">
 	<?php
 	wp_head();
 	the_field( 'for_script_header', 'options' );
@@ -96,6 +97,7 @@
 		<?php
 	endif;
 	?>
+
 </head>
 
 <body <?php body_class(); ?>>
@@ -396,9 +398,9 @@
 						<div class="ai-chat">
 							<div class="ai-chat__holder">
 								<div class="ai-chat__header">
-								<?php if ( $heading_ai ) : ?>
-									<h2><?php echo esc_html( $heading_ai ); ?></h2>
-								<?php endif; ?>
+									<?php if ( $heading_ai ) : ?>
+										<h2><?php echo esc_html( $heading_ai ); ?></h2>
+									<?php endif; ?>
 									<button type="button" class="ai-chat__close" aria-label="Close">
 										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24" viewBox="0 -960 960 960" width="24" fill="#000">
 											<path
@@ -425,6 +427,53 @@
 									</div>
 								</div>
 							</div>
+							<?php
+							$modals = array( 'ai_sales', 'ai_service', 'ai_parts' );
+							foreach ( $modals as $modal ) :
+
+								while ( have_rows( $modal, 'options' ) ) :
+									the_row();
+									$title       = get_sub_field( 'title' );
+									$description = get_sub_field( 'description' );
+									$form_id     = get_sub_field( 'form' );
+									$modal_id    = 'aiContactModal-' . esc_attr( $modal );
+									$label_id    = 'aiContactModalLabel-' . esc_attr( $modal );
+									?>
+									<div class="modal fade ai-form-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-labelledby="<?php echo esc_attr( $label_id ); ?>" aria-hidden="true" data-modal-type="<?php echo esc_attr( $modal ); ?>">
+										<div class="modal-dialog modal-form modal-dialog-scrollable modal-dialog-centered">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+														<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+															<path
+																d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+														</svg>
+													</button>
+												</div>
+												<div class="modal-body">
+													<?php if ( $title || $description ) : ?>
+														<div class="modal-text text-center">
+															<?php if ( $title ) : ?>
+																<h3 class="modal-title" id="<?php echo esc_attr( $label_id ); ?>"><?php echo esc_html( $title ); ?></h3>
+																<?php
+															endif;
+															echo wp_kses_post( $description );
+															?>
+														</div>
+														<?php
+													endif;
+													if ( $form_id ) {
+														echo do_shortcode( '[wpforms id="' . intval( $form_id ) . '"]' );
+													}
+													?>
+												</div>
+											</div>
+										</div>
+									</div>
+									<?php
+								endwhile;
+							endforeach;
+							?>
 						</div>
 					</div>
 				<?php endif; ?>
