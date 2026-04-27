@@ -7,7 +7,7 @@ Author: ShopperExpress
 Author URI:
 Description: ShopperExpress theme for Wordpress
 Tags: one-column, two-columns
-Version: 2.0.27
+Version: 2.0.28
 Requires at least: 5.0
 Tested up to: 7.4
 Requires PHP: 8.1
@@ -38,8 +38,4 @@ Text Domain: shopperexpress
 .post-type-archive.logged-in .payment-info li .unlock-item,
 .post-type-archive .payment-info li.show .unlock-item {
     display: none;
-}
-
-.callout-set {
-    display: none !important;
 }
