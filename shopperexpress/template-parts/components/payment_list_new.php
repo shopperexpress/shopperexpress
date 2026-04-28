@@ -157,7 +157,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		}
 		$style_attr .= '"';
 	}
-	$show_symbol         = get_sub_field( 'show_symbol' ) ? '- ' : '';
+	$show_symbol         = get_sub_field( 'show_symbol' );
 	$small_pricing_block = get_sub_field( 'small_pricing_block' );
 
 	$formatted_value = $show_symbol . '$' . number_format( (int) $value );

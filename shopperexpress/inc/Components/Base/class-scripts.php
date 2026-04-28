@@ -140,6 +140,20 @@ class Scripts implements Theme_Component {
 			true
 		);
 		wp_enqueue_script(
+			'shopperexpress/asc-menu',
+			\App\asset_url_old( 'js/asc-menu.js' ),
+			array( 'shopperexpress/asc-publish' ),
+			$theme_version,
+			true
+		);
+		wp_enqueue_script(
+			'shopperexpress/asc-media',
+			\App\asset_url_old( 'js/asc-media.js' ),
+			array( 'shopperexpress/asc-publish', 'jquery' ),
+			$theme_version,
+			true
+		);
+		wp_enqueue_script(
 			'shopperexpress/asc-datalayer',
 			\App\asset_url_old( 'js/asc-datalayer.js' ),
 			array( 'shopperexpress/asc-publish', 'jquery' ),

@@ -875,8 +875,8 @@
                             "label": "Show symbol",
                             "name": "show_symbol",
                             "aria-label": "",
-                            "type": "true_false",
-                            "instructions": "symbol - \"-\"",
+                            "type": "button_group",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -884,12 +884,15 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "message": "",
-                            "default_value": 0,
-                            "allow_in_bindings": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
-                            "ui": 1
+                            "choices": {
+                                "+": "+",
+                                "-": "-"
+                            },
+                            "default_value": "-",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "layout": "horizontal"
                         }
                     ],
                     "min": "",
@@ -1905,8 +1908,8 @@
                     "label": "Show symbol",
                     "name": "show_symbol",
                     "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "symbol - '-'",
+                    "type": "button_group",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1914,12 +1917,15 @@
                         "class": "",
                         "id": ""
                     },
-                    "message": "",
-                    "default_value": 0,
-                    "allow_in_bindings": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
-                    "ui": 1,
+                    "choices": {
+                        "+": "+",
+                        "-": "-"
+                    },
+                    "default_value": "-",
+                    "return_format": "value",
+                    "allow_null": 0,
+                    "allow_in_bindings": 0,
+                    "layout": "horizontal",
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -10881,5 +10887,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776936439
+    "modified": 1777282012
 }
