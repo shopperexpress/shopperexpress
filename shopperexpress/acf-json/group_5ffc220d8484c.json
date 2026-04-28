@@ -885,10 +885,11 @@
                                 "id": ""
                             },
                             "choices": {
+                                "none": "none",
                                 "+": "+",
                                 "-": "-"
                             },
-                            "default_value": "-",
+                            "default_value": "none",
                             "return_format": "value",
                             "allow_null": 0,
                             "allow_in_bindings": 0,
@@ -1918,10 +1919,11 @@
                         "id": ""
                     },
                     "choices": {
+                        "none": "none",
                         "+": "+",
                         "-": "-"
                     },
-                    "default_value": "-",
+                    "default_value": "none",
                     "return_format": "value",
                     "allow_null": 0,
                     "allow_in_bindings": 0,
@@ -10881,11 +10883,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1777282012
+    "modified": 1777388175
 }

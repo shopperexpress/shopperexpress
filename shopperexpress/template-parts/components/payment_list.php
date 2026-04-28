@@ -31,6 +31,7 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 		$add_asterisk = get_sub_field( 'add_asterisk' ) ? '*' : null;
 		$price        = get_sub_field( 'show_text_if_less_than' ) ? get_sub_field( 'price' ) : 0;
 		$show_symbol  = get_sub_field( 'show_symbol' );
+		$show_symbol  = ! empty( $show_symbol ) && 'none' !== $show_symbol ? $show_symbol : '';
 		$font_size    = is_single() ? get_sub_field( 'vdp_font_size' ) : get_sub_field( 'srp_font_size' );
 		$text_color   = get_sub_field( 'text_color' );
 		$style_attr   = '';

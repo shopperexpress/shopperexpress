@@ -133,6 +133,13 @@ class Scripts implements Theme_Component {
 			true
 		);
 		wp_enqueue_script(
+			'shopperexpress/asc-intice-tool-intake',
+			\App\asset_url_old( 'js/asc-intice-tool-intake.js' ),
+			array( 'shopperexpress/asc-publish' ),
+			$theme_version,
+			true
+		);
+		wp_enqueue_script(
 			'shopperexpress/asc-cta',
 			\App\asset_url_old( 'js/asc-cta.js' ),
 			array( 'shopperexpress/asc-publish' ),
