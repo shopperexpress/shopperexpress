@@ -23,16 +23,87 @@ class Shortcode implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		$methods = get_class_methods( $this );
+		add_action(
+			'init',
+			function () {
 
-		foreach ( $methods as $method ) {
-			if ( in_array( $method, array( 'register', '__construct' ), true ) ) {
-				continue;
+				$methods = get_class_methods( $this );
+
+				foreach ( $methods as $method ) {
+					if ( in_array( $method, array( 'register', '__construct' ), true ) ) {
+						continue;
+					}
+
+					add_shortcode( $method, array( $this, $method ) );
+				}
 			}
-
-			add_shortcode( $method, array( $this, $method ) );
-		}
+		);
 	}
+
+	/**
+	 * Lease Payment shortcode.
+	 *
+	 * Usage: [lease_payment id="POST_ID"]
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function lease_payment( $atts = array() ) {
+		$post_id       = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+		$lease_payment = get_field( 'lease_payment', $post_id );
+		return $lease_payment ? esc_html( $lease_payment ) : '';
+	}
+
+
+	/**
+	 * Year shortcode.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function year( $atts = array() ) {
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+		$year    = get_field( 'year', $post_id );
+		return $year ? esc_html( $year ) : '';
+	}
+
+	/**
+	 * Make shortcode.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function make( $atts = array() ) {
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+		$make    = get_field( 'make', $post_id );
+		return $make ? esc_html( $make ) : '';
+	}
+
+	/**
+	 * Model shortcode.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function model( $atts = array() ) {
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+		$model   = get_field( 'model', $post_id );
+		return $model ? esc_html( $model ) : '';
+	}
+
+	/**
+	 * Trim shortcode.
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function trim( $atts = array() ) {
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+		$trim    = get_field( 'trim', $post_id );
+		return $trim ? esc_html( $trim ) : '';
+	}
+
+
 	/**
 	 * Show
 	 *
@@ -191,7 +262,6 @@ class Shortcode implements Theme_Component {
 		global $post;
 		$post_id = $post->ID;
 
-		$location      = wps_get_term( $post_id, 'location' );
 		$condition     = wps_get_term( $post_id, 'condition' );
 		$loanterm      = get_field( 'loanterm', $post_id );
 		$loanapr       = get_field( 'loanapr', $post_id );

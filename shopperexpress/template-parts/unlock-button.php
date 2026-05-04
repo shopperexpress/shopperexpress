@@ -5,13 +5,17 @@
  * @package Shopperexpress
  */
 
-$args    = ! empty( $args ) ? $args : array();
-$post_id = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$loged   = ! empty( $args['loged'] ) ? $args['loged'] : is_user_logged_in();
-$show    = ! empty( $args['show-image'] ) ? $args['show-image'] : 'true';
-$field   = 'used-listings' == get_post_type( $post_id ) ? '-used-listings' : '';
+$args     = ! empty( $args ) ? $args : array();
+$post_id  = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$loged    = ! empty( $args['loged'] ) ? $args['loged'] : is_user_logged_in();
+$show     = ! empty( $args['show-image'] ) ? $args['show-image'] : 'true';
+$field    = 'used-listings' == get_post_type( $post_id ) ? '-used-listings' : '';
+$single   = is_single( $post_id ) ? '-vdp' : '';
+$position = get_field( 'cta_animation_position' . $field . $single, 'options' );
 
 if ( in_array( get_post_type( $post_id ), array( 'listings', 'used-listings', 'offers', 'service-offers' ) ) ) {
+	$custom_img_html = '';
+	ob_start();
 	if ( in_array( get_post_type( $post_id ), array( 'listings', 'used-listings' ) ) && 'true' == $show ) {
 		while ( have_rows( 'custom_image' . $field, 'options' ) ) :
 			the_row();
@@ -23,6 +27,11 @@ if ( in_array( get_post_type( $post_id ), array( 'listings', 'used-listings', 'o
 				echo wp_kses_post( get_attachment_image( $image['id'], 'full', $attr ) );
 			}
 		endwhile;
+	}
+	$custom_img_html = ob_get_clean();
+
+	if ( 'above' == $position ) {
+		echo wp_kses_post( $custom_img_html );
 	}
 
 	if ( ! wps_auth() && ! $loged ) :
@@ -49,5 +58,8 @@ if ( in_array( get_post_type( $post_id ), array( 'listings', 'used-listings', 'o
 				)
 			);
 		endwhile;
+	}
+	if ( 'below' == $position ) {
+		echo wp_kses_post( $custom_img_html );
 	}
 }

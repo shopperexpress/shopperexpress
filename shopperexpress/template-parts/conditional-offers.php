@@ -29,10 +29,12 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 		$json = '';
 	}
 
+	$title = get_field( 'api_new_car_incentives_title', 'option' ) ? get_field( 'api_new_car_incentives_title', 'option' ) : esc_html__( 'Conditional Offers', 'shopperexpress' );
+
 	if ( ! empty( $json ) ) :
 		?>
 		<div class="conditional-offers">
-			<strong class="conditional-offers__title"><?php echo $make; ?> <?php esc_html_e( 'Conditional Offers', 'shopperexpress' ); ?></strong>
+			<strong class="conditional-offers__title"><?php echo $make; ?> <?php echo esc_html( $title ); ?></strong>
 			<ul class="conditional-offers__list list-unstyled">
 				<?php foreach ( $json as $index => $item ) : ?>
 					<li>

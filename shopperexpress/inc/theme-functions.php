@@ -1348,3 +1348,35 @@ function get_font_family( $font_styling = '' ) {
 			endif;
 	endif;
 }
+
+/**
+ * Build style attribute.
+ *
+ * @param array $style Style array.
+ */
+function build_style_attr( array $style = array() ): string {
+	$styles = array();
+
+	$map = array(
+		'text_color'  => 'color',
+		'font_size'   => 'font-size',
+		'font_weight' => 'font-weight',
+		'font_family' => 'font-family',
+	);
+
+	foreach ( $map as $field => $css_property ) {
+		if ( empty( $style[ $field ] ) ) {
+			continue;
+		}
+
+		$value = esc_attr( $style[ $field ] );
+
+		if ( 'font_size' === $field ) {
+			$value .= 'px';
+		}
+
+		$styles[] = "{$css_property}: {$value};";
+	}
+
+	return $styles ? ' style="' . implode( ' ', $styles ) . '"' : '';
+}

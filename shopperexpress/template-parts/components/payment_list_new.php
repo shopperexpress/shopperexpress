@@ -144,19 +144,26 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		continue;
 	endif;
 
-	$font_size  = is_single() ? get_sub_field( 'vdp_font_size' ) : get_sub_field( 'srp_font_size' );
-	$text_color = get_sub_field( 'text_color' );
-	$style_attr = '';
-	if ( $text_color || $font_size ) {
-		$style_attr .= ' style="';
-		if ( $text_color ) {
-			$style_attr .= 'color: ' . esc_attr( $text_color ) . '; ';
-		}
-		if ( $font_size ) {
-			$style_attr .= 'font-size: ' . esc_attr( $font_size ) . 'px; ';
-		}
-		$style_attr .= '"';
+	$get_style = get_sub_field( ( is_single() ? 'vdp_' : 'srp_' ) . 'style' );
+	$style_row = array();
+
+	if ( ! empty( $get_style['padding_top'] ) ) {
+		$style_row[] = 'padding-top:' . $get_style['padding_top'] . 'px;';
 	}
+
+	if ( ! empty( $get_style['padding_bottom'] ) ) {
+		$style_row[] = 'padding-bottom:' . $get_style['padding_bottom'] . 'px;';
+	}
+	if ( ! empty( $style_row ) ) {
+		$style_row = ' style="' . implode( '', $style_row ) . '"';
+	}
+
+	foreach ( array( 'title', 'description', 'price' ) as $key ) {
+		${$key . '_style'} = ! empty( $get_style[ $key ] )
+		? build_style_attr( $get_style[ $key ] )
+		: '';
+	}
+
 	$show_symbol         = get_sub_field( 'show_symbol' );
 	$show_symbol         = ! empty( $show_symbol ) && 'none' !== $show_symbol ? $show_symbol : '';
 	$small_pricing_block = get_sub_field( 'small_pricing_block' );
@@ -170,20 +177,20 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 	ob_start();
 	?>
-	<li class="show<?php echo $small_pricing_block ? ' text--sm' : ''; ?>">
+	<li class="show<?php echo $small_pricing_block ? ' text--sm' : ''; ?>" <?php echo ! is_array( $style_row ) ? $style_row : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
 		<a href="#" data-content="<?php echo esc_attr( wp_strip_all_tags( (string) get_sub_field( 'pop_up_details' ) ) ); ?>" data-toggle="modal" data-target="#popUpDetails">
 			<?php if ( $style ) : ?>
-				<strong class="dt"><?php echo esc_html( $heading ); ?></strong>
+				<strong class="dt" <?php echo $title_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>><?php echo esc_html( $heading ); ?></strong>
 			<?php else : ?>
 				<div class="text-holder">
-					<h4 class="h3"><?php echo esc_html( $heading ); ?></h4>
+					<h4 class="h3" <?php echo $title_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>><?php echo esc_html( $heading ); ?></h4>
 					<?php if ( ! $small_pricing_block ) : ?>
-						<?php echo wp_kses_post( $description ); ?>
+						<p <?php echo $description_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>><?php echo esc_html( $description ); ?></p>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 			<strong class="price">
-				<span class="<?php echo esc_attr( $price_class ); ?>"<?php echo $style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
+				<span class="<?php echo esc_attr( $price_class ); ?>"<?php echo $price_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
 					<?php echo wp_kses( $formatted_value, array( 's' => array() ) ); ?>
 				</span>
 			</strong>

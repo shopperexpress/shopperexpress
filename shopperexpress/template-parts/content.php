@@ -21,11 +21,9 @@
 			<p class="meta-info">
 				<?php _e( 'by', 'shopperexpress' ); ?> <a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ), get_the_author_meta( 'user_nicename' ) ); ?>"><?php the_author(); ?></a>
 				<br />
-				<a href="<?php echo get_date_archive_link(); ?>" rel="bookmark">
-					<time datetime="<?php echo get_the_date( 'Y-m-d' ); ?>">
-						<?php the_date(); ?>
-					</time>
-				</a>
+				<time datetime="<?php echo get_the_date( 'Y-m-d' ); ?>">
+					<?php the_date(); ?>
+				</time>
 			</p>
 			<?php
 			if ( shortcode_exists( 'addtoany' ) ) {

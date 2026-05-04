@@ -409,51 +409,32 @@ class Api implements Theme_Component {
 
 	private function generate_vehicles_data_new( string $post_type, $similar_vehicles = false ): array {
 
-		$sort = ! empty( $_REQUEST['sort'] ) && $_REQUEST['sort'] === 'custom' ? true : false;
+		$sort       = ! empty( $_REQUEST['sort'] ) && $_REQUEST['sort'] === 'custom' ? true : false;
+		$sort_rules = array();
 
+		if ( have_rows( 'custom_sort_' . $post_type, 'option' ) ) {
+			while ( have_rows( 'custom_sort_' . $post_type, 'option' ) ) {
+				the_row();
+
+				$field = get_sub_field( 'field' );
+				$order = strtoupper( get_sub_field( 'order' ) ) === 'DESC' ? 'DESC' : 'ASC';
+
+				if ( $field ) {
+					$field        = 'price_sort' === $field ? 'price' : $field;
+					$sort_rules[] = array(
+						'field'   => $field,
+						'order'   => $order,
+						'numeric' => in_array( $field, array( 'price', 'mileage', 'year', 'dealer_special', 'price_sort' ), true ),
+					);
+				}
+			}
+		}
 		// Set up query arguments based on post type
 		$args = array(
 			'post_type'      => $post_type,
 			'posts_per_page' => -1,
 			'fields'         => 'ids',
 		);
-
-		if ( $sort && in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
-			$meta_query = array( 'relation' => 'AND' );
-			$orderby    = array();
-
-			if ( have_rows( 'custom_sort_' . $post_type, 'option' ) ) {
-				while ( have_rows( 'custom_sort_' . $post_type, 'option' ) ) {
-					the_row();
-
-					$field = get_sub_field( 'field' );
-					$order = strtoupper( get_sub_field( 'order' ) ) === 'DESC' ? 'DESC' : 'ASC';
-
-					if ( $field ) {
-						$clause = $field . '_clause';
-
-						$meta_query[ $clause ] = array(
-							'key'     => $field,
-							'compare' => 'EXISTS',
-						);
-
-						if ( in_array( $field, array( 'price', 'mileage', 'year', 'dealer_special' ), true ) ) {
-
-							$meta_query[ $clause ]['type'] = 'NUMERIC';
-						}
-
-						$orderby[ $clause ] = $order;
-					}
-				}
-			}
-
-			if ( count( $meta_query ) > 1 ) {
-				$args['meta_query'] = $meta_query;
-			}
-			if ( ! empty( $orderby ) ) {
-				$args['orderby'] = $orderby;
-			}
-		}
 
 		// Add meta query arguments for specific post types
 		if ( in_array( $post_type, array( 'listings', 'used-listings' ), true ) && ! $sort ) {
@@ -650,6 +631,52 @@ class Api implements Theme_Component {
 				}
 
 				$vehicles[] = $vehicle_data;
+			}
+		}
+
+		if ( $sort && in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
+
+			if ( ! empty( $sort_rules ) && ! empty( $vehicles ) ) {
+
+				$normalize = function ( $value, $numeric ) {
+					if ( $value === null || $value === '' ) {
+						return $numeric ? INF : '';
+					}
+
+					if ( $numeric ) {
+						return (float) preg_replace( '/[^0-9.-]/', '', (string) $value );
+					}
+
+					return mb_strtolower( (string) $value );
+				};
+
+				usort(
+					$vehicles,
+					function ( $a, $b ) use ( $sort_rules, $normalize ) {
+
+						foreach ( $sort_rules as $rule ) {
+
+							$field   = $rule['field'];
+							$order   = $rule['order'];
+							$numeric = $rule['numeric'];
+
+							$valA = $normalize( $a[ $field ] ?? null, $numeric );
+							$valB = $normalize( $b[ $field ] ?? null, $numeric );
+
+							if ( $valA == $valB ) {
+								continue;
+							}
+
+							if ( $order === 'ASC' ) {
+								return $valA <=> $valB;
+							}
+
+							return $valB <=> $valA;
+						}
+
+						return 0;
+					}
+				);
 			}
 		}
 
