@@ -786,6 +786,32 @@
   }
 }
 
+.modal-steps {
+  .step {
+    display: none;
+
+    &.current-step {
+      display: block;
+    }
+  }
+}
+
+.modal-footer {
+  .steps-controls {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    button {
+      border: 0;
+      transition: all;
+      padding: 10px 14px;
+    }
+  }
+}
+
 .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }

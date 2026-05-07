@@ -147,11 +147,11 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	$get_style = get_sub_field( ( is_single() ? 'vdp_' : 'srp_' ) . 'style' );
 	$style_row = array();
 
-	if ( ! empty( $get_style['padding_top'] ) ) {
+	if ( ! empty( $get_style['padding_top'] ) || 0 <= $get_style['padding_top'] ) {
 		$style_row[] = 'padding-top:' . $get_style['padding_top'] . 'px;';
 	}
 
-	if ( ! empty( $get_style['padding_bottom'] ) ) {
+	if ( ! empty( $get_style['padding_bottom'] ) || 0 <= $get_style['padding_bottom'] ) {
 		$style_row[] = 'padding-bottom:' . $get_style['padding_bottom'] . 'px;';
 	}
 	if ( ! empty( $style_row ) ) {

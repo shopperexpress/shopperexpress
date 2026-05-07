@@ -2158,11 +2158,23 @@ function initFancybox() {
 
 // Cookie modal init
 function initCookieModal() {
-	document.querySelectorAll('.modal').forEach((modal) => {
+	const activeStepClass = 'current-step';
+	const hiddenClass = 'hidden-button';
+
+	document.querySelectorAll('.modal[data-cookie-expire-days]').forEach((modal) => {
 		const ID = modal.getAttribute('id');
 		const cookieKey = ID + '-is-cashed';
 		const isShow = modal.dataset.show === 'true';
 		const cookieExpireDays = modal.dataset.cookieExpireDays !== undefined ? Number(modal.dataset.cookieExpireDays) : 7;
+		const steps = (modal.querySelectorAll('.modal-steps .step'));
+		const btnNextStep = modal.querySelector('.btn-next');
+		const totalSteps = steps.length;
+		let currentStep = 0;
+
+		btnNextStep?.addEventListener('click', (e) => {
+			e.preventDefault();
+			goToNextStep();
+		});
 
 		if (!Cookies.get(cookieKey) && isShow) {
 			setTimeout(() => {
@@ -2174,6 +2186,26 @@ function initCookieModal() {
 		jQuery(modal).on('hidden.bs.modal', () => {
 			setCookie();
 		});
+
+		function goToNextStep() {
+			currentStep++;
+
+			if (currentStep > totalSteps - 1) {
+				currentStep = totalSteps - 1;
+			}
+
+			if (currentStep === totalSteps - 1) {
+				btnNextStep.classList.add(hiddenClass);
+			}
+
+			steps.forEach((step, i) => {
+				step.classList.remove(activeStepClass);
+
+				if (i === currentStep) {
+					step.classList.add(activeStepClass);
+				}
+			});
+		}
 
 		function showPopup() {
 			jQuery(modal).modal('show');

@@ -29,12 +29,39 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 		$json = '';
 	}
 
-	$title = get_field( 'api_new_car_incentives_title', 'option' ) ? get_field( 'api_new_car_incentives_title', 'option' ) : esc_html__( 'Conditional Offers', 'shopperexpress' );
+	$keywords = get_field( 'api_new_car_incentives_exclude_keyword_list', 'option' );
+
+	if ( ! empty( $keywords ) ) {
+		$keywords = explode( ',', $keywords );
+		$keywords = ! is_array( $keywords ) ? array( $keywords ) : $keywords;
+		$filtered = array_filter(
+			$json,
+			static function ( $item ) use ( $keywords ) {
+
+				$text = mb_strtolower(
+					implode( ' ', array_map( 'strval', $item ) )
+				);
+
+				foreach ( $keywords as $keyword ) {
+					if ( str_contains( $text, mb_strtolower( $keyword ) ) ) {
+						return false;
+					}
+				}
+
+				return true;
+			}
+		);
+
+		$json = array_values( $filtered );
+	}
+	$title = get_field( 'api_new_car_incentives_title', 'option' );
 
 	if ( ! empty( $json ) ) :
 		?>
 		<div class="conditional-offers">
-			<strong class="conditional-offers__title"><?php echo $make; ?> <?php echo esc_html( $title ); ?></strong>
+			<?php if ( $title ) : ?>
+				<strong class="conditional-offers__title"><?php echo esc_html( $title ); ?></strong>
+			<?php endif; ?>
 			<ul class="conditional-offers__list list-unstyled">
 				<?php foreach ( $json as $index => $item ) : ?>
 					<li>

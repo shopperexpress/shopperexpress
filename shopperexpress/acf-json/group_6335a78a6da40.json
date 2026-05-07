@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_68651a628ce4f",
-            "label": "SVG icon",
+            "label": "SVG Icon",
             "name": "svg_icon",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "",
+            "instructions": "Paste the full inline SVG markup for the icon displayed next to this menu item. Ensure the SVG has no fixed width/height attributes so it scales via CSS.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -17,7 +17,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">...</svg>",
             "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
@@ -33,7 +33,7 @@
             "name": "icon_rotation_on_hover",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "When enabled, the SVG icon rotates 180° when the visitor hovers over this menu item. Useful for dropdown arrow icons.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -43,17 +43,17 @@
             },
             "message": "",
             "default_value": 1,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Rotate",
+            "ui_off_text": "No Rotate",
             "ui": 1
         },
         {
             "key": "field_656df9bbae81a",
-            "label": "Show drop",
+            "label": "Show Dropdown",
             "name": "show_drop",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to show a mega-dropdown panel beneath this menu item.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -69,11 +69,11 @@
         },
         {
             "key": "field_66c60fef70daf",
-            "label": "Color",
+            "label": "Text & Icon Color",
             "name": "color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Text and icon",
+            "instructions": "Foreground color applied to the menu item label and SVG icon. Leave blank to inherit the theme default.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -87,11 +87,11 @@
         },
         {
             "key": "field_66c861fa32c31",
-            "label": "Background color",
+            "label": "Background Color",
             "name": "background_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Text and icon",
+            "instructions": "Background color applied behind this menu item. Leave blank to inherit the theme default.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

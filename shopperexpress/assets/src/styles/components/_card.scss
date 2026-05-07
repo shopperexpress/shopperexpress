@@ -236,6 +236,12 @@
 
     .detail-slider {
       margin: 0;
+      pointer-events: none;
+
+      .slick-prev:not(.slick-disabled),
+      .slick-next:not(.slick-disabled) {
+        pointer-events: initial;
+      }
     }
   }
 
@@ -311,6 +317,7 @@
     margin: 3px 0;
     padding: 14px 12px;
     text-transform: none;
+    position: relative;
   }
 
   .payment-info + .info-block__description {
@@ -347,6 +354,15 @@
 
     .page-loaded & {
       position: static;
+    }
+  }
+
+  .intice_bFrame {
+    .widget--buttons__holder {
+      button,
+      a {
+        position: relative;
+      }
     }
   }
 
@@ -457,13 +473,13 @@
   }
 
   .info-block__description + .animate-img,
-  .info-block__description + .animate-btn,
-  .payment-info + .animate-btn,
+  .info-block__description + .btn.btn-custom,
+  .payment-info + .btn.btn-custom,
   .payment-info + .animate-img {
     margin-top: auto;
   }
 
-  .payment-info ~ .btn.btn-custom {
+  .payment-info + .btn.btn-custom {
     margin-top: 7px;
     margin-bottom: 7px;
   }
@@ -502,7 +518,7 @@
       border-radius: 4px;
       font-size: 14px;
       padding: 14px 16px;
-      margin: auto 0 0;
+      margin: 7px 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -521,8 +537,8 @@
     margin: 5px 0 3px;
   }
 
-  img ~ .btn.btn-custom {
-    margin: 7px 0;
+  .btn.btn-custom + .animate-img {
+    margin-bottom: 7px;
   }
 
   .btn-disclosure {
@@ -554,6 +570,11 @@
     text-transform: none;
     font-size: 10px;
     line-height: 1.5;
+  }
+
+  .ghost-link {
+    position: absolute;
+    inset: 0;
   }
 }
 

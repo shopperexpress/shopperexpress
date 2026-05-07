@@ -1358,20 +1358,21 @@ function build_style_attr( array $style = array() ): string {
 	$styles = array();
 
 	$map = array(
-		'text_color'  => 'color',
-		'font_size'   => 'font-size',
-		'font_weight' => 'font-weight',
-		'font_family' => 'font-family',
+		'text_color'    => 'color',
+		'font_size'     => 'font-size',
+		'font_weight'   => 'font-weight',
+		'font_family'   => 'font-family',
+		'margin_bottom' => 'margin-bottom',
 	);
 
 	foreach ( $map as $field => $css_property ) {
-		if ( empty( $style[ $field ] ) ) {
+		if ( ! isset( $style[ $field ] ) || '' === $style[ $field ] ) {
 			continue;
 		}
 
 		$value = esc_attr( $style[ $field ] );
 
-		if ( 'font_size' === $field ) {
+		if ( 'font_size' === $field || 'margin_bottom' === $field ) {
 			$value .= 'px';
 		}
 
@@ -1379,4 +1380,69 @@ function build_style_attr( array $style = array() ): string {
 	}
 
 	return $styles ? ' style="' . implode( ' ', $styles ) . '"' : '';
+}
+
+/**
+ * Universal button renderer with unique ID + inline hover styles
+ *
+ * @param array $btn Button data.
+ * @param array $args Button args.
+ */
+function render_step_button( array $btn, array $args = array() ) {
+
+	static $i = 0;
+	++$i;
+
+	$id    = 'step-btn-' . $i . '-' . wp_generate_password( 4, false, false );
+	$title = ! empty( $btn['title'] ) ? $btn['title'] : ( $args['default_title'] ?? '' );
+	$class = ! empty( $args['class'] ) ? $args['class'] : '';
+	$attrs = ! empty( $args['attrs'] ) ? $args['attrs'] : '';
+
+	$styles = array();
+
+	if ( ! empty( $btn['font_size'] ) ) {
+		$styles[] = 'font-size:' . esc_attr( $btn['font_size'] ) . 'px';
+	}
+	if ( ! empty( $btn['background_color'] ) ) {
+		$styles[] = 'background-color:' . esc_attr( $btn['background_color'] );
+	}
+	if ( ! empty( $btn['text_color'] ) ) {
+		$styles[] = 'color:' . esc_attr( $btn['text_color'] );
+	}
+	if ( ! empty( $btn['font_family'] ) ) {
+		$styles[] = 'font-family:' . esc_attr( $btn['font_family'] );
+	}
+	if ( ! empty( $btn['font_weight'] ) ) {
+		$styles[] = 'font-weight:' . esc_attr( $btn['font_weight'] );
+	}
+
+	$style_attr = ! empty( $styles ) ? 'style="' . implode( ';', $styles ) . '"' : '';
+
+	$hover_css = '';
+
+	if ( ! empty( $btn['background_color_hover'] ) || ! empty( $btn['text_color_hover'] ) ) {
+		$hover_css .= '#' . $id . ':hover{';
+
+		if ( ! empty( $btn['background_color_hover'] ) ) {
+			$hover_css .= 'background-color:' . esc_attr( $btn['background_color_hover'] ) . ' !important;';
+		}
+		if ( ! empty( $btn['text_color_hover'] ) ) {
+			$hover_css .= 'color:' . esc_attr( $btn['text_color_hover'] ) . ' !important;';
+		}
+
+		$hover_css .= '}';
+	}
+
+	if ( $hover_css ) {
+		echo '<style>' . $hover_css . '</style>';
+	}
+
+	printf(
+		'<button id="%1$s" type="button" class="%2$s" %3$s %4$s>%5$s</button>',
+		esc_attr( $id ),
+		esc_attr( $class ),
+		$attrs,
+		$style_attr,
+		esc_html( $title )
+	);
 }

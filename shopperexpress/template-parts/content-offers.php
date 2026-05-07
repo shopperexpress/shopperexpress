@@ -9,19 +9,26 @@
 
 $post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
 $post_type = '-' . get_post_type( $post_id );
+$year      = get_field( 'year', $post_id );
+$make      = get_field( 'make', $post_id );
+$model     = get_field( 'model', $post_id );
+$trim      = get_field( 'trim', $post_id );
+
+$aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ), esc_html( $make ), esc_html( $model ), esc_html( $trim ), 'page' );
 ?>
 <div class="col-sm-6 col-lg-4 col-xxl-3">
 	<div class="card">
 		<div class="card-body">
+			<a class="ghost-link" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" aria-label="<?php echo esc_attr( implode( ' ', $aria_label ) ); ?>"></a>
 			<div class="card-head">
 				<div class="card-head__holder">
-					<span class="card-brand"><?php echo get_field( 'year', $post_id ); ?> <?php echo get_field( 'make', $post_id ); ?></span>
+					<span class="card-brand"><?php echo esc_html( $year ); ?> <?php echo esc_html( $make ); ?></span>
 					<?php
 					if ( shortcode_exists( 'favorite_button' ) ) {
 						echo do_shortcode( '[favorite_button post_id="' . $post_id . '"]' );}
 					?>
 				</div>
-				<strong class="card-model"><?php echo get_field( 'model', $post_id ); ?> <?php echo get_field( 'trim', $post_id ); ?></strong>
+				<strong class="card-model"><?php echo esc_html( $model ); ?> <?php echo esc_html( $trim ); ?></strong>
 			</div>
 			<?php
 			get_template_part(

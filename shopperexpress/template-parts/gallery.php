@@ -86,9 +86,7 @@ if ( $vin_number ) {
 				$gallery = is_array( $gallery ) ? $gallery[0]['image_url'] : $gallery;
 				?>
 				<div class="slide">
-					<a href="<?php echo get_the_permalink( $post_id ); ?>">
-						<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?> 2x" alt="<?php esc_attr_e( 'image description', 'shopperexpress' ); ?>">
-					</a>
+					<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?> 2x" alt="<?php esc_attr_e( 'image description', 'shopperexpress' ); ?>">
 				</div>
 				<?php
 			} else {
@@ -103,32 +101,24 @@ if ( $vin_number ) {
 						if ( $image_background ) :
 							?>
 							bg-cover" style="background-image: url(<?php echo get_field( 'background_image', 'option' ); ?>)<?php endif; ?>">
-							<a href="<?php echo get_the_permalink( $post_id ); ?>" 
+							<span 
 							<?php
 							if ( $image_reverse ) :
 								?>
 								class="reverse-image" <?php endif; ?>>
 								<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?> 2x" alt="<?php esc_attr_e( 'image description', 'shopperexpress' ); ?>">
-							</a>
+							</span>
 						</div>
 						<?php
 						++$i;
 					}
 				}
 				if ( 0 === $i ) {
-					?>
-						<a href="<?php echo get_the_permalink( $post_id ); ?>">
-							<?php echo default_image( 'slide', $post_type ); ?>
-						</a>
-					<?php
+					echo default_image( 'slide', $post_type );
 				}
 			}
 		} else {
-			?>
-			<a href="<?php echo get_the_permalink( $post_id ); ?>">
-				<?php echo default_image( 'slide', $post_type ); ?>
-			</a>
-			<?php
+			echo default_image( 'slide', $post_type );
 		}
 		?>
 	</div>

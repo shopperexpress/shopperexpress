@@ -26,7 +26,7 @@
             "name": "logo",
             "aria-label": "",
             "type": "image",
-            "instructions": "",
+            "instructions": "Upload the main site logo displayed in the header. Recommended size: 300x80 px, PNG with transparent background.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -49,11 +49,11 @@
         },
         {
             "key": "field_6478711ba3769",
-            "label": "Logo Url",
+            "label": "Logo URL",
             "name": "logo_url",
             "aria-label": "",
             "type": "url",
-            "instructions": "Logo will be linked to the Homepage if empty",
+            "instructions": "Optional custom URL the logo links to. Leave empty to link to the homepage.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -62,7 +62,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com"
         },
         {
             "key": "field_67dd6fcbf6ba7",
@@ -70,7 +70,7 @@
             "name": "logo_list",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Add additional logos displayed alongside the main logo (e.g. partner brand logos). Each row requires an image and a destination URL.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -93,7 +93,7 @@
                     "name": "image",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "",
+                    "instructions": "Logo image for this entry. Recommended size: 200x60 px, PNG with transparent background.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -118,11 +118,11 @@
                 },
                 {
                     "key": "field_67dd6fe7f6ba9",
-                    "label": "Url",
+                    "label": "URL",
                     "name": "url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "",
+                    "instructions": "The page this logo links to when clicked.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -132,7 +132,7 @@
                     },
                     "default_value": "",
                     "allow_in_bindings": 0,
-                    "placeholder": "",
+                    "placeholder": "https://",
                     "parent_repeater": "field_67dd6fcbf6ba7"
                 }
             ]
@@ -143,7 +143,7 @@
             "name": "page_for_saved_vehicles",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "",
+            "instructions": "Select the page that displays the user's saved/favourite vehicles. Used for the favourites icon link in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -177,7 +177,7 @@
             "name": "show_contact_bar",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to display the contact bar at the top of the header. Configure contacts in the Contact list section below.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -188,8 +188,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 1,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Visible",
+            "ui_off_text": "Hidden",
             "ui": 1
         },
         {
@@ -198,7 +198,7 @@
             "name": "hide_select_models",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to hide the model-selector dropdown in the header navigation.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -209,8 +209,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 1,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
             "ui": 1
         },
         {
@@ -219,7 +219,7 @@
             "name": "hide_favorite_icon",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to hide the saved-vehicles (heart) icon from the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -230,8 +230,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 1,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
             "ui": 1
         },
         {
@@ -258,7 +258,7 @@
             "name": "contact_list_header",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Desktop contact bar items. Each row is one contact entry (e.g. phone number, email, chat link). Visible only when Show contact bar is enabled.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -308,7 +308,7 @@
                     "name": "svg_icon",
                     "aria-label": "",
                     "type": "acfe_code_editor",
-                    "instructions": "",
+                    "instructions": "Paste the full svg markup for the icon shown next to this contact item.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -317,7 +317,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "",
+                    "placeholder": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">...</svg>",
                     "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
@@ -330,11 +330,11 @@
                 },
                 {
                     "key": "field_65039671a9046",
-                    "label": "title",
+                    "label": "Title",
                     "name": "title",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Label shown next to the icon (e.g. \"Call Us\" or the phone number).",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -344,18 +344,18 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. (555) 123-4567",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_65039657a9044"
                 },
                 {
                     "key": "field_65039675a9047",
-                    "label": "link",
+                    "label": "Link",
                     "name": "link",
                     "aria-label": "",
                     "type": "link",
-                    "instructions": "",
+                    "instructions": "Destination when the contact item is clicked (e.g. tel:+15551234567 or mailto:info@dealer.com). Hidden when Show Drop is enabled.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -380,7 +380,7 @@
                     "name": "show_drop",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Enable to show a dropdown panel instead of a direct link. Configure the dropdown items in the Drop tab.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -390,8 +390,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Dropdown",
+                    "ui_off_text": "Link",
                     "ui": 1,
                     "parent_repeater": "field_65039657a9044"
                 },
@@ -428,7 +428,7 @@
                     "name": "drop",
                     "aria-label": "",
                     "type": "repeater",
-                    "instructions": "",
+                    "instructions": "Each row is a section in the dropdown panel. Add a title and a list of items (e.g. department names with phone numbers).",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -459,7 +459,7 @@
                             "name": "svg_icon",
                             "aria-label": "",
                             "type": "acfe_code_editor",
-                            "instructions": "",
+                            "instructions": "Optional SVG icon displayed next to the dropdown section title.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -485,7 +485,7 @@
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Section heading shown inside the dropdown (e.g. \"Sales\", \"Service\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -495,7 +495,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Sales",
                             "prepend": "",
                             "append": "",
                             "parent_repeater": "field_66267a77fd4ad"
@@ -506,7 +506,7 @@
                             "name": "list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Items in this dropdown section. First text is typically the label (e.g. department name), Second text is the value (e.g. phone number).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -530,7 +530,7 @@
                                     "name": "first_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Left column text, typically a department or category label.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -540,7 +540,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. New Car Sales",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_66267a93fd4b0"
@@ -551,7 +551,7 @@
                                     "name": "second_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Right column text, typically a phone number or contact detail.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -561,7 +561,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. (555) 123-4567",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_66267a93fd4b0"
@@ -596,7 +596,7 @@
             "name": "contact_list_header_mobile",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Mobile contact bar items. Same structure as the desktop Contact list but rendered in the mobile menu. Visible only when Show contact bar is enabled.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -646,7 +646,7 @@
                     "name": "svg_icon",
                     "aria-label": "",
                     "type": "acfe_code_editor",
-                    "instructions": "",
+                    "instructions": "Paste the full svg markup for the icon shown next to this mobile contact item.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -668,11 +668,11 @@
                 },
                 {
                     "key": "field_66267abf24def",
-                    "label": "title",
+                    "label": "Title",
                     "name": "title",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Label shown next to the icon in the mobile contact bar.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -682,18 +682,18 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. (555) 123-4567",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_66267abf24dec"
                 },
                 {
                     "key": "field_66267abf24df0",
-                    "label": "link",
+                    "label": "Link",
                     "name": "link",
                     "aria-label": "",
                     "type": "link",
-                    "instructions": "",
+                    "instructions": "Destination when the mobile contact item is tapped (e.g. tel:+15551234567). Hidden when Show Drop is enabled.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -718,7 +718,7 @@
                     "name": "show_drop",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Enable to show a dropdown panel instead of a direct link on mobile.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -728,8 +728,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Dropdown",
+                    "ui_off_text": "Link",
                     "ui": 1,
                     "parent_repeater": "field_66267abf24dec"
                 },
@@ -766,7 +766,7 @@
                     "name": "drop",
                     "aria-label": "",
                     "type": "repeater",
-                    "instructions": "",
+                    "instructions": "Each row is a section in the mobile dropdown panel with a title and a list of contact items.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -797,7 +797,7 @@
                             "name": "svg_icon",
                             "aria-label": "",
                             "type": "acfe_code_editor",
-                            "instructions": "",
+                            "instructions": "Optional SVG icon displayed next to the mobile dropdown section title.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -823,7 +823,7 @@
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Section heading shown inside the mobile dropdown (e.g. \"Sales\", \"Service\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -833,7 +833,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Sales",
                             "prepend": "",
                             "append": "",
                             "parent_repeater": "field_66267abf24df3"
@@ -867,7 +867,7 @@
                                     "name": "first_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Left column text (e.g. department label).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -877,7 +877,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Service",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_66267abf24df6"
@@ -888,7 +888,7 @@
                                     "name": "second_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Right column text (e.g. phone number or contact detail).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -898,7 +898,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. (555) 123-4567",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_66267abf24df6"
@@ -933,7 +933,7 @@
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Site-wide title or dealership name displayed in the header intro area.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -942,7 +942,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. Your Dealership Name",
             "prepend": "",
             "append": "",
             "maxlength": ""
@@ -953,7 +953,7 @@
             "name": "information",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "Short tagline or description shown in the header intro area beneath the title.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -974,7 +974,7 @@
             "name": "intro_style",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Layout style for the header intro/hero area. Style 1 is the default layout; Style 2 uses an alternate arrangement.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1004,7 +1004,7 @@
             "name": "font",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Primary font family used site-wide. Changes affect headings and body text across all pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1036,7 +1036,7 @@
             "name": "theme_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "",
+            "instructions": "Primary brand color used for buttons, links, and accent elements site-wide.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1057,7 +1057,7 @@
             "name": "overlay_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "",
+            "instructions": "Color of the tint overlay applied over hero/banner images.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1078,7 +1078,7 @@
             "name": "overlay_opacity",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Opacity of the hero image overlay. Enter a decimal between 0 (transparent) and 1 (fully opaque). Default: 0.75.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1088,7 +1088,7 @@
             },
             "default_value": "0.75",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "0.75",
             "prepend": "",
             "append": ""
         },
@@ -1098,7 +1098,7 @@
             "name": "header_nav_drop_bg",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "",
+            "instructions": "Background color of navigation dropdown panels in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1119,7 +1119,7 @@
             "name": "header_nav_link_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "",
+            "instructions": "Default text color for navigation links in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1140,7 +1140,7 @@
             "name": "header_nav_link_hover_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "",
+            "instructions": "Text color of navigation links when hovered over in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1179,7 +1179,7 @@
             "name": "menu_list",
             "aria-label": "",
             "type": "flexible_content",
-            "instructions": "",
+            "instructions": "Build the header navigation. Use Link for a simple nav item, or Menu to attach a WordPress menu (with dropdown support) under a heading.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1234,7 +1234,7 @@
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Label shown in the header for this menu group (e.g. \"Inventory\", \"Offers\").",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1243,7 +1243,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Inventory",
                             "prepend": "",
                             "append": "",
                             "maxlength": ""
@@ -1254,7 +1254,7 @@
                             "name": "menu",
                             "aria-label": "",
                             "type": "menu",
-                            "instructions": "",
+                            "instructions": "Select a WordPress menu to display as dropdown items under the Title above.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1344,7 +1344,7 @@
             "name": "powered",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "\"Powered by\" attribution text displayed in the header or footer (e.g. \"Powered by DealerName\").",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1353,7 +1353,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. Powered by DealerName",
             "prepend": "",
             "append": "",
             "maxlength": ""
@@ -1364,7 +1364,7 @@
             "name": "link_header",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "URL for the Powered-by attribution link in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1373,18 +1373,18 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "https://",
             "prepend": "",
             "append": "",
             "maxlength": ""
         },
         {
             "key": "field_60002e0ad4bd5",
-            "label": "Video id",
+            "label": "Video ID",
             "name": "video_id",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "YouTube video ID for the header background video (the part after ?v= in the YouTube URL).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1394,17 +1394,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. dQw4w9WgXcQ",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_608facac26e46",
-            "label": "For script",
+            "label": "For script (header)",
             "name": "for_script_header",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "",
+            "instructions": "Custom HTML/JavaScript injected in the <head> section. Use for tracking pixels, Google Tag Manager, or other head scripts.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1446,7 +1446,7 @@
             "name": "footer_style",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Layout style for the site footer. Style 1 is the default; Style 2 uses an alternate column arrangement.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1476,7 +1476,7 @@
             "name": "copyright",
             "aria-label": "",
             "type": "link",
-            "instructions": "",
+            "instructions": "Copyright text and link displayed in the footer bottom bar (e.g. \"© 2025 Dealer Name\").",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1492,7 +1492,7 @@
             "name": "text_right_side",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Text displayed on the right side of the footer bottom bar (e.g. a legal disclaimer or secondary tagline).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1501,7 +1501,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. All Rights Reserved",
             "prepend": "",
             "append": "",
             "maxlength": ""
@@ -1512,7 +1512,7 @@
             "name": "form_description",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "Description text displayed above the footer contact/savings form.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1528,12 +1528,32 @@
             "acfe_textarea_code": 0
         },
         {
+            "key": "field_676e9207c8ce4",
+            "label": "Hide search form (footer)",
+            "name": "hide_search_form_footer",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to hide the vehicle search form from the footer area.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
+            "ui": 1
+        },
+        {
             "key": "field_651afd2c9ca52",
             "label": "Unlock Savings Form",
             "name": "unlock_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "",
+            "instructions": "Select the WPForms form to display in the footer Unlock Savings / lead-capture section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1560,32 +1580,12 @@
             "save_post_type": ""
         },
         {
-            "key": "field_676e9207c8ce4",
-            "label": "Hide search form",
-            "name": "hide_search_form_footer",
-            "aria-label": "",
-            "type": "true_false",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "message": "",
-            "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
-            "ui": 1
-        },
-        {
             "key": "field_672b85a01e598",
             "label": "Spinning Icon Buttons",
             "name": "buttons",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Animated circular icon buttons displayed in the footer. Each row adds one button with an icon, a primary label, a secondary label, and a destination URL.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1608,7 +1608,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "",
+                    "instructions": "Icon image for the spinning button. Recommended: square PNG/SVG, at least 80x80 px.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1636,7 +1636,7 @@
                     "name": "text",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Primary label shown on the button (e.g. \"Schedule\" or \"Call Us\").",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1646,7 +1646,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Schedule Service",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_672b85a01e598"
@@ -1657,7 +1657,7 @@
                     "name": "second_text",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Secondary label shown below the primary text on the button (e.g. a brief description or department name).",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1667,18 +1667,18 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Book an appointment",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_672b85a01e598"
                 },
                 {
                     "key": "field_672b86231e59c",
-                    "label": "Url",
+                    "label": "URL",
                     "name": "url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "",
+                    "instructions": "Destination URL when the button is clicked.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1687,7 +1687,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "",
+                    "placeholder": "https://",
                     "parent_repeater": "field_672b85a01e598"
                 }
             ]
@@ -1698,7 +1698,7 @@
             "name": "contact_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "",
+            "instructions": "Select the WPForms contact form shown in the footer contact section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1726,11 +1726,11 @@
         },
         {
             "key": "field_608faccc26e47",
-            "label": "For script",
+            "label": "For script (footer)",
             "name": "for_script_footer",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "",
+            "instructions": "Custom HTML/JavaScript injected just before the closing </body> tag. Use for chat widgets, analytics, or other footer scripts.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1772,7 +1772,7 @@
             "name": "email_notification",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Primary recipients for form submission notification emails. Add one email address per row.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1817,7 +1817,7 @@
             "name": "email_notification_cc",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "CC recipients who receive a copy of each form notification email. Add one email address per row.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1862,7 +1862,7 @@
             "name": "email_notification_bcc",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "BCC recipients who silently receive a copy of each form notification email. Add one email address per row.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1907,7 +1907,7 @@
             "name": "unlock_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "",
+            "instructions": "Select the WPForms form to display in the footer Unlock Savings / lead-capture section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1939,7 +1939,7 @@
             "name": "contact_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "",
+            "instructions": "Select the WPForms contact form shown in the footer contact section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1989,7 +1989,7 @@
             "name": "adf_templates",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "ADF (Auto-lead Data Format) email templates sent to the dealer CRM on form submissions. Each row defines a subject line and the XML/HTML ADF email body.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2012,7 +2012,7 @@
                     "name": "subject",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Email subject line for this ADF notification.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2022,7 +2022,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. New Lead: Get Price Request",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_65148a3b7d3b6"
@@ -2033,7 +2033,7 @@
                     "name": "template",
                     "aria-label": "",
                     "type": "acfe_code_editor",
-                    "instructions": "",
+                    "instructions": "ADF XML email body. Use standard ADF 1.0 format. Dynamic field tokens (e.g. {{first-name}}) are replaced with submitted form values.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2078,7 +2078,7 @@
             "name": "adf_subject_get_price",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Email subject for the Get Price ADF notification sent to the dealer CRM.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2088,7 +2088,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. New Lead: Get Price",
             "prepend": "",
             "append": ""
         },
@@ -2136,11 +2136,11 @@
         },
         {
             "key": "field_64ba76aade6ca",
-            "label": "Url",
+            "label": "Chrome Data API URL",
             "name": "url_chromedata",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Base endpoint URL for the Chrome Data (vehicle specifications) API.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2150,17 +2150,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "https://services.chromedata.com/Data/",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64ba76c5de6cb",
-            "label": "chromedata app id",
+            "label": "Chrome Data App ID",
             "name": "chromedata_app_id",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Application ID provided by Chrome Data for API authentication.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2170,17 +2170,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. your_app_id",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64ba76d1de6cc",
-            "label": "shared secret",
+            "label": "Shared Secret",
             "name": "shared_secret",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Shared secret key for Chrome Data API request signing. Keep this confidential.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2190,7 +2190,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. your_shared_secret",
             "prepend": "",
             "append": ""
         },
@@ -2200,7 +2200,7 @@
             "name": "show_feature_list",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to display the Chrome Data vehicle feature list on VDP pages. Configure the features in the Feature list repeater below.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2210,8 +2210,8 @@
             },
             "message": "",
             "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Visible",
+            "ui_off_text": "Hidden",
             "ui": 1
         },
         {
@@ -2220,7 +2220,7 @@
             "name": "limit_feature_list",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Maximum number of feature items to display on the VDP before a Show More button appears. Default: 10.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2231,7 +2231,7 @@
             "default_value": 10,
             "min": 0,
             "max": "",
-            "placeholder": "",
+            "placeholder": "10",
             "step": "",
             "prepend": "",
             "append": ""
@@ -2242,7 +2242,7 @@
             "name": "feature_list_chromedata",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Map Chrome Data feature category IDs to display icons and labels. Each row defines one feature category shown on vehicle detail pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2261,11 +2261,11 @@
             "sub_fields": [
                 {
                     "key": "field_66b4e3cc15b22",
-                    "label": "Id",
+                    "label": "Chrome Data Category ID",
                     "name": "id",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Chrome Data feature category ID (numeric). Refer to the Chrome Data API documentation for available category IDs.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2286,7 +2286,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "",
+                    "instructions": "Icon displayed next to this feature category. Recommended: square SVG or PNG, 40x40 px.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2314,7 +2314,7 @@
                     "name": "text",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Display label for this feature category (e.g. \"Safety\", \"Technology\", \"Comfort\").",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2324,7 +2324,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Safety Features",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_66b4e3bc15b21"
@@ -2355,7 +2355,7 @@
             "name": "spin_data_api_key",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "API key for the 360° spin image provider (Impel, SpinCar, etc.). Provided by your spin image vendor.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2365,17 +2365,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. sk_live_xxxxxxxxxxxx",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_672a29ef10ca2",
-            "label": "Evox api key",
+            "label": "Evox API key",
             "name": "evox_api_key",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "API key for the Evox vehicle image service. Obtain from your Evox account dashboard.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2391,11 +2391,11 @@
         },
         {
             "key": "field_672a306795155",
-            "label": "Product ID",
+            "label": "Evox Product ID",
             "name": "evox_productid",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Evox product ID assigned to this account. Provided by Evox when you set up your subscription.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2411,11 +2411,11 @@
         },
         {
             "key": "field_672a306f95156",
-            "label": "Product Type ID",
+            "label": "Evox Product Type ID",
             "name": "evox_producttypeid",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Evox product type identifier that determines the image set format (e.g. exterior, interior). Provided by Evox.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2435,7 +2435,7 @@
             "name": "spin_data_id",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Client/dealer ID issued by the 360° spin provider to identify this dealership account.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2445,7 +2445,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. dealer_12345",
             "prepend": "",
             "append": ""
         },
@@ -2455,7 +2455,7 @@
             "name": "spin_data_provider",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Select the 360° spin image provider used by this dealership. This determines how spin URLs are constructed on VDP pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2486,11 +2486,11 @@
         },
         {
             "key": "field_6672de7ec08d0",
-            "label": "Url for csv",
+            "label": "URL for CSV (360)",
             "name": "url_for_csv_360",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "URL to the CSV file containing 360° spin image data for inventory matching. Used by the spin data import process.",
             "required": false,
             "conditional_logic": 0,
             "wrapper": {
@@ -2525,7 +2525,7 @@
             "name": "shortcodes",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Register custom shortcodes that output theme option values. Each row creates a shortcode [sc_NAME] that returns the given value anywhere on the site.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2569,7 +2569,7 @@
                     "name": "shortcode_value",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "The text output when the shortcode is used in content (e.g. the actual dealership name).",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2579,7 +2579,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Acme Motors",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_660eebbf15403"
@@ -2606,11 +2606,11 @@
         },
         {
             "key": "field_68dfa1df21222",
-            "label": "Use new databse table",
+            "label": "Use new database table",
             "name": "use_new_databse_table",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to route API queries through the new optimised database table structure. Only enable after confirming the new table has been populated.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2621,8 +2621,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "New table",
+            "ui_off_text": "Legacy table",
             "ui": 1
         },
         {
@@ -2631,7 +2631,7 @@
             "name": "cache_api",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to cache API responses on the Search Results Page (SRP). Improves performance but may delay showing newly imported inventory. Use transient fields below to control cache keys.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2642,8 +2642,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 1,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Enabled",
+            "ui_off_text": "Disabled",
             "ui": 1
         },
         {
@@ -2841,7 +2841,7 @@
             "name": "after_import",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Actions triggered automatically after a WP All Import job completes. Each row can ping an action URL or run a WP-CLI command to flush caches or re-sync data.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2864,7 +2864,7 @@
                     "name": "use",
                     "aria-label": "",
                     "type": "radio",
-                    "instructions": "",
+                    "instructions": "Choose how to trigger the post-import action: via an HTTP URL callback or a WP-CLI command.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2887,11 +2887,11 @@
                 },
                 {
                     "key": "field_67ea9e7f30e11",
-                    "label": "Import id",
+                    "label": "Import ID",
                     "name": "import_id",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "",
+                    "instructions": "The WP All Import feed/job ID that triggers this action. Find it in WP All Import > All Imports.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2911,11 +2911,11 @@
                 },
                 {
                     "key": "field_67ea9e5c30e10",
-                    "label": "Action url",
+                    "label": "Action URL",
                     "name": "action_url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "",
+                    "instructions": "The URL to ping via HTTP GET after the import finishes (e.g. a cache-flush endpoint).",
                     "required": 1,
                     "conditional_logic": [
                         [
@@ -2942,7 +2942,7 @@
                     "name": "post_type",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "",
+                    "instructions": "The post type to target with the WP-CLI command after this import completes.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -3008,7 +3008,7 @@
             "name": "smart_tags",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Map vehicle data fields to WPForms smart tags. Each row selects an ACF/inventory field and its data type so the theme can auto-populate hidden form fields with vehicle data when a form is submitted from a VDP.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3031,7 +3031,7 @@
                     "name": "acf_field_selector",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "",
+                    "instructions": "Select the vehicle/offer data field whose value will be injected into WPForms via a smart tag.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3190,6 +3190,7 @@
                         "cash_offer": "Cash Offer (cash_offer)",
                         "srp_banner_keyword": "SRP Banner Keyword (srp_banner_keyword)",
                         "addinfo": "Add info (addinfo)",
+                        "disclosure_slider": "Disclosure Slider (disclosure_slider)",
                         "disclosure_finance": "Disclosure Finance (disclosure_finance)",
                         "disclosure_lease": "Disclosure Lease (disclosure_lease)",
                         "disclosure_cash": "Disclosure Cash (disclosure_cash)",
@@ -3234,7 +3235,7 @@
                     "name": "field_type",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "",
+                    "instructions": "Data type of the field value. \"text\" passes the raw string; \"price\" formats the value as a dollar amount.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3286,7 +3287,7 @@
             "name": "cookie_modal",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Configure popup modals that appear based on page URL rules and cookie state. Each row is one modal definition. Add content, an optional multi-step flow, and a WPForms form for the final step.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3309,19 +3310,19 @@
                     "name": "enable_popup",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Enable this modal. Disable to temporarily suppress it without deleting the configuration.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "20",
                         "class": "",
                         "id": ""
                     },
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Active",
+                    "ui_off_text": "Inactive",
                     "ui": 1,
                     "parent_repeater": "field_699c23d2b17a4"
                 },
@@ -3331,11 +3332,11 @@
                     "name": "cookie_name",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Unique cookie identifier used to remember that the user has seen or dismissed this popup. Use lowercase letters and underscores only.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "50",
+                        "width": "40",
                         "class": "",
                         "id": ""
                     },
@@ -3352,36 +3353,34 @@
                     "label": "Cookie Expiration (Days)",
                     "name": "cookie_expiration_days",
                     "aria-label": "",
-                    "type": "number",
-                    "instructions": "Works only if the “Cookie Name” field is not empty",
+                    "type": "text",
+                    "instructions": "How many days after dismissal before the popup appears again for the same user. Enter a whole number (e.g. 30).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 1,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_699c2403b17a6",
+                    "label": "Show Only On URLs Containing",
+                    "name": "include_urls",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Comma-separated URL substrings. The popup only appears on pages whose URL contains one of these strings. Leave empty to show on all pages.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
                         "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": 7,
-                    "min": "",
-                    "max": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "step": "",
-                    "prepend": "",
-                    "append": "Days",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c35481989d",
-                    "label": "Title",
-                    "name": "title",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
                         "class": "",
                         "id": ""
                     },
@@ -3394,12 +3393,630 @@
                     "parent_repeater": "field_699c23d2b17a4"
                 },
                 {
+                    "key": "field_699c2541b17ab",
+                    "label": "Exclude URLs Containing",
+                    "name": "exclude_urls",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Comma-separated URL substrings. The popup is suppressed on any page whose URL contains one of these strings.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_699c35481989d",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Heading displayed at the top of the modal popup.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "e.g. Unlock Exclusive Savings",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69faff3d1eadc",
+                    "label": "Steps",
+                    "name": "steps",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Enable to show a two-step modal flow: Step One shows introductory content with a Next button; the Final Step shows the form. Disable for a single-step modal.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "allow_in_bindings": 0,
+                    "ui_on_text": "Multi-step",
+                    "ui_off_text": "Single step",
+                    "ui": 1,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69fb02501eadf",
+                    "label": "Step One",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "tab",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_69faff3d1eadc",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69faff671eadd",
+                    "label": "Content",
+                    "name": "content_step",
+                    "aria-label": "",
+                    "type": "wysiwyg",
+                    "instructions": "Content displayed on Step One of the multi-step modal before the user clicks Next.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_69faff3d1eadc",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69fb02851eae0",
+                    "label": "Close button",
+                    "name": "close_button",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "Styling for the Close/Dismiss button on Step One. Leave fields empty to use theme defaults.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_69faff3d1eadc",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "acfe_seamless_style": 0,
+                    "acfe_group_modal": 0,
+                    "sub_fields": [
+                        {
+                            "key": "field_69fb02ce1eae2",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_69fb02e31eae4",
+                            "label": "Font size",
+                            "name": "font_size",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69fb02f11eae5",
+                            "label": "Font weight",
+                            "name": "font_weight",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "600": "Semi Bold",
+                                "700": "Bold",
+                                "400": "Regular"
+                            },
+                            "default_value": "Regular",
+                            "return_format": "",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": "",
+                            "create_options": 0,
+                            "save_options": 0,
+                            "allow_custom": 0,
+                            "search_placeholder": ""
+                        },
+                        {
+                            "key": "field_69fb04b31eae6",
+                            "label": "Font family",
+                            "name": "font_family",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "Roboto": "Roboto",
+                                "Roboto Condensed": "Roboto Condensed",
+                                "Roboto Mono": "Roboto Mono",
+                                "Montserrat": "Montserrat",
+                                "Poppins": "Poppins",
+                                "Lato": "Lato",
+                                "PT Sans": "PT Sans",
+                                "PT Sans Narrow": "PT Sans Narrow",
+                                "Inter": "Inter"
+                            },
+                            "default_value": "Roboto",
+                            "return_format": "",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": "",
+                            "create_options": 0,
+                            "save_options": 0,
+                            "allow_custom": 0,
+                            "search_placeholder": ""
+                        },
+                        {
+                            "key": "field_69fb02d91eae3",
+                            "label": "Text color",
+                            "name": "text_color",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb0647318ad",
+                            "label": "Text color (hover)",
+                            "name": "text_color_hover",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb0660318af",
+                            "label": "Background color",
+                            "name": "background_color",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb0652318ae",
+                            "label": "Background color (hover)",
+                            "name": "background_color_hover",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        }
+                    ],
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69fb06ac318b0",
+                    "label": "Next button",
+                    "name": "next_button",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "Styling for the Next button that advances from Step One to the Final Step. Leave fields empty to use theme defaults.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_69faff3d1eadc",
+                                "operator": "==",
+                                "value": "1"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "acfe_seamless_style": 0,
+                    "acfe_group_modal": 0,
+                    "sub_fields": [
+                        {
+                            "key": "field_69fb06ac318b1",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b2",
+                            "label": "Font size",
+                            "name": "font_size",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69fb06ac318b3",
+                            "label": "Font weight",
+                            "name": "font_weight",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "600": "Semi Bold",
+                                "700": "Bold",
+                                "400": "Regular"
+                            },
+                            "default_value": "Regular",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": "",
+                            "create_options": 0,
+                            "save_options": 0,
+                            "allow_custom": 0,
+                            "search_placeholder": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b4",
+                            "label": "Font family",
+                            "name": "font_family",
+                            "aria-label": "",
+                            "type": "select",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "Roboto": "Roboto",
+                                "Roboto Condensed": "Roboto Condensed",
+                                "Roboto Mono": "Roboto Mono",
+                                "Montserrat": "Montserrat",
+                                "Poppins": "Poppins",
+                                "Lato": "Lato",
+                                "PT Sans": "PT Sans",
+                                "PT Sans Narrow": "PT Sans Narrow",
+                                "Inter": "Inter"
+                            },
+                            "default_value": "Roboto",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": "",
+                            "create_options": 0,
+                            "save_options": 0,
+                            "allow_custom": 0,
+                            "search_placeholder": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b5",
+                            "label": "Text color",
+                            "name": "text_color",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "string",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b6",
+                            "label": "Text color (hover)",
+                            "name": "text_color_hover",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "string",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b7",
+                            "label": "Background color",
+                            "name": "background_color",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "string",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        },
+                        {
+                            "key": "field_69fb06ac318b8",
+                            "label": "Background color (hover)",
+                            "name": "background_color_hover",
+                            "aria-label": "",
+                            "type": "color_picker",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "25",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "enable_opacity": 0,
+                            "return_format": "string",
+                            "allow_in_bindings": 0,
+                            "show_custom_palette": 0,
+                            "show_color_wheel": 1,
+                            "custom_palette_source": "",
+                            "palette_colors": ""
+                        }
+                    ],
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69fb022a1eade",
+                    "label": "Final Step",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "tab",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
                     "key": "field_699c23e9b17a5",
                     "label": "Content",
                     "name": "content",
                     "aria-label": "",
                     "type": "wysiwyg",
-                    "instructions": "",
+                    "instructions": "Content displayed in the Final Step (or the only step for single-step modals), shown above the form.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3421,7 +4038,7 @@
                     "name": "form",
                     "aria-label": "",
                     "type": "post_object",
-                    "instructions": "",
+                    "instructions": "Select the WPForms form embedded in the Final Step of this modal.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3450,50 +4067,6 @@
                     "bidirectional_target": [],
                     "save_post_type": "",
                     "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c2403b17a6",
-                    "label": "Show Only On URLs Containing",
-                    "name": "include_urls",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
-                },
-                {
-                    "key": "field_699c2541b17ab",
-                    "label": "Exclude URLs Containing",
-                    "name": "exclude_urls",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_699c23d2b17a4"
                 }
             ]
         },
@@ -3521,7 +4094,7 @@
             "name": "twilio_account_sid",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Twilio Account SID found in the Twilio Console dashboard. Required for SMS sending.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3542,7 +4115,7 @@
             "name": "twilio_auth_token",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Twilio Auth Token from the Twilio Console. Keep this confidential — it authenticates all API requests.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3563,7 +4136,7 @@
             "name": "twilio_number",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Twilio phone number used as the SMS sender (E.164 format, e.g. +15551234567).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3602,28 +4175,49 @@
             "name": "active_ai",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable the AI chat widget on the front-end. Requires a valid AI Key below.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "50",
                 "class": "",
                 "id": ""
             },
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Active",
+            "ui_off_text": "Inactive",
+            "ui": 1
+        },
+        {
+            "key": "field_69fb55aec3cfc",
+            "label": "AI crawler",
+            "name": "ai_crawler_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable the scheduled website content crawler that indexes site pages as AI knowledge base context. Runs daily (full) and every 2 hours (incremental).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "Active",
+            "ui_off_text": "Inactive",
             "ui": 1
         },
         {
             "key": "field_69d65ec933667",
-            "label": "Heading",
+            "label": "AI Chat Heading",
             "name": "heading_ai",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Title shown in the AI chat widget header (e.g. \"How can I help you today?\").",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3634,7 +4228,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. How can I help you today?",
             "prepend": "",
             "append": ""
         },
@@ -3644,7 +4238,7 @@
             "name": "ai_api_key",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "OpenAI API key used for the AI chat and embedding features. Obtain from platform.openai.com. Keep this confidential.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3661,11 +4255,33 @@
         },
         {
             "key": "field_69d66a3f458da",
-            "label": "AI Promt",
+            "label": "AI System Prompt",
             "name": "ai_promt",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "System prompt (persona and instructions) for the AI chat assistant. Defines tone, scope, and behaviour. Example: \"You are a helpful assistant for [Dealer Name]. Answer questions about our vehicles and services.\"",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69f9eaac96f49",
+            "label": "AI inventory prompt",
+            "name": "ai_inventory_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Supplemental system prompt used when the AI chat handles inventory-related questions. Appended to the main system prompt for vehicle/listing queries.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3687,7 +4303,7 @@
             "name": "ai_sales",
             "aria-label": "",
             "type": "group",
-            "instructions": "",
+            "instructions": "AI chat escalation panel for the Sales department. Shown in the chat widget as a contact option when the user asks to speak to someone.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3698,6 +4314,9 @@
             "layout": "block",
             "acfe_seamless_style": 0,
             "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
             "sub_fields": [
                 {
                     "key": "field_69ea1eaed2e4f",
@@ -3705,7 +4324,7 @@
                     "name": "title",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Department name shown in the AI chat escalation panel (e.g. \"Sales Team\").",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3726,7 +4345,7 @@
                     "name": "description",
                     "aria-label": "",
                     "type": "textarea",
-                    "instructions": "",
+                    "instructions": "Short description or contact prompt displayed under the department title in the AI chat escalation panel.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3748,7 +4367,7 @@
                     "name": "form",
                     "aria-label": "",
                     "type": "post_object",
-                    "instructions": "",
+                    "instructions": "WPForms form shown when a user requests to contact the Sales department from the AI chat widget.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3777,10 +4396,7 @@
                     "bidirectional_target": [],
                     "save_post_type": ""
                 }
-            ],
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large"
+            ]
         },
         {
             "key": "field_69ea1ed9d2e51",
@@ -3788,7 +4404,7 @@
             "name": "ai_service",
             "aria-label": "",
             "type": "group",
-            "instructions": "",
+            "instructions": "AI chat escalation panel for the Service department. Shown when the user asks about servicing, repairs, or appointments.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3799,6 +4415,9 @@
             "layout": "block",
             "acfe_seamless_style": 0,
             "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
             "sub_fields": [
                 {
                     "key": "field_69ea1ed9d2e57",
@@ -3878,10 +4497,7 @@
                     "save_post_type": "",
                     "save_post_status": ""
                 }
-            ],
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large"
+            ]
         },
         {
             "key": "field_69ea1efed2e5a",
@@ -3889,7 +4505,7 @@
             "name": "ai_parts",
             "aria-label": "",
             "type": "group",
-            "instructions": "",
+            "instructions": "AI chat escalation panel for the Parts department. Shown when the user asks about parts, accessories, or orders.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3900,6 +4516,9 @@
             "layout": "block",
             "acfe_seamless_style": 0,
             "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
             "sub_fields": [
                 {
                     "key": "field_69ea1efed2e60",
@@ -3979,10 +4598,7 @@
                     "save_post_type": "",
                     "save_post_status": ""
                 }
-            ],
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large"
+            ]
         }
     ],
     "location": [
@@ -4010,5 +4626,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776951191
+    "modified": 1778148521
 }

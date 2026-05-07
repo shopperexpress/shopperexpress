@@ -101,12 +101,14 @@ switch ( get_post_type( $post_id ) ) {
 
 		break;
 }
-$action = ! empty( $args['action'] ) ? $args['action'] : '';
+$action     = ! empty( $args['action'] ) ? $args['action'] : '';
+$aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ), esc_html( $make ), esc_html( $model ), esc_html( $trim ), 'page' );
 if ( $action ) :
 	?>
 	<div class="col-sm-6 col-lg-4 col-xxl-3">
 	<?php endif; ?>
 	<div class="card card-offer">
+		<a class="ghost-link" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" aria-label="<?php echo esc_attr( implode( ' ', $aria_label ) ); ?>"></a>
 		<div class="card-head">
 			<div class="card-head__holder">
 				<?php if ( ! empty( $year ) || ! empty( $make ) ) : ?>

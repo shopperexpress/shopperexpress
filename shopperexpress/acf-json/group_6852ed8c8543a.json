@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_6852ed8e782c3",
-            "label": "Image",
+            "label": "Banner Image",
             "name": "image",
             "aria-label": "",
             "type": "image",
-            "instructions": "",
+            "instructions": "Upload the banner image displayed in this widget. Recommended dimensions: 600 × 200 px or wider, landscape orientation. This image appears as a clickable promotional banner in the sidebar or content area.",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -32,11 +32,11 @@
         },
         {
             "key": "field_6852eda0782c4",
-            "label": "Url",
+            "label": "Destination URL",
             "name": "url",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "The URL visitors are taken to when they click the banner image. Use a full URL including https://.",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -47,7 +47,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "https://example.com/offer",
             "prepend": "",
             "append": ""
         }

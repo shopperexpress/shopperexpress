@@ -8,7 +8,7 @@
             "name": "heading",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Section heading displayed above the news posts in this widget (e.g. Latest News, Dealer Updates).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,17 +19,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. Latest News",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6852e900bc6f0",
-            "label": "Limit",
+            "label": "Number of Posts",
             "name": "limit",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "How many news posts to display in this widget. Default is 3. Increase with caution as it may impact page layout.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -41,18 +41,18 @@
             "min": 0,
             "max": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "3",
             "step": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6852e91ebc6f1",
-            "label": "Link",
+            "label": "View All Link",
             "name": "link",
             "aria-label": "",
             "type": "link",
-            "instructions": "",
+            "instructions": "Optional link displayed below the news posts (e.g. a 'View All News' button). Leave blank to hide the link.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

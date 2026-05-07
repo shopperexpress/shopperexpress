@@ -2327,7 +2327,7 @@
       </footer>
     </div>
     <!-- Cookie Modal -->
-    <div data-show="true" data-cookie-expire-days="7" class="modal fade" id="ctaModal" tabindex="-1" aria-labelledby="ctaModalLabel" aria-hidden="true">
+    <div data-show="true" data-cookie-expire-days="10" class="modal fade" id="ctaModal" tabindex="-1" aria-labelledby="ctaModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-form modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -2341,7 +2341,18 @@
             </button>
           </div>
           <div class="modal-body">
-            <p>Cookie Modal Text</p>
+            <div class="modal-steps">
+              <div class="step current-step">
+                <p>Cookie Modal Text</p>
+              </div>
+              <div class="step">Form</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="steps-controls">
+              <button type="button" data-dismiss="modal">Close</button>
+              <button type="button" class="btn-next">Go to next step</button>
+            </div>
           </div>
         </div>
       </div>

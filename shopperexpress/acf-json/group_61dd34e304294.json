@@ -27,7 +27,7 @@
             "name": "chrome",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the Vehicle Identification Number (VIN) to link this offer to a specific vehicle record.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. 1HGBH41JXMN109186",
             "prepend": "",
             "append": ""
         },
@@ -48,7 +48,7 @@
             "name": "priority",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Controls display order among offers. Lower numbers appear first. Leave 0 for default ordering.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -60,7 +60,7 @@
             "min": "",
             "max": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. 1",
             "step": "",
             "prepend": "",
             "append": ""
@@ -71,7 +71,7 @@
             "name": "information",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "Short summary text displayed on the offer card or listing page (e.g. offer headline or brief description). Plain text only.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -80,7 +80,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. Special lease offer available for qualified buyers.",
             "maxlength": "",
             "rows": 1,
             "new_lines": "wpautop",
@@ -93,7 +93,7 @@
             "name": "message",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Rich-text message displayed prominently on the offer detail page. Use for promotional copy, call-to-action text, or offer highlights.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -114,7 +114,7 @@
             "name": "custom_content",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Optional additional rich-text content block displayed below the main message. Use for supplementary offer details, terms overview, or extra promotional content.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -131,11 +131,11 @@
         },
         {
             "key": "field_61df2e1eb2984",
-            "label": "Modal",
+            "label": "Modal Disclosure Type",
             "name": "modal",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Select which disclosure modal is shown when a visitor clicks the legal/disclosure link on this offer. Must match the offer type (lease, loan, or cash).",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -163,11 +163,11 @@
         },
         {
             "key": "field_64896fffea4f3",
-            "label": "Wistia ID",
+            "label": "Wistia Video ID",
             "name": "wistia_id",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the Wistia video ID (not the full URL) to embed a video on this offer page. Find it in your Wistia account under the video embed code.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -177,7 +177,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. abc123xyz9",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
@@ -188,7 +188,7 @@
             "name": "sold",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter any value (e.g. \"yes\" or \"1\") to mark this offer as sold. When set, a sold badge or notice is displayed on the listing.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -197,7 +197,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. yes",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -209,7 +209,7 @@
             "name": "vdp_description",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Add one or more text lines that appear in the Vehicle Detail Page description section. Each row is a separate line of descriptive copy.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -228,11 +228,11 @@
             "sub_fields": [
                 {
                     "key": "field_690c820d26c2d",
-                    "label": "Text",
+                    "label": "Description Line",
                     "name": "text",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Enter a single line of vehicle description text.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -243,7 +243,7 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 0,
-                    "placeholder": "",
+                    "placeholder": "e.g. Includes complimentary maintenance for 2 years.",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_690c81fd26c2c"
@@ -275,7 +275,7 @@
             "name": "city_mpg",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the EPA-estimated city fuel economy in miles per gallon. Displayed in the vehicle specs section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -284,7 +284,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 28",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -296,7 +296,7 @@
             "name": "highway_mpg",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the EPA-estimated highway fuel economy in miles per gallon. Displayed in the vehicle specs section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -305,7 +305,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 36",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -336,7 +336,7 @@
             "name": "price",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Enter the current selling price in dollars (numbers only, no $ sign or commas). This is the price shown prominently on the offer.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -345,7 +345,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 29995",
             "prepend": "",
             "append": "",
             "min": "",
@@ -359,7 +359,7 @@
             "name": "original_price",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Enter the original MSRP or pre-discount price in dollars. When provided, it displays as a strikethrough price to show savings.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -368,7 +368,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 33500",
             "prepend": "",
             "append": "",
             "min": 0,
@@ -401,7 +401,7 @@
             "name": "intro_slider_img",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to the desktop hero/slider image. Recommended size: 1920x900 px. Displayed in the intro slider on the offer detail page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -410,16 +410,16 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "https://example.com/images/offer-hero-1920x900.jpg",
             "wpml_cf_preferences": 1
         },
         {
             "key": "field_64896f0e414df",
-            "label": "Intro Slider Image (400x400)",
+            "label": "Intro Slider Image — Mobile (400x400)",
             "name": "intro_slider_img_sm",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to the mobile/small-screen slider image. Recommended size: 400x400 px. Used in place of the desktop image on small screens.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -428,7 +428,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com/images/offer-hero-400x400.jpg"
         },
         {
             "key": "field_66a77d786f0ed",
@@ -436,7 +436,7 @@
             "name": "intro_slider_overlay",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to a transparent PNG overlay image layered on top of the desktop slider image. Recommended size: 1920x900 px. Use for logo badges, offer callouts, or graphic treatments.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -445,15 +445,15 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com/images/offer-overlay-1920x900.png"
         },
         {
             "key": "field_66a8b5a33cbd8",
-            "label": "Intro Slider Overlay (400x400)",
+            "label": "Intro Slider Overlay — Mobile (400x400)",
             "name": "intro_slider_overlay_sm",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to the mobile version of the slider overlay image. Recommended size: 400x400 px. Should be a transparent PNG.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -462,15 +462,15 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com/images/offer-overlay-400x400.png"
         },
         {
             "key": "field_67a0af6426128",
-            "label": "SRP Banner Desktop (1920x200)",
+            "label": "SRP Banner — Desktop (1920x200)",
             "name": "srp_banner_desktop_1920x200",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to the desktop Search Results Page (SRP) banner image. Recommended size: 1920x200 px. Displays as a wide banner strip within the inventory listing page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -479,15 +479,15 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com/images/srp-banner-desktop-1920x200.jpg"
         },
         {
             "key": "field_67a0af8926129",
-            "label": "SRP Banner Mobile (1200x628)",
+            "label": "SRP Banner — Mobile (1200x628)",
             "name": "srp_banner_mobile_1200x628",
             "aria-label": "",
             "type": "url",
-            "instructions": "",
+            "instructions": "Full URL to the mobile SRP banner image. Recommended size: 1200x628 px. Replaces the desktop banner on smaller screens.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -496,7 +496,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": ""
+            "placeholder": "https://example.com/images/srp-banner-mobile-1200x628.jpg"
         },
         {
             "key": "field_61dd34e308659",
@@ -504,7 +504,7 @@
             "name": "gallery",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Add vehicle photo URLs for the offer gallery. Each row is one image. The image URL is required; use the background and reverse toggles to control display style.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -523,11 +523,11 @@
             "sub_fields": [
                 {
                     "key": "field_61dd34e3328f3",
-                    "label": "image url",
+                    "label": "Image URL",
                     "name": "image_url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "",
+                    "instructions": "Full URL to the gallery image. Paste the direct image link (JPG or PNG recommended).",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -536,17 +536,17 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "",
+                    "placeholder": "https://example.com/images/vehicle-photo.jpg",
                     "parent_repeater": "field_61dd34e308659",
                     "wpml_cf_preferences": 1
                 },
                 {
                     "key": "field_6839865cebaaf",
-                    "label": "image background",
+                    "label": "Image Background",
                     "name": "image_background",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Enable to render this image as a CSS background (cover mode) rather than an inline img tag. Useful for hero-style gallery slides.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -557,18 +557,18 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Background",
+                    "ui_off_text": "Inline",
                     "ui": 1,
                     "parent_repeater": "field_61dd34e308659"
                 },
                 {
                     "key": "field_6899d28ac9a0d",
-                    "label": "image reverse",
+                    "label": "Image Reverse",
                     "name": "image_reverse",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Enable to mirror/flip this image horizontally in the gallery display.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -579,8 +579,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Reversed",
+                    "ui_off_text": "Normal",
                     "ui": 1,
                     "parent_repeater": "field_61dd34e308659"
                 }
@@ -611,7 +611,7 @@
             "name": "vehicle_overview",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Rich-text vehicle overview copy displayed in the \"Vehicle Overview\" section of the offer detail page. Include key selling points, standard features, and a general description of the vehicle.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -651,7 +651,7 @@
             "name": "features_options",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "List vehicle features and options. Each row is a feature group or block of text (e.g. a category heading followed by a list of features). Add one row per feature group.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -670,11 +670,11 @@
             "sub_fields": [
                 {
                     "key": "field_61dd34e345e89",
-                    "label": "Text",
+                    "label": "Feature Text",
                     "name": "text",
                     "aria-label": "",
                     "type": "textarea",
-                    "instructions": "",
+                    "instructions": "Enter a feature or group of features. Use one line per feature item, or enter a heading followed by features on separate lines.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -683,7 +683,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Safety\nBlind spot monitoring\nLane departure warning\nAutomatic emergency braking",
                     "maxlength": "",
                     "rows": "",
                     "new_lines": "",
@@ -718,7 +718,7 @@
             "name": "year",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle model year. Used for filtering and display in listing categories.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -729,7 +729,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. 2024",
             "prepend": "",
             "append": ""
         },
@@ -739,7 +739,7 @@
             "name": "make",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle manufacturer/brand. Used for filtering and display.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -750,7 +750,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Toyota",
             "prepend": "",
             "append": ""
         },
@@ -760,7 +760,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle model name. Used for filtering and display.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -771,7 +771,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Camry",
             "prepend": "",
             "append": ""
         },
@@ -781,7 +781,7 @@
             "name": "body_style",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle body style. Used for filtering and display in specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -792,7 +792,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Sedan",
             "prepend": "",
             "append": ""
         },
@@ -802,7 +802,7 @@
             "name": "transmission",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the transmission type. Displayed in vehicle specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -813,7 +813,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Automatic",
             "prepend": "",
             "append": ""
         },
@@ -823,7 +823,7 @@
             "name": "condition",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle condition. Used for filtering and displayed in specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -834,7 +834,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. New",
             "prepend": "",
             "append": ""
         },
@@ -844,7 +844,7 @@
             "name": "location",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the dealership location or lot where this vehicle is available. Displayed in the listing details.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -854,7 +854,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. Main Lot",
             "prepend": "",
             "append": ""
         },
@@ -864,7 +864,7 @@
             "name": "drivetrain",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the drivetrain configuration. Displayed in vehicle specs and used for filtering.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -875,7 +875,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. AWD",
             "prepend": "",
             "append": ""
         },
@@ -885,7 +885,7 @@
             "name": "engine",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the engine description. Displayed in vehicle specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -896,7 +896,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. 2.5L 4-Cylinder",
             "prepend": "",
             "append": ""
         },
@@ -906,7 +906,7 @@
             "name": "exterior_color",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the exterior paint color name. Displayed in vehicle specs and used for filtering.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -917,7 +917,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Midnight Black Metallic",
             "prepend": "",
             "append": ""
         },
@@ -927,7 +927,7 @@
             "name": "interior_color",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the interior color or material name. Displayed in vehicle specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -937,7 +937,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. Black Leather",
             "prepend": "",
             "append": ""
         },
@@ -947,7 +947,7 @@
             "name": "trim",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the vehicle trim level. Displayed in specs and used for filtering.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -958,7 +958,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. XSE",
             "prepend": "",
             "append": ""
         },
@@ -968,7 +968,7 @@
             "name": "lease_payment",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the monthly lease payment amount (numbers only, no $ sign). Displayed on the offer card and detail page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -978,17 +978,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. 299",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_61dd34e3086df",
-            "label": "LeaseTerm",
+            "label": "Lease Term",
             "name": "leaseterm",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the lease term duration in months. Displayed alongside the lease payment.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -998,7 +998,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. 36",
             "prepend": "",
             "append": ""
         },
@@ -1008,7 +1008,7 @@
             "name": "loan_payment",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the monthly loan/finance payment amount (numbers only, no $ sign). Displayed on the offer card and detail page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1018,17 +1018,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. 399",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_61e184d925242",
-            "label": "LoanTerm",
+            "label": "Loan Term",
             "name": "loanterm",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the loan term duration in months. Displayed alongside the loan payment.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1037,7 +1037,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 60",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -1045,11 +1045,11 @@
         },
         {
             "key": "field_61e1954bc210d",
-            "label": "LoanAPR",
+            "label": "Loan APR",
             "name": "loanapr",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the annual percentage rate for the loan offer. Include the % symbol if desired (e.g. 3.9%). Displayed alongside loan payment details.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1058,7 +1058,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. 3.9%",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -1070,7 +1070,7 @@
             "name": "search_inventory_button",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the label text for the Search Inventory button displayed in the Listing Categories section. Leave blank to hide the button.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1080,7 +1080,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. Search Inventory",
             "prepend": "",
             "append": ""
         },
@@ -1090,7 +1090,7 @@
             "name": "down_payment",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the required down payment amount (numbers only, no $ sign). Displayed with lease or loan payment details.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1100,7 +1100,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. 2999",
             "prepend": "",
             "append": ""
         },
@@ -1110,7 +1110,7 @@
             "name": "fuel_type",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the fuel type for this vehicle. Used for filtering and displayed in vehicle specs.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1121,13 +1121,13 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "",
+            "placeholder": "e.g. Gasoline",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_61dd38c79c057",
-            "label": "Offer information",
+            "label": "Offer Information",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -1150,7 +1150,7 @@
             "name": "cash_offer_label",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the display label for the cash offer amount (e.g. \"Cash Back\" or \"Dealer Discount\"). Shown alongside the Cash Offer value.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1160,17 +1160,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. Cash Back",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_61dd38db9c058",
-            "label": "Cash Offer",
+            "label": "Cash Offer Value",
             "name": "cash_offer",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the cash offer amount (numbers only, no $ sign or commas). Displayed next to the Cash Offer Label on the offer page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1180,7 +1180,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. 1500",
             "prepend": "",
             "append": ""
         },
@@ -1190,7 +1190,7 @@
             "name": "srp_banner_keyword",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter a keyword or tag used to match and display the SRP banner images on the inventory search results page. Must match the keyword configured in the SRP banner logic.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1200,17 +1200,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. camry-offer",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_61dd390e9c05a",
-            "label": "Add info",
+            "label": "Additional Info",
             "name": "addinfo",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "Enter any supplementary information for this offer (e.g. eligibility requirements, expiry date, or extra terms). Displayed in the offer information section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1219,7 +1219,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. Offer valid through the end of the month. Must qualify through dealer financing.",
             "maxlength": "",
             "rows": "",
             "new_lines": "",
@@ -1232,7 +1232,7 @@
             "name": "disclosure_slider",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Enter the legal disclosure text displayed in the offer slider. This typically contains fine-print terms for the featured offer.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1253,7 +1253,7 @@
             "name": "disclosure_finance",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Enter the legal disclosure text for the finance/loan offer. Shown in the Disclosure_loan modal when a visitor clicks the disclosure link.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1274,7 +1274,7 @@
             "name": "disclosure_lease",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Enter the legal disclosure text for the lease offer. Shown in the Disclosure_lease modal when a visitor clicks the disclosure link.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1295,7 +1295,7 @@
             "name": "disclosure_cash",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Enter the legal disclosure text for the cash offer. Shown in the Disclosure_Cash modal when a visitor clicks the disclosure link.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1316,7 +1316,7 @@
             "name": "search_inventory_button",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Enter the label text for the Search Inventory button displayed in the Offer Information section. Leave blank to hide the button.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1326,7 +1326,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "",
+            "placeholder": "e.g. Search Inventory",
             "prepend": "",
             "append": ""
         }

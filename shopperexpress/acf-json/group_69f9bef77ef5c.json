@@ -1,14 +1,14 @@
 {
-    "key": "group_690e01226c880",
-    "title": "CPT: FAQ",
+    "key": "group_69f9bef77ef5c",
+    "title": "Website content",
     "fields": [
         {
-            "key": "field_690e0124b0001",
-            "label": "Dealer ID",
-            "name": "dealerid",
+            "key": "field_69f9bef8d33dc",
+            "label": "Page URL",
+            "name": "page_url",
             "aria-label": "",
             "type": "text",
-            "instructions": "Enter the unique dealer identifier associated with this FAQ entry. Used by the AI chat system to scope answers to a specific dealership.",
+            "instructions": "The full URL of the crawled page. Populated automatically by the AI crawler — do not edit manually.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,17 +19,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. dealer_123",
+            "placeholder": "https://example.com/page",
             "prepend": "",
             "append": ""
         },
         {
-            "key": "field_690e0123c7b5c",
-            "label": "Type",
-            "name": "type",
+            "key": "field_69f9bf05d33dd",
+            "label": "Page Title",
+            "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "Classify the FAQ type (e.g. general, finance, service, lease). Helps the AI route the question to the correct response category.",
+            "instructions": "The title of the crawled page as extracted from the page content. Populated automatically by the AI crawler.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -40,17 +40,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. finance",
+            "placeholder": "e.g. New Vehicle Inventory",
             "prepend": "",
             "append": ""
         },
         {
-            "key": "field_690e0124b0004",
-            "label": "Intent",
-            "name": "intent",
+            "key": "field_69f9bf09d33de",
+            "label": "Department",
+            "name": "department",
             "aria-label": "",
             "type": "text",
-            "instructions": "Describes the user intent this FAQ is meant to address (e.g. get_price, book_test_drive). Used by the AI chat system to match user queries to this entry.",
+            "instructions": "The dealership department this page relates to (e.g. Sales, Service, Finance). Populated by the crawler based on page content.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -61,143 +61,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. get_price",
+            "placeholder": "e.g. Service",
             "prepend": "",
             "append": ""
         },
         {
-            "key": "field_690e0124b0005",
-            "label": "Page",
-            "name": "page",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "The page or section of the site where this FAQ is most relevant (e.g. inventory, offers, finance). Helps scope AI responses by page context.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. inventory",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b0006",
-            "label": "Context",
-            "name": "context",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "Additional context that helps the AI understand when to surface this FAQ (e.g. new_vehicle, used_vehicle). Keep concise.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. new_vehicle",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b0007",
-            "label": "CTA Type",
-            "name": "ctatype",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "The call-to-action type the AI should suggest alongside this FAQ answer (e.g. contact_form, phone_call, schedule_service).",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. contact_form",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b0008",
-            "label": "Category",
-            "name": "category",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "Broad category grouping for this FAQ (e.g. Sales, Service, Finance). Used for filtering and organising FAQ entries.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. Sales",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b0009",
-            "label": "Status",
-            "name": "status",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "Publication status of this FAQ entry (e.g. active, draft, archived). Only active entries are used by the AI chat system.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. active",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b000a",
-            "label": "Priority",
-            "name": "priority",
-            "aria-label": "",
-            "type": "text",
-            "instructions": "Numeric priority for ranking this FAQ when multiple entries match a query. Higher number = higher priority. Leave blank for default ordering.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "maxlength": "",
-            "allow_in_bindings": 0,
-            "placeholder": "e.g. 10",
-            "prepend": "",
-            "append": ""
-        },
-        {
-            "key": "field_690e0124b000b",
+            "key": "field_69f9bf0dd33df",
             "label": "OEM (Brand)",
             "name": "oem",
             "aria-label": "",
             "type": "text",
-            "instructions": "The vehicle brand/manufacturer this FAQ applies to (e.g. Toyota, Ford). Leave blank if the FAQ is brand-agnostic.",
+            "instructions": "The vehicle brand/manufacturer associated with this page (e.g. Toyota). Extracted by the crawler from page content.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -213,12 +87,12 @@
             "append": ""
         },
         {
-            "key": "field_690e0124b000c",
+            "key": "field_69f9bf12d33e0",
             "label": "Model",
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "The specific vehicle model this FAQ applies to (e.g. Camry, F-150). Leave blank if not model-specific.",
+            "instructions": "The vehicle model associated with this page (e.g. Camry). Extracted by the crawler from page content.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -234,12 +108,12 @@
             "append": ""
         },
         {
-            "key": "field_690e0124b000d",
-            "label": "Last Reviewed",
-            "name": "lastreviewed",
+            "key": "field_69f9bf15d33e1",
+            "label": "Summary",
+            "name": "summary",
             "aria-label": "",
             "type": "text",
-            "instructions": "Date this FAQ entry was last reviewed for accuracy. Use YYYY-MM-DD format. Helps identify outdated entries.",
+            "instructions": "A short summary of the page content extracted by the AI crawler. Used as context when the AI chat system answers questions about this page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -250,7 +124,112 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. 2025-01-15",
+            "placeholder": "Auto-populated by crawler",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69f9bf19d33e2",
+            "label": "Important Facts",
+            "name": "important_facts",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Key facts extracted from the page that the AI should prioritise when answering related questions. Auto-populated by the crawler.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Auto-populated by crawler",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69f9bf1fd33e3",
+            "label": "Primary CTA",
+            "name": "primary_cta",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "The main call-to-action identified on this page (e.g. Schedule a Test Drive). Extracted by the crawler and used by the AI to guide users toward action.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "e.g. Schedule a Test Drive",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69f9bfed83489",
+            "label": "Secondary CTA",
+            "name": "secondary_cta",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "A secondary call-to-action identified on this page (e.g. Get a Quote). Extracted by the crawler as a fallback suggestion for the AI.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "e.g. Get a Quote",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69f9bf22d33e4",
+            "label": "Last Crawled",
+            "name": "last_crawled",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Timestamp of when this page was last crawled and indexed by the AI crawler. Updated automatically — do not edit manually.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "Auto-populated by crawler",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_69f9c0038348a",
+            "label": "Page Category",
+            "name": "page_category",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "The category of the crawled page (e.g. inventory, offers, blog, service). Used to filter AI responses by page type.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "e.g. inventory",
             "prepend": "",
             "append": ""
         }
@@ -260,7 +239,7 @@
             {
                 "param": "post_type",
                 "operator": "==",
-                "value": "faq"
+                "value": "website-content"
             }
         ]
     ],
@@ -280,5 +259,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776345840
+    "modified": 1777975306
 }

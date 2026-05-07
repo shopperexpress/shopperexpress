@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Components\\Base\\ACF' => $baseDir . '/inc/Components/Base/class-acf.php',
     'App\\Components\\Base\\AI' => $baseDir . '/inc/Components/Base/class-ai.php',
+    'App\\Components\\Base\\AI_Crawler' => $baseDir . '/inc/Components/Base/class-ai-crawler.php',
     'App\\Components\\Base\\ASC_Datalayer' => $baseDir . '/inc/Components/Base/class-asc-datalayer.php',
     'App\\Components\\Base\\Admin' => $baseDir . '/inc/Components/Base/class-admin.php',
     'App\\Components\\Base\\Ajax' => $baseDir . '/inc/Components/Base/class-ajax.php',

@@ -60,6 +60,7 @@ class Theme {
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
 			\App\Components\Base\AI::class,
+			\App\Components\Base\AI_Crawler::class,
 		);
 
 		$gutenberg_components = array(

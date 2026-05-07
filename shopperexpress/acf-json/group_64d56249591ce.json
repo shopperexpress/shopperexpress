@@ -8,7 +8,7 @@
             "name": "",
             "aria-label": "",
             "type": "tab",
-            "instructions": "",
+            "instructions": "Settings for the Research archive (listing) page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -26,7 +26,7 @@
             "name": "description_research",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "",
+            "instructions": "Optional introductory text displayed above the research archive listing. Supports rich text and media.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -47,7 +47,7 @@
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Configure the promotional banner shown at the top of the research archive page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -65,7 +65,7 @@
             "name": "show_banner-research",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to display a promotional banner on the research archive page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -75,17 +75,17 @@
             },
             "message": "",
             "default_value": 0,
-            "ui_on_text": "",
-            "ui_off_text": "",
+            "ui_on_text": "Show",
+            "ui_off_text": "Hide",
             "ui": 1
         },
         {
             "key": "field_66019b6f6c31e",
-            "label": "Show",
+            "label": "Banner Type",
             "name": "show-research",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Choose the banner style: 'Skip pre-qualify' shows a static banner; 'Shop by payment' shows a payment-based widget.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -119,11 +119,11 @@
         },
         {
             "key": "field_660196cd048a8",
-            "label": "For code",
+            "label": "Banner Embed Code",
             "name": "for_code-research",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "",
+            "instructions": "Paste the JavaScript embed code for the 'Skip pre-qualify' banner widget (e.g. from a third-party financing provider).",
             "required": 0,
             "conditional_logic": [
                 [
@@ -156,11 +156,11 @@
         },
         {
             "key": "field_66a8fe6c266b2",
-            "label": "Banner slider",
+            "label": "Banner Slider",
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Add rotating banner slides for the research archive page. Each slide can link to a different destination.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -174,11 +174,11 @@
         },
         {
             "key": "field_6601a158d67eb",
-            "label": "Banner slider",
+            "label": "Banner Slider",
             "name": "research",
             "aria-label": "",
             "type": "clone",
-            "instructions": "",
+            "instructions": "Configure the banner slider slides displayed on the research archive page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -201,11 +201,11 @@
         },
         {
             "key": "field_66a8fe79266b3",
-            "label": "Filters list",
+            "label": "Filters List",
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Define which filter options appear in the research archive sidebar. Add a row for each filter you want to display.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -219,11 +219,11 @@
         },
         {
             "key": "field_6630b54fb56fc",
-            "label": "Filters list",
+            "label": "Filters List",
             "name": "filters_list_research",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "",
+            "instructions": "Add each filter that should appear on the research archive page. Toggle visibility, set a display label, choose the filter type, and optionally add an icon.",
             "required": false,
             "conditional_logic": 0,
             "wrapper": {
@@ -261,11 +261,11 @@
                 },
                 {
                     "key": "field_6630b57eb5700",
-                    "label": "Show filter",
+                    "label": "Show Filter",
                     "name": "show_filter",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "",
+                    "instructions": "Toggle to display this filter option on the archive page.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -275,8 +275,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
+                    "ui_on_text": "Visible",
+                    "ui_off_text": "Hidden",
                     "ui": 1,
                     "parent_repeater": "field_6630b54fb56fc"
                 },
@@ -286,7 +286,7 @@
                     "name": "label",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "The display label shown to visitors for this filter (e.g. 'Year', 'Make').",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -296,7 +296,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Year",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_6630b54fb56fc"
@@ -307,7 +307,7 @@
                     "name": "filter",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "",
+                    "instructions": "Select which vehicle attribute this filter targets.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -359,7 +359,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "acfe_code_editor",
-                    "instructions": "",
+                    "instructions": "Paste inline SVG or an HTML icon tag (e.g. <svg>...</svg>) to display alongside this filter label.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -404,7 +404,7 @@
             "name": "",
             "aria-label": "",
             "type": "tab",
-            "instructions": "",
+            "instructions": "Settings for individual research article pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -419,11 +419,11 @@
         },
         {
             "key": "field_663b8684077ec",
-            "label": "Slider",
+            "label": "Slider Settings",
             "name": "research",
             "aria-label": "",
             "type": "clone",
-            "instructions": "",
+            "instructions": "Control autoplay behavior for image sliders on single research article pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -446,11 +446,11 @@
         },
         {
             "key": "field_64d56265f7788",
-            "label": "Info block",
+            "label": "Info Block",
             "name": "info_block",
             "aria-label": "",
             "type": "group",
-            "instructions": "",
+            "instructions": "A highlight block displayed on single research pages, typically used for a key fact or callout with an icon, heading, and body text.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -472,7 +472,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "",
+                    "instructions": "Upload a small icon or logo for the info block. Recommended size: 60x60 px. Displayed above the heading.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -500,7 +500,7 @@
                     "name": "heading",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "",
+                    "instructions": "Short heading for the info block (e.g. 'Why Research with Us?').",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -510,7 +510,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "",
+                    "placeholder": "e.g. Why Research with Us?",
                     "prepend": "",
                     "append": "",
                     "wpml_cf_preferences": 2
@@ -521,7 +521,7 @@
                     "name": "text",
                     "aria-label": "",
                     "type": "wysiwyg",
-                    "instructions": "",
+                    "instructions": "Body text for the info block. Keep concise — 1 to 3 sentences works best.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -540,11 +540,11 @@
         },
         {
             "key": "field_660bf18242277",
-            "label": "Detail info",
+            "label": "Detail Info",
             "name": "research-detail_info",
             "aria-label": "",
             "type": "clone",
-            "instructions": "",
+            "instructions": "Configure which vehicle detail fields (e.g. model, year) are displayed on individual research pages. Each row maps a visible label to a taxonomy field name.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -567,11 +567,11 @@
         },
         {
             "key": "field_672ce7fa79d16",
-            "label": "Flexible content",
+            "label": "Flexible Content",
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Add modular content blocks to the research single page layout.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -585,11 +585,11 @@
         },
         {
             "key": "field_672b69009dc56",
-            "label": "Research",
+            "label": "Flexible Content Blocks",
             "name": "research",
             "aria-label": "",
             "type": "clone",
-            "instructions": "",
+            "instructions": "Select and configure flexible content layout blocks for this research section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -616,7 +616,7 @@
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Configure the navigation menu items displayed on research pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -634,7 +634,7 @@
             "name": "research",
             "aria-label": "",
             "type": "clone",
-            "instructions": "",
+            "instructions": "Assign the navigation menu to use on research pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -657,11 +657,11 @@
         },
         {
             "key": "field_68ca886b2f780",
-            "label": "EVO settings",
+            "label": "EVO Settings",
             "name": "",
             "aria-label": "",
             "type": "accordion",
-            "instructions": "",
+            "instructions": "Configure the aspect ratio of the EVO iframe embedded on research pages.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -675,11 +675,11 @@
         },
         {
             "key": "field_68ca875962fee",
-            "label": "evo iframe ration",
+            "label": "EVO iFrame Ratio",
             "name": "evo_iframe_ration",
             "aria-label": "",
             "type": "button_group",
-            "instructions": "",
+            "instructions": "Select the aspect ratio for the EVO iframe. Choose 'custom' to specify pixel dimensions manually.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -702,11 +702,11 @@
         },
         {
             "key": "field_68ca879862fef",
-            "label": "custom width",
+            "label": "Custom Width",
             "name": "custom_width",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Enter the iframe width in pixels. Only used when ratio is set to 'custom'.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -726,18 +726,18 @@
             "min": "",
             "max": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. 800",
             "step": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_68ca87b862ff0",
-            "label": "custom height",
+            "label": "Custom Height",
             "name": "custom_height",
             "aria-label": "",
             "type": "number",
-            "instructions": "",
+            "instructions": "Enter the iframe height in pixels. Only used when ratio is set to 'custom'.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -757,7 +757,7 @@
             "min": "",
             "max": "",
             "allow_in_bindings": 0,
-            "placeholder": "",
+            "placeholder": "e.g. 600",
             "step": "",
             "prepend": "",
             "append": ""

@@ -1941,6 +1941,10 @@ textarea.form-control {
       justify-content: center;
     }
 
+    .btn-custom + .animate-img {
+      margin-top: 13px;
+    }
+
     .price {
       color: var(--primary);
       font-weight: 600;
@@ -5228,6 +5232,12 @@ body {
   .btn-disclosure {
     margin: 0;
   }
+}
+
+.hidden-button {
+  position: absolute;
+  left: -9999px;
+  top: 0;
 }
 
 @keyframes sticky-bottom {

@@ -8,7 +8,7 @@
             "name": "new_home_page_styles",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "",
+            "instructions": "Enable to activate the new home page visual style.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -29,7 +29,7 @@
             "name": "page_style",
             "aria-label": "",
             "type": "select",
-            "instructions": "",
+            "instructions": "Choose the overall layout style for this page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -61,7 +61,7 @@
             "name": "content_blocks",
             "aria-label": "",
             "type": "flexible_content",
-            "instructions": "",
+            "instructions": "Add and arrange page sections using the available layout blocks.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -105,7 +105,7 @@
                                     "name": "heading",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "The clickable accordion panel heading.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -115,7 +115,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. What financing options are available?",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_675b1329f1fb5"
@@ -126,7 +126,7 @@
                                     "name": "text",
                                     "aria-label": "",
                                     "type": "wysiwyg",
-                                    "instructions": "",
+                                    "instructions": "Body content shown when the panel is expanded. Supports formatted text and links.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -153,7 +153,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays a collapsible accordion list. Each row becomes one expandable panel with a heading and rich text body."
                 },
                 "layout_606c2719e3137": {
                     "key": "layout_606c2719e3137",
@@ -167,7 +168,7 @@
                             "name": "logo",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Upload the logo image. Recommended: transparent PNG, 300×150 px. Appears as a standalone centered logo.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -199,7 +200,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays a single logo image centered on the page. Useful for brand or partner highlights."
                 },
                 "layout_606c2a5e27c6d": {
                     "key": "layout_606c2a5e27c6d",
@@ -213,7 +215,7 @@
                             "name": "background_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Full-width background image behind the offer block. Recommended: 1920×600 px, JPG.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -241,7 +243,7 @@
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Main body text for the offer. Keep it concise — 1–3 sentences.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -262,7 +264,7 @@
                             "name": "for_code",
                             "aria-label": "",
                             "type": "textarea",
-                            "instructions": "",
+                            "instructions": "Paste raw HTML or embed code here (e.g. a form shortcode or button HTML). Leave blank if not needed.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -271,7 +273,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "<a href=\"/offers\" class=\"btn btn-primary\">View Offers</a>",
                             "maxlength": "",
                             "rows": "",
                             "new_lines": "",
@@ -288,7 +290,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A call-to-action section with a background image, descriptive text, and an optional custom HTML element (e.g. a form or button embed)."
                 },
                 "layout_606c2c88a5f06": {
                     "key": "layout_606c2c88a5f06",
@@ -302,7 +305,7 @@
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Introductory text above the icon columns.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -323,7 +326,7 @@
                             "name": "columns",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per feature column. Each column shows an icon, title, and description.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -346,7 +349,7 @@
                                     "name": "icon_image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Small icon image for this column. Recommended: SVG or PNG, 60×60 px, transparent background.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -383,7 +386,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Choose Your Car",
                                     "prepend": "",
                                     "append": "",
                                     "maxlength": "",
@@ -405,7 +408,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Browse our full inventory and filter by price, make, or model.",
                                     "maxlength": "",
                                     "rows": 1,
                                     "new_lines": "wpautop",
@@ -421,7 +424,7 @@
                             "name": "slogan",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Short tagline displayed at the bottom of this section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -430,7 +433,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Driving your dreams forward.",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -446,7 +449,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A \"Buy\" feature section with introductory text and a repeatable icon-based column grid. Add columns for each buying step or feature."
                 },
                 "layout_606c2e85c184d": {
                     "key": "layout_606c2e85c184d",
@@ -460,7 +464,7 @@
                             "name": "icon_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Optional decorative icon above the title. Recommended: SVG or PNG, 80×80 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -496,7 +500,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Why Buy From Us",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -508,7 +512,7 @@
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Main body content. Keep it clear and scannable.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -529,7 +533,7 @@
                             "name": "link",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "URL or anchor link the block title or CTA points to.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -538,7 +542,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "https://example.com/page",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -550,7 +554,7 @@
                             "name": "first_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Left-side image in the two-column image row. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -578,7 +582,7 @@
                             "name": "second_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Right-side image in the two-column image row. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -610,7 +614,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A versatile content block with optional icon, title, body text, a link, and two side-by-side images. Limited to 1 per page."
                 },
                 "layout_601acb819e757": {
                     "key": "layout_601acb819e757",
@@ -620,11 +625,11 @@
                     "sub_fields": [
                         {
                             "key": "field_601acb8eeb688",
-                            "label": "logo",
+                            "label": "Logo",
                             "name": "logo_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Brand logo or header icon. Recommended: transparent PNG, 200×100 px. Appears beside the title.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -647,7 +652,7 @@
                         },
                         {
                             "key": "field_601acba2eb689",
-                            "label": "title",
+                            "label": "Title",
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
@@ -660,7 +665,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Welcome to Our Dealership",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -668,11 +673,11 @@
                         },
                         {
                             "key": "field_601acbafeb68a",
-                            "label": "text",
+                            "label": "Text",
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Supporting text shown below the title.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -697,7 +702,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Page header section with an optional logo, title, and introductory text at the top of the content area."
                 },
                 "layout_601aea73351d6": {
                     "key": "layout_601aea73351d6",
@@ -711,7 +717,7 @@
                             "name": "remove_margin",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "When enabled, removes the default top/bottom margin around the video.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -721,8 +727,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -731,7 +737,7 @@
                             "name": "video_code",
                             "aria-label": "",
                             "type": "textarea",
-                            "instructions": "",
+                            "instructions": "Paste the full iframe embed code from YouTube, Vimeo, or your video platform.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -740,7 +746,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "<iframe src=\"https://www.youtube.com/embed/VIDEO_ID\" ...></iframe>",
                             "maxlength": "",
                             "rows": "",
                             "new_lines": "",
@@ -757,7 +763,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays a single embedded video. Paste the full iframe embed code. Toggle to remove vertical margin."
                 },
                 "layout_601aef486e586": {
                     "key": "layout_601aef486e586",
@@ -786,11 +793,11 @@
                         },
                         {
                             "key": "field_601aef616e588",
-                            "label": "icon",
+                            "label": "Icon",
                             "name": "icon",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Small decorative icon. Recommended: SVG or PNG, 60×60 px, transparent background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -813,11 +820,11 @@
                         },
                         {
                             "key": "field_601af1b76e58b",
-                            "label": "image",
+                            "label": "Header Image",
                             "name": "image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Main header image. Recommended: 1200×600 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -840,7 +847,7 @@
                         },
                         {
                             "key": "field_601af18a6e58a",
-                            "label": "title",
+                            "label": "Title",
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
@@ -853,7 +860,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Explore Our Inventory",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -861,7 +868,7 @@
                         },
                         {
                             "key": "field_601afbf6a92d7",
-                            "label": "subtitle",
+                            "label": "Subtitle",
                             "name": "subtitle",
                             "aria-label": "",
                             "type": "text",
@@ -874,7 +881,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Find the perfect vehicle for your lifestyle.",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -882,11 +889,11 @@
                         },
                         {
                             "key": "field_601af17b6e589",
-                            "label": "text",
+                            "label": "Text",
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Main body copy for the intro header area.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -903,11 +910,11 @@
                         },
                         {
                             "key": "field_601af1d86e58c",
-                            "label": "bottom image",
+                            "label": "Bottom Image",
                             "name": "bottom_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Optional image at the bottom of the header area. Recommended: 800×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -930,11 +937,11 @@
                         },
                         {
                             "key": "field_601af1f76e58d",
-                            "label": "bottom button code",
+                            "label": "Bottom Button Code",
                             "name": "bottom_button_code",
                             "aria-label": "",
                             "type": "textarea",
-                            "instructions": "",
+                            "instructions": "Paste raw HTML for a CTA button at the bottom of the header.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -943,7 +950,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "<a href=\"/contact\" class=\"btn btn-primary\">Contact Us</a>",
                             "maxlength": "",
                             "rows": 2,
                             "new_lines": "",
@@ -975,7 +982,7 @@
                             "name": "blocks",
                             "aria-label": "",
                             "type": "flexible_content",
-                            "instructions": "",
+                            "instructions": "Add one or more content blocks (image-left/right layouts) below the intro header.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -996,7 +1003,7 @@
                                             "name": "centered_image",
                                             "aria-label": "",
                                             "type": "true_false",
-                                            "instructions": "",
+                                            "instructions": "Center the image vertically within its column.",
                                             "required": 0,
                                             "conditional_logic": [
                                                 [
@@ -1014,8 +1021,8 @@
                                             "message": "",
                                             "default_value": 0,
                                             "ui": 1,
-                                            "ui_on_text": "",
-                                            "ui_off_text": "",
+                                            "ui_on_text": "Centered",
+                                            "ui_off_text": "Top",
                                             "wpml_cf_preferences": 1
                                         },
                                         {
@@ -1024,7 +1031,7 @@
                                             "name": "decor_position",
                                             "aria-label": "",
                                             "type": "select",
-                                            "instructions": "",
+                                            "instructions": "Choose where the decorative overlay image is positioned relative to the main image.",
                                             "required": 1,
                                             "conditional_logic": [
                                                 [
@@ -1059,11 +1066,11 @@
                                         },
                                         {
                                             "key": "field_601af2796e590",
-                                            "label": "image",
+                                            "label": "Image",
                                             "name": "image",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Main image for the left column. Recommended: 600×500 px.",
                                             "required": 1,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1087,11 +1094,11 @@
                                         },
                                         {
                                             "key": "field_601af74d6e5ac",
-                                            "label": "image (decor)",
+                                            "label": "Decorative Overlay Image",
                                             "name": "image_decor",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional smaller image layered over the main image. Recommended: 200×200 px, PNG with transparency.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1119,7 +1126,7 @@
                                             "name": "icon",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional icon above the right column text. Recommended: SVG or PNG, 60×60 px.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1142,7 +1149,7 @@
                                         },
                                         {
                                             "key": "field_601af2af6e591",
-                                            "label": "title",
+                                            "label": "Title",
                                             "name": "title",
                                             "aria-label": "",
                                             "type": "text",
@@ -1155,7 +1162,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Your Trusted Local Dealer",
                                             "prepend": "",
                                             "append": "",
                                             "maxlength": "",
@@ -1163,7 +1170,7 @@
                                         },
                                         {
                                             "key": "field_601af2bc6e592",
-                                            "label": "subtitle",
+                                            "label": "Subtitle",
                                             "name": "subtitle",
                                             "aria-label": "",
                                             "type": "text",
@@ -1176,7 +1183,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Serving the community for 25+ years.",
                                             "prepend": "",
                                             "append": "",
                                             "maxlength": "",
@@ -1184,7 +1191,7 @@
                                         },
                                         {
                                             "key": "field_601af2f16e594",
-                                            "label": "text",
+                                            "label": "Text",
                                             "name": "text",
                                             "aria-label": "",
                                             "type": "textarea",
@@ -1197,7 +1204,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "Enter the main body text for this block...",
                                             "maxlength": "",
                                             "rows": 5,
                                             "new_lines": "wpautop",
@@ -1206,11 +1213,11 @@
                                         },
                                         {
                                             "key": "field_601af3216e595",
-                                            "label": "bottom button code",
+                                            "label": "Bottom Button Code",
                                             "name": "bottom_button_code",
                                             "aria-label": "",
                                             "type": "textarea",
-                                            "instructions": "",
+                                            "instructions": "Paste raw HTML for a CTA button at the bottom of the text column.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1219,7 +1226,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "<a href=\"/inventory\" class=\"btn\">Browse Inventory</a>",
                                             "maxlength": "",
                                             "rows": 2,
                                             "new_lines": "",
@@ -1228,11 +1235,11 @@
                                         },
                                         {
                                             "key": "field_601af49d6e5a8",
-                                            "label": "additional image",
+                                            "label": "Additional Image",
                                             "name": "additional_image",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional extra image below the button. Recommended: 800×300 px.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1264,7 +1271,8 @@
                                     "acfe_flexible_settings": false,
                                     "acfe_flexible_settings_size": "medium",
                                     "acfe_flexible_modal_edit_size": false,
-                                    "acfe_flexible_category": false
+                                    "acfe_flexible_category": false,
+                                    "instructions": "Two-column block: image on the left, text content on the right. Optional decorative overlay image."
                                 },
                                 "layout_601af3396e596": {
                                     "key": "layout_601af3396e596",
@@ -1278,7 +1286,7 @@
                                             "name": "centered_image",
                                             "aria-label": "",
                                             "type": "true_false",
-                                            "instructions": "",
+                                            "instructions": "Center the image vertically within its column.",
                                             "required": 0,
                                             "conditional_logic": [
                                                 [
@@ -1296,8 +1304,8 @@
                                             "message": "",
                                             "default_value": 0,
                                             "ui": 1,
-                                            "ui_on_text": "",
-                                            "ui_off_text": "",
+                                            "ui_on_text": "Centered",
+                                            "ui_off_text": "Top",
                                             "wpml_cf_preferences": 1
                                         },
                                         {
@@ -1306,7 +1314,7 @@
                                             "name": "decor_position",
                                             "aria-label": "",
                                             "type": "select",
-                                            "instructions": "",
+                                            "instructions": "Choose where the decorative overlay image is positioned relative to the main image.",
                                             "required": 1,
                                             "conditional_logic": [
                                                 [
@@ -1341,11 +1349,11 @@
                                         },
                                         {
                                             "key": "field_601af3396e597",
-                                            "label": "image",
+                                            "label": "Image",
                                             "name": "image",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Main image for the right column. Recommended: 600×500 px.",
                                             "required": 1,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1369,11 +1377,11 @@
                                         },
                                         {
                                             "key": "field_601af64d6e5a9",
-                                            "label": "image (decor)",
+                                            "label": "Decorative Overlay Image",
                                             "name": "image_decor",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional smaller image layered over the main image. Recommended: 200×200 px, PNG.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1397,11 +1405,11 @@
                                         },
                                         {
                                             "key": "field_601af3396e598",
-                                            "label": "icon",
+                                            "label": "Icon",
                                             "name": "icon",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional icon above the left column text. Recommended: SVG or PNG, 60×60 px.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1424,7 +1432,7 @@
                                         },
                                         {
                                             "key": "field_601af3396e599",
-                                            "label": "title",
+                                            "label": "Title",
                                             "name": "title",
                                             "aria-label": "",
                                             "type": "text",
@@ -1437,7 +1445,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Finance Made Easy",
                                             "prepend": "",
                                             "append": "",
                                             "maxlength": "",
@@ -1445,7 +1453,7 @@
                                         },
                                         {
                                             "key": "field_601af3396e59a",
-                                            "label": "subtitle",
+                                            "label": "Subtitle",
                                             "name": "subtitle",
                                             "aria-label": "",
                                             "type": "text",
@@ -1458,7 +1466,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Flexible terms to suit your budget.",
                                             "prepend": "",
                                             "append": "",
                                             "maxlength": "",
@@ -1466,7 +1474,7 @@
                                         },
                                         {
                                             "key": "field_601af3396e59b",
-                                            "label": "text",
+                                            "label": "Text",
                                             "name": "text",
                                             "aria-label": "",
                                             "type": "textarea",
@@ -1479,7 +1487,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "Enter the main body text for this block...",
                                             "maxlength": "",
                                             "rows": 5,
                                             "new_lines": "wpautop",
@@ -1488,11 +1496,11 @@
                                         },
                                         {
                                             "key": "field_601af3396e59c",
-                                            "label": "bottom button code",
+                                            "label": "Bottom Button Code",
                                             "name": "bottom_button_code",
                                             "aria-label": "",
                                             "type": "textarea",
-                                            "instructions": "",
+                                            "instructions": "Paste raw HTML for a CTA button at the bottom of the text column.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1501,7 +1509,7 @@
                                                 "id": ""
                                             },
                                             "default_value": "",
-                                            "placeholder": "",
+                                            "placeholder": "<a href=\"/finance\" class=\"btn\">Learn More</a>",
                                             "maxlength": "",
                                             "rows": 2,
                                             "new_lines": "",
@@ -1510,11 +1518,11 @@
                                         },
                                         {
                                             "key": "field_601af4876e5a7",
-                                            "label": "additional image",
+                                            "label": "Additional Image",
                                             "name": "additional_image",
                                             "aria-label": "",
                                             "type": "image",
-                                            "instructions": "",
+                                            "instructions": "Optional extra image below the button. Recommended: 800×300 px.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -1546,7 +1554,8 @@
                                     "acfe_flexible_settings": false,
                                     "acfe_flexible_settings_size": "medium",
                                     "acfe_flexible_modal_edit_size": false,
-                                    "acfe_flexible_category": false
+                                    "acfe_flexible_category": false,
+                                    "instructions": "Two-column block: text content on the left, image on the right. Mirror of the image-left layout."
                                 }
                             },
                             "button_label": "Add Block",
@@ -1595,7 +1604,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A rich intro section with header content (icon, image, title, subtitle, text, CTA button) and a nested block area for image-left/right layouts."
                 },
                 "layout_601bdff771d65": {
                     "key": "layout_601bdff771d65",
@@ -1624,7 +1634,7 @@
                         },
                         {
                             "key": "field_601bdff771d69",
-                            "label": "title",
+                            "label": "Title",
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
@@ -1637,7 +1647,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Watch Our Latest Videos",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -1645,7 +1655,7 @@
                         },
                         {
                             "key": "field_601be22043ec4",
-                            "label": "subtitle",
+                            "label": "Subtitle",
                             "name": "subtitle",
                             "aria-label": "",
                             "type": "text",
@@ -1658,7 +1668,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. See what our customers are saying.",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -1666,11 +1676,11 @@
                         },
                         {
                             "key": "field_601bdff771d67",
-                            "label": "icon",
+                            "label": "Icon",
                             "name": "icon",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Optional icon near the section heading. Recommended: SVG or PNG, 60×60 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1693,11 +1703,11 @@
                         },
                         {
                             "key": "field_601bdff771d6b",
-                            "label": "text",
+                            "label": "Text",
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Supporting text for the section header.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1718,7 +1728,7 @@
                             "name": "link",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "",
+                            "instructions": "Optional CTA link button for the section header.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1735,7 +1745,7 @@
                             "name": "first_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "First decorative header image. Recommended: 400×300 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1763,7 +1773,7 @@
                             "name": "second_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Second decorative header image. Recommended: 400×300 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1787,11 +1797,11 @@
                         },
                         {
                             "key": "field_601be04a71d86",
-                            "label": "Thrid image",
+                            "label": "Third Image",
                             "name": "thrid_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Third decorative header image. Recommended: 400×300 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1834,11 +1844,11 @@
                         },
                         {
                             "key": "field_601bdff771d6f",
-                            "label": "blocks",
+                            "label": "Video/Content Blocks",
                             "name": "blocks",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Each row shows a text area paired with an embedded video and an optional link.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1861,7 +1871,7 @@
                                     "name": "content",
                                     "aria-label": "",
                                     "type": "wysiwyg",
-                                    "instructions": "",
+                                    "instructions": "Rich text content displayed beside the video embed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1883,7 +1893,7 @@
                                     "name": "code_for_video",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "",
+                                    "instructions": "Paste the full iframe embed code for the video (YouTube, Vimeo, etc.).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1892,7 +1902,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "<iframe src=\"https://www.youtube.com/embed/VIDEO_ID\" ...></iframe>",
                                     "maxlength": "",
                                     "rows": "",
                                     "new_lines": "",
@@ -1930,7 +1940,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A multi-column section with a header (title, subtitle, icon, text, link, decorative images) plus repeatable video/content block pairs."
                 },
                 "layout_601bc0e9e9c6d": {
                     "key": "layout_601bc0e9e9c6d",
@@ -1940,11 +1951,11 @@
                     "sub_fields": [
                         {
                             "key": "field_601bc0f0e9c6e",
-                            "label": "buttons",
+                            "label": "Buttons",
                             "name": "buttons",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per button. Each row takes raw HTML for the button element.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1967,7 +1978,7 @@
                                     "name": "button_code",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "",
+                                    "instructions": "Paste the full HTML for this button.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -1976,7 +1987,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "<a href=\"/offers\" class=\"btn btn-primary\">View Offers</a>",
                                     "maxlength": "",
                                     "rows": 2,
                                     "new_lines": "",
@@ -1996,7 +2007,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Renders a row of CTA buttons. Paste raw HTML for each button."
                 },
                 "layout_601bc2d94e73d": {
                     "key": "layout_601bc2d94e73d",
@@ -2006,7 +2018,7 @@
                     "sub_fields": [
                         {
                             "key": "field_601bc36f4e73e",
-                            "label": "title",
+                            "label": "Title",
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
@@ -2019,7 +2031,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Our Showroom",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2027,11 +2039,11 @@
                         },
                         {
                             "key": "field_601bc3744e73f",
-                            "label": "images",
+                            "label": "Images",
                             "name": "images",
                             "aria-label": "",
                             "type": "gallery",
-                            "instructions": "",
+                            "instructions": "Upload all images for this section. Recommended: consistent aspect ratio, 800×600 px each.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2064,7 +2076,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays an optional heading followed by a gallery grid of informational images."
                 },
                 "layout_60475c5c5fbe9": {
                     "key": "layout_60475c5c5fbe9",
@@ -2097,7 +2110,7 @@
                             "name": "icon",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Intro section icon. Recommended: SVG or PNG, 60×60 px, transparent background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2133,7 +2146,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Why Choose Us",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2145,7 +2158,7 @@
                             "name": "content_intro",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Intro section body text.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2166,7 +2179,7 @@
                             "name": "script_for_link_intro",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "JavaScript or URL string for the intro CTA link.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2175,7 +2188,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "/contact-us",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2187,7 +2200,7 @@
                             "name": "title_for_link_intro",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Display label for the intro CTA link.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2196,7 +2209,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Contact Us",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2208,7 +2221,7 @@
                             "name": "first_image_intro",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "First intro image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2236,7 +2249,7 @@
                             "name": "second_image_intro",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Second intro image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2283,7 +2296,7 @@
                             "name": "left_text",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Label or caption displayed above the left image.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2292,7 +2305,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. New Arrivals",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2304,7 +2317,7 @@
                             "name": "right_text",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Label or caption displayed above the right image.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2313,7 +2326,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Certified Pre-Owned",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2325,7 +2338,7 @@
                             "name": "left_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Left image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2353,7 +2366,7 @@
                             "name": "right_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Right image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2400,7 +2413,7 @@
                             "name": "icon2",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Block section icon. Recommended: SVG or PNG, 60×60 px, transparent background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2436,7 +2449,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Explore Our Models",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2448,7 +2461,7 @@
                             "name": "content_block",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Block section body content.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2469,7 +2482,7 @@
                             "name": "script_for_link",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "JavaScript or URL string for the block CTA link.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2478,7 +2491,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "/inventory",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2490,7 +2503,7 @@
                             "name": "title_for_link",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Display label for the block CTA link.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2499,7 +2512,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. View Inventory",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2511,7 +2524,7 @@
                             "name": "first_image_block",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "First block image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2539,7 +2552,7 @@
                             "name": "second_image_block",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Second block image. Recommended: 600×400 px.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2571,7 +2584,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A three-tab layout: Intro (icon, title, content, images), Image (left/right image pairs with labels), and Block (icon, title, content, images). Used for multi-section feature pages."
                 },
                 "layout_6047671b21de1": {
                     "key": "layout_6047671b21de1",
@@ -2585,7 +2599,7 @@
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove the default top/bottom padding from this section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2595,8 +2609,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -2605,7 +2619,7 @@
                             "name": "offers",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per offer card.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2628,7 +2642,7 @@
                                     "name": "image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Offer card image. Recommended: 600×400 px, consistent ratio across all offers.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -2657,7 +2671,7 @@
                                     "name": "description",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "",
+                                    "instructions": "Short description shown below the offer image.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -2666,7 +2680,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. 0% APR for 60 months on select models.",
                                     "maxlength": "",
                                     "rows": 1,
                                     "new_lines": "wpautop",
@@ -2686,7 +2700,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays a repeatable grid of offer cards, each with an image and short description. Toggle to remove section padding."
                 },
                 "layout_60476c7dd3a61": {
                     "key": "layout_60476c7dd3a61",
@@ -2700,7 +2715,7 @@
                             "name": "images",
                             "aria-label": "",
                             "type": "gallery",
-                            "instructions": "",
+                            "instructions": "Upload gallery images. Recommended: consistent ratio, 800×600 px each.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2733,7 +2748,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A simple full-width image gallery. Upload all images; they display in a responsive grid."
                 },
                 "layout_604a04e6211b7": {
                     "key": "layout_604a04e6211b7",
@@ -2747,7 +2763,7 @@
                             "name": "add_grey_background",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to display this block on a light grey background.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2758,17 +2774,17 @@
                             "message": "",
                             "default_value": 0,
                             "ui": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "wpml_cf_preferences": 1
                         },
                         {
                             "key": "field_617fe08853fa9",
-                            "label": "remove paddings",
+                            "label": "Remove Paddings",
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove top/bottom padding from this block.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2779,17 +2795,17 @@
                             "message": "",
                             "default_value": 0,
                             "ui": 1,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "wpml_cf_preferences": 1
                         },
                         {
                             "key": "field_604a04ea211b8",
-                            "label": "html",
+                            "label": "HTML Content",
                             "name": "html",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Enter content or paste embed/shortcode HTML. Switch to the Text tab for raw HTML.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2841,7 +2857,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. custom-section my-special-block",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
@@ -2856,7 +2872,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A freeform HTML/WYSIWYG block. Use for custom embeds, shortcodes, or structured content. Toggle grey background and padding as needed."
                 },
                 "layout_612c9d9290b37": {
                     "key": "layout_612c9d9290b37",
@@ -2866,11 +2883,11 @@
                     "sub_fields": [
                         {
                             "key": "field_612c9d9a90b38",
-                            "label": "form id",
+                            "label": "Form ID",
                             "name": "form",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Enter the numeric ID of the form to embed.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2880,14 +2897,14 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. 3",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
                         },
                         {
                             "key": "field_612c9dba90b39",
-                            "label": "title",
+                            "label": "Title",
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
@@ -2900,7 +2917,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Request a Quote",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2908,11 +2925,11 @@
                         },
                         {
                             "key": "field_612c9dc590b3a",
-                            "label": "text",
+                            "label": "Text",
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Optional short description displayed beside the form.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2937,7 +2954,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Embeds a form by ID (Gravity Forms, WPForms, etc.). Optionally shows a title and introductory text beside the form."
                 },
                 "layout_6257159d17b47": {
                     "key": "layout_6257159d17b47",
@@ -2947,7 +2965,7 @@
                     "sub_fields": [
                         {
                             "key": "field_625716b817b48",
-                            "label": "heading",
+                            "label": "Heading",
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
@@ -2960,7 +2978,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Our Brand Partners",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -2972,7 +2990,7 @@
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove top/bottom padding from the logo section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -2982,17 +3000,17 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
                             "key": "field_6488320dcf03f",
-                            "label": "Logos Backgorund",
+                            "label": "Logos Background Color",
                             "name": "logos_backgorund",
                             "aria-label": "",
                             "type": "color_picker",
-                            "instructions": "",
+                            "instructions": "Optional background colour for the logo row area. Leave blank for default (white).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3014,7 +3032,7 @@
                             "name": "logos_per_row",
                             "aria-label": "",
                             "type": "range",
-                            "instructions": "",
+                            "instructions": "Number of logos displayed per row (1–5). Default is 4.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3032,11 +3050,11 @@
                         },
                         {
                             "key": "field_6257187117b49",
-                            "label": "logos",
+                            "label": "Logos",
                             "name": "logos",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per logo. Each row requires an image and a destination URL.",
                             "required": 1,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3055,11 +3073,11 @@
                             "sub_fields": [
                                 {
                                     "key": "field_6257187e17b4a",
-                                    "label": "image",
+                                    "label": "Logo Image",
                                     "name": "image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Logo image for this entry. Recommended: transparent PNG, 200×100 px.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3084,7 +3102,7 @@
                                 },
                                 {
                                     "key": "field_625718b517b4b",
-                                    "label": "link",
+                                    "label": "Link URL",
                                     "name": "link",
                                     "aria-label": "",
                                     "type": "url",
@@ -3097,17 +3115,17 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "https://brandpartner.com",
                                     "parent_repeater": "field_6257187117b49",
                                     "wpml_cf_preferences": 1
                                 },
                                 {
                                     "key": "field_653133c27b6a0",
-                                    "label": "alt",
+                                    "label": "Alt Text",
                                     "name": "alt",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Descriptive alt text for accessibility.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3117,7 +3135,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Toyota logo",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6257187117b49"
@@ -3128,7 +3146,7 @@
                                     "name": "new_tab",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to open this logo link in a new browser tab.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3138,8 +3156,8 @@
                                     },
                                     "message": "",
                                     "default_value": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New tab",
+                                    "ui_off_text": "Same tab",
                                     "ui": 1,
                                     "parent_repeater": "field_6257187117b49"
                                 }
@@ -3155,7 +3173,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A branded logo strip with an optional heading. Each logo links to an external URL. Control background colour, logos per row, and new-tab behaviour."
                 },
                 "layout_64897755325aa": {
                     "key": "layout_64897755325aa",
@@ -3165,11 +3184,11 @@
                     "sub_fields": [
                         {
                             "key": "field_68e3ac75538f5",
-                            "label": "no margin",
+                            "label": "No Margin",
                             "name": "no_margin",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove the bottom margin below the slider.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3180,8 +3199,8 @@
                             "message": "",
                             "default_value": 0,
                             "allow_in_bindings": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -3190,7 +3209,7 @@
                             "name": "buttons",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add quick-action buttons displayed on top of the slider (e.g. New, Used, Service links).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3213,7 +3232,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Optional icon for this button. Recommended: SVG or PNG, 32×32 px.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3252,7 +3271,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. New Vehicles",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6489775f325ac",
@@ -3264,7 +3283,7 @@
                                     "name": "second_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Optional second line of text shown below the main button label.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3274,7 +3293,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Shop Now",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6489775f325ac",
@@ -3282,7 +3301,7 @@
                                 },
                                 {
                                     "key": "field_64ad72f8c0d85",
-                                    "label": "Url",
+                                    "label": "URL",
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "url",
@@ -3295,7 +3314,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "",
+                                    "placeholder": "https://example.com/new-vehicles",
                                     "parent_repeater": "field_6489775f325ac",
                                     "wpml_cf_preferences": 1
                                 }
@@ -3307,7 +3326,7 @@
                             "name": "show_slider",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "Choose the slide source: pull from published offers, enter slides manually, or combine both.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3339,7 +3358,7 @@
                             "name": "sort_offers_by",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "Controls the sort order of offer-sourced slides.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -3394,7 +3413,7 @@
                             "name": "slider_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Slide transition speed in milliseconds. Default is 500ms.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3417,7 +3436,7 @@
                             "name": "autoplay_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Time each slide is shown before auto-advancing, in milliseconds. Default is 5000ms (5 sec).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3440,7 +3459,7 @@
                             "name": "slider",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add manual slides. Each slide requires a landing page URL and at least a desktop background image.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -3470,7 +3489,7 @@
                                     "name": "video_id",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "YouTube or Vimeo video ID (alphanumeric ID from the URL, not the full URL).",
                                     "required": 0,
                                     "conditional_logic": [
                                         [
@@ -3488,7 +3507,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. dQw4w9WgXcQ",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_65b7875dfcf9b"
@@ -3525,7 +3544,7 @@
                                     "name": "video_type",
                                     "aria-label": "",
                                     "type": "select",
-                                    "instructions": "",
+                                    "instructions": "Select the video platform. Choose HTML for self-hosted MP4 files.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3558,7 +3577,7 @@
                                     "name": "video_title",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Accessible title for the video (used in aria attributes).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3568,7 +3587,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Summer Lease Event Promo",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_65b7875dfcf9b"
@@ -3579,7 +3598,7 @@
                                     "name": "desktop_background_image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Desktop background image for this slide. Recommended: 1920×700 px, JPG.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3607,7 +3626,7 @@
                                     "name": "desktop_overlay_image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Optional desktop overlay image (e.g. promotional badge). Displayed on top of the background. Recommended: PNG with transparency.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3635,7 +3654,7 @@
                                     "name": "mobile_image_url",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Mobile background image for this slide. Recommended: 768×500 px, JPG.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3663,7 +3682,7 @@
                                     "name": "intro_slider_overlay_sm",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Optional mobile overlay image. Recommended: PNG with transparency, max 400px wide.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3691,7 +3710,7 @@
                                     "name": "landing_page_url",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "URL the slide image links to when clicked.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3701,7 +3720,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "/offers/summer-lease",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_65b7875dfcf9b"
@@ -3712,7 +3731,7 @@
                                     "name": "start_date",
                                     "aria-label": "",
                                     "type": "date_picker",
-                                    "instructions": "",
+                                    "instructions": "Date this slide becomes visible. Leave blank to show immediately.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3720,7 +3739,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m\/d\/Y",
+                                    "display_format": "m/d/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -3732,7 +3751,7 @@
                                     "name": "end_date",
                                     "aria-label": "",
                                     "type": "date_picker",
-                                    "instructions": "",
+                                    "instructions": "Date this slide stops being visible. Leave blank to show indefinitely.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3740,7 +3759,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m\/d\/Y",
+                                    "display_format": "m/d/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -3752,7 +3771,7 @@
                                     "name": "alt_text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Alt text for the slide image (accessibility and SEO).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3762,7 +3781,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Summer Lease Special — Sedan starting at $299/mo",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_65b7875dfcf9b"
@@ -3773,7 +3792,7 @@
                                     "name": "active",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to show this slide. Disable to hide it without deleting it.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3783,8 +3802,8 @@
                                     },
                                     "message": "",
                                     "default_value": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Active",
+                                    "ui_off_text": "Hidden",
                                     "ui": 1,
                                     "parent_repeater": "field_65b7875dfcf9b"
                                 },
@@ -3794,7 +3813,7 @@
                                     "name": "disclosure",
                                     "aria-label": "",
                                     "type": "wysiwyg",
-                                    "instructions": "",
+                                    "instructions": "Optional legal or promotional disclosure text displayed on or below the slide.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3818,7 +3837,7 @@
                             "name": "custom_overlay",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Override the slider overlay image for a specific date range. Useful for seasonal promotions layered on existing slides.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -3862,7 +3881,7 @@
                                             "name": "active",
                                             "aria-label": "",
                                             "type": "true_false",
-                                            "instructions": "",
+                                            "instructions": "Enable this custom overlay entry.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -3872,8 +3891,8 @@
                                             },
                                             "message": "",
                                             "default_value": 0,
-                                            "ui_on_text": "",
-                                            "ui_off_text": "",
+                                            "ui_on_text": "Active",
+                                            "ui_off_text": "Hidden",
                                             "ui": 1
                                         },
                                         {
@@ -3890,7 +3909,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m\/d\/Y",
+                                            "display_format": "m/d/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -3909,7 +3928,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m\/d\/Y",
+                                            "display_format": "m/d/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -3920,7 +3939,7 @@
                                             "name": "landing_page_url",
                                             "aria-label": "",
                                             "type": "text",
-                                            "instructions": "",
+                                            "instructions": "URL the overlay links to when clicked.",
                                             "required": 1,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -3930,7 +3949,7 @@
                                             },
                                             "default_value": "",
                                             "maxlength": "",
-                                            "placeholder": "",
+                                            "placeholder": "/special-event",
                                             "prepend": "",
                                             "append": ""
                                         },
@@ -3940,7 +3959,7 @@
                                             "name": "alt_text",
                                             "aria-label": "",
                                             "type": "text",
-                                            "instructions": "",
+                                            "instructions": "Alt text for the overlay image.",
                                             "required": 1,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -3950,7 +3969,7 @@
                                             },
                                             "default_value": "",
                                             "maxlength": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Holiday Sale Overlay",
                                             "prepend": "",
                                             "append": ""
                                         }
@@ -3962,7 +3981,7 @@
                                     "name": "overlay",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "The overlay image to display. Recommended: PNG with transparency, same dimensions as the slide background.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -3992,7 +4011,7 @@
                             "name": "hide_search_form",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to hide the vehicle search form that normally appears over the slider.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4002,8 +4021,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Hidden",
+                            "ui_off_text": "Visible",
                             "ui": 1
                         }
                     ],
@@ -4016,7 +4035,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Hero/intro carousel. Supports manually added slides and/or auto-populated offer slides. Configure slider and autoplay speed, sort order, and a hidden search form option."
                 },
                 "layout_64899e8f35e02": {
                     "key": "layout_64899e8f35e02",
@@ -4030,7 +4050,7 @@
                             "name": "hide_block",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to hide this entire block from the front end without deleting it.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4040,8 +4060,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Hidden",
+                            "ui_off_text": "Visible",
                             "ui": 1
                         },
                         {
@@ -4050,7 +4070,7 @@
                             "name": "sort_offers_by",
                             "aria-label": "",
                             "type": "select",
-                            "instructions": "",
+                            "instructions": "Controls the sort order of offer-sourced slides in this slider.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -4105,7 +4125,7 @@
                             "name": "slider_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Slide transition speed in milliseconds. Default is 500ms.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4128,7 +4148,7 @@
                             "name": "autoplay_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Time each slide is shown before auto-advancing, in milliseconds. Default is 5000ms.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4155,7 +4175,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A section combining a text panel with a video/offer slider. Configure slider speed, autoplay, and offer sort order. Toggle to hide the block temporarily."
                 },
                 "layout_648ab9fcc7320": {
                     "key": "layout_648ab9fcc7320",
@@ -4169,7 +4190,7 @@
                             "name": "heading",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Optional section heading displayed above the tabs.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4179,7 +4200,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Shop by Model",
                             "prepend": "",
                             "append": ""
                         },
@@ -4189,7 +4210,7 @@
                             "name": "sort_by_number_of_vehicles",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "High to Low",
+                            "instructions": "When enabled, tabs with more vehicles are shown first (high to low). Default is alphabetical order.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4214,7 +4235,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A tabbed slider that groups vehicles or offers into tabs. Add a heading and optionally sort tabs by vehicle count (high to low)."
                 },
                 "layout_6490097a60923": {
                     "key": "layout_6490097a60923",
@@ -4228,7 +4250,7 @@
                             "name": "top_image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Optional image displayed above the video and content. Recommended: 1200×400 px, JPG.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4256,7 +4278,7 @@
                             "name": "wistia_id",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Enter the Wistia video hash ID (alphanumeric string from the Wistia URL).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4266,18 +4288,18 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. abc123xyz",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
                         },
                         {
                             "key": "field_649009cd60927",
-                            "label": "HTML",
+                            "label": "Content",
                             "name": "html",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Body content displayed below or beside the video.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4302,7 +4324,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A section with an optional top decorative image, a Wistia video embed by ID, and a rich text content area."
                 },
                 "layout_6490104242ffc": {
                     "key": "layout_6490104242ffc",
@@ -4316,7 +4339,7 @@
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove top/bottom padding from this section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4326,8 +4349,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -4336,7 +4359,7 @@
                             "name": "image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Desktop banner image. Displayed on screens wider than 768px. Recommended: 1920×500 px, JPG.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4359,11 +4382,11 @@
                         },
                         {
                             "key": "field_670e86650c1bc",
-                            "label": "Image mobile",
+                            "label": "Mobile Image",
                             "name": "image_mobile",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "",
+                            "instructions": "Mobile banner image. Displayed on screens up to 768px. Recommended: 768×400 px, JPG.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4390,7 +4413,7 @@
                             "name": "url",
                             "aria-label": "",
                             "type": "url",
-                            "instructions": "",
+                            "instructions": "URL the banner links to when clicked. Leave blank for a decorative (non-linked) banner.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4399,7 +4422,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": ""
+                            "placeholder": "https://example.com/promo"
                         },
                         {
                             "key": "field_6759b06e171e2",
@@ -4407,7 +4430,7 @@
                             "name": "open_in_new_tab",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to open the banner link in a new browser tab.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4417,8 +4440,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "New tab",
+                            "ui_off_text": "Same tab",
                             "ui": 1
                         }
                     ],
@@ -4431,7 +4454,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A clickable full-width image banner with separate desktop and mobile images. Optionally links to a URL. Toggle to remove padding."
                 },
                 "layout_683eca82d0ea7": {
                     "key": "layout_683eca82d0ea7",
@@ -4445,7 +4469,7 @@
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove top/bottom padding from the slider section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4456,8 +4480,8 @@
                             "message": "",
                             "default_value": 0,
                             "allow_in_bindings": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -4466,7 +4490,7 @@
                             "name": "slider_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Slide transition speed in milliseconds. Default is 500ms.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4489,7 +4513,7 @@
                             "name": "autoplay_speed",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Time each slide is shown before auto-advancing, in milliseconds. Default is 5000ms.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4512,7 +4536,7 @@
                             "name": "slider",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per slide. Each slide requires at least a desktop image.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4534,7 +4558,7 @@
                                     "name": "image",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Desktop slide image. Recommended: 1920×700 px, JPG.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4563,7 +4587,7 @@
                                     "name": "image_mobile",
                                     "aria-label": "",
                                     "type": "image",
-                                    "instructions": "",
+                                    "instructions": "Mobile slide image. Recommended: 768×500 px, JPG.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4592,7 +4616,7 @@
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "url",
-                                    "instructions": "",
+                                    "instructions": "URL this slide links to when clicked. Leave blank for decorative slides.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4602,7 +4626,7 @@
                                     },
                                     "default_value": "",
                                     "allow_in_bindings": 1,
-                                    "placeholder": "",
+                                    "placeholder": "https://example.com/offer",
                                     "parent_repeater": "field_683eca97d0ead"
                                 },
                                 {
@@ -4611,7 +4635,7 @@
                                     "name": "open_in_new_tab",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to open the slide link in a new tab.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4622,8 +4646,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 1,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New tab",
+                                    "ui_off_text": "Same tab",
                                     "ui": 1,
                                     "parent_repeater": "field_683eca97d0ead"
                                 },
@@ -4633,7 +4657,7 @@
                                     "name": "start_date",
                                     "aria-label": "",
                                     "type": "date_picker",
-                                    "instructions": "",
+                                    "instructions": "Date this slide becomes visible. Leave blank to show immediately.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4641,7 +4665,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d\/m\/Y",
+                                    "display_format": "d/m/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -4654,7 +4678,7 @@
                                     "name": "end_date",
                                     "aria-label": "",
                                     "type": "date_picker",
-                                    "instructions": "",
+                                    "instructions": "Date this slide stops being visible. Leave blank to show indefinitely.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4662,7 +4686,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d\/m\/Y",
+                                    "display_format": "d/m/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -4675,7 +4699,7 @@
                                     "name": "arialabel",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "ARIA label for accessibility screen readers.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4686,7 +4710,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Summer Sale Banner",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_683eca97d0ead"
@@ -4697,7 +4721,7 @@
                                     "name": "disclosure",
                                     "aria-label": "",
                                     "type": "wysiwyg",
-                                    "instructions": "",
+                                    "instructions": "Optional legal or promotional disclosure text displayed on or below the slide.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4725,7 +4749,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A full-width image slideshow. Each slide has desktop and mobile images, an optional link, start/end dates for scheduling, and a disclosure text field."
                 },
                 "layout_64904f960874c": {
                     "key": "layout_64904f960874c",
@@ -4749,7 +4774,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Find Our Location",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
@@ -4770,7 +4795,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. 123 Main St, Springfield",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
@@ -4781,7 +4806,7 @@
                             "name": "button",
                             "aria-label": "",
                             "type": "link",
-                            "instructions": "",
+                            "instructions": "Optional CTA button displayed beside or below the map (e.g. \"Get Directions\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4794,11 +4819,11 @@
                         },
                         {
                             "key": "field_649057d408751",
-                            "label": "Lattitude",
+                            "label": "Latitude",
                             "name": "ltd",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Decimal latitude of the map centre point.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4808,7 +4833,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. 37.7749",
                             "prepend": "",
                             "append": ""
                         },
@@ -4818,7 +4843,7 @@
                             "name": "lng",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "",
+                            "instructions": "Decimal longitude of the map centre point.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4828,7 +4853,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. -122.4194",
                             "prepend": "",
                             "append": ""
                         },
@@ -4838,7 +4863,7 @@
                             "name": "zoom",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "",
+                            "instructions": "Map zoom level (0–22). 10 is a good city-level default; 15+ shows street detail.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4864,7 +4889,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Displays an interactive map centred on a latitude/longitude with title, subtitle, and optional CTA button. Set zoom level (0=world view, 22=building level)."
                 },
                 "layout_6491a181774d7": {
                     "key": "layout_6491a181774d7",
@@ -4888,7 +4914,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Visit Us Today",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
@@ -4899,7 +4925,7 @@
                             "name": "addresses_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one group per location or department. Each group has a title and a list of links.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4932,7 +4958,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Sales",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6491a1a9774da",
@@ -4944,7 +4970,7 @@
                                     "name": "list",
                                     "aria-label": "",
                                     "type": "repeater",
-                                    "instructions": "",
+                                    "instructions": "Add individual links for this location or department group.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -4969,7 +4995,7 @@
                                             "name": "url",
                                             "aria-label": "",
                                             "type": "text",
-                                            "instructions": "",
+                                            "instructions": "URL or tel:/mailto: link for this item.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -4979,7 +5005,7 @@
                                             },
                                             "default_value": "",
                                             "maxlength": "",
-                                            "placeholder": "",
+                                            "placeholder": "tel:+15551234567",
                                             "prepend": "",
                                             "append": "",
                                             "parent_repeater": "field_6491a1e8774dc",
@@ -4991,7 +5017,7 @@
                                             "name": "svg_icon",
                                             "aria-label": "",
                                             "type": "acfe_code_editor",
-                                            "instructions": "",
+                                            "instructions": "Paste raw SVG code for the icon displayed beside this link. Leave blank for no icon.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -5001,7 +5027,7 @@
                                             },
                                             "default_value": "",
                                             "placeholder": "",
-                                            "mode": "text\/html",
+                                            "mode": "text/html",
                                             "lines": 1,
                                             "indent_unit": 4,
                                             "maxlength": "",
@@ -5027,7 +5053,7 @@
                                             },
                                             "default_value": "",
                                             "maxlength": "",
-                                            "placeholder": "",
+                                            "placeholder": "e.g. (555) 123-4567",
                                             "prepend": "",
                                             "append": "",
                                             "parent_repeater": "field_6491a1e8774dc",
@@ -5053,7 +5079,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "",
+                            "placeholder": "e.g. Dealership Hours",
                             "prepend": "",
                             "append": "",
                             "wpml_cf_preferences": 2
@@ -5064,7 +5090,7 @@
                             "name": "schedule_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per day or time range. Each column becomes a table cell in the hours display.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5087,7 +5113,7 @@
                                     "name": "text",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "",
+                                    "instructions": "Hours text for this column.",
                                     "required": 1,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5098,7 +5124,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "rows": "",
-                                    "placeholder": "",
+                                    "placeholder": "Mon–Fri: 9am–7pm",
                                     "new_lines": "br",
                                     "parent_repeater": "field_6491a3d92a692",
                                     "wpml_cf_preferences": 2,
@@ -5116,7 +5142,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A sub-footer bar with a main title, grouped address/location links, and a business hours schedule."
                 },
                 "layout_66c318dec9c7c": {
                     "key": "layout_66c318dec9c7c",
@@ -5130,7 +5157,7 @@
                             "name": "gray_background",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to apply a light grey background to the gallery section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5140,8 +5167,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -5150,7 +5177,7 @@
                             "name": "full_width",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to display the gallery at full page width (edge to edge).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5160,8 +5187,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Full width",
+                            "ui_off_text": "Contained",
                             "ui": 1
                         },
                         {
@@ -5170,7 +5197,7 @@
                             "name": "remove_paddings",
                             "aria-label": "",
                             "type": "true_false",
-                            "instructions": "",
+                            "instructions": "Enable to remove top/bottom padding from the gallery section.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5180,8 +5207,8 @@
                             },
                             "message": "",
                             "default_value": 0,
-                            "ui_on_text": "",
-                            "ui_off_text": "",
+                            "ui_on_text": "Yes",
+                            "ui_off_text": "No",
                             "ui": 1
                         },
                         {
@@ -5190,7 +5217,7 @@
                             "name": "text",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "",
+                            "instructions": "Optional text displayed above the gallery images.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5210,7 +5237,7 @@
                             "name": "gallery",
                             "aria-label": "",
                             "type": "gallery",
-                            "instructions": "",
+                            "instructions": "Upload gallery images. Recommended: consistent ratio, 800×600 px each. Images open in a lightbox.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5242,7 +5269,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "An image gallery with optional introductory text. Toggle grey background, full-width display, and padding. Images display in a responsive grid and open in a lightbox."
                 },
                 "layout_698090c0829ec": {
                     "key": "layout_698090c0829ec",
@@ -5285,7 +5313,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
-                            "placeholder": "",
+                            "placeholder": "e.g. Get in Touch",
                             "prepend": "",
                             "append": ""
                         },
@@ -5295,7 +5323,7 @@
                             "name": "contact_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per contact method (phone, email, address, etc.).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5317,7 +5345,7 @@
                                     "name": "label",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Display label for this contact entry.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5328,18 +5356,18 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Sales",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_698091be829f0"
                                 },
                                 {
                                     "key": "field_69809300829f3",
-                                    "label": "Url",
+                                    "label": "URL",
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Link for this contact (tel:, mailto:, or page URL).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5350,7 +5378,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "tel:+15551234567",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_698091be829f0"
@@ -5361,7 +5389,7 @@
                                     "name": "new_window",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to open this link in a new browser window.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5372,8 +5400,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New window",
+                                    "ui_off_text": "Same window",
                                     "ui": 1,
                                     "parent_repeater": "field_698091be829f0"
                                 },
@@ -5383,7 +5411,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "acfe_code_editor",
-                                    "instructions": "",
+                                    "instructions": "Paste raw SVG code for the icon beside this contact entry. Leave blank for no icon.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5393,7 +5421,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -5440,7 +5468,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
-                            "placeholder": "",
+                            "placeholder": "e.g. Follow Us",
                             "prepend": "",
                             "append": ""
                         },
@@ -5450,7 +5478,7 @@
                             "name": "social_media",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per social media platform.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -5472,7 +5500,7 @@
                                     "name": "label",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Platform name or accessible label.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5483,14 +5511,14 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Facebook",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980941a829f9"
                                 },
                                 {
                                     "key": "field_6980941a829fb",
-                                    "label": "Url",
+                                    "label": "URL",
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "text",
@@ -5505,7 +5533,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "https://facebook.com/yourdealership",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980941a829f9"
@@ -5516,7 +5544,7 @@
                                     "name": "new_window",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to open this social link in a new window.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5527,8 +5555,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New window",
+                                    "ui_off_text": "Same window",
                                     "ui": 1,
                                     "parent_repeater": "field_6980941a829f9"
                                 },
@@ -5538,7 +5566,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "acfe_code_editor",
-                                    "instructions": "",
+                                    "instructions": "Paste raw SVG for the social media icon. Leave blank for no icon.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5548,7 +5576,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -5595,7 +5623,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
-                            "placeholder": "",
+                            "placeholder": "e.g. Hours of Operation",
                             "prepend": "",
                             "append": ""
                         },
@@ -5626,7 +5654,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5637,8 +5665,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -5706,7 +5734,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5717,8 +5745,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -5786,7 +5814,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5797,8 +5825,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -5866,7 +5894,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5877,8 +5905,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -5946,7 +5974,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5957,8 +5985,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -6026,7 +6054,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6037,8 +6065,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -6106,7 +6134,7 @@
                                     "name": "closed",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable if this day is closed.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6117,8 +6145,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Closed",
+                                    "ui_off_text": "Open",
                                     "ui": 1
                                 },
                                 {
@@ -6169,7 +6197,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A tabbed contact block with: Contact List (phone, email, etc.), Social Media links, and Business Hours. Supports SVG icons."
                 },
                 "layout_6980b31aebb39": {
                     "key": "layout_6980b31aebb39",
@@ -6212,7 +6241,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
-                            "placeholder": "",
+                            "placeholder": "e.g. Contact Us",
                             "prepend": "",
                             "append": ""
                         },
@@ -6222,7 +6251,7 @@
                             "name": "contact_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per contact method.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -6244,7 +6273,7 @@
                                     "name": "label",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Display label for this contact item.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6255,18 +6284,18 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Service",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980b31aebb3c"
                                 },
                                 {
                                     "key": "field_6980b31aebb3e",
-                                    "label": "Url",
+                                    "label": "URL",
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Link for this item (tel:, mailto:, or URL).",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6277,7 +6306,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "tel:+15551234567",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980b31aebb3c"
@@ -6288,7 +6317,7 @@
                                     "name": "new_window",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Open link in a new window.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6299,8 +6328,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New window",
+                                    "ui_off_text": "Same window",
                                     "ui": 1,
                                     "parent_repeater": "field_6980b31aebb3c"
                                 },
@@ -6310,7 +6339,7 @@
                                     "name": "copy",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Enable to show a copy-to-clipboard button beside this contact item.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6321,8 +6350,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "Yes",
+                                    "ui_off_text": "No",
                                     "ui": 1,
                                     "parent_repeater": "field_6980b31aebb3c"
                                 },
@@ -6332,7 +6361,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "acfe_code_editor",
-                                    "instructions": "",
+                                    "instructions": "Paste raw SVG for the contact icon. Leave blank for no icon.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6342,7 +6371,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6378,7 +6407,7 @@
                             "name": "links",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add quick navigation links shown in the widget.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -6400,7 +6429,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "acfe_code_editor",
-                                    "instructions": "",
+                                    "instructions": "Paste raw SVG for this link icon. Leave blank for no icon.",
                                     "required": false,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6410,7 +6439,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6474,7 +6503,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 0,
-                            "placeholder": "",
+                            "placeholder": "e.g. Connect With Us",
                             "prepend": "",
                             "append": ""
                         },
@@ -6484,7 +6513,7 @@
                             "name": "social_media",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "",
+                            "instructions": "Add one row per social media platform.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -6506,7 +6535,7 @@
                                     "name": "label",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "",
+                                    "instructions": "Platform name or accessible label.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6517,14 +6546,14 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "e.g. Instagram",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980b31bebb43"
                                 },
                                 {
                                     "key": "field_6980b31bebb45",
-                                    "label": "Url",
+                                    "label": "URL",
                                     "name": "url",
                                     "aria-label": "",
                                     "type": "text",
@@ -6539,7 +6568,7 @@
                                     "default_value": "",
                                     "maxlength": "",
                                     "allow_in_bindings": 0,
-                                    "placeholder": "",
+                                    "placeholder": "https://instagram.com/yourdealership",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_6980b31bebb43"
@@ -6550,7 +6579,7 @@
                                     "name": "new_window",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "",
+                                    "instructions": "Open in a new window.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6561,8 +6590,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "allow_in_bindings": 0,
-                                    "ui_on_text": "",
-                                    "ui_off_text": "",
+                                    "ui_on_text": "New window",
+                                    "ui_off_text": "Same window",
                                     "ui": 1,
                                     "parent_repeater": "field_6980b31bebb43"
                                 },
@@ -6572,7 +6601,7 @@
                                     "name": "icon",
                                     "aria-label": "",
                                     "type": "acfe_code_editor",
-                                    "instructions": "",
+                                    "instructions": "Paste raw SVG for the social icon. Leave blank for no icon.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6582,7 +6611,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6651,7 +6680,7 @@
                                             "default_value": "",
                                             "maxlength": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Sales Hours",
                                             "prepend": "",
                                             "append": ""
                                         },
@@ -6672,7 +6701,7 @@
                                             "default_value": "",
                                             "maxlength": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Sales Department",
                                             "prepend": "",
                                             "append": ""
                                         },
@@ -6682,7 +6711,7 @@
                                             "name": "schedule_list",
                                             "aria-label": "",
                                             "type": "repeater",
-                                            "instructions": "",
+                                            "instructions": "Add one group per department or time block.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -6715,7 +6744,7 @@
                                                     "default_value": "",
                                                     "maxlength": "",
                                                     "allow_in_bindings": 0,
-                                                    "placeholder": "",
+                                                    "placeholder": "e.g. Weekdays",
                                                     "prepend": "",
                                                     "append": "",
                                                     "parent_repeater": "field_6980b40debb6d"
@@ -6726,7 +6755,7 @@
                                                     "name": "list",
                                                     "aria-label": "",
                                                     "type": "repeater",
-                                                    "instructions": "",
+                                                    "instructions": "Add one row per day or range.",
                                                     "required": 0,
                                                     "conditional_logic": 0,
                                                     "wrapper": {
@@ -6761,7 +6790,7 @@
                                                             "default_value": "",
                                                             "maxlength": "",
                                                             "allow_in_bindings": 0,
-                                                            "placeholder": "",
+                                                            "placeholder": "e.g. Monday–Friday",
                                                             "prepend": "",
                                                             "append": "",
                                                             "parent_repeater": "field_6980b42bebb6f"
@@ -6783,7 +6812,7 @@
                                                             "default_value": "",
                                                             "maxlength": "",
                                                             "allow_in_bindings": 0,
-                                                            "placeholder": "",
+                                                            "placeholder": "e.g. 9am–7pm",
                                                             "prepend": "",
                                                             "append": "",
                                                             "parent_repeater": "field_6980b42bebb6f"
@@ -6802,7 +6831,8 @@
                                     "acfe_flexible_settings": false,
                                     "acfe_flexible_settings_size": false,
                                     "acfe_flexible_modal_edit_size": false,
-                                    "acfe_flexible_category": false
+                                    "acfe_flexible_category": false,
+                                    "instructions": "Displays a structured hours schedule within the widget tab. Add schedule groups each with day/time rows."
                                 },
                                 "layout_6980b470ebb72": {
                                     "key": "layout_6980b470ebb72",
@@ -6827,7 +6857,7 @@
                                             "default_value": "",
                                             "maxlength": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
+                                            "placeholder": "e.g. About Us",
                                             "prepend": "",
                                             "append": ""
                                         },
@@ -6837,7 +6867,7 @@
                                             "name": "text",
                                             "aria-label": "",
                                             "type": "wysiwyg",
-                                            "instructions": "",
+                                            "instructions": "Content for this tab. Supports formatted text and links.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -6862,7 +6892,8 @@
                                     "acfe_flexible_settings": false,
                                     "acfe_flexible_settings_size": false,
                                     "acfe_flexible_modal_edit_size": false,
-                                    "acfe_flexible_category": false
+                                    "acfe_flexible_category": false,
+                                    "instructions": "Displays rich text content in a widget tab. Use for notes, promotions, or additional information."
                                 },
                                 "layout_6980b47febb75": {
                                     "key": "layout_6980b47febb75",
@@ -6887,7 +6918,7 @@
                                             "default_value": "",
                                             "maxlength": "",
                                             "allow_in_bindings": 0,
-                                            "placeholder": "",
+                                            "placeholder": "e.g. Amenities",
                                             "prepend": "",
                                             "append": ""
                                         },
@@ -6897,7 +6928,7 @@
                                             "name": "lists",
                                             "aria-label": "",
                                             "type": "repeater",
-                                            "instructions": "",
+                                            "instructions": "Add columns of list items. Each column can have multiple icon+text rows.",
                                             "required": 0,
                                             "conditional_logic": 0,
                                             "wrapper": {
@@ -6919,7 +6950,7 @@
                                                     "name": "list",
                                                     "aria-label": "",
                                                     "type": "repeater",
-                                                    "instructions": "",
+                                                    "instructions": "Add items to this list column.",
                                                     "required": 0,
                                                     "conditional_logic": 0,
                                                     "wrapper": {
@@ -6942,7 +6973,7 @@
                                                             "name": "icon",
                                                             "aria-label": "",
                                                             "type": "acfe_code_editor",
-                                                            "instructions": "",
+                                                            "instructions": "Paste raw SVG for this list item icon. Leave blank for no icon.",
                                                             "required": 0,
                                                             "conditional_logic": 0,
                                                             "wrapper": {
@@ -6952,7 +6983,7 @@
                                                             },
                                                             "default_value": "",
                                                             "placeholder": "",
-                                                            "mode": "text\/html",
+                                                            "mode": "text/html",
                                                             "lines": 1,
                                                             "indent_unit": 4,
                                                             "maxlength": "",
@@ -6979,7 +7010,7 @@
                                                             "default_value": "",
                                                             "maxlength": "",
                                                             "allow_in_bindings": 0,
-                                                            "placeholder": "",
+                                                            "placeholder": "e.g. Free Wi-Fi",
                                                             "prepend": "",
                                                             "append": "",
                                                             "parent_repeater": "field_6980b489ebb77"
@@ -6998,7 +7029,8 @@
                                     "acfe_flexible_settings": false,
                                     "acfe_flexible_settings_size": false,
                                     "acfe_flexible_modal_edit_size": false,
-                                    "acfe_flexible_category": false
+                                    "acfe_flexible_category": false,
+                                    "instructions": "Displays a two-column icon+text list in a widget tab. Useful for amenities, features, or services."
                                 }
                             },
                             "min": "",
@@ -7045,7 +7077,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "A compact contact widget with tabs for Contact info, navigation Links, Social Media, and tabbed Hours/Text/List sub-panels. Ideal for sidebars or floating panels."
                 },
                 "layout_6989b60a2e8c3": {
                     "key": "layout_6989b60a2e8c3",
@@ -7059,7 +7092,7 @@
                             "name": "show_offers_from",
                             "aria-label": "",
                             "type": "button_group",
-                            "instructions": "",
+                            "instructions": "Select which offer types to display: regular offers, service offers, or both.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -7084,7 +7117,7 @@
                             "name": "offers_order",
                             "aria-label": "",
                             "type": "button_group",
-                            "instructions": "",
+                            "instructions": "When showing both offer types, choose which appears first in the grid.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -7120,7 +7153,8 @@
                     "acfe_flexible_settings": false,
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
-                    "acfe_flexible_category": false
+                    "acfe_flexible_category": false,
+                    "instructions": "Auto-populates a card grid from published offers and/or service-offers. Choose which post types to display and the sort order when showing both."
                 }
             },
             "min": "",
@@ -7163,7 +7197,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "pages\/template-flexible.php"
+                "value": "pages/template-flexible.php"
             }
         ]
     ],

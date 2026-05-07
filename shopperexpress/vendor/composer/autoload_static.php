@@ -63,6 +63,7 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
     public static $classMap = array (
         'App\\Components\\Base\\ACF' => __DIR__ . '/../..' . '/inc/Components/Base/class-acf.php',
         'App\\Components\\Base\\AI' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai.php',
+        'App\\Components\\Base\\AI_Crawler' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai-crawler.php',
         'App\\Components\\Base\\ASC_Datalayer' => __DIR__ . '/../..' . '/inc/Components/Base/class-asc-datalayer.php',
         'App\\Components\\Base\\Admin' => __DIR__ . '/../..' . '/inc/Components/Base/class-admin.php',
         'App\\Components\\Base\\Ajax' => __DIR__ . '/../..' . '/inc/Components/Base/class-ajax.php',

@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_5ffd72d56d899",
-            "label": "Title",
+            "label": "Page Heading",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "",
+            "instructions": "Override the main heading displayed at the top of the listings/archive page. If left blank the page title is used.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -17,7 +17,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. New Vehicles for Sale",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -25,11 +25,11 @@
         },
         {
             "key": "field_5ffd72e46d89a",
-            "label": "Information",
+            "label": "Intro Text",
             "name": "information",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "",
+            "instructions": "Optional descriptive text shown below the page heading on the listings or offers archive. Supports basic HTML paragraph formatting.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "",
+            "placeholder": "e.g. Browse our full selection of new and certified pre-owned vehicles.",
             "maxlength": "",
             "rows": "",
             "new_lines": "wpautop",
