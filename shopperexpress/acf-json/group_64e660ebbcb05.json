@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_64e6610b78923",
-            "label": "Dealer ID",
+            "label": "DealerId",
             "name": "dealerid",
             "aria-label": "",
             "type": "text",
-            "instructions": "Unique dealer identifier from the data feed. Used to associate this offer with a specific dealership.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,7 +18,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 12345",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
@@ -29,7 +29,7 @@
             "name": "stock",
             "aria-label": "",
             "type": "text",
-            "instructions": "Stock number or inventory identifier associated with this service offer.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -39,7 +39,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. SRV-00123",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
@@ -50,7 +50,7 @@
             "name": "department",
             "aria-label": "",
             "type": "text",
-            "instructions": "Dealership department this offer applies to (e.g. Service, Parts, Body Shop).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -61,17 +61,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. Service",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64e6619378930",
-            "label": "Offer Type",
+            "label": "Type",
             "name": "type",
             "aria-label": "",
             "type": "text",
-            "instructions": "Category or type of service offer (e.g. Oil Change, Tire Rotation, Multi-Point Inspection).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -82,17 +82,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. Oil Change",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64e661d178934",
-            "label": "Offer Title",
+            "label": "Title",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "Display title for this service offer as shown on the offer card (e.g. $29.95 Oil Change Special).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -103,17 +103,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. $29.95 Oil Change Special",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64e661a678932",
-            "label": "Expiration Date",
+            "label": "ExpirationDate",
             "name": "expirationdate",
             "aria-label": "",
             "type": "text",
-            "instructions": "Date this offer expires. Displayed on the offer card. Format as provided by the feed (e.g. 12/31/2024).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -124,17 +124,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. 12/31/2024",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64e6612f78926",
-            "label": "Offer Text",
+            "label": "OfferText",
             "name": "offertext",
             "aria-label": "",
             "type": "text",
-            "instructions": "Primary promotional text describing the service offer (e.g. Save $20 on your next oil change).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -144,18 +144,18 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Save $20 on your next oil change",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
         },
         {
             "key": "field_64e6613578927",
-            "label": "Additional Info",
+            "label": "AdditionInfo",
             "name": "additioninfo",
             "aria-label": "",
             "type": "text",
-            "instructions": "Secondary details or conditions for the offer (e.g. Valid on most vehicles. Synthetic oil extra).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -165,18 +165,18 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Valid on most vehicles. Synthetic oil extra.",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
         },
         {
             "key": "field_64e6613878928",
-            "label": "Offer Disclaimer",
+            "label": "OfferDisclaimer",
             "name": "offerdisclaimer",
             "aria-label": "",
             "type": "text",
-            "instructions": "Legal disclaimer text displayed in fine print below the offer. Usually provided by the manufacturer or dealer.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -186,18 +186,18 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Cannot be combined with other offers. See dealer for details.",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
         },
         {
             "key": "field_64e6613d78929",
-            "label": "Offer Image URL",
+            "label": "OfferImage",
             "name": "offerimage",
             "aria-label": "",
             "type": "text",
-            "instructions": "URL of the primary offer image. Used as the main thumbnail on the offer card. Recommended size: 800x600px.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -207,18 +207,18 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://cdn.example.com/service-offer.jpg",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
         },
         {
             "key": "field_64e661437892a",
-            "label": "Image List",
+            "label": "ImageList",
             "name": "imagelist",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per additional offer image. Each row contains the image URL and a background display option. Recommended image size: 800x600px, JPG or PNG.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -234,14 +234,15 @@
             "button_label": "Add Row",
             "rows_per_page": 20,
             "wpml_cf_preferences": 1,
+            "acfe_repeater_stylised_button": 0,
             "sub_fields": [
                 {
                     "key": "field_64e661497892b",
-                    "label": "Image URL",
+                    "label": "Image",
                     "name": "image",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Full URL of the image from the offer feed. Must start with https://.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -251,7 +252,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "https://cdn.example.com/service-image.jpg",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_64e661437892a",
@@ -259,11 +260,11 @@
                 },
                 {
                     "key": "field_68398455d2579",
-                    "label": "Image Background",
+                    "label": "image background",
                     "name": "image_background",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable if this image should be displayed as a full background (cover) image rather than a standard inline image.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -274,21 +275,20 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Background",
-                    "ui_off_text": "Inline",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_64e661437892a"
                 }
-            ],
-            "acfe_repeater_stylised_button": 0
+            ]
         },
         {
             "key": "field_64e661607892c",
-            "label": "Offer Content",
+            "label": "OfferContent",
             "name": "offercontent",
             "aria-label": "",
             "type": "text",
-            "instructions": "Extended body content for the offer detail page. Can include HTML or rich text from the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -298,7 +298,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Full offer details and terms...",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
@@ -309,7 +309,7 @@
             "name": "buttons",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per call-to-action button to display on this offer. Each row defines the button label and its destination URL.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -328,11 +328,11 @@
             "sub_fields": [
                 {
                     "key": "field_695d31cfd8e43",
-                    "label": "Button Text",
+                    "label": "ButtonText",
                     "name": "buttontext",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Label displayed on the button (e.g. Schedule Service, Get Coupon).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -343,18 +343,18 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. Schedule Service",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_695d31c4d8e42"
                 },
                 {
                     "key": "field_695d31d7d8e44",
-                    "label": "Button URL",
+                    "label": "ButtonURL",
                     "name": "buttonurl",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Destination URL for the button. Include the full URL with https://.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -365,7 +365,7 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "https://www.example.com/schedule",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_695d31c4d8e42"
@@ -374,11 +374,11 @@
         },
         {
             "key": "field_64e661657892d",
-            "label": "Button Text (Legacy)",
+            "label": "ButtonText",
             "name": "buttontext",
             "aria-label": "",
             "type": "text",
-            "instructions": "Legacy single button label. Use the Buttons repeater above for new offers.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -389,17 +389,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. Schedule Service",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64e661697892e",
-            "label": "Button URL (Legacy)",
+            "label": "ButtonURL",
             "name": "buttonurl",
             "aria-label": "",
             "type": "text",
-            "instructions": "Legacy single button URL. Use the Buttons repeater above for new offers.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -410,7 +410,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "https://www.example.com/schedule",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -420,7 +420,7 @@
             "name": "srp_banner_keyword",
             "aria-label": "",
             "type": "text",
-            "instructions": "Keyword used to match and display this offer's banner on the Search Results Page (SRP). Must match the model or category keyword used in the SRP filter.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -431,7 +431,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -441,7 +441,7 @@
             "name": "srp_banner_desktop_1920x200",
             "aria-label": "",
             "type": "text",
-            "instructions": "URL of the desktop SRP banner image. Recommended size: 1920x200px. Displayed above search results on desktop screens.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -452,7 +452,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "https://cdn.example.com/srp-banner-desktop.jpg",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -462,7 +462,7 @@
             "name": "srp_banner_mobile_1200x628",
             "aria-label": "",
             "type": "text",
-            "instructions": "URL of the mobile SRP banner image. Recommended size: 1200x628px. Displayed above search results on mobile screens.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -473,7 +473,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "https://cdn.example.com/srp-banner-mobile.jpg",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -483,7 +483,7 @@
             "name": "priority",
             "aria-label": "",
             "type": "number",
-            "instructions": "Display order priority. Lower numbers appear first. Use whole numbers (e.g. 1, 2, 10). Leave blank for default ordering.",
+            "instructions": "",
             "required": false,
             "conditional_logic": 0,
             "wrapper": {
@@ -495,7 +495,7 @@
             "min": "",
             "max": "",
             "step": "",
-            "placeholder": "e.g. 1",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         }
@@ -521,11 +521,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1769001967
+    "modified": 1778489994
 }

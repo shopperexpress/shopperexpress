@@ -62,7 +62,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "https://example.com"
+            "placeholder": "https:\/\/example.com"
         },
         {
             "key": "field_67dd6fcbf6ba7",
@@ -132,7 +132,7 @@
                     },
                     "default_value": "",
                     "allow_in_bindings": 0,
-                    "placeholder": "https://",
+                    "placeholder": "https:\/\/",
                     "parent_repeater": "field_67dd6fcbf6ba7"
                 }
             ]
@@ -143,7 +143,7 @@
             "name": "page_for_saved_vehicles",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the page that displays the user's saved/favourite vehicles. Used for the favourites icon link in the header.",
+            "instructions": "Select the page that displays the user's saved\/favourite vehicles. Used for the favourites icon link in the header.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -317,7 +317,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">...</svg>",
+                    "placeholder": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 24 24\">...<\/svg>",
                     "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
@@ -974,7 +974,7 @@
             "name": "intro_style",
             "aria-label": "",
             "type": "select",
-            "instructions": "Layout style for the header intro/hero area. Style 1 is the default layout; Style 2 uses an alternate arrangement.",
+            "instructions": "Layout style for the header intro\/hero area. Style 1 is the default layout; Style 2 uses an alternate arrangement.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1057,7 +1057,7 @@
             "name": "overlay_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Color of the tint overlay applied over hero/banner images.",
+            "instructions": "Color of the tint overlay applied over hero\/banner images.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1373,7 +1373,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "https://",
+            "placeholder": "https:\/\/",
             "prepend": "",
             "append": "",
             "maxlength": ""
@@ -1404,7 +1404,7 @@
             "name": "for_script_header",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "Custom HTML/JavaScript injected in the <head> section. Use for tracking pixels, Google Tag Manager, or other head scripts.",
+            "instructions": "Custom HTML\/JavaScript injected in the <head> section. Use for tracking pixels, Google Tag Manager, or other head scripts.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1512,7 +1512,7 @@
             "name": "form_description",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "Description text displayed above the footer contact/savings form.",
+            "instructions": "Description text displayed above the footer contact\/savings form.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1553,7 +1553,7 @@
             "name": "unlock_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms form to display in the footer Unlock Savings / lead-capture section.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1608,7 +1608,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Icon image for the spinning button. Recommended: square PNG/SVG, at least 80x80 px.",
+                    "instructions": "Icon image for the spinning button. Recommended: square PNG\/SVG, at least 80x80 px.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1687,7 +1687,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "https://",
+                    "placeholder": "https:\/\/",
                     "parent_repeater": "field_672b85a01e598"
                 }
             ]
@@ -1698,7 +1698,7 @@
             "name": "contact_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms contact form shown in the footer contact section.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1730,7 +1730,7 @@
             "name": "for_script_footer",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "Custom HTML/JavaScript injected just before the closing </body> tag. Use for chat widgets, analytics, or other footer scripts.",
+            "instructions": "Custom HTML\/JavaScript injected just before the closing <\/body> tag. Use for chat widgets, analytics, or other footer scripts.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1907,7 +1907,7 @@
             "name": "unlock_savings_form",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms form to display in the footer Unlock Savings / lead-capture section.",
+            "instructions": "Select the WPForms form to display in the footer Unlock Savings \/ lead-capture section.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1989,7 +1989,7 @@
             "name": "adf_templates",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "ADF (Auto-lead Data Format) email templates sent to the dealer CRM on form submissions. Each row defines a subject line and the XML/HTML ADF email body.",
+            "instructions": "ADF (Auto-lead Data Format) email templates sent to the dealer CRM on form submissions. Each row defines a subject line and the XML\/HTML ADF email body.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2150,7 +2150,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://services.chromedata.com/Data/",
+            "placeholder": "https:\/\/services.chromedata.com\/Data\/",
             "prepend": "",
             "append": ""
         },
@@ -2231,7 +2231,7 @@
             "default_value": 10,
             "min": 0,
             "max": "",
-            "placeholder": "10",
+            "placeholder": 10,
             "step": "",
             "prepend": "",
             "append": ""
@@ -2435,7 +2435,7 @@
             "name": "spin_data_id",
             "aria-label": "",
             "type": "text",
-            "instructions": "Client/dealer ID issued by the 360° spin provider to identify this dealership account.",
+            "instructions": "Client\/dealer ID issued by the 360° spin provider to identify this dealership account.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2891,7 +2891,7 @@
                     "name": "import_id",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "The WP All Import feed/job ID that triggers this action. Find it in WP All Import > All Imports.",
+                    "instructions": "The WP All Import feed\/job ID that triggers this action. Find it in WP All Import > All Imports.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3008,7 +3008,7 @@
             "name": "smart_tags",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Map vehicle data fields to WPForms smart tags. Each row selects an ACF/inventory field and its data type so the theme can auto-populate hidden form fields with vehicle data when a form is submitted from a VDP.",
+            "instructions": "Map vehicle data fields to WPForms smart tags. Each row selects an ACF\/inventory field and its data type so the theme can auto-populate hidden form fields with vehicle data when a form is submitted from a VDP.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3031,7 +3031,7 @@
                     "name": "acf_field_selector",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Select the vehicle/offer data field whose value will be injected into WPForms via a smart tag.",
+                    "instructions": "Select the vehicle\/offer data field whose value will be injected into WPForms via a smart tag.",
                     "required": 1,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3521,7 +3521,7 @@
                     "name": "close_button",
                     "aria-label": "",
                     "type": "group",
-                    "instructions": "Styling for the Close/Dismiss button on Step One. Leave fields empty to use theme defaults.",
+                    "instructions": "Styling for the Close\/Dismiss button on Step One. Leave fields empty to use theme defaults.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -3540,6 +3540,10 @@
                     "layout": "block",
                     "acfe_seamless_style": 0,
                     "acfe_group_modal": 0,
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_699c23d2b17a4",
                     "sub_fields": [
                         {
                             "key": "field_69fb02ce1eae2",
@@ -3747,11 +3751,7 @@
                             "custom_palette_source": "",
                             "palette_colors": ""
                         }
-                    ],
-                    "acfe_group_modal_close": 0,
-                    "acfe_group_modal_button": "",
-                    "acfe_group_modal_size": "large",
-                    "parent_repeater": "field_699c23d2b17a4"
+                    ]
                 },
                 {
                     "key": "field_69fb06ac318b0",
@@ -3778,6 +3778,10 @@
                     "layout": "block",
                     "acfe_seamless_style": 0,
                     "acfe_group_modal": 0,
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_699c23d2b17a4",
                     "sub_fields": [
                         {
                             "key": "field_69fb06ac318b1",
@@ -3985,11 +3989,7 @@
                             "custom_palette_source": "",
                             "palette_colors": ""
                         }
-                    ],
-                    "acfe_group_modal_close": 0,
-                    "acfe_group_modal_button": "",
-                    "acfe_group_modal_size": "large",
-                    "parent_repeater": "field_699c23d2b17a4"
+                    ]
                 },
                 {
                     "key": "field_69fb022a1eade",
@@ -4281,7 +4281,7 @@
             "name": "ai_inventory_promt",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "Supplemental system prompt used when the AI chat handles inventory-related questions. Appended to the main system prompt for vehicle/listing queries.",
+            "instructions": "Supplemental system prompt used when the AI chat handles inventory-related questions. Appended to the main system prompt for vehicle\/listing queries.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -4620,11 +4620,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778148521
+    "modified": 1778490000
 }

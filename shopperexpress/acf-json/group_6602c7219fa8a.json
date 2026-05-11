@@ -553,6 +553,9 @@
             "layout": "table",
             "acfe_seamless_style": 0,
             "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
             "sub_fields": [
                 {
                     "key": "field_663b84092dd9a",
@@ -596,10 +599,7 @@
                     "prepend": "",
                     "append": "seconds"
                 }
-            ],
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large"
+            ]
         },
         {
             "key": "field_672a34f3340bb",
@@ -667,6 +667,7 @@
                     "collapsed": "",
                     "button_label": "Add Row",
                     "rows_per_page": 20,
+                    "parent_repeater": "field_672a34f3340bb",
                     "sub_fields": [
                         {
                             "key": "field_672a3518340be",
@@ -731,8 +732,7 @@
                             "append": "",
                             "parent_repeater": "field_672a350b340bd"
                         }
-                    ],
-                    "parent_repeater": "field_672a34f3340bb"
+                    ]
                 }
             ]
         }
@@ -755,12 +755,14 @@
     "active": false,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1757424647
+    "modified": 1778489890
 }

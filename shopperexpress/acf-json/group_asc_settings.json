@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_69e604c37bf7a",
-            "label": "ASC Tracking Active",
+            "label": "Active",
             "name": "asc_active",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Enable to activate ASC event tracking across the site. Disable to suppress all ASC data layer pushes without removing the configuration.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,8 +19,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 0,
-            "ui_on_text": "Active",
-            "ui_off_text": "Inactive",
+            "ui_on_text": "",
+            "ui_off_text": "",
             "ui": 1
         },
         {
@@ -29,7 +29,7 @@
             "name": "asc_store_name",
             "aria-label": "",
             "type": "text",
-            "instructions": "Dealership name sent in ASC events. Should match the store name registered with your ASC account.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "e.g. Sunshine Toyota",
+            "placeholder": "",
             "maxlength": "",
             "prepend": "",
             "append": ""
@@ -49,7 +49,7 @@
             "name": "asc_oem_code",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer-assigned OEM code that identifies this dealer within the brand's network (e.g. TMS for Toyota). Obtain from your OEM portal or ASC onboarding docs.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -58,7 +58,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "e.g. TMS",
+            "placeholder": "",
             "maxlength": "",
             "prepend": "",
             "append": ""
@@ -69,7 +69,7 @@
             "name": "asc_oem_brand",
             "aria-label": "",
             "type": "text",
-            "instructions": "Brand name sent in ASC events to identify the vehicle manufacturer (e.g. Toyota, Ford). Use the brand's standard short name.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,7 +78,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "maxlength": "",
             "prepend": "",
             "append": ""
@@ -89,7 +89,7 @@
             "name": "asc_affiliation",
             "aria-label": "",
             "type": "text",
-            "instructions": "Platform affiliation tag included in ASC events. Defaults to \"intice\" — only change if instructed by your ASC integration team.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -105,11 +105,11 @@
         },
         {
             "key": "field_asc_language",
-            "label": "Language Code",
+            "label": "Language",
             "name": "asc_language",
             "aria-label": "",
             "type": "text",
-            "instructions": "ISO 639-1 two-letter language code for the site locale (e.g. en, fr, es). Sent with ASC events to indicate content language.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -125,11 +125,11 @@
         },
         {
             "key": "field_asc_currency",
-            "label": "Currency Code",
+            "label": "Currency",
             "name": "asc_currency",
             "aria-label": "",
             "type": "text",
-            "instructions": "ISO 4217 three-letter currency code used in ASC price events (e.g. usd, cad). Must be lowercase.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -149,7 +149,7 @@
             "name": "asc_phone_lookup",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Map each dealership phone number to a department for ASC click-to-call tracking. Add one row per phone number. Enter digits only — no dashes, spaces, or parentheses.",
+            "instructions": "Map each phone number to a department for ASC click-to-call tracking. Enter digits only (no dashes or spaces).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -171,7 +171,7 @@
                     "name": "phone_number",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Digits only, no formatting (e.g. 8135551000).",
+                    "instructions": "Digits only, e.g. 8135551000",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -180,7 +180,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "8135551000",
+                    "placeholder": 8135551000,
                     "maxlength": "",
                     "prepend": "",
                     "append": "",
@@ -192,7 +192,7 @@
                     "name": "department",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Select the dealership department that answers this phone number.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -228,11 +228,11 @@
         },
         {
             "key": "field_asc_measurement_ids",
-            "label": "GA4 Measurement IDs",
+            "label": "Measurement IDs",
             "name": "asc_measurement_ids",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one GA4 Measurement ID per row. ASC events will be sent to all listed properties. Format: G-XXXXXXXXXX.",
+            "instructions": "Add one GA4 Measurement ID per row (e.g. G-XXXXXXXXXX).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -254,7 +254,7 @@
                     "name": "measurement_id",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "GA4 Measurement ID in the format G-XXXXXXXXXX. Found in Google Analytics → Admin → Data Streams.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -291,11 +291,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776682222
+    "modified": 1778489884
 }

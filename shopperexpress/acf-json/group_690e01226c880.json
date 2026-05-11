@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_690e0124b0001",
-            "label": "Dealer ID",
+            "label": "DealerID",
             "name": "dealerid",
             "aria-label": "",
             "type": "text",
-            "instructions": "Enter the unique dealer identifier associated with this FAQ entry. Used by the AI chat system to scope answers to a specific dealership.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,7 +19,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. dealer_123",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -29,7 +29,7 @@
             "name": "type",
             "aria-label": "",
             "type": "text",
-            "instructions": "Classify the FAQ type (e.g. general, finance, service, lease). Helps the AI route the question to the correct response category.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -40,7 +40,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. finance",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -50,7 +50,7 @@
             "name": "intent",
             "aria-label": "",
             "type": "text",
-            "instructions": "Describes the user intent this FAQ is meant to address (e.g. get_price, book_test_drive). Used by the AI chat system to match user queries to this entry.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -61,7 +61,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. get_price",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -71,7 +71,7 @@
             "name": "page",
             "aria-label": "",
             "type": "text",
-            "instructions": "The page or section of the site where this FAQ is most relevant (e.g. inventory, offers, finance). Helps scope AI responses by page context.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -82,7 +82,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. inventory",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -92,7 +92,7 @@
             "name": "context",
             "aria-label": "",
             "type": "text",
-            "instructions": "Additional context that helps the AI understand when to surface this FAQ (e.g. new_vehicle, used_vehicle). Keep concise.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -103,17 +103,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. new_vehicle",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_690e0124b0007",
-            "label": "CTA Type",
+            "label": "CTAType",
             "name": "ctatype",
             "aria-label": "",
             "type": "text",
-            "instructions": "The call-to-action type the AI should suggest alongside this FAQ answer (e.g. contact_form, phone_call, schedule_service).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -124,7 +124,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. contact_form",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -134,7 +134,7 @@
             "name": "category",
             "aria-label": "",
             "type": "text",
-            "instructions": "Broad category grouping for this FAQ (e.g. Sales, Service, Finance). Used for filtering and organising FAQ entries.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -145,7 +145,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Sales",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -155,7 +155,7 @@
             "name": "status",
             "aria-label": "",
             "type": "text",
-            "instructions": "Publication status of this FAQ entry (e.g. active, draft, archived). Only active entries are used by the AI chat system.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -166,7 +166,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. active",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -176,7 +176,7 @@
             "name": "priority",
             "aria-label": "",
             "type": "text",
-            "instructions": "Numeric priority for ranking this FAQ when multiple entries match a query. Higher number = higher priority. Leave blank for default ordering.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -187,17 +187,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. 10",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_690e0124b000b",
-            "label": "OEM (Brand)",
+            "label": "OEM",
             "name": "oem",
             "aria-label": "",
             "type": "text",
-            "instructions": "The vehicle brand/manufacturer this FAQ applies to (e.g. Toyota, Ford). Leave blank if the FAQ is brand-agnostic.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -208,7 +208,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -218,7 +218,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "The specific vehicle model this FAQ applies to (e.g. Camry, F-150). Leave blank if not model-specific.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -229,17 +229,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_690e0124b000d",
-            "label": "Last Reviewed",
+            "label": "LastReviewed",
             "name": "lastreviewed",
             "aria-label": "",
             "type": "text",
-            "instructions": "Date this FAQ entry was last reviewed for accuracy. Use YYYY-MM-DD format. Helps identify outdated entries.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -250,7 +250,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. 2025-01-15",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         }
@@ -274,11 +274,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1776345840
+    "modified": 1778489888
 }

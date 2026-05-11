@@ -26,7 +26,7 @@
             "name": "offers_default_image",
             "aria-label": "",
             "type": "image",
-            "instructions": "Fallback image used on offer cards when no individual offer image is set. Recommended size: 800×600 px (4:3 ratio).",
+            "instructions": "",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -53,7 +53,7 @@
             "name": "offers_phone",
             "aria-label": "",
             "type": "text",
-            "instructions": "Phone number displayed on the Special Offers page. Include area code.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -63,7 +63,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "(555) 000-0000",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -107,7 +107,7 @@
             "name": "offers_menu",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Each row adds one item to the Special Offers navigation menu. Provide an image (icon or logo), an optional tooltip, and the finance event this item should trigger.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -130,7 +130,7 @@
                     "name": "image",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Menu item icon or logo. Recommended size: 60×60 px, PNG with transparent background.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -159,7 +159,7 @@
                     "name": "tooltip",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Short text shown when a user hovers over this menu item. Keep under 60 characters.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -169,7 +169,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. Calculate your lease payment",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_61dd34c8d58e7",
@@ -181,7 +181,7 @@
                     "name": "event",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Choose which finance tool or event this menu item triggers when clicked.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -237,7 +237,7 @@
             "name": "offers_flexible_content",
             "aria-label": "",
             "type": "flexible_content",
-            "instructions": "Add content blocks to the Special Offers page. Use the Payment layout for finance offer details and the Video layout for video showcases.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -259,7 +259,7 @@
                             "name": "image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "Hero image for the Payment content block. Recommended size: 800×500 px.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -287,7 +287,7 @@
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Heading for this Payment content block.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -296,7 +296,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "e.g. Current Lease Offers",
+                            "placeholder": "",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -308,7 +308,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "wysiwyg",
-                            "instructions": "Introductory text shown below the Payment block title. Keep it concise — 1 to 2 short paragraphs.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -329,7 +329,7 @@
                             "name": "payment_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "Each row is one payment option (e.g. a lease term or loan option) displayed in the offer block. Add a title, a description, and configure whether it shows a payment figure or triggers a finance event.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -352,7 +352,7 @@
                                     "name": "title",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "Label for this payment option, e.g. the term or type of payment.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -361,7 +361,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "e.g. 36-Month Lease",
+                                    "placeholder": "",
                                     "prepend": "",
                                     "append": "",
                                     "maxlength": "",
@@ -374,7 +374,7 @@
                                     "name": "description",
                                     "aria-label": "",
                                     "type": "textarea",
-                                    "instructions": "Short disclaimer or detail for this payment row, e.g. due at signing, miles per year, etc.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -397,7 +397,7 @@
                                     "name": "lock",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "Enable to hide the payment value behind a gate that requires a user action (e.g. submitting a form) to reveal it.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -408,8 +408,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "ui": 1,
-                                    "ui_on_text": "Locked",
-                                    "ui_off_text": "Unlocked",
+                                    "ui_on_text": "",
+                                    "ui_off_text": "",
                                     "parent_repeater": "field_61dd34c8f3681",
                                     "wpml_cf_preferences": 1
                                 },
@@ -419,7 +419,7 @@
                                     "name": "show_event",
                                     "aria-label": "",
                                     "type": "true_false",
-                                    "instructions": "Enable to attach a finance event button to this locked payment row. Visible only when Lock is on.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": [
                                         [
@@ -438,8 +438,8 @@
                                     "message": "",
                                     "default_value": 0,
                                     "ui": 1,
-                                    "ui_on_text": "Show",
-                                    "ui_off_text": "Hide",
+                                    "ui_on_text": "",
+                                    "ui_off_text": "",
                                     "parent_repeater": "field_61dd34c8f3681",
                                     "wpml_cf_preferences": 1
                                 },
@@ -449,7 +449,7 @@
                                     "name": "event",
                                     "aria-label": "",
                                     "type": "select",
-                                    "instructions": "Select the finance tool this payment row should trigger when clicked.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": [
                                         [
@@ -501,7 +501,7 @@
                                     "name": "show_payment",
                                     "aria-label": "",
                                     "type": "select",
-                                    "instructions": "Choose which payment type to display when this row is locked. Visible only when Lock is on.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": [
                                         [
@@ -544,7 +544,7 @@
                                     "name": "text",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "Optional label or call-to-action text shown alongside the payment figure.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -554,7 +554,7 @@
                                     },
                                     "default_value": "",
                                     "maxlength": "",
-                                    "placeholder": "e.g. Per month",
+                                    "placeholder": "",
                                     "prepend": "",
                                     "append": "",
                                     "parent_repeater": "field_61dd34c8f3681"
@@ -565,7 +565,7 @@
                                     "name": "show_popup",
                                     "aria-label": "",
                                     "type": "select",
-                                    "instructions": "Select which disclosure or content popup appears when this row is clicked. Visible only when Event = Popup.",
+                                    "instructions": "",
                                     "required": 1,
                                     "conditional_logic": [
                                         [
@@ -626,7 +626,7 @@
                             "name": "image",
                             "aria-label": "",
                             "type": "image",
-                            "instructions": "Hero image for the Video content block. Recommended size: 800×500 px.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -654,7 +654,7 @@
                             "name": "title",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Heading for this Video content block.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -663,7 +663,7 @@
                                 "id": ""
                             },
                             "default_value": "",
-                            "placeholder": "e.g. Watch How It Works",
+                            "placeholder": "",
                             "prepend": "",
                             "append": "",
                             "maxlength": "",
@@ -675,7 +675,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "textarea",
-                            "instructions": "Short intro text shown below the Video block title. 1 to 2 sentences.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -697,7 +697,7 @@
                             "name": "video_list",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "Each row is one video item. Add a title, description, and the YouTube or Vimeo video ID (the alphanumeric code from the URL, e.g. dQw4w9WgXcQ).",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -720,7 +720,7 @@
                                     "name": "title",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "Video title displayed beneath the video player.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -729,7 +729,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "e.g. How Lease Payments Work",
+                                    "placeholder": "",
                                     "prepend": "",
                                     "append": "",
                                     "maxlength": "",
@@ -742,7 +742,7 @@
                                     "name": "description",
                                     "aria-label": "",
                                     "type": "wysiwyg",
-                                    "instructions": "Optional description or transcript excerpt shown beneath the video.",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -760,11 +760,11 @@
                                 },
                                 {
                                     "key": "field_61dd34c9385f6",
-                                    "label": "Video ID",
+                                    "label": "Video id",
                                     "name": "video_id",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "Paste the YouTube or Vimeo video ID only — not the full URL. Example: dQw4w9WgXcQ",
+                                    "instructions": "",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -773,7 +773,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "e.g. dQw4w9WgXcQ",
+                                    "placeholder": "",
                                     "prepend": "",
                                     "append": "",
                                     "maxlength": "",
@@ -853,7 +853,7 @@
             "name": "unlock_button_offers",
             "aria-label": "",
             "type": "group",
-            "instructions": "Configure the primary CTA button shown when payment details are locked. This button prompts the user to unlock pricing.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -892,7 +892,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Material Icons ligature name for the button icon, e.g. lock_open, lock, star.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -903,7 +903,7 @@
                     "default_value": "lock_open",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. lock_open",
+                    "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
@@ -913,7 +913,7 @@
                     "name": "title",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Button label text shown to users when pricing is locked.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -924,7 +924,7 @@
                     "default_value": "Unlock Best Price",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. Unlock Best Price",
+                    "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
@@ -934,7 +934,7 @@
                     "name": "animation",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable a pulsing or attention-drawing animation on this CTA button.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -945,8 +945,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1
                 },
                 {
@@ -955,7 +955,7 @@
                     "name": "background_color",
                     "aria-label": "",
                     "type": "color_picker",
-                    "instructions": "Button background color. Leave empty to use the theme default.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -977,7 +977,7 @@
                     "name": "text_color",
                     "aria-label": "",
                     "type": "color_picker",
-                    "instructions": "Button text and icon color. Leave empty to use the theme default.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -999,7 +999,7 @@
                     "name": "form_id",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "WPForms form ID to open when this locked CTA is clicked. Leave empty to use a finance event instead.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1010,7 +1010,7 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 0,
-                    "placeholder": "e.g. 123",
+                    "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
@@ -1038,7 +1038,7 @@
                     "name": "font_size",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "Button text size for the Search Results Page (SRP) in pixels. Default: 10.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1061,7 +1061,7 @@
                     "name": "font_styling",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font family for the CTA button text on the SRP.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1099,7 +1099,7 @@
                     "name": "weight",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font weight for the CTA button text on the SRP.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1131,7 +1131,7 @@
                     "name": "show",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this CTA button on the Search Results Page (SRP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1170,7 +1170,7 @@
                     "name": "font_size_single",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "Button text size for the Offer Detail Page (ODP / single) in pixels. Default: 10.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1193,7 +1193,7 @@
                     "name": "font_styling_single",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font family for the CTA button text on the Offer Detail Page (ODP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1231,7 +1231,7 @@
                     "name": "weight_single",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font weight for the CTA button text on the Offer Detail Page (ODP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1263,7 +1263,7 @@
                     "name": "show_single",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this CTA button on the Offer Detail Page (ODP / single offer).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1304,7 +1304,7 @@
             "name": "contact_button_offers",
             "aria-label": "",
             "type": "group",
-            "instructions": "Configure the primary CTA button shown when pricing is already unlocked (user has already engaged). Typically a contact or next-step action.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1343,7 +1343,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Material Icons ligature name for the button icon, e.g. phone, chat, directions_car.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1354,7 +1354,7 @@
                     "default_value": "lock_open",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. phone",
+                    "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
@@ -1364,7 +1364,7 @@
                     "name": "title",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Button label text shown after pricing is unlocked.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1375,7 +1375,7 @@
                     "default_value": "Unlock Best Price",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. Contact Us",
+                    "placeholder": "",
                     "prepend": "",
                     "append": ""
                 },
@@ -1385,7 +1385,7 @@
                     "name": "animation",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable a pulsing or attention-drawing animation on this CTA button.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1396,8 +1396,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 1,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1
                 },
                 {
@@ -1406,7 +1406,7 @@
                     "name": "background_color",
                     "aria-label": "",
                     "type": "color_picker",
-                    "instructions": "Button background color. Leave empty to use the theme default.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1428,7 +1428,7 @@
                     "name": "text_color",
                     "aria-label": "",
                     "type": "color_picker",
-                    "instructions": "Button text and icon color. Leave empty to use the theme default.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1450,7 +1450,7 @@
                     "name": "form_id",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "WPForms form ID to open when this unlocked CTA is clicked. Leave empty if no form is needed.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1460,7 +1460,6 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. 123",
                     "allow_in_bindings": 0,
                     "placeholder": "",
                     "prepend": "",
@@ -1490,7 +1489,7 @@
                     "name": "font_size",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "Button text size for the Search Results Page (SRP) in pixels. Default: 10.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1513,7 +1512,7 @@
                     "name": "font_styling",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font family for the CTA button text on the SRP.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1551,7 +1550,7 @@
                     "name": "weight",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font weight for the CTA button text on the SRP.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1583,7 +1582,7 @@
                     "name": "show",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this unlocked CTA button on the Search Results Page (SRP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1622,7 +1621,7 @@
                     "name": "font_size_single",
                     "aria-label": "",
                     "type": "number",
-                    "instructions": "Button text size for the Offer Detail Page (ODP / single) in pixels. Default: 10.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1645,7 +1644,7 @@
                     "name": "font_styling_single",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font family for the CTA button text on the Offer Detail Page (ODP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1683,7 +1682,7 @@
                     "name": "weight_single",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Font weight for the CTA button text on the Offer Detail Page (ODP).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1715,7 +1714,7 @@
                     "name": "show_single",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this unlocked CTA button on the Offer Detail Page (ODP / single offer).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1756,7 +1755,7 @@
             "name": "offers-detail_info",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Detailed offer information block cloned from a shared field group. Fill in the fields that appear here to populate the offer detail section on single offer pages.",
+            "instructions": "If you select a form below this link will open a popup with that form.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1819,7 +1818,7 @@
             "name": "description_offers",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Introductory text displayed at the top of the Special Offers archive (listing) page, above the offer cards. Use this to describe the current promotions or seasonal offers.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1858,7 +1857,7 @@
             "name": "show_banner-offers",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Enable to display the promotional banner on the Special Offers archive page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1869,8 +1868,8 @@
             "message": "",
             "default_value": 0,
             "allow_in_bindings": 1,
-            "ui_on_text": "Show",
-            "ui_off_text": "Hide",
+            "ui_on_text": "",
+            "ui_off_text": "",
             "ui": 1
         },
         {
@@ -1879,7 +1878,7 @@
             "name": "placement_banner-offers",
             "aria-label": "",
             "type": "select",
-            "instructions": "Choose whether the banner appears at the top or bottom of the page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1910,7 +1909,7 @@
             "name": "show-offers",
             "aria-label": "",
             "type": "select",
-            "instructions": "Choose which banner content type to display when Show Banner is enabled.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": [
                 [
@@ -1948,7 +1947,7 @@
             "name": "for_code-offers",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "JavaScript code or configuration passed to the selected banner type (e.g. Skip Pre-qualify). Only edit if you know the expected format.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": [
                 [
@@ -2003,7 +2002,7 @@
             "name": "offers",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Promotional banner slider shown on the Special Offers archive. Configure slides via the cloned Banner Slider field group.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2048,7 +2047,7 @@
             "name": "filters_list_offers",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Each row configures one filter chip shown on the Special Offers archive page. Toggle show/hide, set a display label, choose the filter field it controls, and optionally add an SVG icon.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2090,7 +2089,7 @@
                     "name": "show_filter",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable to display this filter on the page. Disable to hide it without deleting the row.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2100,8 +2099,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "Show",
-                    "ui_off_text": "Hide",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_6630b2676b6bd"
                 },
@@ -2111,7 +2110,7 @@
                     "name": "label",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Display name for this filter shown to the user, e.g. Body Style, Year, Make.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2121,7 +2120,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. Body Style",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_6630b2676b6bd"
@@ -2132,7 +2131,7 @@
                     "name": "filter",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Select which vehicle attribute this filter controls in the offer search results.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2194,7 +2193,7 @@
                     "name": "icon",
                     "aria-label": "",
                     "type": "acfe_code_editor",
-                    "instructions": "Paste inline SVG HTML for the filter icon, e.g. svg. Leave empty to show no icon.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2258,7 +2257,7 @@
             "name": "offers_popup_form",
             "aria-label": "",
             "type": "text",
-            "instructions": "WPForms form ID displayed inside the main offers popup. When filled, the Link field will open this popup instead of navigating to a URL.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2268,7 +2267,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 456",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -2278,7 +2277,7 @@
             "name": "offers_popup_form_top_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Text shown above the form inside the popup, e.g. a brief headline or value proposition. Keep it short.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": [
                 [
@@ -2305,7 +2304,7 @@
             "name": "offers_popup_form_bottom_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Text shown below the form inside the popup, e.g. privacy notice or reassurance message.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": [
                 [
@@ -2332,7 +2331,7 @@
             "name": "offers_comment_footer",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "Legal disclaimer or fine-print text shown at the bottom of the Special Offers page. Use plain text; HTML is allowed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2372,7 +2371,7 @@
             "name": "heading_save_offer",
             "aria-label": "",
             "type": "text",
-            "instructions": "Heading text displayed at the top of the Save Offer popup.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2382,7 +2381,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Save This Offer",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -2392,7 +2391,7 @@
             "name": "form_lease_special",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms form used for the Lease Special save-offer popup.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2424,7 +2423,7 @@
             "name": "form_id_special_apr",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms form used for the Special APR save-offer popup.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2456,7 +2455,7 @@
             "name": "offers_form_cash",
             "aria-label": "",
             "type": "post_object",
-            "instructions": "Select the WPForms form used for the Cash offer save-offer popup.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2507,7 +2506,7 @@
             "name": "offers",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Offer slider configuration cloned from the shared Slider field group. Settings here control the offers carousel on the page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2534,7 +2533,7 @@
             "name": "section_bg_offers",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Background color for the entire Offers slider section. Leave empty to use the theme default.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2555,7 +2554,7 @@
             "name": "slide_bg_offers",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Background color for individual slide cards within the Offers slider. Leave empty to use the theme default.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2595,7 +2594,7 @@
             "name": "service-offers",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Conversion block settings for the Special Offers archive page. Configure the call-to-action elements shown below the offers listing.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2643,7 +2642,7 @@
             "name": "service-offers_single",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Conversion block settings for single offer detail pages. Configure the call-to-action elements shown on individual offer pages.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2728,11 +2727,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1773241801
+    "modified": 1778489976
 }

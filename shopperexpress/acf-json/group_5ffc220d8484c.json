@@ -230,7 +230,7 @@
                     "name": "image",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Icon image for this menu item. Recommended: 40×40 px, PNG/SVG with transparent background.",
+                    "instructions": "Icon image for this menu item. Recommended: 40×40 px, PNG\/SVG with transparent background.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -347,7 +347,7 @@
             },
             "default_value": "",
             "placeholder": "",
-            "mode": "text/html",
+            "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
             "maxlength": "",
@@ -380,7 +380,7 @@
             "name": "payment_list",
             "aria-label": "",
             "type": "flexible_content",
-            "instructions": "Define the payment rows displayed on listing cards. Add \"Payment\" rows for standard price fields or \"Enhanced Payment\" rows for calculated/conditional pricing.",
+            "instructions": "Define the payment rows displayed on listing cards. Add \"Payment\" rows for standard price fields or \"Enhanced Payment\" rows for calculated\/conditional pricing.",
             "required": false,
             "conditional_logic": 0,
             "wrapper": {
@@ -547,9 +547,9 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\" /></svg>",
+                            "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\" \/><\/svg>",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -626,7 +626,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo",
+                            "placeholder": "e.g. \/mo",
                             "prepend": "",
                             "append": ""
                         },
@@ -636,7 +636,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Small disclaimer or context text shown below the price (e.g. \"+ tax/fees\").",
+                            "instructions": "Small disclaimer or context text shown below the price (e.g. \"+ tax\/fees\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -733,7 +733,7 @@
                             },
                             "default_value": "",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -828,8 +828,8 @@
                             "label": "Show symbol",
                             "name": "show_symbol",
                             "aria-label": "",
-                            "type": "true_false",
-                            "instructions": "Prepend a minus symbol \"–\" before the payment value (useful for discount lines).",
+                            "type": "button_group",
+                            "instructions": "Select which symbol (if any) to display before the payment value. Use '+' for incentives or discounts, '-' for fees\/additions, or select 'none' for no symbol.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -837,12 +837,16 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "message": "",
-                            "default_value": 0,
-                            "allow_in_bindings": 1,
-                            "ui_on_text": "Show",
-                            "ui_off_text": "Hide",
-                            "ui": 1
+                            "choices": {
+                                "none": "none",
+                                "+": "+",
+                                "-": "-"
+                            },
+                            "default_value": "none",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "allow_in_bindings": 0,
+                            "layout": "horizontal"
                         }
                     ],
                     "min": "",
@@ -928,7 +932,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Short descriptive text below the payment amount (e.g. \"per month, 36 mo, 10k mi/yr\").",
+                            "instructions": "Short descriptive text below the payment amount (e.g. \"per month, 36 mo, 10k mi\/yr\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -938,7 +942,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo for 36 months",
+                            "placeholder": "e.g. \/mo for 36 months",
                             "prepend": "",
                             "append": ""
                         },
@@ -984,9 +988,9 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path\r\n                            d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                            "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path\r\n                            d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -1112,7 +1116,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -1167,7 +1171,7 @@
                             "name": "after_payment",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Text appended after the payment amount (e.g. \"/mo\").",
+                            "instructions": "Text appended after the payment amount (e.g. \"\/mo\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1177,7 +1181,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo",
+                            "placeholder": "e.g. \/mo",
                             "prepend": "",
                             "append": ""
                         }
@@ -1234,7 +1238,7 @@
             "name": "payment_list_new",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Advanced payment rule rows. Each row defines a vehicle type, search criteria, value logic, and display settings for a computed payment line.",
+            "instructions": "Configure payment rules for display. Each row defines a rule for showing a payment. \n\n- Use 'Vehicle Type' to pick if this rule is for NEW or USED vehicles.\n- 'Search in' and 'Rule to Show' determine which vehicle attributes are matched (eg: Make, Model) to show this payment.\n- If 'Select Value Type' is 'Entered Value', input a number into Value. 'Calculated Value' lets you select a field and then perform a calculation.\n- 'Show on SRP'\/'Show on VDP' pick where the payment is displayed.\n- Dates are optional, for limited-time rules.\n- Style settings for SRP\/VDP are for display customization.\n\nTips:\n- Only active payments ('Active' enabled) are displayed.\n- If multiple rules match a vehicle, all their payments are shown, ordered by row.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1247,17 +1251,17 @@
             "pagination": 0,
             "min": 0,
             "max": 0,
-            "collapsed": "",
+            "collapsed": "field_69f33f1ea6dc5",
             "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_695e6991b1600",
-                    "label": "Text color",
-                    "name": "text_color",
+                    "key": "field_69f33f88a6dc6",
+                    "label": "Main",
+                    "name": "",
                     "aria-label": "",
-                    "type": "color_picker",
-                    "instructions": "Override the payment text colour for this row. Leave blank to use the theme default.",
+                    "type": "tab",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1265,13 +1269,31 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "enable_opacity": 0,
-                    "return_format": "string",
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69f33f1ea6dc5",
+                    "label": "Title",
+                    "name": "title",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Only visible in admin when the row is collapsed",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "Payment",
+                    "maxlength": "",
                     "allow_in_bindings": 0,
-                    "custom_palette_source": "",
-                    "palette_colors": "",
-                    "show_color_wheel": true,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -1280,7 +1302,7 @@
                     "name": "vehicle_type",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Apply this payment rule to new or used listings.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1311,7 +1333,7 @@
                     "name": "search_in",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Which vehicle attribute fields to match against the search value below.",
+                    "instructions": "Which vehicle field to match, such as Year, Make, Model, or combinations.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1347,7 +1369,7 @@
                     "name": "rule_to_show",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "\"Contains\" = partial match; \"Does Not Contain\" = exclusion; \"Exact Match\" = strict equality.",
+                    "instructions": "How must the search value match? (Contains\/exact\/etc)",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1379,7 +1401,7 @@
                     "name": "search",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Value to match against the selected vehicle attribute (e.g. a model name or year).",
+                    "instructions": "Type actual value(s) to match in the above-selected field (case-insensitive, partial ok for 'Contains').",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1389,7 +1411,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. Camry",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_667c2ae60ed8e"
@@ -1400,7 +1422,7 @@
                     "name": "select_value_type",
                     "aria-label": "",
                     "type": "radio",
-                    "instructions": "\"Entered Value\" = use a fixed dollar amount; \"Calculated Value\" = derive from another price field; \"Greater than\" = conditional display based on a price comparison.",
+                    "instructions": "Pick how to provide the payment amount:\r\n- Entered Value: plain number.\r\n- Calculated Value: select a field (eg: MSRP) then set an operation.\r\n- Greater Than: show payment only if chosen field is greater than some value.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1411,7 +1433,9 @@
                     "choices": {
                         "1": "Entered Value",
                         "2": "Calculated Value",
-                        "3": "Greater than"
+                        "4": "Calculated Field",
+                        "3": "Greater than Value",
+                        "5": "Greater than Field"
                     },
                     "default_value": 1,
                     "return_format": "value",
@@ -1428,7 +1452,7 @@
                     "name": "calculated_value",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Choose the price field to use as the base for calculation or comparison.",
+                    "instructions": "Pick which field to use as a basis for calculation when using Calculated Value\/Field\/Greater Than.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1443,6 +1467,13 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "3"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
                             }
                         ]
                     ],
@@ -1484,7 +1515,7 @@
                     "name": "operator",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Whether to subtract from or add to the selected price field.",
+                    "instructions": "For Calculated Value\/Field: define addition or subtraction against the picked field.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1499,6 +1530,13 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "3"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
                             }
                         ]
                     ],
@@ -1526,14 +1564,71 @@
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
+                    "key": "field_69e89686eed01",
+                    "label": "Field",
+                    "name": "calculated_field",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Used only for 'Calculated Field' value type. Pick another field as the second operand in the calculation.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "original_price": "MSRP",
+                        "InvoiceAmount": "InvoiceAmount",
+                        "DefaultBookValue": "DefaultBookValue",
+                        "InternetPrice": "InternetPrice",
+                        "CustomPrice1": "CustomPrice1",
+                        "CustomPrice2": "CustomPrice2",
+                        "CustomPrice3": "CustomPrice3",
+                        "Pack": "Pack",
+                        "Holdback": "Holdback",
+                        "Cost": "Cost",
+                        "price": "price"
+                    },
+                    "default_value": 1,
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "allow_in_bindings": 1,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0,
+                    "allow_custom": 0,
+                    "search_placeholder": "",
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
                     "key": "field_667c2ca40eda4",
                     "label": "Value",
                     "name": "value",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Fixed dollar amount to use or add/subtract from the calculated base.",
+                    "instructions": "Numerical value if not using Calculated Field.",
                     "required": 0,
-                    "conditional_logic": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "!=",
+                                "value": "4"
+                            }
+                        ]
+                    ],
                     "wrapper": {
                         "width": "25",
                         "class": "",
@@ -1541,7 +1636,8 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. 500",
+                    "allow_in_bindings": 1,
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_667c2ae60ed8e"
@@ -1552,7 +1648,7 @@
                     "name": "value_from_field",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "For \"Greater than\" comparisons: the price field to compare the vehicle's value against.",
+                    "instructions": "For 'Greater Than', which field to compare.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1560,6 +1656,13 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "3"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "5"
                             }
                         ]
                     ],
@@ -1601,7 +1704,7 @@
                     "name": "operator_1",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Comparison operator: >, <, = or !=. The row is shown only when the condition is true.",
+                    "instructions": "Only for 'Greater Than' rules: set the comparison operator. Use '>' for typical greater-than matches.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1609,6 +1712,13 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "3"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "5"
                             }
                         ]
                     ],
@@ -1623,7 +1733,7 @@
                         "=": "=",
                         "!=": "!="
                     },
-                    "default_value": "Subtract",
+                    "default_value": ">",
                     "return_format": "value",
                     "multiple": 0,
                     "allow_null": 0,
@@ -1643,7 +1753,7 @@
                     "name": "value_1",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Numeric value to compare the selected price field against.",
+                    "instructions": "For 'Greater Than', what's the value to compare to.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1662,9 +1772,58 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 1,
-                    "placeholder": "e.g. 20000",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69fca6fb4ff79",
+                    "label": "Field",
+                    "name": "calculated_field_1",
+                    "aria-label": "",
+                    "type": "select",
+                    "instructions": "Used only for 'Calculated Field' value type. Pick another field as the second operand in the calculation.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "5"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "original_price": "MSRP",
+                        "InvoiceAmount": "InvoiceAmount",
+                        "DefaultBookValue": "DefaultBookValue",
+                        "InternetPrice": "InternetPrice",
+                        "CustomPrice1": "CustomPrice1",
+                        "CustomPrice2": "CustomPrice2",
+                        "CustomPrice3": "CustomPrice3",
+                        "Pack": "Pack",
+                        "Holdback": "Holdback",
+                        "Cost": "Cost",
+                        "price": "price"
+                    },
+                    "default_value": 1,
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "allow_in_bindings": 1,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "create_options": 0,
+                    "save_options": 0,
+                    "allow_custom": 0,
+                    "search_placeholder": "",
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -1673,7 +1832,7 @@
                     "name": "show_on_srp",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this payment rule row on the SRP card.",
+                    "instructions": "Show payment on Search Results Page?",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1683,8 +1842,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "Show",
-                    "ui_off_text": "Hide",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
@@ -1694,7 +1853,7 @@
                     "name": "show_on_vdp",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Show this payment rule row on the VDP.",
+                    "instructions": "Show payment on Vehicle Details Page?",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1704,8 +1863,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "Show",
-                    "ui_off_text": "Hide",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
@@ -1715,7 +1874,7 @@
                     "name": "active",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable or disable this payment rule row. Disabled rows are ignored at runtime.",
+                    "instructions": "Uncheck to disable this payment row without deleting.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1726,8 +1885,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 1,
-                    "ui_on_text": "Active",
-                    "ui_off_text": "Inactive",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
@@ -1736,8 +1895,8 @@
                     "label": "Show symbol",
                     "name": "show_symbol",
                     "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "Prepend a minus \"–\" symbol before the displayed value.",
+                    "type": "button_group",
+                    "instructions": "Pick symbol (+\/–\/none) to show before payment amount.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1745,12 +1904,16 @@
                         "class": "",
                         "id": ""
                     },
-                    "message": "",
-                    "default_value": 0,
-                    "allow_in_bindings": 1,
-                    "ui_on_text": "Show",
-                    "ui_off_text": "Hide",
-                    "ui": 1,
+                    "choices": {
+                        "none": "none",
+                        "+": "+",
+                        "-": "-"
+                    },
+                    "default_value": "none",
+                    "return_format": "value",
+                    "allow_null": 0,
+                    "allow_in_bindings": 0,
+                    "layout": "horizontal",
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -1759,7 +1922,7 @@
                     "name": "start_date",
                     "aria-label": "",
                     "type": "date_picker",
-                    "instructions": "Optional: row is active only from this date onwards. Leave blank for no start restriction.",
+                    "instructions": "If set, payment will only display starting this date.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1767,7 +1930,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "display_format": "d/m/Y",
+                    "display_format": "d\/m\/Y",
                     "return_format": "Ymd",
                     "first_day": 1,
                     "default_to_current_date": 0,
@@ -1780,7 +1943,7 @@
                     "name": "end_date",
                     "aria-label": "",
                     "type": "date_picker",
-                    "instructions": "Optional: row is active only until this date. Leave blank for no end restriction.",
+                    "instructions": "If set, payment will not display after this date.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1788,7 +1951,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "display_format": "d/m/Y",
+                    "display_format": "d\/m\/Y",
                     "return_format": "Ymd",
                     "first_day": 1,
                     "default_to_current_date": 0,
@@ -1820,7 +1983,7 @@
                     "name": "cross_heading",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Strike through the heading text to indicate a discounted or replaced price label.",
+                    "instructions": "Check this to display this row as a cross heading (divider\/heading row with no value shown).",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1830,8 +1993,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "On",
-                    "ui_off_text": "Off",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
@@ -1841,7 +2004,7 @@
                     "name": "small_pricing_block",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Render this payment row in a compact/smaller visual style.",
+                    "instructions": "Check to display this row in the small pricing block design.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1851,8 +2014,8 @@
                     },
                     "message": "",
                     "default_value": 0,
-                    "ui_on_text": "Small",
-                    "ui_off_text": "Normal",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
@@ -1862,7 +2025,7 @@
                     "name": "heading",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Label displayed above the payment value (e.g. \"Est. Monthly Payment\").",
+                    "instructions": "Heading to display for this row.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1872,7 +2035,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. Est. Monthly Payment",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_667c2ae60ed8e"
@@ -1883,7 +2046,7 @@
                     "name": "description",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Small note shown below the payment value (e.g. \"+ tax & fees\").",
+                    "instructions": "Short description for this row. Used as a note or explanation.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1893,7 +2056,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. + tax & fees",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_667c2ae60ed8e"
@@ -1904,7 +2067,7 @@
                     "name": "pop_up_details",
                     "aria-label": "",
                     "type": "textarea",
-                    "instructions": "Detailed disclaimer or breakdown text shown in a popup when the user clicks for more info. Supports basic HTML.",
+                    "instructions": "Additional details about this payment, displayed in a popup window if set.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1919,6 +2082,1110 @@
                     "placeholder": "",
                     "new_lines": "wpautop",
                     "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69f33f9aa6dc7",
+                    "label": "SRP",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "tab",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69f33ff67a929",
+                    "label": "Style",
+                    "name": "srp_style",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "Customize the appearance of this row on Search Results Pages.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "acfe_seamless_style": 0,
+                    "acfe_group_modal": 0,
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_667c2ae60ed8e",
+                    "sub_fields": [
+                        {
+                            "key": "field_69f3401e7a92b",
+                            "label": "Padding top",
+                            "name": "padding_top",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69f340337a92c",
+                            "label": "Padding bottom",
+                            "name": "padding_bottom",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69f340827a92d",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f340997a92e",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f340aa7a92f",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f340bb7a930",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f3410d7a931",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69fc6a9f52359",
+                                    "label": "Margin bottom",
+                                    "name": "margin_bottom",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_69f341967a945",
+                            "label": "Description",
+                            "name": "description",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f341967a946",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f341967a947",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f341967a948",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f341967a949",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69fc6ab35235a",
+                                    "label": "Margin Bottom",
+                                    "name": "margin_bottom",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_69f341507a932",
+                            "label": "Price",
+                            "name": "price",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f341507a933",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f341507a934",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f341507a935",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f341507a936",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "key": "field_69f3415f7a937",
+                    "label": "VDP",
+                    "name": "",
+                    "aria-label": "",
+                    "type": "tab",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "placement": "top",
+                    "endpoint": 0,
+                    "selected": 0,
+                    "parent_repeater": "field_667c2ae60ed8e"
+                },
+                {
+                    "key": "field_69f341b67a94b",
+                    "label": "Style",
+                    "name": "vdp_style",
+                    "aria-label": "",
+                    "type": "group",
+                    "instructions": "Customize the appearance of this row on Vehicle Details Pages.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "layout": "block",
+                    "acfe_seamless_style": 0,
+                    "acfe_group_modal": 0,
+                    "acfe_group_modal_close": 0,
+                    "acfe_group_modal_button": "",
+                    "acfe_group_modal_size": "large",
+                    "parent_repeater": "field_667c2ae60ed8e",
+                    "sub_fields": [
+                        {
+                            "key": "field_69f341b67a94c",
+                            "label": "Padding top",
+                            "name": "padding_top",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69f341b67a94d",
+                            "label": "Padding bottom",
+                            "name": "padding_bottom",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_69f341b67a94e",
+                            "label": "Title",
+                            "name": "title",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f341b67a94f",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "string",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f341b67a950",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f341b67a951",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f341b67a952",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69fc6b0a89423",
+                                    "label": "Margin Bottom",
+                                    "name": "margin_bottom",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_69f341b67a953",
+                            "label": "Description",
+                            "name": "description",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f341b67a954",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "string",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f341b67a955",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f341b67a956",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f341b77a957",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69fc6b2789424",
+                                    "label": "Margin bottom",
+                                    "name": "margin_bottom",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "12",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_69f341b77a958",
+                            "label": "Price",
+                            "name": "price",
+                            "aria-label": "",
+                            "type": "group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "table",
+                            "acfe_seamless_style": 0,
+                            "acfe_group_modal": 0,
+                            "acfe_group_modal_close": 0,
+                            "acfe_group_modal_button": "",
+                            "acfe_group_modal_size": "large",
+                            "sub_fields": [
+                                {
+                                    "key": "field_69f341b77a959",
+                                    "label": "Text color",
+                                    "name": "text_color",
+                                    "aria-label": "",
+                                    "type": "color_picker",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "enable_opacity": 0,
+                                    "return_format": "string",
+                                    "allow_in_bindings": 0,
+                                    "show_custom_palette": 0,
+                                    "show_color_wheel": 1,
+                                    "custom_palette_source": "",
+                                    "palette_colors": ""
+                                },
+                                {
+                                    "key": "field_69f341b77a95a",
+                                    "label": "Font size",
+                                    "name": "font_size",
+                                    "aria-label": "",
+                                    "type": "number",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "min": "",
+                                    "max": "",
+                                    "allow_in_bindings": 0,
+                                    "placeholder": "",
+                                    "step": "",
+                                    "prepend": "",
+                                    "append": "px"
+                                },
+                                {
+                                    "key": "field_69f341b77a95b",
+                                    "label": "Font weight",
+                                    "name": "font_weight",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "600": "Semi Bold",
+                                        "700": "Bold",
+                                        "400": "Regular"
+                                    },
+                                    "default_value": "Regular",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                },
+                                {
+                                    "key": "field_69f341b77a95c",
+                                    "label": "Font family",
+                                    "name": "font_family",
+                                    "aria-label": "",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "25",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "Roboto": "Roboto",
+                                        "Roboto Condensed": "Roboto Condensed",
+                                        "Roboto Mono": "Roboto Mono",
+                                        "Montserrat": "Montserrat",
+                                        "Poppins": "Poppins",
+                                        "Lato": "Lato",
+                                        "PT Sans": "PT Sans",
+                                        "PT Sans Narrow": "PT Sans Narrow",
+                                        "Inter": "Inter"
+                                    },
+                                    "default_value": "Roboto",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "allow_in_bindings": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "create_options": 0,
+                                    "save_options": 0,
+                                    "allow_custom": 0,
+                                    "search_placeholder": ""
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
         },
@@ -2435,7 +3702,7 @@
             "name": "unlock_button_listings",
             "aria-label": "",
             "type": "group",
-            "instructions": "Settings for the primary CTA button shown when the listing's price is in \"locked\" state (new listings). Tabs separate Main style from SRP and VDP size/visibility settings.",
+            "instructions": "Settings for the primary CTA button shown when the listing's price is in \"locked\" state (new listings). Tabs separate Main style from SRP and VDP size\/visibility settings.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -2482,9 +3749,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -2519,7 +3786,7 @@
                     "name": "animation",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable a pulse/glow animation on the locked CTA button to draw attention.",
+                    "instructions": "Enable a pulse\/glow animation on the locked CTA button to draw attention.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -2888,9 +4155,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -3312,9 +4579,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -3718,9 +4985,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -4095,7 +5362,7 @@
             "name": "vdp_button_listings",
             "aria-label": "",
             "type": "group",
-            "instructions": "Settings for the secondary (outline/ghost) CTA button on new listing cards. The SRP tab controls the appearance on the grid page; this group mirrors the primary CTA structure.",
+            "instructions": "Settings for the secondary (outline\/ghost) CTA button on new listing cards. The SRP tab controls the appearance on the grid page; this group mirrors the primary CTA structure.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -4142,9 +5409,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -4419,9 +5686,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -4812,7 +6079,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "e.g. /mo for 36 months",
+                                    "placeholder": "e.g. \/mo for 36 months",
                                     "maxlength": "",
                                     "rows": 1,
                                     "new_lines": "wpautop",
@@ -5164,7 +6431,7 @@
                                     "name": "video_id",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "YouTube or Vimeo video ID (not the full URL). Example: for https://youtu.be/abc123, enter abc123.",
+                                    "instructions": "YouTube or Vimeo video ID (not the full URL). Example: for https:\/\/youtu.be\/abc123, enter abc123.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -5314,7 +6581,7 @@
             "name": "popup_form_top_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Optional text/HTML displayed above the embedded form in the popup.",
+            "instructions": "Optional text\/HTML displayed above the embedded form in the popup.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -5342,7 +6609,7 @@
             "name": "popup_form_bottom_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Optional text/HTML displayed below the embedded form in the popup (e.g. privacy notice).",
+            "instructions": "Optional text\/HTML displayed below the embedded form in the popup (e.g. privacy notice).",
             "required": 0,
             "conditional_logic": [
                 [
@@ -5430,7 +6697,7 @@
             "name": "hide_disclosure_srp",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Hide the payment disclosure/disclaimer message on the SRP listing grid.",
+            "instructions": "Hide the payment disclosure\/disclaimer message on the SRP listing grid.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -5549,7 +6816,7 @@
             "name": "filters_list",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Configure which filters appear in the SRP sidebar/filter bar. Add one row per filter. Order here reflects order on the page.",
+            "instructions": "Configure which filters appear in the SRP sidebar\/filter bar. Add one row per filter. Order here reflects order on the page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -5692,7 +6959,8 @@
                         "vehicle-status": "vehicle-status",
                         "feature_list": "feature_list",
                         "interior_color": "interior_color",
-                        "hide-duplicates": "hide-duplicates"
+                        "hide-duplicates": "hide-duplicates",
+                        "passengercapacity": "passengercapacity"
                     },
                     "default_value": "condition",
                     "return_format": "value",
@@ -5743,7 +7011,7 @@
                     },
                     "default_value": "",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -5862,8 +7130,8 @@
                         "id": ""
                     },
                     "choices": {
-                        "asc": "A–Z / low → high",
-                        "desc": "Z–A / high → low"
+                        "asc": "A–Z \/ low → high",
+                        "desc": "Z–A \/ high → low"
                     },
                     "default_value": "asc",
                     "return_format": "",
@@ -5964,8 +7232,8 @@
                         "id": ""
                     },
                     "choices": {
-                        "asc": "A–Z / low → high",
-                        "desc": "Z–A / high → low"
+                        "asc": "A–Z \/ low → high",
+                        "desc": "Z–A \/ high → low"
                     },
                     "default_value": "asc",
                     "return_format": "value",
@@ -6177,7 +7445,7 @@
             },
             "default_value": "",
             "placeholder": "Listings",
-            "mode": "text/html",
+            "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
             "maxlength": "",
@@ -6614,24 +7882,6 @@
             "endpoint": 0
         },
         {
-            "key": "field_69b188e5e7112",
-            "label": "Custom cards",
-            "name": "",
-            "aria-label": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
             "key": "field_64cbe6188b89b",
             "label": "Colors",
             "name": "colors",
@@ -6740,157 +7990,6 @@
                     "custom_palette_source": "",
                     "palette_colors": "",
                     "show_color_wheel": true
-                }
-            ]
-        },
-        {
-            "key": "field_69b18934ca86b",
-            "label": "Custom cards",
-            "name": "custom_cards",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "Insert custom promotional cards into the listing grid. Each card can include an image, rich text, a link, and rules for when and where to appear.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "acfe_repeater_stylised_button": 0,
-            "layout": "block",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_69b18968ca86c",
-                    "label": "Image",
-                    "name": "image",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "Card image. Recommended: same aspect ratio as listing cards (e.g. 800×600 px).",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "30",
-                        "class": "",
-                        "id": ""
-                    },
-                    "uploader": "",
-                    "return_format": "id",
-                    "library": "all",
-                    "acfe_thumbnail": 0,
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "allow_in_bindings": 0,
-                    "preview_size": "medium",
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b18975ca86d",
-                    "label": "Text",
-                    "name": "text",
-                    "aria-label": "",
-                    "type": "wysiwyg",
-                    "instructions": "Rich-text content displayed inside the custom card.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "70",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "allow_in_bindings": 0,
-                    "tabs": "all",
-                    "toolbar": "full",
-                    "media_upload": 1,
-                    "delay": 0,
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b1898bca86e",
-                    "label": "Link",
-                    "name": "link",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "Optional click-through link for the custom card.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "allow_in_bindings": 0,
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b189e04c3cf",
-                    "label": "Show after",
-                    "name": "show_after",
-                    "aria-label": "",
-                    "type": "number",
-                    "instructions": "Insert this card after every N regular listing cards (e.g. 6 = after every 6 listings).",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "25",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "min": "",
-                    "max": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "e.g. 6",
-                    "step": "",
-                    "prepend": "",
-                    "append": "card",
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b18a704c3d0",
-                    "label": "Show on",
-                    "name": "show_on",
-                    "aria-label": "",
-                    "type": "select",
-                    "instructions": "Display on new listings, used listings, or both inventory types.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "25",
-                        "class": "",
-                        "id": ""
-                    },
-                    "choices": {
-                        "all": "all",
-                        "listings": "listings",
-                        "used-listings": "used-listings"
-                    },
-                    "default_value": "all",
-                    "return_format": "value",
-                    "multiple": 0,
-                    "allow_custom": 0,
-                    "search_placeholder": "",
-                    "allow_null": 0,
-                    "allow_in_bindings": 0,
-                    "ui": 0,
-                    "ajax": 0,
-                    "placeholder": "",
-                    "create_options": 0,
-                    "save_options": 0,
-                    "parent_repeater": "field_69b18934ca86b"
                 }
             ]
         },
@@ -7530,7 +8629,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 1,
-                            "placeholder": "e.g. /contact",
+                            "placeholder": "e.g. \/contact",
                             "prepend": "",
                             "append": ""
                         },
@@ -7583,7 +8682,7 @@
                             "name": "events",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "One or more analytics/tracking events to fire when this desktop button is clicked. Add one row per event.",
+                            "instructions": "One or more analytics\/tracking events to fire when this desktop button is clicked. Add one row per event.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -10965,11 +12064,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778144323
+    "modified": 1778490301
 }

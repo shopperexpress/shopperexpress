@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_66d70dac86307",
-            "label": "Manufacturer Name",
+            "label": "ManufactName",
             "name": "manufactname",
             "aria-label": "",
             "type": "text",
-            "instructions": "Enter the manufacturer name as provided by the data feed (e.g. Toyota, Ford).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,17 +18,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac8633e",
-            "label": "Geographic ID",
+            "label": "GeogID",
             "name": "geogid",
             "aria-label": "",
             "type": "text",
-            "instructions": "Geographic region identifier from the offer feed. Used to target offers by market.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. US-CA",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -48,7 +48,7 @@
             "name": "vehicle",
             "aria-label": "",
             "type": "text",
-            "instructions": "Full vehicle name as it appears in the offer (e.g. 2024 Toyota Camry LE).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -58,7 +58,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024 Toyota Camry LE",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -68,7 +68,7 @@
             "name": "year",
             "aria-label": "",
             "type": "text",
-            "instructions": "Model year of the vehicle (4-digit year).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,7 +78,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -88,7 +88,7 @@
             "name": "make",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle brand / manufacturer (e.g. Toyota, Honda).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -98,7 +98,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -108,7 +108,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle model name (e.g. Camry, RAV4).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -118,17 +118,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. RAV4",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac8644d",
-            "label": "Vehicle Attributes",
+            "label": "VehicleAttributes",
             "name": "vehicleattributes",
             "aria-label": "",
             "type": "text",
-            "instructions": "Additional vehicle attribute string from the feed (e.g. color codes, package identifiers).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -138,7 +138,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. XLE AWD",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -148,7 +148,7 @@
             "name": "trim",
             "aria-label": "",
             "type": "text",
-            "instructions": "Trim level of the vehicle (e.g. LE, XLE, Limited).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -158,7 +158,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. XLE",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -168,7 +168,7 @@
             "name": "drive",
             "aria-label": "",
             "type": "text",
-            "instructions": "Drivetrain type (e.g. FWD, AWD, 4WD, RWD).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -178,7 +178,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. AWD",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -188,7 +188,7 @@
             "name": "transmission",
             "aria-label": "",
             "type": "text",
-            "instructions": "Transmission type (e.g. Automatic, Manual, CVT).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -198,17 +198,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Automatic",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac86526",
-            "label": "Body Style",
+            "label": "Body",
             "name": "body",
             "aria-label": "",
             "type": "text",
-            "instructions": "Body style of the vehicle (e.g. Sedan, SUV, Truck, Coupe).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -218,7 +218,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. SUV",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -228,7 +228,7 @@
             "name": "box",
             "aria-label": "",
             "type": "text",
-            "instructions": "Truck bed box length, if applicable (e.g. 5.5 ft, 6.5 ft). Leave blank for non-truck vehicles.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -238,7 +238,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 6.5 ft",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -248,7 +248,7 @@
             "name": "cab",
             "aria-label": "",
             "type": "text",
-            "instructions": "Cab configuration for trucks (e.g. Regular Cab, SuperCrew, Crew Cab). Leave blank for non-truck vehicles.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -258,7 +258,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Crew Cab",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -268,7 +268,7 @@
             "name": "engine",
             "aria-label": "",
             "type": "text",
-            "instructions": "Engine description from the feed (e.g. 2.5L 4-Cylinder, 3.5L V6).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -278,17 +278,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2.5L 4-Cylinder",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac865d3",
-            "label": "Model Code",
+            "label": "Model code",
             "name": "model_code",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer model code as provided by the data feed. Used for inventory matching.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -298,17 +298,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 4452",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac86609",
-            "label": "Offer Title",
+            "label": "Title",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "Display title for this lease offer as shown on the offer card (e.g. $299/mo for 36 Months).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -318,7 +318,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. $299/mo for 36 Months",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -328,7 +328,7 @@
             "name": "conditional_description",
             "aria-label": "",
             "type": "text",
-            "instructions": "Short promotional description for this lease offer displayed on the offer page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -338,17 +338,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Lease a new RAV4 for a low monthly payment",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac86675",
-            "label": "Bullet Points",
+            "label": "BulletPoints",
             "name": "bulletpoints",
             "aria-label": "",
             "type": "text",
-            "instructions": "Key lease highlights as a pipe-separated or comma-separated list, as provided by the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -358,7 +358,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. No security deposit|First month's payment included",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -368,7 +368,7 @@
             "name": "disclaimer",
             "aria-label": "",
             "type": "text",
-            "instructions": "Legal disclaimer text displayed below the offer. Usually provided by the manufacturer feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -378,7 +378,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Based on MSRP of $30,000. Not all buyers will qualify.",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -388,7 +388,7 @@
             "name": "msrp",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer's Suggested Retail Price. Enter as a numeric value (e.g. 32995).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -398,7 +398,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 32995",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -408,7 +408,7 @@
             "name": "start_date",
             "aria-label": "",
             "type": "text",
-            "instructions": "Offer start date as provided by the feed (e.g. 2024-01-01 or 01/01/2024).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -418,7 +418,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024-01-01",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -428,7 +428,7 @@
             "name": "end_date",
             "aria-label": "",
             "type": "text",
-            "instructions": "Offer expiration date as provided by the feed. Offers past this date may be hidden automatically.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -438,7 +438,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024-12-31",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -448,7 +448,7 @@
             "name": "conditional_cash",
             "aria-label": "",
             "type": "text",
-            "instructions": "Conditional cash bonus available with this lease offer (e.g. loyalty or conquest cash). Enter as a numeric value.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -458,17 +458,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 500",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac86894",
-            "label": "Web URL",
+            "label": "WebURL",
             "name": "weburl",
             "aria-label": "",
             "type": "text",
-            "instructions": "External URL linked from this offer (e.g. manufacturer lease page). Include full URL with https://.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -478,17 +478,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://www.example.com/lease-offer",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d70dac868cb",
-            "label": "Cash Programs",
+            "label": "CashPrograms",
             "name": "cashprograms",
             "aria-label": "",
             "type": "text",
-            "instructions": "Eligible cash incentive programs associated with this offer, as provided by the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -498,17 +498,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Military Bonus, College Graduate",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711468fdcb",
-            "label": "Purchase Option",
+            "label": "Purchase option",
             "name": "purchase_option",
             "aria-label": "",
             "type": "text",
-            "instructions": "End-of-lease purchase option price. Enter as a numeric value (e.g. 18500).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -518,17 +518,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 18500",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7115e8fdcc",
-            "label": "Cost Per Mile",
+            "label": "Cost per mile",
             "name": "cost_per_mile",
             "aria-label": "",
             "type": "text",
-            "instructions": "Per-mile charge for excess mileage at the end of the lease. Enter as a decimal (e.g. 0.15).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -538,17 +538,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 0.15",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7116b8fdcd",
-            "label": "Yearly Mileage Allowance",
+            "label": "Yearly excess mileage",
             "name": "yearly_excess_mileage",
             "aria-label": "",
             "type": "text",
-            "instructions": "Annual mileage allowance included in the lease (e.g. 10000, 12000, 15000).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -558,17 +558,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 12000",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7117b8fdce",
-            "label": "Total Mileage Allowance",
+            "label": "Total excess mileage",
             "name": "total_excess_mileage",
             "aria-label": "",
             "type": "text",
-            "instructions": "Total mileage allowance over the full lease term (yearly allowance × number of years).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -578,17 +578,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 36000",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7118b8fdcf",
-            "label": "Total Payments",
+            "label": "Total payments",
             "name": "total_payments",
             "aria-label": "",
             "type": "text",
-            "instructions": "Total number of monthly payments over the lease term (e.g. 36, 39, 48).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -598,17 +598,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 36",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711988fdd0",
-            "label": "Lease Cash",
+            "label": "Lease cash",
             "name": "lease_cash",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer lease cash incentive amount applied to this offer. Enter as a numeric value.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -618,17 +618,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 1000",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711a48fdd1",
-            "label": "Cap Cost",
+            "label": "Capcost",
             "name": "capcost",
             "aria-label": "",
             "type": "text",
-            "instructions": "Capitalized cost (negotiated price of the vehicle before incentives). Enter as a numeric value.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -638,17 +638,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 29500",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711ae8fdd2",
-            "label": "Destination Charge",
+            "label": "Destination charge",
             "name": "destination_charge",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer destination and delivery charge. Enter as a numeric value.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -658,17 +658,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 1095",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711bc8fdd3",
-            "label": "Due at Signing",
+            "label": "Due at signing",
             "name": "due_at_signing",
             "aria-label": "",
             "type": "text",
-            "instructions": "Total amount due at lease signing, including first month's payment, fees, and any required down payment.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -678,17 +678,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2999",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711d48fdd4",
-            "label": "Term (months)",
+            "label": "Term",
             "name": "term",
             "aria-label": "",
             "type": "text",
-            "instructions": "Lease term in months (e.g. 24, 36, 39, 48).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -698,17 +698,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 36",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d711df8fdd5",
-            "label": "Monthly Payment",
+            "label": "Payment",
             "name": "payment",
             "aria-label": "",
             "type": "text",
-            "instructions": "Monthly lease payment amount. Enter as a numeric value (e.g. 299).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -718,7 +718,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 299",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -728,7 +728,7 @@
             "name": "gallery",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per vehicle image. Each row contains the image URL and display options. Recommended image size: 800x600px or larger, JPG or PNG.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -747,11 +747,11 @@
             "sub_fields": [
                 {
                     "key": "field_66d97dfc367f6",
-                    "label": "Image URL",
+                    "label": "Image url",
                     "name": "image_url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "Full URL of the vehicle image. Must start with https://.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -760,16 +760,16 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "https://cdn.example.com/vehicle-image.jpg",
+                    "placeholder": "",
                     "parent_repeater": "field_66d97df2367f5"
                 },
                 {
                     "key": "field_68398681dcbc6",
-                    "label": "Image Background",
+                    "label": "image background",
                     "name": "image_background",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable if this image should be displayed as a full background (cover) image rather than a standard inline image.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -780,18 +780,18 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Background",
-                    "ui_off_text": "Inline",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_66d97df2367f5"
                 },
                 {
                     "key": "field_6899d31e6453a",
-                    "label": "Image Reverse",
+                    "label": "image reverse",
                     "name": "image_reverse",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable to display the image mirrored/reversed horizontally (e.g. to show the passenger side of the vehicle).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -802,8 +802,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Reversed",
-                    "ui_off_text": "Normal",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_66d97df2367f5"
                 }
@@ -811,11 +811,11 @@
         },
         {
             "key": "field_66f17ab2f2363",
-            "label": "Search Inventory Button Label",
+            "label": "Search inventory button",
             "name": "search_inventory_button",
             "aria-label": "",
             "type": "text",
-            "instructions": "Label text for the 'Search Inventory' button on this offer. Leave blank to use the default label.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -825,17 +825,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Search Inventory",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_672a355db6576",
-            "label": "Features Items",
+            "label": "features_items",
             "name": "lease-offers",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Cloned feature items shared across offer types. Manage the source field group to update these fields.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -875,12 +875,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1754911528
+    "modified": 1778489988
 }

@@ -8,7 +8,7 @@
             "name": "content_blocks",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Add flexible content blocks to the 404 error page. Use these to provide helpful navigation links, a search bar, or messaging to guide visitors back to the site.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -48,12 +48,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1732709251
+    "modified": 1778489881
 }

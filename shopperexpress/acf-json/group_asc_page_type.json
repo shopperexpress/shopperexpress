@@ -6,8 +6,9 @@
             "key": "field_asc_page_type",
             "label": "ASC Page Type",
             "name": "asc_page_type",
+            "aria-label": "",
             "type": "select",
-            "instructions": "Manually assign the ASC page type for this page. Used by the page type resolver when no automatic system mapping applies. Only set this if the page is not already identified correctly by URL or template.",
+            "instructions": "Manually assign the ASC page type for this page. Used by the page type resolver when no system mapping applies.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -36,13 +37,17 @@
                 "specials": "Specials",
                 "unknown": "Unknown"
             },
-            "default_value": "",
+            "default_value": false,
             "allow_null": 1,
             "multiple": 0,
             "ui": 1,
             "return_format": "value",
             "ajax": 0,
-            "placeholder": "— Select page type —"
+            "placeholder": "— Select page type —",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
         }
     ],
     "location": [
@@ -61,7 +66,16 @@
     "instruction_placement": "label",
     "hide_on_screen": "",
     "active": true,
-    "description": "Manual ASC page type override for custom/flexible WordPress pages.",
+    "description": "Manual ASC page type override for custom\/flexible WordPress pages.",
     "show_in_rest": 0,
-    "modified": 1745193600
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1778489882
 }

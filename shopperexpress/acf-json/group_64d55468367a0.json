@@ -26,7 +26,7 @@
             "name": "year",
             "aria-label": "",
             "type": "text",
-            "instructions": "Model year of the vehicle being researched (4 digits).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -37,7 +37,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. 2025",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -47,7 +47,7 @@
             "name": "make",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle manufacturer name as it should appear on the page (e.g. Toyota, Ford).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -58,7 +58,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -68,7 +68,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle model name (e.g. Camry, F-150). Used in headings and inventory search links.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -79,17 +79,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 1,
-            "placeholder": "e.g. Camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64d5556825d67",
-            "label": "Trim Levels",
+            "label": "Trims",
             "name": "trims",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per available trim level for this model (e.g. LE, XLE, Limited). These are displayed in the trim selector on the research page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -103,16 +103,16 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Add Trim",
+            "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_67ee4bd0ec426",
-                    "label": "Trim Name",
+                    "label": "Trim",
                     "name": "trim",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Exact trim designation as listed by the manufacturer.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -123,7 +123,7 @@
                     "default_value": "",
                     "maxlength": "",
                     "allow_in_bindings": 0,
-                    "placeholder": "e.g. XLE Premium",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_64d5556825d67"
@@ -132,11 +132,11 @@
         },
         {
             "key": "field_64d555b05a9ef",
-            "label": "Starting Prices",
+            "label": "Prices",
             "name": "prices",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per price point displayed on this research page (e.g. MSRP per trim). Enter values as plain numbers or formatted strings (e.g. 29995 or $29,995).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -160,7 +160,7 @@
                     "name": "price",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "MSRP or starting price for this trim. Enter as a plain number or formatted string.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -170,7 +170,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. 29995",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_64d555b05a9ef",
@@ -180,11 +180,11 @@
         },
         {
             "key": "field_64d5567d5a9f4",
-            "label": "Chrome Data ID",
+            "label": "Chrome",
             "name": "chrome",
             "aria-label": "",
             "type": "text",
-            "instructions": "Chrome Data style ID used to pull specification data for this vehicle. Obtain from the Chrome Data dashboard.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -194,17 +194,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 450001",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_672a41c496ec0",
-            "label": "Evox Number",
+            "label": "Evoxnumber",
             "name": "evoxnumber",
             "aria-label": "",
             "type": "text",
-            "instructions": "Evox Images vehicle identifier used to retrieve the exterior 360° spin and gallery images. Find this in the Evox Images portal.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -214,17 +214,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 12345",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_64d556815a9f5",
-            "label": "Search Inventory Button Text",
+            "label": "SearchInventory",
             "name": "searchinventory",
             "aria-label": "",
             "type": "text",
-            "instructions": "Label for the \"Search Inventory\" call-to-action button on this research page. Defaults to a theme-level value if left blank.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -234,14 +234,14 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Search Inventory",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "wpml_cf_preferences": 2
         },
         {
             "key": "field_672a418ffee3f",
-            "label": "Exterior 360° Spin VIF URLs",
+            "label": "ExtSpinVIFs",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -259,11 +259,11 @@
         },
         {
             "key": "field_64d556795a9f3",
-            "label": "Exterior 360° Spin VIF URLs",
+            "label": "ExtSpinVIFs",
             "name": "extspinvifs",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per trim/color variant that has an Evox exterior 360° spin. Each URL is a VIF (Vehicle Image Feed) endpoint provided by Evox Images.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -276,18 +276,18 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Add Spin URL",
+            "button_label": "Add Row",
             "rows_per_page": 20,
             "wpml_cf_preferences": 1,
             "acfe_repeater_stylised_button": 0,
             "sub_fields": [
                 {
                     "key": "field_64dbb3a3d0e94",
-                    "label": "Spin URL",
+                    "label": "Spin",
                     "name": "spin",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "Full URL to the Evox VIF exterior 360° spin for this trim/color (must start with https://).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -296,7 +296,7 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "https://",
+                    "placeholder": "",
                     "parent_repeater": "field_64d556795a9f3",
                     "wpml_cf_preferences": 1
                 }
@@ -322,11 +322,11 @@
         },
         {
             "key": "field_64d555ce5a9f1",
-            "label": "Image Gallery URLs",
+            "label": "Image List Path",
             "name": "imagelistpath",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per gallery image for this research post. Each row is an externally hosted image URL (e.g. from Evox or a CDN). Recommended image size: 1280×720 px (16:9). Images appear in the research page gallery carousel.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -339,18 +339,18 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Add Image",
+            "button_label": "Add Row",
             "rows_per_page": 20,
             "wpml_cf_preferences": 1,
             "acfe_repeater_stylised_button": 0,
             "sub_fields": [
                 {
                     "key": "field_64dbb38cd0e93",
-                    "label": "Image URL",
+                    "label": "Image url",
                     "name": "image_url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "Full URL to the image (must start with https://). Recommended size: 1280×720 px.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -359,17 +359,17 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "https://",
+                    "placeholder": "",
                     "parent_repeater": "field_64d555ce5a9f1",
                     "wpml_cf_preferences": 1
                 },
                 {
                     "key": "field_68398466db0b7",
-                    "label": "Image Has Background",
+                    "label": "image background",
                     "name": "image_background",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable if this image includes a photographic or studio background (vs. a transparent/white-background cutout).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -380,18 +380,18 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Background",
-                    "ui_off_text": "No Background",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_64d555ce5a9f1"
                 },
                 {
                     "key": "field_6899c533b1cdd",
-                    "label": "Image Reversed",
+                    "label": "image reverse",
                     "name": "image_reverse",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable to mirror/flip this image horizontally when displayed in the gallery.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -402,8 +402,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Reversed",
-                    "ui_off_text": "Normal",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_64d555ce5a9f1"
                 }
@@ -428,12 +428,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1754907960
+    "modified": 1778489992
 }

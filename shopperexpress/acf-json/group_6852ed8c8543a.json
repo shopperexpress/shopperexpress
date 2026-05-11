@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_6852ed8e782c3",
-            "label": "Banner Image",
+            "label": "Image",
             "name": "image",
             "aria-label": "",
             "type": "image",
-            "instructions": "Upload the banner image displayed in this widget. Recommended dimensions: 600 × 200 px or wider, landscape orientation. This image appears as a clickable promotional banner in the sidebar or content area.",
+            "instructions": "",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -32,11 +32,11 @@
         },
         {
             "key": "field_6852eda0782c4",
-            "label": "Destination URL",
+            "label": "Url",
             "name": "url",
             "aria-label": "",
             "type": "text",
-            "instructions": "The URL visitors are taken to when they click the banner image. Use a full URL including https://.",
+            "instructions": "",
             "required": 1,
             "conditional_logic": 0,
             "wrapper": {
@@ -47,7 +47,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "https://example.com/offer",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         }
@@ -70,12 +70,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1750265258
+    "modified": 1778490006
 }

@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_672a33ae3fbf6",
-            "label": "VIN",
+            "label": "Vin",
             "name": "vin",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle Identification Number — a unique 17-character code identifying this specific vehicle. Auto-populated from the feed; do not edit manually.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,17 +18,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 1HGBH41JXMN109186",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704214487c3c",
-            "label": "Listing Key",
+            "label": "Key",
             "name": "key",
             "aria-label": "",
             "type": "text",
-            "instructions": "Unique internal key used to match this append-data record to a vehicle listing. Auto-populated from the data feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 12345",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -48,7 +48,7 @@
             "name": "year",
             "aria-label": "",
             "type": "text",
-            "instructions": "Model year of the vehicle as provided by the data feed (e.g. 2024).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -58,7 +58,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -68,7 +68,7 @@
             "name": "make",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle manufacturer/brand as provided by the data feed (e.g. Toyota).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,7 +78,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -88,7 +88,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle model name as provided by the data feed (e.g. Camry).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -98,17 +98,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704216387c40",
-            "label": "Evox Number",
+            "label": "EvoxNumber",
             "name": "evoxnumber",
             "aria-label": "",
             "type": "text",
-            "instructions": "The Evox image library reference number for this vehicle. Used to retrieve vehicle imagery from the Evox integration.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -118,17 +118,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 7894",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704216787c41",
-            "label": "Display Year",
+            "label": "ShownAs_Year",
             "name": "shownas_year",
             "aria-label": "",
             "type": "text",
-            "instructions": "Override for the vehicle year shown to site visitors. Leave blank to use the raw Year value from the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -138,17 +138,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704216e87c42",
-            "label": "Display Make",
+            "label": "ShownAs_Make",
             "name": "shownas_make",
             "aria-label": "",
             "type": "text",
-            "instructions": "Override for the vehicle make/brand shown to site visitors. Leave blank to use the raw Make value from the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -158,17 +158,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704217387c43",
-            "label": "Display Model",
+            "label": "ShownAs_Model",
             "name": "shownas_model",
             "aria-label": "",
             "type": "text",
-            "instructions": "Override for the vehicle model name shown to site visitors. Leave blank to use the raw Model value from the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -178,17 +178,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704217787c44",
-            "label": "Display Trim",
+            "label": "ShownAs_Trim",
             "name": "shownas_trim",
             "aria-label": "",
             "type": "text",
-            "instructions": "Override for the vehicle trim level shown to site visitors (e.g. LE, XLE, Limited). Leave blank to use the raw feed value.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -198,17 +198,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. XLE",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704217f87c45",
-            "label": "Thumbnail URL",
+            "label": "Thumbnail",
             "name": "thumbnail",
             "aria-label": "",
             "type": "text",
-            "instructions": "URL of the primary thumbnail image for this vehicle. Appears in listing cards on the search results page. Populated from the feed or Evox integration.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -218,17 +218,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://example.com/image.jpg",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704218387c46",
-            "label": "Image URL List",
+            "label": "ImageUrlList",
             "name": "imageurllist",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "List of all image URLs for this vehicle. Each row is one image that will appear in the vehicle gallery on the listing detail page. Populated from the data feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -247,11 +247,11 @@
             "sub_fields": [
                 {
                     "key": "field_6704218c87c47",
-                    "label": "Image URL",
+                    "label": "Url",
                     "name": "url",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Full URL to a vehicle image. Must be publicly accessible.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -261,7 +261,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "https://example.com/vehicle-image.jpg",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_6704218387c46"
@@ -270,11 +270,11 @@
         },
         {
             "key": "field_6704219787c48",
-            "label": "Landing Page URL",
+            "label": "LandingPageURL",
             "name": "landingpageurl",
             "aria-label": "",
             "type": "text",
-            "instructions": "The URL of the vehicle detail/landing page. Used for linking from listing cards and offer displays.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -284,17 +284,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://example.com/vehicle/camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6704219e87c49",
-            "label": "Button Text",
+            "label": "ButtonText",
             "name": "buttontext",
             "aria-label": "",
             "type": "text",
-            "instructions": "Label for the CTA button shown on this vehicle's listing card or detail page (e.g. View Details, Get a Quote).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -304,17 +304,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. View Details",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_670421c487c4a",
-            "label": "Display Name (ShownAs)",
+            "label": "ShownAs",
             "name": "shownas",
             "aria-label": "",
             "type": "text",
-            "instructions": "Full display name for this vehicle as it should appear to site visitors (e.g. 2024 Toyota Camry XLE). Overrides individual Year/Make/Model/Trim display fields if set.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -324,7 +324,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024 Toyota Camry XLE",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         }
@@ -347,12 +347,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1730818944
+    "modified": 1778489887
 }

@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_69f9bef8d33dc",
-            "label": "Page URL",
+            "label": "page_url",
             "name": "page_url",
             "aria-label": "",
             "type": "text",
-            "instructions": "The full URL of the crawled page. Populated automatically by the AI crawler — do not edit manually.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,17 +19,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "https://example.com/page",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf05d33dd",
-            "label": "Page Title",
+            "label": "title",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "The title of the crawled page as extracted from the page content. Populated automatically by the AI crawler.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -40,17 +40,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. New Vehicle Inventory",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf09d33de",
-            "label": "Department",
+            "label": "department",
             "name": "department",
             "aria-label": "",
             "type": "text",
-            "instructions": "The dealership department this page relates to (e.g. Sales, Service, Finance). Populated by the crawler based on page content.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -61,17 +61,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Service",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf0dd33df",
-            "label": "OEM (Brand)",
+            "label": "oem",
             "name": "oem",
             "aria-label": "",
             "type": "text",
-            "instructions": "The vehicle brand/manufacturer associated with this page (e.g. Toyota). Extracted by the crawler from page content.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -82,17 +82,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf12d33e0",
-            "label": "Model",
+            "label": "model",
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "The vehicle model associated with this page (e.g. Camry). Extracted by the crawler from page content.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -103,17 +103,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Camry",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf15d33e1",
-            "label": "Summary",
+            "label": "summary",
             "name": "summary",
             "aria-label": "",
             "type": "text",
-            "instructions": "A short summary of the page content extracted by the AI crawler. Used as context when the AI chat system answers questions about this page.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -124,17 +124,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "Auto-populated by crawler",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf19d33e2",
-            "label": "Important Facts",
+            "label": "important_facts",
             "name": "important_facts",
             "aria-label": "",
             "type": "text",
-            "instructions": "Key facts extracted from the page that the AI should prioritise when answering related questions. Auto-populated by the crawler.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -145,17 +145,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "Auto-populated by crawler",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf1fd33e3",
-            "label": "Primary CTA",
+            "label": "primary_cta",
             "name": "primary_cta",
             "aria-label": "",
             "type": "text",
-            "instructions": "The main call-to-action identified on this page (e.g. Schedule a Test Drive). Extracted by the crawler and used by the AI to guide users toward action.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -166,17 +166,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Schedule a Test Drive",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bfed83489",
-            "label": "Secondary CTA",
+            "label": "secondary_cta",
             "name": "secondary_cta",
             "aria-label": "",
             "type": "text",
-            "instructions": "A secondary call-to-action identified on this page (e.g. Get a Quote). Extracted by the crawler as a fallback suggestion for the AI.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -187,17 +187,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Get a Quote",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9bf22d33e4",
-            "label": "Last Crawled",
+            "label": "last_crawled",
             "name": "last_crawled",
             "aria-label": "",
             "type": "text",
-            "instructions": "Timestamp of when this page was last crawled and indexed by the AI crawler. Updated automatically — do not edit manually.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -208,17 +208,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "Auto-populated by crawler",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_69f9c0038348a",
-            "label": "Page Category",
+            "label": "page_category",
             "name": "page_category",
             "aria-label": "",
             "type": "text",
-            "instructions": "The category of the crawled page (e.g. inventory, offers, blog, service). Used to filter AI responses by page type.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -229,7 +229,7 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. inventory",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         }
@@ -253,11 +253,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1777975306
+    "modified": 1778490004
 }

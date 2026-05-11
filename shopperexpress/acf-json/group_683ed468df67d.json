@@ -8,7 +8,7 @@
             "name": "post_type",
             "aria-label": "",
             "type": "select",
-            "instructions": "Select which vehicle listing post type this SRP page should display. Choose 'listings' for new vehicles or 'used-listings' for pre-owned inventory.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -35,11 +35,11 @@
         },
         {
             "key": "field_6846aad50ab37",
-            "label": "Filter Key",
+            "label": "Key",
             "name": "key",
             "aria-label": "",
             "type": "text",
-            "instructions": "The meta key used to pre-filter listings on this SRP page (e.g. make, model, body_style). Works together with the Value field below.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -50,17 +50,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. make",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6846aae10ab38",
-            "label": "Filter Value",
+            "label": "Value",
             "name": "value",
             "aria-label": "",
             "type": "text",
-            "instructions": "The value to match against the Filter Key when querying listings (e.g. Toyota). Leave both Key and Value blank to show all listings.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -71,17 +71,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_683ed711974c9",
-            "label": "Introductory Text",
+            "label": "Text",
             "name": "text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Optional rich-text content displayed above the vehicle listing results on this SRP page. Use for SEO copy, category descriptions, or promotional messaging.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -102,7 +102,7 @@
             "name": "accordion",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Optional FAQ/accordion section displayed below the listing results. Use to provide answers to common questions about this vehicle category.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -145,12 +145,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1749461750
+    "modified": 1778489999
 }

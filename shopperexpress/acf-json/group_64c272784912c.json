@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_64c27279063df",
-            "label": "Feature Groups",
+            "label": "Features",
             "name": "features_items",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per feature category (e.g. Safety, Technology, Comfort). Each row contains a heading and a list of individual features displayed beneath it.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -22,16 +22,16 @@
             "min": 0,
             "max": 0,
             "collapsed": "",
-            "button_label": "Add Feature Group",
+            "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
                 {
                     "key": "field_64c272a1063e1",
-                    "label": "Group Heading",
+                    "label": "Heading",
                     "name": "heading",
                     "aria-label": "",
                     "type": "text",
-                    "instructions": "Category label displayed above the feature list (e.g. Safety, Entertainment, Convenience).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -41,7 +41,7 @@
                     },
                     "default_value": "",
                     "maxlength": "",
-                    "placeholder": "e.g. Safety",
+                    "placeholder": "",
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_64c27279063df",
@@ -53,7 +53,7 @@
                     "name": "features",
                     "aria-label": "",
                     "type": "repeater",
-                    "instructions": "Add one row per individual feature within this group. Each row has an optional numeric ID, a display ranking, and the feature name shown to visitors.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -66,18 +66,19 @@
                     "min": 0,
                     "max": 0,
                     "collapsed": "",
-                    "button_label": "Add Feature",
+                    "button_label": "Add Row",
                     "rows_per_page": 20,
                     "parent_repeater": "field_64c27279063df",
                     "wpml_cf_preferences": 1,
+                    "acfe_repeater_stylised_button": 0,
                     "sub_fields": [
                         {
                             "key": "field_66b5ecd3980d8",
-                            "label": "Feature ID",
+                            "label": "Id",
                             "name": "id",
                             "aria-label": "",
                             "type": "number",
-                            "instructions": "Optional numeric identifier used to match this feature against an external data source or API.",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -88,7 +89,7 @@
                             "default_value": "",
                             "min": "",
                             "max": "",
-                            "placeholder": "e.g. 1042",
+                            "placeholder": "",
                             "step": "",
                             "prepend": "",
                             "append": "",
@@ -100,7 +101,7 @@
                             "name": "ranking",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Display order or priority label for this feature within the group (e.g. 1, 2, High).",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -110,18 +111,18 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. 1",
+                            "placeholder": "",
                             "prepend": "",
                             "append": "",
                             "parent_repeater": "field_64c272e0063e2"
                         },
                         {
                             "key": "field_64c272e8063e3",
-                            "label": "Feature Name",
+                            "label": "Feature",
                             "name": "feature",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "The feature label displayed to visitors (e.g. \"Blind Spot Monitoring\", \"Apple CarPlay\").",
+                            "instructions": "",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -131,14 +132,13 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. Apple CarPlay",
+                            "placeholder": "",
                             "prepend": "",
                             "append": "",
                             "parent_repeater": "field_64c272e0063e2",
                             "wpml_cf_preferences": 2
                         }
-                    ],
-                    "acfe_repeater_stylised_button": 0
+                    ]
                 }
             ]
         }
@@ -182,12 +182,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1762427307
+    "modified": 1778490010
 }

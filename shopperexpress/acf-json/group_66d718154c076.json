@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_66d7181557cb2",
-            "label": "Manufacturer Name",
+            "label": "ManufactName",
             "name": "manufactname",
             "aria-label": "",
             "type": "text",
-            "instructions": "Enter the manufacturer name as provided by the data feed (e.g. Toyota, Ford).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -18,17 +18,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181557cea",
-            "label": "Geographic ID",
+            "label": "GeogID",
             "name": "geogid",
             "aria-label": "",
             "type": "text",
-            "instructions": "Geographic region identifier from the offer feed. Used to target offers by market.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,7 +38,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. US-CA",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -48,7 +48,7 @@
             "name": "vehicle",
             "aria-label": "",
             "type": "text",
-            "instructions": "Full vehicle name as it appears in the offer (e.g. 2024 Toyota Tacoma TRD).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -58,7 +58,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024 Toyota Tacoma TRD",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -68,7 +68,7 @@
             "name": "year",
             "aria-label": "",
             "type": "text",
-            "instructions": "Model year of the vehicle (4-digit year).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -78,7 +78,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -88,7 +88,7 @@
             "name": "make",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle brand / manufacturer (e.g. Toyota, Honda).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -98,7 +98,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Toyota",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -108,7 +108,7 @@
             "name": "model",
             "aria-label": "",
             "type": "text",
-            "instructions": "Vehicle model name (e.g. Tacoma, Tundra).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -118,17 +118,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Tacoma",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181557dfe",
-            "label": "Vehicle Attributes",
+            "label": "VehicleAttributes",
             "name": "vehicleattributes",
             "aria-label": "",
             "type": "text",
-            "instructions": "Additional vehicle attribute string from the feed (e.g. color codes, package identifiers).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -138,7 +138,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. TRD Off-Road 4WD",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -148,7 +148,7 @@
             "name": "trim",
             "aria-label": "",
             "type": "text",
-            "instructions": "Trim level of the vehicle (e.g. SR, SR5, TRD, Limited).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -158,7 +158,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. TRD Off-Road",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -168,7 +168,7 @@
             "name": "drive",
             "aria-label": "",
             "type": "text",
-            "instructions": "Drivetrain type (e.g. FWD, AWD, 4WD, RWD).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -178,7 +178,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 4WD",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -188,7 +188,7 @@
             "name": "transmission",
             "aria-label": "",
             "type": "text",
-            "instructions": "Transmission type (e.g. Automatic, Manual, CVT).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -198,17 +198,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Automatic",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181557edb",
-            "label": "Body Style",
+            "label": "Body",
             "name": "body",
             "aria-label": "",
             "type": "text",
-            "instructions": "Body style of the vehicle (e.g. Sedan, SUV, Truck, Coupe).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -218,7 +218,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Truck",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -228,7 +228,7 @@
             "name": "box",
             "aria-label": "",
             "type": "text",
-            "instructions": "Truck bed box length, if applicable (e.g. 5.5 ft, 6.5 ft). Leave blank for non-truck vehicles.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -238,7 +238,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 6 ft",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -248,7 +248,7 @@
             "name": "cab",
             "aria-label": "",
             "type": "text",
-            "instructions": "Cab configuration for trucks (e.g. Regular Cab, Access Cab, Double Cab). Leave blank for non-truck vehicles.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -258,7 +258,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Double Cab",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -268,7 +268,7 @@
             "name": "engine",
             "aria-label": "",
             "type": "text",
-            "instructions": "Engine description from the feed (e.g. 2.7L 4-Cylinder, 3.5L V6 Twin-Turbo).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -278,17 +278,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2.7L 4-Cylinder",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181557fb8",
-            "label": "Model Code",
+            "label": "Model code",
             "name": "model_code",
             "aria-label": "",
             "type": "text",
-            "instructions": "Manufacturer model code as provided by the data feed. Used for inventory matching.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -298,17 +298,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 7594",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181557fef",
-            "label": "Offer Title",
+            "label": "Title",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "Display title for this conditional offer as shown on the offer card (e.g. $1,500 Military Bonus Cash).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -318,7 +318,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. $1,500 Military Bonus Cash",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -328,7 +328,7 @@
             "name": "conditional_description",
             "aria-label": "",
             "type": "text",
-            "instructions": "Short description of the eligibility conditions for this offer (e.g. Available to active-duty military personnel).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -338,17 +338,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Available to active-duty military and veterans",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d718155805e",
-            "label": "Bullet Points",
+            "label": "BulletPoints",
             "name": "bulletpoints",
             "aria-label": "",
             "type": "text",
-            "instructions": "Key offer highlights as a pipe-separated or comma-separated list, as provided by the feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -358,7 +358,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Stackable with other offers|No purchase deadline",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -368,7 +368,7 @@
             "name": "disclaimer",
             "aria-label": "",
             "type": "text",
-            "instructions": "Legal disclaimer text displayed below the offer. Usually provided by the manufacturer feed.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -378,7 +378,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Proof of eligibility required. Cannot be combined with APR offers.",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -388,7 +388,7 @@
             "name": "start_date",
             "aria-label": "",
             "type": "text",
-            "instructions": "Offer start date as provided by the feed (e.g. 2024-01-01 or 01/01/2024).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -398,7 +398,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024-01-01",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -408,7 +408,7 @@
             "name": "end_date",
             "aria-label": "",
             "type": "text",
-            "instructions": "Offer expiration date as provided by the feed. Offers past this date may be hidden automatically.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -418,17 +418,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 2024-12-31",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d7181558171",
-            "label": "Cash Offer Amount",
+            "label": "Conditional Cash",
             "name": "conditional_cash",
             "aria-label": "",
             "type": "text",
-            "instructions": "Dollar amount of the conditional cash offer. Enter as a numeric value (e.g. 1500).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -438,17 +438,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. 1500",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_66d71815581a8",
-            "label": "Web URL",
+            "label": "WebURL",
             "name": "weburl",
             "aria-label": "",
             "type": "text",
-            "instructions": "External URL linked from this offer (e.g. manufacturer eligibility page). Include full URL with https://.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -458,7 +458,7 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "https://www.example.com/conditional-offer",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
@@ -468,7 +468,7 @@
             "name": "gallery",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Add one row per vehicle image. Each row contains the image URL and display options. Recommended image size: 800x600px or larger, JPG or PNG.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -487,11 +487,11 @@
             "sub_fields": [
                 {
                     "key": "field_66d97e1f64444",
-                    "label": "Image URL",
+                    "label": "Image url",
                     "name": "image_url",
                     "aria-label": "",
                     "type": "url",
-                    "instructions": "Full URL of the vehicle image. Must start with https://.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -500,16 +500,16 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "placeholder": "https://cdn.example.com/vehicle-image.jpg",
+                    "placeholder": "",
                     "parent_repeater": "field_66d97e1964443"
                 },
                 {
                     "key": "field_683986a3843b2",
-                    "label": "Image Background",
+                    "label": "image background",
                     "name": "image_background",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable if this image should be displayed as a full background (cover) image rather than a standard inline image.",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -520,18 +520,18 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Background",
-                    "ui_off_text": "Inline",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_66d97e1964443"
                 },
                 {
                     "key": "field_6899d2f4791d6",
-                    "label": "Image Reverse",
+                    "label": "image reverse",
                     "name": "image_reverse",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable to display the image mirrored/reversed horizontally (e.g. to show the passenger side of the vehicle).",
+                    "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -542,8 +542,8 @@
                     "message": "",
                     "default_value": 0,
                     "allow_in_bindings": 0,
-                    "ui_on_text": "Reversed",
-                    "ui_off_text": "Normal",
+                    "ui_on_text": "",
+                    "ui_off_text": "",
                     "ui": 1,
                     "parent_repeater": "field_66d97e1964443"
                 }
@@ -551,11 +551,11 @@
         },
         {
             "key": "field_66f17a9f15622",
-            "label": "Search Inventory Button Label",
+            "label": "Search inventory button",
             "name": "search_inventory_button",
             "aria-label": "",
             "type": "text",
-            "instructions": "Label text for the 'Search Inventory' button on this offer. Leave blank to use the default label.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -565,17 +565,17 @@
             },
             "default_value": "",
             "maxlength": "",
-            "placeholder": "e.g. Search Inventory",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_672a34e05b6b3",
-            "label": "Features Items",
+            "label": "Features items",
             "name": "conditional-offers",
             "aria-label": "",
             "type": "clone",
-            "instructions": "Cloned feature items shared across offer types. Manage the source field group to update these fields.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -615,12 +615,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1754911490
+    "modified": 1778489979
 }

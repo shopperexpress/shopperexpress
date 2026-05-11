@@ -8,7 +8,7 @@
             "name": "heading",
             "aria-label": "",
             "type": "text",
-            "instructions": "Section heading displayed above the news posts in this widget (e.g. Latest News, Dealer Updates).",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -19,17 +19,17 @@
             "default_value": "",
             "maxlength": "",
             "allow_in_bindings": 0,
-            "placeholder": "e.g. Latest News",
+            "placeholder": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6852e900bc6f0",
-            "label": "Number of Posts",
+            "label": "Limit",
             "name": "limit",
             "aria-label": "",
             "type": "number",
-            "instructions": "How many news posts to display in this widget. Default is 3. Increase with caution as it may impact page layout.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -41,18 +41,18 @@
             "min": 0,
             "max": "",
             "allow_in_bindings": 0,
-            "placeholder": "3",
+            "placeholder": "",
             "step": "",
             "prepend": "",
             "append": ""
         },
         {
             "key": "field_6852e91ebc6f1",
-            "label": "View All Link",
+            "label": "Link",
             "name": "link",
             "aria-label": "",
             "type": "link",
-            "instructions": "Optional link displayed below the news posts (e.g. a 'View All News' button). Leave blank to hide the link.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -82,12 +82,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1750264101
+    "modified": 1778490008
 }

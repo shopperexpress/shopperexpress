@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_68651a628ce4f",
-            "label": "SVG Icon",
+            "label": "SVG icon",
             "name": "svg_icon",
             "aria-label": "",
             "type": "acfe_code_editor",
-            "instructions": "Paste the full inline SVG markup for the icon displayed next to this menu item. Ensure the SVG has no fixed width/height attributes so it scales via CSS.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -17,7 +17,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\">...</svg>",
+            "placeholder": "",
             "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
@@ -33,7 +33,7 @@
             "name": "icon_rotation_on_hover",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "When enabled, the SVG icon rotates 180° when the visitor hovers over this menu item. Useful for dropdown arrow icons.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -43,17 +43,17 @@
             },
             "message": "",
             "default_value": 1,
-            "ui_on_text": "Rotate",
-            "ui_off_text": "No Rotate",
+            "ui_on_text": "",
+            "ui_off_text": "",
             "ui": 1
         },
         {
             "key": "field_656df9bbae81a",
-            "label": "Show Dropdown",
+            "label": "Show drop",
             "name": "show_drop",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Enable to show a mega-dropdown panel beneath this menu item.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -69,11 +69,11 @@
         },
         {
             "key": "field_66c60fef70daf",
-            "label": "Text & Icon Color",
+            "label": "Color",
             "name": "color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Foreground color applied to the menu item label and SVG icon. Leave blank to inherit the theme default.",
+            "instructions": "Text and icon",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -83,15 +83,18 @@
             },
             "default_value": "",
             "enable_opacity": 0,
-            "return_format": "string"
+            "return_format": "string",
+            "custom_palette_source": "",
+            "palette_colors": "",
+            "show_color_wheel": true
         },
         {
             "key": "field_66c861fa32c31",
-            "label": "Background Color",
+            "label": "Background color",
             "name": "background_color",
             "aria-label": "",
             "type": "color_picker",
-            "instructions": "Background color applied behind this menu item. Leave blank to inherit the theme default.",
+            "instructions": "Text and icon",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -101,7 +104,10 @@
             },
             "default_value": "",
             "enable_opacity": 0,
-            "return_format": "string"
+            "return_format": "string",
+            "custom_palette_source": "",
+            "palette_colors": "",
+            "show_color_wheel": true
         }
     ],
     "location": [
@@ -122,12 +128,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfe_display_title": "",
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1751464740
+    "modified": 1778489892
 }

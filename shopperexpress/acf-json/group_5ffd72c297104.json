@@ -4,11 +4,11 @@
     "fields": [
         {
             "key": "field_5ffd72d56d899",
-            "label": "Page Heading",
+            "label": "Title",
             "name": "title",
             "aria-label": "",
             "type": "text",
-            "instructions": "Override the main heading displayed at the top of the listings/archive page. If left blank the page title is used.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -17,7 +17,7 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "e.g. New Vehicles for Sale",
+            "placeholder": "",
             "prepend": "",
             "append": "",
             "maxlength": "",
@@ -25,11 +25,11 @@
         },
         {
             "key": "field_5ffd72e46d89a",
-            "label": "Intro Text",
+            "label": "Information",
             "name": "information",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "Optional descriptive text shown below the page heading on the listings or offers archive. Supports basic HTML paragraph formatting.",
+            "instructions": "",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -38,11 +38,12 @@
                 "id": ""
             },
             "default_value": "",
-            "placeholder": "e.g. Browse our full selection of new and certified pre-owned vehicles.",
+            "placeholder": "",
             "maxlength": "",
             "rows": "",
             "new_lines": "wpautop",
-            "wpml_cf_preferences": 2
+            "wpml_cf_preferences": 2,
+            "acfe_textarea_code": 0
         }
     ],
     "location": [
@@ -57,7 +58,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "archive-offers.php"
+                "value": "default"
             }
         ],
         [
@@ -77,6 +78,14 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "acfml_field_group_mode": "translation",
-    "modified": 1694619949
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1778489996
 }
