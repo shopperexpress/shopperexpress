@@ -61,7 +61,6 @@ class AI implements Theme_Component {
 	private const INTENT_WEBSITE   = 'website';
 	private const INTENT_INVENTORY = 'inventory';
 	private const INTENT_SPECIALS  = 'specials';
-	private const INTENT_UNKNOWN   = 'unknown';
 
 	// Cache group shared by all object-cache keys in this class.
 	private const CACHE_GROUP = 'ai';
@@ -140,7 +139,278 @@ class AI implements Theme_Component {
 						'permission_callback' => $manage_options,
 					)
 				);
+
+				register_rest_route(
+					'ai/v1',
+					'/debug-website',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( $this, 'ai_debug_website_handler' ),
+						'permission_callback' => $manage_options,
+					)
+				);
+
+				register_rest_route(
+					'ai/v1',
+					'/debug-faq',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( $this, 'ai_debug_faq_handler' ),
+						'permission_callback' => $manage_options,
+					)
+				);
+
+				register_rest_route(
+					'ai/v1',
+					'/debug-inventory',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( $this, 'ai_debug_inventory_handler' ),
+						'permission_callback' => $manage_options,
+					)
+				);
+
+				register_rest_route(
+					'ai/v1',
+					'/debug-specials',
+					array(
+						'methods'             => 'GET',
+						'callback'            => array( $this, 'ai_debug_specials_handler' ),
+						'permission_callback' => $manage_options,
+					)
+				);
 			}
+		);
+	}
+
+	/**
+	 * GET /wp-json/ai/v1/debug-website?q=…
+	 *
+	 * Temporary diagnostic endpoint — shows the full website_handler pipeline:
+	 * intent detection, embedding, page scoring, context string, and final prompt.
+	 * Remove once testing is complete.
+	 *
+	 * @param \WP_REST_Request $request REST request.
+	 * @return \WP_REST_Response
+	 */
+	public function ai_debug_website_handler( \WP_REST_Request $request ): \WP_REST_Response {
+
+		$this->api_key = (string) get_field( 'ai_api_key', 'option' );
+
+		$question = sanitize_text_field( $request->get_param( 'q' ) ?? 'What are your service hours' );
+
+		// ── 1. Intent detection ───────────────────────────────────────────────
+		$intent = $this->detect_intent( $question );
+
+		// ── 2. Embedding ─────────────────────────────────────────────────────
+		$embedding     = $this->get_embedding( $question );
+		$has_embedding = ! empty( $embedding );
+
+		// ── 3. Raw page load + scoring ────────────────────────────────────────
+		$pages = $this->load_website_content_pages();
+
+		$scored = array();
+		foreach ( $pages as $page ) {
+			$score = 0.0;
+			if ( $has_embedding && ! empty( $page['embedding'] ) ) {
+				$score = $this->cosine_similarity( $embedding, $page['embedding'] );
+			}
+			$boost    = $this->compute_metadata_boost( $question, $page );
+			$scored[] = array(
+				'title'         => $page['title'],
+				'department'    => $page['department'],
+				'has_embedding' => ! empty( $page['embedding'] ),
+				'cosine'        => round( $score, 4 ),
+				'boost'         => round( $boost, 4 ),
+				'combined'      => round( $score + $boost, 4 ),
+				'passes_min'    => ( $score + $boost ) >= self::WEBSITE_MIN_SCORE,
+			);
+		}
+
+		usort( $scored, fn( $a, $b ) => $b['combined'] <=> $a['combined'] );
+		$top5 = array_slice( $scored, 0, 5 );
+
+		$pages_with_embedding    = count( array_filter( $scored, fn( $p ) => $p['has_embedding'] ) );
+		$pages_passing_threshold = count( array_filter( $scored, fn( $p ) => $p['passes_min'] ) );
+
+		// ── 4. Context string (as website_handler builds it) ──────────────────
+		$context = $this->fetch_website_context( $question, $embedding );
+
+		// ── 5. Final prompt ───────────────────────────────────────────────────
+		$prompt = $this->build_website_prompt( $question, $context );
+
+		// ── 6. AI response ────────────────────────────────────────────────────
+		$ai_response = $this->ask_ai( $prompt );
+
+		return rest_ensure_response(
+			array(
+				'question'                => $question,
+				'detected_intent'         => $intent,
+				'question_embedded'       => $has_embedding,
+				'total_pages'             => count( $pages ),
+				'pages_with_embedding'    => $pages_with_embedding,
+				'pages_passing_min_score' => $pages_passing_threshold,
+				'website_min_score'       => self::WEBSITE_MIN_SCORE,
+				'top_5_scored_pages'      => $top5,
+				'context_length'          => strlen( $context ),
+				'context_empty'           => empty( $context ),
+				'prompt_length'           => strlen( $prompt ),
+				'ai_response'             => $ai_response,
+			)
+		);
+	}
+
+	/**
+	 * GET /wp-json/ai/v1/debug-faq?q=…
+	 *
+	 * Diagnostic endpoint for the FAQ pipeline. Shows embedding coverage,
+	 * top cosine scores, assembled context, and the final AI response.
+	 * Remove once testing is complete.
+	 *
+	 * @param \WP_REST_Request $request REST request.
+	 * @return \WP_REST_Response
+	 */
+	public function ai_debug_faq_handler( \WP_REST_Request $request ): \WP_REST_Response {
+
+		$this->api_key = (string) get_field( 'ai_api_key', 'option' );
+
+		$question = sanitize_text_field( $request->get_param( 'q' ) ?? 'Do you offer financing' );
+
+		// ── 1. Intent ─────────────────────────────────────────────────────────
+		$intent = $this->detect_intent( $question );
+
+		// ── 2. Embedding ─────────────────────────────────────────────────────
+		$embedding     = $this->get_embedding( $question );
+		$has_embedding = ! empty( $embedding );
+
+		// ── 3. FAQ scoring ────────────────────────────────────────────────────
+		$faqs        = $this->get_faq_embeddings();
+		$scored_faqs = $this->score_faqs_by_similarity( $embedding, $faqs );
+		$top5        = array_slice( $scored_faqs, 0, 5 );
+		$top_score   = isset( $scored_faqs[0]['score'] ) ? (float) $scored_faqs[0]['score'] : 0.0;
+
+		$top5_formatted = array_map(
+			fn( $s ) => array(
+				'score'    => round( $s['score'], 4 ),
+				'question' => $s['faq']['question'],
+				'category' => $s['faq']['category'],
+				'intent'   => $s['faq']['intent'],
+			),
+			$top5
+		);
+
+		// ── 4. Context + prompt ───────────────────────────────────────────────
+		$faq_result  = $this->fetch_faq_context( $question, $embedding );
+		$faq_context = $faq_result['context'];
+		$prompt      = $this->build_faq_prompt( $question, $faq_context );
+
+		// ── 5. AI response ────────────────────────────────────────────────────
+		$ai_response = $this->ask_ai( $prompt );
+
+		return rest_ensure_response(
+			array(
+				'question'             => $question,
+				'detected_intent'      => $intent,
+				'question_embedded'    => $has_embedding,
+				'total_faqs'           => count( $faqs ),
+				'top_score'            => $top_score,
+				'confidence_threshold' => self::FAQ_CONFIDENCE_THRESHOLD,
+				'high_confidence_hit'  => $top_score >= self::FAQ_CONFIDENCE_THRESHOLD,
+				'top_5_scored_faqs'    => $top5_formatted,
+				'context_length'       => strlen( $faq_context ),
+				'context_empty'        => empty( $faq_context ),
+				'prompt_length'        => strlen( $prompt ),
+				'ai_response'          => $ai_response,
+			)
+		);
+	}
+
+	/**
+	 * GET /wp-json/ai/v1/debug-inventory?q=…
+	 *
+	 * Diagnostic endpoint for the inventory pipeline. Shows AI-extracted filters,
+	 * the REST payload returned, and the final AI response.
+	 * Remove once testing is complete.
+	 *
+	 * @param \WP_REST_Request $request REST request.
+	 * @return \WP_REST_Response
+	 */
+	public function ai_debug_inventory_handler( \WP_REST_Request $request ): \WP_REST_Response {
+
+		$this->api_key = (string) get_field( 'ai_api_key', 'option' );
+
+		$question = sanitize_text_field( $request->get_param( 'q' ) ?? 'Show me used Honda under 25000' );
+
+		// ── 1. Intent ─────────────────────────────────────────────────────────
+		$intent = $this->detect_intent( $question );
+
+		// ── 2. Filter extraction ──────────────────────────────────────────────
+		$filters = $this->ai_extract_inventory_filters( $question );
+
+		// ── 3. Inventory fetch ────────────────────────────────────────────────
+		$context = $this->fetch_inventory_context( $question );
+
+		// ── 4. Prompt + response ──────────────────────────────────────────────
+		$inventory_json = ! empty( $context ) ? (string) wp_json_encode( $context ) : '';
+		$prompt         = $this->build_inventory_prompt( $question, $inventory_json );
+		$ai_response    = $this->convert_markdown_links( $this->ask_ai( $prompt ) );
+
+		return rest_ensure_response(
+			array(
+				'question'            => $question,
+				'detected_intent'     => $intent,
+				'extracted_filters'   => $filters,
+				'inventory_count'     => $context['count'] ?? 0,
+				'vehicles_in_payload' => count( $context['vehicles'] ?? array() ),
+				'context_length'      => strlen( $inventory_json ),
+				'prompt_length'       => strlen( $prompt ),
+				'ai_response'         => $ai_response,
+			)
+		);
+	}
+
+	/**
+	 * GET /wp-json/ai/v1/debug-specials?q=…
+	 *
+	 * Diagnostic endpoint for the specials pipeline. Shows AI-extracted filters,
+	 * the specials payload returned, and the final AI response.
+	 * Remove once testing is complete.
+	 *
+	 * @param \WP_REST_Request $request REST request.
+	 * @return \WP_REST_Response
+	 */
+	public function ai_debug_specials_handler( \WP_REST_Request $request ): \WP_REST_Response {
+
+		$this->api_key = (string) get_field( 'ai_api_key', 'option' );
+
+		$question = sanitize_text_field( $request->get_param( 'q' ) ?? 'Show me Honda lease specials' );
+
+		// ── 1. Intent ─────────────────────────────────────────────────────────
+		$intent = $this->detect_intent( $question );
+
+		// ── 2. Filter extraction ──────────────────────────────────────────────
+		$filters = $this->build_specials_query( $question );
+
+		// ── 3. Specials fetch ─────────────────────────────────────────────────
+		$context = $this->fetch_specials_context( $question );
+
+		// ── 4. Prompt + response ──────────────────────────────────────────────
+		$specials_json = ! empty( $context['specials'] ) ? (string) wp_json_encode( $context ) : '';
+		$prompt        = $this->build_specials_prompt( $question, $specials_json );
+		$ai_response   = $this->convert_markdown_links( $this->ask_ai( $prompt ) );
+
+		return rest_ensure_response(
+			array(
+				'question'            => $question,
+				'detected_intent'     => $intent,
+				'extracted_filters'   => $filters,
+				'specials_count'      => $context['count'] ?? 0,
+				'specials_in_payload' => count( $context['specials'] ?? array() ),
+				'applied_filters'     => $context['applied_filters'] ?? array(),
+				'context_length'      => strlen( $specials_json ),
+				'prompt_length'       => strlen( $prompt ),
+				'ai_response'         => $ai_response,
+			)
 		);
 	}
 
@@ -206,29 +476,36 @@ class AI implements Theme_Component {
 
 		if ( ! empty( $params['min_price'] ) && ! empty( $params['max_price'] ) ) {
 			$meta_query[] = array(
-				'key'     => 'price',
+				'key'     => 'original_price',
 				'value'   => array( (float) $params['min_price'], (float) $params['max_price'] ),
 				'type'    => 'NUMERIC',
 				'compare' => 'BETWEEN',
 			);
 		} elseif ( ! empty( $params['min_price'] ) ) {
 			$meta_query[] = array(
-				'key'     => 'price',
+				'key'     => 'original_price',
 				'value'   => (float) $params['min_price'],
 				'type'    => 'NUMERIC',
 				'compare' => '>=',
 			);
 		} elseif ( ! empty( $params['max_price'] ) ) {
 			$meta_query[] = array(
-				'key'     => 'price',
+				'key'     => 'original_price',
 				'value'   => (float) $params['max_price'],
 				'type'    => 'NUMERIC',
 				'compare' => '<=',
 			);
 		}
 
+		// When condition is unspecified search both new and used inventory.
+		if ( ! empty( $params['post_type'] ) ) {
+			$post_type = sanitize_text_field( $params['post_type'] );
+		} else {
+			$post_type = array( 'listings', 'used-listings' );
+		}
+
 		return array(
-			'post_type'      => 'listings',
+			'post_type'      => $post_type,
 			'posts_per_page' => $params['limit'] ?? 20,
 			'meta_query'     => $meta_query,
 			'no_found_rows'  => false,
@@ -268,7 +545,8 @@ class AI implements Theme_Component {
 				'time'           => gmdate( 'Y-m-d H:i:s' ),
 				'api_key_set'    => ! empty( $this->api_key ),
 				'acf_options'    => array(
-					'prompt_set' => ! empty( get_field( 'ai_promt', 'option' ) ),
+					'inventory_prompt_set' => ! empty( get_field( 'ai_inventory_promt', 'option' ) ),
+					'intent_prompt_set'    => ! empty( get_field( 'ai_intent_promt', 'option' ) ),
 				),
 				'knowledge_base' => array(
 					'faq_count'                => $faq_count,
@@ -328,7 +606,7 @@ class AI implements Theme_Component {
 				'make'           => get_field( 'make', $post->ID ),
 				'model'          => get_field( 'model', $post->ID ),
 				'year'           => get_field( 'year', $post->ID ),
-				'price'          => (float) get_field( 'price', $post->ID ),
+				'price'          => (float) get_field( 'original_price', $post->ID ),
 				'body_type'      => get_field( 'bodystyle', $post->ID ),
 				'condition'      => get_field( 'condition', $post->ID ),
 				'interior_color' => get_field( 'interior_color', $post->ID ),
@@ -417,7 +695,7 @@ class AI implements Theme_Component {
 
 		$query = new WP_Query(
 			array(
-				'post_type'      => array( 'offers', 'lease-offers', 'finance-offers', 'conditional-offers' ),
+				'post_type'      => array( 'offers', 'lease-offers', 'finance-offers', 'conditional-offers', 'service-offers' ),
 				'posts_per_page' => -1,
 				'post_status'    => 'publish',
 				'no_found_rows'  => true,
@@ -460,6 +738,7 @@ class AI implements Theme_Component {
 			'lease-offers'       => 'lease',
 			'finance-offers'     => 'finance',
 			'conditional-offers' => 'conditional',
+			'service-offers'     => 'service',
 			'offers'             => 'general',
 		);
 
@@ -697,7 +976,7 @@ class AI implements Theme_Component {
 			wp_send_json_error( array( 'message' => 'Question is required.' ), 400 );
 		}
 
-		wp_send_json_success( $this->chat_handler( $question ) );
+		wp_send_json_success( $this->handle_question( $question ) );
 	}
 
 	// -------------------------------------------------------------------------
@@ -705,14 +984,42 @@ class AI implements Theme_Component {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Routes the question to the appropriate handler after intent detection.
+	 * Main conversation entry point.
+	 *
+	 * Detects intent, retrieves context, renders response — each through its own
+	 * dedicated method so every stage is independently testable.
+	 *
+	 * @param string $question Sanitized user question.
+	 * @return array{ message: string }
+	 */
+	public function handle_question( string $question ): array {
+
+		$intent = $this->detect_intent( $question );
+
+		return $this->route_by_intent( $question, $intent );
+	}
+
+	/**
+	 * Backward-compat alias — existing callers of chat_handler() keep working.
 	 *
 	 * @param string $question Sanitized user question.
 	 * @return array{ message: string }
 	 */
 	public function chat_handler( string $question ): array {
+		return $this->handle_question( $question );
+	}
 
-		$intent = $this->detect_intent( $question );
+	/**
+	 * Dispatches to the correct context-fetch + render pipeline for each intent.
+	 *
+	 * Keeping routing isolated from both detection and rendering lets every
+	 * branch be tested without touching unrelated code.
+	 *
+	 * @param string $question Sanitized user question.
+	 * @param string $intent   One of the INTENT_* constants.
+	 * @return array{ message: string }
+	 */
+	private function route_by_intent( string $question, string $intent ): array {
 
 		switch ( $intent ) {
 			case self::INTENT_INVENTORY:
@@ -722,8 +1029,10 @@ class AI implements Theme_Component {
 				return $this->specials_handler( $question );
 
 			case self::INTENT_WEBSITE:
+				return $this->website_handler( $question );
+
 			case self::INTENT_FAQ:
-				return $this->knowledge_handler( $question );
+				return $this->faq_handler( $question );
 
 			default:
 				return $this->contact_fallback_handler();
@@ -749,67 +1058,13 @@ class AI implements Theme_Component {
 		}
 
 		// ─────────────────────────────────────────────
-		// API KEY
-		// ─────────────────────────────────────────────
-		if ( empty( $this->api_key ) ) {
-			$this->api_key = (string) get_field( 'ai_api_key', 'option' );
-		}
-
-		if ( empty( $this->api_key ) ) {
-			return self::INTENT_FAQ;
-		}
-
-		// ─────────────────────────────────────────────
 		// STRICT CLASSIFICATION PROMPT
 		// ─────────────────────────────────────────────
-		$prompt = <<<TXT
-			You are a strict classification system.
+		$prompt = $this->build_intent_prompt( $question );
 
-			You MUST return ONLY one word:
-
-			INVENTORY
-			SPECIALS
-			WEBSITE
-			FAQ
-
-			No punctuation.
-			No explanation.
-			No extra text.
-
-			Class rules:
-
-			INVENTORY:
-			- vehicles
-			- car search
-			- price
-			- availability
-			- stock
-			- filters (make, model, year, trim)
-
-			SPECIALS:
-			- lease
-			- finance
-			- APR
-			- monthly payment
-			- offers
-			- incentives
-			- discounts
-
-			WEBSITE:
-			- service
-			- parts
-			- trade-in
-			- contact
-			- dealership info
-			- hours
-			- location
-
-			FAQ:
-			- everything else
-
-			User question:
-			"""$question"""
-			TXT;
+		if ( empty( $prompt ) ) {
+			return self::INTENT_FAQ;
+		}
 
 		// ─────────────────────────────────────────────
 		// AI REQUEST
@@ -832,7 +1087,8 @@ class AI implements Theme_Component {
 		);
 
 		if ( is_wp_error( $response ) ) {
-			return self::INTENT_FAQ;
+			error_log( 'AI INTENT API ERROR: ' . $response->get_error_message() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return self::INTENT_WEBSITE;
 		}
 
 		// ─────────────────────────────────────────────
@@ -841,6 +1097,11 @@ class AI implements Theme_Component {
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		$raw = $body['output'][0]['content'][0]['text'] ?? '';
+
+		if ( empty( $raw ) ) {
+			error_log( 'AI INTENT EMPTY RESPONSE | HTTP: ' . wp_remote_retrieve_response_code( $response ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return self::INTENT_WEBSITE;
+		}
 
 		// Normalize AI output (very important)
 		$word = strtoupper(
@@ -863,7 +1124,8 @@ class AI implements Theme_Component {
 
 			error_log( 'AI INTENT UNKNOWN: ' . $word . ' | RAW: ' . $raw );
 
-			$result = self::INTENT_FAQ;
+			// Default to WEBSITE (dealership info) — more useful than FAQ when intent is unclear.
+			$result = self::INTENT_WEBSITE;
 
 		} else {
 			$result = $map[ $word ];
@@ -877,81 +1139,23 @@ class AI implements Theme_Component {
 		return $result;
 	}
 
-	/**
-	 * Returns true if the question contains a vehicle make found in the specials
-	 * REST feed or a generic body-type keyword.
-	 *
-	 * Makes are pulled live from load_all_specials() (transient-cached) so the
-	 * list always reflects what the dealer actually carries, without a separate
-	 * HTTP round-trip.
-	 *
-	 * @param string $q Lowercase question string.
-	 * @return bool
-	 */
-	private function question_references_vehicle( string $q ): bool {
-
-		// Body-type terms that are always valid regardless of inventory.
-		$body_types = array( 'suv', 'sedan', 'truck', 'coupe', 'convertible', 'hatchback', 'minivan', 'van', 'wagon', 'pickup' );
-
-		foreach ( $body_types as $term ) {
-			if ( preg_match( '/\b' . preg_quote( $term, '/' ) . '\b/', $q ) ) {
-				return true;
-			}
-		}
-
-		// Derive makes from the cached specials feed.
-		$specials = $this->load_all_specials();
-		$makes    = array();
-
-		foreach ( $specials as $special ) {
-			$make = strtolower( trim( $special['make'] ?? '' ) );
-			if ( '' !== $make ) {
-				$makes[ $make ] = true;
-				// Allow "chevy" as alias for "chevrolet".
-				if ( 'chevrolet' === $make ) {
-					$makes['chevy'] = true;
-				}
-				// Allow "mercedes" as alias for "mercedes-benz".
-				if ( str_starts_with( $make, 'mercedes' ) ) {
-					$makes['mercedes'] = true;
-				}
-				// Allow "vw" as alias for "volkswagen".
-				if ( 'volkswagen' === $make ) {
-					$makes['vw'] = true;
-				}
-			}
-		}
-
-		foreach ( array_keys( $makes ) as $make ) {
-			if ( preg_match( '/\b' . preg_quote( $make, '/' ) . '\b/', $q ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
 
 	// -------------------------------------------------------------------------
-	// Knowledge handler (FAQ + Website hybrid)
+	// Intent handlers — one per intent, each owns context + render
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Unified handler for FAQ and website-intent questions.
+	 * FAQ intent handler.
 	 *
-	 * The question is embedded once here. That same vector is reused for both
-	 * FAQ scoring and website-page scoring to avoid a second API call.
-	 *
-	 * Priority:
-	 *   1. Embed the question.
-	 *   2. Score FAQs by cosine similarity.
-	 *   3. If top FAQ score >= FAQ_CONFIDENCE_THRESHOLD → answer from FAQ only.
-	 *   4. Otherwise enrich with the best matching website pages.
-	 *   5. If no website pages match either → answer from FAQ context alone.
+	 * Embeds the question, scores FAQ records by cosine similarity, and answers
+	 * from FAQ knowledge when confidence is high enough. Falls back to
+	 * website_handler when the top FAQ score is below FAQ_CONFIDENCE_THRESHOLD,
+	 * implementing the documented knowledge hierarchy.
 	 *
 	 * @param string $question User question.
 	 * @return array{ message: string }
 	 */
-	private function knowledge_handler( string $question ): array {
+	private function faq_handler( string $question ): array {
 
 		$question_embedding = $this->get_embedding( $question );
 
@@ -959,32 +1163,52 @@ class AI implements Theme_Component {
 			return $this->contact_fallback_handler();
 		}
 
-		// ── FAQ scoring ───────────────────────────────────────────────────────
-		$faqs          = $this->get_faq_embeddings();
-		$scored_faqs   = $this->score_faqs_by_similarity( $question_embedding, $faqs );
-		$top_faq_score = isset( $scored_faqs[0]['score'] ) ? (float) $scored_faqs[0]['score'] : 0.0;
-		$top_faqs      = array_column( array_slice( $scored_faqs, 0, self::FAQ_LIMIT ), 'faq' );
-		$faq_context   = $this->build_faq_context( $top_faqs );
+		$faq_result  = $this->fetch_faq_context( $question, $question_embedding );
+		$faq_context = $faq_result['context'];
+		$top_score   = $faq_result['top_score'];
 
-		if ( $top_faq_score >= self::FAQ_CONFIDENCE_THRESHOLD ) {
-			// High-confidence FAQ hit — no website lookup needed.
-			$prompt = $this->build_faq_prompt( $question, $faq_context, '' );
-		} else {
-			// Low-confidence — pass the already-computed embedding to avoid a
-			// second OpenAI call inside fetch_website_context().
-			$website_context = $this->fetch_website_context( $question, $question_embedding );
-			$prompt          = $this->build_faq_prompt( $question, $faq_context, $website_context );
+		// Knowledge hierarchy: fall back to website content when FAQ confidence is low.
+		if ( $top_score < self::FAQ_CONFIDENCE_THRESHOLD ) {
+			return $this->website_handler( $question, $question_embedding );
 		}
 
-		return array( 'message' => $this->process_contact_tags( $this->ask_ai( $prompt ) ) );
+		return array( 'message' => $this->process_contact_tags( $this->render_faq_response( $question, $faq_context ) ) );
 	}
 
-	// -------------------------------------------------------------------------
-	// Inventory handler
-	// -------------------------------------------------------------------------
+	/**
+	 * WEBSITE intent handler.
+	 *
+	 * Embeds the question (or reuses a pre-computed embedding passed from
+	 * faq_handler during a confidence fallback), retrieves the best-matching
+	 * crawled website pages, and answers using only dealership website content.
+	 * FAQ records are not consulted.
+	 *
+	 * @param string $question           User question.
+	 * @param array  $question_embedding Optional pre-computed embedding (avoids a second API call).
+	 * @return array{ message: string }
+	 */
+	private function website_handler( string $question, array $question_embedding = array() ): array {
+
+		if ( empty( $question_embedding ) ) {
+			$question_embedding = $this->get_embedding( $question );
+			// If embedding fails, fetch_website_context falls back to metadata-boost
+			// scoring only — still better than a generic contact fallback.
+		}
+
+		$website_context = $this->fetch_website_context( $question, $question_embedding );
+
+		if ( empty( $website_context ) ) {
+			return $this->contact_fallback_handler();
+		}
+
+		return array( 'message' => $this->process_contact_tags( $this->render_website_response( $question, $website_context ) ) );
+	}
 
 	/**
-	 * Handles inventory questions using a live feed.
+	 * INVENTORY intent handler.
+	 *
+	 * Uses AI-extracted filters to query the live inventory feed, then renders
+	 * a structured vehicle list response.
 	 *
 	 * @param string $question User question.
 	 * @return array{ message: string }
@@ -993,36 +1217,117 @@ class AI implements Theme_Component {
 
 		$context = $this->fetch_inventory_context( $question );
 
-		$prompt = $this->build_inventory_prompt(
-			$question,
-			! empty( $context ) ? (string) wp_json_encode( $context ) : '',
-			''
-		);
-
-		$ai_message = $this->convert_markdown_links( $this->ask_ai( $prompt ) );
-
-		return array(
-			'message' => $this->process_contact_tags( $ai_message ),
-		);
+		return array( 'message' => $this->process_contact_tags( $this->render_inventory_response( $question, $context ) ) );
 	}
 
-	// -------------------------------------------------------------------------
-	// Specials handler
-	// -------------------------------------------------------------------------
-
 	/**
-	 * Handles specials / offers questions using the structured CPT feed.
+	 * SPECIALS intent handler.
+	 *
+	 * Extracts offer filters (via AI), queries the specials feed, and renders
+	 * a structured offers response. Does not share a prompt with inventory.
 	 *
 	 * @param string $question User question.
 	 * @return array{ message: string }
 	 */
 	private function specials_handler( string $question ): array {
 
-		$data    = $this->fetch_specials_context( $question );
-		$context = ! empty( $data['specials'] ) ? (string) wp_json_encode( $data ) : '';
-		$prompt  = $this->build_inventory_prompt( $question, '', $context );
+		$context = $this->fetch_specials_context( $question );
 
-		return array( 'message' => $this->process_contact_tags( $this->convert_markdown_links( $this->ask_ai( $prompt ) ) ) );
+		return array( 'message' => $this->process_contact_tags( $this->render_specials_response( $question, $context ) ) );
+	}
+
+	// -------------------------------------------------------------------------
+	// Context retrieval — one method per intent, returns raw context data
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Retrieves and scores FAQ records for the given question.
+	 *
+	 * Accepts the pre-computed question embedding so the caller's embedding
+	 * is reused and no second OpenAI round-trip is made.
+	 *
+	 * Returns both the formatted context string and the top cosine score so
+	 * faq_handler can enforce FAQ_CONFIDENCE_THRESHOLD before using the context.
+	 *
+	 * @param string $question           User question.
+	 * @param array  $question_embedding Pre-computed embedding vector.
+	 * @return array{ context: string, top_score: float }
+	 */
+	private function fetch_faq_context( string $question, array $question_embedding ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+
+		$faqs        = $this->get_faq_embeddings();
+		$scored_faqs = $this->score_faqs_by_similarity( $question_embedding, $faqs );
+		$top_score   = isset( $scored_faqs[0]['score'] ) ? (float) $scored_faqs[0]['score'] : 0.0;
+		$top_faqs    = array_column( array_slice( $scored_faqs, 0, self::FAQ_LIMIT ), 'faq' );
+
+		return array(
+			'context'   => $this->build_faq_context( $top_faqs ),
+			'top_score' => $top_score,
+		);
+	}
+
+	// -------------------------------------------------------------------------
+	// Response rendering — one method per intent, each calls ask_ai()
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Generates a response using only FAQ context.
+	 *
+	 * @param string $question    User question.
+	 * @param string $faq_context Formatted FAQ pairs (context string from fetch_faq_context()).
+	 * @return string AI-generated response text.
+	 */
+	private function render_faq_response( string $question, string $faq_context ): string {
+
+		$prompt = $this->build_faq_prompt( $question, $faq_context );
+
+		return $this->ask_ai( $prompt );
+	}
+
+	/**
+	 * Generates a response using only crawled website content.
+	 *
+	 * @param string $question        User question.
+	 * @param string $website_context Formatted page blocks from fetch_website_context().
+	 * @return string AI-generated response text.
+	 */
+	private function render_website_response( string $question, string $website_context ): string {
+
+		$prompt = $this->build_website_prompt( $question, $website_context );
+
+		return $this->ask_ai( $prompt );
+	}
+
+	/**
+	 * Generates a structured vehicle-list response from inventory data.
+	 *
+	 * @param string $question User question.
+	 * @param array  $context  Normalized inventory payload from fetch_inventory_context().
+	 * @return string AI-generated HTML response text.
+	 */
+	private function render_inventory_response( string $question, array $context ): string {
+
+		$inventory_json = ! empty( $context ) ? (string) wp_json_encode( $context ) : '';
+		$prompt         = $this->build_inventory_prompt( $question, $inventory_json );
+		$message        = $this->ask_ai( $prompt );
+
+		return $this->convert_markdown_links( $message );
+	}
+
+	/**
+	 * Generates a structured specials/offers response.
+	 *
+	 * @param string $question User question.
+	 * @param array  $context  Normalized specials payload from fetch_specials_context().
+	 * @return string AI-generated HTML response text.
+	 */
+	private function render_specials_response( string $question, array $context ): string {
+
+		$specials_json = ! empty( $context['specials'] ) ? (string) wp_json_encode( $context ) : '';
+		$prompt        = $this->build_specials_prompt( $question, $specials_json );
+		$message       = $this->ask_ai( $prompt );
+
+		return $this->convert_markdown_links( $message );
 	}
 
 	// -------------------------------------------------------------------------
@@ -1184,8 +1489,8 @@ class AI implements Theme_Component {
 	/**
 	 * Retrieves and scores crawled website pages relevant to the question.
 	 *
-	 * Accepts a pre-computed question embedding so knowledge_handler() does not
-	 * need to make a second OpenAI API call.
+	 * Accepts a pre-computed question embedding so the caller (website_handler or
+	 * faq_handler) does not need to make a second OpenAI API call.
 	 *
 	 * Scoring strategy (combined):
 	 *   - Cosine similarity between question embedding and page embedding (primary)
@@ -1469,59 +1774,117 @@ class AI implements Theme_Component {
 	 */
 	private function ai_extract_inventory_filters( string $question ): array {
 
-		$prompt = "
-			You are a data extraction engine.
+		$prompt_template = 'You are a vehicle inventory filter extraction engine.
 
-			Extract vehicle inventory filters from the user text.
+		Extract filters from the user query.
 
-			RETURN ONLY VALID RAW JSON.
-			NO markdown.
-			NO code blocks.
-			NO explanations.
-			NO backticks.
+		RETURN ONLY VALID RAW JSON.
+		NO markdown.
+		NO code blocks.
+		NO explanations.
+		NO backticks.
 
-			OUTPUT FORMAT MUST BE EXACTLY THIS:
+		OUTPUT FORMAT MUST BE EXACTLY THIS:
 
-			{
-			\"make\": \"\",
-			\"model\": \"\",
-			\"body_type\": \"\",
-			\"interior_color\": \"\",
-			\"exterior_color\": \"\",
-			\"condition\": \"\",
-			\"min_price\": 0,
-			\"max_price\": 0,
-			\"year\": 0
-			}
+		{
+		\"make\": \"\",
+		\"model\": \"\",
+		\"body_type\": \"\",
+		\"interior_color\": \"\",
+		\"exterior_color\": \"\",
+		\"condition\": \"\",
+		\"post_type\": \"\",
+		\"min_price\": 0,
+		\"max_price\": 0,
+		\"year\": 0
+		}
 
-			RULES:
-			- If value is missing → use \"\" or 0
-			- Normalize makes (chevy → Chevrolet, vw → Volkswagen)
-			- Normalize body types: suv, sedan, truck, coupe, hatchback
-			- Prices must be numbers only (no $, no k)
-			- Do NOT include any text before or after JSON
-			- Do NOT wrap response in ``` or any formatting
+		RULES:
+		- If value is missing → use \"\" or 0
+		- Normalize makes:
+		chevy → Chevrolet
+		vw → Volkswagen
+		merc → Mercedes-Benz
 
-			EXAMPLES:
+		- Normalize body types:
+		suv, sedan, truck, coupe, hatchback, wagon, van
 
-			Input: \"Honda under 25000\"
-			Output:
-			{
-			\"make\": \"Honda\",
-			\"model\": \"\",
-			\"body_type\": \"\",
-			\"interior_color\": \"\",
-			\"exterior_color\": \"\",
-			\"condition\": \"\",
-			\"min_price\": 0,
-			\"max_price\": 25000,
-			\"year\": 0
-			}
+		CONDITION / POST TYPE RULES:
+		- If user says: used, pre-owned, second hand → 
+		\"condition\": \"used\"
+		\"post_type\": \"used-listings\"
 
-			Now process this:
+		- If user says: new, brand new →
+		\"condition\": \"new\"
+		\"post_type\": \"listings\"
 
-			\"$question\"
-			";
+		- If condition is not specified:
+		\"condition\": \"\"
+		\"post_type\": \"\"
+
+		PRICE RULES:
+		- Prices must be numeric only
+		- Convert:
+		20k → 20000
+		25 grand → 25000
+
+		BUDGET RULE:
+		- Phrases like:
+		under 20000
+		below 30000
+		budget 25000
+		up to 40000
+		max 18000
+
+		must populate:
+		\"max_price\"
+
+		IMPORTANT:
+		If user only specifies budget, still return valid filters.
+
+		Do NOT include any text before or after JSON.
+
+		EXAMPLES:
+
+		Input: \"I want a used Honda under 25000\"
+
+		Output:
+		{
+		\"make\": \"Honda\",
+		\"model\": \"\",
+		\"body_type\": \"\",
+		\"interior_color\": \"\",
+		\"exterior_color\": \"\",
+		\"condition\": \"used\",
+		\"post_type\": \"used-listings\",
+		\"min_price\": 0,
+		\"max_price\": 25000,
+		\"year\": 0
+		}
+
+		Input: \"new SUV under 40000\"
+
+		Output:
+		{
+		\"make\": \"\",
+		\"model\": \"\",
+		\"body_type\": \"suv\",
+		\"interior_color\": \"\",
+		\"exterior_color\": \"\",
+		\"condition\": \"new\",
+		\"post_type\": \"listings\",
+		\"min_price\": 0,
+		\"max_price\": 40000,
+		\"year\": 0
+		}
+
+		Now process this:
+
+		[question]';
+
+		$prompt_template = get_field( 'ai_inventory_filter_promt', 'option' ) ? get_field( 'ai_inventory_filter_promt', 'option' ) : $prompt_template;
+
+		$prompt = str_replace( '[question]', $question, $prompt_template );
 
 		$response = wp_remote_post(
 			'https://api.openai.com/v1/responses',
@@ -1530,7 +1893,7 @@ class AI implements Theme_Component {
 					'Authorization' => 'Bearer ' . $this->api_key,
 					'Content-Type'  => 'application/json',
 				),
-				'body'    => json_encode(
+				'body'    => wp_json_encode(
 					array(
 						'model' => 'gpt-4.1-mini',
 						'input' => $prompt,
@@ -1630,15 +1993,15 @@ class AI implements Theme_Component {
 	/**
 	 * Fetches active specials from the local REST endpoint, with a short transient cache.
 	 *
-	 * Extracts basic filters from the question (make/model/type) so the prompt
-	 * receives a focused payload rather than the full catalogue.
+	 * Filters are extracted via AI (build_specials_query) so natural-language
+	 * phrasing is parsed accurately without a brittle regex list.
 	 *
 	 * @param string $question User question.
 	 * @return array{ count: int, specials: array, applied_filters: array }
 	 */
 	private function fetch_specials_context( string $question ): array {
 
-		$filters = $this->parse_specials_filters( $question );
+		$filters = $this->build_specials_query( $question );
 
 		$cache_key = 'ai_spec_' . md5( $question );
 		$cached    = get_transient( $cache_key );
@@ -1689,144 +2052,427 @@ class AI implements Theme_Component {
 	}
 
 	/**
-	 * Extracts lightweight specials filters from a natural-language question.
+	 * Extracts structured specials filters from a natural-language question via AI.
 	 *
-	 * Only parses make, model, year, and offer type — enough to narrow the
-	 * payload without a full AI round-trip for simple queries.
+	 * Replaces the old regex-based parse_specials_filters(). Returns a flat array
+	 * of query params compatible with the /wp-json/ai/v1/specials REST endpoint.
+	 * Falls back to an empty array on any API failure so the REST call still runs
+	 * with no filters (returns all active specials).
 	 *
 	 * @param string $question User question.
 	 * @return array
 	 */
-	private function parse_specials_filters( string $question ): array {
+	private function build_specials_query( string $question ): array {
 
-		$q       = strtolower( $question );
-		$filters = array();
-
-		// Offer type keywords.
-		if ( preg_match( '/\b(lease|leasing)\b/', $q ) ) {
-			$filters['post_type'] = 'lease';
-		} elseif ( preg_match( '/\b(finance|financing|apr|loan)\b/', $q ) ) {
-			$filters['post_type'] = 'finance';
+		if ( empty( $this->api_key ) ) {
+			return array();
 		}
 
-		// Year.
-		if ( preg_match( '/\b(20[0-9]{2})\b/', $q, $m ) ) {
-			$filters['year'] = (int) $m[1];
-		}
+		$prompt = $this->build_specials_filter_prompt( $question );
 
-		// Makes (reuse the same list as inventory parser).
-		$makes = array(
-			'acura',
-			'audi',
-			'bmw',
-			'buick',
-			'cadillac',
-			'chevrolet',
-			'chevy',
-			'chrysler',
-			'dodge',
-			'ford',
-			'genesis',
-			'gmc',
-			'honda',
-			'hyundai',
-			'infiniti',
-			'jaguar',
-			'jeep',
-			'kia',
-			'land rover',
-			'lexus',
-			'lincoln',
-			'mazda',
-			'mercedes',
-			'mini',
-			'mitsubishi',
-			'nissan',
-			'porsche',
-			'ram',
-			'subaru',
-			'tesla',
-			'toyota',
-			'volkswagen',
-			'volvo',
-			'vw',
+		$response = wp_remote_post(
+			'https://api.openai.com/v1/responses',
+			array(
+				'timeout' => 5,
+				'headers' => array(
+					'Authorization' => 'Bearer ' . $this->api_key,
+					'Content-Type'  => 'application/json',
+				),
+				'body'    => wp_json_encode(
+					array(
+						'model' => 'gpt-4.1-mini',
+						'input' => $prompt,
+					)
+				),
+			)
 		);
 
-		foreach ( $makes as $make ) {
-			if ( preg_match( '/\b' . preg_quote( $make, '/' ) . '\b/', $q ) ) {
-				$filters['make'] = 'chevy' === $make ? 'Chevrolet' : ucwords( $make );
-				break;
-			}
+		if ( is_wp_error( $response ) ) {
+			return array();
 		}
 
-		// Monthly payment cap.
-		if ( preg_match( '/\$?([\d,]+)\s*(?:\/|\s+per\s+)month/i', $question, $m ) ) {
-			$filters['max_payment'] = (float) str_replace( ',', '', $m[1] );
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		$json = $body['output'][0]['content'][0]['text'] ?? '{}';
+		$data = json_decode( $json, true );
+
+		if ( ! is_array( $data ) ) {
+			return array();
+		}
+
+		// Map AI output keys to REST endpoint param names and sanitize types.
+		$filters = array();
+
+		if ( ! empty( $data['make'] ) ) {
+			$filters['make'] = sanitize_text_field( $data['make'] );
+		}
+		if ( ! empty( $data['model'] ) ) {
+			$filters['model'] = sanitize_text_field( $data['model'] );
+		}
+		if ( ! empty( $data['trim'] ) ) {
+			$filters['trim'] = sanitize_text_field( $data['trim'] );
+		}
+		if ( ! empty( $data['year'] ) ) {
+			$filters['year'] = (int) $data['year'];
+		}
+		if ( ! empty( $data['condition'] ) ) {
+			$filters['condition'] = sanitize_text_field( $data['condition'] );
+		}
+		if ( ! empty( $data['post_type'] ) ) {
+			$filters['post_type'] = sanitize_text_field( $data['post_type'] );
+		}
+		if ( ! empty( $data['max_payment'] ) ) {
+			$filters['max_payment'] = (float) $data['max_payment'];
+		}
+		if ( ! empty( $data['min_payment'] ) ) {
+			$filters['min_payment'] = (float) $data['min_payment'];
 		}
 
 		return $filters;
 	}
 
+	/**
+	 * Backward-compat alias for any code still calling parse_specials_filters().
+	 *
+	 * @param string $question User question.
+	 * @return array
+	 */
+	private function parse_specials_filters( string $question ): array {
+		return $this->build_specials_query( $question );
+	}
+
 	// -------------------------------------------------------------------------
-	// Prompt builders
+	// Prompt builders — one per pipeline stage, all prompts hardcoded in PHP.
+	// Move individual templates to ACF option fields (ai_*_promt) to override.
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Assembles the FAQ + optional website-context prompt from the ACF template.
+	 * Builds the intent-classification prompt.
 	 *
-	 * Three placeholders in the `ai_promt` ACF option field are replaced:
-	 *   [faq_context]     — top FAQ Q&A pairs
-	 *   [website_context] — crawled page blocks (empty string when not used)
-	 *   [question]        — the user's question
+	 * Returns ONLY one word: INVENTORY | SPECIALS | WEBSITE | FAQ.
+	 * No answer is generated here — routing only.
 	 *
-	 * @param string $question        User question.
-	 * @param string $faq_context     Assembled FAQ context string.
-	 * @param string $website_context Assembled website context string (may be empty).
+	 * Placeholder: [question]
+	 *
+	 * @param string $question User question.
 	 * @return string Fully assembled prompt.
 	 */
-	private function build_faq_prompt( string $question, string $faq_context, string $website_context ): string {
+	private function build_intent_prompt( string $question ): string {
 
-		$template = (string) get_field( 'ai_promt', 'option' );
+		$acf = (string) get_field( 'ai_intent_promt', 'option' );
 
-		if ( empty( $template ) ) {
-			wp_send_json_error( array( 'message' => 'AI prompt not configured.' ), 503 );
-			exit;
-		}
+		$template = ! empty( $acf ) ? $acf : <<<'PROMPT'
+			You are a strict intent classifier for a car dealership assistant.
+
+			Return ONLY one exact word — no punctuation, no explanation, no extra text:
+
+			INVENTORY
+			SPECIALS
+			WEBSITE
+			FAQ
+
+			CLASSIFICATION RULES (apply in order, stop at first match):
+
+			1. SERVICE override — classify as WEBSITE when the question contains ANY of:
+			service, maintenance, repair, oil change, tire, brake, appointment, parts, recall, inspection
+			This takes priority even if the question also contains: specials, coupons, offers, discounts
+
+			2. SPECIALS — classify as SPECIALS ONLY for vehicle purchase financial offers:
+			lease, finance, APR, 0%, monthly payment, cash back, incentive, rebate, purchase offer
+
+			3. INVENTORY — classify as INVENTORY for:
+			vehicle availability, search inventory, price filter, make/model/year/trim, new car, used car, in stock, what do you have
+
+			4. WEBSITE — classify as WEBSITE for:
+			dealership info, contact, hours, location, directions, service, parts, trade-in, appointment, about us
+
+			5. FAQ — everything else
+
+			User question:
+			"""[question]"""
+			PROMPT;
+
+		return str_replace( '[question]', $question, $template );
+	}
+
+	/**
+	 * Builds the FAQ response prompt.
+	 *
+	 * Answers ONLY from FAQ knowledge. No website content, no inventory data.
+	 * Placeholders: [faq_context], [question]
+	 *
+	 * @param string $question    User question.
+	 * @param string $faq_context Formatted FAQ Q&A pairs.
+	 * @return string Fully assembled prompt.
+	 */
+	private function build_faq_prompt( string $question, string $faq_context ): string {
+
+		$acf = (string) get_field( 'ai_faq_promt', 'option' );
+
+		$template = ! empty( $acf ) ? $acf : <<<'PROMPT'
+			You are an FAQ assistant for a car dealership website.
+			Answer ONLY using the FAQ pairs provided below.
+			Do NOT use general knowledge. Do NOT invent answers.
+			If the FAQ does not contain enough information to answer, respond with:
+			Click the button below to open the contact form and connect with a dealer. [SALES]
+
+			CONTACT ESCALATION RULES:
+			When you cannot answer from FAQ data, end your response with exactly ONE of:
+			- [SALES]   — buying, pricing, availability, financing
+			- [SERVICE] — service, repair, maintenance, oil change, tire, brake
+			- [PARTS]   — parts, accessories, replacement
+			Default escalation: [SALES]
+
+			FAQ Knowledge Base:
+			[faq_context]
+
+			User question: [question]
+			PROMPT;
 
 		return str_replace(
-			array( '[faq_context]', '[website_context]', '[question]' ),
-			array( $faq_context, $website_context, $question ),
+			array( '[faq_context]', '[question]' ),
+			array( $faq_context, $question ),
 			$template
 		);
 	}
 
 	/**
-	 * Builds the inventory / specials prompt from the ACF template.
+	 * Builds the website content response prompt.
 	 *
-	 * Three placeholders in the `ai_inventory_promt` ACF option field are replaced:
-	 *   [inventory_context] — JSON inventory payload (empty string when not used)
-	 *   [specials_context]  — JSON specials payload (empty string when not used)
-	 *   [question]          — the user's question
+	 * Answers ONLY from crawled dealership website pages.
+	 * No FAQ data, no inventory data.
+	 *
+	 * Placeholders: [website_context], [question]
+	 *
+	 * @param string $question        User question.
+	 * @param string $website_context Formatted page blocks from fetch_website_context().
+	 * @return string Fully assembled prompt.
+	 */
+	private function build_website_prompt( string $question, string $website_context ): string {
+
+		$acf = (string) get_field( 'ai_website_promt', 'option' );
+
+		$template = ! empty( $acf ) ? $acf : <<<'PROMPT'
+		You are a dealership information assistant.
+		Answer ONLY using the website content provided below.
+		Do NOT use general knowledge. Do NOT invent facts about the dealership.
+		If the content does not answer the question, respond with:
+		Click the button below to open the contact form and connect with a dealer. [SALES]
+
+		RULES:
+		- Use only explicit facts from the content blocks
+		- Do not mention pages, URLs, or data sources in your answer
+		- Include CTAs only when explicitly present in the context
+		- Keep answers concise and factual
+
+		CONTACT ESCALATION RULES:
+		When you cannot answer from the provided content, end your response with exactly ONE of:
+		- [SALES]   — buying, pricing, availability
+		- [SERVICE] — service, repair, maintenance, appointment
+		- [PARTS]   — parts, accessories
+		Default escalation: [SALES]
+
+		Dealership Website Content:
+		[website_context]
+
+		User question: [question]
+		PROMPT;
+
+		return str_replace(
+			array( '[website_context]', '[question]' ),
+			array( $website_context, $question ),
+			$template
+		);
+	}
+
+	/**
+	 * Builds the inventory response prompt.
+	 *
+	 * Answers ONLY from live inventory data. No specials, no FAQ.
+	 * Renders max 3 vehicles as an HTML list with real permalink IDs.
+	 *
+	 * Placeholders: [inventory_context], [question]
 	 *
 	 * @param string $question          User question.
-	 * @param string $inventory_context JSON inventory payload or empty string.
-	 * @param string $specials_context  JSON specials payload or empty string.
-	 * @return string
+	 * @param string $inventory_context JSON-encoded inventory payload.
+	 * @return string Fully assembled prompt.
 	 */
-	private function build_inventory_prompt( string $question, string $inventory_context, string $specials_context ): string {
+	private function build_inventory_prompt( string $question, string $inventory_context ): string {
 
-		$template = (string) get_field( 'ai_inventory_promt', 'option' );
+		$template = 'You are a dealership inventory assistant.
 
-		if ( empty( $template ) ) {
-			wp_send_json_error( array( 'message' => 'AI inventory prompt not configured.' ), 503 );
-			exit;
+		Answer ONLY using the inventory data provided below.
+		Do NOT invent vehicles, prices, availability, or URLs.
+
+		------------------------------------
+		INVENTORY DATA
+		------------------------------------
+
+		[inventory_context]
+
+		------------------------------------
+		OUTPUT RULES
+		------------------------------------
+
+		If vehicles are found:
+		1. First sentence must state the exact count from the data.
+		Example: "There are 61 vehicles currently in stock."
+		2. Render ONLY the first 3 vehicles as an HTML list.
+		3. Vehicle link — use the "url" field from the data exactly as-is, never construct your own URL:
+		<a href="URL_FROM_DATA">View Vehicle</a>
+		4. If inventory_context is empty → say "No exact match was found." then suggest contacting the dealership.
+
+		Format:
+
+		Available models:
+		<ul>
+		<li>
+			<strong>YEAR MAKE MODEL</strong>
+			– PRICE (if present and greater than 0)
+			<a href="URL_FROM_DATA">View Vehicle</a>
+		</li>
+		</ul>
+
+		RULES:
+		- Never render more than 3 vehicles
+		- Never truncate HTML tags
+		- Always close all tags
+		- Use only fields present in the data
+		- Skip PRICE if it is 0 or missing
+
+		------------------------------------
+		STRICT FINAL RULE
+
+		If inventory_context is empty → ask user to contact dealership
+		Otherwise ALWAYS render the vehicles list — never say "no match" when data is present
+
+		User question: [question]';
+
+		$acf = (string) get_field( 'ai_inventory_promt', 'option' );
+		if ( ! empty( $acf ) ) {
+			$template = $acf;
 		}
 
 		return str_replace(
-			array( '[inventory_context]', '[specials_context]', '[question]' ),
-			array( $inventory_context, $specials_context, $question ),
+			array( '[inventory_context]', '[question]' ),
+			array( $inventory_context, $question ),
 			$template
 		);
+	}
+
+	/**
+	 * Builds the specials / offers response prompt.
+	 *
+	 * Answers ONLY from structured specials data. No inventory vehicles.
+	 * Renders matching offers with payment, term, expiration, and CTA link.
+	 *
+	 * Placeholders: [specials_context], [question]
+	 *
+	 * @param string $question       User question.
+	 * @param string $specials_context JSON-encoded specials payload.
+	 * @return string Fully assembled prompt.
+	 */
+	private function build_specials_prompt( string $question, string $specials_context ): string {
+
+		$acf = (string) get_field( 'ai_specials_promt', 'option' );
+
+		$template = ! empty( $acf ) ? $acf : <<<'PROMPT'
+		You are a dealership offers and specials assistant.
+		Answer ONLY using the specials data provided below.
+		Do NOT invent offers, payments, APR rates, or expiration dates.
+
+		RULES:
+		- Use ONLY specials_context data
+		- Do NOT mix specials with inventory vehicles
+		- Omit any field that is null or empty — do not say "not available"
+		- Include the offer URL as a clickable link when present
+		- Render max 5 offers
+
+		OUTPUT FORMAT:
+		For each matching offer, output:
+		- Make / Model / Year (if present)
+		- Offer type (lease / finance / conditional / general)
+		- Payment amount and term (if present)
+		- Due at signing (if present)
+		- Expiration date (if present)
+		- CTA link (if present)
+
+		If no specials match:
+		→ Respond: "I don't see any current specials matching your request."
+		Then end with: [SALES]
+
+		CONTACT ESCALATION RULES:
+		End your response with exactly ONE of:
+		- [SALES]   — purchase, financing questions
+		- [SERVICE] — service offers, maintenance specials
+		Default escalation: [SALES]
+
+		Specials Data:
+		[specials_context]
+
+		User question: [question]
+		PROMPT;
+
+		return str_replace(
+			array( '[specials_context]', '[question]' ),
+			array( $specials_context, $question ),
+			$template
+		);
+	}
+
+	/**
+	 * Builds the specials filter extraction prompt.
+	 *
+	 * Used by build_specials_query() to extract structured REST params from a
+	 * natural-language question. Returns JSON only — no user-facing answer.
+	 *
+	 * Placeholder: [question]
+	 *
+	 * @param string $question User question.
+	 * @return string Fully assembled prompt.
+	 */
+	private function build_specials_filter_prompt( string $question ): string {
+
+		$template = <<<'PROMPT'
+		You are a specials filter extraction engine for a car dealership.
+
+		Extract offer filters from the user query.
+
+		RETURN ONLY VALID RAW JSON — no markdown, no code blocks, no backticks, no explanation.
+
+		OUTPUT FORMAT (always return all keys):
+		{
+		"make": "",
+		"model": "",
+		"trim": "",
+		"year": 0,
+		"condition": "",
+		"post_type": "",
+		"min_payment": 0,
+		"max_payment": 0
+		}
+
+		RULES:
+		- Use "" or 0 for missing values
+		- Normalize make names: chevy → Chevrolet, vw → Volkswagen, merc → Mercedes-Benz
+		- condition values (only these are valid): new | used | ""
+		  - new, brand new → "new"
+		  - used, pre-owned, second hand → "used"
+		  - If not specified → ""
+		- post_type values (only these are valid): lease | finance | conditional | service | general
+		- lease, leasing → "lease"
+		- finance, financing, APR, loan → "finance"
+		- service, oil change, maintenance, repair coupon → "service"
+		- If not specified → ""
+		- Payment values must be numeric only (no $ or commas)
+		- "under $300/month" → max_payment: 300
+		- "at least $200/month" → min_payment: 200
+
+		Do NOT include any text before or after the JSON.
+
+		User question: "[question]"
+		PROMPT;
+		$template = get_field( 'ai_specials_filter_promt', 'option' ) ? get_field( 'ai_specials_filter_promt', 'option' ) : $template;
+		return str_replace( '[question]', $question, $template );
 	}
 
 	// -------------------------------------------------------------------------
@@ -1868,35 +2514,42 @@ class AI implements Theme_Component {
 	}
 
 	/**
-	 * Converts markdown links in AI output to HTML anchor tags.
+	 * Sanitizes AI-generated anchor tags in inventory/specials responses.
 	 *
-	 * Matches [label](url) — skips the link entirely when URL is empty.
+	 * The AI is instructed to output full WordPress permalink URLs directly in
+	 * <a href="..."> tags. This function escapes those hrefs to prevent any
+	 * unintended output, and strips any legacy /vehicle?id= placeholder URLs
+	 * that an older prompt version may have produced.
 	 *
 	 * @param string $message Raw AI response text.
 	 * @return string
 	 */
 	private function convert_markdown_links( string $message ): string {
-		return preg_replace_callback(
+
+		// Remove legacy placeholder links that an old prompt variant may emit.
+		$message = preg_replace_callback(
 			'/<a\s+href="\/vehicle\?id=(\d+)">([^<]+)<\/a>/i',
 			function ( array $matches ): string {
-
 				$vehicle_id = (int) $matches[1];
 				$label      = $matches[2];
-
-				if ( ! $vehicle_id ) {
-					return $label;
-				}
-
-				$url = get_permalink( $vehicle_id );
-
-				if ( ! $url ) {
-					return $label;
-				}
-
-				return '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>';
+				$url        = $vehicle_id ? get_permalink( $vehicle_id ) : false;
+				return $url
+					? '<a href="' . esc_url( $url ) . '">' . esc_html( $label ) . '</a>'
+					: esc_html( $label );
 			},
 			$message
 		);
+
+		// Escape hrefs in any real permalink <a> tags the AI outputs.
+		$message = preg_replace_callback(
+			'/<a\s+href="([^"]+)">([^<]+)<\/a>/i',
+			function ( array $matches ): string {
+				return '<a href="' . esc_url( $matches[1] ) . '">' . esc_html( $matches[2] ) . '</a>';
+			},
+			$message
+		);
+
+		return $message;
 	}
 
 	// -------------------------------------------------------------------------
@@ -1971,12 +2624,6 @@ class AI implements Theme_Component {
 		// Guard: ensure this is actually the correct CPT in case both hook
 		// variants fire for a different post type.
 		if ( ! in_array( $post->post_type, array( 'website-content', 'website_content' ), true ) ) {
-			return;
-		}
-
-		$this->api_key = (string) get_field( 'ai_api_key', 'option' );
-
-		if ( empty( $this->api_key ) ) {
 			return;
 		}
 

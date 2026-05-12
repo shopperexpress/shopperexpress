@@ -102,10 +102,13 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 		$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
 
-	} elseif ( 3 === $select_value_type ) {
+	} elseif ( 3 === $select_value_type || 5 === $select_value_type ) {
 		$calculated_value = (int) get_field( strtolower( (string) get_sub_field( 'calculated_value' ) ), $post_id );
 		$value_from_field = (int) get_field( strtolower( (string) get_sub_field( 'value_from_field' ) ), $post_id );
 		$value_1          = (int) get_sub_field( 'value_1' );
+		$value_1          = 5 === $select_value_type
+			? (int) $value_1
+			: (int) get_field( strtolower( (string) get_sub_field( 'calculated_field_1' ) ), $post_id );
 		$condition        = false;
 
 		switch ( get_sub_field( 'operator_1' ) ) {

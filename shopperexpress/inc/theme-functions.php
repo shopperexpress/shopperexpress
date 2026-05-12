@@ -921,22 +921,74 @@ add_action(
 add_action(
 	'pmxi_after_xml_import',
 	function ( $import_id ) {
-		while ( have_rows( 'after_import', 'options' ) ) :
+
+		if ( ! have_rows( 'after_import', 'options' ) ) {
+			return;
+		}
+
+		$need_clear_cache = false;
+
+		while ( have_rows( 'after_import', 'options' ) ) {
+
 			the_row();
-			if ( get_sub_field( 'import_id' ) == $import_id ) {
-				if ( get_sub_field( 'use' ) == 1 ) {
-					wp_remote_get( esc_url( get_sub_field( 'action_url' ) ) );
-				} else {
-					$post_type = get_sub_field( 'post_type' );
-					$command   = "wp api clear {$post_type} --clear=true";
-					exec( escapeshellcmd( $command ) . ' > /dev/null 2>&1 &' );
+
+			$row_import_id = (int) get_sub_field( 'import_id' );
+
+			if ( $row_import_id !== (int) $import_id ) {
+				continue;
+			}
+
+			$need_clear_cache = true;
+
+			$use_external_url = (bool) get_sub_field( 'use' );
+
+			if ( 1 === $use_external_url ) {
+
+				$action_url = trim( (string) get_sub_field( 'action_url' ) );
+
+				if ( ! empty( $action_url ) ) {
+
+					wp_remote_get(
+						esc_url_raw( $action_url ),
+						array(
+							'timeout'  => 5,
+							'blocking' => false,
+						)
+					);
+				}
+			} else {
+
+				$post_type = sanitize_key( get_sub_field( 'post_type' ) );
+
+				if ( ! empty( $post_type ) ) {
+
+					$command = sprintf(
+						'wp api clear %s --clear=true > /dev/null 2>&1 &',
+						escapeshellarg( $post_type )
+					);
+
+					exec( $command );
 				}
 			}
-	endwhile;
+		}
+
+		if ( $need_clear_cache && function_exists( 'rocket_clean_domain' ) ) {
+			rocket_clean_domain();
+		}
 	}
 );
 
-
+/**
+ * Call API function.
+ *
+ * This function is used to make asynchronous calls to external APIs. It supports both GET and POST requests.
+ *
+ * @param string $url The URL to which the request is made.
+ * @param array  $data The data to be sent in the request.
+ * @param int    $post_id The ID of the post associated with the request.
+ *
+ * @return void
+ */
 function CallAPI( $url, $data, $post_id ) {
 	$post_type = get_post_type( $post_id );
 	$type      = in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ? $post_type . '_' : null;
@@ -950,6 +1002,15 @@ function CallAPI( $url, $data, $post_id ) {
 
 add_action( 'template_redirect', 'redirect_by_vin_and_post_type' );
 
+/**
+ * Redirect to the correct single listing page based on VIN and post type in the URL.
+ *
+ * Checks for a 'vin' parameter in the request. If present, and the current request URI matches
+ * '/listings/' or '/used-listings/', attempts to find the corresponding post by VIN and performs a 301 redirect.
+ * Used to ensure deep links by VIN always point to the canonical vehicle page.
+ *
+ * @return void
+ */
 function redirect_by_vin_and_post_type() {
 	if ( is_admin() || ! isset( $_GET['vin'] ) || empty( $_GET['vin'] ) ) {
 		return;
@@ -984,16 +1045,24 @@ function redirect_by_vin_and_post_type() {
 
 	if ( $query->posts ) {
 		$redirect_url = get_permalink( $query->posts[0] );
-
-		wp_redirect( $redirect_url, 301 );
+		wp_reset_postdata();
+		wp_safe_redirect( $redirect_url, 301 );
 		exit;
 	} else {
 		return;
 	}
-
-	wp_reset_query();
 }
 
+/**
+ * Custom Yoast breadcrumbs as ordered list.
+ *
+ * This function overrides the default Yoast breadcrumbs to output them as an ordered list.
+ * It checks if the Yoast breadcrumb function exists, and if so, it captures the breadcrumbs
+ * into a buffer, cleans it, and then uses regular expressions to extract the breadcrumb items.
+ * The items are then outputted as an ordered list with anchor tags for navigation.
+ *
+ * @return void
+ */
 function custom_yoast_breadcrumbs_as_ol() {
 	if ( function_exists( 'yoast_breadcrumb' ) ) {
 		ob_start();
@@ -1018,8 +1087,6 @@ function custom_yoast_breadcrumbs_as_ol() {
 			}
 			$items = $matches[0];
 
-			// array_shift($items);
-
 			echo '<ol class="breadcrumbs">';
 			foreach ( $items as $index => $item ) {
 				if ( $index === array_key_last( $items ) && str_starts_with( $item, '<span' ) ) {
@@ -1035,6 +1102,18 @@ function custom_yoast_breadcrumbs_as_ol() {
 	}
 }
 
+/**
+ * Display SVG icon.
+ *
+ * This function displays an SVG icon. It checks if the provided SVG code is not empty,
+ * and if it doesn't contain the 'aria-hidden' attribute, it adds it. If the $display
+ * parameter is true, it echoes the SVG code; otherwise, it returns it.
+ *
+ * @param string $svg_code The SVG code to display.
+ * @param bool   $display Whether to display the SVG code (default: true).
+ *
+ * @return string|void Returns the SVG code if $display is false, otherwise void.
+ */
 function display_svg_icon( $svg_code, $display = true ) {
 
 	if ( empty( trim( $svg_code ) ) ) {
@@ -1059,6 +1138,14 @@ function display_svg_icon( $svg_code, $display = true ) {
  */
 add_filter( 'wp_kses_allowed_html', 'acf_add_allowed_svg_tag', 10, 2 );
 
+/**
+ * Add SVG tag to allowed HTML tags.
+ *
+ * @param array  $tags Array of allowed HTML tags.
+ * @param string $context The context for which the tags are being filtered.
+ *
+ * @return array The modified array of allowed HTML tags.
+ */
 function acf_add_allowed_svg_tag( $tags, $context ) {
 	if ( $context === 'acf' ) {
 		$tags['svg']  = array(
@@ -1081,6 +1168,16 @@ function acf_add_allowed_svg_tag( $tags, $context ) {
 	return $tags;
 }
 
+/**
+ * Get JSON data from URL.
+ *
+ * This function retrieves JSON data from a specified URL using wp_remote_get.
+ * It handles errors and returns the decoded JSON data.
+ *
+ * @param string $url The URL to fetch JSON data from.
+ *
+ * @return array|object|void The decoded JSON data, or void if an error occurs.
+ */
 function get_json_from_url( $url = '' ) {
 	if ( empty( $url ) ) {
 		return;
@@ -1098,6 +1195,14 @@ function get_json_from_url( $url = '' ) {
 	return $data;
 }
 
+/**
+ * Check if the current user has access.
+ *
+ * This function determines whether the current user has access based on their roles.
+ * It checks if the user is logged in and has any of the specified allowed roles.
+ *
+ * @return bool Returns true if the user has access, false otherwise.
+ */
 function wps_check_current_usser() {
 	if ( is_user_logged_in() ) {
 		$allowed_roles = array( 'administrator', 'dealership_admin', 'full_dealer_admin' );
@@ -1108,6 +1213,16 @@ function wps_check_current_usser() {
 	}
 	return false;
 }
+
+/**
+ * Enqueue ACF scripts and styles.
+ *
+ * This function enqueues the Advanced Custom Fields (ACF) scripts and styles
+ * if the current post is a singular 'listings' post. It checks if ACF is
+ * available and enqueues the necessary scripts and styles accordingly.
+ *
+ * @return void
+ */
 
 add_action(
 	'wp_enqueue_scripts',
@@ -1124,6 +1239,18 @@ add_action(
 	999
 );
 
+/**
+ * Get backup images for a given VIN number.
+ *
+ * This function retrieves backup images associated with a specific VIN number
+ * from the database. It checks if the VIN number exists in the backup image
+ * table and returns the associated images. If no images are found, it returns
+ * the default image URL.
+ *
+ * @param string $vin_number The VIN number to retrieve backup images for.
+ *
+ * @return array An array of image URLs associated with the VIN number.
+ */
 function get_backup_images( $vin_number ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . 'image_backup';
@@ -1152,6 +1279,19 @@ function get_backup_images( $vin_number ) {
 	return $gallery;
 }
 
+/**
+ * Set backup images for a given VIN number.
+ *
+ * This function sets backup images associated with a specific VIN number in the
+ * database. It takes an array of image URLs and stores them as a comma-separated
+ * string in the backup image table. If the VIN number already exists, the
+ * existing record is updated; otherwise, a new record is inserted.
+ *
+ * @param string $vin_number The VIN number to set backup images for.
+ * @param array  $gallery An array of image URLs to store as backup images.
+ *
+ * @return bool Returns true if the backup images are successfully set, false otherwise.
+ */
 function set_backup_images( $vin_number, $gallery ) {
 	global $wpdb;
 
@@ -1217,6 +1357,17 @@ function set_backup_images( $vin_number, $gallery ) {
 	return ( false !== $inserted );
 }
 
+/**
+ * Remove header and footer scripts.
+ *
+ * This function removes the header and footer scripts from the WordPress
+ * theme. It iterates through the registered actions and removes any instances
+ * of the HeaderAndFooterScripts class with the 'wp_head' or 'wp_footer'
+ * action.
+ *
+ * @return void
+ */
+
 add_action(
 	'init',
 	function () {
@@ -1242,6 +1393,17 @@ add_action(
 		}
 	}
 );
+
+/**
+ * Add custom header script.
+ *
+ * This function adds a custom header script to the WordPress theme. It is
+ * executed on the 'wp_head' action and checks if the current post is a singular
+ * post. If it is, it retrieves the custom header script from the post meta
+ * and echoes it.
+ *
+ * @return void
+ */
 
 add_action(
 	'wp_head',

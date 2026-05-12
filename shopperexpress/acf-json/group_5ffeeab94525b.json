@@ -4254,12 +4254,12 @@
             "append": ""
         },
         {
-            "key": "field_69d66a3f458da",
-            "label": "AI System Prompt",
-            "name": "ai_promt",
+            "key": "field_69fa2b1c7d301",
+            "label": "AI Intent Classifier Prompt",
+            "name": "ai_intent_promt",
             "aria-label": "",
             "type": "textarea",
-            "instructions": "System prompt (persona and instructions) for the AI chat assistant. Defines tone, scope, and behaviour. Example: \"You are a helpful assistant for [Dealer Name]. Answer questions about our vehicles and services.\"",
+            "instructions": "Prompt sent to the AI to classify user intent into one of: INVENTORY, SPECIALS, WEBSITE, FAQ. Use [question] as the placeholder for the user's question.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -4282,6 +4282,116 @@
             "aria-label": "",
             "type": "textarea",
             "instructions": "Supplemental system prompt used when the AI chat handles inventory-related questions. Appended to the main system prompt for vehicle\/listing queries.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69fa2b3e7d302",
+            "label": "AI Inventory Filter Prompt",
+            "name": "ai_inventory_filter_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Prompt used to extract structured inventory filters (make, model, price, etc.) from a user question. Use [question] as the placeholder for the user's question.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69fa2c1a7d303",
+            "label": "AI Specials Filter Prompt",
+            "name": "ai_specials_filter_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Prompt used to extract structured specials\/offers filters (make, model, offer type, payment range, etc.) from a user question via AI. Use [question] as the placeholder for the user's question.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69fa2c5e7d305",
+            "label": "AI Specials Response Prompt",
+            "name": "ai_specials_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Response generation prompt used when the AI answers specials and offers questions. Placeholders: [specials_context], [question].",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_69fa2c3b7d304",
+            "label": "AI Website Response Prompt",
+            "name": "ai_website_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Response generation prompt used when the AI answers questions from crawled dealership website content. Placeholders: [website_context], [question].",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "acfe_textarea_code": 0,
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "rows": "",
+            "placeholder": "",
+            "new_lines": ""
+        },
+        {
+            "key": "field_6a03118ab3eff",
+            "label": "AI FAQ Responce Prompt",
+            "name": "ai_faq_promt",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "Response generation prompt used when the AI answers questions from FAQ. Placeholders: [faq_context], [question].",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -4620,13 +4730,11 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
-    "allow_ai_access": false,
-    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778490000
+    "modified": 1778586064
 }

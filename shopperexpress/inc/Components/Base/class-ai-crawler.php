@@ -221,6 +221,7 @@ class AI_Crawler implements Theme_Component {
 		$pending_urls = (array) get_option( 'ai_crawler_pending_urls', array() );
 		$embed_queue  = (array) get_option( self::OPTION_EMBED_QUEUE, array() );
 		$url_map      = (array) get_option( self::OPTION_URL_MAP, array() );
+		$failed_urls  = (array) get_option( 'ai_crawler_failed_urls', array() );
 
 		return rest_ensure_response(
 			array(
@@ -238,6 +239,7 @@ class AI_Crawler implements Theme_Component {
 					'pending_urls' => count( $pending_urls ),
 					'embed_queue'  => count( $embed_queue ),
 					'known_pages'  => count( $url_map ),
+					'failed_urls'  => count( $failed_urls ),
 				),
 			)
 		);
@@ -397,9 +399,10 @@ class AI_Crawler implements Theme_Component {
 	 * @return \WP_REST_Response
 	 */
 	public function rest_queue( \WP_REST_Request $request ): \WP_REST_Response { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
-		$pending = (array) get_option( 'ai_crawler_pending_urls', array() );
-		$embed_q = (array) get_option( self::OPTION_EMBED_QUEUE, array() );
-		$url_map = (array) get_option( self::OPTION_URL_MAP, array() );
+		$pending     = (array) get_option( 'ai_crawler_pending_urls', array() );
+		$embed_q     = (array) get_option( self::OPTION_EMBED_QUEUE, array() );
+		$url_map     = (array) get_option( self::OPTION_URL_MAP, array() );
+		$failed_urls = (array) get_option( 'ai_crawler_failed_urls', array() );
 
 		// Enrich embed queue with post titles for readability.
 		$embed_enriched = array();
@@ -420,6 +423,8 @@ class AI_Crawler implements Theme_Component {
 				'embed_count'   => count( $embed_q ),
 				'url_map'       => $url_map,
 				'url_map_count' => count( $url_map ),
+				'failed_urls'   => $failed_urls,
+				'failed_count'  => count( $failed_urls ),
 			)
 		);
 	}
@@ -790,9 +795,12 @@ class AI_Crawler implements Theme_Component {
 			}
 		}
 		// Store remaining batches for incremental pick-up.
+		// Merge with any URLs still pending from a previous crawl so they are not lost.
 		if ( count( $batches ) > 1 ) {
-			$remaining = array_merge( ...array_slice( $batches, 1 ) );
-			update_option( 'ai_crawler_pending_urls', $remaining, false );
+			$new_remaining = array_merge( ...array_slice( $batches, 1 ) );
+			$old_remaining = (array) get_option( 'ai_crawler_pending_urls', array() );
+			$merged        = array_values( array_unique( array_merge( $old_remaining, $new_remaining ) ) );
+			update_option( 'ai_crawler_pending_urls', $merged, false );
 		} else {
 			delete_option( 'ai_crawler_pending_urls' );
 		}
@@ -1011,45 +1019,80 @@ class AI_Crawler implements Theme_Component {
 	/**
 	 * Ingests a batch of URLs: fetch → extract → normalize → upsert → queue embed.
 	 *
+	 * Loads url_map and embed_queue once per batch instead of once per URL to
+	 * avoid N redundant DB reads/writes for large batches.
+	 *
 	 * @param string[] $urls Absolute URLs to process.
 	 * @return void
 	 */
 	private function ingest_batch( array $urls ): void {
+		$url_map     = (array) get_option( self::OPTION_URL_MAP, array() );
+		$embed_queue = (array) get_option( self::OPTION_EMBED_QUEUE, array() );
+		$map_dirty   = false;
+		$queue_dirty = false;
+
 		foreach ( $urls as $url ) {
-			$this->ingest_url( $url );
+			$result = $this->ingest_url( $url, $url_map );
+
+			if ( null === $result ) {
+				continue;
+			}
+
+			[ $post_id, $updated_map ] = $result;
+			$url_map                   = $updated_map;
+			$embed_queue[]             = $post_id;
+			$map_dirty                 = true;
+			$queue_dirty               = true;
+		}
+
+		if ( $map_dirty ) {
+			update_option( self::OPTION_URL_MAP, $url_map, false );
+		}
+
+		if ( $queue_dirty ) {
+			update_option( self::OPTION_EMBED_QUEUE, array_unique( $embed_queue ), false );
+			wp_cache_delete( self::CACHE_KEY_INDEX, self::CACHE_GROUP );
 		}
 	}
 
 	/**
 	 * Full pipeline for a single URL.
 	 *
-	 * @param string $url Absolute URL.
-	 * @return void
+	 * Returns a [post_id, updated_url_map] tuple on success so ingest_batch()
+	 * can accumulate changes and flush them in one DB write per batch.
+	 * Returns null on skip (unchanged content) or failure (fetch/extract/upsert error).
+	 *
+	 * Failed URLs are logged to the ai_crawler_failed_urls option for inspection.
+	 *
+	 * @param string $url     Absolute URL.
+	 * @param array  $url_map Current url → post_id map passed in from ingest_batch().
+	 * @return array{int, array}|null [post_id, url_map] on success, null otherwise.
 	 */
-	private function ingest_url( string $url ): void {
+	private function ingest_url( string $url, array $url_map ): ?array {
 		// Fetch.
 		$html = $this->fetch_html( $url );
 
 		if ( null === $html ) {
-			return;
+			$this->record_failed_url( $url );
+			return null;
 		}
 
 		// Extract raw fields.
 		$extracted = $this->extract_content( $html, $url );
 
 		if ( empty( $extracted['content'] ) ) {
-			return;
+			$this->record_failed_url( $url );
+			return null;
 		}
 
 		// Deduplicate.
 		$hash             = md5( $url . $extracted['content'] );
-		$url_map          = (array) get_option( self::OPTION_URL_MAP, array() );
 		$existing_post_id = isset( $url_map[ $url ] ) ? (int) $url_map[ $url ] : 0;
 
 		if ( $existing_post_id > 0 ) {
 			$stored_hash = get_post_meta( $existing_post_id, self::META_HASH, true );
 			if ( $stored_hash === $hash ) {
-				return; // Unchanged — skip entirely.
+				return null; // Unchanged — skip entirely.
 			}
 		}
 
@@ -1059,20 +1102,25 @@ class AI_Crawler implements Theme_Component {
 		// Upsert CPT.
 		$post_id = $this->upsert_post( $record, $url, $hash, $existing_post_id );
 		if ( ! $post_id ) {
-			return;
+			$this->record_failed_url( $url );
+			return null;
 		}
 
-		// Update URL → post_id map.
 		$url_map[ $url ] = $post_id;
-		update_option( self::OPTION_URL_MAP, $url_map, false );
 
-		// Queue embedding generation (processed async by embed-queue cron).
-		$queue   = (array) get_option( self::OPTION_EMBED_QUEUE, array() );
-		$queue[] = $post_id;
-		update_option( self::OPTION_EMBED_QUEUE, array_unique( $queue ), false );
+		return array( $post_id, $url_map );
+	}
 
-		// Bust AI index cache immediately so re-queries see new post.
-		wp_cache_delete( self::CACHE_KEY_INDEX, self::CACHE_GROUP );
+	/**
+	 * Appends a URL to the dead-letter failed-URLs log for admin inspection.
+	 *
+	 * @param string $url URL that failed to ingest.
+	 * @return void
+	 */
+	private function record_failed_url( string $url ): void {
+		$failed   = (array) get_option( 'ai_crawler_failed_urls', array() );
+		$failed[] = $url;
+		update_option( 'ai_crawler_failed_urls', array_unique( $failed ), false );
 	}
 
 	// -------------------------------------------------------------------------

@@ -314,14 +314,14 @@
   }
 
   .info-block__description {
-    margin: 3px 0;
+    margin: 0 0 6px;
     padding: 14px 12px;
     text-transform: none;
     position: relative;
   }
 
   .payment-info + .info-block__description {
-    margin-top: 6px;
+    margin-top: 0;
   }
 
   &-badge-offer,
@@ -372,6 +372,7 @@
     // margin-top: auto;
     background-color: $gray-200;
     border-radius: 4px;
+    margin-bottom: 6px;
 
     li {
       padding: 10px 12px;
@@ -462,8 +463,7 @@
   }
 
   .payment-info + .payment-info {
-    margin-top: 10px;
-    margin-bottom: auto;
+    margin-top: 0;
   }
 
   .payment-info + .intice_bFrame {
@@ -477,11 +477,6 @@
   .payment-info + .btn.btn-custom,
   .payment-info + .animate-img {
     margin-top: auto;
-  }
-
-  .payment-info + .btn.btn-custom {
-    margin-top: 7px;
-    margin-bottom: 7px;
   }
 
   .animate-btn + .intice_bFrame,
