@@ -21,29 +21,28 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 
 	$json = get_json_from_url( $url );
 
-	if ( ! empty( $json['leaseIncentiveOffers'] ) ) {
+	if ( ! empty( $json['leaseIncentiveOffers'] ) && is_array( $json['leaseIncentiveOffers'] ) ) {
 		$json = $json['leaseIncentiveOffers'];
-	} elseif ( ! empty( $json['financeIncentiveOffers'] ) ) {
+	} elseif ( ! empty( $json['financeIncentiveOffers'] ) && is_array( $json['financeIncentiveOffers'] ) ) {
 		$json = $json['financeIncentiveOffers'];
 	} else {
-		$json = '';
+		$json = array();
 	}
 
 	$keywords = get_field( 'api_new_car_incentives_exclude_keyword_list', 'option' );
 
-	if ( ! empty( $keywords ) ) {
+	if ( ! empty( $keywords ) && is_array( $json ) ) {
 		$keywords = explode( ',', $keywords );
 		$keywords = ! is_array( $keywords ) ? array( $keywords ) : $keywords;
 		$filtered = array_filter(
 			$json,
 			static function ( $item ) use ( $keywords ) {
-
 				$text = mb_strtolower(
 					implode( ' ', array_map( 'strval', $item ) )
 				);
 
 				foreach ( $keywords as $keyword ) {
-					if ( str_contains( $text, mb_strtolower( $keyword ) ) ) {
+					if ( str_contains( $text, mb_strtolower( trim( $keyword ) ) ) ) {
 						return false;
 					}
 				}
@@ -56,7 +55,7 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 	}
 	$title = get_field( 'api_new_car_incentives_title', 'option' );
 
-	if ( ! empty( $json ) ) :
+	if ( ! empty( $json ) && is_array( $json ) ) :
 		?>
 		<div class="conditional-offers">
 			<?php if ( $title ) : ?>

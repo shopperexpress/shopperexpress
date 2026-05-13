@@ -719,7 +719,7 @@ define(
  * @param string|null $class Optional. CSS class to add to the `div` element. Default is null.
  * @return string HTML markup for the image.
  */
-function default_image( string $class = null, string $post_type = null ): string {
+function default_image( string $class = null, string $post_type = null, $alt = array() ): string {
 	// Retrieve the ID of the default image from the options and sanitize it as an integer
 
 	if ( ! empty( $post_type ) && ! in_array( $post_type, array( 'listings', 'used-listings' ) ) ) {
@@ -736,8 +736,10 @@ function default_image( string $class = null, string $post_type = null ): string
 	// Sanitize and set the CSS class if provided
 	$class_attr = ! empty( $class ) ? ' class="' . esc_attr( $class ) . '"' : '';
 
+	$alt = ! empty( $alt ) ? implode( ' ', $alt ) : esc_html__( 'Image description', 'shopperexpress' );
+
 	// Generate and return the HTML markup for the image
-	return '<div' . $class_attr . '><img src="' . esc_url( $def_img ) . '" alt="' . esc_attr__( 'Image description', 'shopperexpress' ) . '" class="img-fluid"></div>';
+	return '<div' . $class_attr . '><img src="' . esc_url( $def_img ) . '" alt="' . esc_attr( $alt ) . '" class="img-fluid"></div>';
 }
 
 function get_default_image( string $post_type = null ): string {

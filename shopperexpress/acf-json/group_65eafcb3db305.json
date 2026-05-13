@@ -1823,6 +1823,27 @@
             "append": ""
         },
         {
+            "key": "field_6a0433d981b2b",
+            "label": "Certified Flag",
+            "name": "certified_flag",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_65eafcb3eb75e",
             "label": "Int_Color_Code",
             "name": "int_color_code",
@@ -2365,5 +2386,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778489995
+    "modified": 1778660331
 }

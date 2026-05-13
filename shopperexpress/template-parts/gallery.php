@@ -9,6 +9,7 @@ $post_id         = ! empty( $args['post_id'] ) ? absint( $args['post_id'] ) : ge
 $post_type       = ! empty( $args['post_type'] ) ? $args['post_type'] : get_post_type( $post_id );
 $data_id         = ! empty( $args['data_id'] ) ? $args['data_id'] : '';
 $use_images_list = get_field( 'use_images_list', $post_id );
+$alt_array       = ! empty( $args['alt'] ) ? $args['alt'] : array( esc_html__( 'image description', 'shopperexpress' ) );
 
 $images_count = ! empty( $post_type ) && $post_type == 'used-listings'
 	? get_field( 'images_count_used', 'options' )
@@ -86,13 +87,15 @@ if ( $vin_number ) {
 				$gallery = is_array( $gallery ) ? $gallery[0]['image_url'] : $gallery;
 				?>
 				<div class="slide">
-					<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?> 2x" alt="<?php esc_attr_e( 'image description', 'shopperexpress' ); ?>">
+					<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $gallery ) ); ?> 2x" alt="<?php echo implode( ' ', $alt_array ); ?>">
 				</div>
 				<?php
 			} else {
 				$i = 0;
 				foreach ( $gallery as $index => $image ) {
 					if ( ! empty( $image['image_url'] ) && ( $index + 1 ) <= $images_count ) {
+						$alt              = $alt_array;
+						$alt[]            = $i + 1;
 						$image_background = $image['image_background'];
 						$image_reverse    = $image['image_reverse'];
 						?>
@@ -106,7 +109,7 @@ if ( $vin_number ) {
 							if ( $image_reverse ) :
 								?>
 								class="reverse-image" <?php endif; ?>>
-								<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?> 2x" alt="<?php esc_attr_e( 'image description', 'shopperexpress' ); ?>">
+								<img src="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?>" srcset="<?php echo esc_url( str_replace( 'http://', 'https://', $image['image_url'] ) ); ?> 2x" alt="<?php echo implode( ' ', $alt ); ?>">
 							</span>
 						</div>
 						<?php
@@ -114,11 +117,11 @@ if ( $vin_number ) {
 					}
 				}
 				if ( 0 === $i ) {
-					echo default_image( 'slide', $post_type );
+					echo default_image( 'slide', $post_type, $alt_array );
 				}
 			}
 		} else {
-			echo default_image( 'slide', $post_type );
+			echo default_image( 'slide', $post_type, $alt_array );
 		}
 		?>
 	</div>

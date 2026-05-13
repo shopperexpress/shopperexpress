@@ -37,6 +37,7 @@ while ( have_posts() ) :
 	$condition_slug  = get_field( 'condition' );
 	$drivetrain      = get_field( 'drivetrain' );
 	$dealer_name     = get_field( 'dealer_name' );
+	$exterior_color  = get_field( 'exterior_color' );
 
 	switch ( $condition ) {
 		case 'Slightly Used':
@@ -59,10 +60,10 @@ while ( have_posts() ) :
 					<div class="sticky-box">
 						<div class="detail-top-row">
 							<ol class="breadcrumbs">
-								<li><a href="<?php echo $archive_link . '?year' . '=' . $year; ?>"><?php echo $year; ?></a></li>
-								<li><a href="<?php echo $archive_link . '?condition' . '=' . $condition_slug; ?>"><?php echo $condition; ?></a></li>
-								<li><a href="<?php echo $archive_link . '?make' . '=' . $make_slug; ?>"><?php echo strlen( $make ) >= 10 ? mb_strimwidth( $make, 0, 10, '...' ) : $make; ?></a></li>
-								<li><a href="<?php echo $archive_link . '?model' . '=' . $model_slug; ?>"><?php echo strlen( $model ) >= 15 ? mb_strimwidth( $model, 0, 15, '...' ) : $model; ?></a></li>
+								<li><a href="<?php echo add_query_arg( array( 'year' => $year ), $archive_link ); ?>"><?php echo $year; ?></a></li>
+								<li><a href="<?php echo add_query_arg( array( 'condition' => $condition_slug ), $archive_link ); ?>"><?php echo $condition; ?></a></li>
+								<li><a href="<?php echo add_query_arg( array( 'make' => $make_slug ), $archive_link ); ?>"><?php echo strlen( $make ) >= 10 ? mb_strimwidth( $make, 0, 10, '...' ) : $make; ?></a></li>
+								<li><a href="<?php echo add_query_arg( array( 'model' => $model_slug ), $archive_link ); ?>"><?php echo strlen( $model ) >= 15 ? mb_strimwidth( $model, 0, 15, '...' ) : $model; ?></a></li>
 							</ol>
 							<?php if ( have_rows( 'text_list', 'options' ) ) : ?>
 								<ul class="code-list text-right list-unstyled text-capitalize">
@@ -111,6 +112,7 @@ while ( have_posts() ) :
 						</div>
 						<div class="detail-slider-holder">
 							<?php
+							$alt_array = array( $year, $make, $model, $trim, $exterior_color, '- ' . get_bloginfo( 'name' ) . ' - Image' );
 							if ( ! empty( $gallery ) ) {
 								set_backup_images( $vin_number, $gallery );
 							} else {
@@ -128,6 +130,9 @@ while ( have_posts() ) :
 										<?php
 										$i = 1;
 										foreach ( $gallery as $value ) :
+											$alt              = $alt_array;
+											$alt[]            = $i;
+											$alt              = implode( ' ', $alt );
 											$image_background = ! empty( $value['image_background'] ) ? $value['image_background'] : '';
 											$image_reverse    = ! empty( $value['image_reverse'] ) ? ' class="reverse-image" ' : '';
 											?>
@@ -143,12 +148,12 @@ while ( have_posts() ) :
 													if ( $i == 1 ) {
 														$firstImage = $image_url;
 													}
-													echo '<a href="' . $value['image_url'] . '" ' . $image_reverse . ' data-fancybox="img-gallery"><img src="' . $value['image_url'] . '" alt="image"></a>';
+													echo '<a href="' . $value['image_url'] . '" ' . $image_reverse . ' data-fancybox="img-gallery"><img src="' . $value['image_url'] . '" alt="' . esc_attr( $alt ) . '"></a>';
 												else :
 													$get_default_image = get_default_image( $post_type );
 
 													echo '<a href="' . esc_url( $get_default_image ) . '" ' . $image_reverse . ' data-fancybox="img-gallery">'
-														. '<img src="' . esc_url( $get_default_image ) . '" alt="image">'
+														. '<img src="' . esc_url( $get_default_image ) . '" alt="' . esc_attr( $alt ) . '">'
 														. '</a>';
 
 												endif;
@@ -283,6 +288,9 @@ while ( have_posts() ) :
 										<div class="slider-nav-holder">
 											<?php
 											foreach ( $gallery as $value ) :
+												$alt       = $alt_array;
+												$alt[]     = $i;
+												$alt       = implode( ' ', $alt );
 												$image_url = ! empty( $value['image_url'] ) ? $value['image_url'] : '';
 												if ( $image_url ) :
 													$image_background = $value['image_background'];
@@ -298,7 +306,7 @@ while ( have_posts() ) :
 														if ( $image_background ) :
 															?>
 														bg-cover" style="background-image: url(<?php echo App\asset_url( 'images/360-background.webp' ); ?>)<?php endif; ?>">
-														<img src="<?php echo $image_url; ?>" srcset="<?php echo $image_url; ?> 2x" alt="image">
+														<img src="<?php echo $image_url; ?>" srcset="<?php echo $image_url; ?> 2x" alt="<?php echo esc_attr( $alt ); ?>">
 													</div>
 													<?php
 												else :
@@ -313,7 +321,7 @@ while ( have_posts() ) :
 														if ( $image_background ) :
 															?>
 														bg-cover" style="background-image: url(<?php echo App\asset_url( 'images/360-background.webp' ); ?>)<?php endif; ?>">
-														<img src="<?php echo $get_default_image; ?>" srcset="<?php echo $get_default_image; ?> 2x" alt="image">
+														<img src="<?php echo $get_default_image; ?>" srcset="<?php echo $get_default_image; ?> 2x" alt="<?php echo esc_attr( $alt ); ?>">
 													</div>
 													<?php
 												endif;
@@ -329,7 +337,8 @@ while ( have_posts() ) :
 								<div class="detail-slider">
 									<?php
 									if ( function_exists( 'default_image' ) ) {
-										echo default_image( 'slide' );}
+										echo default_image( 'slide', '', $alt_array );
+									}
 									?>
 								</div>
 							<?php endif; ?>

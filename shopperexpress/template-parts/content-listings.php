@@ -7,17 +7,19 @@
  * @package Shopperexpress
  */
 
-$post_id     = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$post_type   = get_post_type( $post_id );
-$condition   = get_field( 'condition', $post_id );
-$similar_url = ! empty( $args['similar_url'] ) ? $args['similar_url'] : null;
-$year        = get_field( 'year', $post_id );
-$make        = get_field( 'make', $post_id );
-$model       = get_field( 'model', $post_id );
-$mileage     = get_field( 'mileage', $post_id );
-$drivetrain  = get_field( 'drivetrain', $post_id );
-$trim        = get_field( 'trim', $post_id );
-$aria_label  = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ), esc_html( $make ), esc_html( $model ), esc_html( $drivetrain ), esc_html( $trim ), 'page' );
+$post_id        = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$post_type      = get_post_type( $post_id );
+$condition      = get_field( 'condition', $post_id );
+$similar_url    = ! empty( $args['similar_url'] ) ? $args['similar_url'] : null;
+$year           = get_field( 'year', $post_id );
+$make           = get_field( 'make', $post_id );
+$model          = get_field( 'model', $post_id );
+$mileage        = get_field( 'mileage', $post_id );
+$drivetrain     = get_field( 'drivetrain', $post_id );
+$trim           = get_field( 'trim', $post_id );
+$exterior_color = get_field( 'exterior_color', $post_id );
+$aria_label     = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ), esc_html( $make ), esc_html( $model ), esc_html( $drivetrain ), esc_html( $trim ), 'page' );
+$alt_array      = array( $year, $make, $model, $trim, $exterior_color, '- ' . get_bloginfo( 'name' ) . ' - Image' );
 ?>
 <div class="col-sm-6 col-lg-4 col-xxl-3">
 	<div class="card">
@@ -40,6 +42,7 @@ $aria_label  = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year )
 				array(
 					'post_type' => get_post_type( $post_id ),
 					'post_id'   => $post_id,
+					'alt'       => $alt_array,
 				)
 			);
 
