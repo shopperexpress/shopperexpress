@@ -3428,7 +3428,31 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "above": "above",
+                "below": "below"
+            },
+            "default_value": "above",
+            "return_format": "value",
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "layout": "horizontal"
+        },
+        {
+            "key": "field_6a059ba980be5",
+            "label": "CTA animation position ( VDP )",
+            "name": "cta_animation_position-vdp",
+            "aria-label": "",
+            "type": "button_group",
+            "instructions": "Position of the animated CTA element relative to the listing card payment area (new listings).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
                 "class": "",
                 "id": ""
             },
@@ -3562,7 +3586,31 @@
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
-                "width": "",
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "above": "above",
+                "below": "below"
+            },
+            "default_value": "above",
+            "return_format": "value",
+            "allow_null": 0,
+            "allow_in_bindings": 0,
+            "layout": "horizontal"
+        },
+        {
+            "key": "field_6a059be780be6",
+            "label": "CTA animation position (used lisitngs) (VDP)",
+            "name": "cta_animation_position-used-listings-vdp",
+            "aria-label": "",
+            "type": "button_group",
+            "instructions": "Position of the animated CTA element relative to the listing card payment area (used listings).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
                 "class": "",
                 "id": ""
             },
@@ -12084,5 +12132,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778491710
+    "modified": 1778752521
 }
