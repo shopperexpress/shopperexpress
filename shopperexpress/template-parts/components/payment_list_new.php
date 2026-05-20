@@ -30,6 +30,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	$active       = get_sub_field( 'active' );
 	$start_date   = get_sub_field( 'start_date' );
 	$end_date     = get_sub_field( 'end_date' );
+	$custom_text  = get_sub_field( 'custom_text' );
 	$current_date = date_i18n( 'Ymd' );
 	$show         = $active ? ( $current_date >= $start_date && $current_date <= $end_date ) : true;
 
@@ -103,7 +104,6 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
 
 	} elseif ( 3 === $select_value_type || 5 === $select_value_type ) {
-		$calculated_value = (int) get_field( strtolower( (string) get_sub_field( 'calculated_value' ) ), $post_id );
 		$value_from_field = (int) get_field( strtolower( (string) get_sub_field( 'value_from_field' ) ), $post_id );
 		$value_1          = (int) get_sub_field( 'value_1' );
 		$value_1          = 5 === $select_value_type
@@ -127,17 +127,9 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		}
 
 		if ( $condition ) {
-			switch ( get_sub_field( 'operator' ) ) {
-				case 'Subtract':
-					$value = $calculated_value - (int) $value;
-					break;
-				case 'Add':
-					$value = $calculated_value + (int) $value;
-					break;
-			}
-			$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
+			$value = ( ! empty( $value_from_field ) && (int) $value_from_field > 0 ) ? $value_from_field : null;
 		} else {
-			$value = '';
+			$value = $custom_text;
 		}
 	}
 
@@ -170,18 +162,18 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	$show_symbol         = get_sub_field( 'show_symbol' );
 	$show_symbol         = ! empty( $show_symbol ) && 'none' !== $show_symbol ? $show_symbol : '';
 	$small_pricing_block = get_sub_field( 'small_pricing_block' );
-
-	$formatted_value = $show_symbol . '$' . number_format( (int) $value );
-	if ( get_sub_field( 'cross_heading' ) ) {
-		$formatted_value = '<s>' . $formatted_value . '</s>';
+	if ( is_numeric( $value ) ) {
+		$formatted_value = $show_symbol . '$' . number_format( (int) $value );
+		if ( get_sub_field( 'cross_heading' ) ) {
+			$formatted_value = '<s>' . $formatted_value . '</s>';
+		}
 	}
-
 	$price_class = $style ? 'price-spr' : 'market-price';
 
 	ob_start();
 	?>
 	<li class="show<?php echo $small_pricing_block ? ' text--sm' : ''; ?>" <?php echo ! is_array( $style_row ) ? $style_row : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
-		<a href="#" data-content="<?php echo esc_attr( wp_strip_all_tags( (string) get_sub_field( 'pop_up_details' ) ) ); ?>" data-toggle="modal" data-target="#popUpDetails">
+		<a href="#" data-content='<?php echo wp_json_encode( wp_kses_post( get_sub_field( 'pop_up_details' ) ) ); ?>' data-toggle="modal" data-target="#popUpDetails">
 			<?php if ( $style ) : ?>
 				<strong class="dt" <?php echo $title_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>><?php echo esc_html( $heading ); ?></strong>
 			<?php else : ?>

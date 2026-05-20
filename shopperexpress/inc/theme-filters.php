@@ -99,15 +99,17 @@ add_filter(
 );
 
 if ( ! is_admin() ) {
-	add_filter( 'wpseo_title', 'do_shortcode' );
-	add_filter( 'wpseo_metadesc', 'do_shortcode' );
-	add_filter( 'wpseo_opengraph_title', 'do_shortcode' );
-	add_filter( 'wpseo_opengraph_desc', 'do_shortcode' );
-	add_filter( 'wpseo_twitter_title', 'do_shortcode' );
-	add_filter( 'wpseo_twitter_desc', 'do_shortcode' );
+	foreach ( array(
+		'wpseo_title',
+		'wpseo_metadesc',
+		'wpseo_opengraph_title',
+		'wpseo_opengraph_desc',
+		'wpseo_twitter_title',
+		'wpseo_twitter_desc',
+	) as $hook ) {
+		add_filter( $hook, 'do_shortcode' );
+	}
 }
-
-add_filter( 'wpseo_title', 'do_shortcode' );
 
 add_filter(
 	'wpseo_title',

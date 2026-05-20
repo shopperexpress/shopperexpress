@@ -109,16 +109,16 @@ if ( class_exists( 'App\\Components\\Theme' ) ) {
 	}
 }
 
-flush_rewrite_rules();
+add_action( 'after_switch_theme', 'flush_rewrite_rules' );
+add_action( 'switch_theme', array( \App\Components\Base\Import_Monitor_Cron::class, 'deactivate' ) );
 
 add_action(
 	'wp',
-	function () {
+	function () use ( &$wp_query ): void {
 		global $wp_query;
-
 		if ( ! get_the_id() && ! is_archive() && ! is_admin() && ! empty( $wp_query->query['post_type'] ) ) {
-			header( 'HTTP/1.1 301 Moved Permanently' );
-			header( 'Location: /' . $wp_query->query['post_type'] );
+				wp_safe_redirect( home_url( $wp_query->query['post_type'] ), 301 );
+				exit;
 		}
 	}
 );

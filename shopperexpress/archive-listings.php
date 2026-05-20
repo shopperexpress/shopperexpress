@@ -36,7 +36,8 @@ if ( $key && $value ) :
 			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#212529">
 				<path d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Z" />
 			</svg>
-			<span><?php esc_html_e( 'Filter', 'shopperexpress' ); ?></span></a>
+			<span><?php esc_html_e( 'Filter', 'shopperexpress' ); ?></span>
+		</a>
 		<aside class="aside">
 			<?php if ( in_array( $post_type, $offer_types ) ) : ?>
 				<ul class="offer-categories">
@@ -183,6 +184,9 @@ if ( $key && $value ) :
 						'post_type'      => $get_post_type,
 						'posts_per_page' => -1,
 						'fields'         => 'ids',
+						'orderby'        => 'meta_value_num',
+						'meta_key'       => 'priority',
+						'order'          => 'ASC',
 					)
 				);
 				$desktop_banner_image = $mobile_banner_image = $search_key_word = '';

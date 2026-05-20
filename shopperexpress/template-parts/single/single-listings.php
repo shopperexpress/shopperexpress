@@ -676,9 +676,10 @@ while ( have_posts() ) :
 
 	</div>
 	<?php
-	$vdp_description = get_field( 'vdp_description', 'options' );
+	$vdp_description    = get_field( 'vdp_description', 'options' );
+	$ai_vdp_description = get_field( 'ai_vdp_description' );
 
-	if ( have_rows( 'vdp_description' ) ) :
+	if ( have_rows( 'vdp_description' ) || $ai_vdp_description ) :
 		?>
 		<div class="vdp-description">
 			<div class="container">
@@ -703,7 +704,10 @@ while ( have_posts() ) :
 								<?php
 							endif;
 						endwhile;
-						?>
+						if ( $ai_vdp_description ) :
+							?>
+							<li><?php echo wp_kses_post( $ai_vdp_description ); ?></li>
+						<?php endif; ?>
 					</ul>
 				</div>
 			</div>

@@ -4212,6 +4212,27 @@
             "ui": 1
         },
         {
+            "key": "field_6a0b115fde990",
+            "label": "AI VDP Description",
+            "name": "ai_vdp_description",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable AI VDP Description Population",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "Active",
+            "ui_off_text": "Inactive",
+            "ui": 1
+        },
+        {
             "key": "field_69d65ec933667",
             "label": "AI Chat Heading",
             "name": "heading_ai",
@@ -4730,11 +4751,13 @@
     "description": "",
     "show_in_rest": 0,
     "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
     "acfe_autosync": [
         "json"
     ],
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778586064
+    "modified": 1779115227
 }

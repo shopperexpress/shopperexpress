@@ -387,32 +387,6 @@ function allow_programmatic_login( $user, $username, $password ) {
 	return get_user_by( 'login', $username );
 }
 
-add_action(
-	'pmxi_after_xml_import ',
-	function () {
-		$query = new WP_Query(
-			array(
-				'post_type'   => 'listings',
-				'post_status' => 'publish',
-				'fields'      => 'ids',
-				'numberposts' => -1,
-				'meta_query'  => array(
-					array(
-						'key'   => 'sold',
-						'value' => 'Yes',
-					),
-				),
-			)
-		);
-		if ( $query->posts ) {
-			foreach ( $query->posts as $post_id ) {
-				wp_delete_post( $post_id );
-			}
-		}
-	},
-	10
-);
-
 add_filter( 'auto_update_plugin', '__return_true' );
 remove_action( 'wp_head', 'wp_site_icon', 99 );
 
@@ -593,36 +567,39 @@ add_action(
  * @param string $vin The Vehicle Identification Number (VIN) for which to retrieve the spin link.
  * @return string|bool The vehicle spin link if found, or false if the VIN is empty or the URL is missing.
  */
-function get_vehicle_spin( $vin = null ) {
+function get_vehicle_spin( string $vin ): string|false {
 	if ( empty( $vin ) ) {
-		return;
-	}
-
-	$csv_url  = get_field( 'url_for_csv_360', 'options' );
-	$response = wp_remote_get( $csv_url );
-
-	if ( is_wp_error( $response ) ) {
 		return false;
 	}
 
-	$csv_content = wp_remote_retrieve_body( $response );
-	$rows        = array_map( 'str_getcsv', explode( "\n", $csv_content ) );
-	foreach ( $rows as $row ) {
-		if ( isset( $row[1] ) && $row[1] === $vin ) {
-			if ( isset( $row[2] ) ) {
-				$link = $row[2];
-				if ( empty( $link ) ) {
-					return;
-				}
-				$link = preg_replace( '#/NLP\??#', '/NLP', $link );
-				$link = str_replace( 'NLPvehicle_fkey', 'NLP/?vehicle_fkey', $link );
-				return $link;
-			}
+	$index = get_transient( 'wps_360_spin_index' );
+
+	if ( false === $index ) {
+		$csv_url  = get_field( 'url_for_csv_360', 'options' );
+		$response = wp_remote_get( $csv_url, array( 'timeout' => 10 ) );
+
+		if ( is_wp_error( $response ) ) {
 			return false;
 		}
+
+		$index = array();
+		$rows  = array_map( 'str_getcsv', explode( "\n", wp_remote_retrieve_body( $response ) ) );
+
+		foreach ( $rows as $row ) {
+			if ( isset( $row[1], $row[2] ) ) {
+				$index[ trim( $row[1] ) ] = trim( $row[2] );
+			}
+		}
+
+		set_transient( 'wps_360_spin_index', $index, 6 * HOUR_IN_SECONDS );
 	}
 
-	return false;
+	if ( ! isset( $index[ $vin ] ) || empty( $index[ $vin ] ) ) {
+		return false;
+	}
+
+	$link = preg_replace( '#/NLP\??#', '/NLP', $index[ $vin ] );
+	return str_replace( 'NLPvehicle_fkey', 'NLP/?vehicle_fkey', $link );
 }
 
 function search_relevent_vehicles( $post_id = null ) {
@@ -1547,6 +1524,39 @@ function build_style_attr( array $style = array() ): string {
 }
 
 /**
+ * Get step button styles.
+ *
+ * @return array
+ */
+function wps_step_button_styles(): array {
+	static $styles = array();
+	return $styles;
+}
+
+/**
+ * Add step button style.
+ *
+ * @param string $css CSS.
+ */
+function wps_add_step_button_style( string $css ): void {
+	static $styles = array();
+
+	$styles[] = $css;
+
+	add_action(
+		'wp_footer',
+		function () use ( &$styles ) {
+			if ( empty( $styles ) ) {
+				return;
+			}
+
+			echo '<style id="wps-step-btn-hover">' . implode( "\n", array_unique( $styles ) ) . '</style>';
+		},
+		5
+	);
+}
+
+/**
  * Universal button renderer with unique ID + inline hover styles
  *
  * @param array $btn Button data.
@@ -1598,7 +1608,7 @@ function render_step_button( array $btn, array $args = array() ) {
 	}
 
 	if ( $hover_css ) {
-		echo '<style>' . $hover_css . '</style>';
+		wps_add_step_button_style( $hover_css );
 	}
 
 	printf(

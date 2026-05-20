@@ -22,14 +22,38 @@ class CPT implements Theme_Component {
 	 * @var array
 	 */
 	public $set_post_types = array(
-		'research'           => 'Research',
-		'service-offers'     => 'Service Offers',
-		'listings'           => 'Listings',
-		'used-listings'      => 'Used Listings',
-		'offers'             => 'Offers',
-		'finance-offers'     => 'Finance Offers',
-		'lease-offers'       => 'Lease Offers',
-		'conditional-offers' => 'Conditional Offers',
+		'research'           => array(
+			'label' => 'Research',
+			'icon'  => 'dashicons-search',
+		),
+		'service-offers'     => array(
+			'label' => 'Service Offers',
+			'icon'  => 'dashicons-admin-tools',
+		),
+		'listings'           => array(
+			'label' => 'Listings',
+			'icon'  => 'dashicons-car',
+		),
+		'used-listings'      => array(
+			'label' => 'Used Listings',
+			'icon'  => 'dashicons-car',
+		),
+		'offers'             => array(
+			'label' => 'Offers',
+			'icon'  => 'dashicons-tag',
+		),
+		'finance-offers'     => array(
+			'label' => 'Finance Offers',
+			'icon'  => 'dashicons-money-alt',
+		),
+		'lease-offers'       => array(
+			'label' => 'Lease Offers',
+			'icon'  => 'dashicons-media-document',
+		),
+		'conditional-offers' => array(
+			'label' => 'Conditional Offers',
+			'icon'  => 'dashicons-warning',
+		),
 	);
 
 	/**
@@ -53,31 +77,31 @@ class CPT implements Theme_Component {
 	/**
 	 * Get post type args.
 	 *
-	 * @param string $name Post type name.
+	 * @param array $array Post type name.
 	 *
 	 * @return array
 	 */
-	public function get_args( string $name ): array {
+	public function get_args( array $array ): array {
 
 		$args = array(
-			'label'               => esc_html( $name ),
+			'label'               => esc_html( $array['label'] ),
 			'description'         => sprintf(
 			/* translators: %s: post type name */
 				esc_html__( '%s Description', 'shopperexpress' ),
-				esc_html( $name )
+				esc_html( $array['label'] )
 			),
 			'labels'              => array(
-				'name'                  => esc_html( $name ),
-				'singular_name'         => esc_html( $name ),
-				'menu_name'             => esc_html( $name ),
-				'name_admin_bar'        => esc_html( $name ),
+				'name'                  => esc_html( $array['label'] ),
+				'singular_name'         => esc_html( $array['label'] ),
+				'menu_name'             => esc_html( $array['label'] ),
+				'name_admin_bar'        => esc_html( $array['label'] ),
 				'archives'              => esc_html__( 'Item Archives', 'shopperexpress' ),
 				'attributes'            => esc_html__( 'Item Attributes', 'shopperexpress' ),
 				'parent_item_colon'     => esc_html__( 'Parent Item:', 'shopperexpress' ),
 				'all_items'             => sprintf(
 				/* translators: %s: post type name */
 					esc_html__( 'All %s', 'shopperexpress' ),
-					esc_html( $name )
+					esc_html( $array['label'] )
 				),
 				'add_new_item'          => esc_html__( 'Add New Item', 'shopperexpress' ),
 				'add_new'               => esc_html__( 'Add New', 'shopperexpress' ),
@@ -112,6 +136,7 @@ class CPT implements Theme_Component {
 			'exclude_from_search' => false,
 			'publicly_queryable'  => true,
 			'capability_type'     => 'page',
+			'menu_icon'           => $array['icon'],
 		);
 
 		return $args;

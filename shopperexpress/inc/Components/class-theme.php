@@ -61,6 +61,9 @@ class Theme {
 			\App\Components\Base\PopupResolver::class,
 			\App\Components\Base\AI::class,
 			\App\Components\Base\AI_Crawler::class,
+			\App\Components\Base\AI_VDP::class,
+			\App\Components\Base\Import_Monitor::class,
+			\App\Components\Base\Vin_Admin::class,
 		);
 
 		$gutenberg_components = array(
@@ -93,7 +96,7 @@ class Theme {
 					throw new InvalidArgumentException(
 						wp_kses_post(
 							sprintf(
-							// translators: %s: component name.
+								// translators: %s: component name.
 								esc_html__( 'The %s theme component don`t implements the Theme_Component interface.', 'base' ),
 								$class
 							)

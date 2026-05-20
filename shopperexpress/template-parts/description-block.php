@@ -7,6 +7,7 @@
 
 $post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : 'listing';
 $type      = ! empty( $args['type'] ) ? $args['type'] : 'single';
+$post_id   = ! empty( $args['post_id'] ) ? (int) $args['post_id'] : get_the_ID();
 
 if ( have_rows( 'description_block', 'options' ) ) :
 	while ( have_rows( 'description_block', 'options' ) ) :
@@ -40,3 +41,24 @@ if ( have_rows( 'description_block', 'options' ) ) :
 		endif;
 	endwhile;
 endif;
+
+/*
+ * AI VDP Description — appended after the imported description block.
+ *
+ * Conditions:
+ *   - Only for supported post types (listings, used-listings).
+ *   - Only on single post views (not SRP / archive).
+ *   - Only when the _ai_vdp_description meta is populated.
+ *   - Output is already stored as sanitized HTML — wp_kses_post is the final gate.
+ */
+if (
+	'single' === $type &&
+	in_array( $post_type, [ 'listings', 'used-listings' ], true ) &&
+	$post_id
+) {
+	$ai_description = get_post_meta( $post_id, '_ai_vdp_description', true );
+
+	if ( ! empty( $ai_description ) ) {
+		echo wp_kses_post( $ai_description );
+	}
+}

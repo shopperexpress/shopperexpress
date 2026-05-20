@@ -9735,11 +9735,17 @@ function initRemoveEmptyItems() {
 function initTaxModal() {
 	jQuery('#popUpDetails').on('show.bs.modal', function(event) {
 		const button = jQuery(event.relatedTarget);
-		const content = button.data('content');
+		let content = button.attr('data-content');
 		const modal = jQuery(this);
 		const textElement = modal.find('#popUpDetailsText');
 
-		textElement.text(content);
+		try {
+			content = JSON.parse(content);
+		} catch (e) {
+
+		}
+
+		textElement.html(content);
 	});
 }
 

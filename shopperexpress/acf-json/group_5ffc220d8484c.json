@@ -2078,7 +2078,7 @@
                     "label": "Pop Up Details",
                     "name": "pop_up_details",
                     "aria-label": "",
-                    "type": "textarea",
+                    "type": "wysiwyg",
                     "instructions": "Additional details about this payment, displayed in a popup window if set.",
                     "required": 0,
                     "conditional_logic": 0,
@@ -2088,11 +2088,11 @@
                         "id": ""
                     },
                     "default_value": "",
-                    "acfe_textarea_code": 0,
-                    "maxlength": "",
-                    "rows": "",
-                    "placeholder": "",
-                    "new_lines": "wpautop",
+                    "allow_in_bindings": 0,
+                    "tabs": "all",
+                    "toolbar": "full",
+                    "media_upload": 1,
+                    "delay": 0,
                     "parent_repeater": "field_667c2ae60ed8e"
                 },
                 {
@@ -12132,5 +12132,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1778752521
+    "modified": 1779095629
 }

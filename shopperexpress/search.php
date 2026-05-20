@@ -11,7 +11,15 @@ if ( have_posts() ) :
 	<div class="container-fluid">
 		<div id="content">
 			<div class="title">
-				<h1><?php printf( __( 'Search Results for: %s', 'shopperexpress' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+			<h1>
+				<?php
+				// translators: %s is the search query entered by the user.
+				printf(
+					esc_html__( 'Search Results for: %s', 'shopperexpress' ),
+					'<span>' . esc_html( get_search_query() ) . '</span>'
+				);
+				?>
+			</h1>
 			</div>
 			<?php
 			while ( have_posts() ) :

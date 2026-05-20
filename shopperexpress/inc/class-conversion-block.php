@@ -11,12 +11,24 @@ class ConversionBlock {
 	public $post_type;
 	public $post_id;
 
+	/**
+	 * ConversionBlock constructor.
+	 *
+	 * @param string $vin
+	 * @param string $post_type
+	 * @param string $post_id
+	 */
 	public function __construct( $vin = '', $post_type = '', $post_id = '' ) {
 		$this->vin       = $vin;
 		$this->post_type = $post_type;
 		$this->post_id   = $post_id;
 	}
 
+	/**
+	 * Render the Conversion Block.
+	 *
+	 * @return string
+	 */
 	public function render() {
 
 		ob_start();
@@ -35,6 +47,11 @@ class ConversionBlock {
 		return $output;
 	}
 
+	/**
+	 * Get the location.
+	 *
+	 * @return string
+	 */
 	public function getLocation() {
 
 		switch ( $this->post_type ) {
@@ -66,8 +83,6 @@ class ConversionBlock {
 		return $output;
 	}
 }
-
-
 
 add_action(
 	'wp_head',
@@ -271,7 +286,7 @@ add_action(
 
 			.block_popup {
 				text-transform: capitalize;
-				font-family: <?php echo $font_styling; ?>;
+				font-family: <?php echo esc_html( $font_styling ); ?>;
 				position: absolute;
 				right: 1%;
 				background: #fff;
@@ -295,29 +310,29 @@ add_action(
 
 			.widget--btn__price-sub,
 			.widget--btn__price-sup {
-				font-size: <?php echo $font_size_5; ?>px;
-				font-weight: <?php echo $weight_5; ?>
+				font-size: <?php echo esc_html( $font_size_5 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_5 ); ?>
 			}
 
 			.widget--btn__num {
-				font-size: <?php echo $font_size_4; ?>px;
-				font-weight: <?php echo $weight_4; ?>
+				font-size: <?php echo esc_html( $font_size_4 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_4 ); ?>
 			}
 
 			.fonttype3 {
-				font-size: <?php echo $font_size_3; ?>px;
-				font-weight: <?php echo $weight_3; ?>;
+				font-size: <?php echo esc_html( $font_size_3 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_3 ); ?>;
 				color: <?php echo $text_color; ?>;
 			}
 
 			.fonttype1 {
-				font-size: <?php echo $font_size_1; ?>px;
-				font-weight: <?php echo $weight_1; ?>
+				font-size: <?php echo esc_html( $font_size_1 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_1 ); ?>
 			}
 
 			.fonttype2 {
-				font-size: <?php echo $font_size_2; ?>px;
-				font-weight: <?php echo $weight_2; ?>
+				font-size: <?php echo esc_html( $font_size_2 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_2 ); ?>
 			}
 
 			.widget--buttons__small {
@@ -329,7 +344,7 @@ add_action(
 			.showWidget button {
 				color: <?php echo $text_color; ?>;
 				display: block;
-				font-family: <?php echo $font_styling; ?>, sans-serif;
+				font-family: <?php echo esc_html( $font_styling ); ?>, sans-serif;
 				line-height: 1;
 			}
 
@@ -349,9 +364,9 @@ add_action(
 
 			.widget--buttons__item,
 			.widget--btn__footer {
-				background-color: <?php echo $primary_color; ?> !important;
+				background-color: <?php echo esc_html( $primary_color ); ?> !important;
 				cursor: pointer;
-				font-family: <?php echo $font_styling; ?>, sans-serif;
+				font-family: <?php echo esc_html( $font_styling ); ?>, sans-serif;
 			}
 
 			.widget--buttons__item:hover,
@@ -371,15 +386,15 @@ add_action(
 
 			.widget--buttons__holder a {
 				background: #fff;
-				color: <?php echo $text_color; ?>;
+				color: <?php echo esc_html( $text_color ); ?>;
 				cursor: pointer;
 			}
 
 			.widget--buttons__holder a:hover,
 			.widget--buttons__holder a:focus {
-				background: <?php echo $color_2; ?> !important;
+				background: <?php echo esc_html( $color_2 ); ?> !important;
 				color: #fff !important;
-				border-color: <?php echo $color_2; ?> !important;
+				border-color: <?php echo esc_html( $color_2 ); ?> !important;
 			}
 
 			.se-lm-widget a,
@@ -429,18 +444,18 @@ add_action(
 			}
 
 			.reverse-button {
-				background-color: <?php echo $primary_color; ?> !important;
-				color: <?php echo $text_color; ?> !important;
+				background-color: <?php echo esc_html( $primary_color ); ?> !important;
+				color: <?php echo esc_html( $text_color ); ?> !important;
 			}
 
 			.fonttype4 {
-				font-size: <?php echo $font_size_4; ?>px;
-				font-weight: <?php echo $weight_4; ?>;
+				font-size: <?php echo esc_html( $font_size_4 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_4 ); ?>;
 			}
 
 			.fonttype5 {
-				font-size: <?php echo $font_size_5; ?>px;
-				font-weight: <?php echo $weight_5; ?>;
+				font-size: <?php echo esc_html( $font_size_5 ); ?>px;
+				font-weight: <?php echo esc_html( $weight_5 ); ?>;
 			}
 		</style>
 			<?php

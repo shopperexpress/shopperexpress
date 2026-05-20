@@ -73,16 +73,16 @@
         },
         {
             "name": "twilio/sdk",
-            "version": "8.11.5",
+            "version": "8.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twilio/twilio-php",
-                "reference": "766e44f9986622335ecbbbd131e61390eddbd700"
+                "reference": "57754efb0998086007ec9a63874fd85def5afb7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/766e44f9986622335ecbbbd131e61390eddbd700",
-                "reference": "766e44f9986622335ecbbbd131e61390eddbd700",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/57754efb0998086007ec9a63874fd85def5afb7f",
+                "reference": "57754efb0998086007ec9a63874fd85def5afb7f",
                 "shasum": ""
             },
             "require": {
@@ -119,7 +119,7 @@
                 "sms",
                 "twilio"
             ],
-            "time": "2026-05-06T08:38:47+00:00"
+            "time": "2026-05-07T16:40:31+00:00"
         }
     ],
     "packages-dev": [
@@ -800,15 +800,15 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {},
     "platform-dev": {
         "php": ">=8.0.2"
     },
     "platform-overrides": {
         "php": "8.0.2"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
