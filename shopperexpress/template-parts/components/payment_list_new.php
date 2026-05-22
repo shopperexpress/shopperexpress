@@ -127,7 +127,21 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		}
 
 		if ( $condition ) {
-			$value = ( ! empty( $value_from_field ) && (int) $value_from_field > 0 ) ? $value_from_field : null;
+			$calculated_value = (int) get_field( strtolower( (string) get_sub_field( 'calculated_value' ) ), $post_id );
+			$operand          = 3 === $select_value_type
+				? (int) $value
+				: (int) get_field( strtolower( (string) get_sub_field( 'calculated_field' ) ), $post_id );
+
+			switch ( get_sub_field( 'operator' ) ) {
+				case 'Subtract':
+					$value = $calculated_value - $operand;
+					break;
+				case 'Add':
+					$value = $calculated_value + $operand;
+					break;
+			}
+
+			$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
 		} else {
 			$value = $custom_text;
 			if ( empty( $value ) ) {
