@@ -1941,7 +1941,7 @@ textarea.form-control {
       justify-content: center;
     }
 
-    .btn-custom + .animate-img {
+    .btn-custom+.animate-img {
       margin-top: 13px;
     }
 
@@ -1996,7 +1996,7 @@ textarea.form-control {
         }
       }
 
-      li + li {
+      li+li {
         padding-top: 0;
       }
 
@@ -2021,7 +2021,7 @@ textarea.form-control {
       }
     }
 
-    .payment-info + .payment-info {
+    .payment-info+.payment-info {
       margin-top: 12px;
     }
   }
@@ -2740,7 +2740,7 @@ textarea.form-control {
       color: var(--primary);
 
       svg {
-         fill: var(--primary);
+        fill: var(--primary);
       }
     }
 

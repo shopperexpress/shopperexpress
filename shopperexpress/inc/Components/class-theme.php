@@ -64,6 +64,8 @@ class Theme {
 			\App\Components\Base\AI_VDP::class,
 			\App\Components\Base\Import_Monitor::class,
 			\App\Components\Base\Vin_Admin::class,
+			\App\Components\Base\Login::class,
+			\App\Components\Base\Required_Plugins::class,
 		);
 
 		$gutenberg_components = array(

@@ -8,6 +8,7 @@
 namespace App\Components\Gutenberg;
 
 use App\Components\Theme_Component;
+use App\Components\Gutenberg\Block_Preview_Helper;
 
 /**
  * Class Register_Gutenberg_Blocks
@@ -84,13 +85,13 @@ class Register_Gutenberg_Blocks implements Theme_Component {
 	 * @param array $block Block array.
 	 * @return void
 	 */
-	public function acf_render_callback( array $block ): void {
+	public function acf_render_callback( array $block, string $content = '', bool $is_preview = false, int $post_id = 0 ): void {
 		$slug = str_replace( 'acf/', '', $block['name'] );
 
 		$file_path = get_theme_file_path( self::ACF_BLOCKS_FOLDER . $slug . '.php' );
 		if ( file_exists( $file_path ) ) {
 			echo '<!-- START ' . esc_html( $block['title'] ) . ' -->';
-			include $file_path;
+			include $file_path; // $block, $is_preview, $content, $post_id available in template scope.
 			echo '<!-- END ' . esc_html( $block['title'] ) . ' -->';
 		}
 	}
@@ -127,7 +128,15 @@ class Register_Gutenberg_Blocks implements Theme_Component {
 						'render_callback' => array( $this, 'acf_render_callback' ),
 						'supports'        => array(
 							'align' => false,
-							'mode'  => false,
+							'mode'  => true,
+						),
+						'example'         => array(
+							'attributes' => array(
+								'mode' => 'preview',
+								'data' => array(
+									'preview_image_help' => true,
+								),
+							),
 						),
 					)
 				);

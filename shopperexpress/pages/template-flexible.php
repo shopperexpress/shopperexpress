@@ -19,6 +19,10 @@ if ( get_field( 'page_style' ) == 2 ) :
 	?>
 	class="trade-value-page"<?php endif; ?>>
 	<?php
+	while ( have_posts() ) :
+		the_post();
+		the_content();
+	endwhile;
 	$i = 1;
 	while ( have_rows( 'content_blocks' ) ) :
 		the_row();

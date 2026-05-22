@@ -1,22 +1,15 @@
 <?php
 /**
- * Info Images
+ * Flexible Content Wrapper: Info Images
  *
  * @package ShopperExpress
  */
 
-$title = get_sub_field( 'title' );
-if ( $images = get_sub_field( 'images' ) ) { ?>
-<section class="section">
-	<div class="container">
-		<?php
-		if ( $title ) {
-			?>
-			<h3><?php echo $title; ?></h3><?php } ?>
-		<?php
-		foreach ( $images as $img ) {
-			echo wp_get_attachment_image( $img, 'full' );}
-		?>
-	</div>
-</section>
-<?php } ?>
+get_template_part(
+	'template-parts/acf-shared/info-images',
+	null,
+	array(
+		'title'  => get_sub_field( 'title' ),
+		'images' => get_sub_field( 'images' ),
+	)
+);

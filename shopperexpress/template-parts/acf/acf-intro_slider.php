@@ -1,6 +1,6 @@
 <?php
 /**
- * Intro Slider
+ * Flexible Content Wrapper: Intro Slider
  *
  * @package ShopperExpress
  */
@@ -8,10 +8,12 @@
 $buttons        = get_sub_field( 'buttons' );
 $show_slider    = get_sub_field( 'show_slider' );
 $sort_offers_by = get_sub_field( 'sort_offers_by' );
-$html_offers    = $htmlField = '';
 $no_margin      = get_sub_field( 'no_margin' );
-$slider_speed   = get_sub_field( 'slider_speed' ) ? get_sub_field( 'slider_speed' ) : 500;
-$autoplay_speed = get_sub_field( 'autoplay_speed' ) ? get_sub_field( 'autoplay_speed' ) : 5000;
+$slider_speed   = get_sub_field( 'slider_speed' ) ?: 500;
+$autoplay_speed = get_sub_field( 'autoplay_speed' ) ?: 5000;
+
+// Build overlay HTML.
+$overlay_html = '';
 ob_start();
 if ( have_rows( 'custom_overlay' ) ) :
 	?>
@@ -56,11 +58,12 @@ if ( have_rows( 'custom_overlay' ) ) :
 	</div>
 	<?php
 endif;
-$htmlField = ob_get_contents();
-ob_end_clean();
-if ( $show_slider != 2 ) {
+$overlay_html = ob_get_clean();
 
-	$args = array(
+// Build offers slides HTML.
+$html_offers = '';
+if ( $show_slider != 2 ) {
+	$query_args = array(
 		'post_type'      => 'offers',
 		'post_status'    => 'publish',
 		'posts_per_page' => -1,
@@ -68,26 +71,26 @@ if ( $show_slider != 2 ) {
 	);
 	switch ( $sort_offers_by ) {
 		case 'date':
-			$args['orderby'] = 'date';
-			$args['order']   = 'DESC';
+			$query_args['orderby'] = 'date';
+			$query_args['order']   = 'DESC';
 			break;
 		case 'payment_lowest':
-			$args['orderby']  = 'meta_value_num';
-			$args['meta_key'] = 'lease_payment';
-			$args['order']    = 'ASC';
+			$query_args['orderby']  = 'meta_value_num';
+			$query_args['meta_key'] = 'lease_payment';
+			$query_args['order']    = 'ASC';
 			break;
 		case 'payment_highest':
-			$args['orderby']  = 'meta_value_num';
-			$args['meta_key'] = 'lease_payment';
-			$args['order']    = 'DESC';
+			$query_args['orderby']  = 'meta_value_num';
+			$query_args['meta_key'] = 'lease_payment';
+			$query_args['order']    = 'DESC';
 			break;
 		case 'priority':
-			$args['orderby']  = 'meta_value_num';
-			$args['meta_key'] = 'priority';
-			$args['order']    = 'ASC';
+			$query_args['orderby']  = 'meta_value_num';
+			$query_args['meta_key'] = 'priority';
+			$query_args['order']    = 'ASC';
 			break;
 	}
-	$query = new WP_Query( $args );
+	$query = new WP_Query( $query_args );
 
 	if ( $query->posts ) {
 		ob_start();
@@ -112,9 +115,9 @@ if ( $show_slider != 2 ) {
 						</div>
 					<?php endif; ?>
 				</a>
-				<?php if ( $htmlField ) : ?>
+				<?php if ( $overlay_html ) : ?>
 					<div class="slider-detail-content">
-						<?php echo do_shortcode( $htmlField ); ?>
+						<?php echo do_shortcode( $overlay_html ); ?>
 					</div>
 					<?php
 				endif;
@@ -129,12 +132,12 @@ if ( $show_slider != 2 ) {
 			<?php
 		endforeach;
 		wp_reset_query();
-		$html_offers .= ob_get_contents();
-		ob_end_clean();
+		$html_offers = ob_get_clean();
 	}
 }
-$html_manually = '';
 
+// Build manual slides HTML.
+$html_manually = '';
 if ( $show_slider != 1 ) {
 	ob_start();
 	while ( have_rows( 'slider' ) ) :
@@ -183,9 +186,9 @@ if ( $show_slider != 1 ) {
 						</div>
 					<?php endif; ?>
 				</a>
-				<?php if ( $htmlField ) : ?>
+				<?php if ( $overlay_html ) : ?>
 					<div class="slider-detail-content">
-						<?php echo do_shortcode( $htmlField ); ?>
+						<?php echo do_shortcode( $overlay_html ); ?>
 					</div>
 					<?php
 				endif;
@@ -200,66 +203,20 @@ if ( $show_slider != 1 ) {
 			<?php
 		endif;
 	endwhile;
-	$html_manually .= ob_get_contents();
-	ob_end_clean();
+	$html_manually = ob_get_clean();
 }
 
-switch ( $show_slider ) {
-	case 1:
-		$html = $html_offers;
-		break;
-	case 2:
-		$html = $html_manually;
-		break;
-	case 3:
-		$html = $html_offers . $html_manually;
-		break;
-	case 4:
-		$html = $html_manually . $html_offers;
-		break;
-}
-
-if ( $html ) :
-	?>
-	<div class="visual
-	<?php
-	if ( $no_margin ) :
-		?>
-		m-0<?php endif; ?>">
-		<div class="visual-holder">
-			<div class="visual-slider slick-item" data-speed="<?php echo esc_html( $slider_speed ); ?>" data-autoplay-speed="<?php echo esc_html( $autoplay_speed ); ?>">
-				<?php echo $html; ?>
-			</div>
-			<div class="slick-controls">
-				<div class="buttons-holder">
-					<button class="slick-control slick-play-pause" aria-label="<?php _e( 'Play/pause', 'shopperexpress' ); ?>">
-						<svg class="indicator" viewBox="0 0 40 40">
-							<circle class="progress-circle" cx="20" cy="20" r="16" fill="none" pathLength="40" style="stroke-dashoffset: 40"></circle>
-						</svg>
-						<span class="icon-play">
-							<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-								<path
-									d="M320-273v-414q0-17 12-28.5t28-11.5q5 0 10.5 1.5T381-721l326 207q9 6 13.5 15t4.5 19q0 10-4.5 19T707-446L381-239q-5 3-10.5 4.5T360-233q-16 0-28-11.5T320-273Z" />
-							</svg>
-						</span>
-						<span class="icon-pause">
-							<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
-								<path
-									d="M640-200q-33 0-56.5-23.5T560-280v-400q0-33 23.5-56.5T640-760q33 0 56.5 23.5T720-680v400q0 33-23.5 56.5T640-200Zm-320 0q-33 0-56.5-23.5T240-280v-400q0-33 23.5-56.5T320-760q33 0 56.5 23.5T400-680v400q0 33-23.5 56.5T320-200Z" />
-							</svg>
-						</span>
-					</button>
-				</div>
-			</div>
-			<div class="dots-holder slick-item"></div>
-		</div>
-		<div class="search-bar-container">
-			<?php
-			if ( get_sub_field( 'hide_search_form' ) != true ) {
-				get_template_part( 'template-parts/search-form' );
-			}
-			?>
-			<?php get_template_part( 'template-parts/spinning-icon-buttons' ); ?>
-		</div>
-	</div>
-<?php endif; ?>
+get_template_part(
+	'template-parts/acf-shared/intro-slider',
+	null,
+	array(
+		'no_margin'          => $no_margin,
+		'slider_speed'       => $slider_speed,
+		'autoplay_speed'     => $autoplay_speed,
+		'hide_search_form'   => get_sub_field( 'hide_search_form' ),
+		'html_offers_slides' => $html_offers,
+		'html_manual_slides' => $html_manually,
+		'show_slider'        => $show_slider,
+		'overlay_html'       => $overlay_html,
+	)
+);

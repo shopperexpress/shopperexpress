@@ -1,18 +1,14 @@
 <?php
 /**
- * Block Logo
+ * Flexible Content Wrapper: Block Logo
  *
  * @package ShopperExpress
  */
 
-?>
-<section class="block-logo">
-	<div class="container">
-		<?php
-		if ( $logo = get_sub_field( 'logo' ) ) {
-			$logo_id = absint( $logo['id'] );
-			echo wp_kses_post( wp_get_attachment_image( $logo_id, 'full', null, array( 'class' => 'logo-lg' ) ) );
-		}
-		?>
-	</div>
-</section>
+get_template_part(
+	'template-parts/acf-shared/block-logo',
+	null,
+	array(
+		'logo' => get_sub_field( 'logo' ),
+	)
+);

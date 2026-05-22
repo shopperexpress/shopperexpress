@@ -1,0 +1,27 @@
+// Login page standalone stylesheet.
+// Compiled to dist/login.css — enqueued only on wp-login.php.
+
+$breakpoints: (
+  'xs-phone': 320px,
+  'sm-phone': 480px,
+  'phone': 576px,
+  'tablet': 768px,
+  'desktop': 992px,
+  'widescreen': 1200px,
+  'xxl': 1480px,
+);
+
+$media-expressions: (
+  'screen': 'screen',
+  'print': 'print',
+  'handheld': 'handheld',
+  'landscape': '(orientation: landscape)',
+  'portrait': '(orientation: portrait)',
+  'retina2x': '(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)',
+  'retina3x': '(-webkit-min-device-pixel-ratio: 2.5), (min-resolution: 240dpi)',
+);
+
+@import 'vendors/include-media';
+@import 'base/mixins';
+
+@import 'pages/login';

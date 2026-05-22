@@ -3110,6 +3110,7 @@
                         "vin_number": "VIN (vin_number)",
                         "url": "Url (url)",
                         "vdp_description": "VDP Description (vdp_description)",
+                        "ai_vdp_description": "AI VDP description (ai_vdp_description)",
                         "highway_mpg": "MPGHwy (highway_mpg)",
                         "city_mpg": "MPGCity (city_mpg)",
                         "epaclassification": "EPAClassification (epaclassification)",
@@ -3213,7 +3214,8 @@
                         "offercontent": "OfferContent (offercontent)",
                         "buttons": "Buttons (buttons)",
                         "buttontext": "ButtonText (buttontext)",
-                        "buttonurl": "ButtonURL (buttonurl)"
+                        "buttonurl": "ButtonURL (buttonurl)",
+                        "certified_flag": "Certified Flag (certified_flag)"
                     },
                     "default_value": false,
                     "return_format": "array",
@@ -4759,5 +4761,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1779115227
+    "modified": 1779357766
 }

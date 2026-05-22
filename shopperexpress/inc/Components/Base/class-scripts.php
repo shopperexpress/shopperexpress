@@ -16,6 +16,19 @@ use App\Components\Theme_Component;
  */
 class Scripts implements Theme_Component {
 
+	/**
+	 * Theme version.
+	 *
+	 * @var string
+	 */
+	protected $theme_version;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		$this->theme_version = wp_get_theme()->get( 'Version' );
+	}
 
 	/**
 	 * Register theme styles and scripts.
@@ -26,6 +39,59 @@ class Scripts implements Theme_Component {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_style' ) );
+		add_action( 'admin_head', array( $this, 'render_vars' ), 1 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'load_admin_block_style' ) );
+	}
+
+	/**
+	 * Theme styles enqueue.
+	 *
+	 * @return void
+	 */
+	public function render_vars(): void {
+
+		$theme_color = get_field( 'theme_color', 'options' );
+		if ( ! $theme_color ) {
+			return;
+		}
+
+		$overlay_color   = get_field( 'overlay_color', 'options' );
+		$overlay_opacity = get_field( 'overlay_opacity', 'options' );
+
+		?>
+		<style>
+			:root {
+				--primary: <?php echo esc_attr( $theme_color ); ?>;
+				--primary-rgb: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?>;
+				--primary-rgba: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?>;
+
+				<?php if ( $overlay_color ) : ?>
+				--overlay-color-rgb: <?php echo esc_attr( hexToRgb( $overlay_color ) ); ?>;
+				<?php endif; ?>
+
+				<?php if ( $overlay_opacity ) : ?>
+				--overlay-opacity: <?php echo esc_attr( $overlay_opacity ); ?>;
+				<?php endif; ?>
+				--font-family-base: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+			}
+			body{
+				font-family: var(--font-family-base);
+				font-size: 13px;
+			}
+			::after, ::before {
+				box-sizing: content-box;
+			}
+			button, input, optgroup, select, textarea {
+				line-height: normal;
+			}
+			.block-editor-inserter__preview-container__popover iframe {
+				max-width: inherit;
+			}
+			.block-editor-list-view-block__contents-cell table td,.block-editor-list-view-block__contents-cell table th {
+				border: none;
+			}
+		</style>
+		<?php
 	}
 
 	/**
@@ -35,7 +101,7 @@ class Scripts implements Theme_Component {
 	 */
 	public function enqueue_styles(): void {
 
-		$theme_version = wp_get_theme()->get( 'Version' );
+		$theme_version = $this->theme_version;
 
 		wp_enqueue_style(
 			'base/style',
@@ -69,13 +135,35 @@ class Scripts implements Theme_Component {
 	 *
 	 * @return void
 	 */
-	public function load_admin_style(): void {
-
-		$theme_version = wp_get_theme()->get( 'Version' );
+	public function load_admin_block_style(): void {
+		$theme_version = $this->theme_version;
 
 		wp_enqueue_style(
-			'shopperexpress/admin_panel_css',
-			\App\asset_url_old( 'css/admin-panel.css' ),
+			'shopperexpress/main_css',
+			\App\asset_url_old( 'css/main.css' ),
+			array(),
+			$theme_version
+		);
+		wp_enqueue_style(
+			'shopperexpress/style',
+			\App\asset_url( 'style.css' ),
+			array(),
+			$theme_version
+		);
+	}
+
+	/**
+	 * Admin panel styles enqueue.
+	 *
+	 * @return void
+	 */
+	public function load_admin_style(): void {
+
+		$theme_version = $this->theme_version;
+
+		wp_enqueue_style(
+			'shopperexpress/main_css_admin',
+			\App\asset_url_old( 'css/main.css' ),
 			array(),
 			$theme_version
 		);
@@ -87,8 +175,8 @@ class Scripts implements Theme_Component {
 	 * @return void
 	 */
 	public function enqueue_scripts(): void {
-		$in_footer     = true;
-		$theme_version = wp_get_theme()->get( 'Version' );
+
+		$theme_version = $this->theme_version;
 
 		wp_deregister_script( 'comment-reply' );
 		wp_deregister_style( 'listing_shortcodes' );
@@ -122,7 +210,7 @@ class Scripts implements Theme_Component {
 			'shopperexpress/jquery',
 			\App\asset_url( 'js/app.js' ),
 			array( 'jquery' ),
-			time(),
+			$theme_version,
 			false
 		);
 		wp_enqueue_script(

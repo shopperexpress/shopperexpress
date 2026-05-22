@@ -1,0 +1,113 @@
+#uip-login-wrap {
+  display: flex;
+  height: 100vh;
+  color: rgba(8, 8, 16, 0.75);
+
+  // LEFT COLUMN
+  #uip-login-form-wrap {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    box-sizing: border-box;
+
+    #uip-login-form {
+      width: 350px;
+      max-width: 100%;
+      padding: 32px;
+      background: #fff;
+      border-radius: 4px;
+
+      .screen-reader-text {
+        display: none;
+      }
+
+      .forgetmenot {
+        label {
+          display: inline-block;
+        }
+      }
+
+      // WP container reset
+      #login {
+        padding: 0;
+        width: 100%;
+      }
+
+      // LOGO
+      .wp-login-logo a {
+        background-image: var(--login-logo-image);
+        background-size: contain;
+        background-position: left;
+        background-repeat: no-repeat;
+
+        height: 50px;
+        width: auto;
+        margin-left: 0;
+        display: block;
+      }
+
+      // FORM RESET (important: keep shallow)
+      #loginform {
+        padding: 0;
+        border: 0;
+        background: none;
+        box-shadow: none;
+      }
+
+      label {
+        margin-bottom: 16px;
+        color: rgba(8, 8, 16, 0.56);
+        display: block;
+      }
+
+      // INPUTS
+      input {
+        border: 1px solid rgba(181, 181, 181, 0.35);
+        background-color: #fff;
+        color: rgba(8, 8, 16, 0.75);
+      }
+
+      // CHECKBOX FIX (clean & safe)
+      input[type="checkbox"] {
+        appearance: auto;
+        -webkit-appearance: checkbox;
+        border: 1px solid #8c8f94;
+        border-radius: 4px;
+      }
+
+      // BUTTON
+      .button-primary {
+        background-color: #333;
+        border: 0;
+        color: #fff;
+
+        width: 100%;
+        min-height: 32px;
+        line-height: 2.3;
+        padding: 0 12px;
+      }
+
+      // LINKS
+      #nav,
+      #backtoblog {
+        padding: 0;
+      }
+
+      // LANGUAGE SWITCHER
+      .language-switcher {
+        display: none;
+      }
+    }
+  }
+
+  // RIGHT PANEL
+  #uip-login-panel {
+    width: 50%;
+    background-color: rgba(8, 8, 16, 0.75);
+    background-image: var(--login-panel-image) !important;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}

@@ -48,5 +48,8 @@
       "dest": "js"
     }
   },
-  "minimize": false
+  "minimize": false,
+  "externals": {
+    "login": "styles/login.scss"
+  }
 }

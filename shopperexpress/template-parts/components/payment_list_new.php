@@ -130,6 +130,9 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			$value = ( ! empty( $value_from_field ) && (int) $value_from_field > 0 ) ? $value_from_field : null;
 		} else {
 			$value = $custom_text;
+			if ( empty( $value ) ) {
+				break;
+			}
 		}
 	}
 
