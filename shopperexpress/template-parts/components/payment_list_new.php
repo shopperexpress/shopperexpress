@@ -113,10 +113,11 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 		switch ( get_sub_field( 'operator_1' ) ) {
 			case '>':
-				$condition = $value_from_field > $value_1;
+				$condition = $value_1 > $value_from_field;
+
 				break;
 			case '<':
-				$condition = $value_from_field < $value_1;
+				$condition = $value_1 < $value_from_field;
 				break;
 			case '=':
 				$condition = $value_from_field === $value_1;

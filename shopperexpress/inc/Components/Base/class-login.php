@@ -36,11 +36,13 @@ class Login implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'login_header', array( $this, 'render_open_wrapper' ) );
-		add_action( 'login_footer', array( $this, 'render_close_wrapper' ) );
-		add_filter( 'login_headerurl', array( $this, 'logo_url' ) );
-		add_filter( 'login_headertext', array( $this, 'logo_text' ) );
+		if ( version_compare( get_bloginfo( 'version' ), '7.0', '>=' ) ) {
+			add_action( 'login_enqueue_scripts', array( $this, 'enqueue_assets' ) );
+			add_action( 'login_header', array( $this, 'render_open_wrapper' ) );
+			add_action( 'login_footer', array( $this, 'render_close_wrapper' ) );
+			add_filter( 'login_headerurl', array( $this, 'logo_url' ) );
+			add_filter( 'login_headertext', array( $this, 'logo_text' ) );
+		}
 	}
 
 	/**
