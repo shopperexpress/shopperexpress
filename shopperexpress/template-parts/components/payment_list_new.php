@@ -145,7 +145,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
 		} else {
 			$value = $custom_text;
-			if ( empty( $value ) ) {
+			if ( empty( $value ) && 1 === get_row_index() ) {
 				break;
 			}
 		}
