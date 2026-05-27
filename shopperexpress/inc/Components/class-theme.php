@@ -66,6 +66,7 @@ class Theme {
 			\App\Components\Base\Vin_Admin::class,
 			\App\Components\Base\Login::class,
 			\App\Components\Base\Required_Plugins::class,
+			\App\Components\SOC\SOC::class,
 		);
 
 		$gutenberg_components = array(

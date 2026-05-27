@@ -24,15 +24,12 @@ class Import_Monitor_Dashboard implements Theme_Component {
 	const NONCE_ACTION = 'wpim_toggle_import';
 
 	/**
-	 * Register hooks.
+	 * Register hooks — standalone page and AJAX are now handled by SOC.
+	 * This method intentionally registers nothing.
 	 *
 	 * @return void
 	 */
-	public function register(): void {
-		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_wpim_toggle', array( $this, 'ajax_toggle_import' ) );
-	}
+	public function register(): void {}
 
 	/**
 	 * Register admin menu page.

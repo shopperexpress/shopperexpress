@@ -796,13 +796,21 @@
   }
 }
 
+.modal-content.last-step {
+  .modal-footer {
+    display: none;
+  }
+}
+
 .modal-footer {
   .steps-controls {
     margin: 0;
     width: 100%;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 
     button {
       border: 0;

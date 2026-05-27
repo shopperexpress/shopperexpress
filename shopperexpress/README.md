@@ -10,6 +10,7 @@ Custom WordPress theme for a car/auto shopper platform. Handles vehicle listings
 - [Commands](#commands)
 - [Structure](#structure)
 - [Architecture](#architecture)
+- [Operation Center (SOC)](#operation-center-soc)
 - [ACF Flexible Content & Gutenberg Blocks](#acf-flexible-content--gutenberg-blocks)
 - [Autoloading & DIC](#autoloading--dic)
 - [Coding Standards](#coding-standards)
@@ -112,7 +113,48 @@ shopperexpress/
 │       │   ├── class-rest.php       # Custom REST endpoints
 │       │   ├── class-ai.php         # Hybrid AI chat endpoint
 │       │   ├── class-ai-crawler.php # Site content crawler for AI
+│       │   ├── class-chromedata-client.php  # Shared Chromedata API client
+│       │   ├── class-vin-admin.php           # VIN service (service methods only)
+│       │   ├── class-import-monitor-tracker.php   # WP All Import hook tracker
+│       │   ├── class-import-monitor-cron.php      # Import monitor cron schedule
+│       │   ├── class-import-monitor-notifier.php  # Import failure/success alerts
 │       │   └── ...
+│       ├── SOC/                     # Operation Center — unified admin dashboard
+│       │   ├── class-soc.php        # Bootstraps modules, registers menu + assets
+│       │   ├── class-soc-ajax.php   # Single AJAX dispatcher (soc_nonce)
+│       │   ├── class-soc-assets.php # Enqueues soc.css + soc.js + localises socData
+│       │   ├── Contracts/
+│       │   │   └── interface-soc-module.php  # SOC_Module interface
+│       │   ├── Modules/             # One class per panel
+│       │   │   ├── class-system-status.php
+│       │   │   ├── class-api-health.php
+│       │   │   ├── class-cron-manager.php
+│       │   │   ├── class-cache-manager.php
+│       │   │   ├── class-database-health.php
+│       │   │   ├── class-developer-tools.php    # VIN Checker panel
+│       │   │   ├── class-soc-import-monitor.php # Import Monitor panel
+│       │   │   ├── class-log-viewer.php
+│       │   │   ├── class-maintenance.php
+│       │   │   ├── class-performance.php
+│       │   │   └── class-security-snapshot.php
+│       │   ├── Support/
+│       │   │   ├── class-soc-cache.php    # Transient cache wrapper
+│       │   │   ├── class-soc-logger.php   # File-based logger
+│       │   │   ├── class-soc-response.php # AJAX response helpers
+│       │   │   └── class-cache-registry.php
+│       │   └── views/               # Panel HTML templates
+│       │       ├── dashboard.php
+│       │       ├── system-status.php
+│       │       ├── api-health.php
+│       │       ├── cron-manager.php
+│       │       ├── cache-manager.php
+│       │       ├── database-health.php
+│       │       ├── developer-tools.php  # VIN Checker UI
+│       │       ├── import-monitor.php
+│       │       ├── log-viewer.php
+│       │       ├── maintenance.php
+│       │       ├── performance.php
+│       │       └── security-snapshot.php
 │       ├── Gutenberg/
 │       │   ├── class-register-gutenberg-blocks.php  # Auto-registers ACF blocks
 │       │   ├── class-custom-blocks-category.php     # Adds custom block category
@@ -169,6 +211,112 @@ To add a new component: create a class that implements `Theme_Component`, then a
 ### Text domain
 
 `shopperexpress`
+
+---
+
+## Operation Center (SOC)
+
+Operation Center is a unified admin dashboard (WordPress menu: **Operation Center**) that consolidates all site-health, maintenance, and developer tools in one place. Navigation uses the standard WordPress submenu — each panel is a separate submenu page.
+
+### SOC_Module interface
+
+Every panel implements `App\Components\SOC\Contracts\SOC_Module`:
+
+```php
+interface SOC_Module {
+    public function get_slug(): string;   // URL key: soc-{slug}
+    public function get_label(): string;  // Submenu + panel heading
+    public function get_icon(): string;   // Dashicon class
+    public function collect(bool $force_refresh = false): array; // Data gathering
+    public function render(array $data): void;                   // HTML output
+}
+```
+
+To add a panel: create a class implementing `SOC_Module` in `inc/Components/SOC/Modules/`, add a view in `inc/Components/SOC/views/`, then register it in `SOC::boot_modules()`.
+
+### Panels
+
+| Panel | Slug | Description |
+|---|---|---|
+| System Status | `system-status` | PHP, WP, memory, plugin list |
+| API Health | `api-health` | Pings registered external APIs (incl. Chromedata with auth) |
+| Cron Manager | `cron-manager` | View, run, reschedule, and delete WP cron events |
+| Cache Manager | `cache-manager` | Per-post-type cache status, clear, regenerate |
+| Database Health | `database-health` | DB size, cleanup tools (revisions, spam, trash, auto-drafts, orphaned rows) |
+| VIN Checker | `developer-tools` | Decode a 17-char VIN via the Chromedata API; background job + polling |
+| Import Monitor | `import-monitor` | WP All Import run history, status, per-import active toggle |
+| Log Viewer | `log-viewer` | Browse SOC file-based logs by type |
+| Maintenance | `maintenance` | Site maintenance mode toggle |
+| Performance | `performance` | Runtime performance metrics |
+| Security Snapshot | `security-snapshot` | Basic security audit |
+
+### AJAX
+
+All AJAX requests go through a single dispatcher in `SOC_Ajax`. Every action requires:
+- `nonce` — value of `socData.nonce` (action: `soc_nonce`)
+- `manage_options` capability
+
+Registered actions:
+
+| Action | Handler | Purpose |
+|---|---|---|
+| `soc_load_panel` | `handle_load_panel` | Re-render a panel and return HTML |
+| `soc_refresh_module` | `handle_refresh_module` | Return fresh collected data |
+| `soc_db_cleanup` | `handle_db_cleanup` | Run a DB cleanup type |
+| `soc_clear_cache` | `handle_clear_cache` | Flush all caches |
+| `soc_run_cron` | `handle_run_cron` | Manually fire a cron hook |
+| `soc_delete_cron` | `handle_delete_cron` | Unschedule a cron event |
+| `soc_reschedule_cron` | `handle_reschedule_cron` | Change cron recurrence |
+| `soc_clear_transients` | `handle_clear_transients` | Delete all transients |
+| `soc_clear_object_cache` | `handle_clear_object_cache` | Flush object cache |
+| `soc_optimize_tables` | `handle_optimize_tables` | OPTIMIZE all DB tables |
+| `soc_clear_pt_cache` | `handle_clear_pt_cache` | Clear a post-type cache |
+| `soc_regen_pt_cache` | `handle_regen_pt_cache` | Trigger cache regeneration |
+| `soc_flush_expired` | `handle_flush_expired` | Delete expired transients |
+| `soc_view_pt_keys` | `handle_view_pt_keys` | List cache keys for a post type |
+| `soc_pt_cache_status` | `handle_pt_cache_status` | Poll cache build status |
+| `soc_test_api` | `handle_test_api` | Ping a URL |
+| `soc_dismiss_notice` | `handle_dismiss_notice` | Dismiss an admin notice |
+| `soc_vin_lookup` | `handle_vin_lookup` | VIN decode via Chromedata |
+| `soc_vin_clear_history` | `handle_vin_clear_history` | Clear per-user VIN history |
+| `soc_vin_run_background` | `handle_vin_run_background` | Dispatch background API job |
+| `soc_vin_poll` | `handle_vin_poll` | Poll features_items population |
+| `soc_im_toggle` | `handle_im_toggle` | Toggle import active flag |
+
+### Support classes
+
+| Class | Purpose |
+|---|---|
+| `SOC_Cache` | Transient wrapper — `get($module, $key)`, `set(...)`, `forget($module, $key)`. Always call `forget()` after mutations. |
+| `SOC_Logger` | File-based logger to `wp-content/soc-logs/`. Types: `api`, `cron`, `cache`, `security`, `performance`, `general`. |
+| `SOC_Response` | `::success(array $data)` / `::error(string $msg, int $status)` — terminates with `wp_send_json_*`. |
+
+### Chromedata client
+
+`App\Components\Base\Chromedata_Client` is the shared API client for all Chromedata (Atmosphere) calls. It reads credentials from ACF options (`url_chromedata`, `appid_chromedata`, `secret_chromedata`) and handles auth header generation (nonce + timestamp + SHA1 digest).
+
+```php
+// Authenticated PUT request
+$result = Chromedata_Client::request($url, ['VIN' => '...', 'onlyDecodeUsing' => 'V,E,C,S']);
+
+// Health check (used by API Health panel)
+$health = Chromedata_Client::health_check(5); // returns ['ok', 'status', 'response_time_ms', ...]
+```
+
+### Frontend assets
+
+SOC assets are enqueued only on Operation Center pages (`strpos($hook, 'soc')`).
+
+| File | Purpose |
+|---|---|
+| `assets/src/styles/soc.scss` → `assets/dist/soc.css` | All SOC panel styles |
+| `assets/src/js/soc/soc.js` → `assets/dist/js/soc.js` | Panel JS (refresh, AJAX actions, cron, DB cleanup, cache) |
+
+The JS global `socData` is localised by `SOC_Assets`:
+```js
+socData.ajaxUrl  // admin-ajax.php URL
+socData.nonce    // wp_create_nonce('soc_nonce')
+```
 
 ---
 

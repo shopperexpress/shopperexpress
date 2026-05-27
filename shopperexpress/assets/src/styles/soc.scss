@@ -1,0 +1,346 @@
+// ============================================================
+// SOC — Site Operation Center
+// Standalone stylesheet: compiled to dist/soc.css
+// ============================================================
+
+// Variables
+$soc-primary: #2271b1;
+$soc-success: #00a32a;
+$soc-warning: #dba617;
+$soc-danger: #d63638;
+$soc-gray: #8c8f94;
+$soc-bg: #f0f0f1;
+$soc-white: #fff;
+$soc-border: #c3c4c7;
+$soc-radius: 4px;
+
+// ============================================================
+// Wrapper & Title
+// ============================================================
+.soc-wrap {
+    max-width: 1400px;
+}
+
+.soc-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .soc-version {
+        font-size: 12px;
+        color: $soc-gray;
+        margin-left: auto;
+    }
+}
+
+// ============================================================
+// Main Content
+// ============================================================
+.soc-content {
+    margin-top: 20px;
+    background: $soc-white;
+    border: 1px solid $soc-border;
+    border-radius: $soc-radius;
+    overflow: hidden;
+}
+
+.soc-panel-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid $soc-border;
+    background: $soc-bg;
+
+    h2 {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 16px;
+    }
+
+    .soc-refresh-btn {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+
+        gap: 4px;
+
+        .dashicons-update {
+            align-self: baseline;
+        }
+    }
+}
+
+.soc-panel-body {
+    padding: 20px;
+}
+
+// ============================================================
+// Grid & Cards
+// ============================================================
+.soc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.soc-card {
+    background: $soc-white;
+    border: 1px solid $soc-border;
+    border-radius: $soc-radius;
+    padding: 16px;
+
+    .soc-card__label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $soc-gray;
+        margin-bottom: 4px;
+    }
+
+    .soc-card__value {
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .soc-card__sub {
+        font-size: 12px;
+        color: $soc-gray;
+        margin-top: 4px;
+    }
+}
+
+// ============================================================
+// Badges
+// ============================================================
+.soc-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+
+    &--ok {
+        background: #d7f5dc;
+        color: $soc-success;
+    }
+
+    &--fail {
+        background: #fce8e8;
+        color: $soc-danger;
+    }
+
+    &--warn {
+        background: #fcf0d0;
+        color: $soc-warning;
+    }
+
+    &--neutral {
+        background: #f0f0f1;
+        color: $soc-gray;
+    }
+}
+
+// ============================================================
+// Tables
+// ============================================================
+.soc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+
+    th {
+        text-align: left;
+        padding: 8px 12px;
+        border-bottom: 2px solid $soc-border;
+        font-weight: 600;
+        background: $soc-bg;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 8px 12px;
+        border-bottom: 1px solid $soc-border;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: 0;
+    }
+
+    tr:hover td {
+        background: rgba(0, 0, 0, 0.02);
+    }
+}
+
+// ============================================================
+// Sections
+// ============================================================
+.soc-section {
+    margin-bottom: 28px;
+
+    .soc-section__title {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $soc-gray;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid $soc-border;
+    }
+}
+
+// ============================================================
+// Log Output
+// ============================================================
+.soc-log-output {
+    background: #1a1a1a;
+    color: #e8e8e8;
+    padding: 16px;
+    border-radius: $soc-radius;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    max-height: 600px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+
+    .soc-log-line {
+        display: block;
+    }
+}
+
+// ============================================================
+// Notices
+// ============================================================
+.soc-notice {
+    padding: 10px 14px;
+    border-radius: $soc-radius;
+    margin-bottom: 12px;
+    font-size: 13px;
+    display: none;
+
+    &.is-visible {
+        display: block;
+    }
+
+    &--success {
+        background: #d7f5dc;
+        color: darken(#00a32a, 10%);
+        border-left: 4px solid $soc-success;
+    }
+
+    &--error {
+        background: #fce8e8;
+        color: darken(#d63638, 10%);
+        border-left: 4px solid $soc-danger;
+    }
+
+    &--loading {
+        background: #f0f0f1;
+        color: $soc-gray;
+        border-left: 4px solid $soc-gray;
+    }
+
+    &--warn {
+        background: #fcf0d0;
+        color: darken(#dba617, 15%);
+        border-left: 4px solid $soc-warning;
+    }
+}
+
+// ============================================================
+// Row Actions
+// ============================================================
+.soc-actions {
+    display: flex;
+    gap: 4px;
+}
+
+// ============================================================
+// Action Bar
+// ============================================================
+.soc-action-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+// ============================================================
+// Log Search
+// ============================================================
+.soc-log-search {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 6px 10px;
+    border: 1px solid $soc-border;
+    border-radius: $soc-radius;
+    font-size: 13px;
+}
+
+// ============================================================
+// Maintenance Toggle
+// ============================================================
+.soc-maintenance-toggle {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: $soc-bg;
+    border-radius: $soc-radius;
+    margin-bottom: 20px;
+
+    .soc-status-indicator {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: $soc-gray;
+        flex-shrink: 0;
+
+        &.is-active {
+            background: $soc-success;
+        }
+    }
+
+    .soc-status-label {
+        font-size: 18px;
+        font-weight: 600;
+    }
+}
+
+// ============================================================
+// Footer Notes
+// ============================================================
+.soc-footer-note {
+    font-size: 12px;
+    color: $soc-gray;
+    margin-top: 16px;
+}
+
+// ============================================================
+// Log Pagination
+// ============================================================
+.soc-pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+
+    &__info {
+        font-size: 13px;
+        color: $soc-gray;
+    }
+
+    .button {
+        min-width: 72px;
+    }
+}
+

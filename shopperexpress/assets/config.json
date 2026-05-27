@@ -50,6 +50,7 @@
   },
   "minimize": false,
   "externals": {
-    "login": "styles/login.scss"
+    "login": "styles/login.scss",
+    "soc": ["styles/soc.scss", "js/soc/soc.js"]
   }
 }

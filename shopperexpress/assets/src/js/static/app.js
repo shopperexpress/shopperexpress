@@ -2168,6 +2168,7 @@ function initCookieModal() {
 		const cookieExpireDays = modal.dataset.cookieExpireDays !== undefined ? Number(modal.dataset.cookieExpireDays) : 7;
 		const steps = (modal.querySelectorAll('.modal-steps .step'));
 		const btnNextStep = modal.querySelector('.btn-next');
+		const modalContent = modal.querySelector('.modal-content');
 		const totalSteps = steps.length;
 		let currentStep = 0;
 
@@ -2196,6 +2197,7 @@ function initCookieModal() {
 
 			if (currentStep === totalSteps - 1) {
 				btnNextStep.classList.add(hiddenClass);
+				modalContent?.classList.add('last-step');
 			}
 
 			steps.forEach((step, i) => {
@@ -3551,7 +3553,9 @@ function formatPhoneNumber(phone) {
 		 * @returns {boolean} - if all words are included in the terms object
 		 */
 		containsAllWords(terms, wordsArr) {
-			const allValues = Object.values(terms)
+			const allValues = Object.entries(terms)
+				.filter(([key]) => key !== 'dealer-special' && key !== 'dealer_special') // Exclude dealer special terms from keyword search
+				.map(([, value]) => value)
 				.flat() // Make a flat array of all values
 				.map(value => {
 					return value.toString().toLowerCase();

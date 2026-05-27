@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
+class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -61,15 +61,16 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
     );
 
     public static $classMap = array (
-        'App\\Components\\Base\\ACF' => __DIR__ . '/../..' . '/inc/Components/Base/ACF.php',
-        'App\\Components\\Base\\AI' => __DIR__ . '/../..' . '/inc/Components/Base/AI.php',
+        'App\\Components\\Base\\ACF' => __DIR__ . '/../..' . '/inc/Components/Base/class-acf.php',
+        'App\\Components\\Base\\AI' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai.php',
         'App\\Components\\Base\\AI_Crawler' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai-crawler.php',
         'App\\Components\\Base\\AI_VDP' => __DIR__ . '/../..' . '/inc/Components/Base/class-ai-vdp.php',
-        'App\\Components\\Base\\ASC_Datalayer' => __DIR__ . '/../..' . '/inc/Components/Base/ASC_Datalayer.php',
-        'App\\Components\\Base\\Admin' => __DIR__ . '/../..' . '/inc/Components/Base/Admin.php',
-        'App\\Components\\Base\\Ajax' => __DIR__ . '/../..' . '/inc/Components/Base/Ajax.php',
-        'App\\Components\\Base\\Api' => __DIR__ . '/../..' . '/inc/Components/Base/Api.php',
+        'App\\Components\\Base\\ASC_Datalayer' => __DIR__ . '/../..' . '/inc/Components/Base/class-asc-datalayer.php',
+        'App\\Components\\Base\\Admin' => __DIR__ . '/../..' . '/inc/Components/Base/class-admin.php',
+        'App\\Components\\Base\\Ajax' => __DIR__ . '/../..' . '/inc/Components/Base/class-ajax.php',
+        'App\\Components\\Base\\Api' => __DIR__ . '/../..' . '/inc/Components/Base/class-api.php',
         'App\\Components\\Base\\CPT' => __DIR__ . '/../..' . '/inc/Components/Base/class-cpt.php',
+        'App\\Components\\Base\\Chromedata_Client' => __DIR__ . '/../..' . '/inc/Components/Base/class-chromedata-client.php',
         'App\\Components\\Base\\Export' => __DIR__ . '/../..' . '/inc/Components/Base/class-export.php',
         'App\\Components\\Base\\Import_Monitor' => __DIR__ . '/../..' . '/inc/Components/Base/class-import-monitor.php',
         'App\\Components\\Base\\Import_Monitor_ACF' => __DIR__ . '/../..' . '/inc/Components/Base/class-import-monitor-acf.php',
@@ -93,6 +94,25 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
         'App\\Components\\Gutenberg\\Custom_Blocks_Category' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-custom-blocks-category.php',
         'App\\Components\\Gutenberg\\Gutenberg_Color_Palette' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-gutenberg-color-palette.php',
         'App\\Components\\Gutenberg\\Register_Gutenberg_Blocks' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-register-gutenberg-blocks.php',
+        'App\\Components\\SOC\\Contracts\\SOC_Module' => __DIR__ . '/../..' . '/inc/Components/SOC/Contracts/interface-soc-module.php',
+        'App\\Components\\SOC\\Modules\\Api_Health' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-api-health.php',
+        'App\\Components\\SOC\\Modules\\Cache_Manager' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-cache-manager.php',
+        'App\\Components\\SOC\\Modules\\Cron_Manager' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-cron-manager.php',
+        'App\\Components\\SOC\\Modules\\Database_Health' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-database-health.php',
+        'App\\Components\\SOC\\Modules\\Developer_Tools' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-developer-tools.php',
+        'App\\Components\\SOC\\Modules\\Import_Monitor_Panel' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-soc-import-monitor.php',
+        'App\\Components\\SOC\\Modules\\Log_Viewer' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-log-viewer.php',
+        'App\\Components\\SOC\\Modules\\Maintenance' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-maintenance.php',
+        'App\\Components\\SOC\\Modules\\Performance' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-performance.php',
+        'App\\Components\\SOC\\Modules\\Security_Snapshot' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-security-snapshot.php',
+        'App\\Components\\SOC\\Modules\\System_Status' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-system-status.php',
+        'App\\Components\\SOC\\SOC' => __DIR__ . '/../..' . '/inc/Components/SOC/class-soc.php',
+        'App\\Components\\SOC\\SOC_Ajax' => __DIR__ . '/../..' . '/inc/Components/SOC/class-soc-ajax.php',
+        'App\\Components\\SOC\\SOC_Assets' => __DIR__ . '/../..' . '/inc/Components/SOC/class-soc-assets.php',
+        'App\\Components\\SOC\\Support\\Cache_Registry' => __DIR__ . '/../..' . '/inc/Components/SOC/Support/class-cache-registry.php',
+        'App\\Components\\SOC\\Support\\SOC_Cache' => __DIR__ . '/../..' . '/inc/Components/SOC/Support/class-soc-cache.php',
+        'App\\Components\\SOC\\Support\\SOC_Logger' => __DIR__ . '/../..' . '/inc/Components/SOC/Support/class-soc-logger.php',
+        'App\\Components\\SOC\\Support\\SOC_Response' => __DIR__ . '/../..' . '/inc/Components/SOC/Support/class-soc-response.php',
         'App\\Components\\Theme' => __DIR__ . '/../..' . '/inc/Components/class-theme.php',
         'App\\Components\\Theme_Component' => __DIR__ . '/../..' . '/inc/Components/class-theme-component.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
@@ -166,9 +186,9 @@ class ComposerStaticInit19b7e993b712eabfb720044ade1d4177
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit19b7e993b712eabfb720044ade1d4177::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit19b7e993b712eabfb720044ade1d4177::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit19b7e993b712eabfb720044ade1d4177::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5::$classMap;
 
         }, null, ClassLoader::class);
     }

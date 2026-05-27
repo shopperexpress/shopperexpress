@@ -893,7 +893,7 @@ class Api implements Theme_Component {
 					case 'listings':
 					case 'used-listings':
 						$payment               = ! empty( get_field( 'loan_payment_sort', $post_id ) ) ? get_field( 'loan_payment_sort', $post_id ) : '';
-						$vehicle_data['price'] = ! empty( get_field( 'price_sort', $post_id ) ) ? get_field( 'price_sort', $post_id ) : '';
+						$vehicle_data['price'] = ! empty( get_field( 'original_price', $post_id ) ) ? get_field( 'original_price', $post_id ) : '';
 						if ( ! empty( $payment ) && 0 !== $payment ) {
 							$vehicle_data['payment'] = $payment;
 						}
@@ -902,7 +902,8 @@ class Api implements Theme_Component {
 							$vehicle_data['dateinstock'] = $dateinstock;
 						}
 
-						$vehicle_data['year'] = get_field( 'year', $post_id );
+						$vehicle_data['year']  = get_field( 'year', $post_id );
+						$vehicle_data['photo'] = ! empty( get_field( 'primaryimageurl' ) ) ? get_field( 'primaryimageurl' ) : '';
 						break;
 
 					case 'lease-offers':

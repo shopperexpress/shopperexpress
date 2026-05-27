@@ -25,18 +25,11 @@ class Vin_Admin implements Theme_Component {
 	const CACHE_TTL     = 3600; // seconds.
 
 	/**
-	 * Register hooks.
+	 * Register hooks — standalone Tools page removed; VIN Checker lives in Operation Center.
 	 *
 	 * @return void
 	 */
-	public function register(): void {
-		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
-		add_action( 'wp_ajax_' . self::AJAX_ACTION, array( $this, 'handle_ajax' ) );
-		add_action( 'wp_ajax_' . self::AJAX_ACTION . '_clear_history', array( $this, 'handle_clear_history' ) );
-		add_action( 'wp_ajax_' . self::AJAX_ACTION . '_run_background', array( $this, 'handle_background_ajax' ) );
-		add_action( 'wp_ajax_' . self::AJAX_ACTION . '_poll', array( $this, 'handle_poll_ajax' ) );
-	}
+	public function register(): void {}
 
 	// -------------------------------------------------------------------------
 	// Menu
@@ -62,7 +55,7 @@ class Vin_Admin implements Theme_Component {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Enqueue inline styles and the AJAX script only on our admin page.
+	 * Enqueue inline styles only on our admin page.
 	 *
 	 * @param string $hook Current admin page hook.
 	 * @return void
@@ -72,15 +65,8 @@ class Vin_Admin implements Theme_Component {
 			return;
 		}
 
-		// jQuery is already enqueued in admin; just add our styles here.
-		// The JS is printed directly in render_page() to avoid the empty-src
-		// handle issue that silently drops wp_localize_script / wp_add_inline_script.
 		wp_enqueue_style( 'wp-color-picker' );
-
-		wp_add_inline_style(
-			'wp-color-picker',
-			$this->inline_styles()
-		);
+		wp_add_inline_style( 'wp-color-picker', $this->inline_styles() );
 	}
 
 	// -------------------------------------------------------------------------
@@ -164,7 +150,7 @@ class Vin_Admin implements Theme_Component {
 		</div>
 
 		<script>
-		var vinChecker = 
+		var vinChecker =
 		<?php
 		echo wp_json_encode(
 			array(
@@ -190,76 +176,43 @@ class Vin_Admin implements Theme_Component {
 	}
 
 	// -------------------------------------------------------------------------
-	// AJAX handler
+	// Public service methods (consumed by SOC Developer_Tools module)
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Handle the AJAX VIN lookup request.
+	 * Perform a VIN lookup via Chromedata API.
 	 *
-	 * @return void
+	 * @param string $vin Validated 17-char VIN (uppercase).
+	 * @return array|\WP_Error
 	 */
-	public function handle_ajax(): void {
-		check_ajax_referer( self::AJAX_ACTION, 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'shopperexpress' ) ), 403 );
-			return;
-		}
-
-		$vin = strtoupper( trim( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) ) );
-
-		if ( empty( $vin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Please enter a VIN.', 'shopperexpress' ) ) );
-			return;
-		}
-
-		if ( ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/', $vin ) ) {
-			wp_send_json_error( array( 'message' => __( 'VIN must be exactly 17 alphanumeric characters (I, O and Q are not valid).', 'shopperexpress' ) ) );
-			return;
-		}
-
-		// Serve from transient cache when available.
+	public function lookup_vin( string $vin ) {
 		$cache_key = 'vin_check_' . md5( $vin );
 		$cached    = get_transient( $cache_key );
 
 		if ( false !== $cached ) {
 			$cached['cached'] = true;
-			wp_send_json_success( $cached );
-			return;
+			return $cached;
 		}
 
 		$api_url = get_field( 'url_chromedata', 'options' );
 
 		if ( empty( $api_url ) ) {
-			error_log( '[VIN Admin] Chromedata URL option is not configured.' );
-			wp_send_json_error( array( 'message' => __( 'API is not configured. Please set the Chromedata URL in Theme Options.', 'shopperexpress' ) ) );
-			return;
+			return new \WP_Error( 'not_configured', __( 'API is not configured. Please set the Chromedata URL in Theme Options.', 'shopperexpress' ) );
 		}
 
-		$response = $this->call_chromedata_api(
-			$api_url,
-			array(
-				'VIN'             => $vin,
-				'onlyDecodeUsing' => 'V,E,C,S',
-			)
-		);
+		$response = $this->call_chromedata_api( $api_url, array(
+			'VIN'             => $vin,
+			'onlyDecodeUsing' => 'V,E,C,S',
+		) );
 
 		if ( is_wp_error( $response ) ) {
-			error_log( '[VIN Admin] Chromedata API error for VIN ' . $vin . ': ' . $response->get_error_message() );
-			wp_send_json_error( array( 'message' => __( 'API request failed. Please try again.', 'shopperexpress' ) ) );
-			return;
+			return $response;
 		}
 
 		$has_data = ! empty( $response['result']['features'] );
 
 		if ( ! $has_data ) {
-			wp_send_json_success(
-				array(
-					'hasData' => false,
-					'vin'     => $vin,
-				)
-			);
-			return;
+			return array( 'hasData' => false, 'vin' => $vin );
 		}
 
 		$payload = array(
@@ -272,98 +225,68 @@ class Vin_Admin implements Theme_Component {
 		set_transient( $cache_key, $payload, self::CACHE_TTL );
 		$this->push_history( $vin, $response );
 
-		wp_send_json_success( $payload );
+		return $payload;
 	}
 
 	/**
-	 * Handle the AJAX request to run run_callapi_in_background() and report back.
+	 * Clear the current user's VIN history.
 	 *
 	 * @return void
 	 */
-	public function handle_background_ajax(): void {
-		check_ajax_referer( self::AJAX_ACTION, 'nonce' );
+	public function clear_user_history(): void {
+		delete_user_meta( get_current_user_id(), self::HISTORY_KEY );
+	}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'shopperexpress' ) ), 403 );
-			return;
-		}
-
-		$vin = strtoupper( trim( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) ) );
-
-		if ( ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/', $vin ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid VIN.', 'shopperexpress' ) ) );
-			return;
-		}
-
+	/**
+	 * Dispatch a background Chromedata API call for a VIN.
+	 *
+	 * @param string $vin Validated VIN (uppercase).
+	 * @return array|\WP_Error
+	 */
+	public function run_background_for_vin( string $vin ) {
 		$api_url = get_field( 'url_chromedata', 'options' );
 
 		if ( empty( $api_url ) ) {
-			wp_send_json_error( array( 'message' => __( 'Chromedata URL is not configured.', 'shopperexpress' ) ) );
-			return;
+			return new \WP_Error( 'not_configured', __( 'Chromedata URL is not configured.', 'shopperexpress' ) );
 		}
 
 		if ( ! function_exists( 'run_callapi_in_background' ) ) {
-			wp_send_json_error( array( 'message' => __( 'run_callapi_in_background() is not available.', 'shopperexpress' ) ) );
-			return;
+			return new \WP_Error( 'unavailable', __( 'run_callapi_in_background() is not available.', 'shopperexpress' ) );
 		}
 
 		if ( $this->is_shell_exec_disabled() ) {
-			wp_send_json_error( array( 'message' => __( 'shell_exec is disabled on this server (disable_functions).', 'shopperexpress' ) ) );
-			return;
+			return new \WP_Error( 'shell_disabled', __( 'shell_exec is disabled on this server (disable_functions).', 'shopperexpress' ) );
 		}
 
 		$post_id = $this->find_post_by_vin( $vin );
 
 		if ( ! $post_id ) {
-			wp_send_json_error( array( 'message' => __( 'No listing found for this VIN in listings or used-listings.', 'shopperexpress' ) ) );
-			return;
+			return new \WP_Error( 'not_found', __( 'No listing found for this VIN in listings or used-listings.', 'shopperexpress' ) );
 		}
 
-		run_callapi_in_background(
-			$api_url,
-			array(
-				'VIN'             => $vin,
-				'onlyDecodeUsing' => 'V,E,C,S',
-			),
-			$post_id
-		);
+		run_callapi_in_background( $api_url, array(
+			'VIN'             => $vin,
+			'onlyDecodeUsing' => 'V,E,C,S',
+		), $post_id );
 
-		wp_send_json_success(
-			array(
-				'message' => sprintf(
-					/* translators: 1: post ID, 2: post type */
-					__( 'Background job dispatched for post #%1$d (%2$s).', 'shopperexpress' ),
-					$post_id,
-					get_post_type( $post_id )
-				),
-				'post_id' => $post_id,
-			)
+		return array(
+			'message' => sprintf(
+				/* translators: 1: post ID, 2: post type */
+				__( 'Background job dispatched for post #%1$d (%2$s).', 'shopperexpress' ),
+				$post_id,
+				get_post_type( $post_id )
+			),
+			'post_id' => $post_id,
 		);
 	}
 
 	/**
 	 * Poll whether features_items has been populated for a given post.
 	 *
-	 * Returns { populated: true, count: N } once the CLI job has saved rows,
-	 * or { populated: false } while it is still running.
-	 *
-	 * @return void
+	 * @param int $post_id Post ID.
+	 * @return array { populated: bool, count: int, field: string }
 	 */
-	public function handle_poll_ajax(): void {
-		check_ajax_referer( self::AJAX_ACTION, 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'shopperexpress' ) ), 403 );
-			return;
-		}
-
-		$post_id = absint( $_POST['post_id'] ?? 0 );
-
-		if ( ! $post_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid post ID.', 'shopperexpress' ) ) );
-			return;
-		}
-
+	public function poll_features( int $post_id ): array {
 		$post_type   = get_post_type( $post_id );
 		$type_prefix = in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ), true )
 			? $post_type . '_'
@@ -373,24 +296,29 @@ class Vin_Admin implements Theme_Component {
 		$rows  = get_field( $field_key, $post_id );
 		$count = is_array( $rows ) ? count( $rows ) : 0;
 
-		wp_send_json_success(
-			array(
-				'populated' => $count > 0,
-				'count'     => $count,
-				'field'     => $field_key,
-			)
+		return array(
+			'populated' => $count > 0,
+			'count'     => $count,
+			'field'     => $field_key,
 		);
 	}
 
 	/**
-	 * Check whether shell_exec is actually usable (not in disable_functions).
+	 * Return the current user's VIN history (newest first).
 	 *
-	 * function_exists('shell_exec') is always true even when disabled,
-	 * so we parse the ini setting directly.
+	 * @return array<int, array{vin: string, label: string, time: string}>
+	 */
+	public function get_history(): array {
+		$history = get_user_meta( get_current_user_id(), self::HISTORY_KEY, true );
+		return is_array( $history ) ? $history : array();
+	}
+
+	/**
+	 * Check whether shell_exec is actually usable.
 	 *
 	 * @return bool True if disabled.
 	 */
-	private function is_shell_exec_disabled(): bool {
+	public function is_shell_exec_disabled(): bool {
 		$disabled = array_map( 'trim', explode( ',', (string) ini_get( 'disable_functions' ) ) );
 		return in_array( 'shell_exec', $disabled, true );
 	}
@@ -439,16 +367,6 @@ class Vin_Admin implements Theme_Component {
 
 		delete_user_meta( get_current_user_id(), self::HISTORY_KEY );
 		wp_send_json_success();
-	}
-
-	/**
-	 * Return the current user's VIN history (newest first).
-	 *
-	 * @return array<int, array{vin: string, label: string, time: string}>
-	 */
-	private function get_history(): array {
-		$history = get_user_meta( get_current_user_id(), self::HISTORY_KEY, true );
-		return is_array( $history ) ? $history : array();
 	}
 
 	/**
@@ -509,74 +427,20 @@ class Vin_Admin implements Theme_Component {
 	/**
 	 * Call the Chromedata API and return the decoded JSON array.
 	 *
-	 * Mirrors the auth logic in api-cli.php but runs in a web context.
-	 * Returns WP_Error on cURL failure or non-200 response.
+	 * Delegates entirely to Chromedata_Client so auth logic lives in one place.
 	 *
 	 * @param string $url  Chromedata endpoint URL (from ACF options).
 	 * @param array  $data Query parameters (VIN, onlyDecodeUsing, etc.).
 	 * @return array|\WP_Error Decoded response array or WP_Error.
 	 */
 	private function call_chromedata_api( string $url, array $data ) {
-		$mt        = explode( ' ', microtime() );
-		$timestamp = ( (int) $mt[1] ) * 1000 + (int) round( $mt[0] * 1000 );
+		$response = Chromedata_Client::request( $url, $data );
 
-		$nonce = substr(
-			str_replace( array( '+', '/', '=' ), '', base64_encode( random_bytes( 32 ) ) ),
-			0,
-			32
-		);
-
-		$app_id = get_field( 'chromedata_app_id', 'options' );
-		$secret = get_field( 'shared_secret', 'options' );
-		$digest = base64_encode( sha1( $nonce . $timestamp . $secret, true ) );
-
-		$token = sprintf(
-			'Atmosphere realm="http://chromedata.com",chromedata_app_id="%s",chromedata_nonce="%s",chromedata_secret_digest="%s",chromedata_digest_method=SHA1,chromedata_version=1.0,chromedata_timestamp="%s"',
-			$app_id,
-			$nonce,
-			$digest,
-			$timestamp
-		);
-
-		$ch = curl_init();
-		curl_setopt_array(
-			$ch,
-			array(
-				CURLOPT_URL            => $url . '?' . http_build_query( $data ),
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_CUSTOMREQUEST  => 'PUT',
-				CURLOPT_HTTPHEADER     => array(
-					'Accept: application/json',
-					'Content-Type: application/json',
-					'Authorization: ' . $token,
-				),
-				CURLOPT_POSTFIELDS     => json_encode( $data ),
-				CURLOPT_TIMEOUT        => 15,
-				CURLOPT_SSL_VERIFYHOST => 0,
-				CURLOPT_SSL_VERIFYPEER => 0,
-			)
-		);
-
-		$body  = curl_exec( $ch );
-		$error = curl_error( $ch );
-		$code  = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-		curl_close( $ch );
-
-		if ( $error ) {
-			return new \WP_Error( 'curl_error', $error );
+		if ( is_wp_error( $response ) ) {
+			return $response;
 		}
 
-		if ( $code !== 200 ) {
-			return new \WP_Error( 'http_error', "Chromedata returned HTTP {$code}" );
-		}
-
-		$result = json_decode( $body, true );
-
-		if ( ! is_array( $result ) ) {
-			return new \WP_Error( 'parse_error', 'Failed to parse Chromedata response' );
-		}
-
-		return $result;
+		return $response['result'];
 	}
 
 	// -------------------------------------------------------------------------

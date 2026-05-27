@@ -73,6 +73,15 @@ if ( $popup ) :
 					<div class="modal-footer">
 						<div class="steps-controls">
 							<?php
+							if ( ! empty( $next_button ) ) {
+								render_step_button(
+									$next_button,
+									array(
+										'default_title' => esc_html__( 'Next', 'shopperexpress' ),
+										'class'         => 'btn-next',
+									)
+								);
+							}
 							if ( ! empty( $close_button ) ) {
 								render_step_button(
 									$close_button,
@@ -80,15 +89,6 @@ if ( $popup ) :
 										'default_title' => esc_html__( 'Close', 'shopperexpress' ),
 										'class'         => 'btn-close-step',
 										'attrs'         => 'data-dismiss="modal"',
-									)
-								);
-							}
-							if ( ! empty( $next_button ) ) {
-								render_step_button(
-									$next_button,
-									array(
-										'default_title' => esc_html__( 'Next', 'shopperexpress' ),
-										'class'         => 'btn-next',
 									)
 								);
 							}

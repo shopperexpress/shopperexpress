@@ -352,6 +352,18 @@ class Import_Monitor_Tracker implements Theme_Component {
 	 * @return array
 	 */
 	public static function get_monitored_imports(): array {
+		return array_filter(
+			self::get_all_imports(),
+			static fn( $row ) => ( ! isset( $row['active'] ) || ! empty( $row['active'] ) ) && ! empty( $row['import_id'] )
+		);
+	}
+
+	/**
+	 * Return all configured imports regardless of active flag (used by the SOC panel).
+	 *
+	 * @return array
+	 */
+	public static function get_all_imports(): array {
 		$imports = function_exists( 'get_field' ) ? get_field( 'wpim_imports', 'option' ) : null;
 		if ( ! is_array( $imports ) ) {
 			$raw     = get_option( 'options_wpim_imports' );
@@ -360,9 +372,6 @@ class Import_Monitor_Tracker implements Theme_Component {
 		if ( empty( $imports ) ) {
 			return array();
 		}
-		return array_filter(
-			$imports,
-			static fn( $row ) => ( ! isset( $row['active'] ) || ! empty( $row['active'] ) ) && ! empty( $row['import_id'] )
-		);
+		return array_values( array_filter( $imports, static fn( $row ) => ! empty( $row['import_id'] ) ) );
 	}
 }

@@ -1458,8 +1458,15 @@
                         [
                             {
                                 "field": "field_667c2c620eda3",
-                                "operator": "!=",
-                                "value": "1"
+                                "operator": "==",
+                                "value": "2"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "4"
                             }
                         ]
                     ],
@@ -1507,8 +1514,15 @@
                         [
                             {
                                 "field": "field_667c2c620eda3",
-                                "operator": "!=",
-                                "value": "1"
+                                "operator": "==",
+                                "value": "4"
+                            }
+                        ],
+                        [
+                            {
+                                "field": "field_667c2c620eda3",
+                                "operator": "==",
+                                "value": "2"
                             }
                         ]
                     ],
@@ -1549,13 +1563,6 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "4"
-                            }
-                        ],
-                        [
-                            {
-                                "field": "field_667c2c620eda3",
-                                "operator": "==",
-                                "value": "5"
                             }
                         ]
                     ],
@@ -1612,13 +1619,6 @@
                                 "field": "field_667c2c620eda3",
                                 "operator": "==",
                                 "value": "1"
-                            }
-                        ],
-                        [
-                            {
-                                "field": "field_667c2c620eda3",
-                                "operator": "==",
-                                "value": "3"
                             }
                         ]
                     ],
@@ -12338,5 +12338,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1779458293
+    "modified": 1779357700
 }

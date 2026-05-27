@@ -231,8 +231,10 @@ class JSON_LD implements Theme_Component {
 
 		if ( $get_transient ) :
 			$get_transient['vehicles'] = array_slice( $get_transient['vehicles'], 0, 24 );
+
 			?>
 		<script type="application/ld+json">
+
 		{
 			"@context": "https://schema.org",
 			"@type": "CollectionPage",

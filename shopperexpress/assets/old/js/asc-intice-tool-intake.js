@@ -23,7 +23,10 @@
 		'https://app.intice.com',
 		'https://tools.inticeinc.com',
 		'https://tools.inticeinc.net',
-		'https://cdn.intice.com'
+		'https://cdn.intice.com',
+		'https://my-dealmaker.com',
+		'https://gettradevalue.com',
+		'https://my-loanmaker.com'
 	];
 
 	function isValidInticeToolEvent(data) {
@@ -184,7 +187,7 @@
 
 		if (data.source === 'intice_tool') {
 			if (!isValidInticeToolEvent(data)) {
-				console.log('⛔ INVALID TOOL EVENT');
+				console.log('⛔ INVALID TOOL EVENT', { tool_name: data.tool_name });
 				return;
 			}
 
@@ -198,7 +201,6 @@
 			return;
 		}
 
-		console.log('⚠️ UNKNOWN EVENT TYPE');
 	}
 
 	window.addEventListener('message', handleInticeToolMessage);
