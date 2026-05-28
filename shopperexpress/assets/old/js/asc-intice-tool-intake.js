@@ -79,10 +79,15 @@
 	function enrichToolAscEvent(ascEvent) {
 		var base = (window.asc_datalayer && window.asc_datalayer[0]) || {};
 
-		return Object.assign({}, base, ascEvent, {
-			department: ascEvent.department || base.department || 'sales',
-			page_type: ascEvent.page_type || base.page_type || '',
-			items: ascEvent.items || base.items || []
+		// prevent recursive structures
+		var safeBase = Object.assign({}, base);
+
+		delete safeBase.events;
+
+		return Object.assign({}, safeBase, ascEvent, {
+			department: ascEvent.department || safeBase.department || 'sales',
+			page_type: ascEvent.page_type || safeBase.page_type || '',
+			items: ascEvent.items || safeBase.items || []
 		});
 	}
 

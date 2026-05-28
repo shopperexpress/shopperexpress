@@ -113,11 +113,10 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 		switch ( get_sub_field( 'operator_1' ) ) {
 			case '>':
-				$condition = $value_1 > $value_from_field;
-
+				$condition =  $value_from_field > $value_1;
 				break;
 			case '<':
-				$condition = $value_1 < $value_from_field;
+				$condition =  $value_from_field < $value_1;
 				break;
 			case '=':
 				$condition = $value_from_field === $value_1;
@@ -145,9 +144,6 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			$value = ( ! empty( $value ) && (int) $value > 0 ) ? $value : null;
 		} else {
 			$value = $custom_text;
-			if ( empty( $value ) && 1 === get_row_index() ) {
-				break;
-			}
 		}
 	}
 
@@ -185,6 +181,8 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		if ( get_sub_field( 'cross_heading' ) ) {
 			$formatted_value = '<s>' . $formatted_value . '</s>';
 		}
+	}else{
+		$formatted_value = $value;
 	}
 	$price_class = $style ? 'price-spr' : 'market-price';
 
@@ -204,7 +202,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			<?php endif; ?>
 			<strong class="price">
 				<span class="<?php echo esc_attr( $price_class ); ?>"<?php echo $price_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
-					<?php echo wp_kses( $formatted_value, array( 's' => array() ) ); ?>
+					<?php echo $formatted_value; ?>
 				</span>
 			</strong>
 		</a>
