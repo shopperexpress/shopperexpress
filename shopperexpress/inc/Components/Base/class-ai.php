@@ -1323,11 +1323,81 @@ class AI implements Theme_Component {
 	 */
 	private function render_specials_response( string $question, array $context ): string {
 
-		$specials_json = ! empty( $context['specials'] ) ? (string) wp_json_encode( $context ) : '';
+		$specials      = array_slice( $context['specials'] ?? array(), 0, 5 );
+		$specials_json = ! empty( $specials ) ? (string) wp_json_encode( $context ) : '';
 		$prompt        = $this->build_specials_prompt( $question, $specials_json );
 		$message       = $this->ask_ai( $prompt );
+		$message       = $this->convert_markdown_links( $message );
+		$message       = $this->inject_specials_links( $message, $specials );
 
-		return $this->convert_markdown_links( $message );
+		return $message;
+	}
+
+	/**
+	 * Replaces [SPECIAL_LINK:{id}] tokens in AI output with real anchor tags.
+	 *
+	 * The AI outputs tokens like [SPECIAL_LINK:4821] instead of URLs. This
+	 * method does an exact ID lookup against the specials data and replaces
+	 * each token with <a href="...">View Offer</a>. Tokens with unknown IDs
+	 * are removed silently.
+	 *
+	 * @param string $html     AI-generated HTML.
+	 * @param array  $specials Normalised specials array (each item has 'id' and 'url').
+	 * @return string HTML with resolved anchor tags.
+	 */
+	/**
+	 * Strips any AI-invented links from the response and appends real offer
+	 * cards built directly from the specials data. The AI is no longer trusted
+	 * to produce correct URLs — PHP owns all link generation.
+	 *
+	 * @param string $html     AI-generated HTML (links stripped).
+	 * @param array  $specials Normalised specials (max 5, already sliced).
+	 * @return string HTML with real offer links appended.
+	 */
+	private function inject_specials_links( string $html, array $specials ): string {
+
+		if ( empty( $specials ) ) {
+			return $html;
+		}
+
+		// Remove any <a> tags the AI invented so no fake URLs survive.
+		$html = preg_replace( '/<a\b[^>]*>(.*?)<\/a>/is', '$1', $html );
+
+		// Collect valid URLs in order.
+		$urls = array();
+		foreach ( $specials as $special ) {
+			$url = $special['url'] ?? '';
+			if ( ! empty( $url ) ) {
+				$urls[] = esc_url( $url );
+			}
+		}
+
+		if ( empty( $urls ) ) {
+			return $html;
+		}
+
+		// Inject each URL into the matching special-offer__actions div by position.
+		$index = 0;
+		$html  = preg_replace_callback(
+			'/<div class="special-offer__actions">(.*?)<\/div>/is',
+			function ( $matches ) use ( $urls, &$index ) {
+				if ( isset( $urls[ $index ] ) ) {
+					$link = '<a href="' . $urls[ $index ] . '" class="btn btn-primary">View Offer</a>';
+					++$index;
+					return '<div class="special-offer__actions">' . $link . '</div>';
+				}
+				++$index;
+				return $matches[0];
+			},
+			$html
+		);
+
+		// Append any remaining links if there are more specials than cards.
+		for ( $i = $index; $i < count( $urls ); $i++ ) {
+			$html .= '<p><a href="' . $urls[ $i ] . '" class="btn btn-primary">View Offer</a></p>';
+		}
+
+		return $html;
 	}
 
 	// -------------------------------------------------------------------------
@@ -2006,45 +2076,39 @@ class AI implements Theme_Component {
 		$cache_key = 'ai_spec_' . md5( $question );
 		$cached    = get_transient( $cache_key );
 
-		if ( is_array( $cached ) ) {
+		if ( is_array( $cached ) && ! empty( $cached['specials'] ) ) {
 			return $cached;
 		}
 
-		$url = add_query_arg(
-			array_merge(
-				$filters,
-				array(
-					'active_only' => '1',
-					'limit'       => 20,
-				)
-			),
-			home_url( '/wp-json/ai/v1/specials' )
+		// Call the data layer directly — avoids HTTP loopback failures on
+		// local/staging environments with SSL or auth issues.
+		$all_specials = $this->load_all_specials();
+
+		$normalized_filters = array(
+			'make'        => sanitize_text_field( $filters['make'] ?? '' ),
+			'model'       => sanitize_text_field( $filters['model'] ?? '' ),
+			'trim'        => sanitize_text_field( $filters['trim'] ?? '' ),
+			'year'        => ! empty( $filters['year'] ) ? (int) $filters['year'] : 0,
+			'condition'   => sanitize_text_field( $filters['condition'] ?? '' ),
+			'post_type'   => sanitize_text_field( $filters['post_type'] ?? '' ),
+			'min_payment' => ! empty( $filters['min_payment'] ) ? (float) $filters['min_payment'] : 0.0,
+			'max_payment' => ! empty( $filters['max_payment'] ) ? (float) $filters['max_payment'] : 0.0,
+			'active_only' => true,
 		);
 
-		$response = wp_remote_get(
-			$url,
-			array(
-				'sslverify' => ( 'https' === parse_url( $url, PHP_URL_SCHEME ) ),
-				'headers'   => $this->get_basic_auth_headers(),
-			)
+		$filtered = $this->apply_specials_filters( $all_specials, $normalized_filters );
+		$sliced   = array_slice( $filtered, 0, 20 );
+
+		$applied = array_filter(
+			$normalized_filters,
+			fn( $v ) => '' !== $v && 0 !== $v && 0.0 !== $v && true !== $v
 		);
 
-		if ( is_wp_error( $response ) ) {
-			return array(
-				'count'    => 0,
-				'specials' => array(),
-				'error'    => 'API error',
-			);
-		}
-
-		$data = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( ! is_array( $data ) ) {
-			$data = array(
-				'count'    => 0,
-				'specials' => array(),
-			);
-		}
+		$data = array(
+			'count'           => count( $sliced ),
+			'specials'        => $sliced,
+			'applied_filters' => $applied,
+		);
 
 		set_transient( $cache_key, $data, 10 * MINUTE_IN_SECONDS );
 
@@ -2376,29 +2440,47 @@ class AI implements Theme_Component {
 		$acf = (string) get_field( 'ai_specials_promt', 'option' );
 
 		$template = ! empty( $acf ) ? $acf : <<<'PROMPT'
-		You are a dealership offers and specials assistant.
-		Answer ONLY using the specials data provided below.
-		Do NOT invent offers, payments, APR rates, or expiration dates.
+		You are a helpful dealership website assistant.
 
-		RULES:
-		- Use ONLY specials_context data
-		- Do NOT mix specials with inventory vehicles
-		- Omit any field that is null or empty — do not say "not available"
-		- Include the offer URL as a clickable link when present
-		- Render max 5 offers
+		Use ONLY the specials data provided below to answer the user's question.
 
-		OUTPUT FORMAT:
-		For each matching offer, output:
-		- Make / Model / Year (if present)
-		- Offer type (lease / finance / conditional / general)
-		- Payment amount and term (if present)
-		- Due at signing (if present)
-		- Expiration date (if present)
-		- CTA link (if present)
+		Your goal is to present matching specials in a friendly, easy-to-read format.
 
-		If no specials match:
-		→ Respond: "I don't see any current specials matching your request."
-		Then end with: [SALES]
+		Return valid HTML only. Do not use markdown. Do not invent offers, pricing, terms, expiration dates, or links.
+
+		FORMATTING RULES:
+		- Start with a short helpful sentence.
+		- Display each matching offer as a separate card or paragraph.
+		- Include the most useful details when available:
+		  - Year
+		  - Make
+		  - Model
+		  - Trim
+		  - Offer type
+		  - Monthly payment
+		  - Term
+		  - Due at signing
+		  - Expiration date
+		  - CTA link
+		- If a value is missing, omit that line.
+		- Do not show raw JSON.
+		- Do not use technical labels like post_type.
+		- Limit the response to the best 3 to 5 matching offers.
+		- Do not output any links or URLs. CTA links are added automatically by the system after your response.
+		- If no specials match, politely say that no matching specials were found and recommend viewing all current specials or contacting the dealership.
+
+		EXAMPLE OUTPUT STYLE:
+		<p>Here are the current Honda Civic lease specials I found:</p>
+		<div class="special-offer">
+		  <h3>2026 Honda Civic LX Lease Offer</h3>
+		  <p><strong>Payment:</strong> $219/month</p>
+		  <p><strong>Term:</strong> 36 months</p>
+		  <p><strong>Due at signing:</strong> $3,899</p>
+		  <p><strong>Expires:</strong> July 6, 2026</p>
+		  <div class="special-offer__actions">
+		    <p><a href="#" data-post_id="123">View</a></p>
+		  </div>
+		</div>
 
 		CONTACT ESCALATION RULES:
 		End your response with exactly ONE of:
@@ -2406,8 +2488,7 @@ class AI implements Theme_Component {
 		- [SERVICE] — service offers, maintenance specials
 		Default escalation: [SALES]
 
-		Specials Data:
-		[specials_context]
+		Matched specials: [specials_context]
 
 		User question: [question]
 		PROMPT;
@@ -2433,41 +2514,50 @@ class AI implements Theme_Component {
 	private function build_specials_filter_prompt( string $question ): string {
 
 		$template = <<<'PROMPT'
-		You are a specials filter extraction engine for a car dealership.
+		You are a specials search filter extraction engine for a car dealership website.
 
-		Extract offer filters from the user query.
+		Your job is to extract structured filters from the user's question so the system can search available specials.
 
-		RETURN ONLY VALID RAW JSON — no markdown, no code blocks, no backticks, no explanation.
+		Return ONLY valid raw JSON. Do not include markdown, code blocks, comments, explanations, or text outside the JSON.
 
-		OUTPUT FORMAT (always return all keys):
-		{
-		"make": "",
-		"model": "",
-		"trim": "",
-		"year": 0,
-		"condition": "",
-		"post_type": "",
-		"min_payment": 0,
-		"max_payment": 0
-		}
+		Always return this exact JSON structure:
+		{ "make": "", "model": "", "trim": "", "year": 0, "condition": "", "post_type": "", "min_payment": 0, "max_payment": 0 }
 
-		RULES:
-		- Use "" or 0 for missing values
-		- Normalize make names: chevy → Chevrolet, vw → Volkswagen, merc → Mercedes-Benz
-		- condition values (only these are valid): new | used | ""
-		  - new, brand new → "new"
-		  - used, pre-owned, second hand → "used"
-		  - If not specified → ""
-		- post_type values (only these are valid): lease | finance | conditional | service | general
-		- lease, leasing → "lease"
-		- finance, financing, APR, loan → "finance"
-		- service, oil change, maintenance, repair coupon → "service"
-		- If not specified → ""
-		- Payment values must be numeric only (no $ or commas)
-		- "under $300/month" → max_payment: 300
-		- "at least $200/month" → min_payment: 200
+		EXTRACTION RULES:
+		- Use "" for missing text values.
+		- Use 0 for missing numeric values.
+		- Normalize common make names:
+		  - honda → Honda
+		  - toyota → Toyota
+		  - chevy → Chevrolet
+		  - vw → Volkswagen
+		  - merc → Mercedes-Benz
 
-		Do NOT include any text before or after the JSON.
+		Condition values:
+		- Only use: "new", "used", or ""
+		- new, brand new → "new"
+		- used, pre-owned, second hand, certified pre-owned, cpo → "used"
+		- If not stated, use ""
+
+		Post type values:
+		- Only use: "lease", "finance", "conditional", "service", or ""
+		- lease, leasing, monthly lease → "lease"
+		- finance, financing, APR, loan, payment offer → "finance"
+		- service, oil change, maintenance, repair, coupon → "service"
+		- conditional, rebate, incentive, bonus cash, loyalty, conquest, military, college grad → "conditional"
+		- If not stated, use ""
+
+		Payment rules:
+		- Payment values must be numeric only.
+		- Do not include $, commas, or text.
+		- "under $300/month" → "max_payment": 300
+		- "less than $300" → "max_payment": 300
+		- "$300 or less" → "max_payment": 300
+		- "around $300" → "max_payment": 300
+		- "at least $200/month" → "min_payment": 200
+		- "between $200 and $350" → "min_payment": 200, "max_payment": 350
+
+		Do not guess values that are not clearly stated.
 
 		User question: "[question]"
 		PROMPT;

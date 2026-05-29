@@ -1,284 +1,2043 @@
+# Copyright (C) 2026 ShopperExpress
+# This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Base\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-12 13:52+0200\n"
-"PO-Revision-Date: 2012-11-12 14:21+0200\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: ShopperExpress 2.0.45\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/shopperexpress\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
-"X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: ..\n"
+"POT-Creation-Date: 2026-05-29T14:50:33+03:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: shopperexpress\n"
 
-#: ../404.php:6
-#: ../archive.php:54
-#: ../index.php:33
-#: ../page.php:22
-#: ../single.php:37
-#: ../template-testimonials.php:50
-msgid "Not Found"
+#. Theme Name of the theme
+#. Author of the theme
+#: style.css
+msgid "ShopperExpress"
 msgstr ""
 
-#: ../404.php:9
-#: ../archive.php:57
-#: ../index.php:36
-#: ../page.php:25
-#: ../single.php:40
-#: ../template-testimonials.php:53
-msgid "Sorry, but you are looking for something that isn't here."
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/shopperexpress/shopperexpress"
 msgstr ""
 
-#: ../archive.php:10
-#, php-format
-msgid "Archive for the &#8216;%s&#8217; Category"
+#. Description of the theme
+#: style.css
+msgid "ShopperExpress theme for Wordpress"
 msgstr ""
 
-#: ../archive.php:12
-#, php-format
-msgid "Posts Tagged &#8216;%s&#8217;"
+#. Template Name of the theme
+msgid "Listings Template"
 msgstr ""
 
-#: ../archive.php:14
-#: ../archive.php:16
-#: ../archive.php:18
-msgid "Archive for"
+#: archive-listings.php:39
+msgid "Filter"
 msgstr ""
 
-#: ../archive.php:20
-msgid "Author Archive"
+#: archive-listings.php:58
+msgid "Starting MSRP"
 msgstr ""
 
-#: ../archive.php:22
-msgid "Blog Archives"
+#: archive-listings.php:58
+msgid "Price"
 msgstr ""
 
-#: ../archive.php:30
-#: ../index.php:9
-#: ../search.php:15
-msgid "Permanent Link to"
+#: archive-listings.php:59
+msgid "Lease Payment"
 msgstr ""
 
-#: ../archive.php:31
-#: ../index.php:10
-#: ../single.php:11
-msgid "by"
+#: archive-listings.php:59
+msgid "Payment"
 msgstr ""
 
-#: ../archive.php:38
-#: ../index.php:17
-#: ../single.php:18
-msgid "Posted in"
+#: archive-listings.php:64
+msgid "Showing"
 msgstr ""
 
-#: ../archive.php:39
-#: ../index.php:18
-#: ../single.php:19
-msgid "No Comments"
+#: archive-listings.php:64
+msgid "of"
 msgstr ""
 
-#: ../archive.php:39
-#: ../index.php:18
-#: ../single.php:19
-msgid "1 Comment"
+#: archive-listings.php:64
+msgid "found"
 msgstr ""
 
-#: ../archive.php:39
-#: ../index.php:18
-#: ../single.php:19
-msgid "% Comments"
+#: archive-listings.php:65
+msgid "show all vehicles"
 msgstr ""
 
-#: ../archive.php:40
-#: ../index.php:19
-#: ../single.php:20
-msgid "<li>Tags: "
+#: archive-listings.php:244
+msgid "Search Year, Make, Model or Body Style"
 msgstr ""
 
-#: ../archive.php:47
-#: ../index.php:26
-#: ../search.php:24
-#: ../template-testimonials.php:36
-msgid "Older Entries &raquo;"
+#: archive-listings.php:248
+msgid "Search Year, Make, Model or Trims"
 msgstr ""
 
-#: ../archive.php:48
-#: ../index.php:27
-#: ../search.php:25
-#: ../template-testimonials.php:37
-msgid "&laquo; Newer Entries"
+#: archive-listings.php:252
+msgid "Search Department, Type, Expiration or Title"
 msgstr ""
 
-#: ../comments.php:8
-msgid "This post is password protected. Enter the password to view comments."
+#: archive-listings.php:257
+msgid "Search By Make or Model"
 msgstr ""
 
-#: ../comments.php:18
-msgid "at"
+#: archive-listings.php:261
+#: template-parts/search-form.php:18
+msgid "Search Makes, Models, Stock Number or VIN"
 msgstr ""
 
-#: ../comments.php:18
-msgid "said:"
+#: archive-listings.php:272
+msgid "Go to top"
 msgstr ""
 
-#: ../comments.php:20
-msgid "Your comment is awaiting moderation."
+#: archive-listings.php:282
+msgid "sort by"
 msgstr ""
 
-#: ../comments.php:27
-msgid "Reply"
+#: archive-listings.php:284
+msgid "choose option"
 msgstr ""
 
-#: ../comments.php:45
-msgid "No Responses"
+#: archive-listings.php:292
+msgid "Highest Offer"
 msgstr ""
 
-#: ../comments.php:45
-msgid "One Response"
+#: archive-listings.php:293
+msgid "Lowest Offer"
 msgstr ""
 
-#: ../comments.php:45
-msgid "% Responses"
+#: archive-listings.php:294
+#: archive-listings.php:301
+#: archive-listings.php:308
+msgid "Model Name"
 msgstr ""
 
-#: ../comments.php:45
-msgid "to"
+#: archive-listings.php:299
+msgid "Highest APR"
 msgstr ""
 
-#: ../comments.php:55
-msgid "&laquo; Older Comments"
+#: archive-listings.php:300
+msgid "Lowest APR"
 msgstr ""
 
-#: ../comments.php:56
-msgid "Newer Comments &raquo;"
+#: archive-listings.php:306
+#: archive-listings.php:320
+msgid "Highest Payment"
 msgstr ""
 
-#: ../comments.php:68
-msgid "Comments are closed."
+#: archive-listings.php:307
+#: archive-listings.php:321
+msgid "Lowest Payment"
 msgstr ""
 
-#: ../comments.php:80
-msgid "Leave a Reply"
+#: archive-listings.php:315
+msgid "Highest Price"
 msgstr ""
 
-#: ../comments.php:80
-#, php-format
-msgid "Leave a Reply to %s"
+#: archive-listings.php:316
+msgid "Lowest Price"
 msgstr ""
 
-#: ../comments.php:85
-msgid "logged in"
+#: archive-listings.php:318
+msgid "Priority"
 msgstr ""
 
-#: ../comments.php:85
-msgid "to post a comment."
+#: archive-listings.php:322
+msgid "Newest First"
 msgstr ""
 
-#: ../comments.php:90
-msgid "Logged in as"
+#: archive-listings.php:323
+msgid "Oldest First"
 msgstr ""
 
-#: ../comments.php:90
-msgid "Log out of this account"
+#: archive-listings.php:325
+msgid "Show Unique Only"
 msgstr ""
 
-#: ../comments.php:90
-msgid "Log out &raquo;"
+#: archive-listings.php:326
+msgid "Newest in stock"
 msgstr ""
 
-#: ../comments.php:97
-msgid "Name"
+#: archive-listings.php:327
+msgid "Oldest in stock"
 msgstr ""
 
-#: ../comments.php:99
-msgid "E-Mail (will not be published)"
+#: archive-listings.php:328
+msgid "Show All"
 msgstr ""
 
-#: ../comments.php:101
-msgid "Website"
+#: archive-listings.php:338
+msgid "Loading"
 msgstr ""
 
-#: ../comments.php:104
-msgid "Comment"
+#: archive-listings.php:347
+#: template-parts/pager.php:10
+msgid "Previous page"
 msgstr ""
 
-#: ../comments.php:106
-msgid "Submit Comment"
+#: archive-listings.php:348
+msgid "Page"
 msgstr ""
 
-#: ../functions.php:25
-#: ../sidebar.php:3
-msgid "Default Sidebar"
+#: archive-listings.php:354
+#: template-parts/pager.php:11
+msgid "Next page"
 msgstr ""
 
-#: ../functions.php:40
-msgid "Primary Navigation"
+#: footer.php:103
+msgid "Version"
 msgstr ""
 
-#: ../functions.php:94
-msgid "Search"
+#: header.php:135
+msgid "Left menu toggle"
 msgstr ""
 
-#: ../search.php:8
-msgid "Search Results"
+#: header.php:204
+#: template-parts/acf-shared/tabs-slider.php:38
+#: template-parts/model-slider.php:27
+msgid "all vehicles"
 msgstr ""
 
-#: ../search.php:31
+#: header.php:259
+msgid "Main navigation toggle"
+msgstr ""
+
+#: header.php:270
+#: header.php:326
+msgid "Toggle Dropdown"
+msgstr ""
+
+#: header.php:290
+msgid "Saved New Listings"
+msgstr ""
+
+#: header.php:291
+msgid "Saved Used Listings"
+msgstr ""
+
+#: header.php:292
+msgid "Saved Conditional Offers"
+msgstr ""
+
+#: header.php:293
+msgid "Saved Lease Offers"
+msgstr ""
+
+#: header.php:294
+msgid "Saved Finance Offers"
+msgstr ""
+
+#: header.php:295
+msgid "Saved Offers"
+msgstr ""
+
+#: inc/class-widget.php:220
+#: inc/class-widget.php:232
+#: inc/class-widget.php:338
+msgid "Latest Posts"
+msgstr ""
+
+#: inc/class-widget.php:221
+msgid "Displays a list of your most recent posts."
+msgstr ""
+
+#: inc/class-widget.php:295
+msgid "Uncategorized"
+msgstr ""
+
+#: inc/class-widget.php:318
 msgid "No posts found."
 msgstr ""
 
-#: ../search.php:34
-msgid "Try a different search?"
+#: inc/class-widget.php:323
+msgid "See all latest news"
 msgstr ""
 
-#: ../searchform.php:1
+#: inc/Components/Base/class-ai-crawler.php:740
+msgid "Every 15 Minutes"
+msgstr ""
+
+#: inc/Components/Base/class-ai-crawler.php:744
+msgid "Every 2 Hours"
+msgstr ""
+
+#: inc/Components/Base/class-ai-crawler.php:871
+#: inc/Components/Base/class-import-monitor-dashboard.php:324
+msgid "Insufficient permissions."
+msgstr ""
+
+#: inc/Components/Base/class-ai.php:1414
+msgid "I'm not sure I can answer that accurately. Let me connect you with our team."
+msgstr ""
+
+#: inc/Components/Base/class-ai.php:1417
+msgid "Contact Us"
+msgstr ""
+
+#: inc/Components/Base/class-ai.php:2599
+msgid "Contact me"
+msgstr ""
+
+#: inc/Components/Base/class-ajax.php:292
+msgid "All fields mandatory."
+msgstr ""
+
+#: inc/Components/Base/class-ajax.php:294
+msgid "Email already exists."
+msgstr ""
+
+#: inc/Components/Base/class-ajax.php:296
+msgid "Error Occured please fill up the sign up form carefully."
+msgstr ""
+
+#. translators: %s: post type name
+#: inc/Components/Base/class-cpt.php:90
+#, php-format
+msgid "%s Description"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:98
+msgid "Item Archives"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:99
+msgid "Item Attributes"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:100
+msgid "Parent Item:"
+msgstr ""
+
+#. translators: %s: post type name
+#: inc/Components/Base/class-cpt.php:103
+#, php-format
+msgid "All %s"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:106
+msgid "Add New Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:107
+msgid "Add New"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:108
+msgid "New Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:109
+msgid "Edit Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:110
+msgid "Update Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:111
+msgid "View Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:112
+msgid "View Items"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:113
+msgid "Search Item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:114
+msgid "Not found"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:115
+msgid "Not found in Trash"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:116
+msgid "Featured Image"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:117
+msgid "Set featured image"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:118
+msgid "Remove featured image"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:119
+msgid "Use as featured image"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:120
+msgid "Insert into item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:121
+msgid "Uploaded to this item"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:122
+msgid "Items list"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:123
+msgid "Items list navigation"
+msgstr ""
+
+#: inc/Components/Base/class-cpt.php:124
+msgid "Filter items list"
+msgstr ""
+
+#: inc/Components/Base/class-export.php:67
+msgid "Export to JSON"
+msgstr ""
+
+#: inc/Components/Base/class-export.php:70
+msgid "Import from JSON"
+msgstr ""
+
+#: inc/Components/Base/class-export.php:76
+msgid "Please select a JSON file to import."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:105
+msgid "Import failed: "
+msgstr ""
+
+#: inc/Components/Base/class-export.php:212
+msgid "Invalid import request."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:222
+msgid "Access denied."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:228
+msgid "File upload error."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:233
+msgid "Failed to read import file."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:238
+msgid "Invalid JSON in import file."
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:41
+#: inc/Components/Base/class-import-monitor-dashboard.php:169
+msgid "Import Monitor Dashboard"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:42
+msgid "Import Monitor"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:133
+#: inc/Components/Base/class-vin-admin.php:83
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:175
+#: inc/Components/SOC/views/import-monitor.php:24
+msgid "Monitoring is currently disabled."
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:176
+#: inc/Components/SOC/views/import-monitor.php:25
+msgid "Enable it on the"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:177
+#: inc/Components/SOC/views/import-monitor.php:26
+msgid "Import Monitor settings page"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:185
+#: inc/Components/SOC/views/import-monitor.php:36
+msgid "Total Monitored"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:189
+#: inc/Components/SOC/views/import-monitor.php:40
+msgid "Last Run OK"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:193
+#: inc/Components/SOC/views/import-monitor.php:44
+msgid "Last Run Failed"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:197
+#: inc/Components/Base/class-import-monitor-dashboard.php:243
+#: inc/Components/SOC/views/import-monitor.php:48
+#: inc/Components/SOC/views/import-monitor.php:96
+msgid "Never Run"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:208
+#: inc/Components/SOC/views/import-monitor.php:52
+msgid "Next Cron Check"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:214
+#: inc/Components/SOC/views/import-monitor.php:66
+msgid "No imports are configured yet."
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:215
+#: inc/Components/SOC/views/import-monitor.php:67
+msgid "Add monitored imports →"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:221
+#: inc/Components/SOC/views/import-monitor.php:73
+#: inc/Components/SOC/views/security-snapshot.php:106
+msgid "ID"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:222
+#: inc/Components/SOC/views/api-health.php:19
+#: inc/Components/SOC/views/import-monitor.php:74
+msgid "Name"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:223
+#: inc/Components/SOC/views/import-monitor.php:75
+msgid "Check Mode"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:224
+#: inc/Components/SOC/views/import-monitor.php:76
+msgid "Last Run"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:225
+#: inc/Components/SOC/views/import-monitor.php:77
+msgid "Records"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:226
+#: inc/Components/SOC/views/api-health.php:21
+#: inc/Components/SOC/views/api-health.php:52
+#: inc/Components/SOC/views/cache-manager.php:104
+#: inc/Components/SOC/views/cron-manager.php:64
+#: inc/Components/SOC/views/import-monitor.php:78
+#: inc/Components/SOC/views/system-status.php:34
+#: inc/Components/SOC/views/system-status.php:85
+#: inc/Components/SOC/views/system-status.php:134
+#: inc/Components/SOC/views/system-status.php:193
+msgid "Status"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:227
+#: inc/Components/SOC/views/import-monitor.php:79
+msgid "Last Error"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:228
+#: inc/Components/SOC/views/cache-manager.php:42
+#: inc/Components/SOC/views/cache-manager.php:65
+#: inc/Components/SOC/views/cron-manager.php:35
+#: inc/Components/SOC/views/import-monitor.php:80
+#: inc/Components/SOC/views/security-snapshot.php:20
+msgid "Active"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:258
+#: inc/Components/SOC/views/cache-manager.php:117
+#: inc/Components/SOC/views/import-monitor.php:106
+msgid "ago"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:261
+#: inc/Components/Base/class-import-monitor-dashboard.php:286
+msgid "—"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:272
+#: inc/Components/Base/class-import-monitor-dashboard.php:279
+#: inc/Components/SOC/views/import-monitor.php:114
+msgid "Created / Updated / Skipped"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:305
+#: inc/Components/SOC/views/import-monitor.php:148
+msgid "Last page load:"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:307
+#: inc/Components/SOC/views/import-monitor.php:150
+msgid "Edit settings →"
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:332
+msgid "No imports found."
+msgstr ""
+
+#: inc/Components/Base/class-import-monitor-dashboard.php:346
+#: inc/Components/SOC/Modules/class-soc-import-monitor.php:135
+msgid "Import not found."
+msgstr ""
+
+#: inc/Components/Base/class-menus.php:37
+msgid "Drop-down"
+msgstr ""
+
+#: inc/Components/Base/class-menus.php:38
+msgid "Header Navigation"
+msgstr ""
+
+#. translators: %s: plugin slug
+#: inc/Components/Base/class-required-plugins.php:144
+#, php-format
+msgid "Shopperexpress: Cannot install required plugin \"%s\" — filesystem credentials required. Please install it manually."
+msgstr ""
+
+#. translators: 1: plugin slug, 2: error message
+#: inc/Components/Base/class-required-plugins.php:179
+#, php-format
+msgid "Shopperexpress: Could not fetch plugin info for \"%1$s\": %2$s"
+msgstr ""
+
+#: inc/Components/Base/class-required-plugins.php:196
+msgid "Unknown error"
+msgstr ""
+
+#. translators: 1: plugin slug, 2: error message
+#: inc/Components/Base/class-required-plugins.php:202
+#, php-format
+msgid "Shopperexpress: Installation of required plugin \"%1$s\" failed: %2$s"
+msgstr ""
+
+#. translators: 1: plugin file, 2: error message
+#: inc/Components/Base/class-required-plugins.php:233
+#, php-format
+msgid "Shopperexpress: Activation of required plugin \"%1$s\" failed: %2$s"
+msgstr ""
+
+#: inc/Components/Base/class-shortcode.php:288
+#: inc/Components/Base/class-shortcode.php:309
+#: inc/Components/Base/class-shortcode.php:327
+#: template-parts/acf-shared/text-video-slider.php:148
+#: template-parts/acf-shared/text-video-slider.php:187
+#: template-parts/content-offers.php:98
+#: template-parts/content-offers.php:137
+#: template-parts/single/single-conditional-offers.php:450
+#: template-parts/single/single-conditional-offers.php:489
+#: template-parts/single/single-listings.php:562
+#: template-parts/single/single-listings.php:571
+#: template-parts/single/single-offers.php:267
+#: template-parts/single/single-offers.php:306
+#: template-parts/single/single-research.php:156
+#: template-parts/single/single-research.php:165
+msgid "DOWN"
+msgstr ""
+
+#: inc/Components/Base/class-shortcode.php:297
+#: inc/Components/Base/class-shortcode.php:309
+#: template-parts/acf-shared/text-video-slider.php:157
+#: template-parts/acf-shared/text-video-slider.php:169
+#: template-parts/content-offers.php:107
+#: template-parts/content-offers.php:119
+#: template-parts/single/single-conditional-offers.php:459
+#: template-parts/single/single-conditional-offers.php:471
+#: template-parts/single/single-offers.php:276
+#: template-parts/single/single-offers.php:288
+msgid "mos."
+msgstr ""
+
+#: inc/Components/Base/class-sidebars.php:43
+msgid "Footer Sidebar"
+msgstr ""
+
+#: inc/Components/Base/class-sidebars.php:55
+msgid "Post Sidebar"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:45
+#: inc/Components/Base/class-vin-admin.php:46
+#: inc/Components/Base/class-vin-admin.php:89
+#: inc/Components/SOC/views/developer-tools.php:21
+msgid "VIN Checker"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:91
+#: inc/Components/SOC/views/developer-tools.php:23
+msgid "Enter a 17-character VIN to decode vehicle data via the Chromedata API."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:101
+#: inc/Components/SOC/views/developer-tools.php:32
+msgid "e.g. 1HGCM82633A004352"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:106
+#: inc/Components/Base/class-vin-admin.php:162
+#: inc/Components/SOC/views/developer-tools.php:38
+#: inc/Components/SOC/views/developer-tools.php:115
+msgid "Check VIN"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:110
+#: inc/Components/SOC/views/developer-tools.php:42
+msgid "Clear History"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:117
+#: inc/Components/SOC/views/developer-tools.php:49
+msgid "Contacting Chromedata API…"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:122
+#: inc/Components/SOC/views/developer-tools.php:55
+msgid "Run in Background"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:132
+#: inc/Components/SOC/views/developer-tools.php:67
+msgid "Recent VINs"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:161
+#: inc/Components/SOC/views/developer-tools.php:114
+msgid "Checking…"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:163
+#: inc/Components/SOC/views/developer-tools.php:116
+msgid "No data found for this VIN."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:164
+#: inc/Components/SOC/views/developer-tools.php:117
+msgid "API request failed. Please try again."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:165
+#: inc/Components/SOC/class-soc-ajax.php:479
+#: inc/Components/SOC/views/developer-tools.php:118
+msgid "Please enter a VIN."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:166
+#: inc/Components/SOC/class-soc-ajax.php:483
+#: inc/Components/SOC/views/developer-tools.php:119
+msgid "VIN must be exactly 17 alphanumeric characters (I, O and Q are not valid)."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:167
+msgid "Copied!"
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:200
+msgid "API is not configured. Please set the Chromedata URL in Theme Options."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:250
+msgid "Chromedata URL is not configured."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:254
+msgid "run_callapi_in_background() is not available."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:258
+msgid "shell_exec is disabled on this server (disable_functions)."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:264
+msgid "No listing found for this VIN in listings or used-listings."
+msgstr ""
+
+#. translators: 1: post ID, 2: post type
+#: inc/Components/Base/class-vin-admin.php:275
+#, php-format
+msgid "Background job dispatched for post #%1$d (%2$s)."
+msgstr ""
+
+#: inc/Components/Base/class-vin-admin.php:365
+msgid "Permission denied."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-ajax.php:522
+msgid "Invalid VIN."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-ajax.php:547
+msgid "Invalid post ID."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-ajax.php:569
+msgid "Invalid import ID."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-assets.php:81
+msgid "Are you sure?"
+msgstr ""
+
+#: inc/Components/SOC/class-soc-assets.php:82
+msgid "Loading..."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-assets.php:83
+msgid "Done!"
+msgstr ""
+
+#: inc/Components/SOC/class-soc-assets.php:84
+msgid "An error occurred."
+msgstr ""
+
+#: inc/Components/SOC/Modules/class-soc-import-monitor.php:120
+msgid "No imports configured."
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:14
+msgid "Internal Endpoints"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:20
+msgid "URL"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:22
+#: inc/Components/SOC/views/api-health.php:53
+msgid "Response Time"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:23
+#: inc/Components/SOC/views/api-health.php:54
+#: inc/Components/SOC/views/cron-manager.php:88
+msgid "OK"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:39
+msgid "No endpoints."
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:45
+msgid "Integrations"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:50
+msgid "Service"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:51
+msgid "Endpoint"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:75
+msgid "Not configured"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:95
+msgid "API Test Tool"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:100
+msgid "https://example.com/api/endpoint"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:102
+msgid "Test URL"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:110
+msgid "Failed API Log"
+msgstr ""
+
+#: inc/Components/SOC/views/api-health.php:120
+msgid "No failed API log entries."
+msgstr ""
+
+#. translators: %s: collection timestamp
+#: inc/Components/SOC/views/api-health.php:125
+#: inc/Components/SOC/views/cache-manager.php:232
+#: inc/Components/SOC/views/log-viewer.php:87
+#, php-format
+msgid "Last collected: %s"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:35
+msgid "Cache Layers"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:44
+#: inc/Components/SOC/views/cache-manager.php:66
+#: inc/Components/SOC/views/cron-manager.php:36
+#: inc/Components/SOC/views/security-snapshot.php:22
+msgid "Inactive"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:58
+msgid "Cache Stats"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:61
+msgid "Object Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:71
+msgid "Transients (total)"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:75
+msgid "API Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:79
+#: inc/Components/SOC/views/cron-manager.php:47
+#: inc/Components/SOC/views/security-snapshot.php:33
+msgid "Enabled"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:80
+#: inc/Components/SOC/views/cron-manager.php:45
+#: inc/Components/SOC/views/security-snapshot.php:31
+msgid "Disabled"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:85
+msgid "Last Purge"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:87
+msgid "Never"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:96
+msgid "Post Type Cache Overview"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:103
+#: inc/Components/SOC/views/cache-manager.php:195
+msgid "Post Type"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:105
+msgid "Last Generated"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:106
+msgid "Generated By"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:107
+#: inc/Components/SOC/views/cron-manager.php:66
+msgid "Actions"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:144
+msgid "after import"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:152
+msgid "Regenerate"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:160
+msgid "No cacheable post types detected."
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:166
+msgid "Global Cache Actions"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:169
+msgid "Clear All Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:172
+msgid "Clear Object Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:175
+msgid "Clear All Transients"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:189
+msgid "Cache Activity Log"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:193
+#: inc/Components/SOC/views/security-snapshot.php:138
+msgid "Time"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:194
+#: inc/Components/SOC/views/database-health.php:77
+msgid "Action"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:196
+msgid "User"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:217
+msgid "&laquo; Prev"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:219
+#, php-format
+msgid "Page %1$s of %2$s"
+msgstr ""
+
+#: inc/Components/SOC/views/cache-manager.php:221
+msgid "Next &raquo;"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:15
+msgid "Total Events"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:20
+#: inc/Components/SOC/views/cron-manager.php:86
+msgid "Overdue"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:25
+msgid "Overdue!"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:30
+msgid "Action Scheduler"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:42
+msgid "WP_CRON"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:55
+msgid "Scheduled Events"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:61
+msgid "Hook"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:62
+msgid "Next Run"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:63
+msgid "Schedule"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:65
+#: inc/Components/SOC/views/cron-manager.php:120
+#: inc/Components/SOC/views/cron-manager.php:122
+msgid "Reschedule"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:105
+#: inc/Components/SOC/views/cron-manager.php:107
+msgid "Run Now"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:113
+#: inc/Components/SOC/views/cron-manager.php:115
+msgid "Delete"
+msgstr ""
+
+#: inc/Components/SOC/views/cron-manager.php:132
+msgid "No scheduled cron events found."
+msgstr ""
+
+#: inc/Components/SOC/views/dashboard.php:12
+msgid "Operation Center"
+msgstr ""
+
+#: inc/Components/SOC/views/dashboard.php:24
+msgid "Refresh"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:14
+msgid "Database Overview"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:17
+msgid "DB Size"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:22
+#: inc/Components/SOC/views/performance.php:22
+msgid "Autoload Size"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:27
+#: inc/Components/SOC/views/database-health.php:133
+msgid "Orphan Transients"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:31
+#: inc/Components/SOC/views/database-health.php:82
+msgid "Post Revisions"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:35
+#: inc/Components/SOC/views/database-health.php:92
+msgid "Spam Comments"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:39
+#: inc/Components/SOC/views/database-health.php:103
+msgid "Trash Posts"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:54
+#: inc/Components/SOC/views/database-health.php:123
+msgid "Auto-Drafts"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:58
+msgid "Orphan Postmeta"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:62
+msgid "Orphan Term Rels"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:70
+msgid "Cleanup Tools"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:74
+msgid "Item"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:75
+msgid "Scope"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:76
+msgid "Count"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:83
+msgid "wp_posts + postmeta + term_rels"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:87
+#: inc/Components/SOC/views/database-health.php:97
+#: inc/Components/SOC/views/database-health.php:118
+#: inc/Components/SOC/views/database-health.php:128
+#: inc/Components/SOC/views/database-health.php:138
+#: inc/Components/SOC/views/database-health.php:148
+#: inc/Components/SOC/views/database-health.php:158
+msgid "Clean Up"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:93
+msgid "wp_comments + commentmeta"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:114
+#: inc/Components/SOC/views/database-health.php:124
+msgid "all post types, postmeta + term_rels"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:134
+msgid "wp_options"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:143
+msgid "Orphaned Postmeta"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:144
+msgid "wp_postmeta (deleted posts)"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:153
+msgid "Orphaned Term Relationships"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:154
+msgid "wp_term_relationships (deleted posts)"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:168
+msgid "Top Tables by Size"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:174
+msgid "Table Name"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:175
+msgid "Rows"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:176
+msgid "Data (KB)"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:177
+msgid "Index (KB)"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:178
+msgid "Engine"
+msgstr ""
+
+#: inc/Components/SOC/views/database-health.php:197
+msgid "No table data available."
+msgstr ""
+
+#: inc/Components/SOC/views/import-monitor.php:33
+#: template-parts/modals.php:18
+msgid "Overview"
+msgstr ""
+
+#: inc/Components/SOC/views/import-monitor.php:62
+msgid "Monitored Imports"
+msgstr ""
+
+#: inc/Components/SOC/views/import-monitor.php:121
+msgid "C / U / S"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:31
+msgid "Log File Info"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:34
+msgid "File Size"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:40
+msgid "Lines"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:53
+msgid "Export Log"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:58
+msgid "Clear Log"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:65
+msgid "Filter log entries…"
+msgstr ""
+
+#: inc/Components/SOC/views/log-viewer.php:78
+msgid "No log entries found."
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:20
+msgid "Maintenance Mode: ON"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:21
+msgid "Maintenance Mode: OFF"
+msgstr ""
+
+#. translators: %s: timestamp
+#: inc/Components/SOC/views/maintenance.php:29
+#, php-format
+msgid "Enabled since: %s"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:39
+msgid "Maintenance Settings"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:43
+msgid "Whitelisted IP Addresses (one per line)"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:61
+msgid "Save &amp; Enable"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:64
+msgid "Disable"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:71
+msgid "Note:"
+msgstr ""
+
+#: inc/Components/SOC/views/maintenance.php:72
+msgid "Administrators are always exempt from maintenance mode."
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:14
+msgid "Performance Metrics"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:17
+msgid "Database Size"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:27
+msgid "Query Count"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:31
+#: inc/Components/SOC/views/system-status.php:54
+msgid "Memory Peak"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:40
+msgid "Load Time Samples"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:46
+#: inc/Components/SOC/views/performance.php:93
+msgid "Time (ms)"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:47
+msgid "Memory (MB)"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:48
+msgid "Queries"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:49
+msgid "Sampled At"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:77
+msgid "No load time samples recorded yet."
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:81
+msgid "Samples collected at 1-in-20 probability on admin requests."
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:88
+msgid "Slow Queries"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:92
+msgid "Query"
+msgstr ""
+
+#: inc/Components/SOC/views/performance.php:94
+msgid "Recorded At"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:14
+msgid "Security Overview"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:17
+#: inc/Components/SOC/views/system-status.php:149
+msgid "SSL"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:28
+msgid "File Editor"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:39
+msgid "Debug Mode"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:42
+msgid "On — Warning"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:44
+msgid "Off"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:50
+msgid "Security Keys"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:53
+msgid "Set"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:55
+msgid "Not Set"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:61
+msgid "REST API Public"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:64
+msgid "Public"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:66
+msgid "Restricted"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:72
+#: inc/Components/SOC/views/system-status.php:90
+msgid "WP Version"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:76
+msgid "Up to Date"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:78
+msgid "Update Available"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:84
+msgid "Active Plugins"
+msgstr ""
+
+#. translators: %d: admin count
+#: inc/Components/SOC/views/security-snapshot.php:96
+#, php-format
+msgid "Admin Users (%d)"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:107
+msgid "Login"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:108
+msgid "Email"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:109
+msgid "Registered"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:124
+msgid "No admin users found."
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:130
+msgid "Recent Failed Logins"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:136
+msgid "Username"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:137
+msgid "IP Address"
+msgstr ""
+
+#: inc/Components/SOC/views/security-snapshot.php:152
+msgid "No recent failed login attempts recorded."
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:28
+msgid "PHP Environment"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:32
+#: inc/Components/SOC/views/system-status.php:83
+#: inc/Components/SOC/views/system-status.php:132
+#: inc/Components/SOC/views/system-status.php:191
+msgid "Setting"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:33
+#: inc/Components/SOC/views/system-status.php:84
+#: inc/Components/SOC/views/system-status.php:133
+#: inc/Components/SOC/views/system-status.php:192
+msgid "Value"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:39
+msgid "PHP Version"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:44
+msgid "Memory Limit"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:49
+msgid "Memory Usage"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:59
+msgid "Max Execution Time"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:64
+msgid "Max Upload Size"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:69
+msgid "Post Max Size"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:79
+msgid "WordPress"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:95
+msgid "WP_DEBUG"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:100
+msgid "Warning: Debug On"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:108
+msgid "WP_DEBUG_LOG"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:113
+msgid "Multisite"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:118
+msgid "REST URL"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:128
+msgid "Server"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:139
+msgid "Server Software"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:144
+msgid "MySQL Version"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:154
+msgid "shell_exec"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:164
+msgid "Filesystem"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:168
+msgid "Path"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:169
+msgid "Writable"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:174
+msgid "wp-content"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:178
+msgid "uploads"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:187
+msgid "OPcache"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:198
+msgid "OPcache Enabled"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:203
+msgid "Hit Rate"
+msgstr ""
+
+#. translators: %s: collection timestamp
+#: inc/Components/SOC/views/system-status.php:222
+#, php-format
+msgid "Cached data — last collected: %s"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:226
+msgid "Cache refreshes every 5 minutes."
+msgstr ""
+
+#: inc/theme-functions.php:716
+msgid "Image description"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Flexible Page Template"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Full-Width Page Template"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Saved Page Template"
+msgstr ""
+
+#. Template Name of the theme
+msgid "SRP Template"
+msgstr ""
+
+#: search.php:18
+#, php-format
+msgid "Search Results for: %s"
+msgstr ""
+
+#: searchform.php:8
 msgid "Enter search terms&hellip;"
 msgstr ""
 
-#: ../single.php:30
-msgid "%link &raquo;"
+#: searchform.php:12
+msgid "Search"
 msgstr ""
 
-#: ../single.php:31
-msgid "&laquo; %link"
+#: template-parts/accordion-detail-info.php:58
+msgid "Highlighted Features"
 msgstr ""
 
-#: ../widgets.php:7
-msgid "Arbitrary text or HTML"
+#: template-parts/accordion.php:76
+msgid "Frequently Asked Questions"
 msgstr ""
 
-#: ../widgets.php:9
-msgid "Text"
+#: template-parts/acf-blocks/contact-information.php:64
+#: template-parts/acf/acf-contact_information.php:54
+msgid "Closed"
 msgstr ""
 
-#: ../widgets.php:39
-#: ../widgets.php:127
-msgid "Title:"
+#: template-parts/acf-blocks/contact-information.php:71
+#: template-parts/acf-blocks/contact-information.php:76
+#: template-parts/acf/acf-contact_information.php:61
+#: template-parts/acf/acf-contact_information.php:66
+msgid "N/A"
 msgstr ""
 
-#: ../widgets.php:44
-msgid "Automatically add paragraphs"
+#: template-parts/acf-blocks/intro-slider.php:109
+#: template-parts/acf/acf-intro_slider.php:100
+msgid "Shop now"
 msgstr ""
 
-#: ../widgets.php:56
-msgid "The most recent posts from specific category on your site"
+#: template-parts/acf-shared/contact-widget.php:64
+msgid "Copy"
 msgstr ""
 
-#: ../widgets.php:57
-msgid "Recent Posts From Specific Category"
+#: template-parts/acf-shared/intro-slider.php:54
+msgid "Play/pause"
 msgstr ""
 
-#: ../widgets.php:79
-msgid "Recent Posts"
+#: template-parts/acf-shared/logo-section.php:43
+#, php-format
+msgid "Read more about %s"
 msgstr ""
 
-#: ../widgets.php:132
-msgid "Category"
+#: template-parts/acf-shared/tabs-slider.php:104
+#, php-format
+msgid "Select %1$s image description %2$s %3$s"
 msgstr ""
 
-#: ../widgets.php:137
-msgid "Number of posts to show:"
+#: template-parts/acf-shared/text-video-slider.php:219
+#: template-parts/single/single-conditional-offers.php:520
+#: template-parts/single/single-listings.php:597
+#: template-parts/single/single-offers.php:336
+#: template-parts/single/single-research.php:192
+msgid "UNLOCK PAYMENT"
 msgstr ""
 
+#: template-parts/acf-shared/text-video-slider.php:268
+#: template-parts/acf-shared/text-video-slider.php:309
+#: template-parts/acf-shared/text-video-slider.php:350
+#: template-parts/modals.php:140
+#: template-parts/modals.php:171
+#: template-parts/modals.php:200
+msgid "Additional Information"
+msgstr ""
+
+#: template-parts/banner.php:27
+msgid "Want to Shop By Payment?"
+msgstr ""
+
+#: template-parts/banner.php:28
+msgid "Get a real payment on any vehicle of your choice."
+msgstr ""
+
+#: template-parts/banner.php:36
+msgid "NO S.S.N or D.O.B. NEEDED"
+msgstr ""
+
+#: template-parts/banner.php:37
+msgid "NO IMPACT TO YOUR CREDIT SCORE"
+msgstr ""
+
+#: template-parts/banner.php:72
+msgid "Target Payment Range"
+msgstr ""
+
+#: template-parts/banner.php:79
+msgid "Get Pre-Qualified"
+msgstr ""
+
+#: template-parts/banner.php:79
+msgid "Shop by Payment"
+msgstr ""
+
+#: template-parts/conditionalOffersDetail-modal.php:26
+#: template-parts/conditionalOffersDetail-modal.php:45
+#: template-parts/cookie-modal.php:89
+msgid "Close"
+msgstr ""
+
+#: template-parts/conditionalOffersDetail-modal.php:38
+msgid "Valid from"
+msgstr ""
+
+#: template-parts/conditionalOffersDetail-modal.php:38
+msgid "through"
+msgstr ""
+
+#: template-parts/conditionalOffersDetail-modal.php:39
+msgid "Incentive Id"
+msgstr ""
+
+#: template-parts/content-lease-offers.php:55
+#: template-parts/single/single-conditional-offers.php:105
+#, php-format
+msgid "$%1$s/mo for %2$d mos."
+msgstr ""
+
+#: template-parts/content-lease-offers.php:74
+#: template-parts/single/single-conditional-offers.php:120
+#, php-format
+msgid "%1$s%% APR for %2$d mos."
+msgstr ""
+
+#: template-parts/content-lease-offers.php:92
+#: template-parts/single/single-conditional-offers.php:134
+#, php-format
+msgid "$%1$s %2$s"
+msgstr ""
+
+#: template-parts/content-lease-offers.php:94
+#: template-parts/single/single-conditional-offers.php:136
+msgid "Special Offer"
+msgstr ""
+
+#: template-parts/content-lease-offers.php:105
+#: template-parts/content-listings.php:21
+#: template-parts/content-offers.php:17
+msgid "Go to"
+msgstr ""
+
+#: template-parts/content-lease-offers.php:174
+#: template-parts/content-offers.php:179
+#: template-parts/detail-modal.php:14
+#: template-parts/modals.php:281
+#: template-parts/modals.php:291
+#: template-parts/modals.php:307
+msgid "DETAILS"
+msgstr ""
+
+#: template-parts/content-listings.php:72
+#: template-parts/single/single-listings.php:443
+msgid "Disclosure"
+msgstr ""
+
+#: template-parts/content-offers.php:59
+msgid "Additional info"
+msgstr ""
+
+#: template-parts/content-research.php:35
+msgid "Explore"
+msgstr ""
+
+#: template-parts/content-research.php:40
+#: template-parts/single/single-conditional-offers.php:426
+#: template-parts/single/single-offers.php:222
+#: template-parts/single/single-research.php:103
+msgid "Search Inventory"
+msgstr ""
+
+#: template-parts/content-service-offers.php:45
+msgid "TITLE:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:47
+msgid "OFFER:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:49
+msgid "DEPT:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:51
+msgid "TYPE:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:53
+msgid "EXP. DATE:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:55
+msgid "ADD'L INFO:"
+msgstr ""
+
+#: template-parts/content-service-offers.php:59
+msgid "Offer Details"
+msgstr ""
+
+#: template-parts/content.php:22
+msgid "by"
+msgstr ""
+
+#: template-parts/content.php:46
+msgid "Posted in"
+msgstr ""
+
+#: template-parts/content.php:47
+msgid "<li>Tags: "
+msgstr ""
+
+#: template-parts/cookie-modal.php:80
+msgid "Next"
+msgstr ""
+
+#: template-parts/copyLinkModal.php:20
+msgid "Share Vehicle"
+msgstr ""
+
+#: template-parts/copyLinkModal.php:50
+#: template-parts/modal-edit.php:100
+msgid "VIN"
+msgstr ""
+
+#: template-parts/copyLinkModal.php:56
+#: template-parts/modal-edit.php:106
+msgid "Stock"
+msgstr ""
+
+#: template-parts/copyLinkModal.php:66
+msgid "Copy Link to Share"
+msgstr ""
+
+#: template-parts/copyLinkModal.php:72
+msgid "Done"
+msgstr ""
+
+#: template-parts/gallery.php:12
+#: template-parts/modal-edit.php:84
+msgid "image description"
+msgstr ""
+
+#: template-parts/intro.php:40
+msgid "All"
+msgstr ""
+
+#: template-parts/intro.php:40
+msgid "Inventory"
+msgstr ""
+
+#: template-parts/intro.php:46
+#: template-parts/intro.php:58
+#: template-parts/single/single-conditional-offers.php:150
+#: template-parts/single/single-offers.php:55
+#: template-parts/single/single-service-offers.php:28
+msgid "All Offers"
+msgstr ""
+
+#: template-parts/intro.php:52
+msgid "All Research"
+msgstr ""
+
+#: template-parts/intro.php:88
+msgid "Service Offers"
+msgstr ""
+
+#: template-parts/intro.php:131
+#: template-parts/intro.php:166
+msgid "watch video"
+msgstr ""
+
+#: template-parts/modal-edit.php:26
+msgid "exit"
+msgstr ""
+
+#: template-parts/modal-edit.php:33
+msgid "trash"
+msgstr ""
+
+#: template-parts/modal-edit.php:40
+msgid "Clear Cache"
+msgstr ""
+
+#: template-parts/modal-edit.php:47
+msgid "Save"
+msgstr ""
+
+#: template-parts/modal-edit.php:51
+msgid "Please check the form - one or more fields are filled in incorrectly."
+msgstr ""
+
+#: template-parts/modal-edit.php:57
+msgid "Data saved successfully!"
+msgstr ""
+
+#: template-parts/modal-edit.php:116
+msgid "general info"
+msgstr ""
+
+#: template-parts/modal-edit.php:149
+msgid "fuel"
+msgstr ""
+
+#: template-parts/modal-edit.php:158
+msgid "mechanical"
+msgstr ""
+
+#: template-parts/modal-edit.php:172
+msgid "payment"
+msgstr ""
+
+#: template-parts/modal-edit.php:186
+msgid "pricing"
+msgstr ""
+
+#: template-parts/modal-edit.php:203
+msgid "media"
+msgstr ""
+
+#: template-parts/modal-edit.php:213
+msgid "description"
+msgstr ""
+
+#: template-parts/modal-edit.php:300
+msgid "Are you sure you want to delete the data?"
+msgstr ""
+
+#: template-parts/modal-edit.php:303
+msgid "no"
+msgstr ""
+
+#: template-parts/modal-edit.php:304
+msgid "yes"
+msgstr ""
+
+#: template-parts/modal-evo.php:16
+msgid "360° Spin"
+msgstr ""
+
+#: template-parts/modal-tabs.php:16
+msgid "Select"
+msgstr ""
+
+#: template-parts/modal-tabs.php:66
+msgid "Clear Selections"
+msgstr ""
+
+#: template-parts/modal-tabs.php:67
+msgid "View"
+msgstr ""
+
+#: template-parts/modals.php:47
+#: template-parts/single/single-listings.php:416
+msgid "Features & Options"
+msgstr ""
+
+#: template-parts/not_found.php:11
+msgid "Not Found"
+msgstr ""
+
+#: template-parts/not_found.php:14
+msgid "Sorry, but you are looking for something that isn't here."
+msgstr ""
+
+#: template-parts/pager-single.php:9
+#: template-parts/pager-single.php:10
+msgid "%link"
+msgstr ""
+
+#: template-parts/search-form.php:23
+msgid "Click Here to Search All New"
+msgstr ""
+
+#: template-parts/search-form.php:26
+msgid "Click Here to Search All Used"
+msgstr ""
+
+#: template-parts/search-form.php:29
+msgid "suggestions"
+msgstr ""
+
+#: template-parts/single/single-conditional-offers.php:158
+#, php-format
+msgid "Year & Make: %1$s %2$s"
+msgstr ""
+
+#: template-parts/single/single-conditional-offers.php:171
+#, php-format
+msgid "Model: %s"
+msgstr ""
+
+#: template-parts/single/single-conditional-offers.php:226
+#: template-parts/single/single-conditional-offers.php:339
+msgid "image"
+msgstr ""
+
+#: template-parts/single/single-conditional-offers.php:571
+#: template-parts/single/single-listings.php:642
+#: template-parts/single/single-offers.php:397
+#: template-parts/single/single-research.php:237
+msgid "Watch Video"
+msgstr ""
+
+#: template-parts/single/single-conditional-offers.php:603
+#: template-parts/single/single-offers.php:423
+msgid "CALL"
+msgstr ""
+
+#: template-parts/single/single-listings.php:45
+#: template-parts/single/single-listings.php:48
+#: template-parts/single/single-offers.php:38
+#: template-parts/single/single-offers.php:41
+msgid "Market Value"
+msgstr ""
+
+#: template-parts/single/single-listings.php:51
+#: template-parts/single/single-offers.php:44
+msgid "MSRP"
+msgstr ""
+
+#: template-parts/single/single-listings.php:109
+msgid "Edit"
+msgstr ""
+
+#: template-parts/single/single-listings.php:415
+#: template-parts/single/single-offers.php:158
+msgid "See Details"
+msgstr ""
+
+#: template-parts/single/single-listings.php:503
+msgid "Shopping Tools"
+msgstr ""
+
+#: template-parts/single/single-offers.php:58
+#: template-parts/single/single-research.php:32
+msgid "Year & Model"
+msgstr ""
+
+#: template-parts/single/single-offers.php:60
+#: template-parts/single/single-research.php:34
+msgid "Trim"
+msgstr ""
+
+#: template-parts/single/single-research.php:29
+msgid "All Models"
+msgstr ""
+
+#: template-parts/single/single-research.php:113
+msgid "MSRP Starting at"
+msgstr ""
+
+#: template-parts/single/single-service-offers.php:106
+msgid "Print Special"
+msgstr ""
+
+#: template-parts/single/single-service-offers.php:107
+msgid "Send to Email"
+msgstr ""

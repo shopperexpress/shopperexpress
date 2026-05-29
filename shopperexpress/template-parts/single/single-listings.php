@@ -38,6 +38,7 @@ while ( have_posts() ) :
 	$drivetrain      = get_field( 'drivetrain' );
 	$dealer_name     = get_field( 'dealer_name' );
 	$exterior_color  = get_field( 'exterior_color' );
+	$dealer_id       = $location;
 
 	switch ( $condition ) {
 		case 'Slightly Used':
@@ -185,7 +186,11 @@ while ( have_posts() ) :
 										$attrs['data-url'] = get_vehicle_spin( $vin_number );
 									}
 
-									if ( $API_KEY && $cid && $vin_number ) {
+									if ( $spin_data_provider === 'dealerimage' ) {
+										$attrs['data-dealer-id'] = $dealer_id;
+									}
+
+									if ( $API_KEY && $cid && $vin_number && $spin_data_provider != 'dealerimage' ) {
 										$attrs['data-auth']     = $auth;
 										$attrs['data-clientid'] = $cid;
 									}
