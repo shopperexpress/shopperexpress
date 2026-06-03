@@ -10,6 +10,7 @@ $post_type       = ! empty( $args['post_type'] ) ? $args['post_type'] : get_post
 $data_id         = ! empty( $args['data_id'] ) ? $args['data_id'] : '';
 $use_images_list = get_field( 'use_images_list', $post_id );
 $alt_array       = ! empty( $args['alt'] ) ? $args['alt'] : array( esc_html__( 'image description', 'shopperexpress' ) );
+$test            = false;
 
 $images_count = ! empty( $post_type ) && $post_type == 'used-listings'
 	? get_field( 'images_count_used', 'options' )
@@ -19,7 +20,7 @@ $images_count = ! empty( $post_type ) && $post_type == 'used-listings'
 $images_count = ! empty( $images_count ) ? absint( $images_count ) : 1;
 
 // Retrieve the gallery or primary image based on $images_count.
-if ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ) {
+if ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers', 'offers' ) ) ) {
 	if ( ! empty( $data_id ) ) {
 		$primaryimageurl = get_field( 'thumbnail', $data_id );
 	} else {
@@ -28,6 +29,7 @@ if ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional
 } else {
 	$primaryimageurl = get_field( 'primaryimageurl', $post_id );
 }
+
 switch ( $post_type ) {
 	case 'research':
 		$primaryimageurl = array();
@@ -53,6 +55,7 @@ switch ( $post_type ) {
 }
 if ( $images_count === 1 || get_field( 'use_primary_image_url', 'option' ) ) {
 	$gallery = $primaryimageurl;
+
 } elseif ( ! empty( $data_id ) ) {
 	while ( have_rows( $acf_field, $data_id ) ) :
 		the_row();
@@ -77,7 +80,9 @@ if ( $vin_number ) {
 		$gallery = get_backup_images( $vin_number );
 	}
 }
-
+if ( 'offers' === $post_type ) {
+	$gallery = get_field( 'gallery', $post_id ) ? array( get_field( 'gallery', $post_id )[0] ) : $gallery;
+}
 ?>
 <div class="detail-slider-holder">
 	<div class="detail-slider">
