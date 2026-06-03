@@ -125,5 +125,5 @@ return array(
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'WPS_Latest_Posts_Widget' => $baseDir . '/inc/class-widget.php',
     'WPS_Nav_Menu_Widget' => $baseDir . '/inc/class-widget.php',
-    'WP_Auto_Import' => $baseDir . '/inc/classes.php',
+    'WP_Auto_Import' => $baseDir . '/inc/class-walker-nav.php',
 );

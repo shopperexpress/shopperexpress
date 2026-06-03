@@ -180,7 +180,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'WPS_Latest_Posts_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
         'WPS_Nav_Menu_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
-        'WP_Auto_Import' => __DIR__ . '/../..' . '/inc/classes.php',
+        'WP_Auto_Import' => __DIR__ . '/../..' . '/inc/class-walker-nav.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
