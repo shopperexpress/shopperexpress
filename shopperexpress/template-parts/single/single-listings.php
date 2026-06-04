@@ -187,7 +187,7 @@ while ( have_posts() ) :
 									}
 
 									if ( $spin_data_provider === 'dealerimage' ) {
-										$attrs['data-dealer-id'] = $dealer_id;
+										$attrs['data-dealer-id'] = $cid;
 									}
 
 									if ( $API_KEY && $cid && $vin_number && $spin_data_provider != 'dealerimage' ) {
