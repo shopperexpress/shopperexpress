@@ -5,20 +5,32 @@
 .full-width-image-slider {
   .slick-dots {
     button {
+      @include animate(background-color);
+      @include size(14px);
+      text-indent: -9999px;
+      overflow: hidden;
+      display: block;
+      border-radius: 50rem;
       border: 1px solid var(--primary) !important;
+      background-color: transparent;
+      padding: 0;
+
+      &:hover {
+        background-color: var(--primary);
+      }
     }
+
+    li.slick-active button {
+      background-color: var(--primary);
+    }
+  }
+
+  .slick-slide > div > a {
+    display: block;
   }
 
   .slick-slide {
     position: relative;
-  }
-
-  .slick-dots {
-    pointer-events: none;
-
-    li {
-      pointer-events: initial;
-    }
   }
 
   img {

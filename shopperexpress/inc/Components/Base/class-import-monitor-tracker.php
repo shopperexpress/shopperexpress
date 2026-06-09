@@ -204,6 +204,8 @@ class Import_Monitor_Tracker implements Theme_Component {
 		if ( $this->should_notify( $import_id, 'failure' ) ) {
 			$this->notifier->dispatch( $config, 'failure', $error_message );
 			$this->mark_notified( $import_id, 'failure' );
+		} else {
+			error_log( "[Import Monitor] Notification skipped for import #{$import_id}: last_notified already 'failure'." );
 		}
 	}
 
@@ -289,13 +291,20 @@ class Import_Monitor_Tracker implements Theme_Component {
 	}
 
 	/**
-	 * Return true only when the status has changed since the last notification.
+	 * Return true when a notification should be sent.
+	 *
+	 * Success: always notify — every completed import is worth reporting.
+	 * Failure: deduplicate so we don't re-send the same failure alert that
+	 *          check_persistent_failure already handles on cron cycles.
 	 *
 	 * @param int    $import_id Import ID.
 	 * @param string $status    Current status.
 	 * @return bool
 	 */
 	private function should_notify( int $import_id, string $status ): bool {
+		if ( 'success' === $status ) {
+			return true;
+		}
 		$state = self::get_state( $import_id );
 		return ( $state['last_notified'] ?? '' ) !== $status;
 	}

@@ -3,7 +3,7 @@
         'name' => 'base/base',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'dffa7b2a71a6bb4bea70e2e682cf1d38aa07e50f',
+        'reference' => 'ee43cb07f52fef5a9df47a177ff23674a7740516',
         'type' => 'wordpress-theme',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'base/base' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'dffa7b2a71a6bb4bea70e2e682cf1d38aa07e50f',
+            'reference' => 'ee43cb07f52fef5a9df47a177ff23674a7740516',
             'type' => 'wordpress-theme',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

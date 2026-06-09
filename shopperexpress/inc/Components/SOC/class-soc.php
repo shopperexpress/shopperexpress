@@ -16,6 +16,7 @@ use App\Components\SOC\Modules\Cache_Manager;
 use App\Components\SOC\Modules\Database_Health;
 use App\Components\SOC\Modules\Developer_Tools;
 use App\Components\SOC\Modules\Import_Monitor_Panel;
+use App\Components\SOC\Modules\Api_Settings;
 
 /**
  * SOC Component
@@ -64,6 +65,7 @@ class SOC implements Theme_Component {
 			new Database_Health(),
 			new Developer_Tools(),
 			new Import_Monitor_Panel(),
+			new Api_Settings(),
 		);
 
 		foreach ( $module_classes as $module ) {

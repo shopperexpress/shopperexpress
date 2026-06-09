@@ -46,6 +46,27 @@ function asset_url_old( string $asset_path ): string {
 
 
 /**
+ * Returns true when the Intice API mode is active.
+ *
+ * Use this in templates to switch between WordPress data and the external API:
+ *   if ( \App\is_api_mode() ) { ... }
+ *
+ * @return bool
+ */
+function is_api_mode(): bool {
+	static $mode;
+
+	if ( null === $mode ) {
+		$mode = (bool) get_option(
+			\App\Components\SOC\Modules\Api_Settings::OPTION_API_MODE,
+			false
+		);
+	}
+
+	return $mode;
+}
+
+/**
  * Acf button helper.
  *
  * @param array  $button acf button array.

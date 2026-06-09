@@ -21,6 +21,7 @@
         SOC.bindLogPagination();
         SOC.bindApiTest();
         SOC.bindDbCleanup();
+        SOC.bindApiSettings();
     };
 
     // ----------------------------------------------------------------
@@ -407,6 +408,125 @@
         });
         $(document).on('click', '.soc-log-next', function () {
             if (current < pages) renderPage(current + 1);
+        });
+    };
+
+    // ----------------------------------------------------------------
+    // API Settings
+    // ----------------------------------------------------------------
+    SOC.bindApiSettings = function () {
+
+        // Mode toggle
+        $(document).on('change', '#soc-api-mode-toggle', function () {
+            const enabled = $(this).is(':checked') ? 1 : 0;
+            const $card   = $(this).closest('.soc-api-mode-card');
+            const $label  = $('#soc-api-mode-label');
+            const $badge  = $('#soc-api-mode-badge');
+            const $dot    = $card.find('.soc-api-mode-indicator');
+
+            SOC.showLoading();
+
+            SOC.ajax('soc_api_mode_toggle', { enabled: enabled }, function (data) {
+                const on = data && data.enabled;
+
+                $card.toggleClass('soc-api-mode-card--api', !!on)
+                     .toggleClass('soc-api-mode-card--wp', !on);
+                $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+                $label.text(on ? 'API Mode (Intice)' : 'WordPress Mode');
+                $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral'))
+                      .text(on ? 'ACTIVE' : 'INACTIVE');
+
+                SOC.showSuccess('Mode ' + (on ? 'enabled' : 'disabled') + '.');
+            });
+        });
+
+        // Show key input on "Change" click
+        $(document).on('click', '#soc-api-key-edit', function () {
+            $(this).hide();
+            $(this).closest('td').find('.soc-masked-key').hide();
+            $('#soc-intice-api-key').show().trigger('focus');
+        });
+
+        // Save credentials
+        $(document).on('click', '#soc-save-api-credentials', function () {
+            const $btn = $(this);
+            const url  = $('#soc-intice-api-url').val().trim();
+            const key  = $('#soc-intice-api-key').val().trim();
+
+            if (!url) {
+                SOC.showError('API URL is required.');
+                return;
+            }
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_api_save_credentials', { api_url: url, api_key: key }, function () {
+                SOC.showSuccess('Credentials saved.');
+                $btn.prop('disabled', false);
+                // Hide input, reload panel to refresh masked key display
+                if (key) {
+                    SOC.reloadPanel('api-settings');
+                }
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Flush all Intice cache
+        $(document).on('click', '#soc-flush-all-api-cache', function () {
+            if (!confirm('Flush all Intice Nexus cache? Next page loads will re-fetch from the API.')) return;
+            const $btn = $(this);
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+            SOC.ajax('soc_flush_api_cache', {}, function () {
+                SOC.showSuccess('All Intice cache flushed.');
+                SOC.reloadPanel('api-settings');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Flush single cache group
+        $(document).on('click', '.soc-flush-api-cache-group', function () {
+            const $btn  = $(this);
+            const group = $btn.data('group');
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+            SOC.ajax('soc_flush_api_cache_group', { group: group }, function (data) {
+                SOC.showSuccess('Cache group "' + group + '" flushed (' + (data.deleted || 0) + ' rows).');
+                SOC.reloadPanel('api-settings');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Test connection
+        $(document).on('click', '#soc-test-intice-api', function () {
+            const $btn    = $(this);
+            const $result = $('#soc-connection-result');
+
+            $btn.prop('disabled', true);
+            $result.text('Testing…').css('color', '');
+            SOC.showLoading();
+
+            SOC.ajax('soc_api_test_connection', {}, function (data) {
+                const ok = data && data.ok;
+                $result.text(
+                    ok
+                        ? '✓ ' + (data.status || 'OK') + ' — ' + (data.ms || 0) + ' ms'
+                        : '✗ ' + (data.error || data.status || 'Error')
+                ).css('color', ok ? '#00a32a' : '#d63638');
+                SOC.showSuccess('Connection test complete.');
+                $btn.prop('disabled', false);
+            }, function (msg) {
+                $result.text('✗ ' + msg).css('color', '#d63638');
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
         });
     };
 

@@ -51,7 +51,17 @@ $next_cron          = $data['next_cron'] ?? false;
 		<div class="soc-card">
 			<div class="soc-card__label"><?php esc_html_e( 'Next Cron Check', 'shopperexpress' ); ?></div>
 			<div class="soc-card__value">
-				<?php echo $next_cron ? esc_html( human_time_diff( $next_cron ) ) : '<span style="color:#aaa">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php
+				if ( $next_cron ) {
+					if ( $next_cron > time() ) {
+						echo 'in ' . esc_html( human_time_diff( $next_cron ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+					} else {
+						echo '<span style="color:#d63638;">Overdue (' . esc_html( human_time_diff( $next_cron ) ) . ' ago)</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
+					}
+				} else {
+					echo '<span style="color:#aaa">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
+				}
+				?>
 			</div>
 		</div>
 	</div>

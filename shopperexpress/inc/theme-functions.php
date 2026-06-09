@@ -946,7 +946,9 @@ add_action(
 						escapeshellarg( $post_type )
 					);
 
-					exec( $command );
+					if ( function_exists( 'exec' ) && ! in_array( 'exec', array_map( 'trim', explode( ',', (string) ini_get( 'disable_functions' ) ) ), true ) ) {
+						exec( $command );
+					}
 				}
 			}
 		}

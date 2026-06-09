@@ -539,7 +539,7 @@ class JSON_LD implements Theme_Component {
 					'url'           => esc_url( $item['link'] ),
 				);
 
-				if ( ! empty( $item['price'] ) ) {
+				if ( ! empty( $item['price'] ) || 0 == $item['price'] ) {
 					$offer['price'] = (string) $item['price'];
 				}
 

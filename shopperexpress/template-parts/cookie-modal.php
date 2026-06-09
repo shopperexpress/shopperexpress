@@ -22,12 +22,13 @@ if ( $popup ) :
 	$next_button            = ! empty( $popup['next_button'] ) ? $popup['next_button'] : '';
 	?>
 	<!-- Cookie Modal -->
-	<div data-show="true" data-cookie-expire-days="<?php echo esc_attr( $cookie_expiration_days ); ?>" class="modal fade" id="<?php echo str_replace( ' ', '', esc_attr( $cookie_name ) ); ?>" tabindex="-1">
+	<?php $modal_id = str_replace( ' ', '', esc_attr( $cookie_name ) ); ?>
+	<div data-show="true" data-cookie-expire-days="<?php echo esc_attr( $cookie_expiration_days ); ?>" class="modal fade" id="<?php echo $modal_id; ?>" tabindex="-1" role="dialog" aria-labelledby="<?php echo $modal_id; ?>Label" aria-modal="true">
 		<div class="modal-dialog modal-lg modal-form modal-dialog-scrollable modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header">
 					<?php if ( ! empty( $title ) ) : ?>
-						<h3 class="modal-title"><?php echo esc_html( $title ); ?></h3>
+						<h3 class="modal-title" id="<?php echo $modal_id; ?>Label"><?php echo esc_html( $title ); ?></h3>
 					<?php endif; ?>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">

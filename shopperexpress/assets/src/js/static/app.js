@@ -9600,9 +9600,9 @@ ResponsiveHelper = (function($) {
 						scrolling="no"
 						class="wistia_embed"
 						name="wistia_embed"
-						title="Video player for ${(self.videoData.title || 'wistia')}"
+						title="Video of ${(self.videoData.title || 'wistia')}"
+						role="application"
 						aria-label="Video of ${(self.videoData.title || 'wistia')}"
-						role="presentation"
 					/>`)
 					.addClass(self.options.containerClass)
 					.appendTo(self.holder)

@@ -6,6 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'App\\Components\\Api\\Intice_Api_Client' => $baseDir . '/inc/Components/Api/class-intice-api-client.php',
+    'App\\Components\\Api\\Intice_Rest' => $baseDir . '/inc/Components/Api/class-intice-rest.php',
+    'App\\Components\\Api\\Intice_VDP' => $baseDir . '/inc/Components/Api/class-intice-vdp.php',
     'App\\Components\\Base\\ACF' => $baseDir . '/inc/Components/Base/class-acf.php',
     'App\\Components\\Base\\AI' => $baseDir . '/inc/Components/Base/class-ai.php',
     'App\\Components\\Base\\AI_Crawler' => $baseDir . '/inc/Components/Base/class-ai-crawler.php',
@@ -41,6 +44,7 @@ return array(
     'App\\Components\\Gutenberg\\Register_Gutenberg_Blocks' => $baseDir . '/inc/Components/Gutenberg/class-register-gutenberg-blocks.php',
     'App\\Components\\SOC\\Contracts\\SOC_Module' => $baseDir . '/inc/Components/SOC/Contracts/interface-soc-module.php',
     'App\\Components\\SOC\\Modules\\Api_Health' => $baseDir . '/inc/Components/SOC/Modules/class-api-health.php',
+    'App\\Components\\SOC\\Modules\\Api_Settings' => $baseDir . '/inc/Components/SOC/Modules/class-api-settings.php',
     'App\\Components\\SOC\\Modules\\Cache_Manager' => $baseDir . '/inc/Components/SOC/Modules/class-cache-manager.php',
     'App\\Components\\SOC\\Modules\\Cron_Manager' => $baseDir . '/inc/Components/SOC/Modules/class-cron-manager.php',
     'App\\Components\\SOC\\Modules\\Database_Health' => $baseDir . '/inc/Components/SOC/Modules/class-database-health.php',
@@ -125,5 +129,4 @@ return array(
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'WPS_Latest_Posts_Widget' => $baseDir . '/inc/class-widget.php',
     'WPS_Nav_Menu_Widget' => $baseDir . '/inc/class-widget.php',
-    'WP_Auto_Import' => $baseDir . '/inc/class-walker-nav.php',
 );

@@ -10,7 +10,7 @@
 $vin       = ! empty( $args['vin'] ) ? $args['vin'] : null;
 $location  = $args['location'];
 $post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$post_type = get_post_type( $post_id );
+$post_type = get_post_type( $post_id ) ?: ( $args['post_type'] ?? '' );
 
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();

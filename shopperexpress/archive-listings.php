@@ -25,8 +25,15 @@ if ( ! empty( $args['template'] ) ) {
 	$value = get_field( 'value', $page_id );
 }
 get_header();
+
+$api_mode        = \App\is_api_mode() && in_array( $post_type, array( 'listings', 'used-listings' ), true );
+$vehicles_url    = $api_mode
+	? home_url( 'wp-json/v1/intice/vehicles/' . $post_type . $query_string )
+	: home_url( 'wp-json/v1/vehicles/' . $post_type . $query_string );
+$meta_url        = $api_mode ? home_url( 'wp-json/v1/intice/meta' ) : '';
 ?>
-<div class="filter-section" data-vehicles="<?php echo home_url( 'wp-json/v1/vehicles/' . $post_type . $query_string ); ?>"
+<div class="filter-section" data-vehicles="<?php echo esc_url( $vehicles_url ); ?>"
+	<?php if ( $api_mode ) : ?>data-intice-meta="<?php echo esc_url( $meta_url ); ?>"<?php endif; ?>
 <?php
 if ( $key && $value ) :
 	?>

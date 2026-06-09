@@ -326,6 +326,106 @@ $soc-radius: 4px;
 }
 
 // ============================================================
+// Toggle Switch
+// ============================================================
+.soc-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+    }
+
+    &__slider {
+        position: absolute;
+        inset: 0;
+        background: $soc-border;
+        border-radius: 26px;
+        transition: background 0.2s;
+
+        &::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 4px;
+            top: 4px;
+            background: $soc-white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+    }
+
+    input:checked + .soc-toggle__slider {
+        background: $soc-success;
+    }
+
+    input:checked + .soc-toggle__slider::before {
+        transform: translateX(22px);
+    }
+}
+
+// ============================================================
+// API Mode Card
+// ============================================================
+.soc-api-mode-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border: 2px solid $soc-border;
+    border-radius: $soc-radius;
+    background: $soc-bg;
+    max-width: 680px;
+
+    &--api {
+        border-color: $soc-success;
+        background: lighten($soc-success, 60%);
+    }
+
+    &__status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        flex-wrap: wrap;
+    }
+
+    &__desc {
+        font-size: 12px;
+        color: $soc-gray;
+        margin: 0;
+        flex-basis: 100%;
+    }
+}
+
+.soc-api-mode-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $soc-border;
+    flex-shrink: 0;
+
+    &--on {
+        background: $soc-success;
+        box-shadow: 0 0 0 3px lighten($soc-success, 50%);
+    }
+}
+
+.soc-masked-key {
+    letter-spacing: 2px;
+    color: $soc-gray;
+}
+
+// ============================================================
 // Log Pagination
 // ============================================================
 .soc-pagination {

@@ -52,7 +52,12 @@ class SOC_Ajax {
 		'soc_vin_clear_history'  => 'handle_vin_clear_history',
 		'soc_vin_run_background' => 'handle_vin_run_background',
 		'soc_vin_poll'           => 'handle_vin_poll',
-		'soc_im_toggle'          => 'handle_im_toggle',
+		'soc_im_toggle'               => 'handle_im_toggle',
+		'soc_api_mode_toggle'         => 'handle_api_mode_toggle',
+		'soc_api_save_credentials'    => 'handle_api_save_credentials',
+		'soc_api_test_connection'     => 'handle_api_test_connection',
+		'soc_flush_api_cache'         => 'handle_flush_api_cache',
+		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
 	);
 
 	/**
@@ -582,5 +587,104 @@ class SOC_Ajax {
 		}
 
 		SOC_Response::success( $result );
+	}
+
+	// ─── API Settings ─────────────────────────────────────────────────────────
+
+	/**
+	 * Toggle the global API mode on/off.
+	 */
+	private function handle_api_mode_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 0 );
+
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$new_state = $module->set_api_mode( $enabled );
+
+		SOC_Logger::write( 'general', 'API mode toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Save Intice API credentials (URL + key).
+	 */
+	private function handle_api_save_credentials(): void {
+		$url = esc_url_raw( wp_unslash( $_POST['api_url'] ?? '' ) );
+		$key = sanitize_text_field( wp_unslash( $_POST['api_key'] ?? '' ) );
+
+		if ( empty( $url ) ) {
+			SOC_Response::error( __( 'API URL is required.', 'shopperexpress' ) );
+		}
+
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$module->save_credentials( $url, $key );
+
+		SOC_Logger::write( 'general', 'Intice API credentials updated.' );
+
+		SOC_Response::success( array( 'saved' => true ) );
+	}
+
+	/**
+	 * Test the connection to the Intice API.
+	 */
+	private function handle_api_test_connection(): void {
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$result = $module->test_connection();
+
+		SOC_Response::success( $result );
+	}
+
+	/**
+	 * Flush all Intice API transient cache.
+	 */
+	private function handle_flush_api_cache(): void {
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$module->flush_api_cache();
+
+		SOC_Logger::write( 'cache', 'Intice API cache: full flush via SOC' );
+
+		SOC_Response::success( array( 'flushed' => true ) );
+	}
+
+	/**
+	 * Flush a specific Intice API cache group (vehicles / vehicle / meta).
+	 */
+	private function handle_flush_api_cache_group(): void {
+		$group  = sanitize_key( $_POST['group'] ?? '' );
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		if ( ! in_array( $group, array( 'vehicles', 'vehicle', 'meta' ), true ) ) {
+			SOC_Response::error( 'Invalid cache group.' );
+		}
+
+		$deleted = $module->flush_api_cache_group( $group );
+
+		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] flushed via SOC" );
+
+		SOC_Response::success( array( 'group' => $group, 'deleted' => $deleted ) );
 	}
 }

@@ -195,6 +195,25 @@ class Shortcode implements Theme_Component {
 		$output .= '</span>';
 		return $output;
 	}
+
+	/**
+	 * Loan APR
+	 *
+	 * @param array $atts Attributes.
+	 *
+	 * @return string
+	 */
+	public function loan_apr( $atts = array() ) {
+		$post_id = ! empty( $atts['id'] ) ? $atts['id'] : get_the_ID();
+
+		$output = "<span class='js-is-empty'>";
+		$apr    = get_field( 'loanapr', $post_id );
+		if ( $apr ) {
+			$output .= $apr;
+		}
+		$output .= '</span>';
+		return $output;
+	}
 	/**
 	 * Lease Term
 	 *

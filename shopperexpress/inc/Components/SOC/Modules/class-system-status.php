@@ -84,8 +84,9 @@ class System_Status implements SOC_Module {
 			// WordPress debugging config
 			'wp_debug'            => defined( 'WP_DEBUG' ) && WP_DEBUG,
 			'wp_debug_log'        => defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG,
-			// PHP feature support
-			'shell_exec'          => function_exists( 'shell_exec' ),
+			// PHP feature support — check disable_functions, not just function_exists.
+			'shell_exec'          => $this->is_function_callable( 'shell_exec' ),
+			'exec'                => $this->is_function_callable( 'exec' ),
 			// WordPress setup checks
 			'ssl'                 => is_ssl(),
 			'multisite'           => is_multisite(),
@@ -121,6 +122,21 @@ class System_Status implements SOC_Module {
 	 */
 	public function render( array $data ): void {
 		require get_template_directory() . '/inc/Components/SOC/views/system-status.php';
+	}
+
+	/**
+	 * Check whether a function is truly callable — not just declared but also absent
+	 * from disable_functions / suhosin blacklists.
+	 *
+	 * @param string $func Function name to test.
+	 * @return bool
+	 */
+	private function is_function_callable( string $func ): bool {
+		if ( ! function_exists( $func ) ) {
+			return false;
+		}
+		$disabled = array_map( 'trim', explode( ',', (string) ini_get( 'disable_functions' ) ) );
+		return ! in_array( $func, $disabled, true );
 	}
 
 	/**

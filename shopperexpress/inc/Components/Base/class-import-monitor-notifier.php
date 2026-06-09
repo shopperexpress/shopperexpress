@@ -30,12 +30,16 @@ class Import_Monitor_Notifier {
 	 * @return void
 	 */
 	public function dispatch( array $import_config, string $status, string $error_message = '', array $counts = array() ): void {
+		$import_id = $import_config['import_id'] ?? '?';
+
 		// Only suppress when the flag is explicitly set to false/0.
 		// A missing key (e.g. row saved before the field existed) defaults to enabled.
 		if ( 'success' === $status && isset( $import_config['notify_success'] ) && ! $import_config['notify_success'] ) {
+			error_log( "[Import Monitor] dispatch skipped: notify_success=false for import #{$import_id}" );
 			return;
 		}
 		if ( in_array( $status, array( 'failure', 'missing' ), true ) && isset( $import_config['notify_failure'] ) && ! $import_config['notify_failure'] ) {
+			error_log( "[Import Monitor] dispatch skipped: notify_failure=false for import #{$import_id}" );
 			return;
 		}
 
@@ -51,13 +55,20 @@ class Import_Monitor_Notifier {
 			}
 		}
 
-		if ( $this->get_acf_bool( 'wpim_slack_enabled' ) ) {
-			$slack_ok = ( $is_success && $this->get_acf_bool( 'wpim_slack_notify_success' ) )
-				|| ( $is_failure && $this->get_acf_bool( 'wpim_slack_notify_failure' ) );
-			if ( $slack_ok ) {
-				$this->send_slack( $vars );
-			}
+		if ( ! $this->get_acf_bool( 'wpim_slack_enabled' ) ) {
+			error_log( "[Import Monitor] Slack skipped: wpim_slack_enabled=false for import #{$import_id}" );
+			return;
 		}
+
+		$slack_ok = ( $is_success && $this->get_acf_bool( 'wpim_slack_notify_success' ) )
+			|| ( $is_failure && $this->get_acf_bool( 'wpim_slack_notify_failure' ) );
+
+		if ( ! $slack_ok ) {
+			error_log( "[Import Monitor] Slack skipped: notify flag off for status={$status}, import #{$import_id}" );
+			return;
+		}
+
+		$this->send_slack( $vars );
 	}
 
 	/**
@@ -157,13 +168,20 @@ class Import_Monitor_Notifier {
 	 * @return void
 	 */
 	private function send_slack( array $vars ): void {
-		$webhook = function_exists( 'get_field' ) ? get_field( 'wpim_slack_webhook', 'option' ) : get_option( 'options_wpim_slack_webhook' );
+		$webhook = trim( (string) ( function_exists( 'get_field' ) ? get_field( 'wpim_slack_webhook', 'option' ) : get_option( 'options_wpim_slack_webhook' ) ) );
 
-		if (
-			empty( $webhook )
-			|| ! filter_var( $webhook, FILTER_VALIDATE_URL )
-			|| strpos( $webhook, 'hooks.slack.com' ) === false
-		) {
+		if ( empty( $webhook ) ) {
+			error_log( '[Import Monitor] Slack skipped: webhook URL is empty.' );
+			return;
+		}
+
+		if ( ! filter_var( $webhook, FILTER_VALIDATE_URL ) ) {
+			error_log( '[Import Monitor] Slack skipped: webhook URL failed FILTER_VALIDATE_URL — "' . $webhook . '"' );
+			return;
+		}
+
+		if ( strpos( $webhook, 'hooks.slack.com' ) === false ) {
+			error_log( '[Import Monitor] Slack skipped: webhook URL does not contain hooks.slack.com — "' . $webhook . '"' );
 			return;
 		}
 
@@ -182,6 +200,8 @@ class Import_Monitor_Notifier {
 			$payload['channel'] = $channel;
 		}
 
+		error_log( '[Import Monitor] Sending Slack notification to webhook (channel: ' . ( $channel ?: 'default' ) . ')' );
+
 		// Use blocking=true: non-blocking requests are silently dropped when PHP
 		// shuts down at the end of a long import request before the TCP buffer flushes.
 		$response = wp_remote_post(
@@ -197,6 +217,14 @@ class Import_Monitor_Notifier {
 
 		if ( is_wp_error( $response ) ) {
 			error_log( '[Import Monitor] Slack request failed: ' . $response->get_error_message() );
+		} else {
+			$code = wp_remote_retrieve_response_code( $response );
+			$body = wp_remote_retrieve_body( $response );
+			if ( 200 !== (int) $code ) {
+				error_log( "[Import Monitor] Slack returned HTTP {$code}: {$body}" );
+			} else {
+				error_log( '[Import Monitor] Slack notification sent successfully.' );
+			}
 		}
 	}
 }

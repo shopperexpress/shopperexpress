@@ -200,9 +200,15 @@ class Import_Monitor_Dashboard implements Theme_Component {
 					<div class="wpim-stat__num">
 						<?php
 						$next = wp_next_scheduled( Import_Monitor_Cron::HOOK );
-						echo $next
-							? esc_html( human_time_diff( $next ) )
-							: '<span style="color:#aaa">—</span>';
+						if ( $next ) {
+							if ( $next > time() ) {
+								echo 'in ' . esc_html( human_time_diff( $next ) );
+							} else {
+								echo '<span style="color:#842029;">Overdue (' . esc_html( human_time_diff( $next ) ) . ' ago)</span>';
+							}
+						} else {
+							echo '<span style="color:#aaa">—</span>';
+						}
 						?>
 					</div>
 					<div class="wpim-stat__label"><?php esc_html_e( 'Next Cron Check', 'shopperexpress' ); ?></div>

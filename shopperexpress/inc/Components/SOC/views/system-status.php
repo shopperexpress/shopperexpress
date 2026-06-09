@@ -153,7 +153,12 @@ function soc_badge( bool $ok, string $yes = '✓', string $no = '✗' ): void {
 			<tr>
 				<td><?php esc_html_e( 'shell_exec', 'shopperexpress' ); ?></td>
 				<td><?php echo esc_html( ! empty( $data['shell_exec'] ) ? 'Available' : 'Disabled' ); ?></td>
-				<td></td>
+				<td><?php soc_badge( ! empty( $data['shell_exec'] ), 'Available', 'Disabled' ); ?></td>
+			</tr>
+			<tr>
+				<td><?php esc_html_e( 'exec', 'shopperexpress' ); ?></td>
+				<td><?php echo esc_html( ! empty( $data['exec'] ) ? 'Available' : 'Disabled' ); ?></td>
+				<td><?php soc_badge( ! empty( $data['exec'] ), 'Available', 'Disabled' ); ?></td>
 			</tr>
 		</tbody>
 	</table>

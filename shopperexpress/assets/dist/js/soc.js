@@ -561,7 +561,7 @@ var fails = __webpack_require__(9039);
 
 module.exports = !fails(function () {
   // eslint-disable-next-line es/no-function-prototype-bind -- safe
-  var test = (function () { /* empty */ }).bind();
+  var test = function () { /* empty */ }.bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
 });
@@ -576,7 +576,7 @@ module.exports = !fails(function () {
 var NATIVE_BIND = __webpack_require__(616);
 
 var call = Function.prototype.call;
-
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 module.exports = NATIVE_BIND ? call.bind(call) : function () {
   return call.apply(call, arguments);
 };
@@ -597,7 +597,7 @@ var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
 // additional protection from minified / mangled / dropped function names
-var PROPER = EXISTS && (function something() { /* empty */ }).name === 'something';
+var PROPER = EXISTS && function something() { /* empty */ }.name === 'something';
 var CONFIGURABLE = EXISTS && (!DESCRIPTORS || (DESCRIPTORS && getDescriptor(FunctionPrototype, 'name').configurable));
 
 module.exports = {
@@ -634,6 +634,7 @@ var NATIVE_BIND = __webpack_require__(616);
 
 var FunctionPrototype = Function.prototype;
 var call = FunctionPrototype.call;
+// eslint-disable-next-line es/no-function-prototype-bind -- safe
 var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
 module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
@@ -668,7 +669,7 @@ module.exports = function (namespace, method) {
 
 
 // `GetIteratorDirect(obj)` abstract operation
-// https://tc39.es/proposal-iterator-helpers/#sec-getiteratordirect
+// https://tc39.es/ecma262/#sec-getiteratordirect
 module.exports = function (obj) {
   return {
     iterator: obj,
@@ -1100,7 +1101,9 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal', condition);
+    var $iterator = iterator;
+    iterator = undefined;
+    if ($iterator) iteratorClose($iterator, 'normal');
     return new Result(true, condition);
   };
 
@@ -1130,13 +1133,39 @@ module.exports = function (iterable, unboundFunction, options) {
 
   next = IS_RECORD ? iterable.next : iterator.next;
   while (!(step = call(next, iterator)).done) {
+    // `IteratorValue` errors should propagate without closing the iterator
+    var value = step.value;
     try {
-      result = callFn(step.value);
+      result = callFn(value);
     } catch (error) {
-      iteratorClose(iterator, 'throw', error);
+      if (iterator) iteratorClose(iterator, 'throw', error);
+      else throw error;
     }
     if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
   } return new Result(false);
+};
+
+
+/***/ }),
+
+/***/ 1385:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var iteratorClose = __webpack_require__(9539);
+
+module.exports = function (iters, kind, value) {
+  for (var i = iters.length - 1; i >= 0; i--) {
+    if (iters[i] === undefined) continue;
+    try {
+      value = iteratorClose(iters[i].iterator, kind, value);
+    } catch (error) {
+      kind = 'throw';
+      value = error;
+    }
+  }
+  if (kind === 'throw') throw value;
+  return value;
 };
 
 
@@ -1187,10 +1216,13 @@ var getMethod = __webpack_require__(5966);
 var IteratorPrototype = (__webpack_require__(7657).IteratorPrototype);
 var createIterResultObject = __webpack_require__(2529);
 var iteratorClose = __webpack_require__(9539);
+var iteratorCloseAll = __webpack_require__(1385);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var ITERATOR_HELPER = 'IteratorHelper';
 var WRAP_FOR_VALID_ITERATOR = 'WrapForValidIterator';
+var NORMAL = 'normal';
+var THROW = 'throw';
 var setInternalState = InternalStateModule.set;
 
 var createIteratorProxyPrototype = function (IS_ITERATOR) {
@@ -1200,12 +1232,13 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
     next: function next() {
       var state = getInternalState(this);
       // for simplification:
-      //   for `%WrapForValidIteratorPrototype%.next` our `nextHandler` returns `IterResultObject`
+      //   for `%WrapForValidIteratorPrototype%.next` or with `state.returnHandlerResult` our `nextHandler` returns `IterResultObject`
       //   for `%IteratorHelperPrototype%.next` - just a value
       if (IS_ITERATOR) return state.nextHandler();
+      if (state.done) return createIterResultObject(undefined, true);
       try {
-        var result = state.done ? undefined : state.nextHandler();
-        return createIterResultObject(result, state.done);
+        var result = state.nextHandler();
+        return state.returnHandlerResult ? result : createIterResultObject(result, state.done);
       } catch (error) {
         state.done = true;
         throw error;
@@ -1214,17 +1247,25 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
     'return': function () {
       var state = getInternalState(this);
       var iterator = state.iterator;
+      var done = state.done;
       state.done = true;
       if (IS_ITERATOR) {
         var returnMethod = getMethod(iterator, 'return');
         return returnMethod ? call(returnMethod, iterator) : createIterResultObject(undefined, true);
       }
+      if (done) return createIterResultObject(undefined, true);
       if (state.inner) try {
-        iteratorClose(state.inner.iterator, 'normal');
+        iteratorClose(state.inner.iterator, NORMAL);
       } catch (error) {
-        return iteratorClose(iterator, 'throw', error);
+        return iteratorClose(iterator, THROW, error);
       }
-      if (iterator) iteratorClose(iterator, 'normal');
+      if (state.openIters) try {
+        iteratorCloseAll(state.openIters, NORMAL);
+      } catch (error) {
+        if (iterator) return iteratorClose(iterator, THROW, error);
+        throw error;
+      }
+      if (iterator) iteratorClose(iterator, NORMAL);
       return createIterResultObject(undefined, true);
     }
   });
@@ -1235,13 +1276,14 @@ var IteratorHelperPrototype = createIteratorProxyPrototype(false);
 
 createNonEnumerableProperty(IteratorHelperPrototype, TO_STRING_TAG, 'Iterator Helper');
 
-module.exports = function (nextHandler, IS_ITERATOR) {
+module.exports = function (nextHandler, IS_ITERATOR, RETURN_HANDLER_RESULT) {
   var IteratorProxy = function Iterator(record, state) {
     if (state) {
       state.iterator = record.iterator;
       state.next = record.next;
     } else state = record;
     state.type = IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER;
+    state.returnHandlerResult = !!RETURN_HANDLER_RESULT;
     state.nextHandler = nextHandler;
     state.counter = 0;
     state.done = false;
@@ -1256,32 +1298,50 @@ module.exports = function (nextHandler, IS_ITERATOR) {
 
 /***/ }),
 
-/***/ 713:
+/***/ 684:
+/***/ (function(module) {
+
+
+// Should throw an error on invalid iterator
+// https://issues.chromium.org/issues/336839115
+module.exports = function (methodName, argument) {
+  // eslint-disable-next-line es/no-iterator -- required for testing
+  var method = typeof Iterator == 'function' && Iterator.prototype[methodName];
+  if (method) try {
+    method.call({ next: null }, argument).next();
+  } catch (error) {
+    return true;
+  }
+};
+
+
+/***/ }),
+
+/***/ 4549:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 
-var call = __webpack_require__(9565);
-var aCallable = __webpack_require__(9306);
-var anObject = __webpack_require__(8551);
-var getIteratorDirect = __webpack_require__(1767);
-var createIteratorProxy = __webpack_require__(9462);
-var callWithSafeIterationClosing = __webpack_require__(6319);
+var globalThis = __webpack_require__(4576);
 
-var IteratorProxy = createIteratorProxy(function () {
-  var iterator = this.iterator;
-  var result = anObject(call(this.next, iterator));
-  var done = this.done = !!result.done;
-  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
-});
+// https://github.com/tc39/ecma262/pull/3467
+module.exports = function (METHOD_NAME, ExpectedError) {
+  var Iterator = globalThis.Iterator;
+  var IteratorPrototype = Iterator && Iterator.prototype;
+  var method = IteratorPrototype && IteratorPrototype[METHOD_NAME];
 
-// `Iterator.prototype.map` method
-// https://github.com/tc39/proposal-iterator-helpers
-module.exports = function map(mapper) {
-  anObject(this);
-  aCallable(mapper);
-  return new IteratorProxy(getIteratorDirect(this), {
-    mapper: mapper
-  });
+  var CLOSED = false;
+
+  if (method) try {
+    method.call({
+      next: function () { return { done: true }; },
+      'return': function () { CLOSED = true; }
+    }, -1);
+  } catch (error) {
+    // https://bugs.webkit.org/show_bug.cgi?id=291195
+    if (!(error instanceof ExpectedError)) CLOSED = false;
+  }
+
+  if (!CLOSED) return method;
 };
 
 
@@ -1874,10 +1934,10 @@ var SHARED = '__core-js_shared__';
 var store = module.exports = globalThis[SHARED] || defineGlobalProperty(SHARED, {});
 
 (store.versions || (store.versions = [])).push({
-  version: '3.39.0',
+  version: '3.49.0',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2024 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.39.0/LICENSE',
+  copyright: '© 2013–2025 Denis Pushkarev (zloirock.ru), 2025–2026 CoreJS Company (core-js.io). All rights reserved.',
+  license: 'https://github.com/zloirock/core-js/blob/v3.49.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -2068,7 +2128,7 @@ var wellKnownSymbol = __webpack_require__(8227);
 
 var TO_STRING_TAG = wellKnownSymbol('toStringTag');
 var test = {};
-
+// eslint-disable-next-line unicorn/no-immediate-mutation -- ES3 syntax limitation
 test[TO_STRING_TAG] = 'z';
 
 module.exports = String(test) === '[object z]';
@@ -2101,7 +2161,7 @@ var uncurryThis = __webpack_require__(9504);
 
 var id = 0;
 var postfix = Math.random();
-var toString = uncurryThis(1.0.toString);
+var toString = uncurryThis(1.1.toString);
 
 module.exports = function (key) {
   return 'Symbol(' + (key === undefined ? '' : key) + ')_' + toString(++id + postfix, 36);
@@ -2261,17 +2321,29 @@ $({ global: true, constructor: true, forced: FORCED }, {
 
 
 var $ = __webpack_require__(6518);
+var call = __webpack_require__(9565);
 var iterate = __webpack_require__(2652);
 var aCallable = __webpack_require__(9306);
 var anObject = __webpack_require__(8551);
 var getIteratorDirect = __webpack_require__(1767);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
+
+var findWithoutClosingOnEarlyError = iteratorHelperWithoutClosingOnEarlyError('find', TypeError);
 
 // `Iterator.prototype.find` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.find
-$({ target: 'Iterator', proto: true, real: true }, {
+$({ target: 'Iterator', proto: true, real: true, forced: findWithoutClosingOnEarlyError }, {
   find: function find(predicate) {
     anObject(this);
-    aCallable(predicate);
+    try {
+      aCallable(predicate);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (findWithoutClosingOnEarlyError) return call(findWithoutClosingOnEarlyError, this, predicate);
+
     var record = getIteratorDirect(this);
     var counter = 0;
     return iterate(record, function (value, stop) {
@@ -2288,13 +2360,47 @@ $({ target: 'Iterator', proto: true, real: true }, {
 
 
 var $ = __webpack_require__(6518);
-var map = __webpack_require__(713);
+var call = __webpack_require__(9565);
+var aCallable = __webpack_require__(9306);
+var anObject = __webpack_require__(8551);
+var getIteratorDirect = __webpack_require__(1767);
+var createIteratorProxy = __webpack_require__(9462);
+var callWithSafeIterationClosing = __webpack_require__(6319);
+var iteratorClose = __webpack_require__(9539);
+var iteratorHelperThrowsOnInvalidIterator = __webpack_require__(684);
+var iteratorHelperWithoutClosingOnEarlyError = __webpack_require__(4549);
 var IS_PURE = __webpack_require__(6395);
+
+var MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR = !IS_PURE && !iteratorHelperThrowsOnInvalidIterator('map', function () { /* empty */ });
+var mapWithoutClosingOnEarlyError = !IS_PURE && !MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR
+  && iteratorHelperWithoutClosingOnEarlyError('map', TypeError);
+
+var FORCED = IS_PURE || MAP_WITHOUT_THROWING_ON_INVALID_ITERATOR || mapWithoutClosingOnEarlyError;
+
+var IteratorProxy = createIteratorProxy(function () {
+  var iterator = this.iterator;
+  var result = anObject(call(this.next, iterator));
+  var done = this.done = !!result.done;
+  if (!done) return callWithSafeIterationClosing(iterator, this.mapper, [result.value, this.counter++], true);
+});
 
 // `Iterator.prototype.map` method
 // https://tc39.es/ecma262/#sec-iterator.prototype.map
-$({ target: 'Iterator', proto: true, real: true, forced: IS_PURE }, {
-  map: map
+$({ target: 'Iterator', proto: true, real: true, forced: FORCED }, {
+  map: function map(mapper) {
+    anObject(this);
+    try {
+      aCallable(mapper);
+    } catch (error) {
+      iteratorClose(this, 'throw', error);
+    }
+
+    if (mapWithoutClosingOnEarlyError) return call(mapWithoutClosingOnEarlyError, this, mapper);
+
+    return new IteratorProxy(getIteratorDirect(this), {
+      mapper: mapper
+    });
+  }
 });
 
 
@@ -2439,6 +2545,7 @@ var __webpack_exports__ = {};
     SOC.bindLogPagination();
     SOC.bindApiTest();
     SOC.bindDbCleanup();
+    SOC.bindApiSettings();
   };
 
   // ----------------------------------------------------------------
@@ -2824,6 +2931,116 @@ var __webpack_exports__ = {};
     });
     $(document).on('click', '.soc-log-next', function () {
       if (current < pages) renderPage(current + 1);
+    });
+  };
+
+  // ----------------------------------------------------------------
+  // API Settings
+  // ----------------------------------------------------------------
+  SOC.bindApiSettings = function () {
+    // Mode toggle
+    $(document).on('change', '#soc-api-mode-toggle', function () {
+      const enabled = $(this).is(':checked') ? 1 : 0;
+      const $card = $(this).closest('.soc-api-mode-card');
+      const $label = $('#soc-api-mode-label');
+      const $badge = $('#soc-api-mode-badge');
+      const $dot = $card.find('.soc-api-mode-indicator');
+      SOC.showLoading();
+      SOC.ajax('soc_api_mode_toggle', {
+        enabled: enabled
+      }, function (data) {
+        const on = data && data.enabled;
+        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+        $label.text(on ? 'API Mode (Intice)' : 'WordPress Mode');
+        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.showSuccess('Mode ' + (on ? 'enabled' : 'disabled') + '.');
+      });
+    });
+
+    // Show key input on "Change" click
+    $(document).on('click', '#soc-api-key-edit', function () {
+      $(this).hide();
+      $(this).closest('td').find('.soc-masked-key').hide();
+      $('#soc-intice-api-key').show().trigger('focus');
+    });
+
+    // Save credentials
+    $(document).on('click', '#soc-save-api-credentials', function () {
+      const $btn = $(this);
+      const url = $('#soc-intice-api-url').val().trim();
+      const key = $('#soc-intice-api-key').val().trim();
+      if (!url) {
+        SOC.showError('API URL is required.');
+        return;
+      }
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax('soc_api_save_credentials', {
+        api_url: url,
+        api_key: key
+      }, function () {
+        SOC.showSuccess('Credentials saved.');
+        $btn.prop('disabled', false);
+        // Hide input, reload panel to refresh masked key display
+        if (key) {
+          SOC.reloadPanel('api-settings');
+        }
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Flush all Intice cache
+    $(document).on('click', '#soc-flush-all-api-cache', function () {
+      if (!confirm('Flush all Intice Nexus cache? Next page loads will re-fetch from the API.')) return;
+      const $btn = $(this);
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax('soc_flush_api_cache', {}, function () {
+        SOC.showSuccess('All Intice cache flushed.');
+        SOC.reloadPanel('api-settings');
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Flush single cache group
+    $(document).on('click', '.soc-flush-api-cache-group', function () {
+      const $btn = $(this);
+      const group = $btn.data('group');
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax('soc_flush_api_cache_group', {
+        group: group
+      }, function (data) {
+        SOC.showSuccess('Cache group "' + group + '" flushed (' + (data.deleted || 0) + ' rows).');
+        SOC.reloadPanel('api-settings');
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Test connection
+    $(document).on('click', '#soc-test-intice-api', function () {
+      const $btn = $(this);
+      const $result = $('#soc-connection-result');
+      $btn.prop('disabled', true);
+      $result.text('Testing…').css('color', '');
+      SOC.showLoading();
+      SOC.ajax('soc_api_test_connection', {}, function (data) {
+        const ok = data && data.ok;
+        $result.text(ok ? '✓ ' + (data.status || 'OK') + ' — ' + (data.ms || 0) + ' ms' : '✗ ' + (data.error || data.status || 'Error')).css('color', ok ? '#00a32a' : '#d63638');
+        SOC.showSuccess('Connection test complete.');
+        $btn.prop('disabled', false);
+      }, function (msg) {
+        $result.text('✗ ' + msg).css('color', '#d63638');
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
     });
   };
 
