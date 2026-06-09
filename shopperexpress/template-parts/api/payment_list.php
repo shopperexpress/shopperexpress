@@ -23,6 +23,7 @@ if ( empty( $vehicle ) ) {
 	return;
 }
 
+$vin     = strtoupper( $vehicle['vin'] ?? '' );
 $payload = $vehicle['payload'] ?? array();
 
 // Map ACF payment_type values → Intice API fields.
@@ -104,7 +105,7 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 						<strong class="price"<?php echo $style_attr; // phpcs:ignore ?>><?php echo $payment; // phpcs:ignore ?></strong>
 					</div>
 				<?php else : ?>
-					<a href="#" data-toggle="modal" data-target="#unlockSavingsModal">
+					<a href="#" data-post="<?php echo esc_attr( $vin ); ?>" data-toggle="modal" data-target="#unlockSavingsModal">
 						<?php if ( 'single' === $style ) : ?>
 							<div class="text-holder">
 								<h4 class="h3"><?php echo esc_html( $heading ); ?></h4>
@@ -152,7 +153,7 @@ while ( have_rows( 'payment_list', 'options' ) ) :
 		if ( ( $post_type === $vehicle_type || 'All' === $vehicle_type ) && $show && $payment ) :
 			?>
 			<li class="<?php echo ! $lock ? 'show' : ''; ?>">
-				<a href="#"<?php echo $lock ? ' data-toggle="modal" data-target="#unlockSavingsModal"' : ''; ?>>
+				<a href="#"<?php echo $lock ? ' data-post="' . esc_attr( $vin ) . '" data-toggle="modal" data-target="#unlockSavingsModal"' : ''; ?>>
 					<?php if ( 'single' === $style ) : ?>
 						<div class="text-holder">
 							<?php if ( $title ) : ?>

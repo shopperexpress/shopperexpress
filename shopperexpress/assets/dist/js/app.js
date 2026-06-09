@@ -871,38 +871,62 @@ function initUpdateFavorite() {
 	const type = window.ajax ? window.ajax.request.saved : undefined;
 
 	if (type) {
-		jQuery.ajax({
-			url: window.ajax.admin,
-			type: 'POST',
-			data: {
-				action: 'favorites_array'
-			},
-			success: function(response) {
-				if (response.status === 'success') {
-					const favorites = response.favorites;
-					const posts = Object.values(favorites[0].posts);
-					const postIDs = [];
+		if (window.ajax && window.ajax.api_mode) {
+			jQuery.ajax({
+				url: window.ajax.admin,
+				type: 'POST',
+				data: { action: 'wps_api_favorites_list' },
+				success: function(response) {
+					if (!response.success || !response.data) return;
+					const vins = response.data[type] || [];
+					if (!vins.length) return;
 
-					if (posts.length > 0) {
-						posts.forEach(function(post) {
-							postIDs.push(post.post_id);
-						});
-
-						// Collect all saved ids
-						const data = {
-							post_id: postIDs.join(',')
-						};
-
-						jQuery.post(window.location.origin + `/wp-json/favorite/v1/render?action=${type}`, data, function(response) {
-							if (response.success) {
-								jQuery('#listings-container').html(response.html);
+					jQuery.post(
+						window.location.origin + `/wp-json/favorite/v1/render?action=${type}`,
+						{ post_id: vins.join(',') },
+						function(resp) {
+							if (resp.success) {
+								jQuery('#listings-container').html(resp.html);
 								initUnlockSavings();
+								initApiFavoriteButtons();
 							}
-						});
+						}
+					);
+				}
+			});
+		} else {
+			jQuery.ajax({
+				url: window.ajax.admin,
+				type: 'POST',
+				data: {
+					action: 'favorites_array'
+				},
+				success: function(response) {
+					if (response.status === 'success') {
+						const favorites = response.favorites;
+						const posts = Object.values(favorites[0].posts);
+						const postIDs = [];
+
+						if (posts.length > 0) {
+							posts.forEach(function(post) {
+								postIDs.push(post.post_id);
+							});
+
+							const data = {
+								post_id: postIDs.join(',')
+							};
+
+							jQuery.post(window.location.origin + `/wp-json/favorite/v1/render?action=${type}`, data, function(response) {
+								if (response.success) {
+									jQuery('#listings-container').html(response.html);
+									initUnlockSavings();
+								}
+							});
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 }
 
@@ -930,6 +954,80 @@ function initTouchDevice() {
 	if (isTouchDevice) {
 		jQuery('html').addClass('touch-device');
 	}
+}
+
+// API-mode favorite buttons (VIN-based toggle via custom AJAX handler).
+function initApiFavoriteButtons() {
+	if (!window.ajax || !window.ajax.api_mode) return;
+
+	const activeClass = 'active';
+
+	function setIcon($btn, isFav) {
+		$btn.find('i')
+			.toggleClass('sf-icon-star-empty', !isFav)
+			.toggleClass('sf-icon-star-full', isFav);
+	}
+
+	// Mark already-favorited buttons on page load.
+	jQuery.ajax({
+		url: window.ajax.admin,
+		type: 'POST',
+		data: { action: 'wps_api_favorites_list' },
+		success: function(response) {
+			if (!response.success) return;
+			const allFavs = response.data || {};
+			jQuery('.api-favorite-button[data-postid]').each(function() {
+				const $btn = jQuery(this);
+				const vin = String($btn.data('postid'));
+				const postType = $btn.data('posttype') || 'listings';
+				const isFav = (allFavs[postType] || []).indexOf(vin) !== -1;
+				$btn.toggleClass(activeClass, isFav);
+				setIcon($btn, isFav);
+			});
+		}
+	});
+
+	// Toggle on click (delegated so it works after AJAX-injected content).
+	jQuery(document).off('click.apiFav').on('click.apiFav', '.api-favorite-button[data-postid]', function(e) {
+		if (!window.ajax || !window.ajax.api_mode) return;
+
+		e.preventDefault();
+		e.stopImmediatePropagation();
+
+		const $btn = jQuery(this);
+		const vin = String($btn.data('postid'));
+		if (!vin) return;
+
+		const postType = $btn.data('posttype') || 'listings';
+		const isActive = $btn.hasClass(activeClass);
+		const newActive = !isActive;
+
+		$btn.toggleClass(activeClass, newActive);
+		setIcon($btn, newActive);
+
+		jQuery.ajax({
+			url: window.ajax.admin,
+			type: 'POST',
+			data: {
+				action: 'wps_api_favorite_toggle',
+				vin: vin,
+				post_type: postType,
+				status: newActive ? 'active' : 'inactive'
+			},
+			success: function(response) {
+				if (!response.success) {
+					$btn.toggleClass(activeClass, isActive);
+					setIcon($btn, isActive);
+					return;
+				}
+				jQuery(document).trigger('favorites-updated-single');
+			},
+			error: function() {
+				$btn.toggleClass(activeClass, isActive);
+				setIcon($btn, isActive);
+			}
+		});
+	});
 }
 
 // checked classes when element active
@@ -2696,6 +2794,7 @@ function initProductsFiltration() {
 			initFunctions(items);
 			initUnlockSavings();
 			initRemoveEmptyItems();
+			initApiFavoriteButtons();
 		}
 	});
 
@@ -11181,6 +11280,7 @@ jQuery(function() {
 	initRemoveEmptyItems();
 	initCopyToClipboard();
 	initUpdateFavorite();
+	initApiFavoriteButtons();
 	initUnlockSavings();
 	initTaxModal();
 	initSpinPopup();

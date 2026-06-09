@@ -11,6 +11,7 @@
  *   is_single  (bool)   — true on VDP, false on SRP
  *   loged      (string) — 'true' | '' (from SRP JS; falls back to is_user_logged_in)
  *   show-image (string) — 'true' (default) | 'false' — whether to render custom images
+ *   vin        (string) — VIN passed as post_id to the button (API mode)
  *
  * @package Shopperexpress
  */
@@ -20,6 +21,7 @@ $permalink  = $args['permalink']  ?? '#';
 $is_single  = ! empty( $args['is_single'] );
 $show       = ( $args['show-image'] ?? 'true' ) !== 'false';
 $loged      = ! empty( $args['loged'] ) ? $args['loged'] : is_user_logged_in();
+$vin        = $args['vin'] ?? '';
 
 if ( ! in_array( $post_type, array( 'listings', 'used-listings', 'offers', 'service-offers' ), true ) ) {
 	return;
@@ -53,12 +55,12 @@ if ( 'above' === $position ) {
 if ( ! wps_auth() && ! $loged ) :
 	while ( have_rows( 'unlock_button_' . $post_type, 'options' ) ) :
 		the_row();
-		get_template_part( 'template-parts/components/button', null, array( 'post_id' => 0 ) );
+		get_template_part( 'template-parts/components/button', null, array( 'post_id' => $vin ) );
 	endwhile;
 else :
 	while ( have_rows( 'contact_button_' . $post_type, 'options' ) ) :
 		the_row();
-		get_template_part( 'template-parts/components/button', null, array( 'post_id' => 0 ) );
+		get_template_part( 'template-parts/components/button', null, array( 'post_id' => $vin ) );
 	endwhile;
 endif;
 

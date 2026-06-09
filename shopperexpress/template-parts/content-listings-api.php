@@ -39,7 +39,7 @@ $alt_array = array( $year, $make, $model, $trim, $exterior_color, '- ' . get_blo
 // Payment data from payload (import-template fields).
 $payload      = $vehicle['payload'] ?? array();
 $loan_payment = $payload['loan_payment_sort'] ?? ( $payload['loan_payment'] ?? 0 );
-$status       = $payload['special field 4'] ?? '';
+$status       = $payload['special field 3'] ?? '';
 
 $price_display   = $price ? '$' . number_format( (int) $price ) : '';
 $payment_display = $loan_payment ? '$' . number_format( (int) $loan_payment ) . '/mo' : '';
@@ -59,26 +59,24 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 				<div class="card-head__holder">
 					<span class="card-brand"><?php echo esc_html( $year . ' ' . $make ); ?></span>
 					<?php
-					if ( shortcode_exists( 'favorite_button' ) ) {
-						echo do_shortcode( '[favorite_button post_id="' . $vin . '"]' );
+					if ( $vin ) {
+						echo '<button class="api-favorite-button" data-postid="' . esc_attr( $vin ) . '" data-posttype="' . esc_attr( $post_type ) . '"><i class="sf-icon-star-empty"></i></button>';
 					}
 					?>
 				</div>
 				<strong class="card-model"><?php echo esc_html( trim( $model . ' ' . $drivetrain . ' ' . $trim ) ); ?></strong>
 			</div>
-			<div class="detail-slider-holder">
-				<div class="detail-slider">
-					<div class="slide">
-						<?php
-						if ( $thumb ) {
-							echo '<img src="' . esc_url( $thumb ) . '" alt="' . esc_attr( implode( ' ', array_filter( $alt_array ) ) ) . '" class="detail-slide-img"/>';
-						} else {
-							echo default_image( 'slide', $post_type, $alt_array );
-						}
-						?>
-					</div>
-				</div>
-			</div>
+			<?php
+			get_template_part(
+				'template-parts/api/gallery',
+				null,
+				array(
+					'vehicle'   => $vehicle,
+					'post_type' => $post_type,
+					'is_single' => false,
+				)
+			);
+			?>
 			<?php if ( $status ) : ?>
 				<div class="badges-list">
 					<span class="card-badge-status"><?php echo esc_html( $status ); ?></span>
@@ -191,6 +189,7 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 					'permalink' => $permalink,
 					'is_single' => false,
 					'loged'     => $loged,
+					'vin'       => $vin,
 				)
 			);
 

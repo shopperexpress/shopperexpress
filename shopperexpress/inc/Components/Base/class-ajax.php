@@ -46,12 +46,15 @@ class Ajax implements Theme_Component {
 	public function wp_end_point() {
 		return array(
 			'ajax'              => array(
-				'register_user'   => 'register_user',
-				'ajax_login'      => 'ajax_login',
-				'adf'             => 'adf_action',
-				'submit_adf_lead' => 'submit_adf_lead',
-				'favorite'        => 'favorite_action',
-				'get_pdf'         => 'get_pdf',
+				'register_user'            => 'register_user',
+				'ajax_login'               => 'ajax_login',
+				'adf'                      => 'adf_action',
+				'submit_adf_lead'          => 'submit_adf_lead',
+				'favorite'                 => 'favorite_action',
+				'get_pdf'                  => 'get_pdf',
+				'wps_api_favorite_toggle'  => 'api_favorite_toggle',
+				'wps_api_favorites_list'   => 'api_favorites_list',
+				'wps_api_render_favorites' => 'api_render_favorites',
 			),
 			'admin-ajax'        => array(
 				'save_listing'    => 'save_listing',
@@ -457,14 +460,8 @@ class Ajax implements Theme_Component {
 
 			echo '<script src="' . home_url( '/wp-content/plugins/wpforms/assets/js/frontend/wpforms.min.js' ) . '"></script>';
 
-			$query   = new WP_Query(
-				array(
-					'post_type'      => 'any',
-					'post__in'       => array( $_REQUEST['post_id'] ),
-					'posts_per_page' => 1,
-				)
-			);
-			$form_id = ! empty( $_REQUEST['form_id'] ) ? $_REQUEST['form_id'] : '';
+			$raw_post_id = $_REQUEST['post_id'] ?? '';
+			$form_id     = ! empty( $_REQUEST['form_id'] ) ? $_REQUEST['form_id'] : '';
 
 			if ( empty( $form_id ) ) {
 				if ( wps_auth() ) {
@@ -474,16 +471,31 @@ class Ajax implements Theme_Component {
 				}
 			}
 
-			if ( $query->have_posts() ) {
-				while ( $query->have_posts() ) {
-					$query->the_post();
-					if ( $form_id ) {
-						echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
-					}
-				}
-				wp_reset_query();
-			} elseif ( $form_id ) {
+			// VIN (non-numeric) — API mode: no WP post context needed.
+			if ( ! is_numeric( $raw_post_id ) ) {
+				if ( $form_id ) {
 					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+				}
+			} else {
+				$query = new WP_Query(
+					array(
+						'post_type'      => 'any',
+						'post__in'       => array( absint( $raw_post_id ) ),
+						'posts_per_page' => 1,
+					)
+				);
+
+				if ( $query->have_posts() ) {
+					while ( $query->have_posts() ) {
+						$query->the_post();
+						if ( $form_id ) {
+							echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+						}
+					}
+					wp_reset_query();
+				} elseif ( $form_id ) {
+					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+				}
 			}
 
 			exit;
@@ -552,5 +564,130 @@ class Ajax implements Theme_Component {
 
 			exit;
 		}
+	}
+
+	// ─── API Favorites (VIN-based) ────────────────────────────────────────────
+
+	/**
+	 * Toggle a VIN favorite for the current user (logged-in: user_meta, guest: cookie).
+	 */
+	public function api_favorite_toggle() {
+		$vin       = strtoupper( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) );
+		$post_type = sanitize_key( $_POST['post_type'] ?? 'listings' );
+		$status    = ( isset( $_POST['status'] ) && 'active' === $_POST['status'] ) ? 'active' : 'inactive';
+
+		$allowed_types = array( 'listings', 'used-listings' );
+		if ( ! $vin || ! in_array( $post_type, $allowed_types, true ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid data' ) );
+		}
+
+		$favorites = $this->get_api_favorites();
+
+		if ( 'active' === $status ) {
+			if ( ! in_array( $vin, $favorites[ $post_type ] ?? array(), true ) ) {
+				$favorites[ $post_type ][] = $vin;
+			}
+		} else {
+			$favorites[ $post_type ] = array_values(
+				array_filter( $favorites[ $post_type ] ?? array(), fn( $v ) => $v !== $vin )
+			);
+		}
+
+		$this->save_api_favorites( $favorites );
+
+		wp_send_json_success(
+			array(
+				'active' => 'active' === $status,
+				'count'  => count( $favorites[ $post_type ] ),
+			)
+		);
+	}
+
+	/**
+	 * Return all API VIN favorites grouped by post_type.
+	 */
+	public function api_favorites_list() {
+		wp_send_json_success( $this->get_api_favorites() );
+	}
+
+	/**
+	 * Read API favorites from user_meta (logged-in) or cookie (guest).
+	 *
+	 * @return array  e.g. [ 'listings' => ['VIN1'], 'used-listings' => ['VIN2'] ]
+	 */
+	private function get_api_favorites(): array {
+		if ( is_user_logged_in() ) {
+			$meta = get_user_meta( get_current_user_id(), 'wps_api_favorites', true );
+			return is_array( $meta ) ? $meta : array();
+		}
+
+		$raw = isset( $_COOKIE['wps_api_favorites'] )
+			? json_decode( stripslashes( $_COOKIE['wps_api_favorites'] ), true )
+			: null;
+
+		return is_array( $raw ) ? $raw : array();
+	}
+
+	/**
+	 * Persist API favorites.
+	 *
+	 * @param array $favorites
+	 */
+	private function save_api_favorites( array $favorites ): void {
+		if ( is_user_logged_in() ) {
+			update_user_meta( get_current_user_id(), 'wps_api_favorites', $favorites );
+		} else {
+			setcookie(
+				'wps_api_favorites',
+				wp_json_encode( $favorites ),
+				time() + 30 * DAY_IN_SECONDS,
+				COOKIEPATH,
+				COOKIE_DOMAIN,
+				is_ssl(),
+				false
+			);
+		}
+	}
+
+	/**
+	 * Render saved API vehicles as HTML cards for the saved page.
+	 */
+	public function api_render_favorites() {
+		$post_type = sanitize_key( $_POST['post_type'] ?? '' );
+		$vins      = $_POST['vins'] ?? array();
+
+		$allowed = array( 'listings', 'used-listings' );
+		if ( ! in_array( $post_type, $allowed, true ) || ! is_array( $vins ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid data' ) );
+		}
+
+		if ( ! class_exists( '\App\Components\Api\Intice_Api_Client' ) ) {
+			wp_send_json_error( array( 'message' => 'API client not available' ) );
+		}
+
+		$client = \App\Components\Api\Intice_Api_Client::instance();
+
+		ob_start();
+		foreach ( $vins as $vin ) {
+			$vin     = strtoupper( sanitize_text_field( $vin ) );
+			$vehicle = $client->get_vehicle( $vin );
+			if ( is_wp_error( $vehicle ) || empty( $vehicle ) ) {
+				continue;
+			}
+			$permalink = home_url( '/' . $post_type . '/' . $vin . '/' );
+			get_template_part(
+				'template-parts/content-listings-api',
+				null,
+				array(
+					'vehicle'   => $vehicle,
+					'post_type' => $post_type,
+					'permalink' => $permalink,
+					'loged'     => is_user_logged_in() ? 'true' : '',
+				)
+			);
+		}
+		$html = ob_get_clean();
+
+		wp_send_json_success( array( 'html' => $html ) );
 	}
 }

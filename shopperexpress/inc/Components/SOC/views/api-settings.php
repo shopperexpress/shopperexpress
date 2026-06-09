@@ -7,7 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$mode_enabled = ! empty( $data['api_mode_enabled'] );
+$mode_enabled  = ! empty( $data['api_mode_enabled'] );
+$cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -139,12 +140,41 @@ $mode_enabled = ! empty( $data['api_mode_enabled'] );
 	</table>
 </div>
 
-<?php if ( $mode_enabled && ! empty( $data['api_cache'] ) ) : ?>
+<?php if ( $mode_enabled ) : ?>
 
-<!-- 4. Intice API Cache -->
+<!-- 4. Intice Nexus Cache -->
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Intice Nexus Cache', 'shopperexpress' ); ?></div>
 
+	<!-- Cache enable / disable toggle -->
+	<div class="soc-api-mode-card <?php echo $cache_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>" style="margin-bottom:16px;">
+		<div class="soc-api-mode-card__status">
+			<span class="soc-api-mode-indicator <?php echo $cache_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-cache-indicator"></span>
+			<strong id="soc-cache-label">
+				<?php echo $cache_enabled ? esc_html__( 'Cache Enabled', 'shopperexpress' ) : esc_html__( 'Cache Disabled', 'shopperexpress' ); ?>
+			</strong>
+			<span class="soc-badge <?php echo $cache_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-cache-badge">
+				<?php echo $cache_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
+			</span>
+		</div>
+		<p class="soc-api-mode-card__desc">
+			<?php if ( $cache_enabled ) : ?>
+				<?php esc_html_e( 'API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated.', 'shopperexpress' ); ?>
+			<?php else : ?>
+				<?php esc_html_e( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ); ?>
+			<?php endif; ?>
+		</p>
+		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle cache', 'shopperexpress' ); ?>">
+			<input
+				type="checkbox"
+				id="soc-intice-cache-toggle"
+				<?php checked( $cache_enabled ); ?>
+			/>
+			<span class="soc-toggle__slider"></span>
+		</label>
+	</div>
+
+	<?php if ( ! empty( $data['api_cache'] ) ) : ?>
 	<table class="soc-table">
 		<thead>
 			<tr>
@@ -160,6 +190,7 @@ $mode_enabled = ! empty( $data['api_mode_enabled'] );
 			<?php
 			$status_map = array(
 				'valid'   => array( 'class' => 'soc-badge--ok',      'label' => 'Valid' ),
+				'stale'   => array( 'class' => 'soc-badge--warn',    'label' => 'Stale' ),
 				'expired' => array( 'class' => 'soc-badge--fail',    'label' => 'Expired' ),
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
@@ -178,6 +209,9 @@ $mode_enabled = ! empty( $data['api_mode_enabled'] );
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
+						<?php if ( $st === 'stale' ) : ?>
+							<small style="margin-left:4px;color:#856404;"><?php esc_html_e( 'regen pending…', 'shopperexpress' ); ?></small>
+						<?php endif; ?>
 					</td>
 					<td><?php echo $row['expires_at'] ? esc_html( $row['expires_at'] ) : '—'; ?></td>
 					<td><code><?php echo esc_html( $row['ttl_label'] ); ?></code></td>
@@ -200,6 +234,7 @@ $mode_enabled = ! empty( $data['api_mode_enabled'] );
 			<?php esc_html_e( 'Flush All Intice Cache', 'shopperexpress' ); ?>
 		</button>
 	</div>
+	<?php endif; ?>
 </div>
 
 <?php endif; ?>

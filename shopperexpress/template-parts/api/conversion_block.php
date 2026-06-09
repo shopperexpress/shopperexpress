@@ -28,7 +28,7 @@ get_template_part(
 	array(
 		'vin'       => $vin,
 		'location'  => null,
-		'post_id'   => 0,
+		'post_id'   => $vin,
 		'post_type' => $post_type,
 	)
 );

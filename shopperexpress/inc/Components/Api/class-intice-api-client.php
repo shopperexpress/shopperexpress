@@ -25,6 +25,8 @@ class Intice_Api_Client {
 	const CACHE_TTL_VEHICLE  = 15 * MINUTE_IN_SECONDS;
 	const CACHE_TTL_META     = 30 * MINUTE_IN_SECONDS;
 	const CACHE_PREFIX       = 'intice_api_';
+	const CACHE_PREFIX_STALE = 'intice_stale_';
+	const STALE_TTL          = 2 * HOUR_IN_SECONDS;
 
 	/**
 	 * Singleton instance.
@@ -32,6 +34,13 @@ class Intice_Api_Client {
 	 * @var static|null
 	 */
 	private static ?self $instance = null;
+
+	/**
+	 * Set to true during background regen to bypass stale-cache fallback and force a fresh API fetch.
+	 *
+	 * @var bool
+	 */
+	private static bool $regenerating = false;
 
 	/**
 	 * Base API URL (without trailing slash, without /api/v1).
@@ -82,11 +91,24 @@ class Intice_Api_Client {
 	 * @return array|WP_Error Decoded response array or WP_Error on failure.
 	 */
 	public function get_vehicles( array $filters = [] ) {
-		$cache_key = self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) );
-		$cached    = get_transient( $cache_key );
+		$live_key  = self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) );
+		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_' . md5( serialize( $filters ) );
 
-		if ( false !== $cached ) {
-			return $cached;
+		if ( ! self::$regenerating ) {
+			if ( ! $this->is_cache_enabled() ) {
+				return $this->request( 'GET', '/api/v1/vehicles', $filters );
+			}
+
+			$cached = get_transient( $live_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+
+			// Serve stale data while background regeneration is in progress.
+			$stale = get_transient( $stale_key );
+			if ( false !== $stale ) {
+				return $stale;
+			}
 		}
 
 		$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
@@ -95,7 +117,9 @@ class Intice_Api_Client {
 			return $response;
 		}
 
-		set_transient( $cache_key, $response, self::CACHE_TTL_VEHICLES );
+		if ( self::$regenerating || $this->is_cache_enabled() ) {
+			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLES );
+		}
 
 		return $response;
 	}
@@ -108,11 +132,23 @@ class Intice_Api_Client {
 	 */
 	public function get_vehicle( string $vin ) {
 		$vin       = strtoupper( trim( $vin ) );
-		$cache_key = self::CACHE_PREFIX . 'vehicle_' . $vin;
-		$cached    = get_transient( $cache_key );
+		$live_key  = self::CACHE_PREFIX . 'vehicle_' . $vin;
+		$stale_key = self::CACHE_PREFIX_STALE . 'vehicle_' . $vin;
 
-		if ( false !== $cached ) {
-			return $cached;
+		if ( ! self::$regenerating ) {
+			if ( ! $this->is_cache_enabled() ) {
+				return $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ) );
+			}
+
+			$cached = get_transient( $live_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+
+			$stale = get_transient( $stale_key );
+			if ( false !== $stale ) {
+				return $stale;
+			}
 		}
 
 		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ) );
@@ -121,7 +157,9 @@ class Intice_Api_Client {
 			return $response;
 		}
 
-		set_transient( $cache_key, $response, self::CACHE_TTL_VEHICLE );
+		if ( self::$regenerating || $this->is_cache_enabled() ) {
+			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLE );
+		}
 
 		return $response;
 	}
@@ -132,11 +170,23 @@ class Intice_Api_Client {
 	 * @return array|WP_Error Decoded response array or WP_Error on failure.
 	 */
 	public function get_meta() {
-		$cache_key = self::CACHE_PREFIX . 'meta';
-		$cached    = get_transient( $cache_key );
+		$live_key  = self::CACHE_PREFIX . 'meta';
+		$stale_key = self::CACHE_PREFIX_STALE . 'meta';
 
-		if ( false !== $cached ) {
-			return $cached;
+		if ( ! self::$regenerating ) {
+			if ( ! $this->is_cache_enabled() ) {
+				return $this->request( 'GET', '/api/v1/meta' );
+			}
+
+			$cached = get_transient( $live_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+
+			$stale = get_transient( $stale_key );
+			if ( false !== $stale ) {
+				return $stale;
+			}
 		}
 
 		$response = $this->request( 'GET', '/api/v1/meta' );
@@ -145,24 +195,97 @@ class Intice_Api_Client {
 			return $response;
 		}
 
-		set_transient( $cache_key, $response, self::CACHE_TTL_META );
+		if ( self::$regenerating || $this->is_cache_enabled() ) {
+			set_transient( $live_key, $response, self::CACHE_TTL_META );
+		}
 
 		return $response;
 	}
 
 	/**
-	 * Clear all cached API responses for this client.
+	 * Flush live cache with stale-while-revalidate: copies current transients to a stale
+	 * prefix (2h TTL) so existing data keeps being served while a background cron regenerates
+	 * the fresh cache.
 	 *
 	 * @return void
 	 */
 	public function flush_cache(): void {
 		global $wpdb;
 
+		// Copy live transients to stale prefix before deleting.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
+				'_transient_' . self::CACHE_PREFIX . '%'
+			)
+		);
+
+		foreach ( $rows as $row ) {
+			$live_key  = str_replace( '_transient_', '', $row->option_name );
+			$stale_key = str_replace( self::CACHE_PREFIX, self::CACHE_PREFIX_STALE, $live_key );
+			set_transient( $stale_key, maybe_unserialize( $row->option_value ), self::STALE_TTL );
+		}
+
+		// Delete live transients.
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
 				'_transient_' . self::CACHE_PREFIX . '%',
 				'_transient_timeout_' . self::CACHE_PREFIX . '%'
+			)
+		);
+
+		// Schedule immediate background regeneration.
+		if ( ! wp_next_scheduled( 'intice_cache_regen' ) ) {
+			wp_schedule_single_event( time(), 'intice_cache_regen' );
+		}
+
+		spawn_cron();
+	}
+
+	/**
+	 * Regenerate the default cache entries (called by WP cron).
+	 * Uses $regenerating flag to bypass stale fallback and force fresh API calls.
+	 *
+	 * @return void
+	 */
+	public function regen_cache(): void {
+		self::$regenerating = true;
+
+		$this->get_meta();
+		$this->get_vehicles( [] );
+		$this->get_vehicles( [ 'condition' => 'new' ] );
+		$this->get_vehicles( [ 'condition' => 'used' ] );
+
+		self::$regenerating = false;
+
+		$this->clear_stale_cache();
+	}
+
+	// ─── Private helpers ──────────────────────────────────────────────────────
+
+	/**
+	 * Whether transient caching is currently enabled.
+	 *
+	 * @return bool
+	 */
+	private function is_cache_enabled(): bool {
+		return (bool) get_option( Api_Settings::OPTION_CACHE_ENABLED, true );
+	}
+
+	/**
+	 * Delete all stale transients created during a graceful flush.
+	 *
+	 * @return void
+	 */
+	private function clear_stale_cache(): void {
+		global $wpdb;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+				'_transient_' . self::CACHE_PREFIX_STALE . '%',
+				'_transient_timeout_' . self::CACHE_PREFIX_STALE . '%'
 			)
 		);
 	}

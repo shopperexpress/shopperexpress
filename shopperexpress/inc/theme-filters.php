@@ -186,202 +186,116 @@ add_filter(
 
 		$post_id = get_the_ID();
 
+		// API mode: if post_id in the request is a non-numeric VIN, fetch vehicle
+		// from the Intice API instead of reading ACF fields from a WP post.
+		$api_vehicle    = null;
+		$raw_request_id = isset( $_REQUEST['post_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post_id'] ) ) : '';
+
+		if (
+			$raw_request_id
+			&& ! is_numeric( $raw_request_id )
+			&& get_option( 'shopperexpress_api_mode_enabled' )
+			&& class_exists( '\App\Components\Api\Intice_Api_Client' )
+		) {
+			$api_result = \App\Components\Api\Intice_Api_Client::instance()->get_vehicle( $raw_request_id );
+			if ( ! is_wp_error( $api_result ) && ! empty( $api_result ) ) {
+				$api_vehicle = $api_result;
+			}
+		}
+
+		// tag => [ acf_field, api_key (, 'upper'|'price') ]
+		// 'api_key' omitted = ACF-only tag (offers/service/disclosure).
+		$tag_map = array(
+			// Vehicle fields — API-aware.
+			'year'               => array( 'year', 'year' ),
+			'make'               => array( 'make', 'make' ),
+			'model'              => array( 'model', 'model' ),
+			'trim'               => array( 'trim', 'trim' ),
+			'miles'              => array( 'mileage', 'mileage' ),
+			'vin'                => array( 'vin_number', 'vin', 'upper' ),
+			'stock'              => array( 'stock-number', 'stock' ),
+			'type'               => array( 'condition', 'condition' ),
+			// ACF-only fields.
+			'service_disclaimer' => array( 'offerdisclaimer' ),
+			'offer_year'         => array( 'year' ),
+			'offer_make'         => array( 'make' ),
+			'offer_model'        => array( 'model' ),
+			'offer_trim'         => array( 'trim' ),
+			'service_title'      => array( 'title' ),
+			'service_offer'      => array( 'offertext' ),
+			'service_dept'       => array( 'dept' ),
+			'service_type'       => array( 'type' ),
+			'service_expiration' => array( 'expiration' ),
+			'service_info'       => array( 'additioninfo' ),
+			'service_image'      => array( 'offerimage' ),
+			'disclosure_lease'   => array( 'disclosure_lease' ),
+			'disclosure_finance' => array( 'disclosure_finance' ),
+			'disclosure_cash'    => array( 'disclosure_cash' ),
+		);
+
+		if ( isset( $tag_map[ $tag ] ) ) {
+			[ $acf_key, $api_key, $format ] = $tag_map[ $tag ] + array( null, null, null );
+
+			$value = ( $api_vehicle && $api_key ) ? ( $api_vehicle[ $api_key ] ?? null ) : get_field( $acf_key, $post_id );
+
+			if ( $value ) {
+				if ( 'upper' === $format ) {
+					$value = strtoupper( $value );
+				}
+				$content = str_replace( '{' . $tag . '}', $value, $content );
+			}
+
+			return $content;
+		}
+
+		// Special cases that don't fit the simple get→replace pattern.
 		switch ( $tag ) {
 
-			case 'service_disclaimer':
-				$offerdisclaimer = get_field( 'offerdisclaimer', $post_id ) ? get_field( 'offerdisclaimer', $post_id ) : null;
-				if ( $offerdisclaimer ) {
-					$content = str_replace( '{service_disclaimer}', $offerdisclaimer, $content );
-				}
-				break;
-
 			case 'msrp':
-				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				if ( $price ) {
-					$content = str_replace( '{msrp}', $price, $content );
-				}
+				$raw   = $api_vehicle ? ( $api_vehicle['msrp'] ?? 0 ) : get_field( 'price', $post_id );
+				$value = $raw ? number_format( (int) $raw ) : null;
 				break;
 
 			case 'best_price':
-				$price = get_field( 'price', $post_id ) ? number_format( get_field( 'price', $post_id ) ) : null;
-				if ( $price ) {
-					$content = str_replace( '{best_price}', $price, $content );
-				}
+				$raw   = $api_vehicle
+					? ( $api_vehicle['price_sort'] ?? $api_vehicle['price'] ?? 0 )
+					: get_field( 'price', $post_id );
+				$value = $raw ? number_format( (int) $raw ) : null;
 				break;
 
 			case 'internet_price':
-				$price = get_field( 'customprice2', $post_id );
-				if ( is_float( $price ) ) {
-					$content = str_replace( '{internet_price}', number_format( $price ), $content );
-				}
-				break;
-
-			case 'offer_year':
-				$year = get_field( 'year', $post_id );
-				if ( $year ) {
-					$content = str_replace( '{offer_year}', $year, $content );
-				}
-				break;
-
-			case 'offer_make':
-				$make = get_field( 'make', $post_id );
-				if ( $make ) {
-					$content = str_replace( '{offer_make}', $make, $content );
-				}
-				break;
-
-			case 'offer_model':
-				$model = get_field( 'model', $post_id );
-				if ( $model ) {
-					$content = str_replace( '{offer_model}', $model, $content );
-				}
-				break;
-
-			case 'offer_trim':
-				$trim = get_field( 'trim', $post_id );
-				if ( $trim ) {
-					$content = str_replace( '{offer_trim}', $trim, $content );
+				if ( $api_vehicle ) {
+					$payload = $api_vehicle['payload'] ?? array();
+					$raw     = $payload['customprice2'] ?? ( $payload['internet_price'] ?? 0 );
+					$value   = $raw ? number_format( (int) $raw ) : null;
+				} else {
+					$raw   = get_field( 'customprice2', $post_id );
+					$value = is_float( $raw ) ? number_format( $raw ) : null;
 				}
 				break;
 
 			case 'offer_image':
-				$image = get_field( 'gallery', $post_id ) ? get_field( 'gallery', $post_id )[0]['image_url'] : null;
-				if ( $image ) {
-					$content = str_replace( '{offer_image}', $image, $content );
-				}
+				$gallery = get_field( 'gallery', $post_id );
+				$value   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : null;
 				break;
 
-			case 'service_title':
-				$title = get_field( 'title', $post_id );
-				if ( $title ) {
-					$content = str_replace( '{service_title}', $title, $content );
-				}
-				break;
-
-			case 'service_offer':
-				$offer = get_field( 'offertext', $post_id );
-				if ( $offer ) {
-					$content = str_replace( '{service_offer}', $offer, $content );
-				}
-				break;
-
-			case 'service_dept':
-				$dept = get_field( 'dept', $post_id );
-				if ( $dept ) {
-					$content = str_replace( '{service_dept}', $dept, $content );
-				}
-				break;
-
-			case 'service_type':
-				$type = get_field( 'type', $post_id );
-				if ( $type ) {
-					$content = str_replace( '{service_type}', $type, $content );
-				}
-				break;
-
-			case 'service_expiration':
-				$expiration = get_field( 'expiration', $post_id );
-				if ( $expiration ) {
-					$content = str_replace( '{service_expiration}', $expiration, $content );
-				}
-				break;
-
-			case 'service_info':
-				$info = get_field( 'additioninfo', $post_id );
-				if ( $info ) {
-					$content = str_replace( '{service_info}', $info, $content );
-				}
-				break;
-
-			case 'service_image':
-				$image = get_field( 'offerimage', $post_id );
-				if ( $image ) {
-					$content = str_replace( '{service_image}', $image, $content );
-				}
-				break;
-
-			case 'disclosure_lease':
-				$lease = get_field( 'disclosure_lease', $post_id );
-				if ( $lease ) {
-					$content = str_replace( '{disclosure_lease}', $lease, $content );
-				}
-				break;
-
-			case 'disclosure_finance':
-				$finance = get_field( 'disclosure_finance', $post_id );
-				if ( $finance ) {
-					$content = str_replace( '{disclosure_finance}', $finance, $content );
-				}
-				break;
-
-			case 'disclosure_cash':
-				$cash = get_field( 'disclosure_cash', $post_id );
-				if ( $cash ) {
-					$content = str_replace( '{disclosure_cash}', $cash, $content );
-				}
-				break;
-
-			case 'year':
-				$year = get_field( 'year', $post_id );
-				if ( $year ) {
-					$content = str_replace( '{year}', $year, $content );
-				}
-				break;
-
-			case 'make':
-				$make = get_field( 'make', $post_id );
-				if ( $make ) {
-					$content = str_replace( '{make}', $make, $content );
-				}
-				break;
-
-			case 'model':
-				$model = get_field( 'model', $post_id );
-				if ( $model ) {
-					$content = str_replace( '{model}', $model, $content );
-				}
-				break;
-
-			case 'trim':
-				$trim = get_field( 'trim', $post_id );
-				if ( $trim ) {
-					$content = str_replace( '{trim}', $trim, $content );
-				}
-				break;
-
-			case 'miles':
-				$miles = get_field( 'mileage', $post_id );
-				if ( $miles ) {
-					$content = str_replace( '{miles}', $miles, $content );
-				}
-				break;
-
-			case 'vin':
-				$vin = get_field( 'vin_number', $post_id );
-				if ( $vin ) {
-					$content = str_replace( '{vin}', $vin, $content );
-				}
-				break;
-
-			case 'stock':
-				$stock = get_field( 'stock-number', $post_id );
-				if ( $stock ) {
-					$content = str_replace( '{stock}', $stock, $content );
-				}
-				break;
-
-			case 'type':
-				$type = get_field( 'condition', $post_id );
-				if ( $type ) {
-					$content = str_replace( '{type}', $type, $content );
-				}
-				break;
 			case 'url':
-				$url = get_the_permalink( $post_id );
-				if ( $url ) {
-					$content = str_replace( '{url}', $url, $content );
+				if ( $api_vehicle ) {
+					$vin_val  = strtoupper( $api_vehicle['vin'] ?? $raw_request_id );
+					$referrer = wp_get_referer();
+					$slug     = ( $referrer && str_contains( $referrer, 'used-listings' ) ) ? 'used-listings' : 'listings';
+					$value    = home_url( '/' . $slug . '/' . $vin_val . '/' );
+				} else {
+					$value = get_the_permalink( $post_id );
 				}
 				break;
+
+			default:
+				$value = null;
+		}
+
+		if ( ! empty( $value ) ) {
+			$content = str_replace( '{' . $tag . '}', $value, $content );
 		}
 
 		while ( have_rows( 'smart_tags', 'options' ) ) :

@@ -69,19 +69,65 @@ class Rest implements Theme_Component {
 		);
 
 		if ( in_array( $post_type, $allowed, true ) ) {
+			$api_mode = get_option( 'shopperexpress_api_mode_enabled' )
+				&& class_exists( '\App\Components\Api\Intice_Api_Client' )
+				&& in_array( $post_type, array( 'listings', 'used-listings' ), true );
+
 			ob_start();
-			foreach ( $posts as $post_id ) {
-				if ( $post_type === get_post_type( $post_id ) ) {
+
+			if ( $api_mode ) {
+				// Build VIN lookup from the same get_vehicles() call SRP uses — same data structure.
+				$client     = \App\Components\Api\Intice_Api_Client::instance();
+				$conditions = array(
+					'listings'      => 'new',
+					'used-listings' => 'used',
+				);
+				$api_data = $client->get_vehicles( array( 'condition' => $conditions[ $post_type ] ) );
+				$all_vehicles = ( ! is_wp_error( $api_data ) ) ? ( $api_data['data'] ?? array() ) : array();
+
+				// Index by VIN for fast lookup.
+				$by_vin = array();
+				foreach ( $all_vehicles as $v ) {
+					$v_vin = strtoupper( $v['vin'] ?? '' );
+					if ( $v_vin ) {
+						$by_vin[ $v_vin ] = $v;
+					}
+				}
+
+				foreach ( $posts as $post_id ) {
+					$vin     = strtoupper( trim( $post_id ) );
+					$vehicle = $by_vin[ $vin ] ?? null;
+					if ( ! $vehicle ) {
+						continue;
+					}
+					$permalink = home_url( '/' . $post_type . '/' . $vin . '/' );
 					get_template_part(
-						'template-parts/content',
-						$post_type,
+						'template-parts/content-listings-api',
+						null,
 						array(
-							'post_id' => $post_id,
-							'action'  => 'favorite',
+							'vehicle'   => $vehicle,
+							'post_type' => $post_type,
+							'permalink' => $permalink,
+							'loged'     => is_user_logged_in() ? 'true' : '',
 						)
 					);
 				}
+			} else {
+				foreach ( $posts as $post_id ) {
+					$post_id = trim( $post_id );
+					if ( $post_type === get_post_type( $post_id ) ) {
+						get_template_part(
+							'template-parts/content',
+							$post_type,
+							array(
+								'post_id' => $post_id,
+								'action'  => 'favorite',
+							)
+						);
+					}
+				}
 			}
+
 			$html = ob_get_clean();
 
 			return new \WP_REST_Response(
@@ -118,6 +164,25 @@ class Rest implements Theme_Component {
 				null,
 				array( 'post_type' => array( $post_type ) )
 			);
+		}
+
+		// Merge API VIN favorites (stored separately from SimpleFavorites plugin).
+		if ( get_option( 'shopperexpress_api_mode_enabled' ) ) {
+			$api_favorites = array();
+			if ( is_user_logged_in() ) {
+				$meta          = get_user_meta( get_current_user_id(), 'wps_api_favorites', true );
+				$api_favorites = is_array( $meta ) ? $meta : array();
+			} else {
+				$raw           = isset( $_COOKIE['wps_api_favorites'] )
+					? json_decode( stripslashes( $_COOKIE['wps_api_favorites'] ), true )
+					: null;
+				$api_favorites = is_array( $raw ) ? $raw : array();
+			}
+
+			foreach ( array( 'listings', 'used-listings' ) as $pt ) {
+				$api_count      = count( $api_favorites[ $pt ] ?? array() );
+				$output[ $pt ] += $api_count;
+			}
 		}
 
 		return new \WP_REST_Response( $output, 200 );

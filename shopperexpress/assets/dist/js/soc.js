@@ -2992,6 +2992,30 @@ var __webpack_exports__ = {};
       });
     });
 
+    // Cache enable / disable toggle
+    $(document).on('change', '#soc-intice-cache-toggle', function () {
+      const enabled = $(this).is(':checked') ? 1 : 0;
+      const $card = $(this).closest('.soc-api-mode-card');
+      const $label = $('#soc-cache-label');
+      const $badge = $('#soc-cache-badge');
+      const $dot = $('#soc-cache-indicator');
+      SOC.showLoading();
+      SOC.ajax('soc_intice_cache_toggle', {
+        enabled: enabled
+      }, function (data) {
+        const on = data && data.enabled;
+        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+        $label.text(on ? 'Cache Enabled' : 'Cache Disabled');
+        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+        SOC.showSuccess('Intice cache ' + (on ? 'enabled' : 'disabled') + '.');
+      }, function (msg) {
+        SOC.showError(msg);
+        // Revert toggle on error
+        $(this).prop('checked', !enabled);
+      });
+    });
+
     // Flush all Intice cache
     $(document).on('click', '#soc-flush-all-api-cache', function () {
       if (!confirm('Flush all Intice Nexus cache? Next page loads will re-fetch from the API.')) return;

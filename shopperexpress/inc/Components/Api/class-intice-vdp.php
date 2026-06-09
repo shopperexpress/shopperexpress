@@ -119,7 +119,7 @@ class Intice_VDP implements Theme_Component {
 	public function maybe_serve_vdp(): void {
 		global $wp;
 
-		$slug      = $wp->query_vars[ self::QUERY_VAR_SLUG ]      ?? '';
+		$slug      = $wp->query_vars[ self::QUERY_VAR_SLUG ] ?? '';
 		$post_type = $wp->query_vars[ self::QUERY_VAR_POST_TYPE ] ?? '';
 
 		if ( ! $slug || ! $post_type ) {
@@ -150,9 +150,9 @@ class Intice_VDP implements Theme_Component {
 
 		// is_singular( 'listings' ) also checks queried_object->post_type.
 		if ( ! $wp_query->queried_object ) {
-			$fake                       = new \stdClass();
-			$fake->post_type            = $post_type;
-			$wp_query->queried_object   = $fake;
+			$fake                     = new \stdClass();
+			$fake->post_type          = $post_type;
+			$wp_query->queried_object = $fake;
 		}
 
 		status_header( 200 );
@@ -232,12 +232,12 @@ class Intice_VDP implements Theme_Component {
 	 */
 	private static function build_vdp_slug( string $vin, string $post_type, array $vehicle ): string {
 		$condition  = 'used-listings' === $post_type ? 'used' : 'new';
-		$year       = $vehicle['year']       ?? '';
-		$make       = $vehicle['make']       ?? '';
-		$model      = $vehicle['model']      ?? '';
+		$year       = $vehicle['year'] ?? '';
+		$make       = $vehicle['make'] ?? '';
+		$model      = $vehicle['model'] ?? '';
 		$body_style = $vehicle['body_style'] ?? '';
-		$trim       = $vehicle['trim']       ?? '';
-		$stock      = $vehicle['stock']      ?? '';
+		$trim       = $vehicle['trim'] ?? '';
+		$stock      = $vehicle['stock'] ?? '';
 
 		$parts = array_filter( array( $condition, $year, $make, $model, $body_style, $trim, strtolower( $vin ), $stock ) );
 

@@ -67,8 +67,10 @@ class Theme {
 			\App\Components\Base\Login::class,
 			\App\Components\Base\Required_Plugins::class,
 			\App\Components\SOC\SOC::class,
-			\App\Components\Api\Intice_Rest::class,
-			\App\Components\Api\Intice_VDP::class,
+			...( \App\is_api_mode() ? array(
+				\App\Components\Api\Intice_Rest::class,
+				\App\Components\Api\Intice_VDP::class,
+			) : array() ),
 		);
 
 		$gutenberg_components = array(

@@ -19,9 +19,10 @@ use App\Components\SOC\Support\SOC_Logger;
  */
 class Api_Settings implements SOC_Module {
 
-	const OPTION_API_MODE    = 'shopperexpress_api_mode_enabled';
-	const OPTION_API_KEY     = 'shopperexpress_intice_api_key';
-	const OPTION_API_URL     = 'shopperexpress_intice_api_url';
+	const OPTION_API_MODE      = 'shopperexpress_api_mode_enabled';
+	const OPTION_API_KEY       = 'shopperexpress_intice_api_key';
+	const OPTION_API_URL       = 'shopperexpress_intice_api_url';
+	const OPTION_CACHE_ENABLED = 'shopperexpress_intice_cache_enabled';
 
 	/**
 	 * @return string
@@ -61,10 +62,12 @@ class Api_Settings implements SOC_Module {
 		$api_url = get_option( self::OPTION_API_URL, '' );
 		$api_key = get_option( self::OPTION_API_KEY, '' );
 
-		$api_mode = (bool) get_option( self::OPTION_API_MODE, false );
+		$api_mode     = (bool) get_option( self::OPTION_API_MODE, false );
+		$cache_enabled = (bool) get_option( self::OPTION_CACHE_ENABLED, true );
 
 		$data = array(
 			'api_mode_enabled' => $api_mode,
+			'cache_enabled'    => $cache_enabled,
 			'api_url'          => $api_url,
 			'api_key_set'      => ! empty( $api_key ),
 			'api_key_masked'   => $this->mask_key( $api_key ),
@@ -96,6 +99,18 @@ class Api_Settings implements SOC_Module {
 	 */
 	public function set_api_mode( bool $enabled ): bool {
 		update_option( self::OPTION_API_MODE, $enabled ? '1' : '0', false );
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+		return $enabled;
+	}
+
+	/**
+	 * Toggle Intice Nexus cache on/off.
+	 *
+	 * @param bool $enabled
+	 * @return bool New state.
+	 */
+	public function set_cache_enabled( bool $enabled ): bool {
+		update_option( self::OPTION_CACHE_ENABLED, $enabled ? '1' : '0', false );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 		return $enabled;
 	}
@@ -216,11 +231,16 @@ class Api_Settings implements SOC_Module {
 				}
 			}
 
+			// Check for stale entries while live cache is being rebuilt.
+			$stale_like  = '_transient_timeout_' . str_replace( Intice_Api_Client::CACHE_PREFIX, Intice_Api_Client::CACHE_PREFIX_STALE, $entry['key'] );
+			$stale_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s", $stale_like ) );
+			$has_stale   = (int) $stale_count > 0;
+
 			$rows[] = array(
 				'label'      => $entry['label'],
 				'key'        => $entry['key'],
 				'count'      => $count,
-				'status'     => $status,
+				'status'     => ( $status === 'missing' && $has_stale ) ? 'stale' : $status,
 				'expires_at' => $expires_at,
 				'ttl_label'  => human_readable_duration( gmdate( 'H:i:s', $entry['ttl'] ) ),
 			);

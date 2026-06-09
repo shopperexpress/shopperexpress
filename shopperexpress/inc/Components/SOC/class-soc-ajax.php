@@ -58,6 +58,7 @@ class SOC_Ajax {
 		'soc_api_test_connection'     => 'handle_api_test_connection',
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
+		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
 	);
 
 	/**
@@ -647,6 +648,24 @@ class SOC_Ajax {
 		$result = $module->test_connection();
 
 		SOC_Response::success( $result );
+	}
+
+	/**
+	 * Toggle Intice Nexus cache on/off.
+	 */
+	private function handle_intice_cache_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 1 );
+		$module  = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$new_state = $module->set_cache_enabled( $enabled );
+
+		SOC_Logger::write( 'cache', 'Intice cache ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
 	}
 
 	/**

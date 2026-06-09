@@ -46,6 +46,16 @@ class Intice_Rest implements Theme_Component {
 	 */
 	public function register(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'intice_cache_regen', array( $this, 'handle_cache_regen' ) );
+	}
+
+	/**
+	 * WP cron callback: regenerate default Intice API cache entries.
+	 *
+	 * @return void
+	 */
+	public function handle_cache_regen(): void {
+		Intice_Api_Client::instance()->regen_cache();
 	}
 
 	/**

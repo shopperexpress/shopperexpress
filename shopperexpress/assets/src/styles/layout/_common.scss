@@ -42,7 +42,9 @@ body {
     .main-navigation .drop-opener::before,
     #nav ul a::before,
     .simplefavorite-button .sf-icon-star-empty::before,
-    .simplefavorite-button .sf-icon-star-full::before {
+    .simplefavorite-button .sf-icon-star-full::before,
+    .api-favorite-button .sf-icon-star-empty::before,
+    .api-favorite-button .sf-icon-star-full::before {
       opacity: 0;
       width: 0;
     }
@@ -2563,7 +2565,8 @@ textarea.form-control {
     }
 
     &.active {
-      .simplefavorite-button {
+      .simplefavorite-button,
+      .api-favorite-button {
         &::before {
           background-color: var(--primary);
         }
@@ -2577,7 +2580,8 @@ textarea.form-control {
     }
   }
 
-  .simplefavorite-button {
+  .simplefavorite-button,
+  .api-favorite-button {
     &::before {
       @include animate(opacity);
       content: '';
