@@ -247,7 +247,7 @@ class ACF implements Theme_Component {
 			wp_cache_set( $cache_key, $acf_data );
 		}
 
-		$key = $field['key'];
-		return $acf_data[ $key ] ?? $null;
+		$name = $field['name'];
+		return $acf_data[ $name ] ?? $null;
 	}
 }

@@ -3,7 +3,7 @@
  * API-mode equivalent of template-parts/description-block.php
  *
  * ACF options loop is identical to the original. AI description is read from
- * the Intice payload/enrichment fields instead of post meta.
+ * the Intice payload fields instead of post meta.
  *
  * Accepts $args:
  *   vehicle   (array)  — Intice API vehicle object
@@ -53,11 +53,10 @@ if ( have_rows( 'description_block', 'options' ) ) :
 	endwhile;
 endif;
 
-// AI description from Intice payload/enrichment (replaces _ai_vdp_description post meta).
+// AI description from Intice payload (replaces _ai_vdp_description post meta).
 if ( 'vdp' === $type || 'single' === $type ) :
-	$payload     = $vehicle['payload']     ?? array();
-	$enrichment  = $vehicle['enrichment']  ?? array();
-	$ai_desc     = $payload['ai_vdp_description'] ?? ( $enrichment['ai_vdp_description'] ?? '' );
+	$payload  = $vehicle['payload'] ?? array();
+	$ai_desc  = $payload['ai_vdp_description'] ?? '';
 
 	if ( $ai_desc ) :
 		echo wp_kses_post( $ai_desc );

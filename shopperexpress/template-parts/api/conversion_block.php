@@ -13,7 +13,7 @@ if ( ! class_exists( 'ConversionBlock' ) ) {
 	return;
 }
 
-$vehicle   = $args['vehicle']   ?? array();
+$vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? '';
 $vin       = strtoupper( $vehicle['vin'] ?? '' );
 
@@ -21,14 +21,16 @@ if ( ! $vin || ! in_array( $post_type, array( 'listings', 'used-listings' ), tru
 	return;
 }
 
-// SRP only — location is null (no 'single_' suffix).
+// SRP only — no 'single_' location prefix.
+// Pass the already-fetched vehicle data to avoid a redundant API call per card.
 get_template_part(
 	'template-parts/ConversionBlock',
 	null,
 	array(
-		'vin'       => $vin,
-		'location'  => null,
-		'post_id'   => $vin,
-		'post_type' => $post_type,
+		'vin'         => $vin,
+		'location'    => '',
+		'post_id'     => 0,
+		'post_type'   => $post_type,
+		'api_vehicle' => $vehicle,
 	)
 );

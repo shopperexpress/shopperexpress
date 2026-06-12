@@ -150,9 +150,23 @@ class Intice_VDP implements Theme_Component {
 
 		// is_singular( 'listings' ) also checks queried_object->post_type.
 		if ( ! $wp_query->queried_object ) {
-			$fake                     = new \stdClass();
-			$fake->post_type          = $post_type;
-			$wp_query->queried_object = $fake;
+			$fake                       = new \stdClass();
+			$fake->ID                   = 0;
+			$fake->post_type            = $post_type;
+			$fake->post_title           = '';
+			$fake->post_name            = '';
+			$fake->post_status          = 'publish';
+			$fake->post_author          = 0;
+			$fake->post_date            = '';
+			$fake->post_date_gmt        = '';
+			$fake->post_modified        = '';
+			$fake->post_modified_gmt    = '';
+			$fake->post_content         = '';
+			$fake->post_excerpt         = '';
+			$fake->comment_status       = 'closed';
+			$fake->ping_status          = 'closed';
+			$fake->filter               = 'raw';
+			$wp_query->queried_object   = $fake;
 		}
 
 		status_header( 200 );

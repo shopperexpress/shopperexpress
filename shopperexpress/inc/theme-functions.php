@@ -809,7 +809,7 @@ function get_url_with_fields( $post_id = '', $post_type = '', $url = '' ) {
 		if ( $field == 'url' ) {
 			$url = str_replace( '[' . $field . ']', get_permalink( $post_id ), $url );
 		} else {
-			$url = str_replace( '[' . $field . ']', get_field( $field, $post_id ), $url );
+			$url = str_replace( '[' . $field . ']', (string) ( get_field( $field, $post_id ) ?? '' ), $url );
 		}
 	}
 

@@ -20,9 +20,24 @@ $modals[]         = array(
 	'content'         => $vehicle_overview,
 	'footer'          => true,
 );
-
 ob_start();
-if ( have_rows( 'features_options' ) ) :
+$_intice_vehicle = $GLOBALS['intice_vehicle'] ?? null;
+if ( $_intice_vehicle ) :
+	$_intice_payload = $_intice_vehicle['payload'] ?? array();
+	$_intice_options = $_intice_payload['options'] ?? array();
+	if ( ! empty( $_intice_options ) ) :
+		$_intice_options = explode( '|', $_intice_options );
+		?>
+		<ul class="modal-content-list">
+			<?php foreach ( $_intice_options as $_option ) : ?>
+				<?php if ( $_option ) : ?>
+					<li><?php echo esc_html( $_option ); ?></li>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</ul>
+		<?php
+	endif;
+elseif ( have_rows( 'features_options' ) ) :
 	?>
 	<ul class="modal-content-list">
 		<?php

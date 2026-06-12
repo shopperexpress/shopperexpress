@@ -15,7 +15,7 @@
  * @package Shopperexpress
  */
 
-$vehicle   = $args['vehicle']   ?? array();
+$vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
 $style     = ! empty( $args['style'] );
 $is_single = ! empty( $args['is_single'] );
@@ -28,16 +28,16 @@ $payload = $vehicle['payload'] ?? array();
 
 // Map ACF field name → Intice API value for matching and calculations.
 $field_map = array(
-	'year'           => (string) ( $vehicle['year']        ?? '' ),
-	'make'           => (string) ( $vehicle['make']        ?? '' ),
-	'model'          => (string) ( $vehicle['model']       ?? '' ),
-	'trim'           => (string) ( $vehicle['trim']        ?? '' ),
-	'loan_payment'   => (int) ( $payload['loan_payment']   ?? $payload['loan_payment_sort']  ?? 0 ),
-	'lease_payment'  => (int) ( $payload['lease_payment']  ?? $payload['lease_payment_sort'] ?? 0 ),
-	'original_price' => (int) ( $vehicle['msrp']           ?? 0 ),
-	'price'          => (int) ( $vehicle['price_sort']     ?? $vehicle['price']               ?? 0 ),
-	'price_sort'     => (int) ( $vehicle['price_sort']     ?? $vehicle['price']               ?? 0 ),
-	'down_payment'   => (int) ( $payload['down_payment']   ?? 0 ),
+	'year'           => (string) ( $vehicle['year'] ?? '' ),
+	'make'           => (string) ( $vehicle['make'] ?? '' ),
+	'model'          => (string) ( $vehicle['model'] ?? '' ),
+	'trim'           => (string) ( $vehicle['trim'] ?? '' ),
+	'loan_payment'   => (int) ( $payload['loan_payment'] ?? $payload['loan_payment_sort'] ?? 0 ),
+	'lease_payment'  => (int) ( $payload['lease_payment'] ?? $payload['lease_payment_sort'] ?? 0 ),
+	'original_price' => (int) ( $vehicle['msrp'] ?? 0 ),
+	'price'          => (int) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
+	'price_sort'     => (int) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
+	'down_payment'   => (int) ( $payload['down_payment'] ?? 0 ),
 );
 
 // search_in field values — same as original.
@@ -192,6 +192,9 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	}
 	if ( isset( $get_style['padding_bottom'] ) && '' !== $get_style['padding_bottom'] ) {
 		$style_row[] = 'padding-bottom:' . $get_style['padding_bottom'] . 'px;';
+	}
+	if ( isset( $get_style['min_height'] ) && '' !== $get_style['min_height'] ) {
+		$style_row[] = 'min-height:' . $get_style['min_height'] . 'px;';
 	}
 
 	$style_row_attr = ! empty( $style_row ) ? ' style="' . implode( '', $style_row ) . '"' : '';

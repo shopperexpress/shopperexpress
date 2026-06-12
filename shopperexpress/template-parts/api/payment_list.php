@@ -14,9 +14,9 @@
  * @package Shopperexpress
  */
 
-$vehicle   = $args['vehicle']   ?? array();
+$vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
-$style     = $args['style']     ?? 'single';
+$style     = $args['style'] ?? 'single';
 $bottom    = ! empty( $args['single-bottom'] );
 
 if ( empty( $vehicle ) ) {
@@ -28,14 +28,14 @@ $payload = $vehicle['payload'] ?? array();
 
 // Map ACF payment_type values → Intice API fields.
 $field_map = array(
-	'loan_payment'   => (float) ( $payload['loan_payment']        ?? $payload['loan_payment_sort']   ?? 0 ),
-	'lease_payment'  => (float) ( $payload['lease_payment']       ?? $payload['lease_payment_sort']  ?? 0 ),
-	'original_price' => (float) ( $vehicle['msrp']                ?? 0 ),
-	'price'          => (float) ( $vehicle['price_sort']          ?? $vehicle['price']                ?? 0 ),
-	'price_sort'     => (float) ( $vehicle['price_sort']          ?? $vehicle['price']                ?? 0 ),
-	'down_payment'   => (float) ( $payload['down_payment']        ?? 0 ),
-	'comment1'       => (string) ( $payload['comment1']           ?? $payload['special field 1']     ?? '' ),
-	'comment2'       => (string) ( $payload['comment2']           ?? $payload['special field 2']     ?? '' ),
+	'loan_payment'   => (float) ( $payload['loan_payment']  ?? $payload['loan_payment_sort']  ?? 0 ),
+	'lease_payment'  => (float) ( $payload['lease_payment'] ?? $payload['lease_payment_sort'] ?? 0 ),
+	'original_price' => (float) ( $vehicle['msrp'] ?? 0 ),
+	'price'          => (float) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
+	'price_sort'     => (float) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
+	'down_payment'   => (float) ( $payload['down_payment'] ?? 0 ),
+	'comment1'       => (string) ( $payload['comment1'] ?? $payload['special field 1'] ?? '' ),
+	'comment2'       => (string) ( $payload['comment2'] ?? $payload['special field 2'] ?? '' ),
 );
 
 while ( have_rows( 'payment_list', 'options' ) ) :

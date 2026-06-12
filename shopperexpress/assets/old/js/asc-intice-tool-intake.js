@@ -1,6 +1,9 @@
 (function () {
 	'use strict';
 
+	if (window.__ascInticeIntakeBooted) return;
+	window.__ascInticeIntakeBooted = true;
+
 	console.log('🚀 ASC INTICE INTAKE LAYER INIT');
 
 	var approvedAscEventHints = [
@@ -34,9 +37,9 @@
 			data.source === 'intice_tool' &&
 			data.schema_version === '1.0' &&
 			typeof data.tool_name === 'string' &&
-			typeof data.asc_event_hint === 'string' &&
-			approvedToolNames.indexOf(data.tool_name) !== -1 &&
-			approvedAscEventHints.indexOf(data.asc_event_hint) !== -1;
+			typeof data.event === 'string';
+			//approvedToolNames.indexOf(data.tool_name) !== -1 &&
+			//approvedAscEventHints.indexOf(data.asc_event_hint) !== -1;
 	}
 
 	function isValidOrigin(origin) {
@@ -46,7 +49,7 @@
 
 	function normalizeToolEventToAsc(data) {
 		return {
-			event: data.asc_event_hint,
+			event: data.event,
 			source: 'intice_tool',
 			schema_version: data.schema_version,
 			emitted_at: data.emitted_at || new Date().toISOString(),
@@ -99,6 +102,9 @@
 		window.asc_datalayer[0].events = window.asc_datalayer[0].events || [];
 
 		window.asc_datalayer[0].events.push(enrichedEvent);
+		if (window.asc_datalayer[0].events.length > 100) {
+			window.asc_datalayer[0].events = window.asc_datalayer[0].events.slice(-100);
+		}
 
 		if (typeof gtag === 'function') {
 			console.log('📡 SENT TO GA4');
@@ -191,9 +197,10 @@
 		}
 
 		if (data.source === 'intice_tool') {
+			console.log(data);
 			if (!isValidInticeToolEvent(data)) {
-				console.log('⛔ INVALID TOOL EVENT', { tool_name: data.tool_name });
-				return;
+				console.log('⛔ INVALID TOOL EVENT', { tool_name: data.tool_name, asc_event_hint: data.asc_event_hint });
+			//	return;
 			}
 
 			processToolEvent(data);

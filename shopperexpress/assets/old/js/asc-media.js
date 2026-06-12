@@ -116,28 +116,7 @@
 
 	// ── Slick slider navigation ───────────────────────────────────────────────
 
-	var SLIDER_MAP = [
-		{ selector: '.detail-slider',           media_type: 'image',  creative_name: 'vehicle_gallery'    },
-		{ selector: '.visual-slider',            media_type: 'slider', creative_name: 'hero_slider'        },
-		{ selector: '.offers-slider',            media_type: 'slider', creative_name: 'offers_slider'      },
-		{ selector: '.specials-slider',          media_type: 'slider', creative_name: 'specials_slider'    },
-		{ selector: '.full-width-image-slider',  media_type: 'slider', creative_name: 'full_width_slider'  },
-		{ selector: '.model-slider',             media_type: 'slider', creative_name: 'model_slider'       },
-	];
-
 	function initSlickTracking($) {
-		SLIDER_MAP.forEach(function (entry) {
-			$(document).on('afterChange', entry.selector, function (_e, _slick, currentSlide) {
-				var el = this;
-				ascTrackMediaInteraction(el, {
-					media_type:          dataAttr(el, 'media-type')    || entry.media_type,
-					event_action_result: dataAttr(el, 'media-action')  || 'next_step',
-					link_url:            '',
-					creative_name:       dataAttr(el, 'creative-name') || (entry.creative_name + '_slide_' + (currentSlide + 1)),
-				});
-			});
-		});
-
 		$(document).on('click', '.slider-nav-holder .slide, .detail-slider-nav .slide', function () {
 			var el = this;
 			ascTrackMediaInteraction(el, {
@@ -207,7 +186,12 @@
 
 	// ── Boot ──────────────────────────────────────────────────────────────────
 
+	var booted = false;
+
 	function boot() {
+		if (booted) return;
+		booted = true;
+
 		initNativeVideoTracking();
 
 		if (window.jQuery) {

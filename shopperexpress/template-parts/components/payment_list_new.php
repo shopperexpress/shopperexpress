@@ -113,10 +113,10 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 		switch ( get_sub_field( 'operator_1' ) ) {
 			case '>':
-				$condition =  $value_from_field > $value_1;
+				$condition = $value_from_field > $value_1;
 				break;
 			case '<':
-				$condition =  $value_from_field < $value_1;
+				$condition = $value_from_field < $value_1;
 				break;
 			case '=':
 				$condition = $value_from_field === $value_1;
@@ -163,6 +163,9 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	if ( ! empty( $get_style['padding_bottom'] ) || 0 <= $get_style['padding_bottom'] ) {
 		$style_row[] = 'padding-bottom:' . $get_style['padding_bottom'] . 'px;';
 	}
+	if ( isset( $get_style['min_height'] ) && '' !== $get_style['min_height'] ) {
+		$style_row[] = 'min-height:' . $get_style['min_height'] . 'px;';
+	}
 	if ( ! empty( $style_row ) ) {
 		$style_row = ' style="' . implode( '', $style_row ) . '"';
 	}
@@ -181,7 +184,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 		if ( get_sub_field( 'cross_heading' ) ) {
 			$formatted_value = '<s>' . $formatted_value . '</s>';
 		}
-	}else{
+	} else {
 		$formatted_value = $value;
 	}
 	$price_class = $style ? 'price-spr' : 'market-price';

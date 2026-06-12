@@ -2183,7 +2183,7 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "50",
+                                "width": "33",
                                 "class": "",
                                 "id": ""
                             },
@@ -2206,11 +2206,34 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "50",
+                                "width": "33",
                                 "class": "",
                                 "id": ""
                             },
                             "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_6a2bc94363b87",
+                            "label": "Min height",
+                            "name": "min_height",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 30,
                             "min": "",
                             "max": "",
                             "allow_in_bindings": 0,
@@ -2735,7 +2758,7 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "50",
+                                "width": "33",
                                 "class": "",
                                 "id": ""
                             },
@@ -2758,11 +2781,34 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "50",
+                                "width": "33",
                                 "class": "",
                                 "id": ""
                             },
                             "default_value": "",
+                            "min": "",
+                            "max": "",
+                            "allow_in_bindings": 0,
+                            "placeholder": "",
+                            "step": "",
+                            "prepend": "",
+                            "append": "px"
+                        },
+                        {
+                            "key": "field_6a2bc97f63b88",
+                            "label": "Min height",
+                            "name": "min_height",
+                            "aria-label": "",
+                            "type": "number",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "33",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 35,
                             "min": "",
                             "max": "",
                             "allow_in_bindings": 0,
@@ -12169,5 +12215,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1779966168
+    "modified": 1781254545
 }

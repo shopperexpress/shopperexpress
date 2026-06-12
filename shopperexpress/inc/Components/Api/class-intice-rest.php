@@ -22,26 +22,6 @@ use App\Components\Theme_Component;
 class Intice_Rest implements Theme_Component {
 
 	/**
-	 * Maps Intice API field names to WP filter term keys used by the JS engine.
-	 * Keys are the ACF/wps_tax field names; values are Intice API vehicle array keys.
-	 *
-	 * @var array<string,string>
-	 */
-	private const TERM_MAP = array(
-		'make'           => 'make',
-		'model'          => 'model',
-		'trim'           => 'trim',
-		'year'           => 'year',
-		'condition'      => 'condition',
-		'body_style'     => 'body_style',
-		'drivetrain'     => 'drivetrain',
-		'fuel_type'      => 'fuel_type',
-		'mileage'        => 'mileage',
-		'exterior_color' => 'exterior_color',
-		'interior_color' => 'interior_color',
-	);
-
-	/**
 	 * @return void
 	 */
 	public function register(): void {

@@ -122,55 +122,76 @@
 
 	// ── WPForms submission tracking ────────────────────────────────────────────
 
+	console.log('[ASC] WPForms submission tracking: listeners registered');
+
 	var firedSubmissions = {};
+	var pendingFormTypes = {};
+
+	var WPFORMS_SYSTEM_FIELDS = [
+		'wpforms[id]', 'wpforms[author]', 'wpforms[post_id]',
+		'wpforms[token]', 'wpforms[hash]', 'wpforms[entry_id]', 'wpforms[nonce]'
+	];
 
 	function getWpFormsFormType(formEl) {
-		var field = formEl.querySelector('input[name="wpforms[fields][asc_form_type]"], input.wpforms-field-hidden[value]');
-
-		if (!field) {
-			// ACF-style hidden field: WPForms renders hidden fields with a generated id
-			// but the name follows wpforms[fields][<field_id>] — so we look by a
-			// data attribute WPForms adds to identify the field by its label slug.
-			field = formEl.querySelector('[data-field-id]');
+		// Primary: CSS class "asc_form_type" set in WPForms field CSS Classes setting.
+		var byClass = formEl.querySelector('input.asc_form_type');
+		if (byClass && byClass.value) {
+			console.log('[ASC] getWpFormsFormType → found by class "asc_form_type"', byClass.value);
+			return byClass.value.trim().toLowerCase();
 		}
 
-		// Most reliable: scan all hidden inputs for one whose name contains asc_form_type
-		var hidden = formEl.querySelectorAll('input[type="hidden"]');
+		// Fallback: scan all wpforms hidden fields, skip WPForms system fields.
+		var hidden = formEl.querySelectorAll('input.wpforms-field-hidden, input[name^="wpforms[fields]"][type="hidden"]');
 		for (var i = 0; i < hidden.length; i++) {
-			if (hidden[i].name && hidden[i].name.indexOf('asc_form_type') !== -1) {
-				return (hidden[i].value || 'unknown').trim().toLowerCase();
+			if (WPFORMS_SYSTEM_FIELDS.indexOf(hidden[i].name || '') !== -1) continue;
+			if (hidden[i].value) {
+				console.log('[ASC] getWpFormsFormType → found by hidden field scan', hidden[i].value);
+				return hidden[i].value.trim().toLowerCase();
 			}
 		}
 
+		console.warn('[ASC] getWpFormsFormType → not found, returning "unknown". Check that the hidden field has CSS class "asc_form_type".');
 		return 'unknown';
 	}
 
 	function getWpFormsFormId(formEl) {
-		// WPForms adds data-formid on the form element
 		var id = formEl.getAttribute('data-formid') || formEl.getAttribute('data-form-id');
 		if (id) return 'wpforms_' + id;
-
-		// Fallback: hidden input wpforms[id]
 		var idInput = formEl.querySelector('input[name="wpforms[id]"]');
 		if (idInput && idInput.value) return 'wpforms_' + idInput.value;
-
 		return 'wpforms_unknown';
 	}
 
-	function pushFormSubmissionEvents(formEl) {
-		var formId = getWpFormsFormId(formEl);
+	// Cache formType on submit — WPForms replaces the form DOM with a success message
+	// before wpformsAjaxSubmitSuccess fires, so hidden fields are gone by then.
+	document.addEventListener('submit', function (e) {
+		var formEl = e.target;
+		if (!formEl || !formEl.querySelector('input[name="wpforms[id]"]')) return;
+		var formId   = getWpFormsFormId(formEl);
+		var formType = getWpFormsFormType(formEl);
+		pendingFormTypes[formId] = formType;
+		console.log('[ASC] Step 1 – submit intercepted ✓', { formId: formId, formType: formType });
+	}, true);
 
-		// Prevent duplicate firing per form submission
-		if (firedSubmissions[formId]) return;
+	function pushFormSubmissionEvents(formEl, fallbackFormId) {
+		var formId = (formEl && getWpFormsFormId(formEl)) || ('wpforms_' + fallbackFormId) || 'wpforms_unknown';
+
+		if (firedSubmissions[formId]) {
+			console.log('[ASC] asc_form_submission skipped – duplicate guard', { formId: formId });
+			return;
+		}
 		firedSubmissions[formId] = true;
-
-		// Reset after short delay to allow future submissions on same page
 		setTimeout(function () { delete firedSubmissions[formId]; }, 3000);
 
 		var dl = window.asc_datalayer;
-		if (!dl) return;
+		if (!dl) {
+			console.warn('[ASC] asc_form_submission NOT fired – window.asc_datalayer is missing');
+			return;
+		}
 
-		var formType = getWpFormsFormType(formEl);
+		// Use cached formType first (form DOM may already be gone after AJAX replace).
+		var formType = pendingFormTypes[formId] || (formEl && getWpFormsFormType(formEl)) || 'unknown';
+		delete pendingFormTypes[formId];
 
 		var payload = {
 			event_owner:   'intice',
@@ -178,67 +199,82 @@
 			page_location: window.location.href,
 			form_id:       formId,
 			form_type:     formType,
-			error_code:    '',
 			items:         dl.items || []
 		};
+
+		console.log('[ASC] Step 2 – asc_form_submission firing ✓', payload);
+		console.log('[ASC] Step 3 – asc_form_submission_' + formType + ' firing ✓');
 
 		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
 		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
 	}
 
-	// WPForms AJAX success — fires after every successful AJAX submission
-	window.addEventListener('load', function () {
-		if (typeof window.wpforms === 'undefined') return;
-
-		document.addEventListener('wpformsAjaxSubmitSuccess', function (e) {
-			var formEl = e.detail && e.detail.form ? e.detail.form : null;
-			if (!formEl) {
-				// Older WPForms versions pass formId in e.detail
-				var formId = e.detail && e.detail.formId;
-				if (formId) {
-					formEl = document.querySelector('#wpforms-' + formId + ', [data-formid="' + formId + '"]');
-				}
-			}
-			if (formEl) pushFormSubmissionEvents(formEl);
-		});
-
-		// WPForms also triggers on the jQuery event bus — cover both paths
-		if (window.jQuery) {
-			jQuery(document).on('wpformsAjaxSubmitSuccess', function (_e, response) {
-				var formId = response && response.data && response.data.form_id;
-				if (!formId) return;
-				var formEl = document.querySelector('#wpforms-form-' + formId + ', [data-formid="' + formId + '"]');
-				if (formEl) pushFormSubmissionEvents(formEl);
-			});
+	// Path A: native CustomEvent (WPForms 1.8+)
+	document.addEventListener('wpformsAjaxSubmitSuccess', function (e) {
+		console.log('[ASC] wpformsAjaxSubmitSuccess (native event) ✓', e.detail);
+		var formEl = e.detail && e.detail.form ? e.detail.form : null;
+		var formId = null;
+		if (!formEl) {
+			formId = e.detail && (e.detail.formId || (e.detail.data && e.detail.data.form_id));
+			if (formId) formEl = document.querySelector('[data-formid="' + formId + '"]');
 		}
+		pushFormSubmissionEvents(formEl, formId);
 	});
 
-	// Redirect confirmations: WPForms appends ?wpforms_form_id=<id>&wpforms_return=1 to redirect URL.
-	// On page load, if those params are present, fire the events using the page's hidden form remnant
-	// or fall back to just the form ID from the URL.
+	// Path B: jQuery event bus (WPForms legacy)
+	(function bindJqListener() {
+		if (window.jQuery) {
+			jQuery(document).on('wpformsAjaxSubmitSuccess', function (_e, response) {
+				console.log('[ASC] wpformsAjaxSubmitSuccess (jQuery event) ✓', response);
+				var formId = response && response.data && response.data.form_id;
+
+				// form_id missing in response — try to recover from pendingFormTypes cache
+				if (!formId) {
+					var keys = Object.keys(pendingFormTypes);
+					if (keys.length) formId = keys[keys.length - 1].replace('wpforms_', '');
+					console.warn('[ASC] response.data.form_id missing, recovered formId:', formId);
+				}
+
+				if (!formId) {
+					console.warn('[ASC] asc_form_submission NOT fired – could not determine form_id');
+					return;
+				}
+
+				var formEl = document.querySelector('[data-formid="' + formId + '"]');
+				pushFormSubmissionEvents(formEl, formId);
+			});
+		} else if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', bindJqListener);
+		}
+	}());
+
+	// Path C: redirect confirmation (?wpforms_form_id=123&wpforms_return=1)
 	(function () {
 		var params = new URLSearchParams(window.location.search);
-		var redirectFormId = params.get('wpforms_form_id') || params.get('wpforms[id]');
+		var redirectFormId = params.get('wpforms_form_id');
 		if (!redirectFormId) return;
 
-		var dl = window.asc_datalayer;
-		if (!dl) return;
+		console.log('[ASC] Redirect confirmation page detected ✓', { redirectFormId: redirectFormId });
 
-		// Try to find a rendered form on the confirmation page; otherwise use URL param only
-		var formEl = document.querySelector('[data-formid="' + redirectFormId + '"]');
+		var dl = window.asc_datalayer;
+		if (!dl) {
+			console.warn('[ASC] asc_form_submission (redirect) NOT fired – window.asc_datalayer missing');
+			return;
+		}
+
+		var formEl   = document.querySelector('[data-formid="' + redirectFormId + '"]');
 		var formType = formEl ? getWpFormsFormType(formEl) : (params.get('asc_form_type') || 'unknown');
 		var formId   = 'wpforms_' + redirectFormId;
-
-		var payload = {
+		var payload  = {
 			event_owner:   'intice',
 			page_type:     dl.page_type || '',
 			page_location: window.location.href,
 			form_id:       formId,
 			form_type:     formType,
-			error_code:    '',
 			items:         dl.items || []
 		};
 
+		console.log('[ASC] asc_form_submission (redirect) firing ✓', payload);
 		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
 		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
 	}());

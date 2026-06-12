@@ -3,7 +3,7 @@
  * VDP bottom description block for API mode.
  *
  * Renders the vdp_description ACF options block and AI description
- * from the Intice vehicle payload/enrichment.
+ * from the Intice vehicle payload.
  *
  * Accepts $args:
  *   vehicle (array) — Intice API vehicle object
@@ -11,12 +11,11 @@
  * @package Shopperexpress
  */
 
-$vehicle    = $args['vehicle'] ?? array();
-$payload    = $vehicle['payload']    ?? array();
-$enrichment = $vehicle['enrichment'] ?? array();
+$vehicle = $args['vehicle'] ?? array();
+$payload = $vehicle['payload'] ?? array();
 
 $vdp_description = get_field( 'vdp_description', 'options' );
-$ai_description  = $payload['ai_vdp_description'] ?? ( $enrichment['ai_vdp_description'] ?? '' );
+$ai_description  = $payload['ai_vdp_description'] ?? '';
 
 if ( ! $vdp_description && ! $ai_description ) {
 	return;

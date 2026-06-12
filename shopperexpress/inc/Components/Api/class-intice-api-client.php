@@ -90,7 +90,10 @@ class Intice_Api_Client {
 	 * @param array $filters Query parameters to forward to the API.
 	 * @return array|WP_Error Decoded response array or WP_Error on failure.
 	 */
-	public function get_vehicles( array $filters = [] ) {
+	public function get_vehicles( array $filters = array() ) {
+		// Ensure mode=full is always present (overwriting if needed)
+		$filters['mode'] = 'full';
+
 		$live_key  = self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) );
 		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_' . md5( serialize( $filters ) );
 
@@ -253,9 +256,9 @@ class Intice_Api_Client {
 		self::$regenerating = true;
 
 		$this->get_meta();
-		$this->get_vehicles( [] );
-		$this->get_vehicles( [ 'condition' => 'new' ] );
-		$this->get_vehicles( [ 'condition' => 'used' ] );
+		$this->get_vehicles( array() );
+		$this->get_vehicles( array( 'condition' => 'new' ) );
+		$this->get_vehicles( array( 'condition' => 'used' ) );
 
 		self::$regenerating = false;
 
@@ -300,7 +303,7 @@ class Intice_Api_Client {
 	 * @param array  $params  Query parameters.
 	 * @return array|\WP_Error Decoded JSON body or WP_Error.
 	 */
-	private function request( string $method, string $path, array $params = [] ) {
+	private function request( string $method, string $path, array $params = array() ) {
 		if ( empty( $this->base_url ) || empty( $this->api_key ) ) {
 			return new \WP_Error(
 				'intice_not_configured',

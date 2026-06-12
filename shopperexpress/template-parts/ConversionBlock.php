@@ -8,9 +8,33 @@
  */
 
 $vin       = ! empty( $args['vin'] ) ? $args['vin'] : null;
-$location  = $args['location'];
+$location  = $args['location'] ?? '';
 $post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
 $post_type = get_post_type( $post_id ) ?: ( $args['post_type'] ?? '' );
+
+$is_api = \App\is_api_mode();
+
+if ( $is_api ) {
+	// In API mode post_type always comes from args; get_post_type() won't work
+	// without a real WP post.
+	$post_type = $args['post_type'] ?? $post_type;
+
+	// Use pre-fetched vehicle if passed (e.g. from SRP card loop) to avoid extra API call.
+	if ( ! empty( $args['api_vehicle'] ) && is_array( $args['api_vehicle'] ) ) {
+		$api_vehicle = $args['api_vehicle'];
+	} elseif ( $vin ) {
+		$_api_res    = \App\Components\Api\Intice_Api_Client::instance()->get_vehicle( $vin );
+		$api_vehicle = ( ! is_wp_error( $_api_res ) && ! empty( $_api_res['data'] ) && is_array( $_api_res['data'] ) ) ? $_api_res['data'] : null;
+	} else {
+		$api_vehicle = null;
+	}
+
+	// Use VIN as the page-unique identifier for data-post attributes and popup IDs.
+	$identifier = $vin ?: $post_id;
+} else {
+	$api_vehicle = null;
+	$identifier  = $post_id;
+}
 
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();
@@ -55,7 +79,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								$mobile_button_text_1 = get_sub_field( 'mobile_button_text_1' );
 								$form_id              = get_sub_field( 'form_id_1' );
 								$button_type          = get_sub_field( 'button_type_1' );
-								$url                  = $button_type == 'form' ? '' : get_url_with_fields( $post_id, '-' . get_post_type( $post_id ), get_sub_field( 'url' ) );
+								$url                  = $button_type == 'form' ? '' : get_url_with_fields( $is_api ? $vin : $post_id, '-' . $post_type, get_sub_field( 'url' ) );
 								$url_1                = $url ? ' href="' . $url . '" ' : null;
 								$onclick              = array();
 
@@ -68,7 +92,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									?>
 									<a
 									<?php if ( $button_type == 'form' ) : ?>
-										data-target="#buttonModal" data-post="<?php echo $post_id; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
+										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
 									<?php endif; ?>
 										<?php
 										echo $url_1;
@@ -83,7 +107,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								$mobile_button_text_2 = get_sub_field( 'mobile_button_text_2' );
 								$form_id              = get_sub_field( 'form_id_2' );
 								$button_type          = get_sub_field( 'button_type_2' );
-								$url                  = $button_type == 'form' ? '' : get_url_with_fields( $post_id, '-' . get_post_type( $post_id ), get_sub_field( 'url' ) );
+								$url                  = $button_type == 'form' ? '' : get_url_with_fields( $is_api ? $vin : $post_id, '-' . $post_type, get_sub_field( 'url' ) );
 								$url_2                = $url ? ' href="' . $url . '" ' : null;
 								$onclick              = array();
 
@@ -96,7 +120,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									?>
 									<a
 									<?php if ( $button_type == 'form' ) : ?>
-										data-target="#buttonModal" data-post="<?php echo $post_id; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
+										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
 									<?php endif; ?>
 										<?php
 										echo $url_2;
@@ -109,7 +133,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								$desktop_button_text = get_sub_field( 'desktop_button_text' );
 								$form_id             = get_sub_field( 'form_id' );
 								$button_type         = get_sub_field( 'button_type' );
-								$url                 = $button_type == 'form' ? '' : get_url_with_fields( $post_id, '-' . get_post_type( $post_id ), get_sub_field( 'url' ) );
+								$url                 = $button_type == 'form' ? '' : get_url_with_fields( $is_api ? $vin : $post_id, '-' . $post_type, get_sub_field( 'url' ) );
 								$url                 = $url ? ' href="' . $url . '" ' : null;
 								$onclick             = array();
 								while ( have_rows( 'events' ) ) :
@@ -121,7 +145,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									?>
 									<a
 										<?php if ( $button_type == 'form' ) : ?>
-										data-target="#buttonModal" data-post="<?php echo $post_id; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
+										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
 									<?php endif; ?>
 									<?php
 										echo $url;
@@ -244,14 +268,18 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 						endif;
 					elseif ( $layout == 'button_4' ) :
 						if ( get_sub_field( 'active' ) == true ) :
-							$post_type    = get_post_type( $post_id );
 							$vehicle_type = get_sub_field( 'vehicle_type' );
 							$vehicle_type = $vehicle_type == 'all' ? $post_type : $vehicle_type;
 							if ( $vehicle_type == $post_type ) :
 
 								$show_finance = get_sub_field( 'show_finance' );
 								$show_lease   = get_sub_field( 'show_lease' );
-								if ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ) {
+
+								if ( $is_api ) {
+									$api_payload   = $api_vehicle['payload'] ?? array();
+									$lease_payment = $api_payload['lease payment'] ?? '';
+									$loan_payment  = $api_payload['loan payment'] ?? '';
+								} elseif ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ) {
 									$lease_payment = get_field( 'payment', $post_id );
 									$loan_payment  = get_field( 'payment', $post_id );
 								} else {
@@ -278,9 +306,10 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									the_row();
 									$events_lease[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
-								$events_lease  = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
-								$popup_text    = get_sub_field( 'popup_text', false, false );
-								$popup_text    = wpautop( do_shortcode( str_replace( 'post_id', $post_id, $popup_text ) ) );
+								$events_lease = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
+								$popup_text   = get_sub_field( 'popup_text', false, false );
+								$popup_text   = wpautop( do_shortcode( str_replace( 'post_id', $identifier, $popup_text ) ) );
+
 								$show_banner_1 = $show_banner_2 = false;
 
 								$onclick = ( ( $show_finance && $loan_payment ) || $show_lease && $lease_payment ) ? '' : ' onclick="' . implode( ' ', $onclick ) . '"';
@@ -288,9 +317,9 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								?>
 								<div style="position: relative;width: 100%;margin-bottom: 6px;" class="showWidget <?php echo $hide_on_mobile; ?>">
 									<?php if ( get_sub_field( 'show_popup' ) && $popup_text ) : ?>
-										<span class="showWidget" style="position: absolute;right:0%;top: 10px;width: 40px;height: 40px;text-align: center;z-index: 1;cursor: pointer;"><i class="fa fa-question-circle-o" aria-hidden="true" style="font-size: 19px;color: #bfbfbf !important;" onclick="document.getElementById('block-<?php echo $post_id; ?>').style.display = 'block';"></i></span>
-										<div id="block-<?php echo $post_id; ?>" class="block_popup block-<?php echo $post_id; ?>">
-											<span onclick="document.getElementById('block-<?php echo $post_id; ?>').style.display = 'none';" style="color: black;position: absolute;top: -6px;right: -2px;"><i class="fa fa-times-circle" aria-hidden="true" style="font-size: 24px;"></i></span>
+										<span class="showWidget" style="position: absolute;right:0%;top: 10px;width: 40px;height: 40px;text-align: center;z-index: 1;cursor: pointer;"><i class="fa fa-question-circle-o" aria-hidden="true" style="font-size: 19px;color: #bfbfbf !important;" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
+										<div id="block-<?php echo $identifier; ?>" class="block_popup block-<?php echo $identifier; ?>">
+											<span onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'none';" style="color: black;position: absolute;top: -6px;right: -2px;"><i class="fa fa-times-circle" aria-hidden="true" style="font-size: 24px;"></i></span>
 											<div class="widgetbox__popup-text js-is-empty-parent1">
 												<?php echo $popup_text; ?>
 											</div>
