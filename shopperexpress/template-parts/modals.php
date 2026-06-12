@@ -290,7 +290,7 @@ if ( $popup_form ) {
 	);
 }
 
-if ( is_post_type_archive( array( 'listings', 'used-listings' ) ) || is_singular( array( 'listings', 'used-listings' ) ) ) :
+if ( is_post_type_archive( array( 'listings', 'used-listings' ) ) || is_singular( array( 'listings', 'used-listings' ) ) || ( is_page() && get_field( 'post_type' ) ) ) :
 	$modals[] = array(
 		'id'              => 'popUpDetails',
 		'title'           => '<h3 class="modal-title">' . esc_html__( 'DETAILS', 'shopperexpress' ) . '</h3>',
