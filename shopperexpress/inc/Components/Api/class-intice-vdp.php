@@ -35,7 +35,7 @@ class Intice_VDP implements Theme_Component {
 	 * Bump this version string whenever the rewrite rule pattern changes
 	 * to force a one-time flush on the next request.
 	 */
-	const RULES_VERSION = 'v2-slug';
+	const RULES_VERSION = 'v3-slug';
 
 	/**
 	 * @return void
@@ -123,6 +123,12 @@ class Intice_VDP implements Theme_Component {
 		$post_type = $wp->query_vars[ self::QUERY_VAR_POST_TYPE ] ?? '';
 
 		if ( ! $slug || ! $post_type ) {
+			return;
+		}
+
+		// Let template_redirect AJAX handlers (unlock_form, offers_form, etc.) process
+		// POST requests before we serve the VDP template.
+		if ( ! empty( $_POST['action'] ) ) {
 			return;
 		}
 

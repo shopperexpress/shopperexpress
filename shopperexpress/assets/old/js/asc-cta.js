@@ -122,6 +122,25 @@
 
 	// ── WPForms submission tracking ────────────────────────────────────────────
 
+	// Fire to gtag and store in asc_datalayer.events alongside pageview events.
+	function fireFormEvent(eventObject) {
+		if (!eventObject || !eventObject.event) return;
+		window.asc_datalayer = window.asc_datalayer || {};
+		window.asc_datalayer.events = window.asc_datalayer.events || [];
+		window.asc_datalayer.events.push(eventObject);
+		if (typeof gtag !== 'function') return;
+		var eventName = eventObject.event;
+		var payload   = Object.assign({}, eventObject);
+		delete payload.event;
+		if (
+			Array.isArray(window.asc_datalayer.measurement_ids) &&
+			window.asc_datalayer.measurement_ids.length
+		) {
+			payload.send_to = window.asc_datalayer.measurement_ids;
+		}
+		gtag('event', eventName, payload);
+	}
+
 	console.log('[ASC] WPForms submission tracking: listeners registered');
 
 	var firedSubmissions = {};
@@ -133,24 +152,28 @@
 	];
 
 	function getWpFormsFormType(formEl) {
-		// Primary: CSS class "asc_form_type" set in WPForms field CSS Classes setting.
-		var byClass = formEl.querySelector('input.asc_form_type');
-		if (byClass && byClass.value) {
-			console.log('[ASC] getWpFormsFormType → found by class "asc_form_type"', byClass.value);
-			return byClass.value.trim().toLowerCase();
+		// Primary: WPForms adds CSS classes to the field wrapper div, not the input.
+		// Selector covers div, li, or any wrapper with class asc_form_type.
+		var byWrapper = formEl.querySelector('.asc_form_type input');
+		console.log('[ASC] getWpFormsFormType → .asc_form_type input:', byWrapper, 'value:', byWrapper ? byWrapper.value : 'N/A');
+		if (byWrapper && byWrapper.value) {
+			console.log('[ASC] getWpFormsFormType → found by .asc_form_type wrapper', byWrapper.value);
+			return byWrapper.value.trim().toLowerCase();
 		}
 
 		// Fallback: scan all wpforms hidden fields, skip WPForms system fields.
 		var hidden = formEl.querySelectorAll('input.wpforms-field-hidden, input[name^="wpforms[fields]"][type="hidden"]');
+		console.log('[ASC] getWpFormsFormType → hidden fields found:', hidden.length);
 		for (var i = 0; i < hidden.length; i++) {
 			if (WPFORMS_SYSTEM_FIELDS.indexOf(hidden[i].name || '') !== -1) continue;
+			console.log('[ASC] getWpFormsFormType → hidden field[' + i + ']:', hidden[i].name, '=', hidden[i].value);
 			if (hidden[i].value) {
 				console.log('[ASC] getWpFormsFormType → found by hidden field scan', hidden[i].value);
 				return hidden[i].value.trim().toLowerCase();
 			}
 		}
 
-		console.warn('[ASC] getWpFormsFormType → not found, returning "unknown". Check that the hidden field has CSS class "asc_form_type".');
+		console.warn('[ASC] getWpFormsFormType → not found, returning "unknown". Check that the hidden field li has CSS class "asc_form_type".');
 		return 'unknown';
 	}
 
@@ -205,8 +228,8 @@
 		console.log('[ASC] Step 2 – asc_form_submission firing ✓', payload);
 		console.log('[ASC] Step 3 – asc_form_submission_' + formType + ' firing ✓');
 
-		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
-		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
+		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
+		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
 	}
 
 	// Path A: native CustomEvent (WPForms 1.8+)
@@ -275,8 +298,8 @@
 		};
 
 		console.log('[ASC] asc_form_submission (redirect) firing ✓', payload);
-		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
-		window.ascPublishEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
+		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
+		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
 	}());
 
 	// ── Click-to-call tracking ─────────────────────────────────────────────────

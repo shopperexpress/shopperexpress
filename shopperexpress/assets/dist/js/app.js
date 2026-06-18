@@ -220,8 +220,61 @@ function initTabs() {
 // Edit modal init
 function initEditModal() {
 	document.querySelectorAll('.modal-edit').forEach((modal) => {
-		new EditModal(modal);
+		// API mode: form id is api-edit-form — handled separately below.
+		if (!modal.querySelector('#api-edit-form')) {
+			new EditModal(modal);
+		}
 	});
+
+	// API mode edit modal — save to Intice Nexus via wps_api_save_vehicle.
+	const $apiModal = jQuery('#editModal:has(#api-edit-form)');
+	if ($apiModal.length) {
+		const $form         = $apiModal.find('#api-edit-form');
+		const $errorAlert   = $apiModal.find('.alert.bg-danger');
+		const $successAlert = $apiModal.find('.alert.bg-success');
+
+		$apiModal.on('click', '[data-save]', function(e) {
+			e.preventDefault();
+
+			const formData = new FormData($form[0]);
+			formData.append('action', 'wps_api_save_vehicle');
+
+			$form.addClass('loading');
+			$errorAlert.removeClass('show');
+			$successAlert.removeClass('show');
+
+			jQuery.ajax({
+				url: window.ajax.admin,
+				type: 'POST',
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					$form.removeClass('loading');
+					if (response.success) {
+						$successAlert.addClass('show');
+					} else {
+						$errorAlert.addClass('show');
+						console.error(response.data?.message || 'API save error');
+					}
+				},
+				error: function(xhr) {
+					$form.removeClass('loading');
+					$errorAlert.addClass('show');
+					console.error('AJAX Error:', xhr);
+				}
+			});
+		});
+
+		$apiModal.on('click', '.close-alert', function() {
+			jQuery(this).closest('.alert').removeClass('show');
+		});
+
+		$apiModal.on('hidden.bs.modal', function() {
+			$errorAlert.removeClass('show');
+			$successAlert.removeClass('show');
+		});
+	}
 
 	// Confirm delete button handler
 	jQuery('#confirmYes').on('click', function(e) {

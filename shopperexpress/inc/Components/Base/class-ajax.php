@@ -57,9 +57,10 @@ class Ajax implements Theme_Component {
 				'wps_api_render_favorites' => 'api_render_favorites',
 			),
 			'admin-ajax'        => array(
-				'save_listing'    => 'save_listing',
-				'delete_listings' => 'delete_listings',
-				'clear'           => 'clear_action',
+				'save_listing'       => 'save_listing',
+				'delete_listings'    => 'delete_listings',
+				'clear'              => 'clear_action',
+				'wps_api_save_vehicle' => 'api_save_vehicle',
 			),
 			'template_redirect' => array(
 				'unlock_form',
@@ -476,6 +477,7 @@ class Ajax implements Theme_Component {
 				if ( $form_id ) {
 					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
 				}
+				exit;
 			} else {
 				$query = new WP_Query(
 					array(
@@ -689,5 +691,66 @@ class Ajax implements Theme_Component {
 		$html = ob_get_clean();
 
 		wp_send_json_success( array( 'html' => $html ) );
+	}
+
+	/**
+	 * Save vehicle fields via Intice Nexus API (API mode VDP edit modal).
+	 *
+	 * Expects POST: vin, nonce, and any number of vehicle fields as flat keys.
+	 * Top-level fields (year, make, model, trim, price, mileage, condition, etc.)
+	 * are sent directly; all others go into the "payload" sub-object.
+	 *
+	 * @return void
+	 */
+	public function api_save_vehicle(): void {
+		if ( ! wps_check_current_usser() ) {
+			wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
+		}
+
+		if ( ! check_ajax_referer( 'wps_api_save_vehicle', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+		}
+
+		$vin = strtoupper( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) );
+
+		if ( ! $vin || ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/i', $vin ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid VIN' ) );
+		}
+
+		// Top-level API vehicle fields.
+		$top_level_fields = array(
+			'year', 'make', 'model', 'trim', 'condition', 'mileage',
+			'price', 'msrp', 'stock', 'exterior_color', 'interior_color',
+			'body_style', 'drivetrain', 'fuel_type', 'transmission',
+			'certified', 'sold',
+		);
+
+		$top    = array();
+		$payload = array();
+
+		foreach ( $_POST as $key => $value ) {
+			if ( in_array( $key, array( 'action', 'vin', 'nonce' ), true ) ) {
+				continue;
+			}
+			$clean_value = sanitize_text_field( wp_unslash( $value ) );
+			if ( in_array( $key, $top_level_fields, true ) ) {
+				$top[ $key ] = $clean_value;
+			} else {
+				$payload[ $key ] = $clean_value;
+			}
+		}
+
+		$data = $top;
+		if ( ! empty( $payload ) ) {
+			$data['payload'] = $payload;
+		}
+
+		$result = \App\Components\Api\Intice_Api_Client::instance()->update_vehicle( $vin, $data );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Data saved successfully!', 'shopperexpress' ) ) );
 	}
 }

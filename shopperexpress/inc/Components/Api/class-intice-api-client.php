@@ -293,17 +293,32 @@ class Intice_Api_Client {
 		);
 	}
 
+	/**
+	 * Update vehicle fields via PATCH /api/v1/vehicles/{vin}.
+	 *
+	 * Top-level fields (year, make, price, etc.) are passed directly.
+	 * Payload fields must be nested under a 'payload' key.
+	 * Busts the per-VIN transient cache on success.
+	 *
+	 * @param string $vin  Uppercase 17-char VIN.
+	 * @param array  $data Associative array of fields to update.
+	 * @return array|\WP_Error Updated vehicle data or WP_Error on failure.
+	 */
+	public function update_vehicle( string $vin, array $data ) {
+		$vin    = strtoupper( trim( $vin ) );
+		$result = $this->request( 'PATCH', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), $data );
+
+		if ( ! is_wp_error( $result ) ) {
+			delete_transient( self::CACHE_PREFIX . 'vehicle_' . $vin );
+			delete_transient( self::CACHE_PREFIX_STALE . 'vehicle_' . $vin );
+		}
+
+		return $result;
+	}
+
 	// ─── HTTP layer ───────────────────────────────────────────────────────────
 
-	/**
-	 * Execute an HTTP request against the Intice API.
-	 *
-	 * @param string $method  HTTP method (GET).
-	 * @param string $path    Endpoint path, e.g. '/api/v1/vehicles'.
-	 * @param array  $params  Query parameters.
-	 * @return array|\WP_Error Decoded JSON body or WP_Error.
-	 */
-	private function request( string $method, string $path, array $params = array() ) {
+	private function request( string $method, string $path, array $params = array(), array $body = array() ) {
 		if ( empty( $this->base_url ) || empty( $this->api_key ) ) {
 			return new \WP_Error(
 				'intice_not_configured',
@@ -317,19 +332,22 @@ class Intice_Api_Client {
 			$url = add_query_arg( array_filter( $params, fn( $v ) => $v !== null && $v !== '' ), $url );
 		}
 
-		$response = wp_remote_request(
-			$url,
-			array(
-				'method'    => $method,
-				'timeout'   => 15,
-				'sslverify' => false,
-				'headers'   => array(
-					'X-API-KEY'    => $this->api_key,
-					'Content-Type' => 'application/json',
-					'Accept'       => 'application/json',
-				),
-			)
+		$request_args = array(
+			'method'    => $method,
+			'timeout'   => 15,
+			'sslverify' => false,
+			'headers'   => array(
+				'X-API-KEY'    => $this->api_key,
+				'Content-Type' => 'application/json',
+				'Accept'       => 'application/json',
+			),
 		);
+
+		if ( ! empty( $body ) ) {
+			$request_args['body'] = wp_json_encode( $body );
+		}
+
+		$response = wp_remote_request( $url, $request_args );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;

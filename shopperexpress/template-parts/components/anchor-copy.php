@@ -15,7 +15,15 @@
 			<span class="decor-line" data-theme></span>
 		</a>
 	</li>
-	<?php if ( shortcode_exists( 'favorite_button' ) && ! empty( $args['favorite'] ) ) : ?>
+	<?php
+	$_vin       = $args['vin'] ?? '';
+	$_post_type = $args['post_type'] ?? '';
+	if ( \App\is_api_mode() && $_vin ) :
+		?>
+		<li>
+			<button class="api-favorite-button" data-postid="<?php echo esc_attr( $_vin ); ?>" data-posttype="<?php echo esc_attr( $_post_type ); ?>" aria-label="Add to favorite" title="Add to favorite"><i class="sf-icon-star-empty"></i></button>
+		</li>
+	<?php elseif ( shortcode_exists( 'favorite_button' ) && ! empty( $args['favorite'] ) ) : ?>
 		<li>
 			<?php
 			ob_start();

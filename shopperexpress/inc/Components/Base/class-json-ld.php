@@ -30,7 +30,7 @@ class JSON_LD implements Theme_Component {
 	 *
 	 * @var string[]
 	 */
-	private array $offer_types = array( 'offers', 'lease-offers', 'finance-offers', 'conditional-offers' );
+	private array $offer_types = array( 'offers', 'lease-offers', 'finance-offers', 'conditional-offers', 'research' );
 
 	/**
 	 * Render JSON LD.
@@ -254,6 +254,20 @@ class JSON_LD implements Theme_Component {
 					$schema['price']         = (string) $payment;
 					$schema['priceCurrency'] = 'USD';
 				}
+				$prices = get_field( 'prices', $post_id );
+				$price  = 0;
+				if ( is_array( $prices ) && ! empty( $prices[0]['price'] ) ) {
+					$price = $prices[0]['price'];
+				}
+				if ( ! empty( $price ) ) {
+					$schema['price']         = (string) $price;
+					$schema['priceCurrency'] = 'USD';
+				}
+
+				$imagelist = get_field( 'imagelistpath', $post_id );
+				if ( is_array( $imagelist ) && ! empty( $imagelist[0]['image_url'] ) ) {
+					$schema['photo'] = $imagelist[0]['image_url'];
+				}
 
 				$end_date = get_field( 'end_date', $post_id );
 				if ( $end_date ) {
@@ -464,6 +478,10 @@ class JSON_LD implements Theme_Component {
 				}
 				if ( ! empty( $item['payment'] ) ) {
 					$offer_item['price']         = (string) $item['payment'];
+					$offer_item['priceCurrency'] = 'USD';
+				}
+				if ( ! empty( $item['price'] ) ) {
+					$offer_item['price']         = (string) $item['price'];
 					$offer_item['priceCurrency'] = 'USD';
 				}
 				$items[] = array(

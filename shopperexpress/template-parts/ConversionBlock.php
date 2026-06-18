@@ -31,6 +31,7 @@ if ( $is_api ) {
 
 	// Use VIN as the page-unique identifier for data-post attributes and popup IDs.
 	$identifier = $vin ?: $post_id;
+
 } else {
 	$api_vehicle = null;
 	$identifier  = $post_id;
@@ -307,8 +308,35 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									$events_lease[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
 								$events_lease = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
-								$popup_text   = get_sub_field( 'popup_text', false, false );
-								$popup_text   = wpautop( do_shortcode( str_replace( 'post_id', $identifier, $popup_text ) ) );
+								$popup_text      = get_sub_field( 'popup_text', false, false );
+								$popup_text_body = str_replace( 'post_id', $identifier, $popup_text );
+								if ( $is_api && ! empty( $api_vehicle ) ) {
+									$_payload    = $api_vehicle['payload'] ?? array();
+									$_sc_map     = array(
+										'price'             => $api_vehicle['price'] ?? '',
+										'year'              => $api_vehicle['year'] ?? '',
+										'make'              => $api_vehicle['make'] ?? '',
+										'model'             => $api_vehicle['model'] ?? '',
+										'trim'              => $api_vehicle['trim'] ?? '',
+										'lease_payment'     => $_payload['lease_payment'] ?? '',
+										'loan_term'         => $_payload['loanterm'] ?? '',
+										'loan_apr'          => $_payload['loanapr'] ?? '',
+										'lease_term'        => $_payload['leaseterm'] ?? '',
+										'due_at_signing'    => $_payload['down_payment'] ?? '',
+										'total_of_payments' => $_payload['totalofpmts'] ?? '',
+									);
+									$popup_text_body = preg_replace_callback(
+										'/\[(\w+)(?:\s[^\]]+)?\]/',
+										function ( $matches ) use ( $_sc_map ) {
+											$value = $_sc_map[ $matches[1] ] ?? '';
+											return "<span class='js-is-empty'>" . esc_html( (string) $value ) . '</span>';
+										},
+										$popup_text_body
+									);
+									$popup_text = wpautop( $popup_text_body );
+								} else {
+									$popup_text = wpautop( do_shortcode( $popup_text_body ) );
+								}
 
 								$show_banner_1 = $show_banner_2 = false;
 

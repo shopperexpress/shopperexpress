@@ -20,20 +20,23 @@ $query_params = array_filter(
 $query_string = ! empty( $query_params ) ? '?' . http_build_query( $query_params ) : '';
 $key          = '';
 $value        = '';
-if ( ! empty( $args['template'] ) ) {
+if ( is_page() ) {
 	$key   = get_field( 'key', $page_id );
 	$value = get_field( 'value', $page_id );
 }
 get_header();
 
-$api_mode        = \App\is_api_mode() && in_array( $post_type, array( 'listings', 'used-listings' ), true );
-$vehicles_url    = $api_mode
+$api_mode     = \App\is_api_mode() && in_array( $post_type, array( 'listings', 'used-listings' ), true );
+$vehicles_url = $api_mode
 	? home_url( 'wp-json/v1/intice/vehicles/' . $post_type . $query_string )
 	: home_url( 'wp-json/v1/vehicles/' . $post_type . $query_string );
-$meta_url        = $api_mode ? home_url( 'wp-json/v1/intice/meta' ) : '';
+$meta_url     = $api_mode ? home_url( 'wp-json/v1/intice/meta' ) : '';
 ?>
 <div class="filter-section" data-vehicles="<?php echo esc_url( $vehicles_url ); ?>"
-	<?php if ( $api_mode ) : ?>data-intice-meta="<?php echo esc_url( $meta_url ); ?>"<?php endif; ?>
+	<?php
+	if ( $api_mode ) :
+		?>
+		data-intice-meta="<?php echo esc_url( $meta_url ); ?>"<?php endif; ?>
 <?php
 if ( $key && $value ) :
 	?>

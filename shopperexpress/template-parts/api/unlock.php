@@ -16,19 +16,19 @@
  * @package Shopperexpress
  */
 
-$post_type  = $args['post_type']  ?? 'listings';
-$permalink  = $args['permalink']  ?? '#';
-$is_single  = ! empty( $args['is_single'] );
-$show       = ( $args['show-image'] ?? 'true' ) !== 'false';
-$loged      = ! empty( $args['loged'] ) ? $args['loged'] : is_user_logged_in();
-$vin        = $args['vin'] ?? '';
+$post_type = $args['post_type'] ?? 'listings';
+$permalink = $args['permalink'] ?? '#';
+$is_single = ! empty( $args['is_single'] );
+$show      = ( $args['show-image'] ?? 'true' ) !== 'false';
+$loged     = ! empty( $args['loged'] ) ? $args['loged'] : is_user_logged_in();
+$post_id   = $args['post_id'] ?? '';
 
 if ( ! in_array( $post_type, array( 'listings', 'used-listings', 'offers', 'service-offers' ), true ) ) {
 	return;
 }
 
-$field   = 'used-listings' === $post_type ? '-used-listings' : '';
-$single  = $is_single ? '-vdp' : '';
+$field    = 'used-listings' === $post_type ? '-used-listings' : '';
+$single   = $is_single ? '-vdp' : '';
 $position = get_field( 'cta_animation_position' . $field . $single, 'options' );
 
 $custom_img_html = '';
@@ -55,12 +55,26 @@ if ( 'above' === $position ) {
 if ( ! wps_auth() && ! $loged ) :
 	while ( have_rows( 'unlock_button_' . $post_type, 'options' ) ) :
 		the_row();
-		get_template_part( 'template-parts/components/button', null, array( 'post_id' => $vin ) );
+		get_template_part(
+			'template-parts/components/button',
+			null,
+			array(
+				'post_id'   => $post_id,
+				'is_single' => $is_single,
+			)
+		);
 	endwhile;
 else :
 	while ( have_rows( 'contact_button_' . $post_type, 'options' ) ) :
 		the_row();
-		get_template_part( 'template-parts/components/button', null, array( 'post_id' => $vin ) );
+		get_template_part(
+			'template-parts/components/button',
+			null,
+			array(
+				'post_id'   => $post_id,
+				'is_single' => $is_single,
+			)
+		);
 	endwhile;
 endif;
 

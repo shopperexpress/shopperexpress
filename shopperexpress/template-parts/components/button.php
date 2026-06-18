@@ -7,15 +7,17 @@
  * @package Shopperexpress
  */
 
-$post_id = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$show    = is_single( $post_id ) ? get_sub_field( 'show_single' ) : get_sub_field( 'show' );
-$link    = ! empty( $args['link'] ) ? $args['link'] : '';
+$post_id   = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$link      = ! empty( $args['link'] ) ? $args['link'] : '';
+$is_single = isset( $args['is_single'] ) ? (bool) $args['is_single'] : is_single( $post_id );
+$show      = $is_single ? get_sub_field( 'show_single' ) : get_sub_field( 'show' );
+
 if ( $show ) :
 	$style        = '';
-	$font_size    = is_single( $post_id ) ? get_sub_field( 'font_size_single' ) : get_sub_field( 'font_size' );
+	$font_size    = $is_single ? get_sub_field( 'font_size_single' ) : get_sub_field( 'font_size' );
 	$animation    = get_sub_field( 'animation' ) ? 'animate-btn ' : null;
-	$font_styling = is_single( $post_id ) ? get_sub_field( 'font_styling_single' ) : get_sub_field( 'font_styling' );
-	$weight       = is_single( $post_id ) ? get_sub_field( 'weight_single' ) : get_sub_field( 'weight' );
+	$font_styling = $is_single ? get_sub_field( 'font_styling_single' ) : get_sub_field( 'font_styling' );
+	$weight       = $is_single ? get_sub_field( 'weight_single' ) : get_sub_field( 'weight' );
 	if ( $background_color = get_sub_field( 'background_color' ) ) {
 		$style .= 'background-color: ' . $background_color . '; border-color: ' . $background_color . ';';
 	}
@@ -38,10 +40,7 @@ if ( $show ) :
 	?>
 	<button
 		type="button"
-		<?php
-		if ( ! is_single() ) {
-			echo 'data-post="' . $post_id . '"';}
-		?>
+		<?php echo 'data-post="' . $post_id . '"'; ?>
 		class="btn btn-primary btn-custom btn-block <?php echo $animation; ?>"
 		<?php
 		if ( $form_id = get_sub_field( 'form_id' ) ) :
