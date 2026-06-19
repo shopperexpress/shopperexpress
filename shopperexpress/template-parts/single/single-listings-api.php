@@ -133,7 +133,10 @@ add_action(
 		}
 
 		if ( ! empty( $v['make'] ) ) {
-			$schema['brand'] = array( '@type' => 'Brand', 'name' => wp_strip_all_tags( $v['make'] ) );
+			$schema['brand'] = array(
+				'@type' => 'Brand',
+				'name'  => wp_strip_all_tags( $v['make'] ),
+			);
 		}
 		if ( ! empty( $v['model'] ) ) {
 			$schema['model'] = wp_strip_all_tags( $v['model'] );
@@ -155,13 +158,25 @@ add_action(
 			$schema['vehicleIdentificationNumber'] = wp_strip_all_tags( $v['vin'] );
 		}
 		if ( ! empty( $v['engine'] ) ) {
-			$schema['vehicleEngine'] = array( '@type' => 'EngineSpecification', 'description' => wp_strip_all_tags( $v['engine'] ) );
+			$schema['vehicleEngine'] = array(
+				'@type'       => 'EngineSpecification',
+				'description' => wp_strip_all_tags( $v['engine'] ),
+			);
 		}
 		if ( ! empty( $v['fuel_type'] ) ) {
 			$schema['fuelType'] = wp_strip_all_tags( $v['fuel_type'] );
 		}
 		if ( ! empty( $v['transmission'] ) ) {
 			$schema['vehicleTransmission'] = wp_strip_all_tags( $v['transmission'] );
+		}
+		if ( ! empty( $v['body_style'] ) ) {
+			$schema['bodyType'] = wp_strip_all_tags( $v['body_style'] );
+		}
+		if ( ! empty( $v['exterior_color'] ) ) {
+			$schema['color'] = wp_strip_all_tags( $v['exterior_color'] );
+		}
+		if ( ! empty( $v['interior_color'] ) ) {
+			$schema['vehicleInteriorColor'] = wp_strip_all_tags( $v['interior_color'] );
 		}
 
 		$condition = ( 'used-listings' === $post_type ) ? 'https://schema.org/UsedCondition' : 'https://schema.org/NewCondition';
@@ -177,7 +192,10 @@ add_action(
 		}
 		$dealer_name = $v['payload']['dealer name'] ?? ( $v['dealer_name'] ?? '' );
 		if ( $dealer_name ) {
-			$offer['seller'] = array( '@type' => 'AutoDealer', 'name' => wp_strip_all_tags( $dealer_name ) );
+			$offer['seller'] = array(
+				'@type' => 'AutoDealer',
+				'name'  => wp_strip_all_tags( $dealer_name ),
+			);
 		}
 		$schema['offers'] = $offer;
 
@@ -238,16 +256,6 @@ get_header();
 			<!-- ── Left column: gallery + details ─────────────────────────────── -->
 			<div class="col-sm-6">
 				<div class="sticky-box">
-					<?php
-					get_template_part(
-						'template-parts/api/breadcrumbs',
-						null,
-						array(
-							'vehicle'   => $v,
-							'post_type' => $post_type,
-						)
-					);
-					?>
 					<div class="detail-top-row">
 						<ol class="breadcrumbs">
 							<li><a href="<?php echo esc_url( add_query_arg( 'year', $year, $archive_link ) ); ?>"><?php echo esc_html( $year ); ?></a></li>

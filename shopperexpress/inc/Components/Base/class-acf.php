@@ -235,10 +235,23 @@ class ACF implements Theme_Component {
 		$acf_data        = array();
 
 		foreach ( $acf_group_names as $field_name ) {
-			$value = $_POST['acf'][ $field_name ] ?? get_field( $field_name, $post_id );
+			$value = null;
 
 			if ( $xml_node && isset( $xml_node->{$field_name} ) ) {
 				$value = (string) $xml_node->{$field_name};
+			} elseif ( ! empty( $_POST['acf'] ) ) {
+				$field_obj = acf_get_field( $field_name );
+				$field_key = $field_obj ? $field_obj['key'] : null;
+				if ( $field_key && isset( $_POST['acf'][ $field_key ] ) ) {
+					$value = $_POST['acf'][ $field_key ];
+				}
+			}
+
+			if ( $value === null ) {
+				remove_action( 'acf/pre_load_value', array( $this, 'acf_listings_load' ), 20, 3 );
+				wp_cache_delete( 'acf_' . $post_type . "_{$post_id}" );
+				$value = get_field( $field_name, $post_id );
+				add_action( 'acf/pre_load_value', array( $this, 'acf_listings_load' ), 20, 3 );
 			}
 
 			if ( $value === '' || $value === null ) {
@@ -280,6 +293,8 @@ class ACF implements Theme_Component {
 				array( '%d', '%s' )
 			);
 		}
+
+		wp_cache_delete( 'acf_' . $post_type . "_{$post_id}" );
 	}
 
 	/**
@@ -315,9 +330,13 @@ class ACF implements Theme_Component {
 	 * @return mixed
 	 */
 	public function acf_listings_load( $null, $post_id, $field ) {
+		if ( is_admin() ) {
+			return $null;
+		}
+
 		$post_type = get_post_type( $post_id );
 		if ( ! in_array( $post_type, array( 'listings', 'used-listings' ) ) ) {
-			return;
+			return $null;
 		}
 		if ( 'listings' === $post_type ) {
 			if ( $field['parent'] !== 'group_5ff8660abf8c0' ) {

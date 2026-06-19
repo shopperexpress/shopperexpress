@@ -185,6 +185,21 @@ class JSON_LD implements Theme_Component {
 			$schema['vehicleTransmission'] = $transmission;
 		}
 
+		$body_style = wp_strip_all_tags( (string) get_field( 'body_style', $post_id ) );
+		if ( $body_style ) {
+			$schema['bodyType'] = $body_style;
+		}
+
+		$exterior_color = wp_strip_all_tags( (string) get_field( 'exterior_color', $post_id ) );
+		if ( $exterior_color ) {
+			$schema['color'] = $exterior_color;
+		}
+
+		$interior_color = wp_strip_all_tags( (string) get_field( 'interior_color', $post_id ) );
+		if ( $interior_color ) {
+			$schema['vehicleInteriorColor'] = $interior_color;
+		}
+
 		$condition = ( 'used-listings' === $post_type )
 			? 'https://schema.org/UsedCondition'
 			: 'https://schema.org/NewCondition';
