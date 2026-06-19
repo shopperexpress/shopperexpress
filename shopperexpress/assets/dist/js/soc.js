@@ -95,6 +95,17 @@ module.exports = {
 
 /***/ }),
 
+/***/ 7680:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var uncurryThis = __webpack_require__(9504);
+
+module.exports = uncurryThis([].slice);
+
+
+/***/ }),
+
 /***/ 6319:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -532,6 +543,24 @@ module.exports = function (exec) {
 
 /***/ }),
 
+/***/ 8745:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var NATIVE_BIND = __webpack_require__(616);
+
+var FunctionPrototype = Function.prototype;
+var apply = FunctionPrototype.apply;
+var call = FunctionPrototype.call;
+
+// eslint-disable-next-line es/no-function-prototype-bind, es/no-reflect -- safe
+module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
+  return call.apply(apply, arguments);
+});
+
+
+/***/ }),
+
 /***/ 6080:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -962,6 +991,22 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ 4376:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var classof = __webpack_require__(2195);
+
+// `IsArray` abstract operation
+// https://tc39.es/ecma262/#sec-isarray
+// eslint-disable-next-line es/no-array-isarray -- safe
+module.exports = Array.isArray || function isArray(argument) {
+  return classof(argument) === 'Array';
+};
+
+
+/***/ }),
+
 /***/ 4901:
 /***/ (function(module) {
 
@@ -1042,6 +1087,22 @@ module.exports = function (it) {
 
 
 module.exports = false;
+
+
+/***/ }),
+
+/***/ 5810:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var isObject = __webpack_require__(34);
+var getInternalState = (__webpack_require__(1181).get);
+
+module.exports = function isRawJSON(O) {
+  if (!isObject(O)) return false;
+  var state = getInternalState(O);
+  return !!state && state.type === 'RawJSON';
+};
 
 
 /***/ }),
@@ -1507,6 +1568,24 @@ module.exports = Math.trunc || function trunc(x) {
 
 /***/ }),
 
+/***/ 7819:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+/* eslint-disable es/no-json -- safe */
+var fails = __webpack_require__(9039);
+
+module.exports = !fails(function () {
+  var unsafeInt = '9007199254740993';
+  // eslint-disable-next-line es/no-json-rawjson -- feature detection
+  var raw = JSON.rawJSON(unsafeInt);
+  // eslint-disable-next-line es/no-json-israwjson -- feature detection
+  return !JSON.isRawJSON(raw) || JSON.stringify(raw) !== unsafeInt;
+});
+
+
+/***/ }),
+
 /***/ 2360:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -1888,6 +1967,69 @@ module.exports = getBuiltIn('Reflect', 'ownKeys') || function ownKeys(it) {
 
 /***/ }),
 
+/***/ 8235:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var uncurryThis = __webpack_require__(9504);
+var hasOwn = __webpack_require__(9297);
+
+var $SyntaxError = SyntaxError;
+var $parseInt = parseInt;
+var fromCharCode = String.fromCharCode;
+var at = uncurryThis(''.charAt);
+var slice = uncurryThis(''.slice);
+var exec = uncurryThis(/./.exec);
+
+var codePoints = {
+  '\\"': '"',
+  '\\\\': '\\',
+  '\\/': '/',
+  '\\b': '\b',
+  '\\f': '\f',
+  '\\n': '\n',
+  '\\r': '\r',
+  '\\t': '\t'
+};
+
+var IS_4_HEX_DIGITS = /^[\da-f]{4}$/i;
+// eslint-disable-next-line regexp/no-control-character -- safe
+var IS_C0_CONTROL_CODE = /^[\u0000-\u001F]$/;
+
+module.exports = function (source, i) {
+  var unterminated = true;
+  var value = '';
+  while (i < source.length) {
+    var chr = at(source, i);
+    if (chr === '\\') {
+      var twoChars = slice(source, i, i + 2);
+      if (hasOwn(codePoints, twoChars)) {
+        value += codePoints[twoChars];
+        i += 2;
+      } else if (twoChars === '\\u') {
+        i += 2;
+        var fourHexDigits = slice(source, i, i + 4);
+        if (!exec(IS_4_HEX_DIGITS, fourHexDigits)) throw new $SyntaxError('Bad Unicode escape at: ' + i);
+        value += fromCharCode($parseInt(fourHexDigits, 16));
+        i += 4;
+      } else throw new $SyntaxError('Unknown escape sequence: "' + twoChars + '"');
+    } else if (chr === '"') {
+      unterminated = false;
+      i++;
+      break;
+    } else {
+      if (exec(IS_C0_CONTROL_CODE, chr)) throw new $SyntaxError('Bad control character in string literal at: ' + i);
+      value += chr;
+      i++;
+    }
+  }
+  if (unterminated) throw new $SyntaxError('Unterminated string at: ' + i);
+  return { value: value, end: i };
+};
+
+
+/***/ }),
+
 /***/ 7750:
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2132,6 +2274,22 @@ var test = {};
 test[TO_STRING_TAG] = 'z';
 
 module.exports = String(test) === '[object z]';
+
+
+/***/ }),
+
+/***/ 655:
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+
+var classof = __webpack_require__(6955);
+
+var $String = String;
+
+module.exports = function (argument) {
+  if (classof(argument) === 'Symbol') throw new TypeError('Cannot convert a Symbol value to a string');
+  return $String(argument);
+};
 
 
 /***/ }),
@@ -2406,6 +2564,148 @@ $({ target: 'Iterator', proto: true, real: true, forced: FORCED }, {
 
 /***/ }),
 
+/***/ 3110:
+/***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
+
+
+var $ = __webpack_require__(6518);
+var getBuiltIn = __webpack_require__(7751);
+var apply = __webpack_require__(8745);
+var call = __webpack_require__(9565);
+var uncurryThis = __webpack_require__(9504);
+var fails = __webpack_require__(9039);
+var isArray = __webpack_require__(4376);
+var isCallable = __webpack_require__(4901);
+var isRawJSON = __webpack_require__(5810);
+var isSymbol = __webpack_require__(757);
+var classof = __webpack_require__(2195);
+var toString = __webpack_require__(655);
+var arraySlice = __webpack_require__(7680);
+var parseJSONString = __webpack_require__(8235);
+var uid = __webpack_require__(3392);
+var NATIVE_SYMBOL = __webpack_require__(4495);
+var NATIVE_RAW_JSON = __webpack_require__(7819);
+
+var $String = String;
+var $stringify = getBuiltIn('JSON', 'stringify');
+var exec = uncurryThis(/./.exec);
+var charAt = uncurryThis(''.charAt);
+var charCodeAt = uncurryThis(''.charCodeAt);
+var replace = uncurryThis(''.replace);
+var slice = uncurryThis(''.slice);
+var push = uncurryThis([].push);
+var numberToString = uncurryThis(1.1.toString);
+
+var surrogates = /[\uD800-\uDFFF]/g;
+var leadingSurrogates = /^[\uD800-\uDBFF]$/;
+var trailingSurrogates = /^[\uDC00-\uDFFF]$/;
+
+var MARK = uid();
+var MARK_LENGTH = MARK.length;
+
+var WRONG_SYMBOLS_CONVERSION = !NATIVE_SYMBOL || fails(function () {
+  var symbol = getBuiltIn('Symbol')('stringify detection');
+  // MS Edge converts symbol values to JSON as {}
+  return $stringify([symbol]) !== '[null]'
+    // WebKit converts symbol values to JSON as null
+    || $stringify({ a: symbol }) !== '{}'
+    // V8 throws on boxed symbols
+    || $stringify(Object(symbol)) !== '{}';
+});
+
+// https://github.com/tc39/proposal-well-formed-stringify
+var ILL_FORMED_UNICODE = fails(function () {
+  return $stringify('\uDF06\uD834') !== '"\\udf06\\ud834"'
+    || $stringify('\uDEAD') !== '"\\udead"';
+});
+
+var stringifyWithProperSymbolsConversion = WRONG_SYMBOLS_CONVERSION ? function (it, replacer) {
+  var args = arraySlice(arguments);
+  var $replacer = getReplacerFunction(replacer);
+  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
+  args[1] = function (key, value) {
+    // some old implementations (like WebKit) could pass numbers as keys
+    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
+    if (!isSymbol(value)) return value;
+  };
+  return apply($stringify, null, args);
+} : $stringify;
+
+var fixIllFormedJSON = function (match, offset, string) {
+  var prev = charAt(string, offset - 1);
+  var next = charAt(string, offset + 1);
+  if (
+    (exec(leadingSurrogates, match) && !exec(trailingSurrogates, next)) ||
+    (exec(trailingSurrogates, match) && !exec(leadingSurrogates, prev))
+  ) {
+    return '\\u' + numberToString(charCodeAt(match, 0), 16);
+  } return match;
+};
+
+var getReplacerFunction = function (replacer) {
+  if (isCallable(replacer)) return replacer;
+  if (!isArray(replacer)) return;
+  var rawLength = replacer.length;
+  var keys = [];
+  for (var i = 0; i < rawLength; i++) {
+    var element = replacer[i];
+    if (typeof element == 'string') push(keys, element);
+    else if (typeof element == 'number' || classof(element) === 'Number' || classof(element) === 'String') push(keys, toString(element));
+  }
+  var keysLength = keys.length;
+  var root = true;
+  return function (key, value) {
+    if (root) {
+      root = false;
+      return value;
+    }
+    if (isArray(this)) return value;
+    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
+  };
+};
+
+// `JSON.stringify` method
+// https://tc39.es/ecma262/#sec-json.stringify
+// https://github.com/tc39/proposal-json-parse-with-source
+if ($stringify) $({ target: 'JSON', stat: true, arity: 3, forced: WRONG_SYMBOLS_CONVERSION || ILL_FORMED_UNICODE || !NATIVE_RAW_JSON }, {
+  stringify: function stringify(text, replacer, space) {
+    var replacerFunction = getReplacerFunction(replacer);
+    var rawStrings = [];
+
+    var json = stringifyWithProperSymbolsConversion(text, function (key, value) {
+      // some old implementations (like WebKit) could pass numbers as keys
+      var v = isCallable(replacerFunction) ? call(replacerFunction, this, $String(key), value) : value;
+      return !NATIVE_RAW_JSON && isRawJSON(v) ? MARK + (push(rawStrings, v.rawJSON) - 1) : v;
+    }, space);
+
+    if (typeof json != 'string') return json;
+
+    if (ILL_FORMED_UNICODE) json = replace(json, surrogates, fixIllFormedJSON);
+
+    if (NATIVE_RAW_JSON) return json;
+
+    var result = '';
+    var length = json.length;
+
+    for (var i = 0; i < length; i++) {
+      var chr = charAt(json, i);
+      if (chr === '"') {
+        var end = parseJSONString(json, ++i).end - 1;
+        var string = slice(json, i, end);
+        result += slice(string, 0, MARK_LENGTH) === MARK
+          ? rawStrings[slice(string, MARK_LENGTH)]
+          : '"' + string + '"';
+        i = end;
+      } else result += chr;
+    }
+
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ 8992:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
@@ -2519,6 +2819,9 @@ var __webpack_exports__ = {};
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1454);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(3110);
+/* harmony import */ var core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_json_stringify_js__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -2546,6 +2849,7 @@ var __webpack_exports__ = {};
     SOC.bindApiTest();
     SOC.bindDbCleanup();
     SOC.bindApiSettings();
+    SOC.bindLeadDelivery();
   };
 
   // ----------------------------------------------------------------
@@ -3065,6 +3369,158 @@ var __webpack_exports__ = {};
         SOC.showError(msg);
         $btn.prop('disabled', false);
       });
+    });
+  };
+
+  // ----------------------------------------------------------------
+  // Lead Delivery module
+  // ----------------------------------------------------------------
+  SOC.bindLeadDelivery = function () {
+    if (!$('#soc-lead-save-settings').length) {
+      return;
+    }
+
+    // Toggle API-only rows when delivery method changes.
+    $('input[name="adf_delivery_method"]').on('change', function () {
+      var isApi = $(this).val() === 'api';
+      $('.soc-lead-api-row').toggle(isApi);
+    });
+
+    // Show/hide notify email row.
+    $('#soc-lead-notify-admin').on('change', function () {
+      $('#soc-lead-notify-email-row').toggle(this.checked);
+    });
+
+    // Show/hide secret key input.
+    $('#soc-lead-key-edit').on('click', function () {
+      $('#soc-lead-key-masked').hide();
+      $(this).hide();
+      $('#soc-lead-key-input').show().trigger('focus');
+    });
+
+    // Save settings.
+    $('#soc-lead-save-settings').on('click', function () {
+      var $btn = $(this);
+      $btn.prop('disabled', true);
+      SOC.ajax('soc_lead_settings_save', {
+        delivery_method: $('input[name="adf_delivery_method"]:checked').val() || 'email',
+        api_endpoint: $('#soc-lead-endpoint').val().trim(),
+        secret_key: $('#soc-lead-key-input').val().trim(),
+        timeout: parseInt($('#soc-lead-timeout').val(), 10) || 10,
+        fallback_email: $('#soc-lead-fallback').is(':checked') ? 1 : 0,
+        site_name: $('#soc-lead-site-name').val().trim(),
+        notify_admin: $('#soc-lead-notify-admin').is(':checked') ? 1 : 0,
+        notify_email: $('#soc-lead-notify-email').val().trim(),
+        max_retries: parseInt($('#soc-lead-max-retries').val(), 10) || 0,
+        dedup_minutes: parseInt($('#soc-lead-dedup').val(), 10) || 0,
+        wpforms_ids: $('#soc-lead-wpforms-ids').val().trim()
+      }, function (data) {
+        SOC.showSuccess('Settings saved.');
+        $btn.prop('disabled', false);
+        if (data.api_configured) {
+          $('.soc-badge.soc-badge--warn').first().removeClass('soc-badge--warn').addClass('soc-badge--ok').text('Configured');
+        }
+        $('#soc-lead-key-input').val('').hide();
+        $('#soc-lead-key-masked').show();
+        $('#soc-lead-key-edit').show();
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Test API connection.
+    $('#soc-lead-test-connection').on('click', function () {
+      var $btn = $(this);
+      var $result = $('#soc-lead-test-result');
+      $btn.prop('disabled', true);
+      $result.text('Testing…').removeClass('is-ok is-fail');
+      SOC.ajax('soc_lead_test_connection', {}, function (data) {
+        $result.text('✓ OK (HTTP ' + (data.response_code || '2xx') + ')').addClass('is-ok');
+        $btn.prop('disabled', false);
+      }, function (msg) {
+        $result.text('✗ ' + msg).addClass('is-fail');
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Filter log.
+    $('#soc-lead-filter-btn').on('click', function () {
+      SOC.loadLeadLog($('#soc-lead-filter-status').val(), 1);
+    });
+
+    // Paginate — delegated because the table is replaced by AJAX.
+    $(document).on('click', '.soc-lead-page-btn', function () {
+      var page = parseInt($(this).data('page'), 10) || 1;
+      var status = $('#soc-lead-filter-status').val() || 'all';
+      SOC.loadLeadLog(status, page);
+    });
+
+    // Retry button — delegated.
+    $(document).on('click', '.soc-lead-retry-btn', function () {
+      var $btn = $(this);
+      var log_id = parseInt($btn.data('log-id'), 10);
+      if (!log_id) {
+        return;
+      }
+      $btn.prop('disabled', true).text('…');
+      SOC.ajax('soc_lead_retry', {
+        log_id: log_id
+      }, function () {
+        SOC.showSuccess('Lead re-sent.');
+        SOC.loadLeadLog($('#soc-lead-filter-status').val() || 'all', 1);
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false).text('Retry');
+      });
+    });
+
+    // Details button — open modal with error + raw response.
+    $(document).on('click', '.soc-lead-detail-btn', function () {
+      var $btn = $(this);
+      var response = $btn.data('response') || '';
+      var pretty = response;
+      try {
+        var parsed = JSON.parse(response);
+        pretty = JSON.stringify(parsed, null, 2);
+      } catch (e) {/* not JSON, use raw */}
+      $('#soc-modal-name').text($btn.data('name') || '—');
+      $('#soc-modal-time').text($btn.data('time') || '—');
+      $('#soc-modal-code').text($btn.data('code') || '—');
+      $('#soc-modal-error').text($btn.data('error') || '—');
+      $('#soc-modal-response').text(pretty || '(empty)');
+      SOC.openLeadModal();
+    });
+
+    // Modal close.
+    $(document).on('click', '.soc-lead-modal__close, .soc-lead-modal__backdrop', function () {
+      SOC.closeLeadModal();
+    });
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Escape') {
+        SOC.closeLeadModal();
+      }
+    });
+  };
+  SOC.openLeadModal = function () {
+    $('#soc-lead-modal').fadeIn(150);
+    $('body').addClass('soc-modal-open');
+  };
+  SOC.closeLeadModal = function () {
+    $('#soc-lead-modal').fadeOut(150);
+    $('body').removeClass('soc-modal-open');
+  };
+  SOC.loadLeadLog = function (status, page) {
+    var $wrap = $('#soc-lead-log-wrap');
+    $wrap.css('opacity', 0.5);
+    SOC.ajax('soc_lead_log_filter', {
+      status: status || 'all',
+      page: page || 1
+    }, function (data) {
+      $wrap.html(data.html).css('opacity', 1);
+    }, function (msg) {
+      $wrap.css('opacity', 1);
+      SOC.showError(msg);
     });
   };
 

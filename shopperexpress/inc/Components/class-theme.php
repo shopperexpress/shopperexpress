@@ -66,6 +66,7 @@ class Theme {
 			\App\Components\Base\Vin_Admin::class,
 			\App\Components\Base\Login::class,
 			\App\Components\Base\Required_Plugins::class,
+			\App\Components\Base\ADF_Cron::class,
 			\App\Components\SOC\SOC::class,
 			...( \App\is_api_mode() ? array(
 				\App\Components\Api\Intice_Rest::class,

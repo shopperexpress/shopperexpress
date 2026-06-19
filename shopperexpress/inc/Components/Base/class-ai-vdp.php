@@ -331,12 +331,30 @@ class AI_VDP implements Theme_Component {
 	}
 
 	/**
-	 * System prompt: sets tone, constraints, and dealership context.
+	 * System prompt: uses admin-configured value or falls back to built-in default.
 	 *
 	 * @param array<string, string> $vehicle_data Vehicle attributes.
 	 * @return string
 	 */
 	private function build_system_prompt( array $vehicle_data ): string {
+		$custom = trim( (string) get_field( 'ai_vdp_system_prompt', 'options' ) );
+
+		if ( $custom ) {
+			$dealer = ! empty( $vehicle_data['dealer_name'] ) ? $vehicle_data['dealer_name'] : 'our dealership';
+			$city   = ! empty( $vehicle_data['location'] ) ? $vehicle_data['location'] : '';
+			return str_replace( array( '{dealer}', '{city}' ), array( $dealer, $city ), $custom );
+		}
+
+		return $this->default_system_prompt( $vehicle_data );
+	}
+
+	/**
+	 * Built-in system prompt (used when no custom prompt is configured).
+	 *
+	 * @param array<string, string> $vehicle_data Vehicle attributes.
+	 * @return string
+	 */
+	private function default_system_prompt( array $vehicle_data ): string {
 		$dealer = ! empty( $vehicle_data['dealer_name'] ) ? $vehicle_data['dealer_name'] : 'our dealership';
 		$city   = ! empty( $vehicle_data['location'] ) ? " in {$vehicle_data['location']}" : '';
 
@@ -354,7 +372,7 @@ class AI_VDP implements Theme_Component {
 	}
 
 	/**
-	 * User prompt: structured vehicle data → generation instructions.
+	 * User prompt: structured vehicle data + admin-configured or built-in closing instruction.
 	 *
 	 * @param array<string, string> $vehicle_data Vehicle attributes.
 	 * @return string
@@ -395,9 +413,15 @@ class AI_VDP implements Theme_Component {
 		}
 
 		$lines[] = '';
-		$lines[] = "Highlight the key selling points for a buyer considering the {$vehicle_label}. "
-				. 'Naturally include the full vehicle name for SEO. '
-				. 'Output only the HTML — no preamble, no closing remarks.';
+
+		$custom_closing = trim( (string) get_field( 'ai_vdp_user_prompt', 'options' ) );
+		if ( $custom_closing ) {
+			$lines[] = str_replace( '{vehicle}', $vehicle_label, $custom_closing );
+		} else {
+			$lines[] = "Highlight the key selling points for a buyer considering the {$vehicle_label}. "
+					. 'Naturally include the full vehicle name for SEO. '
+					. 'Output only the HTML — no preamble, no closing remarks.';
+		}
 
 		return implode( "\n", $lines );
 	}

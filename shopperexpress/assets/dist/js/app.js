@@ -143,13 +143,20 @@ function initOpenPdfInNewTab() {
 			link.addEventListener('click', (e) => {
 				e.preventDefault();
 
-				const url = link.getAttribute('href');
+				const gaLabel = link.getAttribute('data-ga-label');
+				if (gaLabel && typeof gtag === 'function') {
+					gtag('event', 'vdr_download', {
+						event_category: 'VDR',
+						event_label: gaLabel
+					});
+				}
 
-				sendRequest(url);
+				const url = link.getAttribute('href');
+				sendRequest(url, link);
 			});
 		});
 
-		async function sendRequest(url) {
+		async function sendRequest(url, link) {
 			if (!url) return;
 
 			try {
@@ -163,19 +170,51 @@ function initOpenPdfInNewTab() {
 
 				const data = await response.json();
 
-				onSuccess(data);
+				onSuccess(data, link);
 			} catch (error) {
 				console.error('Error:', error);
+				showVdrError(link);
 			}
 		}
 
-		function onSuccess(response) {
+		function onSuccess(response, link) {
 			if (response.success) {
 				if (response.data.url) {
 					window.open(response.data.url, '_blank');
 				}
 			} else {
-				console.error('Error:', response.data.message);
+				showVdrError(link);
+			}
+		}
+
+		function showVdrError(link) {
+			const li = link.closest('li');
+			if (li) li.style.display = 'none';
+
+			const errorMessage = link.getAttribute('data-error-message') || 'Sorry, we could not generate the vehicle report at this time. Please try again later.';
+
+			let modal = document.getElementById('vdrErrorModal');
+			if (!modal) {
+				modal = document.createElement('div');
+				modal.id = 'vdrErrorModal';
+				modal.className = 'modal fade';
+				modal.setAttribute('tabindex', '-1');
+				modal.setAttribute('role', 'dialog');
+				modal.setAttribute('aria-hidden', 'true');
+				modal.innerHTML = '<div class="modal-dialog modal-dialog-centered" role="document">'
+					+ '<div class="modal-content">'
+					+ '<div class="modal-header">'
+					+ '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>'
+					+ '</div>'
+					+ '<div class="modal-body" id="vdrErrorModalBody"></div>'
+					+ '</div></div>';
+				document.body.appendChild(modal);
+			}
+
+			document.getElementById('vdrErrorModalBody').textContent = errorMessage;
+
+			if (typeof jQuery !== 'undefined' && jQuery.fn.modal) {
+				jQuery('#vdrErrorModal').modal('show');
 			}
 		}
 	});

@@ -21,6 +21,9 @@ class ACF implements Theme_Component {
 	 */
 	public function register(): void {
 
+		add_action( 'after_setup_theme', array( $this, 'maybe_create_lead_log_table' ) );
+		add_action( 'after_setup_theme', array( $this, 'maybe_create_vdr_log_table' ) );
+
 		add_action(
 			'acf/init',
 			function () {
@@ -40,6 +43,96 @@ class ACF implements Theme_Component {
 				}
 			}
 		);
+	}
+
+	/**
+	 * Create the ADF lead delivery log table if it does not exist yet.
+	 *
+	 * @return void
+	 */
+	/**
+	 * Current schema version. Bump this when columns are added/changed.
+	 */
+	const ADF_LOG_TABLE_VERSION = 2;
+
+	public function maybe_create_lead_log_table(): void {
+		global $wpdb;
+
+		$table           = $wpdb->prefix . 'adf_lead_log';
+		$current_version = (int) get_option( 'adf_lead_log_table_version', 0 );
+
+		if ( $current_version >= self::ADF_LOG_TABLE_VERSION ) {
+			return;
+		}
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		// dbDelta adds missing columns to existing tables — safe to run on upgrades.
+		$sql = "CREATE TABLE `{$table}` (
+			id              bigint(20) UNSIGNED  NOT NULL AUTO_INCREMENT,
+			submitted_at    datetime             NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			site_name       varchar(255)         NOT NULL DEFAULT '',
+			form_name       varchar(255)         NOT NULL DEFAULT '',
+			lead_source     varchar(500)         NOT NULL DEFAULT '',
+			first_name      varchar(100)         NOT NULL DEFAULT '',
+			last_name       varchar(100)         NOT NULL DEFAULT '',
+			email           varchar(255)         NOT NULL DEFAULT '',
+			phone           varchar(50)          NOT NULL DEFAULT '',
+			delivery_method enum('email','api')  NOT NULL DEFAULT 'email',
+			api_endpoint    varchar(500)         NOT NULL DEFAULT '',
+			response_code   smallint(6)          NOT NULL DEFAULT 0,
+			response_body   text                 NOT NULL,
+			status          enum('success','failed','pending') NOT NULL DEFAULT 'pending',
+			retry_count     tinyint(3) UNSIGNED  NOT NULL DEFAULT 0,
+			error_message   text                 NOT NULL,
+			adfxml_payload  mediumtext           NOT NULL,
+			PRIMARY KEY (id),
+			KEY status (status),
+			KEY submitted_at (submitted_at),
+			KEY email (email)
+		) {$charset_collate};";
+
+		dbDelta( $sql );
+
+		update_option( 'adf_lead_log_table_version', self::ADF_LOG_TABLE_VERSION );
+	}
+
+	const VDR_LOG_TABLE_VERSION = 1;
+
+	public function maybe_create_vdr_log_table(): void {
+		global $wpdb;
+
+		$table           = $wpdb->prefix . 'vdr_log';
+		$current_version = (int) get_option( 'vdr_log_table_version', 0 );
+
+		if ( $current_version >= self::VDR_LOG_TABLE_VERSION ) {
+			return;
+		}
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$sql = "CREATE TABLE `{$table}` (
+			id          bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			requested_at datetime           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			vin         varchar(17)         NOT NULL DEFAULT '',
+			dealer_name varchar(255)        NOT NULL DEFAULT '',
+			site_name   varchar(255)        NOT NULL DEFAULT '',
+			result      enum('success','error') NOT NULL DEFAULT 'error',
+			http_code   smallint(6)         NOT NULL DEFAULT 0,
+			from_cache  tinyint(1)          NOT NULL DEFAULT 0,
+			PRIMARY KEY (id),
+			KEY vin (vin),
+			KEY requested_at (requested_at),
+			KEY result (result)
+		) {$charset_collate};";
+
+		dbDelta( $sql );
+
+		update_option( 'vdr_log_table_version', self::VDR_LOG_TABLE_VERSION );
 	}
 
 	/**

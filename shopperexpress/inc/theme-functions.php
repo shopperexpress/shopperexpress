@@ -145,7 +145,13 @@ add_shortcode(
 	}
 );
 
-function adf_email( $fields = array() ) {
+/**
+ * Build an ADFXML string from lead field data.
+ *
+ * @param array $fields Associative array: first_name, last_name, email, phone, comments, zip.
+ * @return string Complete ADFXML payload.
+ */
+function wps_build_adf_xml( array $fields ): string {
 	$first_name = ! empty( $fields['first_name'] ) ? sanitize_text_field( $fields['first_name'] ) : '';
 	$last_name  = ! empty( $fields['last_name'] ) ? sanitize_text_field( $fields['last_name'] ) : '';
 	$email      = ! empty( $fields['email'] ) ? sanitize_email( $fields['email'] ) : '';
@@ -153,97 +159,263 @@ function adf_email( $fields = array() ) {
 	$comments   = ! empty( $fields['comments'] ) ? wp_kses_post( $fields['comments'] ) : '';
 	$zip        = ! empty( $fields['zip'] ) ? sanitize_text_field( $fields['zip'] ) : '';
 
-	$message = '<?xml version="1.0" encoding="utf-8"?>
-	<?ADF version="1.0"?>
-	<adf>
-		<prospect>
-			<id source="shopperexpress" sequence="1"></id>
-			<requestdate>' . date( 'm-d-Y' ) . '</requestdate>
-			<customer>
-				<contact primarycontact="1">
-					<name part="first">' . wps_esc_xml( $first_name ) . '</name>
-					<name part="last">' . wps_esc_xml( $last_name ) . '</name>
-					<name part="full">' . wps_esc_xml( $first_name . ' ' . $last_name ) . '</name>
-					<email>' . wps_esc_xml( $email ) . '</email>
-					<phone time="day" type="voice">' . wps_esc_xml( $phone ) . '</phone>
-					<address>
-						<street line="1"></street>
-						<street line="2"></street>
-						<city></city>
-						<regioncode></regioncode>
-						<postalcode>' . wps_esc_xml( $zip ) . '</postalcode>
-						<country></country>
-					</address>
-				</contact>
-				<comments>' . wps_esc_xml( $comments ) . '</comments>
-			</customer>
-			<provider>
-				<name part="full">intice</name>
-				<service>shopperexpress</service>
-				<url>http://www.inticeinc.com</url>
+	return '<?xml version="1.0" encoding="utf-8"?>
+<?ADF version="1.0"?>
+<adf>
+	<prospect>
+		<id source="shopperexpress" sequence="1"></id>
+		<requestdate>' . gmdate( 'm-d-Y' ) . '</requestdate>
+		<customer>
+			<contact primarycontact="1">
+				<name part="first">' . wps_esc_xml( $first_name ) . '</name>
+				<name part="last">' . wps_esc_xml( $last_name ) . '</name>
+				<name part="full">' . wps_esc_xml( $first_name . ' ' . $last_name ) . '</name>
+				<email>' . wps_esc_xml( $email ) . '</email>
+				<phone time="day" type="voice">' . wps_esc_xml( $phone ) . '</phone>
+				<address>
+					<street line="1"></street>
+					<street line="2"></street>
+					<city></city>
+					<regioncode></regioncode>
+					<postalcode>' . wps_esc_xml( $zip ) . '</postalcode>
+					<country></country>
+				</address>
+			</contact>
+			<comments>' . wps_esc_xml( $comments ) . '</comments>
+		</customer>
+		<provider>
+			<name part="full">intice</name>
+			<service>shopperexpress</service>
+			<url>http://www.inticeinc.com</url>
+			<email>support@inticeinc.com</email>
+			<phone>855-747-7770</phone>
+			<contact primarycontact="1">
+				<name part="full">Intice Inc</name>
 				<email>support@inticeinc.com</email>
-				<phone>855-747-7770</phone>
-				<contact primarycontact="1">
-					<name part="full">Intice Inc</name>
-					<email>support@inticeinc.com</email>
-					<phone time="day" type="voice">855-747-7770</phone>
-					<phone time="day" type="fax">888-220-2913</phone>
-					<address>
-						<street line="1">2660 Cypress Ridge Blvd.</street>
-						<street line="2">Suite 103</street>
-						<city>Wesley Chapel</city>
-						<regioncode>FL</regioncode>
-						<postalcode>33544</postalcode>
-						<country>USA</country>
-					</address>
-				</contact>
-			</provider>
-		</prospect>
-	</adf>';
+				<phone time="day" type="voice">855-747-7770</phone>
+				<phone time="day" type="fax">888-220-2913</phone>
+				<address>
+					<street line="1">2660 Cypress Ridge Blvd.</street>
+					<street line="2">Suite 103</street>
+					<city>Wesley Chapel</city>
+					<regioncode>FL</regioncode>
+					<postalcode>33544</postalcode>
+					<country>USA</country>
+				</address>
+			</contact>
+		</provider>
+	</prospect>
+</adf>';
+}
 
+/**
+ * Dispatch an ADFXML payload via the configured delivery method (email or API).
+ *
+ * Writes a row to {prefix}_adf_lead_log regardless of outcome.
+ *
+ * @param string $xml    ADFXML string produced by wps_build_adf_xml().
+ * @param array  $fields Original lead fields (first_name, last_name, email, phone, form_name …).
+ * @return array{success: bool, method: string, response_code: int, error_message: string}
+ */
+function wps_dispatch_adf( string $xml, array $fields ): array {
+	global $wpdb;
+
+	$method     = get_option( 'adf_delivery_method', 'email' );
+	$first_name = sanitize_text_field( $fields['first_name'] ?? '' );
+	$last_name  = sanitize_text_field( $fields['last_name'] ?? '' );
+	$email      = sanitize_email( $fields['email'] ?? '' );
+	$phone      = sanitize_text_field( $fields['phone'] ?? '' );
+	$form_name  = sanitize_text_field( $fields['form_name'] ?? '' );
+	$lead_source = sanitize_text_field( $fields['lead_source'] ?? wp_get_referer() ?: '' );
+	$site_name  = sanitize_text_field( get_option( 'adf_site_name', get_bloginfo( 'name' ) ) );
+
+	// Duplicate prevention: block same email+phone within the configured window.
+	$dedup_minutes = (int) get_option( 'adf_dedup_minutes', 0 );
+	if ( $dedup_minutes > 0 && '' !== $email ) {
+		$table     = $wpdb->prefix . 'adf_lead_log';
+		$duplicate = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT id FROM `{$table}`
+				 WHERE email = %s AND phone = %s AND status = 'success'
+				   AND submitted_at >= DATE_SUB( NOW(), INTERVAL %d MINUTE )
+				 LIMIT 1",
+				$email,
+				$phone,
+				$dedup_minutes
+			)
+		);
+		if ( $duplicate ) {
+			return array(
+				'success'       => false,
+				'method'        => $method,
+				'response_code' => 0,
+				'error_message' => 'Duplicate lead skipped.',
+				'log_id'        => 0,
+			);
+		}
+	}
+
+	$log = array(
+		'submitted_at'    => current_time( 'mysql' ),
+		'site_name'       => $site_name,
+		'form_name'       => $form_name,
+		'lead_source'     => $lead_source,
+		'first_name'      => $first_name,
+		'last_name'       => $last_name,
+		'email'           => $email,
+		'phone'           => $phone,
+		'delivery_method' => $method,
+		'api_endpoint'    => '',
+		'response_code'   => 0,
+		'response_body'   => '',
+		'status'          => 'pending',
+		'retry_count'     => 0,
+		'error_message'   => '',
+		'adfxml_payload'  => $xml,
+	);
+
+	if ( 'api' === $method ) {
+		$client              = new \App\Components\Base\ADF_Api_Client();
+		$log['api_endpoint'] = get_option( \App\Components\Base\ADF_Api_Client::OPTION_ENDPOINT, '' );
+		$result              = $client->send( $xml, $fields );
+
+		$log['response_code'] = $result['response_code'];
+		$log['response_body'] = $result['response_body'];
+		$log['error_message'] = $result['error_message'];
+		$log['status']        = $result['success'] ? 'success' : 'failed';
+
+		if ( ! $result['success'] ) {
+			// Fallback to email.
+			if ( get_option( 'adf_api_fallback_email', 0 ) ) {
+				wps_send_adf_email( $xml, $first_name, $last_name );
+			}
+			// Admin notification.
+			wps_adf_notify_admin_failure( $log );
+		}
+	} else {
+		wps_send_adf_email( $xml, $first_name, $last_name );
+		$log['status'] = 'success';
+		$result        = array(
+			'success'       => true,
+			'response_code' => 0,
+			'error_message' => '',
+		);
+	}
+
+	$wpdb->insert(
+		$wpdb->prefix . 'adf_lead_log',
+		$log,
+		array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s', '%s' )
+	);
+
+	return array(
+		'success'       => 'success' === $log['status'],
+		'method'        => $method,
+		'response_code' => $log['response_code'],
+		'error_message' => $log['error_message'],
+		'log_id'        => $wpdb->insert_id,
+	);
+}
+
+/**
+ * Send admin notification when ADF API delivery fails.
+ *
+ * @param array $log The log row (without id).
+ * @return void
+ */
+function wps_adf_notify_admin_failure( array $log ): void {
+	if ( ! get_option( 'adf_notify_admin_on_failure', 0 ) ) {
+		return;
+	}
+
+	$to = sanitize_email( get_option( 'adf_notify_email', get_option( 'admin_email' ) ) );
+	if ( ! is_email( $to ) ) {
+		return;
+	}
+
+	$subject = sprintf( '[%s] ADF Lead Delivery Failed — %s %s', get_bloginfo( 'name' ), $log['first_name'], $log['last_name'] );
+
+	$body = "A lead failed to deliver via API.\n\n"
+		. "Name:     {$log['first_name']} {$log['last_name']}\n"
+		. "Email:    {$log['email']}\n"
+		. "Phone:    {$log['phone']}\n"
+		. "Form:     {$log['form_name']}\n"
+		. "Time:     {$log['submitted_at']}\n"
+		. "Endpoint: {$log['api_endpoint']}\n"
+		. "HTTP Code:{$log['response_code']}\n"
+		. "Error:    {$log['error_message']}\n\n"
+		. 'Review in the Operation Center → Lead Delivery panel: ' . admin_url( 'admin.php?page=soc-lead-delivery' );
+
+	wp_mail( $to, $subject, $body );
+}
+
+/**
+ * Send ADFXML by email using WordPress mail.
+ *
+ * @param string $xml        ADFXML payload string.
+ * @param string $first_name Lead first name (used in subject line).
+ * @param string $last_name  Lead last name (used in subject line).
+ * @return void
+ */
+function wps_send_adf_email( string $xml, string $first_name, string $last_name ): void {
 	$mail_to  = array();
 	$mail_cc  = array();
 	$mail_bcc = array();
 
 	while ( have_rows( 'email_notification', 'options' ) ) :
 		the_row();
-		$email_address = sanitize_email( get_sub_field( 'email' ) );
-		if ( is_email( $email_address ) ) {
-			$mail_to[] = $email_address;
+		$addr = sanitize_email( get_sub_field( 'email' ) );
+		if ( is_email( $addr ) ) {
+			$mail_to[] = $addr;
 		}
 	endwhile;
 
 	while ( have_rows( 'email_notification_cc', 'options' ) ) :
 		the_row();
-		$email_address = sanitize_email( get_sub_field( 'email' ) );
-		if ( is_email( $email_address ) ) {
-			$mail_cc[] = $email_address;
+		$addr = sanitize_email( get_sub_field( 'email' ) );
+		if ( is_email( $addr ) ) {
+			$mail_cc[] = $addr;
 		}
 	endwhile;
 
 	while ( have_rows( 'email_notification_bcc', 'options' ) ) :
 		the_row();
-		$email_address = sanitize_email( get_sub_field( 'email' ) );
-		if ( is_email( $email_address ) ) {
-			$mail_bcc[] = $email_address;
+		$addr = sanitize_email( get_sub_field( 'email' ) );
+		if ( is_email( $addr ) ) {
+			$mail_bcc[] = $addr;
 		}
 	endwhile;
 
-	if ( ! empty( $mail_to ) ) {
-		$headers = array(
-			'Content-Type: text/html; charset=utf-8',
-		);
-
-		if ( ! empty( $mail_cc ) ) {
-			$headers[] = 'Cc: ' . implode( ', ', $mail_cc );
-		}
-
-		if ( ! empty( $mail_bcc ) ) {
-			$headers[] = 'Bcc: ' . implode( ', ', $mail_bcc );
-		}
-
-		wp_mail( implode( ', ', $mail_to ), 'intice360: ' . $first_name . ' ' . $last_name, $message, $headers );
+	if ( empty( $mail_to ) ) {
+		return;
 	}
+
+	$headers = array( 'Content-Type: text/html; charset=utf-8' );
+
+	if ( ! empty( $mail_cc ) ) {
+		$headers[] = 'Cc: ' . implode( ', ', $mail_cc );
+	}
+	if ( ! empty( $mail_bcc ) ) {
+		$headers[] = 'Bcc: ' . implode( ', ', $mail_bcc );
+	}
+
+	wp_mail(
+		implode( ', ', $mail_to ),
+		'intice360: ' . $first_name . ' ' . $last_name,
+		$xml,
+		$headers
+	);
+}
+
+/**
+ * Backward-compatible wrapper — builds XML and dispatches via configured method.
+ *
+ * @param array $fields Lead fields: first_name, last_name, email, phone, comments, zip.
+ * @return void
+ */
+function adf_email( $fields = array() ) {
+	$xml = wps_build_adf_xml( $fields );
+	wps_dispatch_adf( $xml, $fields );
 }
 
 function wps_esc_xml( $data ) {
@@ -270,10 +442,96 @@ add_action(
 				}
 			}
 		}
+
+		// ADF delivery: check if this form ID is in the configured ADF forms list.
+		wps_wpforms_maybe_dispatch_adf( $fields, $entry, $form_data );
 	},
 	10,
 	4
 );
+
+/**
+ * Dispatch an ADF lead from a WP Forms submission if the form is configured for ADF delivery.
+ *
+ * Form IDs are stored in option `adf_wpforms_ids` as a comma-separated string.
+ * Field mapping tries to extract lead data by WP Forms field type, then by label.
+ *
+ * @param array $fields    WP Forms field data.
+ * @param array $entry     Form entry meta.
+ * @param array $form_data Form configuration.
+ * @return void
+ */
+function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $form_data ): void {
+	$configured_ids_raw = get_option( 'adf_wpforms_ids', '' );
+	if ( '' === trim( $configured_ids_raw ) ) {
+		return;
+	}
+
+	$form_id         = (int) ( $form_data['id'] ?? 0 );
+	$configured_ids  = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $configured_ids_raw ) ) ) );
+
+	if ( ! in_array( $form_id, $configured_ids, true ) ) {
+		return;
+	}
+
+	$lead = array(
+		'first_name'  => '',
+		'last_name'   => '',
+		'email'       => '',
+		'phone'       => '',
+		'comments'    => '',
+		'zip'         => '',
+		'form_name'   => sanitize_text_field( $form_data['settings']['form_title'] ?? "WP Form #{$form_id}" ),
+		'lead_source' => wp_get_referer() ?: '',
+	);
+
+	foreach ( $fields as $field ) {
+		$type  = $field['type'] ?? '';
+		$label = strtolower( $field['label'] ?? '' );
+		$value = $field['value'] ?? '';
+
+		switch ( $type ) {
+			case 'name':
+				$lead['first_name'] = sanitize_text_field( $field['first_name'] ?? $value );
+				$lead['last_name']  = sanitize_text_field( $field['last_name'] ?? '' );
+				break;
+			case 'email':
+				if ( '' === $lead['email'] ) {
+					$lead['email'] = sanitize_email( $value );
+				}
+				break;
+			case 'phone':
+				if ( '' === $lead['phone'] ) {
+					$lead['phone'] = sanitize_text_field( $value );
+				}
+				break;
+			case 'textarea':
+			case 'text':
+				if ( str_contains( $label, 'comment' ) || str_contains( $label, 'message' ) || str_contains( $label, 'note' ) ) {
+					$lead['comments'] = wp_kses_post( $value );
+				}
+				if ( str_contains( $label, 'zip' ) || str_contains( $label, 'postal' ) ) {
+					$lead['zip'] = sanitize_text_field( $value );
+				}
+				// Fallback: if first_name still empty, try text field labelled "first name" / "name".
+				if ( '' === $lead['first_name'] && ( str_contains( $label, 'first' ) || 'name' === $label ) ) {
+					$lead['first_name'] = sanitize_text_field( $value );
+				}
+				if ( '' === $lead['last_name'] && str_contains( $label, 'last' ) ) {
+					$lead['last_name'] = sanitize_text_field( $value );
+				}
+				break;
+		}
+	}
+
+	// Require at minimum first name and email.
+	if ( '' === $lead['first_name'] || ! is_email( $lead['email'] ) ) {
+		return;
+	}
+
+	$xml = wps_build_adf_xml( $lead );
+	wps_dispatch_adf( $xml, $lead );
+}
 
 add_action(
 	'template_redirect',

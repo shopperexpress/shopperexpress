@@ -383,7 +383,20 @@ while ( have_posts() ) :
 									) : str_replace( '{VIN}', $vin_number, get_sub_field( 'url' ) );
 									if ( $url && $image ) :
 										if ( $action == 'api' ) :
-											$badges_html .= '<li><a href="' . esc_url( $url ) . '" data-pdf>' . get_attachment_image( $image ) . '</a></li>';
+											if ( get_transient( 'vdr_error_' . $vin_number ) ) :
+												// VDR API returned an error on the first attempt — hide for all users.
+											else :
+												$ga_label     = esc_attr( get_sub_field( 'ga_event_label' ) );
+												$error_msg    = esc_attr( get_field( 'vdr_error_message', 'options' ) );
+												$data_attrs   = ' data-pdf';
+												if ( $ga_label ) {
+													$data_attrs .= ' data-ga-label="' . $ga_label . '"';
+												}
+												if ( $error_msg ) {
+													$data_attrs .= ' data-error-message="' . $error_msg . '"';
+												}
+												$badges_html .= '<li><a href="' . esc_url( $url ) . '"' . $data_attrs . '>' . get_attachment_image( $image ) . '</a></li>';
+											endif;
 										else :
 											$badges_html .= '<li><a href="' . esc_url( $url ) . '" target="_blank">' . get_attachment_image( $image ) . '</a></li>';
 										endif;

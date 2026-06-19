@@ -95,6 +95,7 @@ class Ajax implements Theme_Component {
 		}
 
 		if ( file_exists( $file_path ) ) {
+			$this->log_vdr_request( $vin, $dealerName, 'success', 200, true );
 			wp_send_json_success(
 				array(
 					'url'    => $file_url,
@@ -150,6 +151,8 @@ class Ajax implements Theme_Component {
 		curl_close( $ch );
 
 		if ( $http_code !== 200 || empty( $pdf ) ) {
+			$this->log_vdr_request( $vin, $dealerName, 'error', $http_code, false );
+			set_transient( 'vdr_error_' . $vin, 1, DAY_IN_SECONDS );
 			wp_send_json_error(
 				array(
 					'message'   => 'Failed to generate VDR',
@@ -159,12 +162,31 @@ class Ajax implements Theme_Component {
 		}
 
 		file_put_contents( $file_path, $pdf );
+		delete_transient( 'vdr_error_' . $vin );
 
+		$this->log_vdr_request( $vin, $dealerName, 'success', $http_code, false );
 		wp_send_json_success(
 			array(
 				'url'    => $file_url,
 				'cached' => false,
 			)
+		);
+	}
+
+	private function log_vdr_request( string $vin, string $dealer_name, string $result, int $http_code, bool $from_cache ): void {
+		global $wpdb;
+
+		$wpdb->insert(
+			$wpdb->prefix . 'vdr_log',
+			array(
+				'vin'         => $vin,
+				'dealer_name' => $dealer_name,
+				'site_name'   => get_bloginfo( 'name' ),
+				'result'      => $result,
+				'http_code'   => $http_code,
+				'from_cache'  => $from_cache ? 1 : 0,
+			),
+			array( '%s', '%s', '%s', '%s', '%d', '%d' )
 		);
 	}
 
@@ -389,17 +411,17 @@ class Ajax implements Theme_Component {
 			}
 
 			if ( ! empty( $_REQUEST['delivery_address'] ) ) {
+				// Explicit delivery address bypasses the global delivery method setting.
 				wp_mail( $_REQUEST['delivery_address'], $subject, $template, array( 'content-type: text/plain' ) );
-			} elseif ( have_rows( 'email_notification', 'options' ) ) {
-
-					$mail_to = array();
-
-				while ( have_rows( 'email_notification', 'options' ) ) :
-					the_row();
-					$mail_to[] = get_sub_field( 'email' );
-					endwhile;
-
-					wp_mail( implode( ', ', $mail_to ), $subject, $template, array( 'content-type: text/plain' ) );
+			} else {
+				$lead_fields = array(
+					'first_name' => sanitize_text_field( $_REQUEST['first_name'] ?? '' ),
+					'last_name'  => sanitize_text_field( $_REQUEST['last_name'] ?? '' ),
+					'email'      => sanitize_email( $_REQUEST['email'] ?? '' ),
+					'phone'      => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
+					'form_name'  => 'adf_action',
+				);
+				wps_dispatch_adf( $template, $lead_fields );
 			}
 
 			wp_send_json_success(
@@ -442,7 +464,7 @@ class Ajax implements Theme_Component {
 			wp_send_json_error( array( 'message' => 'Missing required fields.' ), 422 );
 		}
 
-		adf_email(
+		$xml    = wps_build_adf_xml(
 			array(
 				'first_name' => $first_name,
 				'last_name'  => $last_name,
@@ -452,8 +474,22 @@ class Ajax implements Theme_Component {
 				'zip'        => sanitize_text_field( wp_unslash( $_POST['zip'] ?? '' ) ),
 			)
 		);
+		$result = wps_dispatch_adf(
+			$xml,
+			array(
+				'first_name' => $first_name,
+				'last_name'  => $last_name,
+				'email'      => $email,
+				'phone'      => $phone,
+				'form_name'  => sanitize_text_field( wp_unslash( $_POST['form_name'] ?? 'submit_adf_lead' ) ),
+			)
+		);
 
-		wp_send_json_success( array( 'message' => 'Lead submitted.' ) );
+		if ( $result['success'] ) {
+			wp_send_json_success( array( 'message' => 'Lead submitted.' ) );
+		} else {
+			wp_send_json_error( array( 'message' => 'Lead delivery failed.' ), 500 );
+		}
 	}
 
 	public function unlock_form() {

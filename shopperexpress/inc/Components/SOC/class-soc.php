@@ -17,6 +17,8 @@ use App\Components\SOC\Modules\Database_Health;
 use App\Components\SOC\Modules\Developer_Tools;
 use App\Components\SOC\Modules\Import_Monitor_Panel;
 use App\Components\SOC\Modules\Api_Settings;
+use App\Components\SOC\Modules\Lead_Delivery;
+use App\Components\SOC\Modules\VDR_Requests;
 
 /**
  * SOC Component
@@ -66,6 +68,8 @@ class SOC implements Theme_Component {
 			new Developer_Tools(),
 			new Import_Monitor_Panel(),
 			new Api_Settings(),
+			new Lead_Delivery(),
+			new VDR_Requests(),
 		);
 
 		foreach ( $module_classes as $module ) {

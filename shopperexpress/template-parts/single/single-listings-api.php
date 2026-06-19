@@ -39,18 +39,19 @@ if ( is_wp_error( $api_res ) || empty( $api_res['data'] ) ) {
 $v       = $api_res['data'];
 $payload = $v['payload'] ?? array();
 
-$year       = $v['year'] ?? '';
-$make       = $v['make'] ?? '';
-$model      = $v['model'] ?? '';
-$trim       = $v['trim'] ?? '';
-$stock      = $v['stock'] ?? '';
-$vin_number = $vin;
-$sold       = ! empty( $v['sold'] );
-$certified  = ! empty( $v['certified'] );
-$images     = $v['images'] ?? ( ! empty( $v['image'] ) ? array( $v['image'] ) : array() );
-$features   = $v['features'] ?? array();
-$condition  = $v['condition'] ?? '';
-$status     = $payload['special field 3'] ?? '';
+$year        = $v['year'] ?? '';
+$make        = $v['make'] ?? '';
+$model       = $v['model'] ?? '';
+$trim        = $v['trim'] ?? '';
+$stock       = $v['stock'] ?? '';
+$vin_number  = $vin;
+$sold        = ! empty( $v['sold'] );
+$certified   = ! empty( $v['certified'] );
+$images      = $v['images'] ?? ( ! empty( $v['image'] ) ? array( $v['image'] ) : array() );
+$features    = $v['features'] ?? array();
+$condition   = $v['condition'] ?? '';
+$status      = $payload['special field 3'] ?? '';
+$dealer_name = $payload['dealer name'] ?? '';
 
 
 $page_title   = trim( implode( ' ', array_filter( array( $year, $make, $model, $trim ) ) ) );
@@ -74,14 +75,16 @@ if ( ! empty( $payload['seo_title'] ) ) {
 if ( ! empty( $payload['seo_description'] ) ) {
 	$_seo_desc = $payload['seo_description'];
 } else {
-	$_seo_desc_parts = array_filter( array(
-		$page_title,
-		$v['condition'] ?? '',
-		$v['mileage'] ? number_format( (int) $v['mileage'] ) . ' mi' : '',
-		$v['exterior_color'] ?? '',
-		$v['price'] ? '$' . number_format( (int) $v['price'] ) : '',
-	) );
-	$_seo_desc = implode( ' · ', $_seo_desc_parts );
+	$_seo_desc_parts = array_filter(
+		array(
+			$page_title,
+			$v['condition'] ?? '',
+			$v['mileage'] ? number_format( (int) $v['mileage'] ) . ' mi' : '',
+			$v['exterior_color'] ?? '',
+			$v['price'] ? '$' . number_format( (int) $v['price'] ) : '',
+		)
+	);
+	$_seo_desc       = implode( ' · ', $_seo_desc_parts );
 }
 
 // payload.seo_image overrides the primary image used for OG/Twitter cards.
@@ -90,17 +93,139 @@ $_seo_image = ! empty( $payload['seo_image'] )
 	: ( ! empty( $v['images'][0] ) ? $v['images'][0] : ( $v['image'] ?? '' ) );
 $_seo_url   = \App\Components\Api\Intice_VDP::vdp_url( $vin, $post_type );
 
-add_filter( 'wpseo_title',            fn() => $_seo_title, 20 );
-add_filter( 'wpseo_metadesc',         fn() => $_seo_desc,  20 );
-add_filter( 'wpseo_opengraph_title',  fn() => $_seo_title, 20 );
-add_filter( 'wpseo_opengraph_desc',   fn() => $_seo_desc,  20 );
-add_filter( 'wpseo_twitter_title',    fn() => $_seo_title, 20 );
-add_filter( 'wpseo_twitter_desc',     fn() => $_seo_desc,  20 );
-add_filter( 'wpseo_canonical',        fn() => $_seo_url,   20 );
+add_filter( 'wpseo_title', fn() => $_seo_title, 20 );
+add_filter( 'wpseo_metadesc', fn() => $_seo_desc, 20 );
+add_filter( 'wpseo_opengraph_title', fn() => $_seo_title, 20 );
+add_filter( 'wpseo_opengraph_desc', fn() => $_seo_desc, 20 );
+add_filter( 'wpseo_twitter_title', fn() => $_seo_title, 20 );
+add_filter( 'wpseo_twitter_desc', fn() => $_seo_desc, 20 );
+add_filter( 'wpseo_canonical', fn() => $_seo_url, 20 );
 
 if ( $_seo_image ) {
 	add_filter( 'wpseo_opengraph_image', fn() => $_seo_image, 20 );
 }
+
+// ── Vehicle JSON-LD for API VDP ──────────────────────────────────────────────
+add_action(
+	'wp_head',
+	function () use ( $v, $post_type, $_seo_url, $_seo_desc ) {
+		$permalink = $_seo_url;
+		$schema    = array(
+			'@context' => 'https://schema.org',
+			'@type'    => 'Vehicle',
+			'@id'      => esc_url( $permalink ) . '/#vehicle',
+			'url'      => esc_url( $permalink ),
+		);
+
+		$name = trim( implode( ' ', array_filter( array( $v['year'] ?? '', $v['make'] ?? '', $v['model'] ?? '', $v['trim'] ?? '' ) ) ) );
+		if ( $name ) {
+			$schema['name'] = $name;
+		}
+
+		if ( $_seo_desc ) {
+			$schema['description'] = wp_strip_all_tags( $_seo_desc );
+		}
+
+		if ( ! empty( $v['images'][0] ) ) {
+			$schema['image'] = esc_url( $v['images'][0] );
+		} elseif ( ! empty( $v['image'] ) ) {
+			$schema['image'] = esc_url( $v['image'] );
+		}
+
+		if ( ! empty( $v['make'] ) ) {
+			$schema['brand'] = array( '@type' => 'Brand', 'name' => wp_strip_all_tags( $v['make'] ) );
+		}
+		if ( ! empty( $v['model'] ) ) {
+			$schema['model'] = wp_strip_all_tags( $v['model'] );
+		}
+		if ( ! empty( $v['trim'] ) ) {
+			$schema['vehicleConfiguration'] = wp_strip_all_tags( $v['trim'] );
+		}
+		if ( ! empty( $v['year'] ) ) {
+			$schema['vehicleModelDate'] = (string) $v['year'];
+		}
+		if ( ! empty( $v['mileage'] ) ) {
+			$schema['mileageFromOdometer'] = array(
+				'@type'    => 'QuantitativeValue',
+				'value'    => (int) $v['mileage'],
+				'unitCode' => 'SMI',
+			);
+		}
+		if ( ! empty( $v['vin'] ) ) {
+			$schema['vehicleIdentificationNumber'] = wp_strip_all_tags( $v['vin'] );
+		}
+		if ( ! empty( $v['engine'] ) ) {
+			$schema['vehicleEngine'] = array( '@type' => 'EngineSpecification', 'description' => wp_strip_all_tags( $v['engine'] ) );
+		}
+		if ( ! empty( $v['fuel_type'] ) ) {
+			$schema['fuelType'] = wp_strip_all_tags( $v['fuel_type'] );
+		}
+		if ( ! empty( $v['transmission'] ) ) {
+			$schema['vehicleTransmission'] = wp_strip_all_tags( $v['transmission'] );
+		}
+
+		$condition = ( 'used-listings' === $post_type ) ? 'https://schema.org/UsedCondition' : 'https://schema.org/NewCondition';
+		$offer     = array(
+			'@type'         => 'Offer',
+			'priceCurrency' => 'USD',
+			'availability'  => 'https://schema.org/InStock',
+			'itemCondition' => $condition,
+			'url'           => esc_url( $permalink ),
+		);
+		if ( ! empty( $v['price'] ) ) {
+			$offer['price'] = (string) $v['price'];
+		}
+		$dealer_name = $v['payload']['dealer name'] ?? ( $v['dealer_name'] ?? '' );
+		if ( $dealer_name ) {
+			$offer['seller'] = array( '@type' => 'AutoDealer', 'name' => wp_strip_all_tags( $dealer_name ) );
+		}
+		$schema['offers'] = $offer;
+
+		// Highlighted Features → additionalProperty.
+		$flat_for_schema = array();
+		foreach ( $v['features'] ?? array() as $group ) {
+			foreach ( $group['features'] ?? array() as $row ) {
+				$flat_for_schema[] = $row;
+			}
+		}
+
+		if ( ! empty( $flat_for_schema ) ) {
+			usort( $flat_for_schema, fn( $a, $b ) => (int) ( $b['ranking'] ?? 0 ) - (int) ( $a['ranking'] ?? 0 ) );
+
+			$overrides = array();
+			while ( have_rows( 'feature_list_chromedata', 'options' ) ) {
+				the_row();
+				$overrides[ (string) get_sub_field( 'id' ) ] = (string) get_sub_field( 'text' );
+			}
+
+			$limit      = (int) get_field( 'limit_feature_list', 'options' );
+			$additional = array();
+
+			foreach ( $flat_for_schema as $i => $feat ) {
+				if ( $limit > 0 && $i >= $limit ) {
+					break;
+				}
+				$id   = (string) ( $feat['id'] ?? '' );
+				$text = ! empty( $overrides[ $id ] ) ? $overrides[ $id ] : ( $feat['feature'] ?? '' );
+				if ( $text ) {
+					$additional[] = array(
+						'@type' => 'PropertyValue',
+						'name'  => 'Feature',
+						'value' => wp_strip_all_tags( $text ),
+					);
+				}
+			}
+
+			if ( ! empty( $additional ) ) {
+				$schema['additionalProperty'] = $additional;
+			}
+		}
+
+		$json = wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
+		echo '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>' . "\n"; // phpcs:ignore
+	},
+	5
+);
 // ─────────────────────────────────────────────────────────────────────────────
 
 get_header();
@@ -205,7 +330,68 @@ get_header();
 						</dl>
 						<?php
 					endif;
-					?>
+					$badges_html = '';
+
+						$certified_custom_url = get_field( 'certified_custom_url' );
+					if ( have_rows( 'certified_badge', 'options' ) ) :
+						while ( have_rows( 'certified_badge', 'options' ) ) :
+							the_row();
+							$image          = get_sub_field( 'image' );
+							$show_badges_on = get_sub_field( 'show_badges_on' );
+							$show_badges_on = is_array( $show_badges_on ) ? $show_badges_on : array( $show_badges_on );
+
+							if ( $certified_custom_url && get_sub_field( 'show' ) && $image && in_array( $post_type, $show_badges_on ) ) {
+								$badges_html .= '<li><a href="' . esc_url( $certified_custom_url ) . '" target="_blank">' . get_attachment_image( $image ) . '</a></li>';
+							}
+							endwhile;
+						endif;
+
+					if ( have_rows( 'additional_custom_badges', 'options' ) ) :
+						while ( have_rows( 'additional_custom_badges', 'options' ) ) :
+							the_row();
+							$show_badges_on = get_sub_field( 'show_badges_on' );
+							$show_badges_on = is_array( $show_badges_on ) ? $show_badges_on : array( $show_badges_on );
+							$action         = get_sub_field( 'action' );
+							if ( get_sub_field( 'show' ) && in_array( $post_type, $show_badges_on ) ) {
+								$image = get_sub_field( 'image' );
+								$url   = $action == 'api' ? add_query_arg(
+									array(
+										'action'      => 'get_pdf',
+										'vin_number'  => $vin_number,
+										'dealer_name' => $dealer_name,
+									),
+									admin_url( 'admin-ajax.php' )
+								) : str_replace( '{VIN}', $vin_number, get_sub_field( 'url' ) );
+								if ( $url && $image ) :
+									if ( $action == 'api' ) :
+										if ( ! get_transient( 'vdr_error_' . $vin_number ) ) :
+											$ga_label   = esc_attr( get_sub_field( 'ga_event_label' ) );
+											$error_msg  = esc_attr( get_field( 'vdr_error_message', 'options' ) );
+											$data_attrs = ' data-pdf';
+											if ( $ga_label ) {
+												$data_attrs .= ' data-ga-label="' . $ga_label . '"';
+											}
+											if ( $error_msg ) {
+												$data_attrs .= ' data-error-message="' . $error_msg . '"';
+											}
+											$badges_html .= '<li><a href="' . esc_url( $url ) . '"' . $data_attrs . '>' . get_attachment_image( $image ) . '</a></li>';
+										endif;
+									else :
+										$badges_html .= '<li><a href="' . esc_url( $url ) . '" target="_blank">' . get_attachment_image( $image ) . '</a></li>';
+									endif;
+								endif;
+							}
+							endwhile;
+						endif;
+
+					if ( ! empty( $badges_html ) ) :
+						?>
+							<div class="details-html">
+								<ul class="details-badges">
+								<?php echo $badges_html; ?>
+								</ul>
+							</div>
+						<?php endif; ?>
 					<!-- See Details / Features modals trigger -->
 					<ul class="details-list list-inline">
 						<li class="list-inline-item">
@@ -301,7 +487,7 @@ get_header();
 							'post_type' => $post_type,
 							'permalink' => $archive_link,
 							'is_single' => true,
-							'post_id'    => $vin_number,
+							'post_id'   => $vin_number,
 						)
 					);
 					?>

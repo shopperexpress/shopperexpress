@@ -216,9 +216,67 @@ class JSON_LD implements Theme_Component {
 
 		$schema['offers'] = $offer;
 
+		$additional = $this->build_features_additional_property( $post_id );
+		if ( ! empty( $additional ) ) {
+			$schema['additionalProperty'] = $additional;
+		}
+
 		$json = wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
 
 		return '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>' . "\n";
+	}
+
+	/**
+	 * Build additionalProperty array from ACF features_items for a post.
+	 *
+	 * @param int $post_id
+	 * @return array
+	 */
+	private function build_features_additional_property( int $post_id ): array {
+		$flat = array();
+
+		while ( have_rows( 'features_items', $post_id ) ) {
+			the_row();
+			while ( have_rows( 'features' ) ) {
+				the_row();
+				$flat[] = array(
+					'ranking' => (int) get_sub_field( 'ranking' ),
+					'feature' => (string) get_sub_field( 'feature' ),
+					'id'      => (string) get_sub_field( 'id' ),
+				);
+			}
+		}
+
+		if ( empty( $flat ) ) {
+			return array();
+		}
+
+		usort( $flat, fn( $a, $b ) => $b['ranking'] - $a['ranking'] );
+
+		$overrides = array();
+		while ( have_rows( 'feature_list_chromedata', 'options' ) ) {
+			the_row();
+			$overrides[ (string) get_sub_field( 'id' ) ] = (string) get_sub_field( 'text' );
+		}
+
+		$limit      = (int) get_field( 'limit_feature_list', 'options' );
+		$additional = array();
+
+		foreach ( $flat as $i => $feat ) {
+			if ( $limit > 0 && $i >= $limit ) {
+				break;
+			}
+			$text = ! empty( $overrides[ $feat['id'] ] ) ? $overrides[ $feat['id'] ] : $feat['feature'];
+			if ( $text ) {
+				$additional[] = array(
+					'@type' => 'PropertyValue',
+					'name'  => 'Feature',
+					'value' => wp_strip_all_tags( $text ),
+				);
+			}
+		}
+
+		return $additional;
 	}
 
 	/**

@@ -444,3 +444,207 @@ $soc-radius: 4px;
     }
 }
 
+// ============================================================
+// Lead Delivery module
+// ============================================================
+
+.soc-lead-radio {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 16px;
+    font-size: 13px;
+    cursor: pointer;
+
+    input[type="radio"] {
+        margin: 0;
+    }
+}
+
+.soc-lead-api-fields {
+    margin-top: 16px;
+
+    .soc-lead-settings-table {
+        width: 100%;
+        max-width: 700px;
+
+        th {
+            width: 220px;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        td input.regular-text {
+            width: 100%;
+            max-width: 420px;
+        }
+    }
+}
+
+.soc-lead-settings-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.soc-lead-test-result {
+    font-size: 13px;
+    font-weight: 600;
+
+    &.is-ok    { color: $soc-success; }
+    &.is-fail  { color: $soc-danger; }
+}
+
+.soc-lead-key-display {
+    display: inline-block;
+    letter-spacing: 2px;
+    color: $soc-gray;
+    margin-right: 8px;
+    font-family: monospace;
+}
+
+// Stats cards — colour overrides for numeric cells
+.soc-lead-stat--success { color: $soc-success; font-weight: 700; }
+.soc-lead-stat--failed  { color: $soc-danger;  font-weight: 700; }
+
+// Log table header with inline filters
+.soc-lead-log-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.soc-lead-log-filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    select { font-size: 13px; }
+}
+
+.soc-lead-log-table {
+    td, th { vertical-align: middle; }
+
+    .button-small { padding: 2px 8px; font-size: 11px; height: auto; }
+}
+
+.soc-lead-pagination {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: $soc-gray;
+}
+
+.soc-lead-empty {
+    color: $soc-gray;
+    font-style: italic;
+    margin: 12px 0;
+}
+
+// 5-column grid variant for stats
+.soc-grid--5 {
+    grid-template-columns: repeat(5, 1fr);
+
+    @media (max-width: 1100px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.soc-lead-source-cell {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 11px;
+    color: $soc-gray;
+}
+
+.soc-lead-actions-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+// ============================================================
+// Lead Details Modal
+// ============================================================
+.soc-lead-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, .55);
+    }
+
+    &__box {
+        position: relative;
+        z-index: 1;
+        background: #fff;
+        border-radius: $soc-radius;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, .22);
+        width: min(700px, calc(100vw - 40px));
+        max-height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid #e0e0e0;
+
+        h3 {
+            margin: 0;
+            font-size: 15px;
+        }
+    }
+
+    &__close {
+        background: none;
+        border: none;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        color: $soc-gray;
+        padding: 0 4px;
+
+        &:hover { color: $soc-danger; }
+    }
+
+    &__body {
+        padding: 16px 20px;
+        overflow-y: auto;
+    }
+
+    &__response-wrap {
+        margin-top: 14px;
+
+        strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: $soc-gray;
+        }
+    }
+}
+
+body.soc-modal-open {
+    overflow: hidden;
+}
+

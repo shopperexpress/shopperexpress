@@ -22,6 +22,7 @@
         SOC.bindApiTest();
         SOC.bindDbCleanup();
         SOC.bindApiSettings();
+        SOC.bindLeadDelivery();
     };
 
     // ----------------------------------------------------------------
@@ -556,6 +557,183 @@
                 $btn.prop('disabled', false);
             });
         });
+    };
+
+    // ----------------------------------------------------------------
+    // Lead Delivery module
+    // ----------------------------------------------------------------
+    SOC.bindLeadDelivery = function () {
+        if ( ! $('#soc-lead-save-settings').length ) {
+            return;
+        }
+
+        // Toggle API-only rows when delivery method changes.
+        $('input[name="adf_delivery_method"]').on('change', function () {
+            var isApi = $(this).val() === 'api';
+            $('.soc-lead-api-row').toggle( isApi );
+        });
+
+        // Show/hide notify email row.
+        $('#soc-lead-notify-admin').on('change', function () {
+            $('#soc-lead-notify-email-row').toggle( this.checked );
+        });
+
+        // Show/hide secret key input.
+        $('#soc-lead-key-edit').on('click', function () {
+            $('#soc-lead-key-masked').hide();
+            $(this).hide();
+            $('#soc-lead-key-input').show().trigger('focus');
+        });
+
+        // Save settings.
+        $('#soc-lead-save-settings').on('click', function () {
+            var $btn = $(this);
+            $btn.prop('disabled', true);
+
+            SOC.ajax(
+                'soc_lead_settings_save',
+                {
+                    delivery_method : $('input[name="adf_delivery_method"]:checked').val() || 'email',
+                    api_endpoint    : $('#soc-lead-endpoint').val().trim(),
+                    secret_key      : $('#soc-lead-key-input').val().trim(),
+                    timeout         : parseInt( $('#soc-lead-timeout').val(), 10 ) || 10,
+                    fallback_email  : $('#soc-lead-fallback').is(':checked') ? 1 : 0,
+                    site_name       : $('#soc-lead-site-name').val().trim(),
+                    notify_admin    : $('#soc-lead-notify-admin').is(':checked') ? 1 : 0,
+                    notify_email    : $('#soc-lead-notify-email').val().trim(),
+                    max_retries     : parseInt( $('#soc-lead-max-retries').val(), 10 ) || 0,
+                    dedup_minutes   : parseInt( $('#soc-lead-dedup').val(), 10 ) || 0,
+                    wpforms_ids     : $('#soc-lead-wpforms-ids').val().trim(),
+                },
+                function (data) {
+                    SOC.showSuccess('Settings saved.');
+                    $btn.prop('disabled', false);
+                    if ( data.api_configured ) {
+                        $('.soc-badge.soc-badge--warn').first()
+                            .removeClass('soc-badge--warn').addClass('soc-badge--ok')
+                            .text('Configured');
+                    }
+                    $('#soc-lead-key-input').val('').hide();
+                    $('#soc-lead-key-masked').show();
+                    $('#soc-lead-key-edit').show();
+                },
+                function (msg) {
+                    SOC.showError(msg);
+                    $btn.prop('disabled', false);
+                }
+            );
+        });
+
+        // Test API connection.
+        $('#soc-lead-test-connection').on('click', function () {
+            var $btn    = $(this);
+            var $result = $('#soc-lead-test-result');
+
+            $btn.prop('disabled', true);
+            $result.text('Testing…').removeClass('is-ok is-fail');
+
+            SOC.ajax(
+                'soc_lead_test_connection',
+                {},
+                function (data) {
+                    $result.text('✓ OK (HTTP ' + (data.response_code || '2xx') + ')').addClass('is-ok');
+                    $btn.prop('disabled', false);
+                },
+                function (msg) {
+                    $result.text('✗ ' + msg).addClass('is-fail');
+                    $btn.prop('disabled', false);
+                }
+            );
+        });
+
+        // Filter log.
+        $('#soc-lead-filter-btn').on('click', function () {
+            SOC.loadLeadLog( $('#soc-lead-filter-status').val(), 1 );
+        });
+
+        // Paginate — delegated because the table is replaced by AJAX.
+        $(document).on('click', '.soc-lead-page-btn', function () {
+            var page   = parseInt( $(this).data('page'), 10 ) || 1;
+            var status = $('#soc-lead-filter-status').val() || 'all';
+            SOC.loadLeadLog( status, page );
+        });
+
+        // Retry button — delegated.
+        $(document).on('click', '.soc-lead-retry-btn', function () {
+            var $btn   = $(this);
+            var log_id = parseInt( $btn.data('log-id'), 10 );
+
+            if ( ! log_id ) { return; }
+
+            $btn.prop('disabled', true).text('…');
+
+            SOC.ajax(
+                'soc_lead_retry',
+                { log_id: log_id },
+                function () {
+                    SOC.showSuccess('Lead re-sent.');
+                    SOC.loadLeadLog( $('#soc-lead-filter-status').val() || 'all', 1 );
+                },
+                function (msg) {
+                    SOC.showError(msg);
+                    $btn.prop('disabled', false).text('Retry');
+                }
+            );
+        });
+
+        // Details button — open modal with error + raw response.
+        $(document).on('click', '.soc-lead-detail-btn', function () {
+            var $btn = $(this);
+            var response = $btn.data('response') || '';
+            var pretty = response;
+            try {
+                var parsed = JSON.parse( response );
+                pretty = JSON.stringify( parsed, null, 2 );
+            } catch (e) { /* not JSON, use raw */ }
+
+            $('#soc-modal-name').text( $btn.data('name') || '—' );
+            $('#soc-modal-time').text( $btn.data('time') || '—' );
+            $('#soc-modal-code').text( $btn.data('code') || '—' );
+            $('#soc-modal-error').text( $btn.data('error') || '—' );
+            $('#soc-modal-response').text( pretty || '(empty)' );
+
+            SOC.openLeadModal();
+        });
+
+        // Modal close.
+        $(document).on('click', '.soc-lead-modal__close, .soc-lead-modal__backdrop', function () {
+            SOC.closeLeadModal();
+        });
+        $(document).on('keydown', function (e) {
+            if ( e.key === 'Escape' ) { SOC.closeLeadModal(); }
+        });
+    };
+
+    SOC.openLeadModal = function () {
+        $('#soc-lead-modal').fadeIn(150);
+        $('body').addClass('soc-modal-open');
+    };
+
+    SOC.closeLeadModal = function () {
+        $('#soc-lead-modal').fadeOut(150);
+        $('body').removeClass('soc-modal-open');
+    };
+
+    SOC.loadLeadLog = function ( status, page ) {
+        var $wrap = $('#soc-lead-log-wrap');
+        $wrap.css('opacity', 0.5);
+
+        SOC.ajax(
+            'soc_lead_log_filter',
+            { status: status || 'all', page: page || 1 },
+            function (data) {
+                $wrap.html(data.html).css('opacity', 1);
+            },
+            function (msg) {
+                $wrap.css('opacity', 1);
+                SOC.showError(msg);
+            }
+        );
     };
 
     // ----------------------------------------------------------------

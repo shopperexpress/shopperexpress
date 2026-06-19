@@ -111,6 +111,7 @@ if ( class_exists( 'App\\Components\\Theme' ) ) {
 
 add_action( 'after_switch_theme', 'flush_rewrite_rules' );
 add_action( 'switch_theme', array( \App\Components\Base\Import_Monitor_Cron::class, 'deactivate' ) );
+add_filter( 'cron_schedules', array( \App\Components\Base\ADF_Cron::class, 'add_cron_interval' ) );
 
 add_action(
 	'wp',

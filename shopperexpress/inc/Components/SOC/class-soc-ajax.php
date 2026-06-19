@@ -59,6 +59,13 @@ class SOC_Ajax {
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
+		// Lead Delivery.
+		'soc_lead_settings_save'      => 'handle_lead_settings_save',
+		'soc_lead_test_connection'    => 'handle_lead_test_connection',
+		'soc_lead_retry'              => 'handle_lead_retry',
+		'soc_lead_log_filter'         => 'handle_lead_log_filter',
+		// VDR Requests.
+		'soc_vdr_log_filter'          => 'handle_vdr_log_filter',
 	);
 
 	/**
@@ -705,5 +712,164 @@ class SOC_Ajax {
 		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] flushed via SOC" );
 
 		SOC_Response::success( array( 'group' => $group, 'deleted' => $deleted ) );
+	}
+
+	// =========================================================================
+	// Lead Delivery handlers
+	// =========================================================================
+
+	/**
+	 * Save ADF lead delivery settings.
+	 *
+	 * Expected POST: delivery_method, api_endpoint, secret_key (optional), timeout, fallback_email.
+	 */
+	private function handle_lead_settings_save(): void {
+		$method       = sanitize_key( $_POST['delivery_method'] ?? 'email' );
+		$endpoint     = esc_url_raw( wp_unslash( $_POST['api_endpoint'] ?? '' ) );
+		$key          = sanitize_text_field( wp_unslash( $_POST['secret_key'] ?? '' ) );
+		$timeout      = (int) ( $_POST['timeout'] ?? 10 );
+		$fallback     = ! empty( $_POST['fallback_email'] ) ? 1 : 0;
+		$site_name    = sanitize_text_field( wp_unslash( $_POST['site_name'] ?? '' ) );
+		$notify_admin = ! empty( $_POST['notify_admin'] ) ? 1 : 0;
+		$notify_email = sanitize_email( wp_unslash( $_POST['notify_email'] ?? '' ) );
+		$max_retries  = max( 0, min( 10, (int) ( $_POST['max_retries'] ?? 3 ) ) );
+		$dedup        = max( 0, (int) ( $_POST['dedup_minutes'] ?? 0 ) );
+		$wpforms_ids  = sanitize_text_field( wp_unslash( $_POST['wpforms_ids'] ?? '' ) );
+
+		if ( ! in_array( $method, array( 'email', 'api' ), true ) ) {
+			SOC_Response::error( 'Invalid delivery method.' );
+		}
+
+		update_option( 'adf_delivery_method', $method );
+		update_option( 'adf_api_fallback_email', $fallback );
+		update_option( 'adf_site_name', $site_name );
+		update_option( 'adf_notify_admin_on_failure', $notify_admin );
+		update_option( 'adf_max_retries', $max_retries );
+		update_option( 'adf_dedup_minutes', $dedup );
+		update_option( 'adf_wpforms_ids', $wpforms_ids );
+
+		if ( is_email( $notify_email ) ) {
+			update_option( 'adf_notify_email', $notify_email );
+		}
+
+		$client = new \App\Components\Base\ADF_Api_Client();
+		$client->save_endpoint( $endpoint );
+		$client->save_timeout( $timeout );
+
+		if ( '' !== $key ) {
+			$client->save_secret_key( $key );
+		}
+
+		SOC_Logger::write( 'lead', "ADF delivery settings saved. Method: {$method}" );
+
+		SOC_Response::success(
+			array(
+				'message'        => 'Settings saved.',
+				'api_configured' => $client->is_configured(),
+			)
+		);
+	}
+
+	/**
+	 * Test the configured API connection with a dummy payload.
+	 */
+	private function handle_lead_test_connection(): void {
+		$client = new \App\Components\Base\ADF_Api_Client();
+
+		if ( ! $client->is_configured() ) {
+			SOC_Response::error( 'API endpoint or secret key is not configured.' );
+		}
+
+		$result = $client->test_connection();
+
+		SOC_Logger::write( 'lead', 'ADF API connection test: ' . ( $result['success'] ? 'OK' : 'FAILED — ' . $result['error_message'] ) );
+
+		if ( $result['success'] ) {
+			SOC_Response::success(
+				array(
+					'message'       => 'Connection successful.',
+					'response_code' => $result['response_code'],
+				)
+			);
+		} else {
+			SOC_Response::error( 'Connection failed: ' . $result['error_message'] . ' (HTTP ' . $result['response_code'] . ')' );
+		}
+	}
+
+	/**
+	 * Retry a failed lead by its log ID.
+	 *
+	 * Expected POST: log_id (int).
+	 */
+	private function handle_lead_retry(): void {
+		$log_id = (int) ( $_POST['log_id'] ?? 0 );
+
+		if ( $log_id <= 0 ) {
+			SOC_Response::error( 'Invalid log ID.' );
+		}
+
+		$module = $this->modules['lead-delivery'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Lead Delivery module not available.' );
+		}
+
+		$result = $module->retry_lead( $log_id );
+
+		SOC_Logger::write( 'lead', "Manual retry for log #{$log_id}: " . ( $result['success'] ? 'OK' : 'FAILED' ) );
+
+		if ( $result['success'] ) {
+			SOC_Response::success( array( 'message' => $result['message'] ) );
+		} else {
+			SOC_Response::error( $result['message'] );
+		}
+	}
+
+	/**
+	 * Return a filtered/paginated HTML fragment of the lead log table.
+	 *
+	 * Expected POST: status (all|success|failed|pending), page (int).
+	 */
+	private function handle_lead_log_filter(): void {
+		$status = sanitize_key( $_POST['status'] ?? 'all' );
+		$page   = max( 1, (int) ( $_POST['page'] ?? 1 ) );
+
+		$module = $this->modules['lead-delivery'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Lead Delivery module not available.' );
+		}
+
+		$logs = $module->fetch_logs( $status, $page );
+
+		ob_start();
+		require get_template_directory() . '/inc/Components/SOC/views/lead-delivery-table.php';
+		$html = ob_get_clean();
+
+		SOC_Response::success( array( 'html' => $html ) );
+	}
+
+	/**
+	 * Return a filtered/paginated HTML fragment of the VDR request log table.
+	 *
+	 * Expected POST: result (all|success|error), page (int).
+	 */
+	private function handle_vdr_log_filter(): void {
+		$result = sanitize_key( $_POST['result'] ?? 'all' );
+		$page   = max( 1, (int) ( $_POST['page'] ?? 1 ) );
+
+		$module = $this->modules['vdr-requests'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'VDR Requests module not available.' );
+		}
+
+		$logs = $module->fetch_logs( $result, $page );
+
+		ob_start();
+		require get_template_directory() . '/inc/Components/SOC/views/vdr-requests-table.php';
+		$html = ob_get_clean();
+
+		SOC_Response::success( array( 'html' => $html ) );
 	}
 }
