@@ -326,6 +326,66 @@ add_filter(
 	2
 );
 
+/**
+ * Inject asc_event into the WPForms AJAX success response so asc-datalayer.js
+ * ajaxSuccess handler can fire ascPublishEvent without a separate client-side call.
+ *
+ * Filter signature: ( $response, $form_id, $form_data ) — $form_id is an int.
+ * wp_send_json_success( $response ) wraps it as { success: true, data: $response },
+ * so keys added here appear in JS as response.data.asc_event.
+ */
+add_filter(
+	'wpforms_ajax_submit_success_response',
+	function ( $response, $form_id, $form_data ) {
+
+		// Resolve form_type: find the field whose CSS class contains "asc_form_type",
+		// then read its submitted value from $_POST['wpforms']['fields'][$field_id].
+		$form_type       = 'unknown';
+		$submitted_fields = isset( $_POST['wpforms']['fields'] ) && is_array( $_POST['wpforms']['fields'] )
+			? wp_unslash( $_POST['wpforms']['fields'] )
+			: array();
+
+		if ( ! empty( $form_data['fields'] ) ) {
+			foreach ( $form_data['fields'] as $field_id => $field_cfg ) {
+				if ( ! empty( $field_cfg['css'] ) && false !== strpos( $field_cfg['css'], 'asc_form_type' ) ) {
+					$raw = $submitted_fields[ $field_id ] ?? '';
+					if ( is_array( $raw ) ) {
+						$raw = implode( '', $raw );
+					}
+					$form_type = sanitize_text_field( $raw ) ?: 'unknown';
+					break;
+				}
+			}
+		}
+
+		$page_type     = sanitize_text_field( wp_unslash( $_POST['asc_page_type'] ?? '' ) );
+		$page_location = esc_url_raw( wp_unslash( $_POST['asc_page_location'] ?? '' ) );
+		$items_raw     = wp_unslash( $_POST['asc_items'] ?? '[]' );
+		$items         = json_decode( $items_raw, true );
+		if ( ! is_array( $items ) ) {
+			$items = array();
+		}
+
+		$base = array(
+			'event_owner'   => 'intice',
+			'page_type'     => $page_type,
+			'page_location' => $page_location,
+			'form_id'       => 'wpforms_' . absint( $form_id ),
+			'form_type'     => $form_type,
+			'items'         => $items,
+		);
+
+		$response['asc_events'] = array(
+			array_merge( $base, array( 'event' => 'asc_form_submission' ) ),
+			array_merge( $base, array( 'event' => 'asc_form_submission_' . $form_type ) ),
+		);
+
+		return $response;
+	},
+	10,
+	3
+);
+
 add_filter(
 	'wpforms_smart_tags',
 	function ( $tags ) {

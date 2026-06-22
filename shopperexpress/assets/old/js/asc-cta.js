@@ -187,6 +187,7 @@
 
 	// Cache formType on submit — WPForms replaces the form DOM with a success message
 	// before wpformsAjaxSubmitSuccess fires, so hidden fields are gone by then.
+	// Also inject asc_datalayer context as hidden fields so PHP can build asc_event in the response.
 	document.addEventListener('submit', function (e) {
 		var formEl = e.target;
 		if (!formEl || !formEl.querySelector('input[name="wpforms[id]"]')) return;
@@ -194,6 +195,21 @@
 		var formType = getWpFormsFormType(formEl);
 		pendingFormTypes[formId] = formType;
 		console.log('[ASC] Step 1 – submit intercepted ✓', { formId: formId, formType: formType });
+
+		var dl = window.asc_datalayer || {};
+		var inject = {
+			asc_page_type:     dl.page_type     || '',
+			asc_page_location: window.location.href,
+			asc_items:         JSON.stringify(dl.items || [])
+		};
+		Object.keys(inject).forEach(function (name) {
+			if (formEl.querySelector('input[name="' + name + '"]')) return;
+			var inp = document.createElement('input');
+			inp.type  = 'hidden';
+			inp.name  = name;
+			inp.value = inject[name];
+			formEl.appendChild(inp);
+		});
 	}, true);
 
 	function pushFormSubmissionEvents(formEl, fallbackFormId) {
@@ -216,20 +232,11 @@
 		var formType = pendingFormTypes[formId] || (formEl && getWpFormsFormType(formEl)) || 'unknown';
 		delete pendingFormTypes[formId];
 
-		var payload = {
-			event_owner:   'intice',
-			page_type:     dl.page_type || '',
-			page_location: window.location.href,
-			form_id:       formId,
-			form_type:     formType,
-			items:         dl.items || []
-		};
-
-		console.log('[ASC] Step 2 – asc_form_submission firing ✓', payload);
-		console.log('[ASC] Step 3 – asc_form_submission_' + formType + ' firing ✓');
-
-		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission' }));
-		fireFormEvent(Object.assign({}, payload, { event: 'asc_form_submission_' + formType }));
+		// asc_form_submission events are fired by asc-datalayer.js ajaxSuccess
+		// after the server injects asc_event into the WPForms AJAX response.
+		console.log('[ASC] Step 2 – form submission handed off to server response ✓', {
+			formId: formId, formType: formType
+		});
 	}
 
 	// Path A: native CustomEvent (WPForms 1.8+)

@@ -48,7 +48,12 @@
 		try {
 			const response = JSON.parse(xhr.responseText);
 
-			if (response?.data?.asc_event) {
+			if (Array.isArray(response?.data?.asc_events)) {
+				response.data.asc_events.forEach(function (ev) {
+					window.ascPublishEvent(ev);
+					console.log('ASC Lead pushed:', ev);
+				});
+			} else if (response?.data?.asc_event) {
 				window.ascPublishEvent(response.data.asc_event);
 				console.log('ASC Lead pushed:', response.data.asc_event);
 			}
