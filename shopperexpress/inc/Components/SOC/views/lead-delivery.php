@@ -95,7 +95,18 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 				</td>
 			</tr>
 			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
-				<th><?php esc_html_e( 'Secret Key', 'shopperexpress' ); ?></th>
+				<th><?php esc_html_e( 'Dealer ID', 'shopperexpress' ); ?></th>
+				<td>
+					<input type="text"
+						id="soc-lead-dealer-id"
+						class="regular-text"
+						value="<?php echo esc_attr( $data['dealer_id'] ?? '' ); ?>"
+						placeholder="660">
+					<p class="description"><?php esc_html_e( 'Included as dealer_id in every ADF-XML API payload.', 'shopperexpress' ); ?></p>
+				</td>
+			</tr>
+			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+				<th><?php esc_html_e( 'API Key (X-API-Key)', 'shopperexpress' ); ?></th>
 				<td>
 					<span id="soc-lead-key-masked" class="soc-lead-key-display">
 						<?php echo esc_html( '' !== ( $data['secret_key_masked'] ?? '' ) ? $data['secret_key_masked'] : __( '(not set)', 'shopperexpress' ) ); ?>

@@ -66,6 +66,11 @@ class SOC_Ajax {
 		'soc_lead_log_filter'         => 'handle_lead_log_filter',
 		// VDR Requests.
 		'soc_vdr_log_filter'          => 'handle_vdr_log_filter',
+		// JSON-LD Schema Builder.
+		'soc_json_ld_save'            => 'handle_json_ld_save',
+		'soc_json_ld_preview'         => 'handle_json_ld_preview',
+		'soc_json_ld_get_posts'       => 'handle_json_ld_get_posts',
+		'soc_json_ld_reset'           => 'handle_json_ld_reset',
 	);
 
 	/**
@@ -726,6 +731,7 @@ class SOC_Ajax {
 	private function handle_lead_settings_save(): void {
 		$method       = sanitize_key( $_POST['delivery_method'] ?? 'email' );
 		$endpoint     = esc_url_raw( wp_unslash( $_POST['api_endpoint'] ?? '' ) );
+		$dealer_id    = sanitize_text_field( wp_unslash( $_POST['dealer_id'] ?? '' ) );
 		$key          = sanitize_text_field( wp_unslash( $_POST['secret_key'] ?? '' ) );
 		$timeout      = (int) ( $_POST['timeout'] ?? 10 );
 		$fallback     = ! empty( $_POST['fallback_email'] ) ? 1 : 0;
@@ -754,6 +760,7 @@ class SOC_Ajax {
 
 		$client = new \App\Components\Base\ADF_Api_Client();
 		$client->save_endpoint( $endpoint );
+		$client->save_dealer_id( $dealer_id );
 		$client->save_timeout( $timeout );
 
 		if ( '' !== $key ) {
@@ -871,5 +878,289 @@ class SOC_Ajax {
 		$html = ob_get_clean();
 
 		SOC_Response::success( array( 'html' => $html ) );
+	}
+
+	// =========================================================================
+	// JSON-LD Schema Builder handlers
+	// =========================================================================
+
+	/**
+	 * Save the JSON-LD builder config to WP option.
+	 *
+	 * Expected POST: config (JSON string with mode, post_types, archive_limit, vehicle toggles).
+	 */
+	private function handle_json_ld_save(): void {
+		$raw = wp_unslash( $_POST['config'] ?? '' );
+
+		if ( empty( $raw ) ) {
+			SOC_Response::error( 'No config payload received.' );
+		}
+
+		$input = json_decode( $raw, true );
+
+		if ( ! is_array( $input ) ) {
+			SOC_Response::error( 'Invalid JSON config.' );
+		}
+
+		// Sanitize mode.
+		$mode = sanitize_key( $input['mode'] ?? 'legacy' );
+		if ( ! in_array( $mode, array( 'legacy', 'builder' ), true ) ) {
+			$mode = 'legacy';
+		}
+
+		// Sanitize post_types.
+		$allowed_pts = array( 'listings', 'used-listings', 'lease-offers', 'finance-offers', 'conditional-offers', 'research' );
+		$post_types  = array();
+		if ( isset( $input['post_types'] ) && is_array( $input['post_types'] ) ) {
+			foreach ( $input['post_types'] as $pt ) {
+				$pt = sanitize_key( $pt );
+				if ( in_array( $pt, $allowed_pts, true ) ) {
+					$post_types[] = $pt;
+				}
+			}
+		}
+
+		// Sanitize archive limit.
+		$archive_limit = max( 1, min( 100, (int) ( $input['archive_limit'] ?? 24 ) ) );
+
+		// Sanitize vehicle prop config (each prop can be bool or {enabled,acf_key,static_value}).
+		$allowed_props = array(
+			'name', 'description', 'image', 'brand', 'model', 'vehicleConfiguration',
+			'vehicleModelDate', 'bodyType', 'vehicleIdentificationNumber', 'vehicleEngine',
+			'fuelType', 'vehicleTransmission', 'mileageFromOdometer', 'color',
+			'vehicleInteriorColor', 'offers', 'additionalProperty',
+			// Extended Specs.
+			'numberOfDoors', 'driveWheelConfiguration', 'vehicleSeatingCapacity',
+			'fuelConsumption', 'knownVehicleDamages', 'vehicleSpecialUsage',
+			'meetsEmissionStandard', 'numberOfForwardGears',
+		);
+		$vehicle     = array();
+		$raw_vehicle = is_array( $input['vehicle'] ?? null ) ? $input['vehicle'] : array();
+		foreach ( $allowed_props as $prop ) {
+			$raw_prop = $raw_vehicle[ $prop ] ?? false;
+			if ( is_array( $raw_prop ) ) {
+				$vehicle[ $prop ] = array(
+					'enabled'      => ! empty( $raw_prop['enabled'] ),
+					'acf_key'      => sanitize_text_field( $raw_prop['acf_key']      ?? '' ),
+					'static_value' => sanitize_text_field( $raw_prop['static_value'] ?? '' ),
+				);
+			} else {
+				$vehicle[ $prop ] = (bool) $raw_prop;
+			}
+		}
+		$vehicle['features_limit'] = max( 0, min( 50, (int) ( $raw_vehicle['features_limit'] ?? 0 ) ) );
+
+		// Sanitize offers_sub.
+		$raw_osub = is_array( $raw_vehicle['offers_sub'] ?? null ) ? $raw_vehicle['offers_sub'] : array();
+		$allowed_avail     = array( 'InStock', 'OutOfStock', 'PreOrder', 'SoldOut', 'Discontinued' );
+		$allowed_condition = array( 'auto', 'NewCondition', 'UsedCondition', 'RefurbishedCondition' );
+		$avail_val = sanitize_text_field( $raw_osub['availability'] ?? 'InStock' );
+		$cond_val  = sanitize_text_field( $raw_osub['condition'] ?? 'auto' );
+		$vehicle['offers_sub'] = array(
+			'price_currency'  => sanitize_text_field( $raw_osub['price_currency']  ?? 'USD' ),
+			'price_key'       => sanitize_text_field( $raw_osub['price_key']       ?? $raw_osub['price_acf'] ?? $raw_osub['price_api'] ?? 'price' ),
+			'availability'    => in_array( $avail_val, $allowed_avail, true ) ? $avail_val : 'InStock',
+			'condition'       => in_array( $cond_val, $allowed_condition, true ) ? $cond_val : 'auto',
+			'seller_name_key' => sanitize_text_field( $raw_osub['seller_name_key'] ?? $raw_osub['seller_name_acf'] ?? $raw_osub['seller_name_api'] ?? 'dealer_name' ),
+			'seller_url_key'  => sanitize_text_field( $raw_osub['seller_url_key']  ?? $raw_osub['seller_url_acf']  ?? 'dealer_url' ),
+		);
+
+		// Sanitize custom properties.
+		$custom_properties = array();
+		if ( isset( $input['custom_properties'] ) && is_array( $input['custom_properties'] ) ) {
+			foreach ( $input['custom_properties'] as $cp ) {
+				if ( ! is_array( $cp ) ) {
+					continue;
+				}
+				$cp_key = sanitize_text_field( $cp['key'] ?? '' );
+				$cp_val = sanitize_text_field( $cp['value'] ?? '' );
+				if ( $cp_key ) {
+					$custom_properties[] = array( 'key' => $cp_key, 'value' => $cp_val );
+				}
+			}
+		}
+
+		// Sanitize non-vehicle schema type configs.
+		$non_vehicle_types = array(
+			'lease_offer', 'finance_offer', 'conditional_offer',
+			'service_offer', 'archive_srp', 'research',
+			'srp_item_listings', 'srp_item_used_listings',
+			'archive_srp_listings', 'archive_srp_used_listings',
+			'lease_offer_srp', 'finance_offer_srp', 'conditional_offer_srp', 'service_offer_srp',
+			'research_srp',
+		);
+		$non_vehicle_cfg = array();
+		foreach ( $non_vehicle_types as $type_key ) {
+			$raw_type = is_array( $input[ $type_key ] ?? null ) ? $input[ $type_key ] : array();
+			$type_cfg = array();
+			foreach ( $raw_type as $prop_key => $prop_val ) {
+				$prop_key = sanitize_key( $prop_key );
+				if ( ! $prop_key ) continue;
+				if ( is_array( $prop_val ) ) {
+					$type_cfg[ $prop_key ] = array(
+						'enabled'      => ! empty( $prop_val['enabled'] ),
+						'acf_key'      => sanitize_text_field( $prop_val['acf_key']      ?? '' ),
+						'static_value' => sanitize_text_field( $prop_val['static_value'] ?? '' ),
+					);
+				} else {
+					$type_cfg[ $prop_key ] = (bool) $prop_val;
+				}
+			}
+			$non_vehicle_cfg[ $type_key ] = $type_cfg;
+		}
+
+		// Sanitize vehicle_listings and vehicle_used_listings (same structure as vehicle).
+		$type_specific_vehicle = array();
+		foreach ( array( 'vehicle_listings', 'vehicle_used_listings' ) as $vkey ) {
+			$raw_vt = is_array( $input[ $vkey ] ?? null ) ? $input[ $vkey ] : array();
+			$vt_cfg = array();
+			foreach ( $allowed_props as $prop ) {
+				$raw_prop = $raw_vt[ $prop ] ?? false;
+				if ( is_array( $raw_prop ) ) {
+					$vt_cfg[ $prop ] = array(
+						'enabled'      => ! empty( $raw_prop['enabled'] ),
+						'acf_key'      => sanitize_text_field( $raw_prop['acf_key']      ?? '' ),
+						'static_value' => sanitize_text_field( $raw_prop['static_value'] ?? '' ),
+					);
+				} elseif ( $raw_prop !== false ) {
+					$vt_cfg[ $prop ] = (bool) $raw_prop;
+				}
+			}
+			// Persist features_limit and offers_sub per post type.
+			$vt_cfg['features_limit'] = max( 0, min( 50, (int) ( $raw_vt['features_limit'] ?? $raw_vehicle['features_limit'] ?? 0 ) ) );
+			$raw_vt_osub = is_array( $raw_vt['offers_sub'] ?? null ) ? $raw_vt['offers_sub'] : $raw_osub;
+			$vt_avail    = sanitize_text_field( $raw_vt_osub['availability'] ?? 'InStock' );
+			$vt_cond     = sanitize_text_field( $raw_vt_osub['condition'] ?? 'auto' );
+			$vt_cfg['offers_sub'] = array(
+				'price_currency'  => sanitize_text_field( $raw_vt_osub['price_currency']  ?? 'USD' ),
+				'price_key'       => sanitize_text_field( $raw_vt_osub['price_key'] ?? $raw_vt_osub['price_acf'] ?? $raw_vt_osub['price_api'] ?? 'price' ),
+				'availability'    => in_array( $vt_avail, $allowed_avail, true ) ? $vt_avail : 'InStock',
+				'condition'       => in_array( $vt_cond, $allowed_condition, true ) ? $vt_cond : 'auto',
+				'seller_name_key' => sanitize_text_field( $raw_vt_osub['seller_name_key'] ?? $raw_vt_osub['seller_name_acf'] ?? $raw_vt_osub['seller_name_api'] ?? 'dealer_name' ),
+				'seller_url_key'  => sanitize_text_field( $raw_vt_osub['seller_url_key']  ?? $raw_vt_osub['seller_url_acf']  ?? 'dealer_url' ),
+			);
+			$type_specific_vehicle[ $vkey ] = $vt_cfg;
+		}
+
+		// Sanitize SRP offers sub-fields per post type.
+		$srp_osub_sanitized = array();
+		foreach ( array( 'srp_item_offers_sub_listings', 'srp_item_offers_sub_used_listings' ) as $osub_key ) {
+			$raw_so   = is_array( $input[ $osub_key ] ?? null ) ? $input[ $osub_key ] : array();
+			$so_avail = sanitize_text_field( $raw_so['availability'] ?? 'InStock' );
+			$so_cond  = sanitize_text_field( $raw_so['condition'] ?? 'auto' );
+			$srp_osub_sanitized[ $osub_key ] = array(
+				'price_currency'  => sanitize_text_field( $raw_so['price_currency'] ?? 'USD' ),
+				'price_key'       => sanitize_text_field( $raw_so['price_key'] ?? $raw_so['price_api'] ?? 'price' ),
+				'availability'    => in_array( $so_avail, $allowed_avail, true ) ? $so_avail : 'InStock',
+				'condition'       => in_array( $so_cond, $allowed_condition, true ) ? $so_cond : 'auto',
+				'show_seller'     => sanitize_text_field( $raw_so['show_seller'] ?? '1' ),
+				'seller_name_key' => sanitize_text_field( $raw_so['seller_name_key'] ?? $raw_so['seller_name_api'] ?? 'dealer_name' ),
+			);
+		}
+
+		$config = array_merge(
+			array(
+				'mode'              => $mode,
+				'post_types'        => $post_types,
+				'archive_limit'     => $archive_limit,
+				'vehicle'           => $vehicle,
+				'custom_properties' => $custom_properties,
+			),
+			$non_vehicle_cfg,
+			$type_specific_vehicle,
+			$srp_osub_sanitized
+		);
+
+		update_option( 'json_ld_field_config', $config );
+
+		SOC_Logger::write( 'general', "JSON-LD config saved. Mode: {$mode}" );
+
+		SOC_Response::success( array( 'message' => 'JSON-LD config saved.', 'mode' => $mode ) );
+	}
+
+	/**
+	 * Return the actual JSON-LD output for a given post ID, using the submitted config preview.
+	 *
+	 * Expected POST: post_id (int), config (JSON string — optional, uses saved config if absent).
+	 */
+	private function handle_json_ld_preview(): void {
+		$post_id = absint( $_POST['post_id'] ?? 0 );
+
+		if ( ! $post_id || ! get_post( $post_id ) ) {
+			SOC_Response::error( 'Valid post_id required.' );
+		}
+
+		// If a preview config is submitted, temporarily override the saved option.
+		$raw = wp_unslash( $_POST['config'] ?? '' );
+		if ( $raw ) {
+			$preview_cfg = json_decode( $raw, true );
+			if ( is_array( $preview_cfg ) ) {
+				add_filter(
+					'pre_option_json_ld_field_config',
+					function () use ( $preview_cfg ) {
+						return $preview_cfg;
+					}
+				);
+			}
+		}
+
+		// Boot a minimal WP query context so get_the_ID(), is_singular() etc. work.
+		global $wp_query, $post;
+		$post     = get_post( $post_id ); // phpcs:ignore
+		$wp_query = new \WP_Query( array( 'p' => $post_id, 'post_type' => $post->post_type ) ); // phpcs:ignore
+		setup_postdata( $post );
+
+		$instance = new \App\Components\Base\JSON_LD();
+		$json_tag = $instance->get_json();
+
+		wp_reset_postdata();
+
+		// Strip script wrapper — return only raw JSON for the preview panel.
+		$json_raw = preg_replace( '/<\/?script[^>]*>/i', '', $json_tag );
+
+		SOC_Response::success( array( 'json' => trim( $json_raw ) ) );
+	}
+
+	/**
+	 * Return recent posts for a given post type (used by the Real preview picker).
+	 *
+	 * Expected POST: post_type (string).
+	 */
+	private function handle_json_ld_get_posts(): void {
+		$post_type = sanitize_key( $_POST['post_type'] ?? 'listings' );
+		$allowed   = array( 'listings', 'used-listings', 'lease-offers', 'finance-offers', 'conditional-offers', 'service-offers', 'research' );
+		if ( ! in_array( $post_type, $allowed, true ) ) {
+			SOC_Response::error( 'Invalid post type.' );
+		}
+
+		$query = new \WP_Query( array(
+			'post_type'      => $post_type,
+			'post_status'    => 'publish',
+			'posts_per_page' => 20,
+			'orderby'        => 'modified',
+			'order'          => 'DESC',
+			'no_found_rows'  => true,
+		) );
+
+		$posts = array();
+		foreach ( $query->posts as $p ) {
+			$posts[] = array(
+				'id'    => $p->ID,
+				'title' => $p->post_title ?: '(no title) #' . $p->ID,
+			);
+		}
+
+		SOC_Response::success( array( 'posts' => $posts ) );
+	}
+
+	/**
+	 * Reset JSON-LD config to defaults by deleting the WP option.
+	 */
+	private function handle_json_ld_reset(): void {
+		delete_option( 'json_ld_field_config' );
+
+		SOC_Logger::write( 'general', 'JSON-LD config reset to defaults.' );
+
+		SOC_Response::success( array( 'message' => 'Config reset to defaults.' ) );
 	}
 }

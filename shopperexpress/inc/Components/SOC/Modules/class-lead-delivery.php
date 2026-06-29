@@ -72,6 +72,7 @@ class Lead_Delivery implements SOC_Module {
 		$data = array(
 			'delivery_method'   => get_option( 'adf_delivery_method', 'email' ),
 			'api_endpoint'      => get_option( ADF_Api_Client::OPTION_ENDPOINT, '' ),
+			'dealer_id'         => get_option( ADF_Api_Client::OPTION_DEALER_ID, '' ),
 			'api_configured'    => $client->is_configured(),
 			'fallback_email'    => (bool) get_option( 'adf_api_fallback_email', 0 ),
 			'timeout'           => (int) get_option( ADF_Api_Client::OPTION_TIMEOUT, 10 ),

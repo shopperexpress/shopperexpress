@@ -17,9 +17,6 @@ $soc-radius: 4px;
 // ============================================================
 // Wrapper & Title
 // ============================================================
-.soc-wrap {
-    max-width: 1400px;
-}
 
 .soc-title {
     display: flex;
@@ -363,11 +360,11 @@ $soc-radius: 4px;
         }
     }
 
-    input:checked + .soc-toggle__slider {
+    input:checked+.soc-toggle__slider {
         background: $soc-success;
     }
 
-    input:checked + .soc-toggle__slider::before {
+    input:checked+.soc-toggle__slider::before {
         transform: translateX(22px);
     }
 }
@@ -492,8 +489,13 @@ $soc-radius: 4px;
     font-size: 13px;
     font-weight: 600;
 
-    &.is-ok    { color: $soc-success; }
-    &.is-fail  { color: $soc-danger; }
+    &.is-ok {
+        color: $soc-success;
+    }
+
+    &.is-fail {
+        color: $soc-danger;
+    }
 }
 
 .soc-lead-key-display {
@@ -505,8 +507,15 @@ $soc-radius: 4px;
 }
 
 // Stats cards — colour overrides for numeric cells
-.soc-lead-stat--success { color: $soc-success; font-weight: 700; }
-.soc-lead-stat--failed  { color: $soc-danger;  font-weight: 700; }
+.soc-lead-stat--success {
+    color: $soc-success;
+    font-weight: 700;
+}
+
+.soc-lead-stat--failed {
+    color: $soc-danger;
+    font-weight: 700;
+}
 
 // Log table header with inline filters
 .soc-lead-log-header {
@@ -522,13 +531,23 @@ $soc-radius: 4px;
     align-items: center;
     gap: 6px;
 
-    select { font-size: 13px; }
+    select {
+        font-size: 13px;
+    }
 }
 
 .soc-lead-log-table {
-    td, th { vertical-align: middle; }
 
-    .button-small { padding: 2px 8px; font-size: 11px; height: auto; }
+    td,
+    th {
+        vertical-align: middle;
+    }
+
+    .button-small {
+        padding: 2px 8px;
+        font-size: 11px;
+        height: auto;
+    }
 }
 
 .soc-lead-pagination {
@@ -622,7 +641,9 @@ $soc-radius: 4px;
         color: $soc-gray;
         padding: 0 4px;
 
-        &:hover { color: $soc-danger; }
+        &:hover {
+            color: $soc-danger;
+        }
     }
 
     &__body {
@@ -647,4 +668,3 @@ $soc-radius: 4px;
 body.soc-modal-open {
     overflow: hidden;
 }
-

@@ -88,6 +88,7 @@ A unified WordPress admin dashboard at **WP Admin → Operation Center**.
 | API Settings | Intice Nexus API mode, credentials, cache controls |
 | **Lead Delivery** | ADFXML lead delivery settings, log, retry |
 | **VDR Requests** | Vehicle Detail Report API call log & statistics |
+| **JSON-LD Schema** | Visual builder for structured-data schema output (field toggle, source mapping, live preview) |
 
 ---
 
@@ -156,11 +157,13 @@ inc/
       Modules/
         class-lead-delivery.php              # Lead Delivery SOC module
         class-vdr-requests.php               # VDR Requests SOC module
+        class-json-ld-settings.php           # JSON-LD Schema Builder SOC module
       views/
         lead-delivery.php                    # Settings + stats + log view
         lead-delivery-table.php              # Paginated log table partial
         vdr-requests.php                     # VDR stats + log view
         vdr-requests-table.php               # Paginated VDR log table partial
+        json-ld-settings.php                 # JSON-LD builder UI (3-col: sidebar/builder/preview)
 
 assets/src/
   styles/soc.scss                            # SOC admin styles (incl. Lead Delivery + modal)
@@ -210,7 +213,16 @@ If the fields are empty, built-in defaults are used.
 
 ## Vehicle JSON-LD Schema
 
-All VDP pages (standard ACF mode and API mode) output a `schema.org/Vehicle` JSON-LD block with `additionalProperty` entries populated from the vehicle's **Highlighted Features** (`features_items` repeater). Features are sorted by `ranking` (desc), truncated by the configured `limit_feature_list` value, and text can be overridden per-feature via `feature_list_chromedata`.
+All VDP pages (standard ACF mode and API mode) output a `schema.org/Vehicle` JSON-LD block. The output mode is controlled in **Operation Center → JSON-LD Schema**:
+
+- **Legacy mode** — hardcoded property set (default, unchanged behaviour).
+- **Builder mode** — field selection and source mapping driven by the config saved in the SOC panel. Each schema property can be toggled on/off and its data source (ACF field key, API field key, or static value) configured without touching code.
+
+The builder config is stored in WP option `json_ld_field_config`. `JSON_LD::get_config()` returns the option merged with hardcoded defaults.
+
+`additionalProperty` entries are populated from the vehicle's **Highlighted Features** (`features_items` repeater). Features are sorted by `ranking` (desc), truncated by the configured `limit_feature_list` value, and text can be overridden per-feature via `feature_list_chromedata`.
+
+The SOC panel also supports custom key/value properties, a live JSON preview (Demo and Real/live-post modes), and a reset-to-defaults action.
 
 ---
 

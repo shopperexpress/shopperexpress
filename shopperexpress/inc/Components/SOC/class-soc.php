@@ -19,6 +19,7 @@ use App\Components\SOC\Modules\Import_Monitor_Panel;
 use App\Components\SOC\Modules\Api_Settings;
 use App\Components\SOC\Modules\Lead_Delivery;
 use App\Components\SOC\Modules\VDR_Requests;
+use App\Components\SOC\Modules\Json_Ld_Settings;
 
 /**
  * SOC Component
@@ -70,6 +71,7 @@ class SOC implements Theme_Component {
 			new Api_Settings(),
 			new Lead_Delivery(),
 			new VDR_Requests(),
+			new Json_Ld_Settings(),
 		);
 
 		foreach ( $module_classes as $module ) {

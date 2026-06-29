@@ -33,6 +33,11 @@ class ADF_Api_Client {
 	const OPTION_TIMEOUT    = 'adf_api_timeout';
 
 	/**
+	 * WP option key for the dealer ID included in every payload.
+	 */
+	const OPTION_DEALER_ID  = 'adf_api_dealer_id';
+
+	/**
 	 * Encryption salt option key.
 	 */
 	const OPTION_SALT       = 'adf_api_key_salt';
@@ -57,11 +62,17 @@ class ADF_Api_Client {
 			return $this->result( false, 0, '', 'API secret key is not configured.' );
 		}
 
+		$dealer_id = get_option( self::OPTION_DEALER_ID, '' );
+
 		$body = wp_json_encode(
-			array(
-				'payload_type' => 'adfxml',
-				'source'       => 'wordpress',
-				'adfxml'       => $xml,
+			array_filter(
+				array(
+					'payload_type' => 'adfxml',
+					'source'       => 'wordpress',
+					'dealer_id'    => '' !== $dealer_id ? $dealer_id : null,
+					'adfxml'       => $xml,
+				),
+				fn( $v ) => null !== $v
 			)
 		);
 
@@ -72,9 +83,9 @@ class ADF_Api_Client {
 				'redirection' => 3,
 				'httpversion' => '1.1',
 				'headers'     => array(
-					'Content-Type'  => 'application/json',
-					'Accept'        => 'application/json',
-					'Authorization' => 'Bearer ' . $secret_key,
+					'Content-Type' => 'application/json',
+					'Accept'       => 'application/json',
+					'X-API-Key'    => $secret_key,
 				),
 				'body'        => $body,
 			)
@@ -132,6 +143,16 @@ class ADF_Api_Client {
 	 */
 	public function save_timeout( int $seconds ): void {
 		update_option( self::OPTION_TIMEOUT, max( 5, min( 60, $seconds ) ) );
+	}
+
+	/**
+	 * Save the dealer ID included in every API payload.
+	 *
+	 * @param string $dealer_id Dealer identifier.
+	 * @return void
+	 */
+	public function save_dealer_id( string $dealer_id ): void {
+		update_option( self::OPTION_DEALER_ID, sanitize_text_field( $dealer_id ) );
 	}
 
 	/**

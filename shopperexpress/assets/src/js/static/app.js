@@ -2918,11 +2918,45 @@ function initProductsFiltration() {
 }
 
 function initUnlockSavings() {
+	// Keyed by "action|post_id|form_id" → jQuery Deferred promise from prefetch
+	const prefetchCache = {};
+
+	function getPrefetchKey(action, post_id, form_id) {
+		return `${action}|${post_id}|${form_id}`;
+	}
+
+	let prefetchDone = false;
+
 	jQuery('[data-target="#buttonModal"], [data-target="#unlockSavingsModal"], [data-target="#Disclosure_loan-acf"], [data-target="#Disclosure_lease-acf"], [data-target="#Disclosure_Cash-acf"]').each(function() {
 		const unlockButton = jQuery(this);
 
 		if (!unlockButton.data('is-init')) {
 			unlockButton.data('is-init', true);
+
+			unlockButton.on('mouseenter pointerdown', function onFirstHover() {
+				if (prefetchDone) return;
+				prefetchDone = true;
+
+				const post_id = unlockButton.data('post') || '';
+				const form_id = unlockButton.data('form') || '';
+				const target  = unlockButton.data('target');
+
+				let action;
+				if (target === '#unlockSavingsModal' || target === '#buttonModal') {
+					action = 'unlock_form';
+				} else if (target === '#Disclosure_loan-acf' || target === '#Disclosure_lease-acf' || target === '#Disclosure_Cash-acf') {
+					action = 'offers_form';
+				} else {
+					return;
+				}
+
+				const key = getPrefetchKey(action, post_id, form_id);
+				prefetchCache[key] = jQuery.ajax({
+					url: window.location.href,
+					type: 'POST',
+					data: { action, form_id, post_id, target }
+				});
+			});
 
 			unlockButton.on('click', function(e) {
 				e.preventDefault();
@@ -3001,46 +3035,35 @@ function initUnlockSavings() {
 		}
 	}
 
-	/**
-	 * Sends an AJAX request with the given action and post ID.
-	 *
-	 * @param {string} action - The action to be performed.
-	 * @param {number} post_id - The ID of the post to be used in the request.
-	 * @param {string} form_id - The ID of the form to be used in the request.
-	 * @param {string} target - The selector for the target form.
-	 * @param {string} formSelector - The selector for the form element.
-	 */
 	function sendRequest(action, post_id, form_id, target, formSelector) {
-		jQuery.ajax({
+		const key = getPrefetchKey(action, post_id, form_id);
+
+		// Use the prefetched promise if available, then clear it so next click always fires fresh
+		const promise = prefetchCache[key] || jQuery.ajax({
 			url: window.location.href,
 			type: 'POST',
-			data: {
-				action: action,
-				form_id: form_id,
-				post_id: post_id,
-				target: target
-			},
-			success: function(response) {
-				const tempDiv = jQuery('<div>').html(response);
-				const form = jQuery(formSelector);
+			data: { action, form_id, post_id, target }
+		});
+		delete prefetchCache[key];
 
-				// Write the post ID into the hidden input
-				// tempDiv.find('.post-id input').val(post_id);
-				jQuery('.post-id input').val(post_id);
+		promise.done(function(response) {
+			const tempDiv = jQuery('<div>').html(response);
+			const form = jQuery(formSelector);
 
-				// Replace the form with the new one
-				form.html(tempDiv.children());
+			jQuery('.post-id input').val(post_id);
 
-				// Write the user journey to the input from the local storage
-				updateJourneyField();
+			// Replace the form with the new one
+			form.html(tempDiv.children());
 
-				// Handle the form pages
-				initFormPagesHandler(form);
+			// Write the user journey to the input from the local storage
+			updateJourneyField();
 
-				form.find('select').each(function() {
-					jcf.replace(jQuery(this));
-				});
-			}
+			// Handle the form pages
+			initFormPagesHandler(form);
+
+			form.find('select').each(function() {
+				jcf.replace(jQuery(this));
+			});
 		});
 	}
 }

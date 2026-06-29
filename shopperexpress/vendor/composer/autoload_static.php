@@ -107,6 +107,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'App\\Components\\SOC\\Modules\\Database_Health' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-database-health.php',
         'App\\Components\\SOC\\Modules\\Developer_Tools' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-developer-tools.php',
         'App\\Components\\SOC\\Modules\\Import_Monitor_Panel' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-soc-import-monitor.php',
+        'App\\Components\\SOC\\Modules\\Json_Ld_Settings' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-json-ld-settings.php',
         'App\\Components\\SOC\\Modules\\Lead_Delivery' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-lead-delivery.php',
         'App\\Components\\SOC\\Modules\\Log_Viewer' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-log-viewer.php',
         'App\\Components\\SOC\\Modules\\Maintenance' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-maintenance.php',

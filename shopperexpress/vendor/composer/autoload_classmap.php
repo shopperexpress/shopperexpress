@@ -52,6 +52,7 @@ return array(
     'App\\Components\\SOC\\Modules\\Database_Health' => $baseDir . '/inc/Components/SOC/Modules/class-database-health.php',
     'App\\Components\\SOC\\Modules\\Developer_Tools' => $baseDir . '/inc/Components/SOC/Modules/class-developer-tools.php',
     'App\\Components\\SOC\\Modules\\Import_Monitor_Panel' => $baseDir . '/inc/Components/SOC/Modules/class-soc-import-monitor.php',
+    'App\\Components\\SOC\\Modules\\Json_Ld_Settings' => $baseDir . '/inc/Components/SOC/Modules/class-json-ld-settings.php',
     'App\\Components\\SOC\\Modules\\Lead_Delivery' => $baseDir . '/inc/Components/SOC/Modules/class-lead-delivery.php',
     'App\\Components\\SOC\\Modules\\Log_Viewer' => $baseDir . '/inc/Components/SOC/Modules/class-log-viewer.php',
     'App\\Components\\SOC\\Modules\\Maintenance' => $baseDir . '/inc/Components/SOC/Modules/class-maintenance.php',

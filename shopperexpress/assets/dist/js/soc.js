@@ -3405,6 +3405,7 @@ var __webpack_exports__ = {};
       SOC.ajax('soc_lead_settings_save', {
         delivery_method: $('input[name="adf_delivery_method"]:checked').val() || 'email',
         api_endpoint: $('#soc-lead-endpoint').val().trim(),
+        dealer_id: $('#soc-lead-dealer-id').val().trim(),
         secret_key: $('#soc-lead-key-input').val().trim(),
         timeout: parseInt($('#soc-lead-timeout').val(), 10) || 10,
         fallback_email: $('#soc-lead-fallback').is(':checked') ? 1 : 0,
