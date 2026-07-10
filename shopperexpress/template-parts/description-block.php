@@ -48,7 +48,7 @@ endif;
  * Conditions:
  *   - Only for supported post types (listings, used-listings).
  *   - Only on single post views (not SRP / archive).
- *   - Only when the _ai_vdp_description meta is populated.
+ *   - Only when the ai_vdp_description meta is populated.
  *   - Output is already stored as sanitized HTML — wp_kses_post is the final gate.
  */
 if (
@@ -56,7 +56,7 @@ if (
 	in_array( $post_type, [ 'listings', 'used-listings' ], true ) &&
 	$post_id
 ) {
-	$ai_description = get_post_meta( $post_id, '_ai_vdp_description', true );
+	$ai_description = get_post_meta( $post_id, 'ai_vdp_description', true );
 
 	if ( ! empty( $ai_description ) ) {
 		echo wp_kses_post( $ai_description );

@@ -40,17 +40,6 @@ $aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ),
 				)
 			);
 			?>
-			<?php
-			get_template_part(
-				'template-parts/detail',
-				'info',
-				array(
-					'post_type' => get_post_type( $post_id ),
-					'post_id'   => $post_id,
-					'class'     => 'card-detail',
-				)
-			);
-			?>
 			<div class="card-info-row">
 				<button class="btn-disclosure" data-toggle="modal" data-target="#detailModal-offers-<?php echo $post_id; ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
@@ -58,103 +47,124 @@ $aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ),
 					</svg>
 					<?php esc_html_e( 'Additional info', 'shopperexpress' ); ?>
 				</button>
+				<div class="nav card-tabs" role="tablist">
+					<button class="card-tabs-link" id="detail-tab-<?php echo $post_id ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $post_id ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $post_id ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link active" id="price-tab-<?php echo $post_id ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $post_id ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $post_id ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
+				</div>
 			</div>
-			<?php
-			$price            = get_field( 'price', $post_id );
-			$down_payment     = get_field( 'down_payment', $post_id );
-			$lease_payment    = get_field( 'lease_payment', $post_id );
-			$loan_payment     = get_field( 'loan_payment', $post_id );
-			$leaseterm        = get_field( 'leaseterm', $post_id );
-			$loanterm         = get_field( 'loanterm', $post_id );
-			$loanapr          = get_field( 'loanapr', $post_id );
-			$cash_offer       = get_field( 'cash_offer', $post_id );
-			$cash_offer       = is_int( $cash_offer ) ? '$' . number_format( $cash_offer ) : $cash_offer;
-			$cash_offer_label = get_field( 'cash_offer_label', $post_id );
-			$condition        = null;
-			?>
+			<div class="tab-content">
+				<div class="tab-pane fade" id="product-detail-info-<?php echo $post_id ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $post_id ?>">
+					<?php
+					get_template_part(
+						'template-parts/detail',
+						'info',
+						array(
+							'post_type' => get_post_type( $post_id ),
+							'post_id'   => $post_id,
+							'class'     => 'card-detail',
+						)
+					);
+					?>
+				</div>
+				<div class="tab-pane fade show active" id="product-price-info-<?php echo $post_id ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $post_id ?>">
+					<?php
+					$price            = get_field( 'price', $post_id );
+					$down_payment     = get_field( 'down_payment', $post_id );
+					$lease_payment    = get_field( 'lease_payment', $post_id );
+					$loan_payment     = get_field( 'loan_payment', $post_id );
+					$leaseterm        = get_field( 'leaseterm', $post_id );
+					$loanterm         = get_field( 'loanterm', $post_id );
+					$loanapr          = get_field( 'loanapr', $post_id );
+					$cash_offer       = get_field( 'cash_offer', $post_id );
+					$cash_offer       = is_int( $cash_offer ) ? '$' . number_format( $cash_offer ) : $cash_offer;
+					$cash_offer_label = get_field( 'cash_offer_label', $post_id );
+					$condition        = null;
+					?>
 
-			<ul class="payment-info">
-				<?php
-				$i = 0;
-				while ( have_rows( 'offers_flexible_content', 'options' ) ) :
-					the_row();
-
-					if ( get_row_layout() == 'payment' && have_rows( 'payment_list' ) && $i == 0 ) :
-
-						while ( have_rows( 'payment_list' ) ) :
+					<ul class="payment-info">
+						<?php
+						$i = 0;
+						while ( have_rows( 'offers_flexible_content', 'options' ) ) :
 							the_row();
-							$lock         = get_sub_field( 'lock' );
-							$show_payment = $lock ? get_sub_field( 'show_payment' ) : false;
-							if ( $price ) {
-								$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
-							}
 
+							if ( get_row_layout() == 'payment' && have_rows( 'payment_list' ) && $i == 0 ) :
 
-							switch ( $show_payment ) {
-								case 'lease-payment':
-									if ( $down_payment && $lease_payment ) {
-
-										$lease_payment = ! empty( $lease_payment ) ? '$' . $lease_payment : null;
-										$text          = ! empty( $lease_payment ) ? '$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
-									} else {
-										$text = null;
+								while ( have_rows( 'payment_list' ) ) :
+									the_row();
+									$lock         = get_sub_field( 'lock' );
+									$show_payment = $lock ? get_sub_field( 'show_payment' ) : false;
+									if ( $price ) {
+										$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
 									}
 
-									break;
 
-								case 'Disclosure_loan':
-									if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-										$text = $loanterm ? $loanterm . ' ' . __( 'mos.', 'shopperexpress' ) : '';
-										if ( $loanapr ) {
-											$text .= '<span class="savings">' . $loanapr . '% <sub>APR</sub></span>';
-										}
-									} else {
-										$text = null;
-									}
-									break;
+									switch ( $show_payment ) {
+										case 'lease-payment':
+											if ( $down_payment && $lease_payment ) {
 
-								case 'Disclosure_lease':
-									if ( $down_payment && $lease_payment ) {
-										$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
-										$text          = ! empty( $lease_payment ) ? $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
-									} else {
-										$text = null;
-									}
-									break;
-								case 'Disclosure_Cash':
-									if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
-										$cash_offer       = get_field( 'cash_offer', $post_id );
-										$cash_offer       = is_int( $cash_offer ) ? '$' . number_format( $cash_offer ) : $cash_offer;
-										$cash_offer_label = get_field( 'cash_offer_label', $post_id );
-										$text             = ! empty( $cash_offer ) ? $cash_offer_label . '<span class="savings">' . $cash_offer . '</span>' : null;
-									} else {
-										$text = null;
-									}
-									break;
+												$lease_payment = ! empty( $lease_payment ) ? '$' . $lease_payment : null;
+												$text          = ! empty( $lease_payment ) ? '$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
+											} else {
+												$text = null;
+											}
 
-								default:
-									$loan_payment = ! empty( $loan_payment ) && $loan_payment != 'None' ? '$' . number_format( $loan_payment ) . ' <sub>/mo</sub>' : null;
-									$text         = ! empty( $loan_payment ) ? '$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '<span class="savings">' . $loan_payment . '</span>' : null;
-									break;
-							}
-							if ( $text ) :
-								?>
-								<li class="show">
-									<?php if ( $title = get_sub_field( 'title' ) ) : ?>
-										<strong class="dt"><?php echo $title; ?></strong>
-									<?php endif; ?>
-									<strong class="price">
-										<?php echo $text; ?>
-									</strong>
-								</li>
-								<?php
+											break;
+
+										case 'Disclosure_loan':
+											if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
+												$text = $loanterm ? $loanterm . ' ' . __( 'mos.', 'shopperexpress' ) : '';
+												if ( $loanapr ) {
+													$text .= '<span class="savings">' . $loanapr . '% <sub>APR</sub></span>';
+												}
+											} else {
+												$text = null;
+											}
+											break;
+
+										case 'Disclosure_lease':
+											if ( $down_payment && $lease_payment ) {
+												$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
+												$text          = ! empty( $lease_payment ) ? $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
+											} else {
+												$text = null;
+											}
+											break;
+										case 'Disclosure_Cash':
+											if ( $condition != 'Slightly Used' && $condition != 'Used' ) {
+												$cash_offer       = get_field( 'cash_offer', $post_id );
+												$cash_offer       = is_int( $cash_offer ) ? '$' . number_format( $cash_offer ) : $cash_offer;
+												$cash_offer_label = get_field( 'cash_offer_label', $post_id );
+												$text             = ! empty( $cash_offer ) ? $cash_offer_label . '<span class="savings">' . $cash_offer . '</span>' : null;
+											} else {
+												$text = null;
+											}
+											break;
+
+										default:
+											$loan_payment = ! empty( $loan_payment ) && $loan_payment != 'None' ? '$' . number_format( $loan_payment ) . ' <sub>/mo</sub>' : null;
+											$text         = ! empty( $loan_payment ) ? '$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '<span class="savings">' . $loan_payment . '</span>' : null;
+											break;
+									}
+									if ( $text ) :
+										?>
+										<li class="show">
+											<?php if ( $title = get_sub_field( 'title' ) ) : ?>
+												<strong class="dt"><?php echo $title; ?></strong>
+											<?php endif; ?>
+											<strong class="price">
+												<?php echo $text; ?>
+											</strong>
+										</li>
+										<?php
+									endif;
+								endwhile;
 							endif;
+							++$i;
 						endwhile;
-					endif;
-					++$i;
-				endwhile;
-				?>
-			</ul>
+						?>
+					</ul>
+				</div>
+			</div>
 			<?php
 			$loged = ! empty( $args['loged'] ) ? $args['loged'] : '';
 			get_template_part(

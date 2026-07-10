@@ -95,10 +95,11 @@ add_action(
 
 			while ( have_rows( $ConversionBlock->getLocation() . 'colors', 'options' ) ) :
 				the_row();
-				$primary_color = get_sub_field( 'primary_color' );
-				$color_2       = get_sub_field( 'color_2' );
-				$color_3       = get_sub_field( 'color_3' );
-				$text_color    = get_sub_field( 'text_color' );
+				$primary_color          = get_sub_field( 'primary_color' );
+				$color_2                = get_sub_field( 'color_2' );
+				$color_3                = get_sub_field( 'color_3' );
+				$text_color             = get_sub_field( 'text_color' );
+				$new_style_color_widget = get_sub_field( 'new_style_color_widget' );
 			endwhile;
 
 			while ( have_rows( $ConversionBlock->getLocation() . 'fonts', 'options' ) ) :
@@ -117,195 +118,12 @@ add_action(
 			endwhile;
 			?>
 		<style>
-			a:hover {
-				text-decoration: none;
-			}
-
-			@-webkit-keyframes animate-loading {
-				0% {
-					transform: rotate(0deg);
-				}
-
-				100% {
-					transform: rotate(360deg);
-				}
-			}
-
-			@keyframes animate-loading {
-				0% {
-					transform: rotate(0deg);
-				}
-
-				100% {
-					transform: rotate(360deg);
-				}
-			}
-
-			/* @media (min-width: 1024px) { .mobile-button { display: none !important; }}@media (max-width: 1023px) { .desktop-button { display: none !important;}} */
-
-			.mobile-button {
-				display: none !important;
-			}
-
-			.desktop-button {
-				display: block;
-			}
-
-			@media only screen and (min-device-width: 767px) and (-webkit-min-device-pixel-ratio: 2) {
-				.desktop-button {
-					display: block !important;
-				}
-
-				.mobile-button {
-					display: none !important;
-				}
-			}
-
-			@media only screen and (max-device-width: 767px) and (-webkit-min-device-pixel-ratio: 2) {
-				.mobile-button {
-					display: block !important;
-				}
-
-				.desktop-button {
-					display: none !important;
-				}
-			}
-
-			.widget--btn {
-				-webkit-transition: box-shadow .15s ease-in-out;
-				transition: box-shadow .15s ease-in-out;
-				box-sizing: border-box;
-				display: block;
-				width: 100%;
-				color: #fff;
-				border: none;
-				padding: 0;
-				border-radius: 5px;
-				overflow: hidden;
-				cursor: pointer;
-			}
-
-			.widget--btn:focus {
-				outline: none;
-			}
-
-			.widget--btn * {
-				box-sizing: border-box;
-				display: block;
-			}
-
-			.widget--btn__body {
-				-webkit-transition: background-color .15s ease-in-out;
-				transition: background-color .15s ease-in-out;
-				text-align: center;
-				padding: 6px 0 9px;
-			}
-
-			.widget--btn__row {
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-webkit-box-pack: center;
-				-ms-flex-pack: center;
-				justify-content: center;
-				padding: 0 0 6px;
-			}
-
-			.widget--btn__col {
-				padding: 0 10px;
-				-webkit-box-flex: 1;
-				-ms-flex-positive: 1;
-				flex-grow: 1;
-			}
-
-			.widget--btn__col .widget--btn__text {
-				padding-bottom: 7px;
-			}
-
-			.widget--btn__text {
-				display: block;
-				color: #bfbfbf !important;
-			}
-
-			.widget--btn__price {
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-webkit-box-pack: center;
-				-ms-flex-pack: center;
-				justify-content: center;
-				line-height: 1;
-			}
-
-			.widget--btn__price-sup {
-				-ms-flex-item-align: start;
-				align-self: flex-start;
-				display: inline-block;
-				line-height: 1;
-			}
-
-			.widget--btn__price-sub {
-				-ms-flex-item-align: end;
-				align-self: flex-end;
-				display: inline-block;
-				line-height: 1.4;
-			}
-
-			.widget--btn__footer {
-				background-color: #c12c1f;
-				padding: 9px 13px;
-				text-transform: uppercase;
-				line-height: 1;
-			}
-
-			.widget--btn__footer-icon {
-				width: 17px;
-				height: auto;
-				-ms-flex-negative: 0;
-				flex-shrink: 0;
-				margin-right: 10px;
-			}
-
-			@media (max-width:480px) {
-				.widget--btn__num {
-					font-size: 36px !important;
-				}
-			}
-
-			img.widget--buttons__icon {
-				transition: transform .7s ease-in-out;
-			}
-
-			.iconhover:hover img.widget--buttons__icon {
-				transform: rotate(360deg);
-			}
-
-			.blockopopup_active {
-				display: block !important;
+			:root {
+				--mini-w-color: <?php echo esc_attr( $new_style_color_widget ); ?>;
 			}
 
 			.block_popup {
-				text-transform: capitalize;
 				font-family: <?php echo esc_html( $font_styling ); ?>;
-				position: absolute;
-				right: 1%;
-				background: #fff;
-				font-weight: 500;
-				z-index: 2;
-				top: 12px;
-				max-width: 188px;
-				width: 100%;
-				padding: 10px;
-				border-radius: 10px;
-				display: none;
-			}
-
-			.widget--btn__price {
-				color: #fff;
-			}
-
-			.widgetbox {
-				margin-bottom: 10px;
 			}
 
 			.widget--btn__price-sub,
@@ -335,37 +153,19 @@ add_action(
 				font-weight: <?php echo esc_html( $weight_2 ); ?>
 			}
 
-			.widget--buttons__small {
-				font-size: 8px;
-				font-weight: 600
-			}
-
 			.showWidget,
 			.showWidget button {
 				color: <?php echo $text_color; ?>;
-				display: block;
 				font-family: <?php echo esc_html( $font_styling ); ?>, sans-serif;
-				line-height: 1;
-			}
-
-			.hideWidget {
-				display: none !important;
 			}
 
 			.widget--btn__body {
 				background-color: <?php echo $color_3; ?>;
-				opacity: 0.8;
-			}
-
-			.paymentbtn:hover .widget--btn__body,
-			.paymentbtn:focus .widget--btn__body {
-				opacity: 1;
 			}
 
 			.widget--buttons__item,
 			.widget--btn__footer {
 				background-color: <?php echo esc_html( $primary_color ); ?> !important;
-				cursor: pointer;
 				font-family: <?php echo esc_html( $font_styling ); ?>, sans-serif;
 			}
 
@@ -373,74 +173,17 @@ add_action(
 			.widget--buttons__item:focus,
 			.paymentbtn:hover .widget--btn__footer,
 			.paymentbtn:focus .widget--btn__footer {
-				box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
 				background-color: <?php echo $color_2; ?> !important;
 			}
 
-			.paymentbtn:hover,
-			.paymentbtn:focus,
-			.widget--buttons__holder a:hover,
-			.widget--buttons__holder a:focus {
-				box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
-			}
-
 			.widget--buttons__holder a {
-				background: #fff;
 				color: <?php echo esc_html( $text_color ); ?>;
-				cursor: pointer;
 			}
 
 			.widget--buttons__holder a:hover,
 			.widget--buttons__holder a:focus {
 				background: <?php echo esc_html( $color_2 ); ?> !important;
-				color: #fff !important;
 				border-color: <?php echo esc_html( $color_2 ); ?> !important;
-			}
-
-			.se-lm-widget a,
-			.se-lm-widget__col-logo strong {
-				color: undefined;
-			}
-
-			.se-lm-widget-header,
-			.se-lm-widget .btn-se-lm-widget {
-				background-color: undefined;
-				border: none;
-			}
-
-			.imghover:hover {
-				box-shadow: 0 2px 5px 0 rgb(0 0 0 / 26%);
-			}
-
-			.showImage {
-				display: block !important;
-			}
-
-			.showCustom {
-				display: flex !important;
-			}
-
-			.hideImage {
-				display: none !important;
-			}
-
-			.hideCustom {
-				display: none !important;
-			}
-
-			.buttonimgbox {
-				margin-bottom: 6px;
-				width: 100%;
-			}
-
-			.buttonimgbox img {
-				width: 100%;
-				height: auto;
-				object-fit: contain;
-			}
-
-			.showIcon {
-				display: inline;
 			}
 
 			.reverse-button {

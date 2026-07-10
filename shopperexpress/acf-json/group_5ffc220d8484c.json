@@ -230,7 +230,7 @@
                     "name": "image",
                     "aria-label": "",
                     "type": "image",
-                    "instructions": "Icon image for this menu item. Recommended: 40×40 px, PNG/SVG with transparent background.",
+                    "instructions": "Icon image for this menu item. Recommended: 40×40 px, PNG\/SVG with transparent background.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -347,7 +347,7 @@
             },
             "default_value": "",
             "placeholder": "",
-            "mode": "text/html",
+            "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
             "maxlength": "",
@@ -380,7 +380,7 @@
             "name": "payment_list",
             "aria-label": "",
             "type": "flexible_content",
-            "instructions": "Define the payment rows displayed on listing cards. Add \"Payment\" rows for standard price fields or \"Enhanced Payment\" rows for calculated/conditional pricing.",
+            "instructions": "Define the payment rows displayed on listing cards. Add \"Payment\" rows for standard price fields or \"Enhanced Payment\" rows for calculated\/conditional pricing.",
             "required": false,
             "conditional_logic": 0,
             "wrapper": {
@@ -547,9 +547,9 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\" /></svg>",
+                            "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\" \/><\/svg>",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -626,7 +626,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo",
+                            "placeholder": "e.g. \/mo",
                             "prepend": "",
                             "append": ""
                         },
@@ -636,7 +636,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Small disclaimer or context text shown below the price (e.g. \"+ tax/fees\").",
+                            "instructions": "Small disclaimer or context text shown below the price (e.g. \"+ tax\/fees\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -733,7 +733,7 @@
                             },
                             "default_value": "",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -829,7 +829,7 @@
                             "name": "show_symbol",
                             "aria-label": "",
                             "type": "button_group",
-                            "instructions": "Select which symbol (if any) to display before the payment value. Use '+' for incentives or discounts, '-' for fees/additions, or select 'none' for no symbol.",
+                            "instructions": "Select which symbol (if any) to display before the payment value. Use '+' for incentives or discounts, '-' for fees\/additions, or select 'none' for no symbol.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -932,7 +932,7 @@
                             "name": "description",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Short descriptive text below the payment amount (e.g. \"per month, 36 mo, 10k mi/yr\").",
+                            "instructions": "Short descriptive text below the payment amount (e.g. \"per month, 36 mo, 10k mi\/yr\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -942,7 +942,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo for 36 months",
+                            "placeholder": "e.g. \/mo for 36 months",
                             "prepend": "",
                             "append": ""
                         },
@@ -988,9 +988,9 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path\r\n                            d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                            "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\">\r\n                          <path\r\n                            d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                             "placeholder": "",
-                            "mode": "text/html",
+                            "mode": "text\/html",
                             "lines": 1,
                             "indent_unit": 4,
                             "maxlength": "",
@@ -1116,7 +1116,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -1171,7 +1171,7 @@
                             "name": "after_payment",
                             "aria-label": "",
                             "type": "text",
-                            "instructions": "Text appended after the payment amount (e.g. \"/mo\").",
+                            "instructions": "Text appended after the payment amount (e.g. \"\/mo\").",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -1181,7 +1181,7 @@
                             },
                             "default_value": "",
                             "maxlength": "",
-                            "placeholder": "e.g. /mo",
+                            "placeholder": "e.g. \/mo",
                             "prepend": "",
                             "append": ""
                         }
@@ -1238,7 +1238,7 @@
             "name": "payment_list_new",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Configure payment rules for display. Each row defines a rule for showing a payment. \n\n- Use 'Vehicle Type' to pick if this rule is for NEW or USED vehicles.\n- 'Search in' and 'Rule to Show' determine which vehicle attributes are matched (eg: Make, Model) to show this payment.\n- If 'Select Value Type' is 'Entered Value', input a number into Value. 'Calculated Value' lets you select a field and then perform a calculation.\n- 'Show on SRP'/'Show on VDP' pick where the payment is displayed.\n- Dates are optional, for limited-time rules.\n- Style settings for SRP/VDP are for display customization.\n\nTips:\n- Only active payments ('Active' enabled) are displayed.\n- If multiple rules match a vehicle, all their payments are shown, ordered by row.",
+            "instructions": "Configure payment rules for display. Each row defines a rule for showing a payment. \n\n- Use 'Vehicle Type' to pick if this rule is for NEW or USED vehicles.\n- 'Search in' and 'Rule to Show' determine which vehicle attributes are matched (eg: Make, Model) to show this payment.\n- If 'Select Value Type' is 'Entered Value', input a number into Value. 'Calculated Value' lets you select a field and then perform a calculation.\n- 'Show on SRP'\/'Show on VDP' pick where the payment is displayed.\n- Dates are optional, for limited-time rules.\n- Style settings for SRP\/VDP are for display customization.\n\nTips:\n- Only active payments ('Active' enabled) are displayed.\n- If multiple rules match a vehicle, all their payments are shown, ordered by row.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -1369,7 +1369,7 @@
                     "name": "rule_to_show",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "How must the search value match? (Contains/exact/etc)",
+                    "instructions": "How must the search value match? (Contains\/exact\/etc)",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1452,7 +1452,7 @@
                     "name": "calculated_value",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "Pick which field to use as a basis for calculation when using Calculated Value/Field/Greater Than.",
+                    "instructions": "Pick which field to use as a basis for calculation when using Calculated Value\/Field\/Greater Than.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1501,7 +1501,7 @@
                     "name": "operator",
                     "aria-label": "",
                     "type": "select",
-                    "instructions": "For Calculated Value/Field: define addition or subtraction against the picked field.",
+                    "instructions": "For Calculated Value\/Field: define addition or subtraction against the picked field.",
                     "required": 0,
                     "conditional_logic": [
                         [
@@ -1945,7 +1945,7 @@
                     "name": "show_symbol",
                     "aria-label": "",
                     "type": "button_group",
-                    "instructions": "Pick symbol (+/–/none) to show before payment amount.",
+                    "instructions": "Pick symbol (+\/–\/none) to show before payment amount.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -1979,7 +1979,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "display_format": "d/m/Y",
+                    "display_format": "d\/m\/Y",
                     "return_format": "Ymd",
                     "first_day": 1,
                     "default_to_current_date": 0,
@@ -2000,7 +2000,7 @@
                         "class": "",
                         "id": ""
                     },
-                    "display_format": "d/m/Y",
+                    "display_format": "d\/m\/Y",
                     "return_format": "Ymd",
                     "first_day": 1,
                     "default_to_current_date": 0,
@@ -2032,7 +2032,7 @@
                     "name": "cross_heading",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Check this to display this row as a cross heading (divider/heading row with no value shown).",
+                    "instructions": "Check this to display this row as a cross heading (divider\/heading row with no value shown).",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -3845,7 +3845,7 @@
             "name": "unlock_button_listings",
             "aria-label": "",
             "type": "group",
-            "instructions": "Settings for the primary CTA button shown when the listing's price is in \"locked\" state (new listings). Tabs separate Main style from SRP and VDP size/visibility settings.",
+            "instructions": "Settings for the primary CTA button shown when the listing's price is in \"locked\" state (new listings). Tabs separate Main style from SRP and VDP size\/visibility settings.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -3892,9 +3892,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -3929,7 +3929,7 @@
                     "name": "animation",
                     "aria-label": "",
                     "type": "true_false",
-                    "instructions": "Enable a pulse/glow animation on the locked CTA button to draw attention.",
+                    "instructions": "Enable a pulse\/glow animation on the locked CTA button to draw attention.",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
@@ -4298,9 +4298,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -4722,9 +4722,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -5128,9 +5128,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -5505,7 +5505,7 @@
             "name": "vdp_button_listings",
             "aria-label": "",
             "type": "group",
-            "instructions": "Settings for the secondary (outline/ghost) CTA button on new listing cards. The SRP tab controls the appearance on the grid page; this group mirrors the primary CTA structure.",
+            "instructions": "Settings for the secondary (outline\/ghost) CTA button on new listing cards. The SRP tab controls the appearance on the grid page; this group mirrors the primary CTA structure.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -5552,9 +5552,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -5829,9 +5829,9 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"/></svg>",
+                    "default_value": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" height=\"24px\" viewBox=\"0 -960 960 960\" width=\"24px\" fill=\"#FFFFFF\"><path d=\"M240-80q-33 0-56.5-23.5T160-160v-400q0-33 23.5-56.5T240-640h360v-80q0-50-35-85t-85-35q-42 0-73.5 25.5T364-751q-4 14-16.5 22.5T320-720q-17 0-28.5-11t-8.5-26q14-69 69-116t128-47q83 0 141.5 58.5T680-720v80h40q33 0 56.5 23.5T800-560v400q0 33-23.5 56.5T720-80H240Zm0-80h480v-400H240v400Zm240-120q33 0 56.5-23.5T560-360q0-33-23.5-56.5T480-440q-33 0-56.5 23.5T400-360q0 33 23.5 56.5T480-280ZM240-160v-400 400Z\"\/><\/svg>",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -6222,7 +6222,7 @@
                                         "id": ""
                                     },
                                     "default_value": "",
-                                    "placeholder": "e.g. /mo for 36 months",
+                                    "placeholder": "e.g. \/mo for 36 months",
                                     "maxlength": "",
                                     "rows": 1,
                                     "new_lines": "wpautop",
@@ -6574,7 +6574,7 @@
                                     "name": "video_id",
                                     "aria-label": "",
                                     "type": "text",
-                                    "instructions": "YouTube or Vimeo video ID (not the full URL). Example: for https://youtu.be/abc123, enter abc123.",
+                                    "instructions": "YouTube or Vimeo video ID (not the full URL). Example: for https:\/\/youtu.be\/abc123, enter abc123.",
                                     "required": 0,
                                     "conditional_logic": 0,
                                     "wrapper": {
@@ -6724,7 +6724,7 @@
             "name": "popup_form_top_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Optional text/HTML displayed above the embedded form in the popup.",
+            "instructions": "Optional text\/HTML displayed above the embedded form in the popup.",
             "required": 0,
             "conditional_logic": [
                 [
@@ -6752,7 +6752,7 @@
             "name": "popup_form_bottom_text",
             "aria-label": "",
             "type": "wysiwyg",
-            "instructions": "Optional text/HTML displayed below the embedded form in the popup (e.g. privacy notice).",
+            "instructions": "Optional text\/HTML displayed below the embedded form in the popup (e.g. privacy notice).",
             "required": 0,
             "conditional_logic": [
                 [
@@ -6840,7 +6840,7 @@
             "name": "hide_disclosure_srp",
             "aria-label": "",
             "type": "true_false",
-            "instructions": "Hide the payment disclosure/disclaimer message on the SRP listing grid.",
+            "instructions": "Hide the payment disclosure\/disclaimer message on the SRP listing grid.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -6959,7 +6959,7 @@
             "name": "filters_list",
             "aria-label": "",
             "type": "repeater",
-            "instructions": "Configure which filters appear in the SRP sidebar/filter bar. Add one row per filter. Order here reflects order on the page.",
+            "instructions": "Configure which filters appear in the SRP sidebar\/filter bar. Add one row per filter. Order here reflects order on the page.",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {
@@ -7159,7 +7159,7 @@
                     },
                     "default_value": "",
                     "placeholder": "",
-                    "mode": "text/html",
+                    "mode": "text\/html",
                     "lines": 1,
                     "indent_unit": 4,
                     "maxlength": "",
@@ -7278,8 +7278,8 @@
                         "id": ""
                     },
                     "choices": {
-                        "asc": "A–Z / low → high",
-                        "desc": "Z–A / high → low"
+                        "asc": "A–Z \/ low → high",
+                        "desc": "Z–A \/ high → low"
                     },
                     "default_value": "asc",
                     "return_format": "",
@@ -7380,8 +7380,8 @@
                         "id": ""
                     },
                     "choices": {
-                        "asc": "A–Z / low → high",
-                        "desc": "Z–A / high → low"
+                        "asc": "A–Z \/ low → high",
+                        "desc": "Z–A \/ high → low"
                     },
                     "default_value": "asc",
                     "return_format": "value",
@@ -7593,7 +7593,7 @@
             },
             "default_value": "",
             "placeholder": "Listings",
-            "mode": "text/html",
+            "mode": "text\/html",
             "lines": 1,
             "indent_unit": 4,
             "maxlength": "",
@@ -7960,24 +7960,6 @@
             "acfe_clone_modal_size": "large"
         },
         {
-            "key": "field_69b188e5e7112",
-            "label": "Custom cards",
-            "name": "",
-            "aria-label": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
-        },
-        {
             "key": "field_63345b0b8566b",
             "label": "Widget",
             "name": "widget",
@@ -8026,157 +8008,6 @@
                     "bidirectional": 0,
                     "multiple": 0,
                     "bidirectional_target": []
-                }
-            ]
-        },
-        {
-            "key": "field_69b18934ca86b",
-            "label": "Custom cards",
-            "name": "custom_cards",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "acfe_repeater_stylised_button": 0,
-            "layout": "block",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_69b18968ca86c",
-                    "label": "Image",
-                    "name": "image",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "30",
-                        "class": "",
-                        "id": ""
-                    },
-                    "uploader": "",
-                    "return_format": "id",
-                    "library": "all",
-                    "acfe_thumbnail": 0,
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "allow_in_bindings": 0,
-                    "preview_size": "medium",
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b18975ca86d",
-                    "label": "Text",
-                    "name": "text",
-                    "aria-label": "",
-                    "type": "wysiwyg",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "70",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "allow_in_bindings": 0,
-                    "tabs": "all",
-                    "toolbar": "full",
-                    "media_upload": 1,
-                    "delay": 0,
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b1898bca86e",
-                    "label": "Link",
-                    "name": "link",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "50",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "allow_in_bindings": 0,
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b189e04c3cf",
-                    "label": "Show after",
-                    "name": "show_after",
-                    "aria-label": "",
-                    "type": "number",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "25",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "min": "",
-                    "max": "",
-                    "allow_in_bindings": 0,
-                    "placeholder": "",
-                    "step": "",
-                    "prepend": "",
-                    "append": "card",
-                    "parent_repeater": "field_69b18934ca86b"
-                },
-                {
-                    "key": "field_69b18a704c3d0",
-                    "label": "Show on",
-                    "name": "show_on",
-                    "aria-label": "",
-                    "type": "select",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "25",
-                        "class": "",
-                        "id": ""
-                    },
-                    "choices": {
-                        "all": "all",
-                        "listings": "listings",
-                        "used-listings": "used-listings"
-                    },
-                    "default_value": "all",
-                    "return_format": "value",
-                    "multiple": 0,
-                    "allow_custom": 0,
-                    "search_placeholder": "",
-                    "allow_null": 0,
-                    "allow_in_bindings": 0,
-                    "ui": 0,
-                    "ajax": 0,
-                    "placeholder": "",
-                    "create_options": 0,
-                    "save_options": 0,
-                    "parent_repeater": "field_69b18934ca86b"
                 }
             ]
         },
@@ -8307,6 +8138,53 @@
                     "custom_palette_source": "",
                     "palette_colors": "",
                     "show_color_wheel": true
+                },
+                {
+                    "key": "field_6a4e1dc2a3e8a",
+                    "label": "Style",
+                    "name": "style",
+                    "aria-label": "",
+                    "type": "button_group",
+                    "instructions": "Choose style for widget",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "old": "old",
+                        "new": "new"
+                    },
+                    "default_value": "old",
+                    "return_format": "value",
+                    "allow_null": 0,
+                    "allow_in_bindings": 0,
+                    "layout": "horizontal"
+                },
+                {
+                    "key": "field_6a4e1ddfa3e8b",
+                    "label": "New style color widget",
+                    "name": "new_style_color_widget",
+                    "aria-label": "",
+                    "type": "color_picker",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "#f00",
+                    "enable_opacity": 0,
+                    "return_format": "string",
+                    "allow_in_bindings": 0,
+                    "show_custom_palette": 0,
+                    "show_color_wheel": 1,
+                    "custom_palette_source": "",
+                    "palette_colors": ""
                 }
             ]
         },
@@ -8946,7 +8824,7 @@
                             "default_value": "",
                             "maxlength": "",
                             "allow_in_bindings": 1,
-                            "placeholder": "e.g. /contact",
+                            "placeholder": "e.g. \/contact",
                             "prepend": "",
                             "append": ""
                         },
@@ -8999,7 +8877,7 @@
                             "name": "events",
                             "aria-label": "",
                             "type": "repeater",
-                            "instructions": "One or more analytics/tracking events to fire when this desktop button is clicked. Add one row per event.",
+                            "instructions": "One or more analytics\/tracking events to fire when this desktop button is clicked. Add one row per event.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -11304,7 +11182,7 @@
                     "key": "field_vdr_ga_event_label",
                     "label": "GA Event Label",
                     "name": "ga_event_label",
-                    "aria_label": "",
+                    "aria-label": "",
                     "type": "text",
                     "instructions": "Google Analytics event label sent when this badge is clicked. Leave empty to skip tracking.",
                     "required": 0,
@@ -11314,11 +11192,13 @@
                         "class": "",
                         "id": ""
                     },
+                    "aria_label": "",
                     "default_value": "",
                     "maxlength": "",
                     "placeholder": "e.g. VDR Report Download",
                     "prepend": "",
-                    "append": ""
+                    "append": "",
+                    "parent_repeater": "field_68b1850ff752b"
                 }
             ]
         },
@@ -12385,7 +12265,7 @@
             "key": "field_vdr_error_message",
             "label": "VDR Error Message",
             "name": "vdr_error_message",
-            "aria_label": "",
+            "aria-label": "",
             "type": "textarea",
             "instructions": "Message shown in a modal when the VDR (PDF) request fails. Leave empty to hide the modal.",
             "required": 0,
@@ -12395,11 +12275,13 @@
                 "class": "",
                 "id": ""
             },
+            "aria_label": "",
             "default_value": "Sorry, we could not generate the vehicle report at this time. Please try again later.",
             "new_lines": "wpautop",
             "maxlength": "",
             "placeholder": "",
-            "rows": 3
+            "rows": 3,
+            "acfe_textarea_code": 0
         }
     ],
     "location": [
@@ -12423,10 +12305,11 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "acfe": {
-        "autosync": [
-            "json"
-        ]
-    },
-    "modified": 1781862957
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1783596228
 }

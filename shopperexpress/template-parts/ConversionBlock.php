@@ -40,13 +40,14 @@ if ( $is_api ) {
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();
 	$primary_color = get_sub_field( 'primary_color' );
+	$style         = 'new' === get_sub_field( 'style' ) ? 'widget--mini' : '';
 endwhile;
 
 if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 	?>
 	<span class="intice_bFrame">
-		<div class="widgetbox">
-			<div class="widgetcon--buttons" style="box-sizing: border-box;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;">
+		<div class="widgetbox <?php echo esc_attr( $style ); ?>">
+			<div class="widgetcon--buttons">
 				<?php
 				while ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 					the_row();
@@ -75,7 +76,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 						}
 						if ( ( $active || $active_1 || $active_2 ) && $show ) :
 							?>
-							<div class="widget--buttons__holder showWidget fonttype1" style="box-sizing: border-box;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;width: calc(100% + 6px);margin: 0 -3px;">
+							<div class="widget--buttons__holder showWidget fonttype1">
 								<?php
 								$mobile_button_text_1 = get_sub_field( 'mobile_button_text_1' );
 								$form_id              = get_sub_field( 'form_id_1' );
@@ -99,7 +100,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url_1;
 										if ( ! empty( $onclick ) ) :
 											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="-webkit-transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;">
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;">
 										<?php echo esc_html( $mobile_button_text_1 ); ?>
 									</a>
 									<?php
@@ -127,7 +128,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url_2;
 										if ( ! empty( $onclick ) ) :
 											?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $mobile_button_text_2 ); ?></a>
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="mobile-button" style="color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;"><?php echo esc_html( $mobile_button_text_2 ); ?></a>
 									<?php
 								endif;
 
@@ -152,7 +153,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										echo $url;
 									if ( ! empty( $onclick ) ) :
 										?>
-										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="desktop-button" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;background: #fff;color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;border-radius: 5px;padding: 13px 5px;text-align: center;line-height: 1;min-width: calc(50% - 6px);width: calc(50% - 6px);min-height: 44px;margin: 0 3px 6px;text-decoration: none;text-transform: uppercase;cursor: pointer;outline: none;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;"><?php echo esc_html( $desktop_button_text ); ?></a>
+										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="desktop-button" style="color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;"><?php echo esc_html( $desktop_button_text ); ?></a>
 							</div>
 									<?php
 							endif;
@@ -160,7 +161,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 					elseif ( $layout == 'button_2' ) :
 						if ( have_rows( 'buttons' ) ) :
 							?>
-							<div class="widget--buttons__holder" style="box-sizing: border-box;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;width: calc(100% + 6px);margin: 0 -3px;">
+							<div class="widget--buttons__holder">
 								<?php
 								while ( have_rows( 'buttons' ) ) :
 									the_row();
@@ -185,12 +186,14 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 											<?php
 											if ( $onclick ) :
 												?>
-											onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> style="-webkit-transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;border-radius: 5px;text-decoration: none;padding: 10px 8px 10px 15px;margin: 0 3px 6px;min-width: calc(50% - 6px);width: calc(50% - 6px);display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;border: none;cursor: pointer;outline: none;text-align: left;">
+											onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?>>
 											<?php
 											$icon = get_sub_field( 'icon' );
 											if ( $icon && ! empty( $icon['url'] ) ) :
 												?>
-												<img class="widget--buttons__icon" src="<?php echo $icon['url']; ?>" alt="icon" style="width: 24px;height: 24px;-ms-flex-negative: 0;flex-shrink: 0;margin-right: 6px;">
+												<div class="widget--buttons__icon">
+													<?php render_acf_image_icon( $icon ); ?>
+												</div>
 												<?php
 											endif;
 											if ( get_sub_field( 'enable_image_content' ) ) :
@@ -219,7 +222,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 					elseif ( $layout == 'button_3' ) :
 						if ( have_rows( 'buttons' ) ) :
 							?>
-							<div class="widget--buttons__holder" style="box-sizing: border-box;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;-webkit-box-pack: justify;-ms-flex-pack: justify;justify-content: space-between;width:100%;margin: 0px;">
+							<div class="widget--buttons__holder">
 								<?php
 								while ( have_rows( 'buttons' ) ) :
 									the_row();
@@ -247,10 +250,15 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 													<?php
 													if ( $onclick ) :
 														?>
-													onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="iconhover fonttype3 widget--buttons__item showCustom" style="-webkit-transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);transition:box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);box-sizing: border-box;margin: 0 0px 6px;border-radius: 5px;text-decoration: none;padding: 7px 10px 5px;margin-bottom: 6px;min-width: 50%;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;border: none;cursor: pointer;outline: none;text-align: center;min-height: 48px;width: 100%;line-height: 1;letter-spacing: 1px;">
+													onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?> class="iconhover fonttype3 widget--buttons__item showCustom">
 													<span class="widget--buttons__text" style="text-transform: uppercase;">
-														<?php if ( $icon = get_sub_field( 'icon' ) ) : ?>
-															<img class="widget--buttons__icon showIcon" src="<?php echo $icon['url']; ?>" alt="Build Your Deal" style="width: 24px;height: 24px;-ms-flex-negative: 0;flex-shrink: 0;margin-right: 6px;vertical-align: middle;">
+														<?php
+														$icon = get_sub_field( 'icon' );
+														if ( $icon ) :
+															?>
+															<div class="widget--buttons__icon">
+																<?php render_acf_image_icon( $icon ); ?>
+															</div>
 															<?php
 														endif;
 
@@ -307,22 +315,22 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									the_row();
 									$events_lease[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
-								$events_lease = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
+								$events_lease    = ! empty( $events_lease ) ? ' onclick="' . implode( ' ', $events_lease ) . '"' : '';
 								$popup_text      = get_sub_field( 'popup_text', false, false );
 								$popup_text_body = str_replace( 'post_id', $identifier, $popup_text );
 								if ( $is_api && ! empty( $api_vehicle ) ) {
-									$_payload    = $api_vehicle['payload'] ?? array();
-									$_sc_map     = array(
-										'price'             => $api_vehicle['price'] ?? '',
-										'year'              => $api_vehicle['year'] ?? '',
-										'make'              => $api_vehicle['make'] ?? '',
-										'model'             => $api_vehicle['model'] ?? '',
-										'trim'              => $api_vehicle['trim'] ?? '',
-										'lease_payment'     => $_payload['lease_payment'] ?? '',
-										'loan_term'         => $_payload['loanterm'] ?? '',
-										'loan_apr'          => $_payload['loanapr'] ?? '',
-										'lease_term'        => $_payload['leaseterm'] ?? '',
-										'due_at_signing'    => $_payload['down_payment'] ?? '',
+									$_payload        = $api_vehicle['payload'] ?? array();
+									$_sc_map         = array(
+										'price'          => $api_vehicle['price'] ?? '',
+										'year'           => $api_vehicle['year'] ?? '',
+										'make'           => $api_vehicle['make'] ?? '',
+										'model'          => $api_vehicle['model'] ?? '',
+										'trim'           => $api_vehicle['trim'] ?? '',
+										'lease_payment'  => $_payload['lease_payment'] ?? '',
+										'loan_term'      => $_payload['loanterm'] ?? '',
+										'loan_apr'       => $_payload['loanapr'] ?? '',
+										'lease_term'     => $_payload['leaseterm'] ?? '',
+										'due_at_signing' => $_payload['down_payment'] ?? '',
 										'total_of_payments' => $_payload['totalofpmts'] ?? '',
 									);
 									$popup_text_body = preg_replace_callback(
@@ -333,7 +341,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										},
 										$popup_text_body
 									);
-									$popup_text = wpautop( $popup_text_body );
+									$popup_text      = wpautop( $popup_text_body );
 								} else {
 									$popup_text = wpautop( do_shortcode( $popup_text_body ) );
 								}
@@ -345,24 +353,23 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								?>
 								<div style="position: relative;width: 100%;margin-bottom: 6px;" class="showWidget <?php echo $hide_on_mobile; ?>">
 									<?php if ( get_sub_field( 'show_popup' ) && $popup_text ) : ?>
-										<span class="showWidget" style="position: absolute;right:0%;top: 10px;width: 40px;height: 40px;text-align: center;z-index: 1;cursor: pointer;"><i class="fa fa-question-circle-o" aria-hidden="true" style="font-size: 19px;color: #bfbfbf !important;" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
 										<div id="block-<?php echo $identifier; ?>" class="block_popup block-<?php echo $identifier; ?>">
-											<span onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'none';" style="color: black;position: absolute;top: -6px;right: -2px;"><i class="fa fa-times-circle" aria-hidden="true" style="font-size: 24px;"></i></span>
+											<span class="widget--popup__close" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'none';"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
 											<div class="widgetbox__popup-text js-is-empty-parent1">
 												<?php echo $popup_text; ?>
 											</div>
 										</div>
 									<?php endif; ?>
-									<button class="widget--btn paymentbtn showWidget" type="button" data-asc-type="banner" style="cursor:pointer;" <?php echo $onclick; ?>>
-										<span class="widget--btn__body widget--btn__body">
+									<button class="widget--btn paymentbtn showWidget" type="button" data-asc-type="banner" <?php echo $onclick; ?>>
+										<span class="widget--btn__body">
 											<span class="widget--btn__row">
 												<?php if ( $show_finance && $loan_payment ) : ?>
 													<span class="widget--btn__col" <?php echo $events_finance; ?>>
 														<span class="widget--btn__text" style="font-size: 11px;"><?php the_sub_field( 'loan_header' ); ?></span>
 														<span class="widget--btn__price">
-															<span class="widget--btn__price-sup widget--btn__price-sup">$</span>
-															<span class="widget--btn__num widget--btn__num finance-num"><?php echo intval( $loan_payment ); ?></span>
-															<span class="widget--btn__price-sub widget--btn__price-sub">/mo.</span>
+															<span class="widget--btn__price-sup">$</span>
+															<span class="widget--btn__num finance-num"><?php echo intval( $loan_payment ); ?></span>
+															<span class="widget--btn__price-sub">/mo.</span>
 														</span>
 													</span>
 													<?php
@@ -374,9 +381,9 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 													<span class="widget--btn__col" <?php echo $events_lease; ?>>
 														<span class="widget--btn__text" style="font-size: 11px;"><?php the_sub_field( 'lease_header' ); ?></span>
 														<span class="widget--btn__price">
-															<span class="widget--btn__price-sup widget--btn__price-sup">$</span>
-															<span class="widget--btn__num widget--btn__num lease-num"><?php echo intval( $lease_payment ); ?></span>
-															<span class="widget--btn__price-sub widget--btn__price-sub">/mo.</span>
+															<span class="widget--btn__price-sup">$</span>
+															<span class="widget--btn__num lease-num"><?php echo intval( $lease_payment ); ?></span>
+															<span class="widget--btn__price-sub">/mo.</span>
 														</span>
 													</span>
 													<?php
@@ -388,17 +395,23 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 													<span class="widget--btn__col">
 														<span class="widget--btn__text" style="font-size: 11px;">Personalize</span>
 														<span class="widget--btn__price">
-															<span class="widget--btn__num widget--btn__num lease-num">My Payment</span>
+															<span class="widget--btn__num lease-num">My Payment</span>
 														</span>
 													</span>
 												<?php endif; ?>
 											</span>
-											<?php if ( $disclosure = get_sub_field( 'disclosure' ) ) : ?>
-												<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo esc_html( $disclosure ); ?></span>
-											<?php endif; ?>
+											<div class="widget--btn__text-holder">
+								<?php if ( $disclosure = get_sub_field( 'disclosure' ) ) : ?>
+							<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo esc_html( $disclosure ); ?></span>
+						<?php endif; ?>
+						<span class="showWidget widget--popup__opener"><i class="fa fa-question-circle-o" aria-hidden="true" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
+						</div>
 										</span>
-										<?php if ( $primary_button_text = get_sub_field( 'primary_button_text' ) ) : ?>
-											<span class="widget--btn__footer widget--btn__footer fonttype3"><?php echo esc_html( $primary_button_text ); ?></span>
+										<?php
+										$primary_button_text = get_sub_field( 'primary_button_text' );
+										if ( $primary_button_text && empty( $style ) ) :
+											?>
+											<span class="widget--btn__footer fonttype3"><?php echo esc_html( $primary_button_text ); ?></span>
 										<?php endif; ?>
 									</button>
 								</div>

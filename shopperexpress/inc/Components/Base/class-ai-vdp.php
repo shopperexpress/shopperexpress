@@ -3,7 +3,7 @@
  * AI VDP Description Population.
  *
  * Generates AI-enhanced Vehicle Detail Page descriptions after import.
- * Stores the result in _ai_vdp_description post meta.
+ * Stores the result in ai_vdp_description post meta.
  * Never overwrites imported content.
  *
  * @package Shopperexpress

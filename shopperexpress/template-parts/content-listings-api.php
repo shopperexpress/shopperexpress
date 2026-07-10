@@ -57,6 +57,11 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 			<a class="ghost-link" href="<?php echo esc_url( $permalink ); ?>" aria-label="<?php echo esc_attr( $aria_label ); ?>"></a>
 			<div class="card-head">
 				<div class="card-head__holder">
+					<?php if ( $status ) : ?>
+						<div class="badges-list">
+							<span class="card-badge-status"><?php echo esc_html( $status ); ?></span>
+						</div>
+					<?php endif; ?>
 					<span class="card-brand"><?php echo esc_html( $year . ' ' . $make ); ?></span>
 					<?php
 					if ( $vin ) {
@@ -77,66 +82,6 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 				)
 			);
 			?>
-			<?php if ( $status ) : ?>
-				<div class="badges-list">
-					<span class="card-badge-status"><?php echo esc_html( $status ); ?></span>
-				</div>
-			<?php endif; ?>
-			<!-- Detail info -->
-			<?php if ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) : ?>
-				<dl class="card-detail">
-					<?php
-					while ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) :
-						the_row();
-						$label = get_sub_field( 'label' );
-						$value = get_sub_field( 'value' );
-
-						if ( ! empty( $value ) ) {
-
-							$result = preg_replace_callback(
-								'/\b([a-z_]+)\b/',
-								function ( $match ) use ( $vehicle ) {
-
-									$field = $match[1];
-									if ( 'vin_number' === $field ) {
-										$field = 'vin';
-									} elseif ( 'stock_number' === $field ) {
-										$field = 'stock';
-									} elseif ( 'miles_display' === $field ) {
-										$field = 'mileage';
-									}
-
-									$value = $vehicle[ $field ];
-
-									if ( $value !== null && $value !== '' ) {
-										return $value;
-									} else {
-										return '';
-									}
-								},
-								$value
-							);
-						}
-						if ( ! empty( $result ) && ! empty( $label ) ) :
-							if ( $label ) :
-								?>
-								<dt><?php echo esc_html( $label ); ?></dt>
-							<?php endif; ?>
-							<dd
-								<?php
-								if ( str_contains( strtolower( $label ), 'vin' ) ) :
-									?>
-								class="vin" <?php endif; ?>>
-								<?php echo str_replace( '&nbsp;', ' ', esc_html( $result ) ); ?>
-							</dd>
-							<?php
-						endif;
-					endwhile;
-					?>
-				</dl>
-				<?php
-			endif;
-			?>
 			<!-- Disclosure -->
 			<div class="card-info-row">
 				<?php if ( get_field( 'comment_footer', 'options' ) && ! get_field( 'hide_disclosure_srp', 'option' ) ) : ?>
@@ -147,40 +92,107 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 						<?php esc_html_e( 'Disclosure', 'shopperexpress' ); ?>
 					</button>
 				<?php endif; ?>
+				<div class="nav card-tabs" role="tablist">
+					<button class="card-tabs-link" id="detail-tab-<?php echo $vin ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $vin ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $vin ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link active" id="price-tab-<?php echo $vin ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $vin ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $vin ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
+				</div>
 			</div>
-			<ul class="payment-info">
-				<?php
-				get_template_part(
-					'template-parts/api/payment_list',
-					null,
-					array(
-						'vehicle'   => $vehicle,
-						'post_type' => $post_type,
-						'style'     => 'archive',
-					)
-				);
-				get_template_part(
-					'template-parts/api/payment_list_new',
-					null,
-					array(
-						'vehicle'   => $vehicle,
-						'post_type' => $post_type,
-						'style'     => 'archive',
-						'is_single' => false,
-					)
-				);
-				?>
-			</ul>
+			<div class="tab-content">
+				<div class="tab-pane fade" id="product-detail-info-<?php echo $vin ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $vin ?>">
+					<!-- Detail info -->
+					<?php if ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) : ?>
+						<dl class="card-detail">
+							<?php
+							while ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) :
+								the_row();
+								$label = get_sub_field( 'label' );
+								$value = get_sub_field( 'value' );
+
+								if ( ! empty( $value ) ) {
+
+									$result = preg_replace_callback(
+										'/\b([a-z_]+)\b/',
+										function ( $match ) use ( $vehicle ) {
+
+											$field = $match[1];
+											if ( 'vin_number' === $field ) {
+												$field = 'vin';
+											} elseif ( 'stock_number' === $field ) {
+												$field = 'stock';
+											} elseif ( 'miles_display' === $field ) {
+												$field = 'mileage';
+											}
+
+											$value = $vehicle[ $field ];
+
+											if ( $value !== null && $value !== '' ) {
+												return $value;
+											} else {
+												return '';
+											}
+										},
+										$value
+									);
+								}
+								if ( ! empty( $result ) && ! empty( $label ) ) :
+									if ( $label ) :
+										?>
+										<dt><?php echo esc_html( $label ); ?></dt>
+									<?php endif; ?>
+									<dd
+										<?php
+										if ( str_contains( strtolower( $label ), 'vin' ) ) :
+											?>
+										class="vin" <?php endif; ?>>
+										<?php echo str_replace( '&nbsp;', ' ', esc_html( $result ) ); ?>
+									</dd>
+									<?php
+								endif;
+							endwhile;
+							?>
+						</dl>
+						<?php
+					endif;
+					?>
+				</div>
+				<div class="tab-pane fade show active" id="product-price-info-<?php echo $vin ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $vin ?>">
+					<ul class="payment-info">
+						<?php
+						get_template_part(
+							'template-parts/api/payment_list',
+							null,
+							array(
+								'vehicle'   => $vehicle,
+								'post_type' => $post_type,
+								'style'     => 'archive',
+							)
+						);
+						get_template_part(
+							'template-parts/api/payment_list_new',
+							null,
+							array(
+								'vehicle'   => $vehicle,
+								'post_type' => $post_type,
+								'style'     => 'archive',
+								'is_single' => false,
+							)
+						);
+						?>
+					</ul>
+					<?php
+						get_template_part(
+							'template-parts/api/description',
+							null,
+							array(
+								'vehicle'   => $vehicle,
+								'post_type' => $post_type,
+								'type'      => 'srp',
+							)
+						);
+						?>
+				</div>
+			</div>
 			<?php
-			get_template_part(
-				'template-parts/api/description',
-				null,
-				array(
-					'vehicle'   => $vehicle,
-					'post_type' => $post_type,
-					'type'      => 'srp',
-				)
-			);
 			get_template_part(
 				'template-parts/api/unlock',
 				null,

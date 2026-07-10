@@ -111,6 +111,11 @@ if ( $action ) :
 		<a class="ghost-link" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" aria-label="<?php echo esc_attr( implode( ' ', $aria_label ) ); ?>"></a>
 		<div class="card-head">
 			<div class="card-head__holder">
+				<?php if ( ! empty( $title ) ) : ?>
+					<div class="badges-list">
+						<span class="card-badge-offer"><?php echo $title; ?></span>
+					</div>
+				<?php	endif; ?>
 				<?php if ( ! empty( $year ) || ! empty( $make ) ) : ?>
 					<span class="card-brand"><?php echo $year . ' ' . $make; ?></span>
 				<?php endif; ?>
@@ -136,13 +141,7 @@ if ( $action ) :
 			)
 		);
 		?>
-		<?php if ( ! empty( $title ) ) : ?>
-			<div class="badges-list">
-				<span class="card-badge-offer"><?php echo $title; ?></span>
-			</div>
-			<?php
-		endif;
-		if ( ! empty( $vehicle ) ) :
+		<?php if ( ! empty( $vehicle ) ) :
 			?>
 			<span class="card-offer-subtitle"><?php echo $vehicle; ?></span>
 			<?php

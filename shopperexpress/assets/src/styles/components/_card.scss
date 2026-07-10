@@ -95,6 +95,10 @@
     text-transform: none;
     padding: 8px;
 
+    .card-head__holder {
+      margin-bottom: 4px;
+    }
+
     // .card-head {
     //   padding-bottom: 10px;
     // }
@@ -123,13 +127,9 @@
     //   }
     // }
 
-    .detail-slider-holder {
-      margin-bottom: 8px;
-    }
-
-    .badges-list {
-      margin-bottom: 8px;
-    }
+    // .badges-list {
+    //   margin-bottom: 8px;
+    // }
 
     .card-offer-subtitle {
       font-size: 16px;
@@ -200,6 +200,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
+      margin-bottom: 4px;
     }
   }
 
@@ -232,7 +233,7 @@
   }
 
   .detail-slider-holder {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     padding: 0;
 
     .detail-slider {
@@ -250,6 +251,8 @@
     display: block;
     font-size: 12px;
     line-height: 16px;
+    margin-right: auto;
+    padding-top: 3px;
   }
 
   &-model {
@@ -262,32 +265,37 @@
   }
 
   &-detail {
-    font-size: 13px;
+    background-color: $gray-200;
+    padding: 8px 10px 10px;
+    font-size: 12px;
     line-height: 1.1538;
     text-transform: none;
-    margin-bottom: 26px;
+    margin-bottom: 0;
     display: flex;
     flex-wrap: wrap;
+    border-radius: 4px;
 
     dt {
       font-weight: 600;
       width: 37%;
       padding-right: 5px;
+      padding-top: 2px;
     }
 
     dd {
       width: 63%;
       margin: 0;
+      padding-top: 2px;
     }
   }
 
   &-detail + .card-detail {
-    margin-bottom: 18px;
+    margin-bottom: 6px;
   }
 
-  .card-detail + .card-info-row {
-    margin-top: -10px;
-  }
+  // .card-detail + .card-info-row {
+  //   margin-top: -10px;
+  // }
 
   &-price {
     font-weight: 600;
@@ -311,7 +319,8 @@
   }
 
   .badges-list {
-    margin-bottom: 6px;
+    // margin-bottom: 6px;
+    margin-right: 6px;
   }
 
   .info-block__description {
@@ -365,6 +374,18 @@
         position: relative;
       }
     }
+  }
+
+  .tab-content {
+    margin-bottom: 6px;
+
+    .payment-info,
+    .info-block__description {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
   }
 
   .payment-info {
@@ -467,16 +488,14 @@
     margin-top: 0;
   }
 
-  .payment-info + .intice_bFrame {
+  .tab-content + .intice_bFrame {
     .widgetbox {
       margin-top: 6px;
     }
   }
 
-  .info-block__description + .animate-img,
-  .info-block__description + .btn.btn-custom,
-  .payment-info + .btn.btn-custom,
-  .payment-info + .animate-img {
+  .tab-content + .btn.btn-custom,
+  .tab-content + .animate-img {
     margin-top: auto;
   }
 
@@ -795,6 +814,33 @@
 
     .card-head {
       display: grid;
+    }
+  }
+}
+
+.card-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  position: relative;
+  z-index: 2;
+
+  &-link {
+    @include animate(color background-color);
+    text-transform: uppercase;
+    font-size: 10px;
+    line-height: 1;
+    background-color: $gray-200;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    border-radius: 4px;
+    padding: 4px 10px;
+
+    &:hover,
+    &.active {
+      background-color: var(--primary);
+      color: $white;
     }
   }
 }

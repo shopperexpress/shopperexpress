@@ -117,11 +117,14 @@ class Intice_Api_Client {
 		$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
 
 		if ( is_wp_error( $response ) ) {
-			return $response;
+			$stale = get_transient( $stale_key );
+
+			return false !== $stale ? $stale : $response;
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLES );
+			set_transient( $stale_key, $response, self::STALE_TTL );
 		}
 
 		return $response;
@@ -157,11 +160,14 @@ class Intice_Api_Client {
 		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ) );
 
 		if ( is_wp_error( $response ) ) {
-			return $response;
+			$stale = get_transient( $stale_key );
+
+			return false !== $stale ? $stale : $response;
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLE );
+			set_transient( $stale_key, $response, self::STALE_TTL );
 		}
 
 		return $response;
@@ -195,11 +201,14 @@ class Intice_Api_Client {
 		$response = $this->request( 'GET', '/api/v1/meta' );
 
 		if ( is_wp_error( $response ) ) {
-			return $response;
+			$stale = get_transient( $stale_key );
+
+			return false !== $stale ? $stale : $response;
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_META );
+			set_transient( $stale_key, $response, self::STALE_TTL );
 		}
 
 		return $response;
@@ -261,8 +270,6 @@ class Intice_Api_Client {
 		$this->get_vehicles( array( 'condition' => 'used' ) );
 
 		self::$regenerating = false;
-
-		$this->clear_stale_cache();
 	}
 
 	// ─── Private helpers ──────────────────────────────────────────────────────
@@ -274,23 +281,6 @@ class Intice_Api_Client {
 	 */
 	private function is_cache_enabled(): bool {
 		return (bool) get_option( Api_Settings::OPTION_CACHE_ENABLED, true );
-	}
-
-	/**
-	 * Delete all stale transients created during a graceful flush.
-	 *
-	 * @return void
-	 */
-	private function clear_stale_cache(): void {
-		global $wpdb;
-
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-				'_transient_' . self::CACHE_PREFIX_STALE . '%',
-				'_transient_timeout_' . self::CACHE_PREFIX_STALE . '%'
-			)
-		);
 	}
 
 	/**

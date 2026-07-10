@@ -387,6 +387,7 @@ get_header();
 						array(
 							'vehicle'   => $v,
 							'post_type' => $post_type,
+							'single'    => 'single_',
 						)
 					);
 					?>

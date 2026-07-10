@@ -16,7 +16,7 @@ if ( ! class_exists( 'ConversionBlock' ) ) {
 $vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? '';
 $vin       = strtoupper( $vehicle['vin'] ?? '' );
-
+$single    = $args['single'] ?? '';
 if ( ! $vin || ! in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
 	return;
 }
@@ -28,7 +28,7 @@ get_template_part(
 	null,
 	array(
 		'vin'         => $vin,
-		'location'    => '',
+		'location'    => $single,
 		'post_id'     => 0,
 		'post_type'   => $post_type,
 		'api_vehicle' => $vehicle,

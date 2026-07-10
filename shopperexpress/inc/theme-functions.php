@@ -220,14 +220,14 @@ function wps_build_adf_xml( array $fields ): string {
 function wps_dispatch_adf( string $xml, array $fields ): array {
 	global $wpdb;
 
-	$method     = get_option( 'adf_delivery_method', 'email' );
-	$first_name = sanitize_text_field( $fields['first_name'] ?? '' );
-	$last_name  = sanitize_text_field( $fields['last_name'] ?? '' );
-	$email      = sanitize_email( $fields['email'] ?? '' );
-	$phone      = sanitize_text_field( $fields['phone'] ?? '' );
-	$form_name  = sanitize_text_field( $fields['form_name'] ?? '' );
+	$method      = get_option( 'adf_delivery_method', 'email' );
+	$first_name  = sanitize_text_field( $fields['first_name'] ?? '' );
+	$last_name   = sanitize_text_field( $fields['last_name'] ?? '' );
+	$email       = sanitize_email( $fields['email'] ?? '' );
+	$phone       = sanitize_text_field( $fields['phone'] ?? '' );
+	$form_name   = sanitize_text_field( $fields['form_name'] ?? '' );
 	$lead_source = sanitize_text_field( $fields['lead_source'] ?? wp_get_referer() ?: '' );
-	$site_name  = sanitize_text_field( get_option( 'adf_site_name', get_bloginfo( 'name' ) ) );
+	$site_name   = sanitize_text_field( get_option( 'adf_site_name', get_bloginfo( 'name' ) ) );
 
 	// Duplicate prevention: block same email+phone within the configured window.
 	$dedup_minutes = (int) get_option( 'adf_dedup_minutes', 0 );
@@ -467,8 +467,8 @@ function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $for
 		return;
 	}
 
-	$form_id         = (int) ( $form_data['id'] ?? 0 );
-	$configured_ids  = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $configured_ids_raw ) ) ) );
+	$form_id        = (int) ( $form_data['id'] ?? 0 );
+	$configured_ids = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $configured_ids_raw ) ) ) );
 
 	if ( ! in_array( $form_id, $configured_ids, true ) ) {
 		return;
@@ -1368,6 +1368,43 @@ function display_svg_icon( $svg_code, $display = true ) {
 	} else {
 		return $svg_code;
 	}
+}
+
+/**
+ * Render an ACF image field value as inline SVG (when the file is an SVG)
+ * or as a regular <img> tag (any other mime type). Alt text is read from
+ * the image field itself.
+ *
+ * @param array  $image   ACF image field value (array format with 'ID', 'url', 'alt', 'mime_type').
+ * @param string $classes Space-separated CSS classes for the <img>/<svg> element.
+ *
+ * @return void
+ */
+function render_acf_image_icon( $image, $classes = '' ) {
+
+	if ( empty( $image['url'] ) ) {
+		return;
+	}
+
+	if ( 'image/svg+xml' === ( $image['mime_type'] ?? '' ) ) {
+		$svg_path = ! empty( $image['ID'] ) ? get_attached_file( $image['ID'] ) : '';
+		$svg_code = $svg_path && file_exists( $svg_path ) ? file_get_contents( $svg_path ) : '';
+
+		if ( $svg_code ) {
+			if ( $classes && ! preg_match( '/class=/', $svg_code ) ) {
+				$svg_code = preg_replace( '/<svg([^>]*)>/', '<svg$1 class="' . esc_attr( $classes ) . '">', $svg_code, 1 );
+			}
+			display_svg_icon( $svg_code );
+			return;
+		}
+	}
+
+	printf(
+		'<img class="%1$s" src="%2$s" alt="%3$s">',
+		esc_attr( $classes ),
+		esc_url( $image['url'] ),
+		esc_attr( $image['alt'] ?? '' )
+	);
 }
 
 /**
