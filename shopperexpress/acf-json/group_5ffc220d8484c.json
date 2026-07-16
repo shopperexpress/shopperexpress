@@ -8004,58 +8004,6 @@
             "endpoint": 0
         },
         {
-            "key": "field_63345b0b8566b",
-            "label": "Widget",
-            "name": "widget",
-            "aria-label": "",
-            "type": "group",
-            "instructions": "Configure the body-style quick-filter widget on the SRP. Select which body style taxonomy terms to display as visual shortcut buttons.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "block",
-            "wpml_cf_preferences": 1,
-            "acfe_seamless_style": 0,
-            "acfe_group_modal": 0,
-            "acfe_group_modal_close": 0,
-            "acfe_group_modal_button": "",
-            "acfe_group_modal_size": "large",
-            "sub_fields": [
-                {
-                    "key": "field_63345b1e8566c",
-                    "label": "Body style",
-                    "name": "body_style",
-                    "aria-label": "",
-                    "type": "taxonomy",
-                    "instructions": "Select the body style terms to include in the quick-filter widget (e.g. SUV, Sedan, Truck).",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "taxonomy": "body-style-listings",
-                    "add_term": 0,
-                    "save_terms": 0,
-                    "load_terms": 0,
-                    "return_format": "object",
-                    "field_type": "multi_select",
-                    "allow_null": 0,
-                    "acfe_bidirectional": {
-                        "acfe_bidirectional_enabled": "0"
-                    },
-                    "bidirectional": 0,
-                    "multiple": 0,
-                    "bidirectional_target": []
-                }
-            ]
-        },
-        {
             "key": "field_69b18934ca86b",
             "label": "Custom cards",
             "name": "custom_cards",
@@ -8203,6 +8151,58 @@
                     "create_options": 0,
                     "save_options": 0,
                     "parent_repeater": "field_69b18934ca86b"
+                }
+            ]
+        },
+        {
+            "key": "field_63345b0b8566b",
+            "label": "Widget",
+            "name": "widget",
+            "aria-label": "",
+            "type": "group",
+            "instructions": "Configure the body-style quick-filter widget on the SRP. Select which body style taxonomy terms to display as visual shortcut buttons.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "wpml_cf_preferences": 1,
+            "acfe_seamless_style": 0,
+            "acfe_group_modal": 0,
+            "acfe_group_modal_close": 0,
+            "acfe_group_modal_button": "",
+            "acfe_group_modal_size": "large",
+            "sub_fields": [
+                {
+                    "key": "field_63345b1e8566c",
+                    "label": "Body style",
+                    "name": "body_style",
+                    "aria-label": "",
+                    "type": "taxonomy",
+                    "instructions": "Select the body style terms to include in the quick-filter widget (e.g. SUV, Sedan, Truck).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "taxonomy": "body-style-listings",
+                    "add_term": 0,
+                    "save_terms": 0,
+                    "load_terms": 0,
+                    "return_format": "object",
+                    "field_type": "multi_select",
+                    "allow_null": 0,
+                    "acfe_bidirectional": {
+                        "acfe_bidirectional_enabled": "0"
+                    },
+                    "bidirectional": 0,
+                    "multiple": 0,
+                    "bidirectional_target": []
                 }
             ]
         },
@@ -12185,92 +12185,6 @@
                     "wpml_cf_preferences": 1
                 },
                 {
-                    "key": "field_64915292354ff",
-                    "label": "Year",
-                    "name": "year",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a"
-                },
-                {
-                    "key": "field_649152a635500",
-                    "label": "Make",
-                    "name": "make",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a"
-                },
-                {
-                    "key": "field_64915292354ff",
-                    "label": "Year",
-                    "name": "year",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a",
-                    "wpml_cf_preferences": 2
-                },
-                {
-                    "key": "field_649152b935501",
-                    "label": "Condition",
-                    "name": "condition",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a",
-                    "wpml_cf_preferences": 2
-                },
-                {
                     "key": "field_649152cb35502",
                     "label": "Label",
                     "name": "label",
@@ -12292,9 +12206,51 @@
                     "parent_repeater": "field_604a1a3d7da2a"
                 },
                 {
+                    "key": "field_64915292354ff",
+                    "label": "Year",
+                    "name": "year",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
                     "key": "field_649152a635500",
                     "label": "Make",
                     "name": "make",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_604a1a3d7da2a"
+                },
+                {
+                    "key": "field_649152b935501",
+                    "label": "Condition",
+                    "name": "condition",
                     "aria-label": "",
                     "type": "text",
                     "instructions": "",
@@ -12336,27 +12292,6 @@
                     "wpml_cf_preferences": 2
                 },
                 {
-                    "key": "field_649152b935501",
-                    "label": "Condition",
-                    "name": "condition",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a"
-                },
-                {
                     "key": "field_6a55fa2a89222",
                     "label": "Trim",
                     "name": "trim",
@@ -12377,28 +12312,6 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_604a1a3d7da2a"
-                },
-                {
-                    "key": "field_649152cb35502",
-                    "label": "Label",
-                    "name": "label",
-                    "aria-label": "",
-                    "type": "text",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_604a1a3d7da2a",
-                    "wpml_cf_preferences": 2
                 },
                 {
                     "key": "field_604a1b827da30",
@@ -12527,5 +12440,5 @@
             "json"
         ]
     },
-    "modified": 1784028531
+    "modified": 1784193939
 }
