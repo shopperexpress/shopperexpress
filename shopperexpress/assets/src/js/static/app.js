@@ -3266,6 +3266,19 @@ function formatPhoneNumber(phone) {
 			let vehiclesURL = this.holder.data('vehicles');
 
 			if (vehiclesURL) {
+				// The page shell can be served from cache, so the "loged" param baked into
+				// data-vehicles may reflect whoever's visit generated the cache, not this
+				// visitor. Override it with the real, current auth state from the cookie.
+				// WordPress' own auth cookie is HttpOnly (unreadable here), so we read the
+				// non-HttpOnly "wps_logged_in" mirror cookie instead (see theme-functions.php).
+				const isLoggedIn = /(?:^|;\s*)wps_logged_in=1/.test(document.cookie);
+
+				if (/([?&])loged=/.test(vehiclesURL)) {
+					vehiclesURL = vehiclesURL.replace(/([?&])loged=[^&]*/, `$1loged=${isLoggedIn}`);
+				} else {
+					vehiclesURL += (vehiclesURL.indexOf('?') >= 0 ? '&' : '?') + `loged=${isLoggedIn}`;
+				}
+
 				this.holder.addClass(this.options.loadingClass);
 
 				const sortType = getUrlAttr('sort').toLocaleLowerCase();

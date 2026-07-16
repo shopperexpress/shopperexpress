@@ -11,13 +11,12 @@
  *   post_type (string) — 'listings' or 'used-listings'
  *   style     (string) — 'archive' (SRP) | '' (VDP)
  *   is_single (bool)   — true on VDP, false on SRP
- *   loged     (string) — 'true' if user is logged in. Passed in explicitly on the
- *                         SRP (archive) card, which is rendered inside a REST API
- *                         callback where WordPress resets the current user to 0
- *                         because the request carries no X-WP-Nonce header — so
- *                         wps_auth()/is_user_logged_in() can't be trusted there.
- *                         On the VDP (normal page load) this arg is not passed
- *                         and wps_auth() is used directly.
+ *
+ * Locked and unlocked rows are both always rendered into markup (this template can
+ * be served from a full-page cache, so a server-side auth check baked into the
+ * cache would go stale for other visitors). Each row gets a `pay-locked` or
+ * `pay-unlocked` class, and CSS shows/hides them against the `logged-in` class on
+ * `<body>`, which is corrected client-side from the real auth cookie on every load.
  *
  * @package Shopperexpress
  */
@@ -26,7 +25,6 @@ $vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
 $style     = ! empty( $args['style'] );
 $is_single = ! empty( $args['is_single'] );
-$is_authed = isset( $args['loged'] ) ? 'true' === $args['loged'] : wps_auth();
 
 if ( empty( $vehicle ) ) {
 	return;
@@ -188,13 +186,20 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	}
 
 	$show_block = $is_single ? get_sub_field( 'show_on_vdp' ) : get_sub_field( 'show_on_srp' );
-	$show_state = ( 'locked' === $show_payment && ! $is_authed )
-		|| ( 'unlocked' === $show_payment && $is_authed )
-		|| 'both' === $show_payment;
 
-	if ( ! $value || ! $heading || ! $show_block || ! $show_state ) :
+	if ( ! $value || ! $heading || ! $show_block ) :
 		continue;
 	endif;
+
+	// Both locked and unlocked rows are always rendered — this markup can be served
+	// from a full-page cache, so the actual show/hide decision is made purely with
+	// CSS against the real-time "logged-in" class the client sets from its own cookie.
+	$auth_class = '';
+	if ( 'locked' === $show_payment ) {
+		$auth_class = ' pay-locked';
+	} elseif ( 'unlocked' === $show_payment ) {
+		$auth_class = ' pay-unlocked';
+	}
 
 	$get_style = get_sub_field( ( $is_single ? 'vdp_' : 'srp_' ) . 'style' );
 	$style_row = array();
@@ -234,7 +239,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 	ob_start();
 	?>
-	<li class="show<?php echo $small_pricing_block ? ' text--sm' : ''; ?>"<?php echo $style_row_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<li class="show<?php echo esc_attr( $auth_class ); ?><?php echo $small_pricing_block ? ' text--sm' : ''; ?>"<?php echo $style_row_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<a href="#" data-content='<?php echo wp_json_encode( wp_kses_post( get_sub_field( 'pop_up_details' ) ) ); ?>' data-toggle="modal" data-target="#popUpDetails">
 			<?php if ( $style ) : ?>
 				<strong class="dt"<?php echo $title_style; // phpcs:ignore ?>><?php echo esc_html( $heading ); ?></strong>

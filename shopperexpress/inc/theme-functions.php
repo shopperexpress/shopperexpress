@@ -542,6 +542,50 @@ add_action(
 	}
 );
 
+/**
+ * WordPress' own logged-in cookie is HttpOnly, so front-end JS can't read it to fix
+ * the "logged-in" body class / payment-list auth state on cached pages. Mirror it in
+ * a plain, non-HttpOnly cookie that carries no privileges by itself — it's only a
+ * client-readable signal, every real auth check still goes through WordPress.
+ */
+function wps_sync_client_auth_cookie( $expire = 0 ) {
+	$expire = $expire ?: time() + 2 * DAY_IN_SECONDS;
+	setcookie( 'wps_logged_in', '1', $expire, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), false );
+	$_COOKIE['wps_logged_in'] = '1';
+}
+
+function wps_clear_client_auth_cookie() {
+	setcookie( 'wps_logged_in', '', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), false );
+	unset( $_COOKIE['wps_logged_in'] );
+}
+
+add_action(
+	'set_logged_in_cookie',
+	function ( $logged_in_cookie, $expire ) {
+		wps_sync_client_auth_cookie( $expire );
+	},
+	10,
+	2
+);
+
+add_action( 'clear_auth_cookie', 'wps_clear_client_auth_cookie' );
+
+// Backfill for sessions that logged in before this cookie existed, so it's applied
+// on the next request that actually reaches PHP without waiting for a fresh login.
+add_action(
+	'init',
+	function () {
+		$flag_present = ! empty( $_COOKIE['wps_logged_in'] );
+		$is_authed    = is_user_logged_in();
+
+		if ( $is_authed && ! $flag_present ) {
+			wps_sync_client_auth_cookie();
+		} elseif ( ! $is_authed && $flag_present ) {
+			wps_clear_client_auth_cookie();
+		}
+	}
+);
+
 function wps_auth( $action = '' ) {
 
 	$auth   = is_user_logged_in() ? true : false;

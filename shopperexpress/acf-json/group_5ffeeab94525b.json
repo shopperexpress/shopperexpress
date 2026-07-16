@@ -1441,36 +1441,6 @@
             "selected": 0
         },
         {
-            "key": "field_60d091e6b52a3",
-            "label": "Footer style",
-            "name": "footer_style",
-            "aria-label": "",
-            "type": "select",
-            "instructions": "Layout style for the site footer. Style 1 is the default; Style 2 uses an alternate column arrangement.",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "1": "Style 1",
-                "2": "Style 2"
-            },
-            "default_value": 1,
-            "allow_null": 0,
-            "multiple": 0,
-            "ui": 0,
-            "return_format": "value",
-            "ajax": 0,
-            "placeholder": "",
-            "allow_custom": 0,
-            "search_placeholder": "",
-            "create_options": 0,
-            "save_options": 0
-        },
-        {
             "key": "field_5ffeeabe26a98",
             "label": "Copyright",
             "name": "copyright",

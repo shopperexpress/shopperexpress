@@ -101,6 +101,17 @@
 </head>
 
 <body <?php body_class(); ?>>
+	<script>
+		// Cached markup can bake in a stale "logged-in" class. Correct it against the
+		// actual browser cookie so payment_list pricing doesn't get stuck on the
+		// auth state that was current when the page was cached. WordPress' own auth
+		// cookie is HttpOnly (unreadable from JS), so we read the non-HttpOnly
+		// "wps_logged_in" cookie that mirrors it — see wps_sync_client_auth_cookie().
+		(function () {
+			var authed = /(?:^|;\s*)wps_logged_in=1/.test( document.cookie );
+			document.body.classList.toggle( 'logged-in', authed );
+		})();
+	</script>
 	<?php wp_body_open(); ?>
 	<div id="wrapper">
 		<header id="header">
