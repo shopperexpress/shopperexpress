@@ -11,6 +11,13 @@
  *   post_type (string) — 'listings' or 'used-listings'
  *   style     (string) — 'archive' (SRP) | '' (VDP)
  *   is_single (bool)   — true on VDP, false on SRP
+ *   loged     (string) — 'true' if user is logged in. Passed in explicitly on the
+ *                         SRP (archive) card, which is rendered inside a REST API
+ *                         callback where WordPress resets the current user to 0
+ *                         because the request carries no X-WP-Nonce header — so
+ *                         wps_auth()/is_user_logged_in() can't be trusted there.
+ *                         On the VDP (normal page load) this arg is not passed
+ *                         and wps_auth() is used directly.
  *
  * @package Shopperexpress
  */
@@ -19,6 +26,7 @@ $vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
 $style     = ! empty( $args['style'] );
 $is_single = ! empty( $args['is_single'] );
+$is_authed = isset( $args['loged'] ) ? 'true' === $args['loged'] : wps_auth();
 
 if ( empty( $vehicle ) ) {
 	return;
@@ -57,6 +65,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	the_row();
 
 	$active       = get_sub_field( 'active' );
+	$show_payment = get_sub_field( 'show_payment' );
 	$start_date   = get_sub_field( 'start_date' );
 	$end_date     = get_sub_field( 'end_date' );
 	$custom_text  = get_sub_field( 'custom_text' );
@@ -179,8 +188,11 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	}
 
 	$show_block = $is_single ? get_sub_field( 'show_on_vdp' ) : get_sub_field( 'show_on_srp' );
+	$show_state = ( 'locked' === $show_payment && ! $is_authed )
+		|| ( 'unlocked' === $show_payment && $is_authed )
+		|| 'both' === $show_payment;
 
-	if ( ! $value || ! $heading || ! $show_block ) :
+	if ( ! $value || ! $heading || ! $show_block || ! $show_state ) :
 		continue;
 	endif;
 

@@ -1074,7 +1074,7 @@ function get_url_with_fields( $post_id = '', $post_type = '', $url = '' ) {
 	return $url;
 }
 
-function get_listings_count( $year, $make, $model, $condition, $index, $row ) {
+function get_listings_count( $year, $make, $model, $condition, $trim, $index, $row ) {
 	$count = get_transient( 'acf-count-' . $index . $row );
 	if ( ! empty( $_REQUEST['clear'] ) ) {
 		$count = false;
@@ -1110,6 +1110,14 @@ function get_listings_count( $year, $make, $model, $condition, $index, $row ) {
 			$meta_query[] = array(
 				'key'     => 'condition',
 				'value'   => $condition,
+				'compare' => '=',
+			);
+		}
+
+		if ( $trim ) {
+			$meta_query[] = array(
+				'key'     => 'trim',
+				'value'   => $trim,
 				'compare' => '=',
 			);
 		}

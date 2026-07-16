@@ -22,6 +22,10 @@ class Export implements Theme_Component {
 		add_action( 'add_meta_boxes_page', array( $this, 'register_meta_box' ) );
 		add_action( 'admin_post_export_acf_flexible_page', array( $this, 'handle_export' ) );
 		add_action( 'admin_post_import_acf_flexible_page', array( $this, 'handle_import' ) );
+
+		add_action( 'acf/render_field/key=field_660eebbf15403', array( $this, 'render_shortcodes_export_import' ) );
+		add_action( 'admin_post_export_theme_shortcodes', array( $this, 'handle_shortcodes_export' ) );
+		add_action( 'admin_post_import_theme_shortcodes', array( $this, 'handle_shortcodes_import' ) );
 	}
 
 	/**
@@ -110,6 +114,139 @@ class Export implements Theme_Component {
 		<?php
 	}
 
+
+	/**
+	 * Render Export/Import buttons below the Shortcodes repeater on the Theme Options page.
+	 */
+	public function render_shortcodes_export_import(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$export_url = add_query_arg(
+			array(
+				'action'   => 'export_theme_shortcodes',
+				'_wpnonce' => wp_create_nonce( 'export_theme_shortcodes' ),
+			),
+			admin_url( 'admin-post.php' )
+		);
+		?>
+		<div class="acf-shortcodes-export-import" style="margin-top:12px; padding-top:12px; border-top:1px solid #dedede;">
+			<a href="<?php echo esc_url( $export_url ); ?>" class="button button-secondary" style="margin-right:8px;">
+				<?php esc_html_e( 'Export shortcodes to JSON', 'shopperexpress' ); ?>
+			</a>
+			<input type="file" id="import_theme_shortcodes_file" accept=".json,application/json">
+			<button type="button" class="button button-secondary" onclick="shopperImportThemeShortcodes()">
+				<?php esc_html_e( 'Import from JSON', 'shopperexpress' ); ?>
+			</button>
+		</div>
+		<script>
+			function shopperImportThemeShortcodes() {
+				const fileInput = document.getElementById('import_theme_shortcodes_file');
+				if (!fileInput.files.length) {
+					alert('<?php echo esc_js( __( 'Please select a JSON file to import.', 'shopperexpress' ) ); ?>');
+					return;
+				}
+
+				const file = fileInput.files[0];
+				const formData = new FormData();
+				formData.append('import_json', file);
+				formData.append('action', 'import_theme_shortcodes');
+				formData.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'import_theme_shortcodes' ) ); ?>');
+
+				const btn = event.target;
+				btn.disabled = true;
+
+				fetch('<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>', {
+						method: 'POST',
+						credentials: 'same-origin',
+						body: formData,
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							window.location.reload();
+						} else {
+							throw new Error(data.data && data.data.message ? data.data.message : 'Import failed');
+						}
+					})
+					.catch(err => {
+						alert(<?php echo json_encode( __( 'Import failed: ', 'shopperexpress' ) ); ?> + err.message);
+						btn.disabled = false;
+					});
+			}
+		</script>
+		<?php
+	}
+
+	/**
+	 * Export the Shortcodes repeater field (Theme Options) as a downloadable JSON file.
+	 */
+	public function handle_shortcodes_export(): void {
+		if (
+			! current_user_can( 'manage_options' ) ||
+			! isset( $_REQUEST['_wpnonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'export_theme_shortcodes' )
+		) {
+			wp_die( 'Access denied' );
+		}
+
+		$rows = function_exists( 'get_field' ) ? get_field( 'shortcodes', 'option' ) : array();
+		$data = array(
+			'field'     => 'shortcodes',
+			'exported'  => gmdate( 'c' ),
+			'shortcodes' => is_array( $rows ) ? $rows : array(),
+		);
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=theme-shortcodes-export-' . gmdate( 'Y-m-d' ) . '.json' );
+
+		echo wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+		exit;
+	}
+
+	/**
+	 * Import the Shortcodes repeater field (Theme Options) from an uploaded JSON file.
+	 */
+	public function handle_shortcodes_import(): void {
+		if (
+			! current_user_can( 'manage_options' ) ||
+			! isset( $_POST['_wpnonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'import_theme_shortcodes' ) ||
+			! isset( $_FILES['import_json'] )
+		) {
+			wp_send_json_error( array( 'message' => __( 'Access denied.', 'shopperexpress' ) ) );
+		}
+
+		$file = $_FILES['import_json'];
+		if ( empty( $file['size'] ) || $file['error'] !== UPLOAD_ERR_OK ) {
+			wp_send_json_error( array( 'message' => __( 'File upload error.', 'shopperexpress' ) ) );
+		}
+
+		$file_contents = file_get_contents( $file['tmp_name'] );
+		$data          = $file_contents ? json_decode( $file_contents, true ) : null;
+
+		if ( ! is_array( $data ) || ! isset( $data['shortcodes'] ) || ! is_array( $data['shortcodes'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid shortcodes JSON file.', 'shopperexpress' ) ) );
+		}
+
+		$rows = array();
+		foreach ( $data['shortcodes'] as $row ) {
+			if ( ! is_array( $row ) || ! isset( $row['shortcode_name'] ) ) {
+				continue;
+			}
+			$rows[] = array(
+				'shortcode_name'  => sanitize_text_field( $row['shortcode_name'] ),
+				'shortcode_value' => isset( $row['shortcode_value'] ) ? wp_kses_post( $row['shortcode_value'] ) : '',
+			);
+		}
+
+		if ( function_exists( 'update_field' ) ) {
+			update_field( 'shortcodes', $rows, 'option' );
+		}
+
+		wp_send_json_success( array( 'imported' => count( $rows ) ) );
+	}
 
 	/**
 	 * Handle the export of page data as JSON.

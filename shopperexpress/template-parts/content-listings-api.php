@@ -165,6 +165,7 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 								'vehicle'   => $vehicle,
 								'post_type' => $post_type,
 								'style'     => 'archive',
+								'loged'     => $loged,
 							)
 						);
 						get_template_part(
@@ -175,6 +176,7 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 								'post_type' => $post_type,
 								'style'     => 'archive',
 								'is_single' => false,
+								'loged'     => $loged,
 							)
 						);
 						?>

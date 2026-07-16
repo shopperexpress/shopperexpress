@@ -61,6 +61,7 @@ if ( have_rows( 'slider', 'options' ) ) :
 						$year      = get_sub_field( 'year' );
 						$make      = get_sub_field( 'make' );
 						$condition = get_sub_field( 'condition' );
+						$trim      = get_sub_field( 'trim' );
 						$row       = get_row_index();
 
 						$count = null;
@@ -71,6 +72,7 @@ if ( have_rows( 'slider', 'options' ) ) :
 								$make,
 								$model,
 								$condition,
+								$trim,
 								$index,
 								$row
 							);
@@ -82,6 +84,7 @@ if ( have_rows( 'slider', 'options' ) ) :
 							'year'      => $year,
 							'make'      => $make,
 							'condition' => $condition,
+							'trim'      => $trim,
 							'label'     => get_sub_field( 'label' ),
 							'image'     => get_sub_field( 'image' ),
 							'url'       => get_sub_field( 'url' ),
@@ -143,6 +146,6 @@ if ( have_rows( 'slider', 'options' ) ) :
 			</div>
 		</div>
 	</section>
-				<?php
+					<?php
 endif;
 endif;

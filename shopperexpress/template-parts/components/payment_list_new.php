@@ -28,6 +28,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	the_row();
 
 	$active       = get_sub_field( 'active' );
+	$show_payment = get_sub_field( 'show_payment' );
 	$start_date   = get_sub_field( 'start_date' );
 	$end_date     = get_sub_field( 'end_date' );
 	$custom_text  = get_sub_field( 'custom_text' );
@@ -148,8 +149,12 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	}
 
 	$show_block = $is_single ? get_sub_field( 'show_on_vdp' ) : get_sub_field( 'show_on_srp' );
+	$is_authed  = wps_auth();
+	$show_state = ( 'locked' === $show_payment && ! $is_authed )
+		|| ( 'unlocked' === $show_payment && $is_authed )
+		|| 'both' === $show_payment;
 
-	if ( ! $value || ! $heading || ! $show_block ) :
+	if ( ! $value || ! $heading || ! $show_block || ! $show_state ) :
 		continue;
 	endif;
 
@@ -205,7 +210,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			<?php endif; ?>
 			<strong class="price">
 				<span class="<?php echo esc_attr( $price_class ); ?>"<?php echo $price_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
-					<?php echo $formatted_value; ?>
+					<?php echo $formatted_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built from escaped parts above ?>
 				</span>
 			</strong>
 		</a>

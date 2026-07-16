@@ -43,8 +43,9 @@ if ( have_rows( 'slider', 'options' ) ) :
 										$year      = get_sub_field( 'year' );
 										$make      = get_sub_field( 'make' );
 										$condition = get_sub_field( 'condition' );
+										$trim      = get_sub_field( 'trim' );
 										$row       = get_row_index();
-										echo ' - ' . get_listings_count( $year, $make, $model, $condition, '1', $row );
+										echo ' - ' . get_listings_count( $year, $make, $model, $condition, $trim, '1', $row );
 									}
 									?>
 								</a>
