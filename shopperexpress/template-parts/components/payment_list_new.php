@@ -149,14 +149,20 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 	}
 
 	$show_block = $is_single ? get_sub_field( 'show_on_vdp' ) : get_sub_field( 'show_on_srp' );
-	$is_authed  = wps_auth();
-	$show_state = ( 'locked' === $show_payment && ! $is_authed )
-		|| ( 'unlocked' === $show_payment && $is_authed )
-		|| 'both' === $show_payment;
 
-	if ( ! $value || ! $heading || ! $show_block || ! $show_state ) :
+	if ( ! $value || ! $heading || ! $show_block ) :
 		continue;
 	endif;
+
+	// Locked and unlocked rows are both always rendered — this markup can be served
+	// from a full-page cache, so the show/hide decision is made purely with CSS
+	// against the real-time "logged-in" class the client sets from its own cookie.
+	$auth_class = '';
+	if ( 'locked' === $show_payment ) {
+		$auth_class = ' pay-locked';
+	} elseif ( 'unlocked' === $show_payment ) {
+		$auth_class = ' pay-unlocked';
+	}
 
 	$get_style = get_sub_field( ( is_single() ? 'vdp_' : 'srp_' ) . 'style' );
 	$style_row = array();
@@ -196,7 +202,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 	ob_start();
 	?>
-	<li class="show<?php echo $small_pricing_block ? ' text--sm' : ''; ?>" <?php echo ! is_array( $style_row ) ? $style_row : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
+	<li class="show<?php echo esc_attr( $auth_class ); ?><?php echo $small_pricing_block ? ' text--sm' : ''; ?>" <?php echo ! is_array( $style_row ) ? $style_row : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>>
 		<a href="#" data-content='<?php echo wp_json_encode( wp_kses_post( get_sub_field( 'pop_up_details' ) ) ); ?>' data-toggle="modal" data-target="#popUpDetails">
 			<?php if ( $style ) : ?>
 				<strong class="dt" <?php echo $title_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above ?>><?php echo esc_html( $heading ); ?></strong>

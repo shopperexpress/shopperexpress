@@ -189,29 +189,14 @@ get_header();
 					);
 
 					// ── Specs table ───────────────────────────────────────────
-					$specs = array(
-						__( 'Mileage', 'shopperexpress' ) => $v['mileage'] ? number_format( (int) $v['mileage'] ) . ' mi' : '',
-						__( 'Condition', 'shopperexpress' ) => $v['condition'] ?? '',
-						__( 'Drivetrain', 'shopperexpress' ) => $v['drivetrain'] ?? '',
-						__( 'Body Style', 'shopperexpress' ) => $v['body_style'] ?? '',
-						__( 'Fuel Type', 'shopperexpress' ) => $v['fuel_type'] ?? '',
-						__( 'Transmission', 'shopperexpress' ) => $v['transmission'] ?? '',
-						__( 'Ext. Color', 'shopperexpress' ) => $v['exterior_color'] ?? '',
-						__( 'Int. Color', 'shopperexpress' ) => $v['interior_color'] ?? '',
-						__( 'Stock #', 'shopperexpress' ) => $v['stock'] ?? '',
-						__( 'VIN', 'shopperexpress' )     => strtoupper( $v['vin'] ?? '' ),
+					get_template_part(
+						'template-parts/detail',
+						'info',
+						array(
+							'post_type' => $post_type,
+							'vehicle'   => $v,
+						)
 					);
-					$specs = array_filter( $specs );
-					if ( ! empty( $specs ) ) :
-						?>
-						<dl class="detail-info">
-							<?php foreach ( $specs as $label => $value ) : ?>
-								<dt><?php echo esc_html( $label ); ?></dt>
-								<dd><?php echo esc_html( $value ); ?></dd>
-							<?php endforeach; ?>
-						</dl>
-						<?php
-					endif;
 					$badges_html = '';
 
 						$certified_custom_url = get_field( 'certified_custom_url' );
