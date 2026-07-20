@@ -726,7 +726,7 @@ class SOC_Ajax {
 	/**
 	 * Save ADF lead delivery settings.
 	 *
-	 * Expected POST: delivery_method, api_endpoint, secret_key (optional), timeout, fallback_email.
+	 * Expected POST: delivery_method (email|api|both), api_endpoint, secret_key (optional), timeout, fallback_email.
 	 */
 	private function handle_lead_settings_save(): void {
 		$method       = sanitize_key( $_POST['delivery_method'] ?? 'email' );
@@ -742,7 +742,7 @@ class SOC_Ajax {
 		$dedup        = max( 0, (int) ( $_POST['dedup_minutes'] ?? 0 ) );
 		$wpforms_ids  = sanitize_text_field( wp_unslash( $_POST['wpforms_ids'] ?? '' ) );
 
-		if ( ! in_array( $method, array( 'email', 'api' ), true ) ) {
+		if ( ! in_array( $method, array( 'email', 'api', 'both' ), true ) ) {
 			SOC_Response::error( 'Invalid delivery method.' );
 		}
 

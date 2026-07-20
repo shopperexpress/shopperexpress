@@ -5,7 +5,7 @@
  * @package Shopperexpress
  *
  * Available variables:
- *   $data['delivery_method']    string  'email'|'api'
+ *   $data['delivery_method']    string  'email'|'api'|'both'
  *   $data['api_endpoint']       string
  *   $data['api_configured']     bool
  *   $data['fallback_email']     bool
@@ -23,8 +23,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$is_api    = 'api' === ( $data['delivery_method'] ?? 'email' );
-$stats     = $data['stats'] ?? array();
+$method_val = $data['delivery_method'] ?? 'email';
+$show_api   = in_array( $method_val, array( 'api', 'both' ), true );
+$is_api     = 'api' === $method_val;
+$stats      = $data['stats'] ?? array();
 $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 ?>
 
@@ -43,12 +45,16 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 			<div class="soc-card__label"><?php esc_html_e( 'Delivery Method', 'shopperexpress' ); ?></div>
 			<div class="soc-card__value">
 				<label class="soc-lead-radio">
-					<input type="radio" name="adf_delivery_method" value="email" <?php checked( ! $is_api ); ?>>
+					<input type="radio" name="adf_delivery_method" value="email" <?php checked( 'email' === $method_val ); ?>>
 					<?php esc_html_e( 'Email', 'shopperexpress' ); ?>
 				</label>
 				<label class="soc-lead-radio">
-					<input type="radio" name="adf_delivery_method" value="api" <?php checked( $is_api ); ?>>
+					<input type="radio" name="adf_delivery_method" value="api" <?php checked( 'api' === $method_val ); ?>>
 					<?php esc_html_e( 'API', 'shopperexpress' ); ?>
+				</label>
+				<label class="soc-lead-radio">
+					<input type="radio" name="adf_delivery_method" value="both" <?php checked( 'both' === $method_val ); ?>>
+					<?php esc_html_e( 'Both', 'shopperexpress' ); ?>
 				</label>
 			</div>
 		</div>
@@ -84,7 +90,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 			</tr>
 
 			<!-- API credentials (shown when API is selected) -->
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'API Endpoint URL', 'shopperexpress' ); ?></th>
 				<td>
 					<input type="url"
@@ -94,7 +100,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 						placeholder="https://api.intice.io/v1/leads">
 				</td>
 			</tr>
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'Dealer ID', 'shopperexpress' ); ?></th>
 				<td>
 					<input type="text"
@@ -105,7 +111,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					<p class="description"><?php esc_html_e( 'Included as dealer_id in every ADF-XML API payload.', 'shopperexpress' ); ?></p>
 				</td>
 			</tr>
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'API Key (X-API-Key)', 'shopperexpress' ); ?></th>
 				<td>
 					<span id="soc-lead-key-masked" class="soc-lead-key-display">
@@ -121,14 +127,14 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					</button>
 				</td>
 			</tr>
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'Request Timeout (s)', 'shopperexpress' ); ?></th>
 				<td>
 					<input type="number" id="soc-lead-timeout" class="small-text"
 						value="<?php echo esc_attr( $data['timeout'] ?? 10 ); ?>" min="5" max="60">
 				</td>
 			</tr>
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-only-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'Fallback to Email on Failure', 'shopperexpress' ); ?></th>
 				<td>
 					<label class="soc-toggle">
@@ -137,7 +143,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					</label>
 				</td>
 			</tr>
-			<tr class="soc-lead-api-row" <?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'Auto-Retry Max Attempts', 'shopperexpress' ); ?></th>
 				<td>
 					<input type="number" id="soc-lead-max-retries" class="small-text"
@@ -194,7 +200,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 			<?php esc_html_e( 'Save Settings', 'shopperexpress' ); ?>
 		</button>
 		<button type="button" class="button soc-lead-api-row" id="soc-lead-test-connection"
-			<?php echo $is_api ? '' : 'style="display:none"'; ?>>
+			<?php echo $show_api ? '' : 'style="display:none"'; ?>>
 			<?php esc_html_e( 'Test Connection', 'shopperexpress' ); ?>
 		</button>
 		<span id="soc-lead-test-result" class="soc-lead-test-result"></span>

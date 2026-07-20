@@ -209,7 +209,7 @@ function wps_build_adf_xml( array $fields ): string {
 }
 
 /**
- * Dispatch an ADFXML payload via the configured delivery method (email or API).
+ * Dispatch an ADFXML payload via the configured delivery method (email, API, or both).
  *
  * Writes a row to {prefix}_adf_lead_log regardless of outcome.
  *
@@ -274,7 +274,7 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 		'adfxml_payload'  => $xml,
 	);
 
-	if ( 'api' === $method ) {
+	if ( 'api' === $method || 'both' === $method ) {
 		$client              = new \App\Components\Base\ADF_Api_Client();
 		$log['api_endpoint'] = get_option( \App\Components\Base\ADF_Api_Client::OPTION_ENDPOINT, '' );
 		$result              = $client->send( $xml, $fields );
@@ -284,12 +284,15 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 		$log['error_message'] = $result['error_message'];
 		$log['status']        = $result['success'] ? 'success' : 'failed';
 
+		if ( 'both' === $method ) {
+			// Email is sent unconditionally alongside the API call.
+			wps_send_adf_email( $xml, $first_name, $last_name );
+		} elseif ( ! $result['success'] && get_option( 'adf_api_fallback_email', 0 ) ) {
+			// API-only mode: fallback to email on failure.
+			wps_send_adf_email( $xml, $first_name, $last_name );
+		}
+
 		if ( ! $result['success'] ) {
-			// Fallback to email.
-			if ( get_option( 'adf_api_fallback_email', 0 ) ) {
-				wps_send_adf_email( $xml, $first_name, $last_name );
-			}
-			// Admin notification.
 			wps_adf_notify_admin_failure( $log );
 		}
 	} else {

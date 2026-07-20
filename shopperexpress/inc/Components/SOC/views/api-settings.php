@@ -13,6 +13,17 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
 
+<div class="soc-subtabs">
+	<button type="button" class="soc-subtabs__btn soc-subtabs__btn--active" data-subtab-btn="connection">
+		<?php esc_html_e( 'Connection & Cache', 'shopperexpress' ); ?>
+	</button>
+	<button type="button" class="soc-subtabs__btn" data-subtab-btn="fields">
+		<?php esc_html_e( 'ACF Fields Reference', 'shopperexpress' ); ?>
+	</button>
+</div>
+
+<div data-subtab-panel="connection">
+
 <!-- 1. Global mode toggle -->
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Listings Data Source', 'shopperexpress' ); ?></div>
@@ -238,6 +249,12 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 </div>
 
 <?php endif; ?>
+
+</div><!-- [data-subtab-panel="connection"] -->
+
+<div data-subtab-panel="fields" style="display:none">
+	<?php require __DIR__ . '/api-settings-fields.php'; ?>
+</div>
 
 <p class="soc-footer-note">
 	<em><?php printf( esc_html__( 'Last collected: %s', 'shopperexpress' ), esc_html( $data['collected_at'] ?? 'N/A' ) ); ?></em>

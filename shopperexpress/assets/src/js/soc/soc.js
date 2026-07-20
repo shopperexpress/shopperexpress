@@ -417,6 +417,15 @@
     // ----------------------------------------------------------------
     SOC.bindApiSettings = function () {
 
+        // Sub-tab navigation (Connection & Cache / ACF Fields Reference).
+        $(document).on('click', '[data-subtab-btn]', function () {
+            var tab = $(this).data('subtab-btn');
+            $('[data-subtab-btn]').removeClass('soc-subtabs__btn--active');
+            $(this).addClass('soc-subtabs__btn--active');
+            $('[data-subtab-panel]').hide();
+            $('[data-subtab-panel="' + tab + '"]').show();
+        });
+
         // Mode toggle
         $(document).on('change', '#soc-api-mode-toggle', function () {
             const enabled = $(this).is(':checked') ? 1 : 0;
@@ -567,10 +576,12 @@
             return;
         }
 
-        // Toggle API-only rows when delivery method changes.
+        // Toggle API rows when delivery method changes.
         $('input[name="adf_delivery_method"]').on('change', function () {
-            var isApi = $(this).val() === 'api';
-            $('.soc-lead-api-row').toggle( isApi );
+            var method = $(this).val();
+            var showApi = method === 'api' || method === 'both';
+            $('.soc-lead-api-row').toggle( showApi );
+            $('.soc-lead-api-only-row').toggle( method === 'api' );
         });
 
         // Show/hide notify email row.

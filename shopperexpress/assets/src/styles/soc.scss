@@ -175,6 +175,68 @@ $soc-radius: 4px;
 }
 
 // ============================================================
+// Sub-tabs
+// ============================================================
+.soc-subtabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid $soc-border;
+    margin-bottom: 20px;
+
+    &__btn {
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: $soc-gray;
+        cursor: pointer;
+
+        &:hover {
+            color: $soc-primary;
+        }
+
+        &--active {
+            color: $soc-primary;
+            border-bottom-color: $soc-primary;
+        }
+    }
+}
+
+.soc-fields-table {
+    table-layout: fixed;
+
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 30%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 30%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 40%;
+    }
+
+    td {
+        overflow-wrap: break-word;
+    }
+}
+
+.soc-fields-group-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: $soc-gray;
+    margin: 20px 0 8px;
+}
+
+// ============================================================
 // Sections
 // ============================================================
 .soc-section {
