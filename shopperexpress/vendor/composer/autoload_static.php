@@ -94,6 +94,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'App\\Components\\Base\\Shortcode' => __DIR__ . '/../..' . '/inc/Components/Base/class-shortcode.php',
         'App\\Components\\Base\\Sidebars' => __DIR__ . '/../..' . '/inc/Components/Base/class-sidebars.php',
         'App\\Components\\Base\\Theme_Support' => __DIR__ . '/../..' . '/inc/Components/Base/class-theme-support.php',
+        'App\\Components\\Base\\Vehicle_Views' => __DIR__ . '/../..' . '/inc/Components/Base/class-vehicle-views.php',
         'App\\Components\\Base\\Vin_Admin' => __DIR__ . '/../..' . '/inc/Components/Base/class-vin-admin.php',
         'App\\Components\\Gutenberg\\Block_Preview_Helper' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-block-preview-helper.php',
         'App\\Components\\Gutenberg\\Custom_Blocks_Category' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-custom-blocks-category.php',
@@ -189,6 +190,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
         'WPS_Latest_Posts_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
         'WPS_Nav_Menu_Widget' => __DIR__ . '/../..' . '/inc/class-widget.php',
+        'WP_Auto_Import' => __DIR__ . '/../..' . '/inc/classes.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

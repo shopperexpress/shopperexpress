@@ -13,6 +13,15 @@ $firstImage       = null;
 if ( is_user_logged_in() ) {
 	acf_form_head();
 }
+
+// Record the view before get_header() sends output, so the dedup cookie can still be set.
+if ( ! is_preview() ) {
+	$vdp_vin_for_view_count = get_field( 'vin_number', get_queried_object_id() );
+	if ( $vdp_vin_for_view_count ) {
+		\App\Components\Base\Vehicle_Views::record_view( $vdp_vin_for_view_count );
+	}
+}
+
 get_header();
 
 while ( have_posts() ) :
@@ -489,6 +498,14 @@ while ( have_posts() ) :
 							?>
 						</ul>
 						<?php
+						get_template_part(
+							'template-parts/components/view-count-badge',
+							null,
+							array(
+								'vin'       => $vin_number,
+								'post_type' => $post_type,
+							)
+						);
 						if ( 'listings' === $post_type ) {
 							get_template_part(
 								'template-parts/conditional',

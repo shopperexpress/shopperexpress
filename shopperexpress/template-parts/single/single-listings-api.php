@@ -39,6 +39,8 @@ if ( is_wp_error( $api_res ) || empty( $api_res['data'] ) ) {
 $v       = $api_res['data'];
 $payload = $v['payload'] ?? array();
 
+\App\Components\Base\Vehicle_Views::record_view( $vin );
+
 $year        = $v['year'] ?? '';
 $make        = $v['make'] ?? '';
 $model       = $v['model'] ?? '';
@@ -338,6 +340,14 @@ get_header();
 					</ul>
 
 					<?php
+					get_template_part(
+						'template-parts/components/view-count-badge',
+						null,
+						array(
+							'vin'       => $vin_number,
+							'post_type' => $post_type,
+						)
+					);
 					get_template_part(
 						'template-parts/api/description',
 						null,

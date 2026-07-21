@@ -39,6 +39,7 @@ return array(
     'App\\Components\\Base\\Shortcode' => $baseDir . '/inc/Components/Base/class-shortcode.php',
     'App\\Components\\Base\\Sidebars' => $baseDir . '/inc/Components/Base/class-sidebars.php',
     'App\\Components\\Base\\Theme_Support' => $baseDir . '/inc/Components/Base/class-theme-support.php',
+    'App\\Components\\Base\\Vehicle_Views' => $baseDir . '/inc/Components/Base/class-vehicle-views.php',
     'App\\Components\\Base\\Vin_Admin' => $baseDir . '/inc/Components/Base/class-vin-admin.php',
     'App\\Components\\Gutenberg\\Block_Preview_Helper' => $baseDir . '/inc/Components/Gutenberg/class-block-preview-helper.php',
     'App\\Components\\Gutenberg\\Custom_Blocks_Category' => $baseDir . '/inc/Components/Gutenberg/class-custom-blocks-category.php',
@@ -134,4 +135,5 @@ return array(
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     'WPS_Latest_Posts_Widget' => $baseDir . '/inc/class-widget.php',
     'WPS_Nav_Menu_Widget' => $baseDir . '/inc/class-widget.php',
+    'WP_Auto_Import' => $baseDir . '/inc/classes.php',
 );

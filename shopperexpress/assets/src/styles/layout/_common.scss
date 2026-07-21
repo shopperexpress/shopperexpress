@@ -1932,6 +1932,34 @@ textarea.form-control {
     }
   }
 
+  .view-count-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    &__text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      strong {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      span {
+        font-size: 11px;
+        color: $gray-600;
+      }
+    }
+
+    &__icon {
+      flex-shrink: 0;
+      color: var(--primary);
+    }
+  }
+
   &.info-block--top {
     border: none;
     padding: 0 0 16px;

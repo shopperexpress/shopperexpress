@@ -55,6 +55,7 @@ class Theme {
 			\App\Components\Base\Ajax::class,
 			\App\Components\Base\Rest::class,
 			\App\Components\Base\ACF::class,
+			\App\Components\Base\Vehicle_Views::class,
 			\App\Components\Base\JSON_LD::class,
 			\App\Components\Base\ASC_Datalayer::class,
 			\App\Components\Base\Export::class,

@@ -7834,6 +7834,24 @@
             "delay": 0
         },
         {
+            "key": "field_69b188e5e7112",
+            "label": "Custom cards",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
             "key": "field_6601999058238",
             "label": "Show Banner",
             "name": "show_banner-used-listings",
@@ -7852,156 +7870,6 @@
             "ui_on_text": "Show",
             "ui_off_text": "Hide",
             "ui": 1
-        },
-        {
-            "key": "field_66d58d36d2057",
-            "label": "Placement Banner",
-            "name": "placement_banner-used-listings",
-            "aria-label": "",
-            "type": "select",
-            "instructions": "Position of the banner on the used listings SRP (top or bottom).",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "50",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "top": "top",
-                "bottom": "bottom"
-            },
-            "default_value": "top",
-            "return_format": "value",
-            "multiple": 0,
-            "allow_null": 0,
-            "ui": 0,
-            "ajax": 0,
-            "placeholder": "",
-            "allow_custom": 0,
-            "search_placeholder": "",
-            "create_options": 0,
-            "save_options": 0
-        },
-        {
-            "key": "field_6601999458239",
-            "label": "Show",
-            "name": "show-used-listings",
-            "aria-label": "",
-            "type": "select",
-            "instructions": "Choose the type of promotional banner to display on the used listings page.",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_6601999058238",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "choices": {
-                "1": "Skip pre-qualify",
-                "2": "Shop by payment"
-            },
-            "default_value": 1,
-            "return_format": "value",
-            "multiple": 0,
-            "allow_null": 0,
-            "ui": 0,
-            "ajax": 0,
-            "placeholder": "",
-            "allow_custom": 0,
-            "search_placeholder": "",
-            "create_options": 0,
-            "save_options": 0
-        },
-        {
-            "key": "field_660197b75b0fc",
-            "label": "For code",
-            "name": "for_code-used-listings",
-            "aria-label": "",
-            "type": "acfe_code_editor",
-            "instructions": "Paste the HTML embed code for the \"Skip pre-qualify\" widget (used listings).",
-            "required": 0,
-            "conditional_logic": [
-                [
-                    {
-                        "field": "field_6601999458239",
-                        "operator": "==",
-                        "value": "1"
-                    },
-                    {
-                        "field": "field_6601999058238",
-                        "operator": "==",
-                        "value": "1"
-                    }
-                ]
-            ],
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "default_value": "",
-            "placeholder": "Used Listings",
-            "mode": "javascript",
-            "lines": 1,
-            "indent_unit": 4,
-            "maxlength": "",
-            "rows": 4,
-            "max_rows": "",
-            "return_format": []
-        },
-        {
-            "key": "field_6601a0c56c46d",
-            "label": "Banner slider",
-            "name": "used-listings",
-            "aria-label": "",
-            "type": "clone",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "clone": [
-                "field_6602c733b7d08"
-            ],
-            "display": "seamless",
-            "layout": "block",
-            "prefix_label": 0,
-            "prefix_name": 1,
-            "acfe_seamless_style": 0,
-            "acfe_clone_modal": 0,
-            "acfe_clone_modal_close": 0,
-            "acfe_clone_modal_button": "",
-            "acfe_clone_modal_size": "large"
-        },
-        {
-            "key": "field_69b188e5e7112",
-            "label": "Custom cards",
-            "name": "",
-            "aria-label": "",
-            "type": "accordion",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "open": 0,
-            "multi_expand": 0,
-            "endpoint": 0
         },
         {
             "key": "field_69b18934ca86b",
@@ -8153,6 +8021,138 @@
                     "parent_repeater": "field_69b18934ca86b"
                 }
             ]
+        },
+        {
+            "key": "field_66d58d36d2057",
+            "label": "Placement Banner",
+            "name": "placement_banner-used-listings",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Position of the banner on the used listings SRP (top or bottom).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "top": "top",
+                "bottom": "bottom"
+            },
+            "default_value": "top",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "allow_custom": 0,
+            "search_placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_6601999458239",
+            "label": "Show",
+            "name": "show-used-listings",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Choose the type of promotional banner to display on the used listings page.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_6601999058238",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "1": "Skip pre-qualify",
+                "2": "Shop by payment"
+            },
+            "default_value": 1,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "allow_custom": 0,
+            "search_placeholder": "",
+            "create_options": 0,
+            "save_options": 0
+        },
+        {
+            "key": "field_660197b75b0fc",
+            "label": "For code",
+            "name": "for_code-used-listings",
+            "aria-label": "",
+            "type": "acfe_code_editor",
+            "instructions": "Paste the HTML embed code for the \"Skip pre-qualify\" widget (used listings).",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_6601999458239",
+                        "operator": "==",
+                        "value": "1"
+                    },
+                    {
+                        "field": "field_6601999058238",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "Used Listings",
+            "mode": "javascript",
+            "lines": 1,
+            "indent_unit": 4,
+            "maxlength": "",
+            "rows": 4,
+            "max_rows": "",
+            "return_format": []
+        },
+        {
+            "key": "field_6601a0c56c46d",
+            "label": "Banner slider",
+            "name": "used-listings",
+            "aria-label": "",
+            "type": "clone",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "clone": [
+                "field_6602c733b7d08"
+            ],
+            "display": "seamless",
+            "layout": "block",
+            "prefix_label": 0,
+            "prefix_name": 1,
+            "acfe_seamless_style": 0,
+            "acfe_clone_modal": 0,
+            "acfe_clone_modal_close": 0,
+            "acfe_clone_modal_button": "",
+            "acfe_clone_modal_size": "large"
         },
         {
             "key": "field_63345b0b8566b",
@@ -10752,6 +10752,910 @@
             "ui": 1
         },
         {
+            "key": "field_68f1a2b3c4d5",
+            "label": "VDP View Count Badge",
+            "name": "",
+            "aria-label": "",
+            "type": "accordion",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "open": 0,
+            "multi_expand": 0,
+            "endpoint": 0
+        },
+        {
+            "key": "field_68f1a2b3c500",
+            "label": "New",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_68f1a2b3c4d6",
+            "label": "Show View Count Badge (New)",
+            "name": "view_count_badge_active_new",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Show the \"X people have viewed this vehicle\" message above the payment info on New Listings VDPs.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "Active",
+            "ui_off_text": "Inactive",
+            "ui": 1
+        },
+        {
+            "key": "field_68f1a2b3c4d7",
+            "label": "Minimum Views (New)",
+            "name": "view_count_badge_threshold_new",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Only show the badge once the all-time view count exceeds this number.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 100,
+            "min": 0,
+            "max": "",
+            "placeholder": 100,
+            "step": 1,
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c501",
+            "label": "Title text",
+            "name": "view_count_badge_title_new",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "The bold headline. Leave blank to use the default.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "This is going to sell soon.",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c502",
+            "label": "Subtitle text",
+            "name": "view_count_badge_subtitle_new",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Use {count} as a placeholder for the all-time view count. Leave blank to use the default.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "{count} people have recently viewed it.",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c503",
+            "label": "Text color",
+            "name": "view_count_badge_text_color_new",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Applies to the headline text.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "show_color_wheel": true,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_68f1a2b3c504",
+            "label": "Font size",
+            "name": "view_count_badge_font_size_new",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 12,
+            "min": 0,
+            "max": "",
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": "px"
+        },
+        {
+            "key": "field_68f1a2b3c505",
+            "label": "Font weight",
+            "name": "view_count_badge_font_weight_new",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "400": "Regular",
+                "600": "Semi Bold",
+                "700": "Bold"
+            },
+            "default_value": 700,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c506",
+            "label": "Font family",
+            "name": "view_count_badge_font_family_new",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "Roboto": "Roboto",
+                "Roboto Condensed": "Roboto Condensed",
+                "Roboto Mono": "Roboto Mono",
+                "Montserrat": "Montserrat",
+                "Poppins": "Poppins",
+                "Lato": "Lato",
+                "PT Sans": "PT Sans",
+                "PT Sans Narrow": "PT Sans Narrow",
+                "Inter": "Inter"
+            },
+            "default_value": "Roboto",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c50e",
+            "label": "Subtitle color",
+            "name": "view_count_badge_subtitle_color_new",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Applies to the subtitle text.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "show_color_wheel": true,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_68f1a2b3c50f",
+            "label": "Subtitle font size",
+            "name": "view_count_badge_subtitle_font_size_new",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 11,
+            "min": 0,
+            "max": "",
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": "px"
+        },
+        {
+            "key": "field_68f1a2b3c510",
+            "label": "Subtitle font weight",
+            "name": "view_count_badge_subtitle_font_weight_new",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "400": "Regular",
+                "600": "Semi Bold",
+                "700": "Bold"
+            },
+            "default_value": "400",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c511",
+            "label": "Subtitle font family",
+            "name": "view_count_badge_subtitle_font_family_new",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "Roboto": "Roboto",
+                "Roboto Condensed": "Roboto Condensed",
+                "Roboto Mono": "Roboto Mono",
+                "Montserrat": "Montserrat",
+                "Poppins": "Poppins",
+                "Lato": "Lato",
+                "PT Sans": "PT Sans",
+                "PT Sans Narrow": "PT Sans Narrow",
+                "Inter": "Inter"
+            },
+            "default_value": "Roboto",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c516",
+            "label": "Icon",
+            "name": "view_count_badge_icon_new",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Replace the default stopwatch icon. SVG uploads render inline (follows Text color); other image formats render as-is.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d6",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "svg,png,jpg,jpeg,gif,webp",
+            "preview_size": "medium"
+        },
+        {
+            "key": "field_68f1a2b3c507",
+            "label": "Used",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_68f1a2b3c4d8",
+            "label": "Show View Count Badge (Used)",
+            "name": "view_count_badge_active_used",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Show the \"X people have viewed this vehicle\" message above the payment info on Used Listings VDPs.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "Active",
+            "ui_off_text": "Inactive",
+            "ui": 1
+        },
+        {
+            "key": "field_68f1a2b3c4d9",
+            "label": "Minimum Views (Used)",
+            "name": "view_count_badge_threshold_used",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "Only show the badge once the all-time view count exceeds this number.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 100,
+            "min": 0,
+            "max": "",
+            "placeholder": 100,
+            "step": 1,
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c508",
+            "label": "Title text",
+            "name": "view_count_badge_title_used",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "The bold headline. Leave blank to use the default.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "This is going to sell soon.",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c509",
+            "label": "Subtitle text",
+            "name": "view_count_badge_subtitle_used",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Use {count} as a placeholder for the all-time view count. Leave blank to use the default.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "{count} people have recently viewed it.",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_68f1a2b3c50a",
+            "label": "Text color",
+            "name": "view_count_badge_text_color_used",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Applies to the headline text.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "show_color_wheel": true,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_68f1a2b3c50b",
+            "label": "Font size",
+            "name": "view_count_badge_font_size_used",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 12,
+            "min": 0,
+            "max": "",
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": "px"
+        },
+        {
+            "key": "field_68f1a2b3c50c",
+            "label": "Font weight",
+            "name": "view_count_badge_font_weight_used",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "400": "Regular",
+                "600": "Semi Bold",
+                "700": "Bold"
+            },
+            "default_value": 700,
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c50d",
+            "label": "Font family",
+            "name": "view_count_badge_font_family_used",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "Roboto": "Roboto",
+                "Roboto Condensed": "Roboto Condensed",
+                "Roboto Mono": "Roboto Mono",
+                "Montserrat": "Montserrat",
+                "Poppins": "Poppins",
+                "Lato": "Lato",
+                "PT Sans": "PT Sans",
+                "PT Sans Narrow": "PT Sans Narrow",
+                "Inter": "Inter"
+            },
+            "default_value": "Roboto",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c512",
+            "label": "Subtitle color",
+            "name": "view_count_badge_subtitle_color_used",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Applies to the subtitle text.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "show_color_wheel": true,
+            "custom_palette_source": "",
+            "palette_colors": ""
+        },
+        {
+            "key": "field_68f1a2b3c513",
+            "label": "Subtitle font size",
+            "name": "view_count_badge_subtitle_font_size_used",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 11,
+            "min": 0,
+            "max": "",
+            "placeholder": "",
+            "step": "",
+            "prepend": "",
+            "append": "px"
+        },
+        {
+            "key": "field_68f1a2b3c514",
+            "label": "Subtitle font weight",
+            "name": "view_count_badge_subtitle_font_weight_used",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "400": "Regular",
+                "600": "Semi Bold",
+                "700": "Bold"
+            },
+            "default_value": "400",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c515",
+            "label": "Subtitle font family",
+            "name": "view_count_badge_subtitle_font_family_used",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "Roboto": "Roboto",
+                "Roboto Condensed": "Roboto Condensed",
+                "Roboto Mono": "Roboto Mono",
+                "Montserrat": "Montserrat",
+                "Poppins": "Poppins",
+                "Lato": "Lato",
+                "PT Sans": "PT Sans",
+                "PT Sans Narrow": "PT Sans Narrow",
+                "Inter": "Inter"
+            },
+            "default_value": "Roboto",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": "",
+            "create_options": 0,
+            "save_options": 0,
+            "allow_custom": 0,
+            "search_placeholder": ""
+        },
+        {
+            "key": "field_68f1a2b3c517",
+            "label": "Icon",
+            "name": "view_count_badge_icon_used",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "Replace the default stopwatch icon. SVG uploads render inline (follows Text color); other image formats render as-is.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_68f1a2b3c4d8",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": "",
+            "min_height": "",
+            "min_size": "",
+            "max_width": "",
+            "max_height": "",
+            "max_size": "",
+            "mime_types": "svg,png,jpg,jpeg,gif,webp",
+            "preview_size": "medium"
+        },
+        {
             "key": "field_6880f1916bb39",
             "label": "Banner",
             "name": "",
@@ -12440,5 +13344,5 @@
             "json"
         ]
     },
-    "modified": 1784193939
+    "modified": 1784629124
 }
