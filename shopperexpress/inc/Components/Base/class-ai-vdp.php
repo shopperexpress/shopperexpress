@@ -31,8 +31,17 @@ class AI_VDP implements Theme_Component {
 	/** Post meta key for the AI-generated description. */
 	private const META_KEY = 'ai_vdp_description';
 
-	/** WP option key for the enable/disable toggle. */
-	private const OPTION_NAME = 'ai_vdp_description';
+	/**
+	 * ACF field key for the per-post AI description (WYSIWYG field on Listings).
+	 * Must be referenced by key, not name — the name "ai_vdp_description" is
+	 * shared with the unrelated Options-page toggle field below, and ACF
+	 * resolves ambiguous name lookups unpredictably, silently writing to the
+	 * wrong field.
+	 */
+	private const FIELD_KEY = 'field_6a0b24f13cc09';
+
+	/** ACF field key for the Options-page enable/disable toggle. Same name-collision reason as FIELD_KEY. */
+	private const OPTION_FIELD_KEY = 'field_6a0b115fde990';
 
 	/** Supported post types. */
 	private const SUPPORTED_TYPES = array( 'listings', 'used-listings' );
@@ -65,9 +74,11 @@ class AI_VDP implements Theme_Component {
 		add_action( 'pmxi_after_xml_import', array( $this, 'on_import_complete' ), 20 );
 
 		// Per-post hook for single-post saves / incremental imports.
-		foreach ( self::SUPPORTED_TYPES as $post_type ) {
-			add_action( "save_post_{$post_type}", array( $this, 'on_save_post' ), 20, 3 );
-		}
+		// Uses acf/save_post (fires after ACF has saved $_POST['acf'] values)
+		// rather than save_post_{type} (fires BEFORE ACF saves the submitted
+		// form) — otherwise ACF's own save overwrites our freshly generated
+		// description with the empty value the edit form was submitted with.
+		add_action( 'acf/save_post', array( $this, 'on_acf_save_post' ), 20 );
 	}
 
 	// -------------------------------------------------------------------------
@@ -94,36 +105,52 @@ class AI_VDP implements Theme_Component {
 	}
 
 	/**
-	 * Fired on save_post_{post_type} for supported types.
+	 * Fired on acf/save_post, after ACF has saved the submitted field values.
 	 * Skips revisions, auto-saves, drafts, and posts that already have a description.
 	 *
-	 * @param int      $post_id Post ID.
-	 * @param \WP_Post $post    Post object.
-	 * @param bool     $update  Whether this is an existing post being updated.
+	 * @param int|string $post_id Post ID (ACF may pass "options" or a string ID; non-numeric is ignored).
 	 * @return void
 	 */
-	public function on_save_post( int $post_id, \WP_Post $post, bool $update ): void {
+	public function on_acf_save_post( $post_id ): void {
+		if ( ! is_numeric( $post_id ) ) {
+			return;
+		}
+
+		$post_id = (int) $post_id;
+
 		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
 			return;
 		}
 
+		$post = get_post( $post_id );
+
+		if ( ! $post || ! in_array( $post->post_type, self::SUPPORTED_TYPES, true ) ) {
+			return;
+		}
+
 		if ( ! $this->is_enabled() ) {
+			$this->log( sprintf( 'Post #%d: skipped — AI VDP Description toggle is off.', $post_id ) );
 			return;
 		}
 
 		if ( 'publish' !== $post->post_status ) {
+			$this->log( sprintf( 'Post #%d: skipped — status is "%s", not "publish".', $post_id, $post->post_status ) );
 			return;
 		}
 
 		// Do not regenerate — meta already cached.
-		if ( ! empty( get_field( self::META_KEY, $post_id ) ) ) {
+		if ( ! empty( get_field( self::FIELD_KEY, $post_id ) ) ) {
+			$this->log( sprintf( 'Post #%d: skipped — field already has a value.', $post_id ) );
 			return;
 		}
 
-		// Prevent recursive save_post firing caused by update_post_meta below.
-		remove_action( "save_post_{$post->post_type}", array( $this, 'on_save_post' ), 20 );
-		$this->process_post( $post_id );
-		add_action( "save_post_{$post->post_type}", array( $this, 'on_save_post' ), 20, 3 );
+		$result = $this->process_post( $post_id );
+
+		if ( is_wp_error( $result ) ) {
+			$this->log( sprintf( 'Post #%d: on_acf_save_post generation failed — %s', $post_id, $result->get_error_message() ) );
+		} else {
+			$this->log( sprintf( 'Post #%d: on_acf_save_post generation succeeded.', $post_id ) );
+		}
 	}
 
 	// -------------------------------------------------------------------------
@@ -169,7 +196,7 @@ class AI_VDP implements Theme_Component {
 	public function process_post( int $post_id, bool $force = false ): string|\WP_Error {
 		// Return cached value when not forcing a regeneration.
 		if ( ! $force ) {
-			$cached = get_field( self::META_KEY, $post_id );
+			$cached = get_field( self::FIELD_KEY, $post_id );
 
 			if ( $cached ) {
 				return $cached;
@@ -210,8 +237,8 @@ class AI_VDP implements Theme_Component {
 			return new \WP_Error( 'empty_response', 'AI returned an empty response.' );
 		}
 
-		update_field( 'ai_vdp_description', $html, $post_id );
-		update_post_meta( $post_id, 'ai_vdp_description', $html );
+		update_field( self::FIELD_KEY, $html, $post_id );
+		update_post_meta( $post_id, self::META_KEY, $html );
 
 		return $html;
 	}
@@ -483,7 +510,7 @@ class AI_VDP implements Theme_Component {
 	 * @return bool
 	 */
 	private function is_enabled(): bool {
-		return (bool) get_field( self::OPTION_NAME, 'options' );
+		return (bool) get_field( self::OPTION_FIELD_KEY, 'options' );
 	}
 
 	/**
