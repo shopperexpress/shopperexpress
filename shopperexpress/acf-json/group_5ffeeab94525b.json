@@ -3344,6 +3344,46 @@
                     "parent_repeater": "field_699c23d2b17a4"
                 },
                 {
+                    "key": "field_69fb00a1b17b1",
+                    "label": "Start Date/Time",
+                    "name": "schedule_start",
+                    "aria-label": "",
+                    "type": "date_time_picker",
+                    "instructions": "Popup will not appear before this date/time. Leave empty for no start restriction.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "m/d/Y g:i a",
+                    "return_format": "Y-m-d H:i:s",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
+                    "key": "field_69fb00a1b17b2",
+                    "label": "End Date/Time",
+                    "name": "schedule_end",
+                    "aria-label": "",
+                    "type": "date_time_picker",
+                    "instructions": "Popup will stop appearing after this date/time. Leave empty for no end restriction.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "m/d/Y g:i a",
+                    "return_format": "Y-m-d H:i:s",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_699c23d2b17a4"
+                },
+                {
                     "key": "field_699c2403b17a6",
                     "label": "Show Only On URLs Containing",
                     "name": "include_urls",
@@ -4788,5 +4828,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1781865434
+    "modified": 1784803938
 }

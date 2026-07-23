@@ -67,6 +67,10 @@ class PopupResolver implements Theme_Component {
 				continue;
 			}
 
+			if ( ! $this->within_schedule() ) {
+				continue;
+			}
+
 			if ( $this->excluded( $url ) ) {
 				continue;
 			}
@@ -89,6 +93,33 @@ class PopupResolver implements Theme_Component {
 	 */
 	private function enabled(): bool {
 		return (bool) get_sub_field( 'enable_popup' );
+	}
+
+	/**
+	 * Check if the popup is within its scheduled start/end window.
+	 *
+	 * @return bool
+	 */
+	private function within_schedule(): bool {
+		$now = strtotime( current_time( 'mysql' ) );
+
+		$start = get_sub_field( 'schedule_start' );
+		if ( ! empty( $start ) ) {
+			$start_ts = strtotime( $start );
+			if ( $start_ts && $now < $start_ts ) {
+				return false;
+			}
+		}
+
+		$end = get_sub_field( 'schedule_end' );
+		if ( ! empty( $end ) ) {
+			$end_ts = strtotime( $end );
+			if ( $end_ts && $now > $end_ts ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

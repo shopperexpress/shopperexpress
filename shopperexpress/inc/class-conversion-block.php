@@ -116,6 +116,8 @@ add_action(
 				$font_size_5  = get_sub_field( 'font_size_5' );
 				$weight_5     = get_sub_field( 'weight_5' );
 			endwhile;
+
+			get_font_family( $font_styling );
 			?>
 		<style>
 			:root {
