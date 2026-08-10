@@ -128,13 +128,15 @@ if ( $key && $value ) :
 				?>
 				<div class="page-description">
 					<?php
+					$text_before_breadcrumbs = get_field( 'text_before_breadcrumbs', $get_page_id ) ? get_field( 'text_before_breadcrumbs', $get_page_id ) : get_field( 'description_before_breadcrumbs_' . $post_type, $get_page_id );
+					echo wp_kses_post( $text_before_breadcrumbs );
+
 					if ( function_exists( 'yoast_breadcrumb' ) && function_exists( 'custom_yoast_breadcrumbs_as_ol' ) ) {
 						custom_yoast_breadcrumbs_as_ol();
 					}
 
-					$text = get_field( 'text', $get_page_id ) ? get_field( 'text', $get_page_id ) : get_field( 'description_' . $post_type, $get_page_id );
-
-					echo wp_kses_post( $text );
+					$text_after_breadcrumbs = get_field( 'text_after_breadcrumbs', $get_page_id ) ? get_field( 'text_after_breadcrumbs', $get_page_id ) : get_field( 'description_after_breadcrumbs_' . $post_type, $get_page_id );
+					echo wp_kses_post( $text_after_breadcrumbs );
 					?>
 				</div>
 							<?php

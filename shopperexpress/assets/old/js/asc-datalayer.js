@@ -17,17 +17,8 @@
 			if ( !event.page_location ) {
 				event.page_location = loc;
 			}
-			if ( typeof gtag === 'function' ) {
-				var eventName = event.event;
-				var payload = Object.assign( {}, event );
-				delete payload.event;
-				if (
-					Array.isArray( window.asc_datalayer.measurement_ids ) &&
-					window.asc_datalayer.measurement_ids.length
-				) {
-					payload.send_to = window.asc_datalayer.measurement_ids;
-				}
-				gtag( 'event', eventName, payload );
+			if ( typeof window.ascDispatchEvent === 'function' ) {
+				window.ascDispatchEvent( event );
 			}
 		} );
 	}

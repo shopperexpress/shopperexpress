@@ -1972,3 +1972,44 @@ function render_step_button( array $btn, array $args = array() ) {
 		esc_html( $title )
 	);
 }
+
+/**
+ * Resolve the dealer identifier used to build shared ASC conversion event IDs.
+ *
+ * Falls back to the ASC Store Name when no dedicated OpenAI dealer ID is set,
+ * matching the ASC settings already surfaced on the ASC Settings options page.
+ *
+ * @return string
+ */
+function wps_asc_dealer_id(): string {
+	$dealer_id = trim( (string) get_option( 'openai_ads_dealer_id', '' ) );
+
+	if ( '' !== $dealer_id ) {
+		return sanitize_title( $dealer_id );
+	}
+
+	$store_name = function_exists( 'get_field' ) ? (string) get_field( 'asc_store_name', 'option' ) : '';
+
+	return '' !== $store_name ? sanitize_title( $store_name ) : 'unknown';
+}
+
+/**
+ * Generate a shared conversion event ID for the ASC event system.
+ *
+ * Format: asc_<dealer-id>_<event-name>_<uuid>
+ *
+ * The same ID is used across the ASC event record, the OpenAI browser pixel,
+ * the future OpenAI Conversions API call, and internal logs so that browser
+ * and server conversions can be deduplicated.
+ *
+ * @param string $event_name ASC event name (e.g. asc_form_submission_sales).
+ * @return string
+ */
+function wps_generate_asc_event_id( string $event_name ): string {
+	return sprintf(
+		'asc_%s_%s_%s',
+		wps_asc_dealer_id(),
+		sanitize_key( $event_name ),
+		wp_generate_uuid4()
+	);
+}

@@ -845,8 +845,8 @@ textarea.form-control {
 }
 
 .filter-result {
-  margin: 0 -15px 30px;
-  padding: 0 15px 20px;
+  margin: 0 -15px 16px;
+  padding: 0 15px 16px;
   border-bottom: 1px solid $gray-400;
 
   .result-detail {
@@ -949,17 +949,7 @@ textarea.form-control {
   &.range-row {
     flex-wrap: wrap;
     padding-left: 0;
-    padding-bottom: 30px;
-
-    @include media('>=tablet') {
-      padding-bottom: 47px;
-    }
-
-    &+&.range-row {
-      @include media('>=tablet') {
-        padding-bottom: 20px;
-      }
-    }
+    padding-bottom: 20px;
   }
 
   // .filter-title {
@@ -1745,6 +1735,7 @@ textarea.form-control {
     }
   }
 
+  h1,
   h2 {
     font-size: 24px;
     margin-bottom: 10px;

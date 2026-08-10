@@ -57,7 +57,7 @@ while ( have_posts() ) :
 				</div>
 				<div class="col-sm-6">
 					<?php if ( $title ) : ?>
-						<h2><?php echo esc_html( $title ); ?></h2>
+						<h1><?php echo esc_html( $title ); ?></h1>
 					<?php endif; ?>
 					<div class="info-block">
 						<?php

@@ -60,6 +60,12 @@ class AI_VDP implements Theme_Component {
 	/** HTTP timeout for the API call (seconds). */
 	private const API_TIMEOUT = 30;
 
+	/** Transient key prefix used to snapshot existing descriptions before an import runs. */
+	private const SNAPSHOT_TRANSIENT_PREFIX = 'ai_vdp_snapshot_';
+
+	/** How long a pre-import snapshot is kept, in seconds. */
+	private const SNAPSHOT_TTL = 2 * HOUR_IN_SECONDS;
+
 	// -------------------------------------------------------------------------
 	// Registration
 	// -------------------------------------------------------------------------
@@ -70,7 +76,11 @@ class AI_VDP implements Theme_Component {
 	 * @return void
 	 */
 	public function register(): void {
-		// WP All Import: fires once when a full import finishes.
+		// WP All Import: snapshot existing descriptions before the import can
+		// overwrite them (the import's own field mapping writes directly to
+		// post meta, bypassing every safeguard below), then restore/backfill
+		// once the import finishes.
+		add_action( 'pmxi_before_xml_import', array( $this, 'on_before_xml_import' ), 10 );
 		add_action( 'pmxi_after_xml_import', array( $this, 'on_import_complete' ), 20 );
 
 		// Per-post hook for single-post saves / incremental imports.
@@ -86,13 +96,54 @@ class AI_VDP implements Theme_Component {
 	// -------------------------------------------------------------------------
 
 	/**
+	 * Fired before a WP All Import XML import starts.
+	 * Snapshots every existing AI description so it can be restored if the
+	 * import's own field mapping clears it.
+	 *
+	 * @param int $import_id WP All Import import ID.
+	 * @return void
+	 */
+	public function on_before_xml_import( int $import_id ): void {
+		$snapshot = array();
+
+		foreach ( self::SUPPORTED_TYPES as $post_type ) {
+			$post_ids = get_posts(
+				array(
+					'post_type'      => $post_type,
+					'post_status'    => 'any',
+					'posts_per_page' => -1,
+					'fields'         => 'ids',
+					'meta_query'     => array(
+						array(
+							'key'     => self::META_KEY,
+							'value'   => '',
+							'compare' => '!=',
+						),
+					),
+				)
+			);
+
+			foreach ( $post_ids as $post_id ) {
+				$snapshot[ $post_id ] = get_post_meta( $post_id, self::META_KEY, true );
+			}
+		}
+
+		set_transient( self::SNAPSHOT_TRANSIENT_PREFIX . $import_id, $snapshot, self::SNAPSHOT_TTL );
+
+		$this->log( sprintf( 'Import #%d starting — snapshotted %d existing AI descriptions.', $import_id, count( $snapshot ) ) );
+	}
+
+	/**
 	 * Fired when a WP All Import XML import completes.
-	 * Batch-processes all published listings that have no AI description yet.
+	 * Restores any description the import cleared, then batch-generates for
+	 * published listings that still have none.
 	 *
 	 * @param int $import_id WP All Import import ID.
 	 * @return void
 	 */
 	public function on_import_complete( int $import_id ): void {
+		$this->restore_snapshot( $import_id );
+
 		if ( ! $this->is_enabled() ) {
 			return;
 		}
@@ -101,6 +152,44 @@ class AI_VDP implements Theme_Component {
 
 		foreach ( self::SUPPORTED_TYPES as $post_type ) {
 			$this->batch_process_post_type( $post_type );
+		}
+	}
+
+	/**
+	 * Restores descriptions captured by on_before_xml_import() that the
+	 * import wiped back to empty, regardless of whether the toggle is on —
+	 * an import should never destroy existing AI content.
+	 *
+	 * @param int $import_id WP All Import import ID.
+	 * @return void
+	 */
+	private function restore_snapshot( int $import_id ): void {
+		$transient_key = self::SNAPSHOT_TRANSIENT_PREFIX . $import_id;
+		$snapshot      = get_transient( $transient_key );
+
+		if ( ! is_array( $snapshot ) || empty( $snapshot ) ) {
+			delete_transient( $transient_key );
+			return;
+		}
+
+		$restored = 0;
+
+		foreach ( $snapshot as $post_id => $previous_value ) {
+			$current = get_post_meta( (int) $post_id, self::META_KEY, true );
+
+			if ( ! empty( $current ) || empty( $previous_value ) ) {
+				continue;
+			}
+
+			update_field( self::FIELD_KEY, $previous_value, (int) $post_id );
+			update_post_meta( (int) $post_id, self::META_KEY, $previous_value );
+			++$restored;
+		}
+
+		delete_transient( $transient_key );
+
+		if ( $restored > 0 ) {
+			$this->log( sprintf( 'Import #%d: restored %d AI description(s) cleared by the import.', $import_id, $restored ) );
 		}
 	}
 
@@ -171,9 +260,15 @@ class AI_VDP implements Theme_Component {
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
 				'meta_query'     => array(
+					'relation' => 'OR',
 					array(
 						'key'     => self::META_KEY,
 						'compare' => 'NOT EXISTS',
+					),
+					array(
+						'key'     => self::META_KEY,
+						'value'   => '',
+						'compare' => '=',
 					),
 				),
 			)

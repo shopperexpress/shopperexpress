@@ -758,7 +758,7 @@ class Ajax implements Theme_Component {
 			'year', 'make', 'model', 'trim', 'condition', 'mileage',
 			'price', 'msrp', 'stock', 'exterior_color', 'interior_color',
 			'body_style', 'drivetrain', 'fuel_type', 'transmission',
-			'certified', 'sold',
+			'certified', 'sold', 'use_images_list',
 		);
 
 		$top    = array();

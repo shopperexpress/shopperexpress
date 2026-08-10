@@ -16,7 +16,7 @@ if ( ! wps_check_current_usser() ) {
 	return;
 }
 
-$vehicle  = $args['vehicle'] ?? array();
+$vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
 
 if ( empty( $vehicle ) ) {
@@ -25,26 +25,49 @@ if ( empty( $vehicle ) ) {
 
 $vin     = strtoupper( $vehicle['vin'] ?? '' );
 $payload = $vehicle['payload'] ?? array();
-$title   = trim( implode( ' ', array_filter( array(
-	$vehicle['year'] ?? '',
-	$vehicle['make'] ?? '',
-	$vehicle['model'] ?? '',
-	$vehicle['trim'] ?? '',
-) ) ) );
+$title   = trim(
+	implode(
+		' ',
+		array_filter(
+			array(
+				$vehicle['year'] ?? '',
+				$vehicle['make'] ?? '',
+				$vehicle['model'] ?? '',
+				$vehicle['trim'] ?? '',
+			)
+		)
+	)
+);
 
 /**
- * Helper: render a text input or textarea field row.
+ * Helper: render a text input, textarea, or select field row.
+ *
+ * $options is only used when $type === 'select': array of value => label.
+ * $readonly disables the input — used for import-source-of-truth fields
+ * that this form is not allowed to write (see Source Sync Principle, CLAUDE.md).
  */
-function _api_modal_field( string $label, string $name, string $value, string $type = 'text' ): void {
+function _api_modal_field( string $label, string $name, string $value, string $type = 'text', array $options = array(), bool $readonly = false ): void {
 	?>
 	<div class="acf-field">
-		<div class="acf-label"><label><?php echo esc_html( $label ); ?></label></div>
+		<div class="acf-label">
+			<label><?php echo esc_html( $label ); ?></label>
+			<?php if ( $readonly ) : ?>
+				<span class="acf-readonly-note"><?php esc_html_e( '(read-only, set by import)', 'shopperexpress' ); ?></span>
+			<?php endif; ?>
+		</div>
 		<div class="acf-input">
-			<?php if ( 'textarea' === $type ) : ?>
+			<?php if ( 'select' === $type ) : ?>
+				<select name="<?php echo esc_attr( $name ); ?>" class="acf-input-text" <?php disabled( $readonly ); ?>>
+					<?php foreach ( $options as $opt_value => $opt_label ) : ?>
+						<option value="<?php echo esc_attr( $opt_value ); ?>" <?php selected( $value, $opt_value ); ?>><?php echo esc_html( $opt_label ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			<?php elseif ( 'textarea' === $type ) : ?>
 				<textarea
 					name="<?php echo esc_attr( $name ); ?>"
 					class="acf-input-text"
 					rows="3"
+					<?php disabled( $readonly ); ?>
 				><?php echo esc_textarea( $value ); ?></textarea>
 			<?php else : ?>
 				<input
@@ -52,7 +75,30 @@ function _api_modal_field( string $label, string $name, string $value, string $t
 					name="<?php echo esc_attr( $name ); ?>"
 					value="<?php echo esc_attr( $value ); ?>"
 					class="acf-input-text"
+					<?php disabled( $readonly ); ?>
 				>
+			<?php endif; ?>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Helper: render a read-only thumbnail strip for one image list.
+ */
+function _api_modal_gallery_preview( string $label, array $urls ): void {
+	?>
+	<div class="acf-field acf-field-gallery-preview">
+		<div class="acf-label"><label><?php echo esc_html( $label ); ?></label></div>
+		<div class="acf-input">
+			<?php if ( empty( $urls ) ) : ?>
+				<p class="description"><?php esc_html_e( 'No images in this list.', 'shopperexpress' ); ?></p>
+			<?php else : ?>
+				<ul class="gallery-preview-list">
+					<?php foreach ( $urls as $url ) : ?>
+						<li><img src="<?php echo esc_url( $url ); ?>" loading="lazy" alt=""></li>
+					<?php endforeach; ?>
+				</ul>
 			<?php endif; ?>
 		</div>
 	</div>
@@ -63,88 +109,317 @@ $tabs = array(
 	'general'     => array(
 		'label'  => __( 'General info', 'shopperexpress' ),
 		'fields' => array(
-			array( 'label' => 'Year',              'name' => 'year',             'value' => $vehicle['year'] ?? '' ),
-			array( 'label' => 'Make',              'name' => 'make',             'value' => $vehicle['make'] ?? '' ),
-			array( 'label' => 'Model',             'name' => 'model',            'value' => $vehicle['model'] ?? '' ),
-			array( 'label' => 'Trim',              'name' => 'trim',             'value' => $vehicle['trim'] ?? '' ),
-			array( 'label' => 'Condition',         'name' => 'condition',        'value' => $vehicle['condition'] ?? '' ),
-			array( 'label' => 'Stock #',           'name' => 'stock',            'value' => $vehicle['stock'] ?? '' ),
-			array( 'label' => 'Mileage',           'name' => 'mileage',          'value' => $vehicle['mileage'] ?? '' ),
-			array( 'label' => 'Ext. Color',        'name' => 'exterior_color',   'value' => $vehicle['exterior_color'] ?? '' ),
-			array( 'label' => 'Int. Color',        'name' => 'interior_color',   'value' => $vehicle['interior_color'] ?? '' ),
-			array( 'label' => 'Body Style',        'name' => 'body_style',       'value' => $vehicle['body_style'] ?? '' ),
-			array( 'label' => 'Drivetrain',        'name' => 'drivetrain',       'value' => $vehicle['drivetrain'] ?? '' ),
-			array( 'label' => 'Transmission',      'name' => 'transmission',     'value' => $vehicle['transmission'] ?? '' ),
-			array( 'label' => 'Fuel Type',         'name' => 'fuel_type',        'value' => $vehicle['fuel_type'] ?? '' ),
-			array( 'label' => 'Certified',         'name' => 'certified',        'value' => $vehicle['certified'] ?? '' ),
-			array( 'label' => 'Sold',              'name' => 'sold',             'value' => $vehicle['sold'] ?? '' ),
-			array( 'label' => 'Status',            'name' => 'special field 3',  'value' => $payload['special field 3'] ?? '' ),
-			array( 'label' => 'Information',       'name' => 'information',      'value' => $payload['information'] ?? '' ),
-			array( 'label' => 'Message',           'name' => 'message',          'value' => $payload['message'] ?? '' ),
-		),
-	),
-	'payment'     => array(
-		'label'  => __( 'Payment', 'shopperexpress' ),
-		'fields' => array(
-			array( 'label' => 'Lease Payment',     'name' => 'lease_payment',    'value' => $payload['lease_payment'] ?? '' ),
-			array( 'label' => 'Loan Payment',      'name' => 'loan_payment',     'value' => $payload['loan_payment'] ?? '' ),
-			array( 'label' => 'Loan Payment Sort', 'name' => 'loan_payment_sort','value' => $payload['loan_payment_sort'] ?? '' ),
-			array( 'label' => 'Down Payment',      'name' => 'down_payment',     'value' => $payload['down_payment'] ?? '' ),
-			array( 'label' => 'Lease Term',        'name' => 'leaseterm',        'value' => $payload['leaseterm'] ?? '' ),
-			array( 'label' => 'Loan Term',         'name' => 'loanterm',         'value' => $payload['loanterm'] ?? '' ),
-			array( 'label' => 'Loan APR',          'name' => 'loanapr',          'value' => $payload['loanapr'] ?? '' ),
-			array( 'label' => 'Total of Payments', 'name' => 'totalofpmts',      'value' => $payload['totalofpmts'] ?? '' ),
-		),
-	),
-	'pricing'     => array(
-		'label'  => __( 'Pricing', 'shopperexpress' ),
-		'fields' => array(
-			array( 'label' => 'Price',             'name' => 'price',            'value' => $vehicle['price'] ?? '' ),
-			array( 'label' => 'MSRP',              'name' => 'msrp',             'value' => $vehicle['msrp'] ?? '' ),
-			array( 'label' => 'Invoice Amount',    'name' => 'invoiceamount',    'value' => $payload['invoiceamount'] ?? '' ),
-			array( 'label' => 'Internet Price',    'name' => 'internetprice',    'value' => $payload['internetprice'] ?? '' ),
-			array( 'label' => 'Custom Price 1',    'name' => 'customprice1',     'value' => $payload['customprice1'] ?? '' ),
-			array( 'label' => 'Custom Price 2',    'name' => 'customprice2',     'value' => $payload['customprice2'] ?? '' ),
-			array( 'label' => 'Custom Price 3',    'name' => 'customprice3',     'value' => $payload['customprice3'] ?? '' ),
-		),
-	),
-	'mechanical'  => array(
-		'label'  => __( 'Mechanical', 'shopperexpress' ),
-		'fields' => array(
-			array( 'label' => 'Engine',            'name' => 'engine',              'value' => $payload['engine'] ?? '' ),
-			array( 'label' => 'Engine Cylinders',  'name' => 'enginecylinders',     'value' => $payload['enginecylinders'] ?? '' ),
-			array( 'label' => 'Engine Block',      'name' => 'engineblock',         'value' => $payload['engineblock'] ?? '' ),
-			array( 'label' => 'Displacement',      'name' => 'enginedisplacement',  'value' => $payload['enginedisplacement'] ?? '' ),
-			array( 'label' => 'Trans. Speed',      'name' => 'transmission_speed',  'value' => $payload['transmission_speed'] ?? '' ),
-			array( 'label' => 'Wheelbase Code',    'name' => 'wheelbase_code',      'value' => $payload['wheelbase_code'] ?? '' ),
+			array(
+				'label'    => 'Year',
+				'name'     => 'year',
+				'value'    => $vehicle['year'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Make',
+				'name'     => 'make',
+				'value'    => $vehicle['make'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label' => 'Model',
+				'name'  => 'model',
+				'value' => $vehicle['model'] ?? '',
+			),
+			array(
+				'label' => 'Trim',
+				'name'  => 'trim',
+				'value' => $vehicle['trim'] ?? '',
+			),
+			array(
+				'label'    => 'Condition',
+				'name'     => 'condition',
+				'value'    => $vehicle['condition'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Stock #',
+				'name'     => 'stock',
+				'value'    => $vehicle['stock'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label' => 'Mileage',
+				'name'  => 'mileage',
+				'value' => $vehicle['mileage'] ?? '',
+			),
+			array(
+				'label' => 'Ext. Color',
+				'name'  => 'exterior_color',
+				'value' => $vehicle['exterior_color'] ?? '',
+			),
+			array(
+				'label' => 'Int. Color',
+				'name'  => 'interior_color',
+				'value' => $vehicle['interior_color'] ?? '',
+			),
+			array(
+				'label'    => 'Body Style',
+				'name'     => 'body_style',
+				'value'    => $vehicle['body_style'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Drivetrain',
+				'name'     => 'drivetrain',
+				'value'    => $vehicle['drivetrain'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Transmission',
+				'name'     => 'transmission',
+				'value'    => $vehicle['transmission'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Fuel Type',
+				'name'     => 'fuel_type',
+				'value'    => $vehicle['fuel_type'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label' => 'Certified',
+				'name'  => 'certified',
+				'value' => $vehicle['certified'] ?? '',
+			),
+			array(
+				'label' => 'Sold',
+				'name'  => 'sold',
+				'value' => $vehicle['sold'] ?? '',
+			),
+			array(
+				'label'    => 'VIN',
+				'name'     => 'vin_display',
+				'value'    => $vin,
+				'readonly' => true,
+			),
+			array(
+				'label' => 'Status',
+				'name'  => 'special field 3',
+				'value' => $payload['special field 3'] ?? '',
+			),
+			array(
+				'label' => 'Information',
+				'name'  => 'information',
+				'value' => $payload['information'] ?? '',
+			),
+			array(
+				'label' => 'Message',
+				'name'  => 'message',
+				'value' => $payload['message'] ?? '',
+			),
 		),
 	),
 	'fuel'        => array(
 		'label'  => __( 'Fuel', 'shopperexpress' ),
 		'fields' => array(
-			array( 'label' => 'City MPG',          'name' => 'city_mpg',         'value' => $payload['city_mpg'] ?? '' ),
-			array( 'label' => 'Highway MPG',       'name' => 'highway_mpg',      'value' => $payload['highway_mpg'] ?? '' ),
-			array( 'label' => 'EPA Class',         'name' => 'epaclassification','value' => $payload['epaclassification'] ?? '' ),
+			array(
+				'label' => 'City MPG',
+				'name'  => 'city_mpg',
+				'value' => $payload['city_mpg'] ?? '',
+			),
+			array(
+				'label' => 'Highway MPG',
+				'name'  => 'highway_mpg',
+				'value' => $payload['highway_mpg'] ?? '',
+			),
+			array(
+				'label' => 'EPA Class',
+				'name'  => 'epaclassification',
+				'value' => $payload['epaclassification'] ?? '',
+			),
 		),
+	),
+	'mechanical'  => array(
+		'label'  => __( 'Mechanical', 'shopperexpress' ),
+		'fields' => array(
+			array(
+				'label' => 'Engine',
+				'name'  => 'engine',
+				'value' => $payload['engine'] ?? '',
+			),
+			array(
+				'label' => 'Engine Cylinders',
+				'name'  => 'enginecylinders',
+				'value' => $payload['enginecylinders'] ?? '',
+			),
+			array(
+				'label' => 'Engine Block',
+				'name'  => 'engineblock',
+				'value' => $payload['engineblock'] ?? '',
+			),
+			array(
+				'label' => 'Displacement',
+				'name'  => 'enginedisplacement',
+				'value' => $payload['enginedisplacement'] ?? '',
+			),
+			array(
+				'label' => 'Trans. Speed',
+				'name'  => 'transmission_speed',
+				'value' => $payload['transmission_speed'] ?? '',
+			),
+			array(
+				'label' => 'Wheelbase Code',
+				'name'  => 'wheelbase_code',
+				'value' => $payload['wheelbase_code'] ?? '',
+			),
+		),
+	),
+	'payment'     => array(
+		'label'  => __( 'Payment', 'shopperexpress' ),
+		'fields' => array(
+			array(
+				'label' => 'Lease Payment',
+				'name'  => 'lease_payment',
+				'value' => $payload['lease_payment'] ?? '',
+			),
+			array(
+				'label' => 'Loan Payment',
+				'name'  => 'loan_payment',
+				'value' => $payload['loan_payment'] ?? '',
+			),
+			array(
+				'label' => 'Loan Payment Sort',
+				'name'  => 'loan_payment_sort',
+				'value' => $payload['loan_payment_sort'] ?? '',
+			),
+			array(
+				'label' => 'Down Payment',
+				'name'  => 'down_payment',
+				'value' => $payload['down_payment'] ?? '',
+			),
+			array(
+				'label' => 'Lease Term',
+				'name'  => 'leaseterm',
+				'value' => $payload['leaseterm'] ?? '',
+			),
+			array(
+				'label' => 'Loan Term',
+				'name'  => 'loanterm',
+				'value' => $payload['loanterm'] ?? '',
+			),
+			array(
+				'label' => 'Loan APR',
+				'name'  => 'loanapr',
+				'value' => $payload['loanapr'] ?? '',
+			),
+			array(
+				'label' => 'Total of Payments',
+				'name'  => 'totalofpmts',
+				'value' => $payload['totalofpmts'] ?? '',
+			),
+		),
+	),
+	'pricing'     => array(
+		'label'  => __( 'Pricing', 'shopperexpress' ),
+		'fields' => array(
+			array(
+				'label' => 'Price',
+				'name'  => 'price',
+				'value' => $payload['price'] ?? '',
+			),
+			array(
+				'label' => 'MSRP',
+				'name'  => 'msrp',
+				'value' => $payload['msrp'] ?? '',
+			),
+			array(
+				'label' => 'Invoice Amount',
+				'name'  => 'invoiceamount',
+				'value' => $payload['invoiceamount'] ?? '',
+			),
+			array(
+				'label' => 'Internet Price',
+				'name'  => 'internetprice',
+				'value' => $payload['internetprice'] ?? '',
+			),
+			array(
+				'label' => 'Custom Price 1',
+				'name'  => 'customprice1',
+				'value' => $payload['customprice1'] ?? '',
+			),
+			array(
+				'label' => 'Custom Price 2',
+				'name'  => 'customprice2',
+				'value' => $payload['customprice2'] ?? '',
+			),
+			array(
+				'label' => 'Custom Price 3',
+				'name'  => 'customprice3',
+				'value' => $payload['customprice3'] ?? '',
+			),
+		),
+	),
+	'media'       => array(
+		'label'  => __( 'Media', 'shopperexpress' ),
+		'custom' => true,
 	),
 	'description' => array(
 		'label'  => __( 'Description', 'shopperexpress' ),
 		'fields' => array(
-			array( 'label' => 'Vehicle Overview',  'name' => 'vehicle_overview',  'value' => $payload['vehicle_overview'] ?? '' ),
-			array( 'label' => 'Certified URL',     'name' => 'certified_custom_url','value' => $payload['certified_custom_url'] ?? '' ),
-			array( 'label' => 'Market Class',      'name' => 'marketclass',       'value' => $payload['marketclass'] ?? '' ),
-			array( 'label' => 'Doors',             'name' => 'doors',             'value' => $payload['doors'] ?? '' ),
-			array( 'label' => 'Passenger Cap.',    'name' => 'passengercapacity', 'value' => $payload['passengercapacity'] ?? '' ),
-			array( 'label' => 'Ext Color Hex',     'name' => 'extcolorhexcode',   'value' => $payload['extcolorhexcode'] ?? '' ),
-			array( 'label' => 'Int Color Hex',     'name' => 'intcolorhexcode',   'value' => $payload['intcolorhexcode'] ?? '' ),
+			array(
+				'label' => 'Vehicle Overview',
+				'name'  => 'vehicle_overview',
+				'value' => $payload['vehicle_overview'] ?? '',
+			),
+			array(
+				'label' => 'Certified URL',
+				'name'  => 'certified_custom_url',
+				'value' => $payload['certified_custom_url'] ?? '',
+			),
+			array(
+				'label' => 'Market Class',
+				'name'  => 'marketclass',
+				'value' => $payload['marketclass'] ?? '',
+			),
+			array(
+				'label' => 'Doors',
+				'name'  => 'doors',
+				'value' => $payload['doors'] ?? '',
+			),
+			array(
+				'label' => 'Passenger Cap.',
+				'name'  => 'passengercapacity',
+				'value' => $payload['passengercapacity'] ?? '',
+			),
+			array(
+				'label' => 'Ext Color Hex',
+				'name'  => 'extcolorhexcode',
+				'value' => $payload['extcolorhexcode'] ?? '',
+			),
+			array(
+				'label' => 'Int Color Hex',
+				'name'  => 'intcolorhexcode',
+				'value' => $payload['intcolorhexcode'] ?? '',
+			),
 		),
 	),
 	'seo'         => array(
 		'label'  => __( 'SEO', 'shopperexpress' ),
 		'fields' => array(
-			array( 'label' => 'SEO Title',       'name' => 'seo_title',       'value' => $payload['seo_title'] ?? '',       'type' => 'text' ),
-			array( 'label' => 'SEO Description', 'name' => 'seo_description', 'value' => $payload['seo_description'] ?? '', 'type' => 'textarea' ),
-			array( 'label' => 'SEO Image URL',   'name' => 'seo_image',       'value' => $payload['seo_image'] ?? '',       'type' => 'text' ),
+			array(
+				'label' => 'SEO Title',
+				'name'  => 'seo_title',
+				'value' => $payload['seo_title'] ?? '',
+				'type'  => 'text',
+			),
+			array(
+				'label' => 'SEO Description',
+				'name'  => 'seo_description',
+				'value' => $payload['seo_description'] ?? '',
+				'type'  => 'textarea',
+			),
+			array(
+				'label' => 'SEO Image URL',
+				'name'  => 'seo_image',
+				'value' => $payload['seo_image'] ?? '',
+				'type'  => 'text',
+			),
 		),
 	),
 );
@@ -218,18 +493,44 @@ $tabs = array(
 											<?php echo esc_html( $tab['label'] ); ?>
 										</button>
 									</li>
-								<?php $first = false; endforeach; ?>
+									<?php
+									$first = false;
+endforeach;
+								?>
 							</ul>
 						</div>
 					</div>
 					<div class="tab-content">
 						<?php $first = true; foreach ( $tabs as $key => $tab ) : ?>
 							<div class="tab-pane fade <?php echo $first ? 'show active' : ''; ?>" id="api-info-<?php echo esc_attr( $key ); ?>" role="tabpanel">
-								<?php foreach ( $tab['fields'] as $f ) : ?>
-									<?php _api_modal_field( $f['label'], $f['name'], $f['value'], $f['type'] ?? 'text' ); ?>
-								<?php endforeach; ?>
+								<?php if ( ! empty( $tab['custom'] ) && 'media' === $key ) : ?>
+									<?php
+									_api_modal_field(
+										__( 'Active Image List', 'shopperexpress' ),
+										'use_images_list',
+										$vehicle['active_image_list'] ?? 'primary',
+										'select',
+										array(
+											'primary' => __( 'Primary', 'shopperexpress' ),
+											'srp'     => __( 'Secondary (SRP)', 'shopperexpress' ),
+										)
+									);
+									?>
+									<p class="description"><?php esc_html_e( 'Chooses which image list below is shown on the site for this vehicle. HomeNet may set this automatically on import; saving here overrides it.', 'shopperexpress' ); ?></p>
+									<?php
+									_api_modal_gallery_preview( __( 'Primary Image List', 'shopperexpress' ), $vehicle['images_primary'] ?? array() );
+									_api_modal_gallery_preview( __( 'Secondary Image List (SRP)', 'shopperexpress' ), $vehicle['images_srp'] ?? array() );
+									?>
+								<?php else : ?>
+									<?php foreach ( $tab['fields'] as $f ) : ?>
+										<?php _api_modal_field( $f['label'], $f['name'], $f['value'], $f['type'] ?? 'text', $f['options'] ?? array(), $f['readonly'] ?? false ); ?>
+									<?php endforeach; ?>
+								<?php endif; ?>
 							</div>
-						<?php $first = false; endforeach; ?>
+							<?php
+							$first = false;
+endforeach;
+						?>
 					</div>
 				</form>
 			</div>

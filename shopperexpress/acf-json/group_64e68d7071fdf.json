@@ -21,9 +21,30 @@
             "selected": 0
         },
         {
-            "key": "field_690c71972b7b9",
-            "label": "Description",
-            "name": "description_service-offers",
+            "key": "field_6a742d3deafaf",
+            "label": "Description before Breadcrumbs",
+            "name": "description_before_breadcrumbs_service-offers",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "allow_in_bindings": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "delay": 0
+        },
+        {
+            "key": "field_6a742d4eeafb0",
+            "label": "Description after Breadcrumbs",
+            "name": "description_after_breadcrumbs_service-offers",
             "aria-label": "",
             "type": "wysiwyg",
             "instructions": "",
@@ -1656,11 +1677,10 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "acfe_autosync": [
-        "json"
-    ],
-    "acfe_form": 0,
-    "acfe_meta": "",
-    "acfe_note": "",
-    "modified": 1779357703
+    "acfe": {
+        "autosync": [
+            "json"
+        ]
+    },
+    "modified": 1785998743
 }

@@ -375,9 +375,28 @@ add_filter(
 			'items'         => $items,
 		);
 
+		// One conversion = one event ID, shared by the generic and the
+		// type-specific event so the browser pixel (and, later, the
+		// Conversions API call for the same lead) can be deduplicated by
+		// OpenAI. Generating two separate IDs here was the root cause of the
+		// browser event ID never matching the ASC event record.
+		$shared_event_id = wps_generate_asc_event_id( 'asc_form_submission_' . $form_type );
+
 		$response['asc_events'] = array(
-			array_merge( $base, array( 'event' => 'asc_form_submission' ) ),
-			array_merge( $base, array( 'event' => 'asc_form_submission_' . $form_type ) ),
+			array_merge(
+				$base,
+				array(
+					'event'    => 'asc_form_submission',
+					'event_id' => $shared_event_id,
+				)
+			),
+			array_merge(
+				$base,
+				array(
+					'event'    => 'asc_form_submission_' . $form_type,
+					'event_id' => $shared_event_id,
+				)
+			),
 		);
 
 		return $response;

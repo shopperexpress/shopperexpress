@@ -1,0 +1,185 @@
+.team-section {
+  padding: 40px 0;
+
+  .container {
+    max-width: 1270px;
+  }
+
+  &__heading {
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto 50px;
+
+    p {
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: $font-weight-bold;
+
+    @include media('>=desktop') {
+      font-size: 32px;
+    }
+  }
+
+  &__footer {
+    padding: 40px 0 80px;
+    text-align: center;
+
+    h3 {
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      border-radius: 5px;
+      text-transform: capitalize;
+      font-weight: $font-weight-normal;
+
+      &:focus-visible {
+        outline: 0.25rem solid rgba(var(--primary-rgb), 0.5);
+        outline-offset: 2px;
+      }
+    }
+  }
+}
+
+.team-filters {
+  @extend %listreset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 34px;
+
+  .active {
+    button {
+      background-color: rgba($gray-500, 0.5);
+      color: $black;
+    }
+  }
+
+  button {
+    @include animate(color background-color);
+    display: inline-block;
+    vertical-align: top;
+    border: 1px solid rgba($gray-500, 0.5);
+    background-clip: padding-box;
+    color: $gray-500;
+    background-color: transparent;
+    padding: 8px 16px;
+    font-size: 16px;
+    text-transform: capitalize;
+
+    &:hover {
+      color: $black;
+    }
+  }
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 24px;
+  position: relative;
+
+  @include media('>=tablet') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media('>=desktop') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media('>=widescreen') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.card-team {
+  $self: &;
+  aspect-ratio: 1;
+  position: relative;
+  overflow: hidden;
+
+  &.custom-hover {
+    #{$self}__body {
+      bottom: 0;
+    }
+
+    #{$self}__hover {
+      opacity: 1;
+    }
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+
+  &__body {
+    @include animate(bottom, 0.2s, linear);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -60px;
+    z-index: 2;
+    font-size: 14px;
+    line-height: 1.4285;
+    color: $white;
+    text-align: center;
+    padding: 28px 24px;
+
+    &::before {
+      content: '';
+      background: linear-gradient(rgba(34, 34, 34, 0), rgb(34, 34, 34));
+      position: absolute;
+      inset: -30% 0 0;
+      z-index: -1;
+    }
+
+    a {
+      color: $white;
+
+      &:hover {
+        color: $white;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__name {
+    font-size: 16px;
+    line-height: 1.625;
+    font-weight: $font-weight-bold;
+    margin: 0;
+  }
+
+  &__position {
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  &__hover {
+    @include animate(opacity, 0.3s, ease);
+    opacity: 0;
+
+    p {
+      margin: 4px 0 0;
+    }
+  }
+
+  .hidden {
+    display: none;
+  }
+}

@@ -44,6 +44,10 @@
   position: relative;
   margin-bottom: 40px;
 
+  &:has(.visual-slider-srp) {
+    margin-bottom: 16px;
+  }
+
   .visual-holder {
     position: relative;
   }
@@ -410,10 +414,29 @@
     }
 
     .slick-arrow {
-      display: none !important;
+      background-color: transparent;
+
+      &:hover {
+        svg {
+          fill: $black;
+        }
+      }
+
+      svg {
+        fill: rgba($black, 0.6);
+      }
+
+      &.slick-prev {
+        left: -5px;
+      }
+
+      &.slick-next {
+        right: -5px;
+      }
     }
 
     .slick-dots {
+      display: none !important;
       bottom: -22px;
       max-width: none;
 

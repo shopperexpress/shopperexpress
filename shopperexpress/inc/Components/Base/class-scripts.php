@@ -256,8 +256,15 @@ class Scripts implements Theme_Component {
 			true
 		);
 		wp_enqueue_script(
+			'shopperexpress/asc-openai-ads',
+			\App\asset_url_old( 'js/asc-openai-ads.js' ),
+			array( 'shopperexpress/asc-publish' ),
+			$theme_version,
+			true
+		);
+		wp_enqueue_script(
 			'shopperexpress/google-map',
-			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker&loading=async&callback=initCustomMap',
+			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker&loading=async&callback=initCustomMap&libraries=places',
 			array( 'jquery' ),
 			$theme_version,
 			false
@@ -266,11 +273,12 @@ class Scripts implements Theme_Component {
 			'shopperexpress/jquery',
 			'ajax',
 			array(
-				'admin'          => admin_url( 'admin-ajax.php' ),
-				'request'        => ! empty( $_GET ) ? $_GET : '',
-				'nonce'          => wp_create_nonce( 'shopperexpress_nonce' ),
-				'adf_lead_nonce' => wp_create_nonce( 'submit_adf_lead' ),
-				'api_mode'       => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
+				'admin'              => admin_url( 'admin-ajax.php' ),
+				'request'            => ! empty( $_GET ) ? $_GET : '',
+				'nonce'              => wp_create_nonce( 'shopperexpress_nonce' ),
+				'adf_lead_nonce'     => wp_create_nonce( 'submit_adf_lead' ),
+				'api_mode'           => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
+				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
 			)
 		);
 		wp_enqueue_script(
@@ -284,11 +292,12 @@ class Scripts implements Theme_Component {
 			'shopperexpress/impl',
 			'ajax',
 			array(
-				'admin'    => admin_url( 'admin-ajax.php' ),
-				'request'  => ! empty( $_GET ) ? $_GET : '',
-				'loged'    => is_user_logged_in(),
-				'nonce'    => wp_create_nonce( 'shopperexpress_nonce' ),
-				'api_mode' => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
+				'admin'               => admin_url( 'admin-ajax.php' ),
+				'request'             => ! empty( $_GET ) ? $_GET : '',
+				'loged'               => is_user_logged_in(),
+				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
+				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
+				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
 			)
 		);
 	}

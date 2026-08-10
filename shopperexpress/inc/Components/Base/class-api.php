@@ -161,9 +161,9 @@ class Api implements Theme_Component {
 									$title = $value;
 								} else {
 									if ( $key != 'model' . $post_type ) {
-										$model = $vehicle['terms'][ 'model' . $post_type ][0];
+										$model = ! empty( $vehicle['terms'][ 'model' . $post_type ] ) ? $vehicle['terms'][ 'model' . $post_type ][0] : '';
 									}
-									$trim    = $vehicle['terms'][ 'trim' . $post_type ][0];
+									$trim = ! empty( $vehicle['terms'][ 'trim' . $post_type ] ) ? $vehicle['terms'][ 'trim' . $post_type ][0] : '';
 									$title   = array();
 									$title[] = $value;
 									if ( ! empty( $model ) ) {
@@ -239,7 +239,7 @@ class Api implements Theme_Component {
 		if ( is_array( $post_type ) ) {
 			$matches = array();
 			foreach ( $post_type as $type ) {
-				$get_vehicles_data = $this->get_vehicles_data( array( 'post_type' => $type ) );
+				$get_vehicles_data = $this->get_search_vehicles_data( $type );
 				$search            = $this->search_object( $get_vehicles_data, $searchTerm, $type );
 
 				if ( $type == 'listings' ) {
@@ -251,7 +251,7 @@ class Api implements Theme_Component {
 				$matches = array_merge( $matches, $search );
 			}
 		} else {
-			$get_vehicles_data = $this->get_vehicles_data( array( 'post_type' => $post_type ) );
+			$get_vehicles_data = $this->get_search_vehicles_data( $post_type );
 			$matches           = $this->search_object( $get_vehicles_data, $searchTerm, $post_type );
 		}
 
@@ -268,6 +268,31 @@ class Api implements Theme_Component {
 		}
 
 		return rest_ensure_response( $output );
+	}
+
+	/**
+	 * Resolve the vehicles data source used by get_search().
+	 *
+	 * In API mode, `listings`/`used-listings` no longer exist as WP posts, so
+	 * get_vehicles_data() (which queries WP_Query) would always come back empty.
+	 * Source from the Intice Nexus API instead, via the same endpoint the SRP
+	 * grid already uses, so search results match what the grid displays.
+	 *
+	 * Non-API post types (offers, research, etc.) and non-API-mode sites are
+	 * untouched — they keep using get_vehicles_data() as before.
+	 *
+	 * @param string $post_type
+	 * @return \WP_REST_Response
+	 */
+	private function get_search_vehicles_data( string $post_type ) {
+		if ( \App\is_api_mode() && in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
+			$request = new \WP_REST_Request( 'GET', '/v1/intice/vehicles/' . $post_type );
+			$request->set_param( 'post_type', $post_type );
+
+			return ( new \App\Components\Api\Intice_Rest() )->get_vehicles( $request );
+		}
+
+		return $this->get_vehicles_data( array( 'post_type' => $post_type ) );
 	}
 
 	/**
@@ -731,7 +756,7 @@ class Api implements Theme_Component {
 							'compare' => 'EXISTS',
 						);
 
-						if ( in_array( $field, array( 'price', 'mileage' ), true ) ) {
+						if ( in_array( $field, array( 'price', 'mileage', 'price_sort', 'loan_payment_sort', 'original_price', 'year' ), true ) ) {
 							$meta_query[ $clause ]['type'] = 'NUMERIC';
 						}
 

@@ -22,7 +22,9 @@
         SOC.bindApiTest();
         SOC.bindDbCleanup();
         SOC.bindApiSettings();
+        SOC.bindApiFilters();
         SOC.bindLeadDelivery();
+        SOC.bindGoogleReviews();
     };
 
     // ----------------------------------------------------------------
@@ -558,6 +560,221 @@
                         ? '✓ ' + (data.status || 'OK') + ' — ' + (data.ms || 0) + ' ms'
                         : '✗ ' + (data.error || data.status || 'Error')
                 ).css('color', ok ? '#00a32a' : '#d63638');
+                SOC.showSuccess('Connection test complete.');
+                $btn.prop('disabled', false);
+            }, function (msg) {
+                $result.text('✗ ' + msg).css('color', '#d63638');
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+    };
+
+    // ----------------------------------------------------------------
+    // API Settings — Vehicle Filters subtab
+    // ----------------------------------------------------------------
+    SOC.bindApiFilters = function () {
+        // Toggle the "custom key" input when Field is set to "Custom field key…".
+        $(document).on('change', '.soc-filter-field', function () {
+            const $row = $(this).closest('.soc-filters-row');
+            $row.find('.soc-filter-custom-key').toggle($(this).val() === 'custom');
+        });
+
+        // Add a row by cloning the shared <template>.
+        $(document).on('click', '.soc-filter-add-row', function () {
+            const $tbody = $(this).closest('.soc-section').find('.soc-filters-rows');
+            const template = document.getElementById('soc-filter-row-template');
+            const $newRow = $(template.content.cloneNode(true)).find('.soc-filters-row');
+
+            $tbody.append($newRow);
+        });
+
+        // Remove a row.
+        $(document).on('click', '.soc-filter-remove-row', function () {
+            $(this).closest('.soc-filters-row').remove();
+        });
+
+        $(document).on('click', '#soc-save-vehicle-filters', function () {
+            const $btn = $(this);
+            const payload = {};
+
+            $('.soc-filters-table').each(function () {
+                const postType = $(this).data('post-type');
+                const rows = [];
+
+                $(this).find('.soc-filters-row').each(function () {
+                    const $r = $(this);
+                    rows.push({
+                        field: $r.find('.soc-filter-field').val(),
+                        custom_key: $r.find('.soc-filter-custom-key').val().trim(),
+                        operator: $r.find('.soc-filter-operator').val(),
+                        value: $r.find('.soc-filter-value').val().trim(),
+                    });
+                });
+
+                payload[postType] = JSON.stringify(rows);
+            });
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_api_save_filters', payload, function () {
+                SOC.showSuccess('Filters saved.');
+                $btn.prop('disabled', false);
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+    };
+
+    // ----------------------------------------------------------------
+    // Google Reviews module
+    // ----------------------------------------------------------------
+    SOC.bindGoogleReviews = function () {
+        // OAuth client
+        $(document).on('click', '#soc-gr-save', function () {
+            const $btn          = $(this);
+            const client_id     = $('#soc-gr-client-id').val().trim();
+            const client_secret = $('#soc-gr-client-secret').val().trim();
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_save', {
+                client_id: client_id,
+                client_secret: client_secret,
+            }, function () {
+                SOC.showSuccess('Settings saved.');
+                SOC.reloadPanel('google-reviews');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Disconnect
+        $(document).on('click', '#soc-gr-disconnect', function () {
+            if (!confirm('Disconnect from Google Business Profile?')) return;
+            const $btn = $(this);
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_disconnect', {}, function () {
+                SOC.showSuccess('Disconnected.');
+                SOC.reloadPanel('google-reviews');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Discovery: accounts
+        $(document).on('click', '#soc-gr-load-accounts', function () {
+            const $btn    = $(this);
+            const $select = $('#soc-gr-account-select');
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_list_accounts', {}, function (data) {
+                $select.empty();
+                (data.accounts || []).forEach(function (account) {
+                    $select.append($('<option>', { value: account.id, text: account.name }));
+                });
+                SOC.showSuccess((data.accounts || []).length + ' account(s) loaded.');
+                $btn.prop('disabled', false);
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Discovery: locations
+        $(document).on('click', '#soc-gr-load-locations', function () {
+            const $btn      = $(this);
+            const $select   = $('#soc-gr-location-select');
+            const accountId = $('#soc-gr-account-select').val();
+
+            if (!accountId) {
+                SOC.showError('Load and select an account first.');
+                return;
+            }
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_list_locations', { account_id: accountId }, function (data) {
+                $select.empty();
+                (data.locations || []).forEach(function (location) {
+                    $select.append($('<option>', { value: location.id, text: location.name }));
+                });
+                SOC.showSuccess((data.locations || []).length + ' location(s) loaded.');
+                $btn.prop('disabled', false);
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Save chosen account/location
+        $(document).on('click', '#soc-gr-save-account', function () {
+            const $btn       = $(this);
+            const accountId  = $('#soc-gr-account-select').val() || '';
+            const locationId = $('#soc-gr-location-select').val() || '';
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_save_account', {
+                account_id: accountId,
+                location_id: locationId,
+            }, function () {
+                SOC.showSuccess('Account/location saved.');
+                SOC.reloadPanel('google-reviews');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Places API key (fallback)
+        $(document).on('click', '#soc-gr-places-key-edit', function () {
+            $(this).hide();
+            $(this).closest('td').find('.soc-masked-key').hide();
+            $('#soc-gr-places-api-key').show().trigger('focus');
+        });
+
+        $(document).on('click', '#soc-gr-save-places-key', function () {
+            const $btn    = $(this);
+            const api_key = $('#soc-gr-places-api-key').val().trim();
+
+            $btn.prop('disabled', true);
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_save_places_key', {
+                api_key: api_key,
+            }, function () {
+                SOC.showSuccess('Settings saved.');
+                SOC.reloadPanel('google-reviews');
+            }, function (msg) {
+                SOC.showError(msg);
+                $btn.prop('disabled', false);
+            });
+        });
+
+        // Test
+        $(document).on('click', '#soc-gr-test', function () {
+            const $btn     = $(this);
+            const $result  = $('#soc-gr-test-result');
+            const place_id = $('#soc-gr-test-place-id').val().trim();
+
+            $btn.prop('disabled', true);
+            $result.text('Testing…').css('color', '');
+            SOC.showLoading();
+
+            SOC.ajax('soc_google_reviews_test', { place_id: place_id }, function (data) {
+                $result.text('✓ OK (' + data.source + ') — ' + (data.total_review_count || 0) + ' review(s)').css('color', '#00a32a');
                 SOC.showSuccess('Connection test complete.');
                 $btn.prop('disabled', false);
             }, function (msg) {

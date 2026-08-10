@@ -211,6 +211,15 @@ class ASC_Datalayer implements Theme_Component {
 	 */
 	public function get_asc_items(): array {
 		if ( is_singular( $this->vehicle_post_types ) ) {
+			// API-mode VDPs fake a queried_object/is_singular so the rest of the
+			// theme (this method included) resolves page context correctly, but
+			// there is no real WP post behind it — build_item_from_post() would
+			// read empty ACF fields. Use the Nexus vehicle payload instead,
+			// stashed early in single-listings-api.php before wp_head fires.
+			if ( \App\is_api_mode() && ! empty( $GLOBALS['intice_vehicle'] ) ) {
+				return array( $this->build_item_from_api_vehicle( $GLOBALS['intice_vehicle'] ) );
+			}
+
 			return array( $this->build_item_from_post( get_the_ID() ) );
 		}
 
@@ -263,14 +272,16 @@ class ASC_Datalayer implements Theme_Component {
 			'error_code'    => '',
 		);
 
-		$events = array( $base_event );
+		$events   = array();
+		$events[] = array_merge( $base_event, array( 'event_id' => \wps_generate_asc_event_id( 'asc_pageview' ) ) );
 
 		if ( 'item' === $page_type && ! empty( $items ) ) {
 			$events[] = array_merge(
 				$base_event,
 				array(
-					'event' => 'asc_item_pageview',
-					'items' => $items,
+					'event'    => 'asc_item_pageview',
+					'items'    => $items,
+					'event_id' => \wps_generate_asc_event_id( 'asc_item_pageview' ),
 				)
 			);
 		}
@@ -279,8 +290,9 @@ class ASC_Datalayer implements Theme_Component {
 			$events[] = array_merge(
 				$base_event,
 				array(
-					'event' => 'asc_itemlist_pageview',
-					'items' => $items,
+					'event'    => 'asc_itemlist_pageview',
+					'items'    => $items,
+					'event_id' => \wps_generate_asc_event_id( 'asc_itemlist_pageview' ),
 				)
 			);
 		}
@@ -441,6 +453,32 @@ class ASC_Datalayer implements Theme_Component {
 			'item_category'       => $this->normalize( get_field( 'body_style', $post_id ) ),
 			'item_fuel_type'      => $this->normalize( get_field( 'fuel_type', $post_id ) ),
 			'item_inventory_date' => $this->normalize( get_field( 'dateinstock', $post_id ) ),
+		);
+	}
+
+	/**
+	 * Build a single item array from a Nexus API vehicle payload (API mode VDPs).
+	 *
+	 * @param array $v Vehicle data as returned by Intice_Api_Client::get_vehicle().
+	 * @return array
+	 */
+	private function build_item_from_api_vehicle( array $v ): array {
+		return array(
+			'item_id'             => $this->normalize( $v['vin'] ?? '' ),
+			'item_number'         => $this->normalize( $v['stock'] ?? '' ),
+			'item_price'          => $this->normalize( $v['price'] ?? '' ),
+			'item_condition'      => $this->normalize( $v['condition'] ?? '' ),
+			'item_year'           => $this->normalize( $v['year'] ?? '' ),
+			'item_make'           => $this->normalize( $v['make'] ?? '' ),
+			'item_model'          => $this->normalize( $v['model'] ?? '' ),
+			'item_variant'        => $this->normalize( $v['trim'] ?? '' ),
+			'item_color'          => $this->normalize( $v['exterior_color'] ?? '' ),
+			// get_post_type() reads global $post, which Intice_VDP never sets for
+			// its faked query (only queried_object) — use that instead.
+			'item_type'           => $this->resolve_item_type( (string) ( get_queried_object()->post_type ?? '' ) ),
+			'item_category'       => $this->normalize( $v['body_style'] ?? '' ),
+			'item_fuel_type'      => $this->normalize( $v['fuel_type'] ?? '' ),
+			'item_inventory_date' => $this->normalize( $v['dateinstock'] ?? '' ),
 		);
 	}
 

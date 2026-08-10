@@ -29,6 +29,17 @@ class Intice_Api_Client {
 	const STALE_TTL          = 2 * HOUR_IN_SECONDS;
 
 	/**
+	 * Option storing a registry of known cache keys (key => [group, expires_at]).
+	 *
+	 * Reading cache status via raw SQL against wp_options is blind whenever a
+	 * persistent object cache (Redis/Memcached) is active, since transients then
+	 * live in the object cache, not the options table. This registry is written
+	 * in PHP at set-time and read back the same way regardless of storage backend,
+	 * so status/flush stay correct on any hosting setup.
+	 */
+	const REGISTRY_OPTION = 'intice_api_cache_registry';
+
+	/**
 	 * Singleton instance.
 	 *
 	 * @var static|null
@@ -125,6 +136,8 @@ class Intice_Api_Client {
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLES );
 			set_transient( $stale_key, $response, self::STALE_TTL );
+			self::track_key( $live_key, 'vehicles', self::CACHE_TTL_VEHICLES );
+			self::track_key( $stale_key, 'vehicles', self::STALE_TTL );
 		}
 
 		return $response;
@@ -168,6 +181,8 @@ class Intice_Api_Client {
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLE );
 			set_transient( $stale_key, $response, self::STALE_TTL );
+			self::track_key( $live_key, 'vehicle', self::CACHE_TTL_VEHICLE );
+			self::track_key( $stale_key, 'vehicle', self::STALE_TTL );
 		}
 
 		return $response;
@@ -209,6 +224,8 @@ class Intice_Api_Client {
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
 			set_transient( $live_key, $response, self::CACHE_TTL_META );
 			set_transient( $stale_key, $response, self::STALE_TTL );
+			self::track_key( $live_key, 'meta', self::CACHE_TTL_META );
+			self::track_key( $stale_key, 'meta', self::STALE_TTL );
 		}
 
 		return $response;
@@ -219,33 +236,59 @@ class Intice_Api_Client {
 	 * prefix (2h TTL) so existing data keeps being served while a background cron regenerates
 	 * the fresh cache.
 	 *
-	 * @return void
+	 * @return int Number of live keys flushed.
 	 */
-	public function flush_cache(): void {
-		global $wpdb;
+	public function flush_cache(): int {
+		return $this->flush_matching( null );
+	}
 
-		// Copy live transients to stale prefix before deleting.
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
-				'_transient_' . self::CACHE_PREFIX . '%'
-			)
-		);
+	/**
+	 * Flush a single cache group ('vehicles', 'vehicle', or 'meta') with the same
+	 * stale-while-revalidate behavior as flush_cache() — existing data keeps being
+	 * served from the stale copy while a background cron regenerates it.
+	 *
+	 * @param string $group
+	 * @return int Number of live keys flushed.
+	 */
+	public function flush_group( string $group ): int {
+		return $this->flush_matching( array( $group ) );
+	}
 
-		foreach ( $rows as $row ) {
-			$live_key  = str_replace( '_transient_', '', $row->option_name );
-			$stale_key = str_replace( self::CACHE_PREFIX, self::CACHE_PREFIX_STALE, $live_key );
-			set_transient( $stale_key, maybe_unserialize( $row->option_value ), self::STALE_TTL );
+	/**
+	 * Shared flush implementation: copies matching live transients to a stale
+	 * prefix (2h TTL) before deleting them, then schedules a background regen.
+	 *
+	 * @param string[]|null $groups Restrict to these groups, or null for all.
+	 * @return int Number of live keys flushed.
+	 */
+	private function flush_matching( ?array $groups ): int {
+		// Use get_transient()/delete_transient() (via the key registry) rather than raw SQL
+		// against wp_options, since a persistent object cache (Redis/Memcached) stores
+		// transients outside the options table entirely — raw DELETEs would silently no-op.
+		$registry = self::get_registry();
+		$flushed  = 0;
+
+		foreach ( $registry as $key => $meta ) {
+			if ( 0 !== strpos( $key, self::CACHE_PREFIX ) ) {
+				continue;
+			}
+
+			if ( null !== $groups && ! in_array( $meta['group'] ?? '', $groups, true ) ) {
+				continue;
+			}
+
+			$value = get_transient( $key );
+
+			if ( false !== $value ) {
+				$stale_key = str_replace( self::CACHE_PREFIX, self::CACHE_PREFIX_STALE, $key );
+				set_transient( $stale_key, $value, self::STALE_TTL );
+				self::track_key( $stale_key, $meta['group'] ?? '', self::STALE_TTL );
+			}
+
+			delete_transient( $key );
+			self::untrack_key( $key );
+			++$flushed;
 		}
-
-		// Delete live transients.
-		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-				'_transient_' . self::CACHE_PREFIX . '%',
-				'_transient_timeout_' . self::CACHE_PREFIX . '%'
-			)
-		);
 
 		// Schedule immediate background regeneration.
 		if ( ! wp_next_scheduled( 'intice_cache_regen' ) ) {
@@ -253,6 +296,8 @@ class Intice_Api_Client {
 		}
 
 		spawn_cron();
+
+		return $flushed;
 	}
 
 	/**
@@ -270,6 +315,61 @@ class Intice_Api_Client {
 		$this->get_vehicles( array( 'condition' => 'used' ) );
 
 		self::$regenerating = false;
+	}
+
+	// ─── Cache registry (backend-agnostic status/flush) ──────────────────────
+
+	/**
+	 * Record a cache key so status/flush works regardless of storage backend
+	 * (DB transients vs. persistent object cache).
+	 *
+	 * @param string $key   Transient key.
+	 * @param string $group 'vehicles', 'vehicle', or 'meta'.
+	 * @param int    $ttl   Seconds until expiry, from now.
+	 * @return void
+	 */
+	public static function track_key( string $key, string $group, int $ttl ): void {
+		$registry = get_option( self::REGISTRY_OPTION, array() );
+
+		// Prune long-expired entries so the registry doesn't grow unbounded — unlike DB
+		// transients (garbage-collected by WP core), registry rows aren't auto-removed
+		// on natural expiry since we only track writes/explicit deletes, not backend TTLs.
+		$now = time();
+		foreach ( $registry as $existing_key => $meta ) {
+			if ( ( $meta['expires_at'] ?? 0 ) < $now - self::STALE_TTL ) {
+				unset( $registry[ $existing_key ] );
+			}
+		}
+
+		$registry[ $key ] = array(
+			'group'      => $group,
+			'expires_at' => $now + $ttl,
+		);
+		update_option( self::REGISTRY_OPTION, $registry, false );
+	}
+
+	/**
+	 * Remove a key from the registry (after delete_transient()).
+	 *
+	 * @param string $key Transient key.
+	 * @return void
+	 */
+	public static function untrack_key( string $key ): void {
+		$registry = get_option( self::REGISTRY_OPTION, array() );
+
+		if ( isset( $registry[ $key ] ) ) {
+			unset( $registry[ $key ] );
+			update_option( self::REGISTRY_OPTION, $registry, false );
+		}
+	}
+
+	/**
+	 * Return the full cache key registry: key => [ group, expires_at ].
+	 *
+	 * @return array<string, array{group: string, expires_at: int}>
+	 */
+	public static function get_registry(): array {
+		return get_option( self::REGISTRY_OPTION, array() );
 	}
 
 	// ─── Private helpers ──────────────────────────────────────────────────────
@@ -301,6 +401,8 @@ class Intice_Api_Client {
 		if ( ! is_wp_error( $result ) ) {
 			delete_transient( self::CACHE_PREFIX . 'vehicle_' . $vin );
 			delete_transient( self::CACHE_PREFIX_STALE . 'vehicle_' . $vin );
+			self::untrack_key( self::CACHE_PREFIX . 'vehicle_' . $vin );
+			self::untrack_key( self::CACHE_PREFIX_STALE . 'vehicle_' . $vin );
 		}
 
 		return $result;

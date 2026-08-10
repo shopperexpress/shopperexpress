@@ -20,6 +20,9 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 	<button type="button" class="soc-subtabs__btn" data-subtab-btn="fields">
 		<?php esc_html_e( 'ACF Fields Reference', 'shopperexpress' ); ?>
 	</button>
+	<button type="button" class="soc-subtabs__btn" data-subtab-btn="filters">
+		<?php esc_html_e( 'Filters', 'shopperexpress' ); ?>
+	</button>
 </div>
 
 <div data-subtab-panel="connection">
@@ -157,6 +160,12 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Intice Nexus Cache', 'shopperexpress' ); ?></div>
 
+	<?php if ( wp_using_ext_object_cache() ) : ?>
+	<p style="margin:0 0 12px;padding:10px 14px;background:#e5f5fa;border-left:4px solid #2271b1;border-radius:4px;font-size:13px;">
+		<?php esc_html_e( 'A persistent object cache (Redis/Memcached) is active on this server. Cache reads/writes go through it instead of the database — status and flush below account for this automatically.', 'shopperexpress' ); ?>
+	</p>
+	<?php endif; ?>
+
 	<!-- Cache enable / disable toggle -->
 	<div class="soc-api-mode-card <?php echo $cache_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>" style="margin-bottom:16px;">
 		<div class="soc-api-mode-card__status">
@@ -206,7 +215,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
 
-			$group_keys = array( 'vehicles', 'vehicle', 'meta' );
+			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom' );
 
 			foreach ( $data['api_cache'] as $i => $row ) :
 				$st    = $row['status'] ?? 'missing';
@@ -254,6 +263,10 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 
 <div data-subtab-panel="fields" style="display:none">
 	<?php require __DIR__ . '/api-settings-fields.php'; ?>
+</div>
+
+<div data-subtab-panel="filters" style="display:none">
+	<?php require __DIR__ . '/api-settings-filters.php'; ?>
 </div>
 
 <p class="soc-footer-note">

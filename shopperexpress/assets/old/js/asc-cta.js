@@ -128,6 +128,13 @@
 		window.asc_datalayer = window.asc_datalayer || {};
 		window.asc_datalayer.events = window.asc_datalayer.events || [];
 		window.asc_datalayer.events.push(eventObject);
+
+		if (typeof window.ascDispatchEvent === 'function') {
+			window.ascDispatchEvent(eventObject);
+			return;
+		}
+
+		// Fallback if asc-publish.js hasn't loaded — preserves original GA4-only behavior.
 		if (typeof gtag !== 'function') return;
 		var eventName = eventObject.event;
 		var payload   = Object.assign({}, eventObject);

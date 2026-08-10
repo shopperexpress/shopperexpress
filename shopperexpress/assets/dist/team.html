@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ShopperExpress.com</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- include jQuery library -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <!-- include jQuery library local file if cdn link doesn't work -->
+    <script>
+      window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+    </script>
+    <!-- include minified bootstrap bundle js -->
+    <script src="js/bootstrap.bundle.min.js" defer></script>
+    <!-- include app js file  -->
+    <script src="js/app.js" defer></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=marker&loading=async&callback=initCustomMap" defer async></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="soc.css" rel="stylesheet" />
+    <link href="login.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <style>
+      :root {
+        --primary: #0074b3;
+        --primary-rgb: 0, 116, 179;
+        --header-nav-drop-bg: #004fb0;
+        --header-nav-link-color: #00c700;
+        --header-nav-link-hover-color: #00d1d4;
+        --overlay-opacity: 0.75;
+        --overlay-color-rgb: 0, 116, 179;
+      }
+    </style>
+    <div id="wrapper">
+      <header id="header">
+        <div class="container">header</div>
+      </header>
+      <!-- main container of all the page elements -->
+      <main id="main">
+        <section class="team-section">
+          <div class="container">
+            <div class="team-section__heading">
+              <h1>Meet Our Team</h1>
+              <p>
+                At VIP Honda, great experiences start with great people. From helping customers find the right vehicle to keeping it running at its best for years to come, our team
+                is committed to delivering knowledgeable guidance, genuine care, and a customer-first experience at every step. Get to know the people behind The VIP Treatment.
+                Every Customer. Every Time.
+              </p>
+            </div>
+            <ul class="team-filters" data-filter-group="team-filter">
+              <li class="active"><button type="button" data-filter="all">all</button></li>
+              <li><button type="button" data-filter="in-memoriam">In Memoriam</button></li>
+              <li><button type="button" data-filter="management">Management</button></li>
+              <li><button type="button" data-filter="sales-finance">Sales & Finance</button></li>
+              <li><button type="button" data-filter="internet-sales">Internet Sales</button></li>
+              <li><button type="button" data-filter="service-parts">Service & Parts</button></li>
+            </ul>
+            <div class="team-grid">
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                  <span class="team-filter hidden">management</span>
+                </div>
+              </div>
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                </div>
+                <span class="team-filter hidden">in-memoriam</span>
+              </div>
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                </div>
+                <span class="team-filter hidden">sales-finance</span>
+              </div>
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                </div>
+                <span class="team-filter hidden">internet-sales</span>
+              </div>
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                </div>
+                <span class="team-filter hidden">service-parts</span>
+              </div>
+              <div class="card-team">
+                <img src="images/team-member.jpg" alt="image description" />
+                <div class="card-team__body">
+                  <h3 class="card-team__name">John Doe</h3>
+                  <span class="card-team__position">Pre-Owned Sales Manager</span>
+                  <div class="card-team__hover">
+                    <p><a href="tel:9087531500">(908) 753-1500</a></p>
+                    <p><a href="mailto:lorem@lorem.com">lorem@lorem.com</a></p>
+                  </div>
+                </div>
+                <span class="team-filter hidden">management</span>
+              </div>
+            </div>
+            <div class="team-section__footer">
+              <h3 class="h2">Join Our Team</h3>
+              <a class="btn btn-primary btn-lg" href="#">See Job Openings</a>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer id="footer">
+        <div class="container-fluid">footer</div>
+      </footer>
+    </div>
+    <script defer src="js/soc.js"></script>
+  </body>
+</html>

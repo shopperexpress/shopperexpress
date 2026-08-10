@@ -10,6 +10,7 @@
 namespace App\Components\SOC\Modules;
 
 use App\Components\Api\Intice_Api_Client;
+use App\Components\Api\Intice_Rest;
 use App\Components\SOC\Contracts\SOC_Module;
 use App\Components\SOC\Support\SOC_Cache;
 use App\Components\SOC\Support\SOC_Logger;
@@ -19,10 +20,55 @@ use App\Components\SOC\Support\SOC_Logger;
  */
 class Api_Settings implements SOC_Module {
 
-	const OPTION_API_MODE      = 'shopperexpress_api_mode_enabled';
-	const OPTION_API_KEY       = 'shopperexpress_intice_api_key';
-	const OPTION_API_URL       = 'shopperexpress_intice_api_url';
-	const OPTION_CACHE_ENABLED = 'shopperexpress_intice_cache_enabled';
+	const OPTION_API_MODE       = 'shopperexpress_api_mode_enabled';
+	const OPTION_API_KEY        = 'shopperexpress_intice_api_key';
+	const OPTION_API_URL        = 'shopperexpress_intice_api_url';
+	const OPTION_CACHE_ENABLED  = 'shopperexpress_intice_cache_enabled';
+	const OPTION_VEHICLE_FILTERS = 'shopperexpress_vehicle_filters';
+
+	/**
+	 * Static reference of filterable vehicle fields — same choices/semantics as the
+	 * "Custom Sort" ACF repeater (field values live either at the vehicle's top level
+	 * or inside the dealer-mapped `payload` bag; Intice_Rest::get_sort_field_value()
+	 * already knows how to resolve both). "custom" lets an admin type an exact payload
+	 * key when a dealer's mapping doesn't match one of these.
+	 *
+	 * @var array<string,string>
+	 */
+	const FILTER_FIELDS = array(
+		'condition'         => 'Condition',
+		'year'              => 'Year',
+		'body_style'        => 'Body Style',
+		'make'              => 'Make',
+		'model'             => 'Model',
+		'drivetrain'        => 'Drivetrain',
+		'trim'              => 'Trim',
+		'engine'            => 'Engine',
+		'transmission'      => 'Transmission',
+		'exterior_color'    => 'Exterior Color',
+		'interior_color'    => 'Interior Color',
+		'fuel_type'         => 'Fuel Type',
+		'mileage'           => 'Mileage',
+		'certified'         => 'Certified',
+		'vehicle-status'    => 'Vehicle Status',
+		'price_sort'        => 'Price (sort)',
+		'original_price'    => 'MSRP',
+		'loan_payment_sort' => 'Loan Payment (sort)',
+		'dateinstock'       => 'DateInStock',
+		'custom'            => 'Custom field key…',
+	);
+
+	/**
+	 * @var array<string,string>
+	 */
+	const FILTER_OPERATORS = array(
+		'>=' => '>=',
+		'<=' => '<=',
+		'>'  => '>',
+		'<'  => '<',
+		'='  => '=',
+		'!=' => '≠',
+	);
 
 	/**
 	 * @return string
@@ -74,6 +120,10 @@ class Api_Settings implements SOC_Module {
 			'connection_test'  => null,
 			'api_cache'        => $api_mode ? $this->collect_api_cache() : null,
 			'listings_fields'  => $this->get_listings_fields_reference(),
+			'filters'          => array(
+				'listings'      => $this->get_filters( 'listings' ),
+				'used-listings' => $this->get_filters( 'used-listings' ),
+			),
 			'collected_at'     => current_time( 'mysql' ),
 		);
 
@@ -114,6 +164,78 @@ class Api_Settings implements SOC_Module {
 		update_option( self::OPTION_CACHE_ENABLED, $enabled ? '1' : '0', false );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 		return $enabled;
+	}
+
+	/**
+	 * Get the saved filter rows for a post type, for rendering the SOC panel's repeater.
+	 * Always includes at least one (empty) row so the repeater never renders blank.
+	 *
+	 * @param string $post_type 'listings' or 'used-listings'.
+	 * @return array<int,array{field:string,custom_key:string,operator:string,value:string}>
+	 */
+	public function get_filters( string $post_type ): array {
+		$all  = get_option( self::OPTION_VEHICLE_FILTERS, array() );
+		$rows = is_array( $all[ $post_type ] ?? null ) ? $all[ $post_type ] : array();
+
+		if ( empty( $rows ) ) {
+			$rows[] = array( 'field' => '', 'custom_key' => '', 'operator' => '>=', 'value' => '' );
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Get only the saved (non-empty) filter rows for a post type — used by Intice_Rest
+	 * to actually apply the filters, as opposed to get_filters() which always includes
+	 * a trailing blank row for rendering the SOC panel's repeater.
+	 *
+	 * @param string $post_type 'listings' or 'used-listings'.
+	 * @return array<int,array{field:string,custom_key:string,operator:string,value:string}>
+	 */
+	public static function get_active_filters( string $post_type ): array {
+		$all = get_option( self::OPTION_VEHICLE_FILTERS, array() );
+		return is_array( $all[ $post_type ] ?? null ) ? $all[ $post_type ] : array();
+	}
+
+	/**
+	 * Save the filter rows for a post type — empty rows (no field/custom key or no value) are dropped.
+	 *
+	 * @param string $post_type 'listings' or 'used-listings'.
+	 * @param array  $rows      Raw rows from the SOC panel: [{field, custom_key, operator, value}, ...].
+	 * @return void
+	 */
+	public function save_filters( string $post_type, array $rows ): void {
+		$sanitized = array();
+
+		foreach ( $rows as $row ) {
+			$field      = sanitize_key( $row['field'] ?? '' );
+			$custom_key = sanitize_key( $row['custom_key'] ?? '' );
+			$operator   = sanitize_text_field( $row['operator'] ?? '>=' );
+			$value      = sanitize_text_field( $row['value'] ?? '' );
+
+			$key = 'custom' === $field ? $custom_key : $field;
+
+			if ( '' === $key || '' === $value || ! isset( self::FILTER_OPERATORS[ $operator ] ) ) {
+				continue;
+			}
+
+			if ( 'custom' !== $field && ! isset( self::FILTER_FIELDS[ $field ] ) ) {
+				continue;
+			}
+
+			$sanitized[] = array(
+				'field'      => $field,
+				'custom_key' => $custom_key,
+				'operator'   => $operator,
+				'value'      => $value,
+			);
+		}
+
+		$all               = get_option( self::OPTION_VEHICLE_FILTERS, array() );
+		$all[ $post_type ] = $sanitized;
+		update_option( self::OPTION_VEHICLE_FILTERS, $all );
+
+		SOC_Cache::forget( $this->get_slug(), 'data' );
 	}
 
 	/**
@@ -180,48 +302,55 @@ class Api_Settings implements SOC_Module {
 	/**
 	 * Collect Intice API transient cache stats for the dashboard table.
 	 *
+	 * Reads from Intice_Api_Client's PHP-side key registry rather than
+	 * querying wp_options directly — a persistent object cache (Redis/Memcached,
+	 * e.g. Object Cache Pro) stores transients outside the options table
+	 * entirely, so a raw SQL LIKE query against wp_options would always read
+	 * back empty even though the cache is live. The registry is backend-agnostic.
+	 *
 	 * @return array
 	 */
 	public function collect_api_cache(): array {
-		global $wpdb;
+		$registry = Intice_Api_Client::get_registry();
+		$now      = time();
 
-		$prefix  = Intice_Api_Client::CACHE_PREFIX;
-		$entries = array(
-			array(
-				'key'   => $prefix . 'vehicles_%',
-				'label' => 'Vehicles (SRP)',
-				'ttl'   => Intice_Api_Client::CACHE_TTL_VEHICLES,
-			),
-			array(
-				'key'   => $prefix . 'vehicle_%',
-				'label' => 'Single Vehicle (VDP)',
-				'ttl'   => Intice_Api_Client::CACHE_TTL_VEHICLE,
-			),
-			array(
-				'key'   => $prefix . 'meta',
-				'label' => 'Filters Meta',
-				'ttl'   => Intice_Api_Client::CACHE_TTL_META,
-			),
+		$groups = array(
+			array( 'key' => 'vehicles', 'label' => 'Vehicles (SRP)', 'ttl' => Intice_Api_Client::CACHE_TTL_VEHICLES, 'api_group' => true ),
+			array( 'key' => 'vehicle', 'label' => 'Single Vehicle (VDP)', 'ttl' => Intice_Api_Client::CACHE_TTL_VEHICLE, 'api_group' => true ),
+			array( 'key' => 'meta', 'label' => 'Filters Meta', 'ttl' => Intice_Api_Client::CACHE_TTL_META, 'api_group' => true ),
+			array( 'key' => 'srp_listings', 'label' => 'New Listings (SRP)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
+			array( 'key' => 'srp_used-listings', 'label' => 'Used Listings (SRP)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
+			array( 'key' => 'srp_listings_custom', 'label' => 'New Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
+			array( 'key' => 'srp_used-listings_custom', 'label' => 'Used Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
 		);
 
 		$rows = array();
 
-		foreach ( $entries as $entry ) {
-			$like    = '_transient_timeout_' . $entry['key'];
-			$results = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
-					$like
-				)
-			);
+		foreach ( $groups as $group ) {
+			$live_entries  = array();
+			$stale_entries = array();
 
-			$count      = count( $results );
-			$expires_at = null;
+			foreach ( $registry as $cache_key => $meta ) {
+				if ( ( $meta['group'] ?? '' ) !== $group['key'] ) {
+					continue;
+				}
+
+				$is_stale_key = 0 === strpos( $cache_key, Intice_Api_Client::CACHE_PREFIX_STALE )
+					|| 0 === strpos( $cache_key, Intice_Rest::CACHE_PREFIX_STALE );
+
+				if ( $is_stale_key ) {
+					$stale_entries[ $cache_key ] = $meta;
+				} else {
+					$live_entries[ $cache_key ] = $meta;
+				}
+			}
+
+			$count      = count( $live_entries );
 			$status     = 'missing';
+			$expires_at = null;
 
 			if ( $count > 0 ) {
-				$earliest = min( array_column( $results, 'option_value' ) );
-				$now      = time();
+				$earliest = min( array_column( $live_entries, 'expires_at' ) );
 
 				if ( $earliest > $now ) {
 					$status     = 'valid';
@@ -232,18 +361,17 @@ class Api_Settings implements SOC_Module {
 				}
 			}
 
-			// Check for stale entries while live cache is being rebuilt.
-			$stale_like  = '_transient_timeout_' . str_replace( Intice_Api_Client::CACHE_PREFIX, Intice_Api_Client::CACHE_PREFIX_STALE, $entry['key'] );
-			$stale_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE %s", $stale_like ) );
-			$has_stale   = (int) $stale_count > 0;
+			if ( 'missing' === $status && ! empty( $stale_entries ) ) {
+				$status = 'stale';
+			}
 
 			$rows[] = array(
-				'label'      => $entry['label'],
-				'key'        => $entry['key'],
+				'label'      => $group['label'],
+				'key'        => $group['key'],
 				'count'      => $count,
-				'status'     => ( $status === 'missing' && $has_stale ) ? 'stale' : $status,
+				'status'     => $status,
 				'expires_at' => $expires_at,
-				'ttl_label'  => human_readable_duration( gmdate( 'H:i:s', $entry['ttl'] ) ),
+				'ttl_label'  => human_readable_duration( gmdate( 'H:i:s', $group['ttl'] ) ),
 			);
 		}
 
@@ -257,47 +385,47 @@ class Api_Settings implements SOC_Module {
 	 */
 	public function flush_api_cache(): int {
 		$client  = Intice_Api_Client::instance();
-		$client->flush_cache();
+		$flushed = $client->flush_cache();
 
 		$user = wp_get_current_user();
 		SOC_Logger::write( 'cache', 'Intice API cache flushed by: ' . ( $user->user_email ?: 'unknown' ) );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
-		global $wpdb;
-		// Count was already deleted; return a best-effort row count.
-		return (int) $wpdb->rows_affected;
+		return $flushed;
 	}
 
 	/**
-	 * Flush a specific cache group (vehicles / vehicle / meta).
+	 * Flush a specific cache group.
 	 *
-	 * @param string $group  'vehicles', 'vehicle', or 'meta'.
+	 * @param string $group  'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', or 'used-custom'.
 	 * @return int Deleted rows.
 	 */
 	public function flush_api_cache_group( string $group ): int {
-		global $wpdb;
-
-		$prefix = Intice_Api_Client::CACHE_PREFIX;
-
-		$like_map = array(
-			'vehicles' => $prefix . 'vehicles_%',
-			'vehicle'  => $prefix . 'vehicle_%',
-			'meta'     => $prefix . 'meta',
+		$srp_map = array(
+			'new'         => array( 'listings', false ),
+			'used'        => array( 'used-listings', false ),
+			'new-custom'  => array( 'listings', true ),
+			'used-custom' => array( 'used-listings', true ),
 		);
 
-		$like = $like_map[ $group ] ?? null;
+		if ( isset( $srp_map[ $group ] ) ) {
+			[ $post_type, $custom_sort ] = $srp_map[ $group ];
+			$deleted = Intice_Rest::clear_cache( $post_type, $custom_sort );
 
-		if ( ! $like ) {
+			$user = wp_get_current_user();
+			SOC_Logger::write( 'cache', "Intice SRP cache flushed [{$group}] by: " . ( $user->user_email ?: 'unknown' ) );
+			SOC_Cache::forget( $this->get_slug(), 'data' );
+
+			return $deleted;
+		}
+
+		if ( ! in_array( $group, array( 'vehicles', 'vehicle', 'meta' ), true ) ) {
 			return 0;
 		}
 
-		$deleted = (int) $wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-				'_transient_' . $like,
-				'_transient_timeout_' . $like
-			)
-		);
+		// Stale-while-revalidate: existing data keeps being served from a 2h stale copy
+		// while a background cron regenerates the live cache for this group.
+		$deleted = Intice_Api_Client::instance()->flush_group( $group );
 
 		$user = wp_get_current_user();
 		SOC_Logger::write( 'cache', "Intice API cache flushed [{$group}] by: " . ( $user->user_email ?: 'unknown' ) );

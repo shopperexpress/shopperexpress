@@ -286,8 +286,8 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 
 								if ( $is_api ) {
 									$api_payload   = $api_vehicle['payload'] ?? array();
-									$lease_payment = $api_payload['lease payment'] ?? '';
-									$loan_payment  = $api_payload['loan payment'] ?? '';
+									$lease_payment = $api_vehicle['lease_payment'] ?? ( $api_payload['lease_payment'] ?? ( $api_payload['lease_payment_sort'] ?? '' ) );
+									$loan_payment  = $api_vehicle['loan_payment'] ?? ( $api_payload['loan_payment'] ?? ( $api_payload['loan_payment_sort'] ?? '' ) );
 								} elseif ( in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ) {
 									$lease_payment = get_field( 'payment', $post_id );
 									$loan_payment  = get_field( 'payment', $post_id );
@@ -326,7 +326,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 										'make'           => $api_vehicle['make'] ?? '',
 										'model'          => $api_vehicle['model'] ?? '',
 										'trim'           => $api_vehicle['trim'] ?? '',
-										'lease_payment'  => $_payload['lease_payment'] ?? '',
+										'lease_payment'  => $api_vehicle['lease_payment'] ?? ( $_payload['lease_payment'] ?? ( $_payload['lease_payment_sort'] ?? '' ) ),
 										'loan_term'      => $_payload['loanterm'] ?? '',
 										'loan_apr'       => $_payload['loanapr'] ?? '',
 										'lease_term'     => $_payload['leaseterm'] ?? '',

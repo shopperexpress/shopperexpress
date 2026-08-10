@@ -58,6 +58,7 @@ class Theme {
 			\App\Components\Base\Vehicle_Views::class,
 			\App\Components\Base\JSON_LD::class,
 			\App\Components\Base\ASC_Datalayer::class,
+			\App\Components\Base\OpenAI_Ads::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
 			\App\Components\Base\AI::class,
@@ -68,6 +69,7 @@ class Theme {
 			\App\Components\Base\Login::class,
 			\App\Components\Base\Required_Plugins::class,
 			\App\Components\Base\ADF_Cron::class,
+			\App\Components\Base\Google_Business_Reviews::class,
 			\App\Components\SOC\SOC::class,
 			...( \App\is_api_mode() ? array(
 				\App\Components\Api\Intice_Rest::class,

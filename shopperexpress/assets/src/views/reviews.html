@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ShopperExpress.com</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- include jQuery library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <!-- include jQuery library local file if cdn link doesn't work -->
+  <script>
+    window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+  </script>
+  <!-- include minified bootstrap bundle js -->
+  <script src="js/bootstrap.bundle.min.js" defer></script>
+  <!-- include app js file  -->
+  <script src="js/app.js" defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=places&loading=async&callback=initGoogleReviews" defer></script>
+</head>
+<body>
+  <style>
+    :root {
+      --primary: #0074b3;
+      --primary-rgb: 0, 116, 179;
+      --header-nav-drop-bg: #004fb0;
+      --header-nav-link-color: #00c700;
+      --header-nav-link-hover-color: #00d1d4;
+      --overlay-opacity: 0.75;
+      --overlay-color-rgb: 0, 116, 179;
+    }
+  </style>
+  <div id="wrapper">
+    <header id="header">
+      <div class="container">
+        header
+      </div>
+    </header>
+    <!-- main container of all the page elements -->
+    <main id="main">
+      <section class="review-section" data-google-reviews data-google-reviews-place-id="ChIJpyiwa4Zw44kRBQSGWKv4wgA">
+        <div class="container">
+          <div class="review-section__heading">
+            <h1>Google Reviews for VIP Honda</h1>
+            <p>At <strong><a href="#"> VIP Honda</a></strong>, we are incredibly proud of the feedback we receive from our customers. Our commitment to quality service shines through in our reviews on Google, where many of you have shared your positive experiences. Whether it’s the friendly atmosphere, the professional service, or the transparency in our dealings, we strive to make your visit memorable. We invite prospective customers to read these reviews to get a real sense of what VIP Honda is all about – commitment to satisfaction and a deep passion for all things Honda!</p>
+          </div>
+          <div class="widget-review">
+            <div class="widget-review__head">
+              <div class="widget-review__head-holder">
+                <div class="widget-review__head-row">
+                  <img src="images/google.svg" alt="Google">
+                  <h3>Reviews</h3>
+                </div>
+                <div class="widget-review__head-row">
+                  <strong class="rating" data-google-reviews-rating></strong>
+                  <span class="google-reviews__stars" data-google-reviews-stars></span>
+                  <span class="count" data-google-reviews-count></span>
+                </div>
+              </div>
+              <a class="btn" href="#" data-google-reviews-cta target="_blank" rel="noopener">Review us on Google</a>
+            </div>
+            <div class="widget-review__list" data-google-reviews-list></div>
+            <div class="widget-review__btn-row" data-load-more-holder hidden>
+              <button class="btn" type="button" data-load-more>Load More</button>
+            </div>
+          </div>
+          <script type="text/x-handlebars-template" data-google-reviews-template="reviews">
+            {{#each reviews}}
+              <div class="review-item">
+                <div class="review-item__head">
+                  <div class="review-item__avatar">
+                    {{#if googleMapsURI}}
+                      <a href="{{googleMapsURI}}" target="_blank" rel="noopener noreferrer">
+                        <img src="{{authorAttribution.photoURI}}" alt="{{authorAttribution.displayName}} photo" referrerpolicy="no-referrer"/>
+                      </a>
+                    {{else}}
+                      <img src="{{authorAttribution.photoURI}}" alt="{{authorAttribution.displayName}} photo" referrerpolicy="no-referrer">
+                    {{/if}}
+                  </div>
+                  <div class="review-item__head-holder">
+                    <strong class="review-item__name">
+                      {{#if googleMapsURI}}
+                        <a href="{{googleMapsURI}}" target="_blank" rel="noopener noreferrer">
+                          <span class="text">{{authorAttribution.displayName}}</span>
+                        </a>
+                      {{else}}
+                        <span class="text">{{authorAttribution.displayName}}</span>
+                      {{/if}}
+                      <span data-toggle="tooltip" data-placement="top" title="Verified Customer">
+                        <img src="images/verified.svg" aria-hidden="true" alt="">
+                      </span>
+                    </strong>
+                    <span class="review-item__info">
+                      <span data-toggle="tooltip" data-placement="top" title="{{publishTime}}">
+                        {{relativePublishTimeDescription}}
+                      </span>
+                      {{#if googleMapsURI}}
+                        on <a href="{{googleMapsURI}}" target="_blank" rel="noopener noreferrer">Google</a>
+                      {{/if}}
+                    </span>
+                  </div>
+                </div>
+                <div class="review-item__body">
+                  {{{stars}}}
+                  <p>{{text}}</p>
+                </div>
+              </div>
+            {{else}}
+              <p>No reviews were found for this place yet.</p>
+            {{/each}}
+          </script>
+        </div>
+      </section>
+    </main>
+    <footer id="footer">
+      <div class="container-fluid">
+        footer
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

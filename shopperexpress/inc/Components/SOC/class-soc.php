@@ -20,6 +20,7 @@ use App\Components\SOC\Modules\Api_Settings;
 use App\Components\SOC\Modules\Lead_Delivery;
 use App\Components\SOC\Modules\VDR_Requests;
 use App\Components\SOC\Modules\Json_Ld_Settings;
+use App\Components\SOC\Modules\Google_Reviews;
 
 /**
  * SOC Component
@@ -72,6 +73,7 @@ class SOC implements Theme_Component {
 			new Lead_Delivery(),
 			new VDR_Requests(),
 			new Json_Ld_Settings(),
+			new Google_Reviews(),
 		);
 
 		foreach ( $module_classes as $module ) {

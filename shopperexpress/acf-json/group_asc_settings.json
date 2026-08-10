@@ -270,6 +270,128 @@
                     "parent_repeater": "field_asc_measurement_ids"
                 }
             ]
+        },
+        {
+            "key": "field_openai_ads_enabled",
+            "label": "OpenAI Ads Enabled",
+            "name": "openai_ads_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable the OpenAI Ads pixel and ASC → OpenAI event translation for this site.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_openai_ads_pixel_id",
+            "label": "OpenAI Pixel ID",
+            "name": "openai_ads_pixel_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Dealer-specific OpenAI Ads Pixel ID. Never share this value across dealers.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_openai_ads_dealer_id",
+            "label": "OpenAI Dealer ID",
+            "name": "openai_ads_dealer_id",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "Short dealer identifier used to build shared event IDs (asc_<dealer-id>_<event-name>_<uuid>). Falls back to the ASC Store Name when empty.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "811",
+            "maxlength": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_openai_ads_debug_mode",
+            "label": "OpenAI Debug Mode",
+            "name": "openai_ads_debug_mode",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Logs ASC → OpenAI event translation details to the browser console. Keep disabled in production.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_openai_ads_capi_enabled",
+            "label": "OpenAI Conversions API Enabled",
+            "name": "openai_ads_capi_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Reserved for the future server-side Conversions API phase.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_openai_ads_capi_key",
+            "label": "OpenAI Conversions API Key",
+            "name": "openai_ads_capi_key",
+            "aria-label": "",
+            "type": "password",
+            "instructions": "Stored encrypted (AES-256-CBC). Never displayed again after saving — leave blank to keep the current key. Never exposed client-side.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
         }
     ],
     "location": [

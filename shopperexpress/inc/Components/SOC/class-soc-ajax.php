@@ -59,6 +59,7 @@ class SOC_Ajax {
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
+		'soc_api_save_filters'        => 'handle_api_save_filters',
 		// Lead Delivery.
 		'soc_lead_settings_save'      => 'handle_lead_settings_save',
 		'soc_lead_test_connection'    => 'handle_lead_test_connection',
@@ -71,6 +72,14 @@ class SOC_Ajax {
 		'soc_json_ld_preview'         => 'handle_json_ld_preview',
 		'soc_json_ld_get_posts'       => 'handle_json_ld_get_posts',
 		'soc_json_ld_reset'           => 'handle_json_ld_reset',
+		// Google Reviews.
+		'soc_google_reviews_save'            => 'handle_google_reviews_save',
+		'soc_google_reviews_save_places_key' => 'handle_google_reviews_save_places_key',
+		'soc_google_reviews_disconnect'      => 'handle_google_reviews_disconnect',
+		'soc_google_reviews_list_accounts'   => 'handle_google_reviews_list_accounts',
+		'soc_google_reviews_list_locations'  => 'handle_google_reviews_list_locations',
+		'soc_google_reviews_save_account'    => 'handle_google_reviews_save_account',
+		'soc_google_reviews_test'            => 'handle_google_reviews_test',
 	);
 
 	/**
@@ -698,7 +707,37 @@ class SOC_Ajax {
 	}
 
 	/**
-	 * Flush a specific Intice API cache group (vehicles / vehicle / meta).
+	 * Save the vehicle exclusion filters for new and/or used listings.
+	 *
+	 * Expected POST: listings (JSON string of rows), used-listings (JSON string of rows).
+	 */
+	private function handle_api_save_filters(): void {
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		foreach ( array( 'listings', 'used-listings' ) as $post_type ) {
+			if ( ! isset( $_POST[ $post_type ] ) ) {
+				continue;
+			}
+
+			$rows = json_decode( wp_unslash( (string) $_POST[ $post_type ] ), true );
+			$module->save_filters( $post_type, is_array( $rows ) ? $rows : array() );
+
+			\App\Components\Api\Intice_Rest::clear_cache( $post_type, false );
+			\App\Components\Api\Intice_Rest::clear_cache( $post_type, true );
+		}
+
+		SOC_Logger::write( 'general', 'Vehicle filters saved.' );
+
+		SOC_Response::success( array( 'message' => 'Filters saved.' ) );
+	}
+
+	/**
+	 * Flush a specific Intice API cache group (vehicles / vehicle / meta /
+	 * new / used / new-custom / used-custom).
 	 */
 	private function handle_flush_api_cache_group(): void {
 		$group  = sanitize_key( $_POST['group'] ?? '' );
@@ -708,7 +747,9 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		if ( ! in_array( $group, array( 'vehicles', 'vehicle', 'meta' ), true ) ) {
+		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom' );
+
+		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
 		}
 
@@ -1162,5 +1203,150 @@ class SOC_Ajax {
 		SOC_Logger::write( 'general', 'JSON-LD config reset to defaults.' );
 
 		SOC_Response::success( array( 'message' => 'Config reset to defaults.' ) );
+	}
+
+	// =========================================================================
+	// Google Reviews handlers
+	// =========================================================================
+
+	/**
+	 * Save the Google Business Profile OAuth client credentials.
+	 */
+	private function handle_google_reviews_save(): void {
+		$client_id     = sanitize_text_field( wp_unslash( $_POST['client_id'] ?? '' ) );
+		$client_secret = trim( wp_unslash( $_POST['client_secret'] ?? '' ) );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$module->save_oauth_client( $client_id, $client_secret );
+
+		SOC_Logger::write( 'general', 'Google Reviews OAuth client saved.' );
+
+		SOC_Response::success( array( 'message' => 'Settings saved.' ) );
+	}
+
+	/**
+	 * Save the Places API key (fallback source).
+	 */
+	private function handle_google_reviews_save_places_key(): void {
+		$api_key = trim( wp_unslash( $_POST['api_key'] ?? '' ) );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$module->save_places_api_key( $api_key );
+
+		SOC_Logger::write( 'general', 'Google Reviews Places API key saved.' );
+
+		SOC_Response::success( array( 'message' => 'Settings saved.' ) );
+	}
+
+	/**
+	 * Disconnect the Google Business Profile connection.
+	 */
+	private function handle_google_reviews_disconnect(): void {
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$module->disconnect();
+
+		SOC_Logger::write( 'general', 'Google Reviews disconnected.' );
+
+		SOC_Response::success( array( 'message' => 'Disconnected.' ) );
+	}
+
+	/**
+	 * List Business Profile accounts reachable by the connected OAuth app.
+	 */
+	private function handle_google_reviews_list_accounts(): void {
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$accounts = $module->list_accounts();
+
+		if ( is_wp_error( $accounts ) ) {
+			SOC_Response::error( $accounts->get_error_message() );
+			return;
+		}
+
+		SOC_Response::success( array( 'accounts' => $accounts ) );
+	}
+
+	/**
+	 * List Business Profile locations under a given account.
+	 */
+	private function handle_google_reviews_list_locations(): void {
+		$account_id = sanitize_text_field( wp_unslash( $_POST['account_id'] ?? '' ) );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$locations = $module->list_locations( $account_id );
+
+		if ( is_wp_error( $locations ) ) {
+			SOC_Response::error( $locations->get_error_message() );
+			return;
+		}
+
+		SOC_Response::success( array( 'locations' => $locations ) );
+	}
+
+	/**
+	 * Save the chosen Business Profile account/location.
+	 */
+	private function handle_google_reviews_save_account(): void {
+		$account_id  = sanitize_text_field( wp_unslash( $_POST['account_id'] ?? '' ) );
+		$location_id = sanitize_text_field( wp_unslash( $_POST['location_id'] ?? '' ) );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$module->save_account_location( $account_id, $location_id );
+
+		SOC_Logger::write( 'general', 'Google Reviews account/location saved.' );
+
+		SOC_Response::success( array( 'message' => 'Settings saved.' ) );
+	}
+
+	/**
+	 * Test the Google Reviews connection against a Place ID.
+	 */
+	private function handle_google_reviews_test(): void {
+		$place_id = sanitize_text_field( wp_unslash( $_POST['place_id'] ?? '' ) );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$result = $module->test_connection( $place_id );
+
+		SOC_Logger::write( 'general', 'Google Reviews connection test: ' . ( $result['ok'] ? 'OK' : 'FAILED — ' . ( $result['error'] ?? '' ) ) );
+
+		if ( $result['ok'] ) {
+			SOC_Response::success( $result );
+		} else {
+			SOC_Response::error( $result['error'] ?? 'Connection failed.' );
+		}
 	}
 }
