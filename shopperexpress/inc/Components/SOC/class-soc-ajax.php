@@ -883,6 +883,7 @@ class SOC_Ajax {
 	private function handle_lead_log_filter(): void {
 		$status = sanitize_key( $_POST['status'] ?? 'all' );
 		$page   = max( 1, (int) ( $_POST['page'] ?? 1 ) );
+		$search = sanitize_text_field( wp_unslash( $_POST['search'] ?? '' ) );
 
 		$module = $this->modules['lead-delivery'] ?? null;
 
@@ -890,7 +891,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'Lead Delivery module not available.' );
 		}
 
-		$logs = $module->fetch_logs( $status, $page );
+		$logs = $module->fetch_logs( $status, $page, $search );
 
 		ob_start();
 		require get_template_directory() . '/inc/Components/SOC/views/lead-delivery-table.php';

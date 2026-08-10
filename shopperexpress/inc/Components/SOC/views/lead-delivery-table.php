@@ -78,12 +78,13 @@ $status_badge = static function ( string $status ): string {
 							<?php esc_html_e( 'Retry', 'shopperexpress' ); ?>
 						</button>
 					<?php endif; ?>
-					<?php if ( ! empty( $row['error_message'] ) || ! empty( $row['response_body'] ) ) : ?>
+					<?php if ( ! empty( $row['error_message'] ) || ! empty( $row['response_body'] ) || ! empty( $row['adfxml_payload'] ) ) : ?>
 						<button type="button"
 							class="button button-small soc-lead-detail-btn"
 							data-log-id="<?php echo (int) $row['id']; ?>"
 							data-error="<?php echo esc_attr( $row['error_message'] ?? '' ); ?>"
 							data-response="<?php echo esc_attr( $row['response_body'] ?? '' ); ?>"
+							data-payload="<?php echo esc_attr( $row['adfxml_payload'] ?? '' ); ?>"
 							data-code="<?php echo (int) ( $row['response_code'] ?? 0 ); ?>"
 							data-name="<?php echo esc_attr( trim( ( $row['first_name'] ?? '' ) . ' ' . ( $row['last_name'] ?? '' ) ) ); ?>"
 							data-time="<?php echo esc_attr( $row['submitted_at'] ?? '' ); ?>">

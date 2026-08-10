@@ -267,6 +267,10 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 		<?php esc_html_e( 'Lead Log', 'shopperexpress' ); ?>
 
 		<div class="soc-lead-log-filters">
+			<input type="text"
+				id="soc-lead-filter-search"
+				class="regular-text"
+				placeholder="<?php esc_attr_e( 'Search email, name or phone…', 'shopperexpress' ); ?>">
 			<select id="soc-lead-filter-status">
 				<option value="all"><?php esc_html_e( 'All statuses', 'shopperexpress' ); ?></option>
 				<option value="success"><?php esc_html_e( 'Success', 'shopperexpress' ); ?></option>
@@ -304,6 +308,10 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					<tr><th><?php esc_html_e( 'Error', 'shopperexpress' ); ?></th><td id="soc-modal-error"></td></tr>
 				</tbody>
 			</table>
+			<div class="soc-lead-modal__response-wrap">
+				<strong><?php esc_html_e( 'ADF-XML Payload Sent', 'shopperexpress' ); ?></strong>
+				<pre id="soc-modal-payload" class="soc-log-output"></pre>
+			</div>
 			<div class="soc-lead-modal__response-wrap">
 				<strong><?php esc_html_e( 'Raw API Response', 'shopperexpress' ); ?></strong>
 				<pre id="soc-modal-response" class="soc-log-output"></pre>

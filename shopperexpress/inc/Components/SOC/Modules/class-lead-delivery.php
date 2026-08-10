@@ -114,26 +114,35 @@ class Lead_Delivery implements SOC_Module {
 	 * @param int    $page    1-based page number.
 	 * @return array{rows: array, total: int, per_page: int, page: int}
 	 */
-	public function fetch_logs( string $status = 'all', int $page = 1 ): array {
+	public function fetch_logs( string $status = 'all', int $page = 1, string $search = '' ): array {
 		global $wpdb;
 
 		$table  = $wpdb->prefix . 'adf_lead_log';
 		$offset = ( max( 1, $page ) - 1 ) * self::PER_PAGE;
 
-		$where = '';
-		$args  = array();
+		$where_parts = array();
+		$args        = array();
 
 		if ( 'all' !== $status && in_array( $status, array( 'success', 'failed', 'pending' ), true ) ) {
-			$where  = 'WHERE status = %s';
-			$args[] = $status;
+			$where_parts[] = 'status = %s';
+			$args[]        = $status;
 		}
+
+		$search = trim( $search );
+		if ( '' !== $search ) {
+			$like           = '%' . $wpdb->esc_like( $search ) . '%';
+			$where_parts[]  = '( email LIKE %s OR first_name LIKE %s OR last_name LIKE %s OR phone LIKE %s )';
+			$args           = array_merge( $args, array( $like, $like, $like, $like ) );
+		}
+
+		$where = $where_parts ? 'WHERE ' . implode( ' AND ', $where_parts ) : '';
 
 		$count_sql = "SELECT COUNT(*) FROM `{$table}` {$where}";
 		$total     = (int) ( $args ? $wpdb->get_var( $wpdb->prepare( $count_sql, ...$args ) ) : $wpdb->get_var( $count_sql ) );
 
 		$rows_sql = "SELECT id, submitted_at, site_name, form_name, lead_source, first_name, last_name,
 		                    email, phone, delivery_method, api_endpoint, response_code, response_body,
-		                    status, retry_count, error_message
+		                    status, retry_count, error_message, adfxml_payload
 		             FROM `{$table}` {$where}
 		             ORDER BY submitted_at DESC
 		             LIMIT %d OFFSET %d";

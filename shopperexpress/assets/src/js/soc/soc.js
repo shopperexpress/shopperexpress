@@ -878,14 +878,21 @@
 
         // Filter log.
         $('#soc-lead-filter-btn').on('click', function () {
-            SOC.loadLeadLog( $('#soc-lead-filter-status').val(), 1 );
+            SOC.loadLeadLog( $('#soc-lead-filter-status').val(), 1, $('#soc-lead-filter-search').val() );
+        });
+        $('#soc-lead-filter-search').on('keydown', function (e) {
+            if ( e.key === 'Enter' ) {
+                e.preventDefault();
+                SOC.loadLeadLog( $('#soc-lead-filter-status').val(), 1, $(this).val() );
+            }
         });
 
         // Paginate — delegated because the table is replaced by AJAX.
         $(document).on('click', '.soc-lead-page-btn', function () {
             var page   = parseInt( $(this).data('page'), 10 ) || 1;
             var status = $('#soc-lead-filter-status').val() || 'all';
-            SOC.loadLeadLog( status, page );
+            var search = $('#soc-lead-filter-search').val();
+            SOC.loadLeadLog( status, page, search );
         });
 
         // Retry button — delegated.
@@ -902,7 +909,7 @@
                 { log_id: log_id },
                 function () {
                     SOC.showSuccess('Lead re-sent.');
-                    SOC.loadLeadLog( $('#soc-lead-filter-status').val() || 'all', 1 );
+                    SOC.loadLeadLog( $('#soc-lead-filter-status').val() || 'all', 1, $('#soc-lead-filter-search').val() );
                 },
                 function (msg) {
                     SOC.showError(msg);
@@ -914,7 +921,11 @@
         // Details button — open modal with error + raw response.
         $(document).on('click', '.soc-lead-detail-btn', function () {
             var $btn = $(this);
-            var response = $btn.data('response') || '';
+            // Use .attr(), not .data() — jQuery's .data() auto-parses
+            // JSON-looking attribute values into objects, which breaks
+            // the JSON.parse() below and prints "[object Object]".
+            var response = $btn.attr('data-response') || '';
+            var payload  = $btn.attr('data-payload') || '';
             var pretty = response;
             try {
                 var parsed = JSON.parse( response );
@@ -925,6 +936,7 @@
             $('#soc-modal-time').text( $btn.data('time') || '—' );
             $('#soc-modal-code').text( $btn.data('code') || '—' );
             $('#soc-modal-error').text( $btn.data('error') || '—' );
+            $('#soc-modal-payload').text( payload || '(no payload stored)' );
             $('#soc-modal-response').text( pretty || '(empty)' );
 
             SOC.openLeadModal();
@@ -949,13 +961,13 @@
         $('body').removeClass('soc-modal-open');
     };
 
-    SOC.loadLeadLog = function ( status, page ) {
+    SOC.loadLeadLog = function ( status, page, search ) {
         var $wrap = $('#soc-lead-log-wrap');
         $wrap.css('opacity', 0.5);
 
         SOC.ajax(
             'soc_lead_log_filter',
-            { status: status || 'all', page: page || 1 },
+            { status: status || 'all', page: page || 1, search: search || '' },
             function (data) {
                 $wrap.html(data.html).css('opacity', 1);
             },
