@@ -340,7 +340,7 @@ add_filter(
 
 		// Resolve form_type: find the field whose CSS class contains "asc_form_type",
 		// then read its submitted value from $_POST['wpforms']['fields'][$field_id].
-		$form_type       = 'unknown';
+		$form_type        = 'unknown';
 		$submitted_fields = isset( $_POST['wpforms']['fields'] ) && is_array( $_POST['wpforms']['fields'] )
 			? wp_unslash( $_POST['wpforms']['fields'] )
 			: array();
@@ -457,4 +457,16 @@ add_filter(
 
 		return $tags;
 	}
+);
+
+add_filter(
+	'wp_revisions_to_keep',
+	function ( $num, $post ) {
+		if ( in_array( $post->post_type, array( 'listings', 'used-listings' ), true ) ) {
+			return 3;
+		}
+		return $num;
+	},
+	10,
+	2
 );

@@ -53,6 +53,38 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 
 		$json = array_values( $filtered );
 	}
+
+	usort(
+		$json,
+		static function ( $a, $b ) {
+			$cash_a = (float) preg_replace( '/[^0-9.]/', '', (string) ( $a['ProgramCash'] ?? 0 ) );
+			$cash_b = (float) preg_replace( '/[^0-9.]/', '', (string) ( $b['ProgramCash'] ?? 0 ) );
+			return $cash_b <=> $cash_a;
+		}
+	);
+
+	$find_replace = get_field( 'api_new_car_incentives_find_replace', 'option' );
+	$replacements = array();
+
+	if ( ! empty( $find_replace ) ) {
+		foreach ( preg_split( '/\r\n|\r|\n/', $find_replace ) as $line ) {
+			if ( str_contains( $line, '|' ) ) {
+				list( $find, $replace ) = array_map( 'trim', explode( '|', $line, 2 ) );
+				if ( '' !== $find ) {
+					$replacements[ $find ] = $replace;
+				}
+			}
+		}
+	}
+
+	if ( ! empty( $replacements ) && is_array( $json ) ) {
+		foreach ( $json as $index => $item ) {
+			if ( ! empty( $item['ProgramName'] ) ) {
+				$json[ $index ]['ProgramName'] = str_replace( array_keys( $replacements ), array_values( $replacements ), $item['ProgramName'] );
+			}
+		}
+	}
+
 	$title = get_field( 'api_new_car_incentives_title', 'option' );
 
 	if ( ! empty( $json ) && is_array( $json ) ) :

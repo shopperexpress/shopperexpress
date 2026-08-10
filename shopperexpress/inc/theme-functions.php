@@ -159,11 +159,13 @@ function wps_build_adf_xml( array $fields ): string {
 	$comments   = ! empty( $fields['comments'] ) ? wp_kses_post( $fields['comments'] ) : '';
 	$zip        = ! empty( $fields['zip'] ) ? sanitize_text_field( $fields['zip'] ) : '';
 
+	$provider_source = sanitize_text_field( get_option( 'adf_provider_source', 'shopperexpress' ) );
+
 	return '<?xml version="1.0" encoding="utf-8"?>
 <?ADF version="1.0"?>
 <adf>
 	<prospect>
-		<id source="shopperexpress" sequence="1"></id>
+		<id source="' . wps_esc_xml( $provider_source ) . '" sequence="1"></id>
 		<requestdate>' . gmdate( 'm-d-Y' ) . '</requestdate>
 		<customer>
 			<contact primarycontact="1">
@@ -185,7 +187,7 @@ function wps_build_adf_xml( array $fields ): string {
 		</customer>
 		<provider>
 			<name part="full">intice</name>
-			<service>shopperexpress</service>
+			<service>' . wps_esc_xml( $provider_source ) . '</service>
 			<url>http://www.inticeinc.com</url>
 			<email>support@inticeinc.com</email>
 			<phone>855-747-7770</phone>
@@ -495,8 +497,15 @@ function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $for
 
 		switch ( $type ) {
 			case 'name':
-				$lead['first_name'] = sanitize_text_field( $field['first_name'] ?? $value );
-				$lead['last_name']  = sanitize_text_field( $field['last_name'] ?? '' );
+				if ( isset( $field['first'] ) || isset( $field['last'] ) ) {
+					$lead['first_name'] = sanitize_text_field( $field['first'] ?? '' );
+					$lead['last_name']  = sanitize_text_field( $field['last'] ?? '' );
+				} else {
+					// Simple (single-input) Name field format: split on the last space.
+					$parts              = explode( ' ', trim( (string) $value ), 2 );
+					$lead['first_name'] = sanitize_text_field( $parts[0] ?? '' );
+					$lead['last_name']  = sanitize_text_field( $parts[1] ?? '' );
+				}
 				break;
 			case 'email':
 				if ( '' === $lead['email'] ) {
@@ -1173,7 +1182,7 @@ function get_listings_count( $year, $make, $model, $condition, $trim, $index, $r
 			'post_type'      => 'listings',
 			'post_status'    => 'publish',
 			'fields'         => 'ids',
-			'posts_per_page' => -1,
+			'posts_per_page' => 1,
 			'meta_query'     => $meta_query,
 		);
 

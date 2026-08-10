@@ -41,6 +41,28 @@
             "delay": 0
         },
         {
+            "key": "field_7a0b1c2d3f006",
+            "label": "Layout Style",
+            "name": "layout_style",
+            "type": "button_group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "list": "List",
+                "slider": "Slider"
+            },
+            "default_value": "list",
+            "return_format": "value",
+            "allow_null": 0,
+            "layout": "horizontal"
+        },
+        {
             "key": "field_7a0b1c2d3f004",
             "label": "CTA Button Text",
             "name": "cta_text",

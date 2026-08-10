@@ -4253,7 +4253,7 @@
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
-                                "width": "50",
+                                "width": "100",
                                 "class": "",
                                 "id": ""
                             },
@@ -4272,12 +4272,48 @@
                             "acfe_thumbnail": 0
                         },
                         {
-                            "key": "field_649009af60926",
-                            "label": "Wistia ID",
-                            "name": "wistia_id",
+                            "key": "field_690a1b2c3d4e1",
+                            "label": "Override Start Date",
+                            "name": "override_start_date",
                             "aria-label": "",
-                            "type": "text",
-                            "instructions": "",
+                            "type": "date_picker",
+                            "instructions": "Override Video plays only from this date through the end date below.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "display_format": "m/d/Y",
+                            "return_format": "Y-m-d",
+                            "first_day": 1
+                        },
+                        {
+                            "key": "field_690a1b2c3d4e2",
+                            "label": "Override End Date",
+                            "name": "override_end_date",
+                            "aria-label": "",
+                            "type": "date_picker",
+                            "instructions": "After this date, the Primary Video is shown again.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "display_format": "m/d/Y",
+                            "return_format": "Y-m-d",
+                            "first_day": 1
+                        },
+                        {
+                            "key": "field_690a1b2c3d4e0",
+                            "label": "Primary Video",
+                            "name": "primary_video",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "Full embed code (supports the LLM-friendly Wistia embed with its script tag).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -4287,10 +4323,30 @@
                             },
                             "default_value": "",
                             "maxlength": "",
+                            "rows": 4,
+                            "new_lines": "",
                             "placeholder": "",
-                            "prepend": "",
-                            "append": "",
                             "wpml_cf_preferences": 2
+                        },
+                        {
+                            "key": "field_690a1b2c3d4e3",
+                            "label": "Override Video",
+                            "name": "override_video",
+                            "aria-label": "",
+                            "type": "textarea",
+                            "instructions": "Full embed code. Plays instead of the Primary Video only between the start and end dates above.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "rows": 4,
+                            "new_lines": "",
+                            "placeholder": ""
                         },
                         {
                             "key": "field_649009cd60927",

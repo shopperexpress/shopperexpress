@@ -12,6 +12,7 @@
  *   $data['timeout']            int
  *   $data['secret_key_masked']  string  masked value or ''
  *   $data['site_name']          string
+ *   $data['provider_source']    string  ADF <id source> / <service> value (default 'shopperexpress')
  *   $data['notify_admin']       bool
  *   $data['notify_email']       string
  *   $data['max_retries']        int
@@ -109,6 +110,17 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 						value="<?php echo esc_attr( $data['dealer_id'] ?? '' ); ?>"
 						placeholder="660">
 					<p class="description"><?php esc_html_e( 'Included as dealer_id in every ADF-XML API payload.', 'shopperexpress' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th><?php esc_html_e( 'Provider Source', 'shopperexpress' ); ?></th>
+				<td>
+					<input type="text"
+						id="soc-lead-provider-source"
+						class="regular-text"
+						value="<?php echo esc_attr( $data['provider_source'] ?? 'shopperexpress' ); ?>"
+						placeholder="shopperexpress">
+					<p class="description"><?php esc_html_e( 'Sent as the ADF-XML <id source> / <service> value on every lead (email and API). Set this to the vendor identifier your OEM/lead partner (e.g. Honda) has registered for this dealer, if "shopperexpress" is not accepted.', 'shopperexpress' ); ?></p>
 				</td>
 			</tr>
 			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>

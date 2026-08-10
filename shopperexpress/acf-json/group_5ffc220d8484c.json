@@ -12552,6 +12552,27 @@
             "append": ""
         },
         {
+            "key": "field_69fc5411fae21",
+            "label": "Find &amp; Replace (Program Name)",
+            "name": "api_new_car_incentives_find_replace",
+            "aria-label": "",
+            "type": "textarea",
+            "instructions": "One pair per line, format: Find Text|Replace Text",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "rows": 4,
+            "new_lines": ""
+        },
+        {
             "key": "field_68c967783a64c",
             "label": "API - URL",
             "name": "api_url",

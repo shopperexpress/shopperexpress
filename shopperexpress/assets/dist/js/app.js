@@ -1,14 +1,14 @@
 // Google Reviews init
 function initGoogleReviews() {
 	document.querySelectorAll('[data-google-reviews]').forEach((holder) => {
-    new GoogleReviews(holder, {
+		new GoogleReviews(holder, {
 			onRender: function() {
 				jQuery(this.listElement)
 					.find('[data-toggle="tooltip"]:not([data-original-title])')
 					.tooltip();
 			}
 		});
-  });
+	});
 }
 
 // Confirm Delete Modal init
@@ -2083,6 +2083,39 @@ function initSlickCarousel() {
 				}]
 			});
 		}
+	});
+
+	jQuery('.reviews-slider').not('[data-google-reviews-list]').each(function() {
+		const slider = jQuery(this);
+
+		slider.slick({
+			slidesToScroll: 1,
+			rows: 0,
+			slidesToShow: 6,
+			prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z"/></svg></button>',
+			nextArrow: '<button class="slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>',
+			responsive: [{
+				breakpoint: 1570,
+				settings: {
+					slidesToShow: 5
+				}
+			}, {
+				breakpoint: 1310,
+				settings: {
+					slidesToShow: 4
+				}
+			}, {
+				breakpoint: 1050,
+				settings: {
+					slidesToShow: 3
+				}
+			}, {
+				breakpoint: 576,
+				settings: {
+					slidesToShow: 1
+				}
+			}]
+		});
 	});
 }
 
@@ -10322,239 +10355,285 @@ function createAutocompleteItems(self, data) {
  * Google Reviews module
  */
 class GoogleReviews {
-  constructor(holder, options = {}) {
-    this.options = {
-      placeId: holder?.dataset.googleReviewsPlaceId,
-      restUrl: window.ajax?.google_reviews_rest,
-      loadingClass: 'is-loading',
-      errorClass: 'has-error',
-      ...options,
-    };
+	constructor(holder, options = {}) {
+		this.options = {
+			placeId: holder?.dataset.googleReviewsPlaceId,
+			style: holder?.dataset.googleReviewsStyle || 'list',
+			restUrl: window.ajax?.google_reviews_rest,
+			loadingClass: 'is-loading',
+			errorClass: 'has-error',
+			...options,
+		};
 
-    if (!holder) return;
+		if (!holder) return;
 
-    this.holder = holder;
+		this.holder = holder;
 
-    this.init();
-  }
+		this.init();
+	}
 
-  init() {
-    this.ratingElement = this.holder.querySelector('[data-google-reviews-rating]');
-    this.countElement = this.holder.querySelector('[data-google-reviews-count]');
-    this.starsElement = this.holder.querySelector('[data-google-reviews-stars]');
-    this.ctaElement = this.holder.querySelector('[data-google-reviews-cta]');
-    this.listElement = this.holder.querySelector('[data-google-reviews-list]');
-    this.moreReviewsElement = this.holder.querySelector('[data-more-reviews-link]');
-    this.loadMoreHolderElement = this.holder.querySelector('[data-load-more-holder]');
-    this.reviews = [];
-    this.nextPageToken = '';
+	init() {
+		this.ratingElement = this.holder.querySelector('[data-google-reviews-rating]');
+		this.countElement = this.holder.querySelector('[data-google-reviews-count]');
+		this.starsElement = this.holder.querySelector('[data-google-reviews-stars]');
+		this.ctaElement = this.holder.querySelector('[data-google-reviews-cta]');
+		this.listElement = this.holder.querySelector('[data-google-reviews-list]');
+		this.moreReviewsElement = this.holder.querySelector('[data-more-reviews-link]');
+		this.loadMoreHolderElement = this.holder.querySelector('[data-load-more-holder]');
+		this.reviews = [];
+		this.nextPageToken = '';
 
-    this.holder.classList.add(this.options.loadingClass);
-    this.holder.classList.remove(this.options.errorClass);
+		this.holder.classList.add(this.options.loadingClass);
+		this.holder.classList.remove(this.options.errorClass);
 
-    this.bindEvents();
-    this.loadReviews();
-  }
+		this.bindEvents();
+		this.loadReviews();
+	}
 
-  bindEvents() {
-    if (this.moreReviewsElement) {
-      this.moreReviewsElement.addEventListener('click', (event) => {
-        // Business Profile connection: fetch the next page in place.
-        // Places API fallback: let the default navigation to Google happen.
-        if (this.nextPageToken) {
-          event.preventDefault();
-          this.handleLoadMore();
-        }
-      });
-    }
-  }
+	bindEvents() {
+		if (this.moreReviewsElement) {
+			this.moreReviewsElement.addEventListener('click', (event) => {
+				// Business Profile connection: fetch the next page in place.
+				// Places API fallback: let the default navigation to Google happen.
+				if (this.nextPageToken) {
+					event.preventDefault();
+					this.handleLoadMore();
+				}
+			});
+		}
+	}
 
-  async fetchReviews(pageToken = '') {
-    if (!this.options.restUrl) {
-      throw new Error('Google Reviews REST endpoint is not configured.');
-    }
+	async fetchReviews(pageToken = '') {
+		if (!this.options.restUrl) {
+			throw new Error('Google Reviews REST endpoint is not configured.');
+		}
 
-    if (!this.options.placeId) {
-      throw new Error('Google Reviews: missing Place ID.');
-    }
+		if (!this.options.placeId) {
+			throw new Error('Google Reviews: missing Place ID.');
+		}
 
-    const params = new URLSearchParams({ place_id: this.options.placeId });
-    if (pageToken) {
-      params.set('page_token', pageToken);
-    }
+		const params = new URLSearchParams({ place_id: this.options.placeId });
+		if (pageToken) {
+			params.set('page_token', pageToken);
+		}
 
-    const response = await fetch(`${this.options.restUrl}?${params.toString()}`, {
-      headers: { Accept: 'application/json' },
-    });
-    const data = await response.json();
+		const response = await fetch(`${this.options.restUrl}?${params.toString()}`, {
+			headers: { Accept: 'application/json' },
+		});
+		const data = await response.json();
 
-    if (!response.ok || data.error) {
-      throw new Error(data.error || `Request failed with status ${response.status}`);
-    }
+		if (!response.ok || data.error) {
+			throw new Error(data.error || `Request failed with status ${response.status}`);
+		}
 
-    return data;
-  }
+		return data;
+	}
 
-  async loadReviews() {
-    try {
-      this.compileTemplates();
+	async loadReviews() {
+		try {
+			this.compileTemplates();
 
-      const data = await this.fetchReviews();
+			const data = await this.fetchReviews();
 
-      this.render(data);
-    } catch (error) {
-      console.error('GoogleReviews:', error);
-      this.holder.classList.add(this.options.errorClass);
-      this.renderFallback();
-    } finally {
-      this.holder.classList.remove(this.options.loadingClass);
-    }
-  }
+			this.render(data);
+		} catch (error) {
+			console.error('GoogleReviews:', error);
+			this.holder.classList.add(this.options.errorClass);
+			this.renderFallback();
+		} finally {
+			this.holder.classList.remove(this.options.loadingClass);
+		}
+	}
 
-  async handleLoadMore() {
-    if (!this.moreReviewsElement) return;
+	async handleLoadMore() {
+		if (!this.moreReviewsElement) return;
 
-    try {
-      const data = await this.fetchReviews(this.nextPageToken);
-      const newReviews = (data.reviews ?? []).map((review) => this.normalizeReview(review));
+		try {
+			const data = await this.fetchReviews(this.nextPageToken);
+			const newReviews = (data.reviews ?? []).map((review) => this.normalizeReview(review));
 
-      this.reviews = this.reviews.concat(newReviews);
-      this.nextPageToken = data.next_page_token ?? '';
+			this.reviews = this.reviews.concat(newReviews);
+			this.nextPageToken = data.next_page_token ?? '';
 
-      if (this.listElement) {
-        this.listElement.insertAdjacentHTML('beforeend', this.reviewsTemplate({ reviews: newReviews }));
-      }
+			if (this.listElement) {
+				this.listElement.insertAdjacentHTML('beforeend', this.reviewsTemplate({ reviews: newReviews }));
+			}
 
-      if (this.loadMoreHolderElement) {
-        this.loadMoreHolderElement.hidden = !this.nextPageToken;
-      }
+			this.initSlider();
 
-      this.makeCallback('onRender', newReviews);
-    } catch (error) {
-      console.error('GoogleReviews:', error);
-    }
-  }
+			if (this.loadMoreHolderElement) {
+				this.loadMoreHolderElement.hidden = !this.nextPageToken;
+			}
 
-  renderFallback() {
-    if (this.moreReviewsElement && this.options.placeId) {
-      this.moreReviewsElement.href = `https://search.google.com/local/reviews?placeid=${this.options.placeId}`;
-    }
+			this.makeCallback('onRender', newReviews);
+		} catch (error) {
+			console.error('GoogleReviews:', error);
+		}
+	}
 
-    if (this.loadMoreHolderElement) {
-      this.loadMoreHolderElement.hidden = !this.options.placeId;
-    }
+	renderFallback() {
+		if (this.moreReviewsElement && this.options.placeId) {
+			this.moreReviewsElement.href = `https://search.google.com/local/reviews?placeid=${this.options.placeId}`;
+		}
 
-    if (this.listElement) {
-      this.listElement.innerHTML = '<p>Reviews are temporarily unavailable. See them on Google.</p>';
-    }
-  }
+		if (this.loadMoreHolderElement) {
+			this.loadMoreHolderElement.hidden = !this.options.placeId;
+		}
 
-  compileTemplates() {
-    const template = this.holder.querySelector('[data-google-reviews-template="reviews"]');
+		if (this.listElement) {
+			this.listElement.innerHTML = '<p>Reviews are temporarily unavailable. See them on Google.</p>';
+		}
+	}
 
-    this.reviewsTemplate = Handlebars.compile(template.textContent);
-  }
+	compileTemplates() {
+		const template = this.holder.querySelector('[data-google-reviews-template="reviews"]');
 
-  normalizeReview(review) {
-    return {
-      rating: review.rating ?? 0,
-      stars: this.renderStars(review.rating),
-      text: review.text ?? '',
-      relativePublishTimeDescription: review.relativePublishTimeDescription ?? '',
-      publishTime: this.formatPublishTime(review.publishTime),
-      googleMapsURI: review.googleMapsURI ?? '',
-      authorAttribution: {
-        displayName: review.authorAttribution?.displayName ?? 'Google user',
-        photoURI: review.authorAttribution?.photoURI || 'images/review-avatar.png',
-      },
-    };
-  }
+		this.reviewsTemplate = Handlebars.compile(template.textContent);
+	}
 
-  formatPublishTime(publishTime) {
-    if (!publishTime) return '';
+	normalizeReview(review) {
+		return {
+			rating: review.rating ?? 0,
+			stars: this.renderStars(review.rating),
+			text: review.text ?? '',
+			relativePublishTimeDescription: review.relativePublishTimeDescription ?? '',
+			publishTime: this.formatPublishTime(review.publishTime),
+			googleMapsURI: review.googleMapsURI ?? '',
+			authorAttribution: {
+				displayName: review.authorAttribution?.displayName ?? 'Google user',
+				photoURI: review.authorAttribution?.photoURI || 'images/review-avatar.png',
+			},
+		};
+	}
 
-    const date = new Date(publishTime);
+	formatPublishTime(publishTime) {
+		if (!publishTime) return '';
 
-    if (Number.isNaN(date.getTime())) return '';
+		const date = new Date(publishTime);
 
-    return new Intl.DateTimeFormat('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-      timeZoneName: 'shortOffset',
-    }).format(date);
-  }
+		if (Number.isNaN(date.getTime())) return '';
 
-  renderStars(rating = 0) {
-    const starsCount = 5;
-    const normalizedRating = Math.max(0, Math.min(starsCount, Number(rating) || 0));
-    const fill = (normalizedRating / starsCount) * 100;
-    const stars = '★'.repeat(starsCount);
+		return new Intl.DateTimeFormat('en-US', {
+			month: 'long',
+			day: 'numeric',
+			year: 'numeric',
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true,
+			timeZoneName: 'shortOffset',
+		}).format(date);
+	}
 
-    return `
-      <span class="google-reviews__stars-row" style="--fill: ${fill}%">
-        <span class="google-reviews__stars-bg" aria-hidden="true">${stars}</span>
-        <span class="google-reviews__stars-fg" aria-hidden="true">${stars}</span>
-        <span class="visually-hidden">Rating: ${normalizedRating} out of ${starsCount} stars</span>
-      </span>
-    `;
-  }
+	renderStars(rating = 0) {
+		const starsCount = 5;
+		const normalizedRating = Math.max(0, Math.min(starsCount, Number(rating) || 0));
+		const fill = (normalizedRating / starsCount) * 100;
+		const stars = '★'.repeat(starsCount);
 
-  render(data) {
-    this.reviews = (data.reviews ?? []).map((review) => this.normalizeReview(review));
+		return `
+			<span class="google-reviews__stars-row" style="--fill: ${fill}%">
+				<span class="google-reviews__stars-bg" aria-hidden="true">${stars}</span>
+				<span class="google-reviews__stars-fg" aria-hidden="true">${stars}</span>
+				<span class="visually-hidden">Rating: ${normalizedRating} out of ${starsCount} stars</span>
+			</span>
+		`;
+	}
 
-    if (this.ratingElement) {
-      this.ratingElement.textContent = data.average_rating ?? '';
-    }
+	render(data) {
+		this.reviews = (data.reviews ?? []).map((review) => this.normalizeReview(review));
 
-    if (this.countElement) {
-      this.countElement.textContent = data.total_review_count ? `(${data.total_review_count.toLocaleString()})` : '';
-    }
+		if (this.ratingElement) {
+			this.ratingElement.textContent = data.average_rating ?? '';
+		}
 
-    if (this.starsElement) {
-      this.starsElement.innerHTML = this.renderStars(data.average_rating);
-    }
+		if (this.countElement) {
+			this.countElement.textContent = data.total_review_count ? `(${data.total_review_count.toLocaleString()})` : '';
+		}
 
-    if (this.ctaElement && this.options.placeId) {
-      this.ctaElement.href = `https://search.google.com/local/writereview?placeid=${this.options.placeId}`;
-    }
+		if (this.starsElement) {
+			this.starsElement.innerHTML = this.renderStars(data.average_rating);
+		}
 
-    this.nextPageToken = data.next_page_token ?? '';
+		if (this.ctaElement && this.options.placeId) {
+			this.ctaElement.href = `https://search.google.com/local/writereview?placeid=${this.options.placeId}`;
+		}
 
-    if (this.moreReviewsElement) {
-      if (this.nextPageToken) {
-        // Business Profile connection: real pagination, fetched in place.
-        this.moreReviewsElement.removeAttribute('href');
-        this.moreReviewsElement.removeAttribute('target');
-        this.moreReviewsElement.textContent = 'Load More';
-      } else if (this.options.placeId) {
-        // Places API fallback: Google caps this at 5 reviews with no
-        // pagination — link out to the place's full review list instead.
-        this.moreReviewsElement.href = `https://search.google.com/local/reviews?placeid=${this.options.placeId}`;
-        this.moreReviewsElement.setAttribute('target', '_blank');
-        this.moreReviewsElement.textContent = 'Show More Reviews';
-      }
-    }
+		this.nextPageToken = data.next_page_token ?? '';
 
-    if (this.loadMoreHolderElement) {
-      this.loadMoreHolderElement.hidden = !this.nextPageToken && !this.options.placeId;
-    }
+		if (this.moreReviewsElement) {
+			if (this.nextPageToken) {
+				// Business Profile connection: real pagination, fetched in place.
+				this.moreReviewsElement.removeAttribute('href');
+				this.moreReviewsElement.removeAttribute('target');
+				this.moreReviewsElement.textContent = 'Load More';
+			} else if (this.options.placeId) {
+				// Places API fallback: Google caps this at 5 reviews with no
+				// pagination — link out to the place's full review list instead.
+				this.moreReviewsElement.href = `https://search.google.com/local/reviews?placeid=${this.options.placeId}`;
+				this.moreReviewsElement.setAttribute('target', '_blank');
+				this.moreReviewsElement.textContent = 'Show More Reviews';
+			}
+		}
 
-    if (this.listElement) {
-      this.listElement.innerHTML = this.reviewsTemplate({ reviews: this.reviews });
-    }
+		if (this.loadMoreHolderElement) {
+			this.loadMoreHolderElement.hidden = !this.nextPageToken && !this.options.placeId;
+		}
 
-    this.makeCallback('onRender', this.reviews);
-  }
+		if (this.listElement) {
+			this.listElement.innerHTML = this.reviewsTemplate({ reviews: this.reviews });
+		}
 
-  makeCallback(callbackName, ...args) {
-    if (typeof this.options[callbackName] === 'function') {
-      this.options[callbackName].apply(this, args);
-    }
-  }
+		this.initSlider();
+
+		this.makeCallback('onRender', this.reviews);
+	}
+
+	initSlider() {
+		if (this.options.style !== 'slider' || !this.listElement || !window.jQuery) return;
+
+		const $list = window.jQuery(this.listElement);
+
+		if ($list.hasClass('slick-initialized')) {
+			$list.slick('unslick');
+		}
+
+		if (!this.reviews.length) return;
+
+		$list.slick({
+			slidesToScroll: 1,
+			rows: 0,
+			slidesToShow: 6,
+			prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z"/></svg></button>',
+			nextArrow: '<button class="slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>',
+			responsive: [{
+				breakpoint: 1570,
+				settings: {
+					slidesToShow: 5
+				}
+			}, {
+				breakpoint: 1310,
+				settings: {
+					slidesToShow: 4
+				}
+			}, {
+				breakpoint: 1050,
+				settings: {
+					slidesToShow: 3
+				}
+			}, {
+				breakpoint: 576,
+				settings: {
+					slidesToShow: 1
+				}
+			}]
+		});
+	}
+
+	makeCallback(callbackName, ...args) {
+		if (typeof this.options[callbackName] === 'function') {
+			this.options[callbackName].apply(this, args);
+		}
+	}
 }
 
 /*

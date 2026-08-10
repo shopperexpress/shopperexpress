@@ -354,6 +354,16 @@ get_header();
 							'post_type' => $post_type,
 						)
 					);
+					if ( 'listings' === $post_type ) {
+						get_template_part(
+							'template-parts/conditional',
+							'offers',
+							array(
+								'make'       => $v['make'] ?? '',
+								'vin_number' => $vin_number,
+							)
+						);
+					}
 					get_template_part(
 						'template-parts/api/description',
 						null,
