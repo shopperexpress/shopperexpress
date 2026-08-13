@@ -62,13 +62,26 @@ class Api_Settings implements SOC_Module {
 	 * @var array<string,string>
 	 */
 	const FILTER_OPERATORS = array(
-		'>=' => '>=',
-		'<=' => '<=',
-		'>'  => '>',
-		'<'  => '<',
-		'='  => '=',
-		'!=' => '≠',
+		'>='        => '>=',
+		'<='        => '<=',
+		'>'         => '>',
+		'<'         => '<',
+		'='         => '=',
+		'!='        => '≠',
+		'empty'     => 'Empty',
+		'not_empty' => 'Not Empty',
+		'len_eq'    => 'String Length =',
+		'len_gt'    => 'String Length >',
+		'len_lt'    => 'String Length <',
 	);
+
+	/**
+	 * Operators that don't need a "value" input — the row is dropped by
+	 * save_filters() otherwise, since every other operator requires one.
+	 *
+	 * @var string[]
+	 */
+	const VALUELESS_OPERATORS = array( 'empty', 'not_empty' );
 
 	/**
 	 * @return string
@@ -215,7 +228,13 @@ class Api_Settings implements SOC_Module {
 
 			$key = 'custom' === $field ? $custom_key : $field;
 
-			if ( '' === $key || '' === $value || ! isset( self::FILTER_OPERATORS[ $operator ] ) ) {
+			if ( ! isset( self::FILTER_OPERATORS[ $operator ] ) ) {
+				continue;
+			}
+
+			$needs_value = ! in_array( $operator, self::VALUELESS_OPERATORS, true );
+
+			if ( '' === $key || ( $needs_value && '' === $value ) ) {
 				continue;
 			}
 

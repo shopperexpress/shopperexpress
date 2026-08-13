@@ -213,7 +213,7 @@ class Intice_Rest implements Theme_Component {
 		}
 
 		$raw_vehicles = $api_data['data'] ?? array();
-		$raw_vehicles = $this->apply_vehicle_filters( $raw_vehicles, $post_type );
+		$raw_vehicles = self::apply_vehicle_filters( $raw_vehicles, $post_type );
 
 		if ( $custom_sort ) {
 			$sort_rules = $this->get_custom_sort_rules( $post_type );
@@ -271,9 +271,12 @@ class Intice_Rest implements Theme_Component {
 				'terms'   => $terms,
 				'html'    => $html,
 				'price'   => (float) ( $this->get_sort_field_value( $vehicle, 'price' ) ?? 0 ),
-				'payment' => (float) ( $vehicle['payload']['loan_payment_sort'] ?? 0 ),
+				'payment' => (float) ( $this->get_sort_field_value( $vehicle, 'loan_payment_sort' ) ?? 0 ),
 				'year'    => (string) $year,
-				'photo'   => $vehicle['thumb'] ?? $vehicle['image'] ?? '',
+				// Prefer the gallery-resolved list (respects use_images_list,
+				// same as the rendered card in 'html' above) over the flat
+				// primary-only thumb/image fields.
+				'photo'   => $vehicle['images'][0] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) ),
 			);
 		}
 
@@ -417,15 +420,47 @@ class Intice_Rest implements Theme_Component {
 	 * @return array
 	 */
 	private function build_terms( array $vehicle, array $tax_keys ): array {
-		$terms = array();
+		$terms   = array();
+		$payload = $vehicle['payload'] ?? array();
 
 		foreach ( $tax_keys as $key ) {
+			// "Key Features" is multi-value, not a scalar field — VehicleApiResource
+			// groups it by heading: [{heading, features:[{feature, ranking, id}, ...]}].
+			// Mirrors the legacy WP-mode flattening in class-api.php (is_array($field)
+			// && $key == 'features' → array of $item['feature']) so the SRP filter
+			// checkbox list gets the same flat list of feature names either way.
+			if ( 'features' === $key && ! empty( $vehicle['features'] ) && is_array( $vehicle['features'] ) ) {
+				$flat = array();
+				foreach ( $vehicle['features'] as $group ) {
+					foreach ( $group['features'] ?? array() as $item ) {
+						if ( ! empty( $item['feature'] ) ) {
+							$flat[] = (string) $item['feature'];
+						}
+					}
+				}
+
+				if ( ! empty( $flat ) ) {
+					$terms[ $key ] = $flat;
+				}
+
+				continue;
+			}
+
 			// Strip post-type suffixes (e.g. 'make-listings' → 'make').
 			$base = preg_replace( '/-(?:listings|used-listings)$/', '', $key );
 			// Also try underscore variant (body_style vs body-style).
 			$base_underscore = str_replace( '-', '_', $base );
 
-			$value = $vehicle[ $base ] ?? $vehicle[ $base_underscore ] ?? null;
+			// Most site-configured filters map to top-level vehicle fields
+			// (make, model, drivetrain, ...), but many — engine, dealer_special,
+			// or anything a dealer's Import Template mapped as "payload" —
+			// only exist inside `payload`. Check both so a filter configured
+			// against a payload-only field isn't silently left with no options.
+			$value = $vehicle[ $base ]
+				?? $vehicle[ $base_underscore ]
+				?? $payload[ $base ]
+				?? $payload[ $base_underscore ]
+				?? null;
 
 			if ( $value !== null && $value !== '' ) {
 				$terms[ $key ] = array( (string) $value );
@@ -492,12 +527,12 @@ class Intice_Rest implements Theme_Component {
 	 * @param string $field
 	 * @return mixed
 	 */
-	private function get_sort_field_value( array $vehicle, string $field ) {
+	private static function get_sort_field_value( array $vehicle, string $field ) {
 		$payload = $vehicle['payload'] ?? array();
 
 		switch ( $field ) {
 			case 'price':
-				return $this->first_usable(
+				return self::first_usable(
 					array(
 						$vehicle['price_sort'] ?? null,
 						$payload['price_sort'] ?? null,
@@ -506,21 +541,22 @@ class Intice_Rest implements Theme_Component {
 					)
 				);
 			case 'original_price':
-				return $this->first_usable(
+				return self::first_usable(
 					array(
 						$vehicle['msrp'] ?? null,
 						$payload['msrp'] ?? null,
 					)
 				);
 			case 'loan_payment_sort':
-				return $this->first_usable(
+				return self::first_usable(
 					array(
+						$vehicle['payment_sort'] ?? null,
 						$payload['loan_payment_sort'] ?? null,
 						$payload['loan_payment'] ?? null,
 					)
 				);
 			default:
-				return $this->first_usable(
+				return self::first_usable(
 					array(
 						$vehicle[ $field ] ?? null,
 						$payload[ $field ] ?? null,
@@ -535,7 +571,7 @@ class Intice_Rest implements Theme_Component {
 	 * @param array $candidates
 	 * @return mixed
 	 */
-	private function first_usable( array $candidates ) {
+	private static function first_usable( array $candidates ) {
 		foreach ( $candidates as $candidate ) {
 			if ( ! empty( $candidate ) ) {
 				return $candidate;
@@ -606,11 +642,16 @@ class Intice_Rest implements Theme_Component {
 	 * Exclude vehicles that don't match every configured filter row for this post type
 	 * (rows are ANDed together). Rows are configured in SOC → API Settings → Filters.
 	 *
+	 * Public/static so callers that need the *real* (post-exclusion) vehicle count
+	 * outside the SRP request lifecycle — e.g. get_listings_count() for the ACF
+	 * model-slider count badge — apply the exact same rules instead of drifting out
+	 * of sync with what the results grid actually shows.
+	 *
 	 * @param array  $vehicles  Raw vehicle arrays from Intice_Api_Client::get_vehicles().
 	 * @param string $post_type 'listings' or 'used-listings'.
 	 * @return array
 	 */
-	private function apply_vehicle_filters( array $vehicles, string $post_type ): array {
+	public static function apply_vehicle_filters( array $vehicles, string $post_type ): array {
 		$rows = Api_Settings::get_active_filters( $post_type );
 
 		if ( empty( $rows ) || empty( $vehicles ) ) {
@@ -622,7 +663,7 @@ class Intice_Rest implements Theme_Component {
 				$vehicles,
 				function ( $vehicle ) use ( $rows ) {
 					foreach ( $rows as $row ) {
-						if ( ! $this->filter_row_matches( $vehicle, $row ) ) {
+						if ( ! self::filter_row_matches( $vehicle, $row ) ) {
 							return false;
 						}
 					}
@@ -635,15 +676,20 @@ class Intice_Rest implements Theme_Component {
 	/**
 	 * Evaluate a single filter row against one vehicle.
 	 *
+	 * Public/static so callers (e.g. get_listings_count() for the ACF model-slider
+	 * count badge) can match arbitrary ad-hoc rows (year/make/model/trim equality)
+	 * against an already-fetched vehicle list instead of issuing a fresh Nexus
+	 * request per slide.
+	 *
 	 * @param array $vehicle Raw Intice vehicle array.
 	 * @param array $row     {field, custom_key, operator, value}.
 	 * @return bool
 	 */
-	private function filter_row_matches( array $vehicle, array $row ): bool {
+	public static function filter_row_matches( array $vehicle, array $row ): bool {
 		$field = 'custom' === $row['field'] ? $row['custom_key'] : $row['field'];
 		$field = 'price_sort' === $field ? 'price' : $field;
 
-		$actual   = $this->get_sort_field_value( $vehicle, $field );
+		$actual   = self::get_sort_field_value( $vehicle, $field );
 		$operator = $row['operator'];
 		$expected = $row['value'];
 
@@ -660,6 +706,25 @@ class Intice_Rest implements Theme_Component {
 					return $actual_num > $expected_num;
 				case '<':
 					return $actual_num < $expected_num;
+			}
+		}
+
+		if ( 'empty' === $operator || 'not_empty' === $operator ) {
+			$is_empty = '' === trim( (string) $actual );
+			return 'empty' === $operator ? $is_empty : ! $is_empty;
+		}
+
+		if ( in_array( $operator, array( 'len_eq', 'len_gt', 'len_lt' ), true ) ) {
+			$actual_len   = mb_strlen( trim( (string) $actual ) );
+			$expected_len = (int) preg_replace( '/[^0-9-]/', '', (string) $expected );
+
+			switch ( $operator ) {
+				case 'len_eq':
+					return $actual_len === $expected_len;
+				case 'len_gt':
+					return $actual_len > $expected_len;
+				case 'len_lt':
+					return $actual_len < $expected_len;
 			}
 		}
 

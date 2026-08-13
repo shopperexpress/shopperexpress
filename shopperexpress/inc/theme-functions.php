@@ -427,6 +427,86 @@ function wps_esc_xml( $data ) {
 	return htmlspecialchars( $data, ENT_XML1 | ENT_COMPAT, 'UTF-8' );
 }
 
+/**
+ * Substitute {{token}} placeholders (and {{date}}) into an ADF template string.
+ * Same substitution rules as the `adf_action()` ajax handler, factored out so
+ * other callers (e.g. wps_wpforms_maybe_dispatch_adf()) can reuse a custom
+ * `adf_templates` row instead of the hardcoded wps_build_adf_xml() structure.
+ *
+ * @param string $template Raw template string (subject or XML body) containing {{token}} placeholders.
+ * @param array  $tokens   Flat key => scalar value map. Keys are matched without the surrounding {{ }}.
+ * @return string
+ */
+function wps_render_adf_template( string $template, array $tokens ): string {
+	$rendered = str_replace( '{{date}}', gmdate( 'm-d-Y' ), $template );
+
+	foreach ( $tokens as $key => $value ) {
+		$rendered = str_replace( '{{' . $key . '}}', is_scalar( $value ) ? (string) $value : '', $rendered );
+	}
+
+	return $rendered;
+}
+
+/**
+ * Find an `adf_templates` (Theme Options) row by its "Template Name" sub-field.
+ *
+ * @param string $name Exact template_name value to match (case-insensitive).
+ * @return array{subject: string, template: string}|null Null when not found or $name is empty.
+ */
+function wps_get_adf_template_by_name( string $name ): ?array {
+	$name = trim( $name );
+	if ( '' === $name ) {
+		return null;
+	}
+
+	$found = null;
+
+	while ( have_rows( 'adf_templates', 'options' ) ) :
+		the_row();
+		if ( 0 === strcasecmp( trim( (string) get_sub_field( 'template_name' ) ), $name ) ) {
+			$found = array(
+				'subject'  => (string) get_sub_field( 'subject' ),
+				'template' => (string) get_sub_field( 'template' ),
+			);
+			break;
+		}
+	endwhile;
+
+	return $found;
+}
+
+/**
+ * Parse the `adf_wpforms_ids` option into a form_id => template_name map.
+ *
+ * Backward-compatible with the original plain "123, 456, 789" format (each
+ * entry maps to an empty template_name, meaning "use the default hardcoded
+ * ADF structure" — unchanged behavior). New optional syntax per entry:
+ * "123:Store 1 - Standard" selects a named row from the `adf_templates` repeater.
+ *
+ * @param string $raw Raw option value.
+ * @return array<int, string> Map of WP Forms form ID => template_name ('' = default/unset).
+ */
+function wps_parse_adf_wpforms_ids( string $raw ): array {
+	$map = array();
+
+	foreach ( explode( ',', $raw ) as $entry ) {
+		$entry = trim( $entry );
+		if ( '' === $entry ) {
+			continue;
+		}
+
+		$parts    = explode( ':', $entry, 2 );
+		$form_id  = (int) trim( $parts[0] );
+		$template = isset( $parts[1] ) ? trim( $parts[1] ) : '';
+
+		if ( $form_id > 0 ) {
+			$map[ $form_id ] = $template;
+		}
+	}
+
+	return $map;
+}
+
 add_action(
 	'register_new_user',
 	function () {
@@ -472,10 +552,10 @@ function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $for
 		return;
 	}
 
-	$form_id        = (int) ( $form_data['id'] ?? 0 );
-	$configured_ids = array_map( 'intval', array_filter( array_map( 'trim', explode( ',', $configured_ids_raw ) ) ) );
+	$form_id      = (int) ( $form_data['id'] ?? 0 );
+	$template_map = wps_parse_adf_wpforms_ids( $configured_ids_raw );
 
-	if ( ! in_array( $form_id, $configured_ids, true ) ) {
+	if ( ! array_key_exists( $form_id, $template_map ) ) {
 		return;
 	}
 
@@ -541,7 +621,17 @@ function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $for
 		return;
 	}
 
-	$xml = wps_build_adf_xml( $lead );
+	// If this form has a named ADF template configured, render that custom
+	// XML instead of the default hardcoded structure. Falls back to the
+	// original behavior when no template is set or the name doesn't match
+	// any row — existing forms with a bare form ID keep working unchanged.
+	$template_name = $template_map[ $form_id ];
+	$template_row  = '' !== $template_name ? wps_get_adf_template_by_name( $template_name ) : null;
+
+	$xml = null !== $template_row
+		? wps_render_adf_template( $template_row['template'], $lead )
+		: wps_build_adf_xml( $lead );
+
 	wps_dispatch_adf( $xml, $lead );
 }
 
@@ -1130,12 +1220,80 @@ function get_url_with_fields( $post_id = '', $post_type = '', $url = '' ) {
 	return $url;
 }
 
+/**
+ * Fetch the full Nexus vehicle list for a given condition, memoized per request.
+ *
+ * The model-slider (tabs-slider.php) renders one slide per model and calls
+ * get_listings_count() for each — without this, every slide would issue its own
+ * Nexus API request. Memoizing per condition means at most one request for "new"
+ * and one for "used" per pageload, reusing whatever Intice_Api_Client::get_vehicles()
+ * already has cached for the SRP grid.
+ *
+ * @param string|null $condition
+ * @return array
+ */
+function get_api_vehicles_by_condition( $condition ) {
+	static $cache = array();
+
+	$key = (string) $condition;
+
+	if ( ! array_key_exists( $key, $cache ) ) {
+		$result        = \App\Components\Api\Intice_Api_Client::instance()->get_vehicles( array_filter( array( 'condition' => $condition ) ) );
+		$cache[ $key ] = is_wp_error( $result ) ? array() : ( $result['data'] ?? array() );
+	}
+
+	return $cache[ $key ];
+}
+
 function get_listings_count( $year, $make, $model, $condition, $trim, $index, $row ) {
 	$count = get_transient( 'acf-count-' . $index . $row );
 	if ( ! empty( $_REQUEST['clear'] ) ) {
 		$count = false;
 	}
 	if ( false === $count ) {
+		if ( \App\is_api_mode() ) {
+			// Slides don't carry a post_type — infer it the same way the SRP endpoints
+			// split new vs. used, so the right "API Settings → Filters" exclusion rules apply.
+			$condition_norm = $condition ? strtolower( (string) $condition ) : '';
+			$post_type      = in_array( $condition_norm, array( 'used', 'certified' ), true ) ? 'used-listings' : 'listings';
+
+			// Reuses the exact same client call (and transient cache key) the SRP grid
+			// warms on page load — one shared fetch per condition instead of a fresh
+			// Nexus request per model-slider slide.
+			$vehicles = get_api_vehicles_by_condition( $condition ?: null );
+
+			$rows = array_filter(
+				array(
+					$year  ? array( 'field' => 'year', 'custom_key' => '', 'operator' => '=', 'value' => $year ) : null,
+					$make  ? array( 'field' => 'make', 'custom_key' => '', 'operator' => '=', 'value' => $make ) : null,
+					$model ? array( 'field' => 'model', 'custom_key' => '', 'operator' => '=', 'value' => $model ) : null,
+					$trim  ? array( 'field' => 'trim', 'custom_key' => '', 'operator' => '=', 'value' => $trim ) : null,
+				)
+			);
+
+			// Apply the same "API Settings → Filters" exclusion rules the SRP grid uses,
+			// so this badge never shows a number the shop-section grid doesn't actually display.
+			$rows = array_merge( $rows, \App\Components\SOC\Modules\Api_Settings::get_active_filters( $post_type ) );
+
+			$matching = array_filter(
+				$vehicles,
+				function ( $vehicle ) use ( $rows ) {
+					foreach ( $rows as $rule ) {
+						if ( ! \App\Components\Api\Intice_Rest::filter_row_matches( $vehicle, $rule ) ) {
+							return false;
+						}
+					}
+					return true;
+				}
+			);
+
+			$count = count( $matching );
+
+			set_transient( 'acf-count-' . $index . $row, $count, 12 * HOUR_IN_SECONDS );
+
+			return $count;
+		}
+
 		$meta_query = array( 'relation' => 'AND' );
 
 		if ( $year ) {
@@ -1394,10 +1552,13 @@ function custom_yoast_breadcrumbs_as_ol() {
 			foreach ( $items as $index => $item ) {
 				if ( $index === array_key_last( $items ) && str_starts_with( $item, '<span' ) ) {
 					preg_match( '/<span.*?>(.*?)<\/span>/', $item, $text_match );
-					$label = $text_match[1] ?? '—';
-					echo '<li><a href="#">' . esc_html( $label ) . '</a></li>';
+					// Yoast's breadcrumb title field stores raw text (may include our
+					// dynamic [sc_*] shortcodes, e.g. dealership name/city) — run it
+					// through do_shortcode() instead of just escaping it as plain text.
+					$label = do_shortcode( $text_match[1] ?? '—' );
+					echo '<li><a href="#">' . $label . '</a></li>';
 				} else {
-					echo '<li>' . $item . '</li>';
+					echo '<li>' . do_shortcode( $item ) . '</li>';
 				}
 			}
 			echo '</ol>';

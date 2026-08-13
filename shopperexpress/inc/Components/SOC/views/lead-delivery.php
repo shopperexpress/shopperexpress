@@ -199,8 +199,31 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 				<td>
 					<input type="text" id="soc-lead-wpforms-ids" class="regular-text"
 						value="<?php echo esc_attr( $data['wpforms_ids'] ?? '' ); ?>"
-						placeholder="123, 456, 789">
-					<p class="description"><?php esc_html_e( 'Comma-separated WP Forms IDs whose submissions should trigger ADF delivery.', 'shopperexpress' ); ?></p>
+						placeholder="123, 456:Store 1 - Standard, 789">
+					<p class="description">
+						<?php esc_html_e( 'Comma-separated WP Forms IDs whose submissions should trigger ADF delivery.', 'shopperexpress' ); ?>
+						<?php esc_html_e( 'Optionally append ":Template Name" to a form ID to use a specific row from the ADF Templates repeater (Theme Options → Email Notification) for that form — e.g. "456:Store 1 - Standard". A bare form ID (no ":") keeps using the default ADF structure.', 'shopperexpress' ); ?>
+					</p>
+					<?php
+					$adf_template_names = array();
+					while ( have_rows( 'adf_templates', 'options' ) ) :
+						the_row();
+						$name = trim( (string) get_sub_field( 'template_name' ) );
+						if ( '' !== $name ) {
+							$adf_template_names[] = $name;
+						}
+					endwhile;
+					?>
+					<?php if ( ! empty( $adf_template_names ) ) : ?>
+						<p class="description">
+							<?php esc_html_e( 'Available template names:', 'shopperexpress' ); ?>
+							<?php echo esc_html( implode( ', ', $adf_template_names ) ); ?>
+						</p>
+					<?php else : ?>
+						<p class="description">
+							<?php esc_html_e( 'No named templates yet — give a row in the ADF Templates repeater a "Template Name" to make it selectable here.', 'shopperexpress' ); ?>
+						</p>
+					<?php endif; ?>
 				</td>
 			</tr>
 

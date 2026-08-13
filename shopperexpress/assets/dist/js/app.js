@@ -366,13 +366,80 @@ function initEditModal() {
 			$errorAlert.removeClass('show');
 			$successAlert.removeClass('show');
 		});
+
+		// API mode: per-vehicle cache clear (same 'clear' action/handler as legacy mode).
+		$apiModal.on('click', '[data-clear]', function(e) {
+			e.preventDefault();
+
+			const postType = jQuery(this).data('clear');
+
+			$form.addClass('loading');
+			$errorAlert.removeClass('show');
+			$successAlert.removeClass('show');
+
+			jQuery.ajax({
+				url: window.ajax.admin,
+				type: 'POST',
+				data: {
+					action: 'clear',
+					post_type: postType
+				},
+				success: function(response) {
+					$form.removeClass('loading');
+					if (response.success) {
+						$successAlert.find('strong').text(response.data.message);
+						$successAlert.addClass('show');
+					} else {
+						$errorAlert.find('strong').text(response.data?.message || 'Clear cache error');
+						$errorAlert.addClass('show');
+						console.error(response.data?.message || 'Clear cache error');
+					}
+				},
+				error: function(xhr) {
+					$form.removeClass('loading');
+					$errorAlert.find('strong').text('Clear cache request failed.');
+					$errorAlert.addClass('show');
+					console.error('AJAX Error:', xhr);
+				}
+			});
+		});
 	}
 
 	// Confirm delete button handler
 	jQuery('#confirmYes').on('click', function(e) {
 		e.preventDefault();
 
-		const post_id = jQuery(this).data('post-id');
+		const $btn = jQuery(this);
+		const vin  = $btn.data('vin');
+
+		// API mode: trash the vehicle via Intice Nexus (soft-delete), keyed by VIN.
+		if (vin) {
+			const nonce = jQuery('#api-edit-form input[name="delete_nonce"]').val();
+
+			jQuery.ajax({
+				url: window.ajax.admin,
+				type: 'POST',
+				data: {
+					action: 'wps_api_delete_vehicle',
+					vin: vin,
+					nonce: nonce
+				},
+				success: function(response) {
+					if (response.success) {
+						window.location.href = '/';
+					} else {
+						console.error('Error: ' + (response.data?.message || response.data));
+					}
+				},
+				error: function() {
+					console.error('AJAX request failed');
+				}
+			});
+
+			return;
+		}
+
+		const post_id = $btn.data('post-id');
 
 		jQuery.ajax({
 			url: window.ajax.admin,
@@ -3854,7 +3921,7 @@ function formatPhoneNumber(phone) {
 				}
 
 				if (!this.isItemsLoaded) {
-					if (item.price && item.price.length) {
+					if (item.price) {
 						if (!this.rangesMinMaxValues.value) {
 							this.rangesMinMaxValues.value = [];
 						}
@@ -3864,7 +3931,7 @@ function formatPhoneNumber(phone) {
 						}
 					}
 
-					if (item.payment && item.payment.length) {
+					if (item.payment) {
 						if (!this.rangesMinMaxValues.payment) {
 							this.rangesMinMaxValues.payment = [];
 						}

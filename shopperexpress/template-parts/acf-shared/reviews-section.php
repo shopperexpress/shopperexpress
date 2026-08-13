@@ -32,6 +32,56 @@ $cta_url      = $args['cta_url'] ?? '#';
 $is_slider    = 'slider' === $layout_style;
 
 if ( $place_id ) :
+	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
+	// filtered) data the widget displays, so search engines see it without
+	// needing to run the client-side Google Reviews JS module.
+	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id );
+
+	if ( ! is_wp_error( $reviews_data ) && ! empty( $reviews_data['reviews'] ) ) :
+		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
+		$dealer_name = wp_strip_all_tags( get_field( 'dealer_name', 'options' ) ?: get_bloginfo( 'name' ) );
+		$dealer_url  = esc_url( get_field( 'dealer_url', 'options' ) ?: home_url( '/' ) );
+
+		$graph = array(
+			array(
+				'@type' => 'AutoDealer',
+				'@id'   => $dealer_id,
+				'name'  => $dealer_name,
+				'url'   => $dealer_url,
+			),
+		);
+
+		foreach ( $reviews_data['reviews'] as $_i => $_review ) {
+			$_published = $_review['publishTime'] ?? '';
+			$graph[]    = array(
+				'@type'         => 'Review',
+				'@id'           => esc_url( home_url( '/' ) ) . '#review-' . ( $_i + 1 ),
+				'itemReviewed'  => array( '@id' => $dealer_id ),
+				'author'        => array(
+					'@type' => 'Person',
+					'name'  => wp_strip_all_tags( $_review['authorAttribution']['displayName'] ?? __( 'Google user', 'shopperexpress' ) ),
+				),
+				'datePublished' => $_published ? gmdate( 'Y-m-d', strtotime( $_published ) ) : gmdate( 'Y-m-d' ),
+				'reviewBody'    => wp_strip_all_tags( $_review['text'] ?? '' ),
+				'reviewRating'  => array(
+					'@type'       => 'Rating',
+					'ratingValue' => (int) ( $_review['rating'] ?? 5 ),
+					'bestRating'  => 5,
+					'worstRating' => 1,
+				),
+			);
+		}
+
+		$review_schema = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => $graph,
+		);
+		?>
+		<script type="application/ld+json">
+			<?php echo wp_json_encode( $review_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>
+		</script>
+		<?php
+	endif;
 	?>
 	<section
 		class="review-section<?php echo $is_slider ? ' review-section--slider' : ''; ?>"

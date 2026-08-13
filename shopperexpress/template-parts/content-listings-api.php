@@ -30,7 +30,12 @@ $mileage        = $vehicle['mileage'] ?? 0;
 $price          = $vehicle['price'] ?? 0;
 $vin            = strtoupper( $vehicle['vin'] ?? '' );
 
-$thumb     = $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' );
+// `images` is already resolved server-side to the active gallery
+// (use_images_list → primary/srp — see VehicleApiResource::toArray());
+// prefer it so the SRP card matches the selected list, same as standard
+// mode's template-parts/gallery.php:71. Fall back to the flat thumb/image
+// fields only if the vehicle has no images at all.
+$thumb     = $vehicle['images'][0] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) );
 $features  = $vehicle['features'] ?? array();
 $sold      = ! empty( $vehicle['sold'] );
 $certified = ! empty( $vehicle['certified'] );

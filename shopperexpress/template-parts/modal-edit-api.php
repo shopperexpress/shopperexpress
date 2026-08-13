@@ -159,14 +159,14 @@ $tabs = array(
 				'value' => $vehicle['interior_color'] ?? '',
 			),
 			array(
-				'label'    => 'Body Style',
+				'label'    => 'Style',
 				'name'     => 'body_style',
 				'value'    => $vehicle['body_style'] ?? '',
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Drivetrain',
-				'name'     => 'drivetrain',
+				'name'     => 'drivetrain_display',
 				'value'    => $vehicle['drivetrain'] ?? '',
 				'readonly' => true,
 			),
@@ -178,7 +178,7 @@ $tabs = array(
 			),
 			array(
 				'label'    => 'Fuel Type',
-				'name'     => 'fuel_type',
+				'name'     => 'fuel_type_display',
 				'value'    => $vehicle['fuel_type'] ?? '',
 				'readonly' => true,
 			),
@@ -213,6 +213,71 @@ $tabs = array(
 				'name'  => 'message',
 				'value' => $payload['message'] ?? '',
 			),
+			array(
+				'label' => 'Interior Type',
+				'name'  => 'interiortype',
+				'value' => $payload['interiortype'] ?? '',
+			),
+			array(
+				'label' => 'BodyStyle',
+				'name'  => 'bodystyle',
+				'value' => $payload['bodystyle'] ?? '',
+			),
+			array(
+				'label'    => 'Miles Display',
+				'name'     => 'miles_display_display',
+				'value'    => $payload['miles_display'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Status Code',
+				'name'     => 'status_code_display',
+				'value'    => $vehicle['status_code'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Vehicle Status',
+				'name'     => 'vehicle_status_display',
+				'value'    => $vehicle['status'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'Date In Stock',
+				'name'     => 'dateinstock_display',
+				'value'    => $vehicle['date_in_stock'] ?? ( $payload['dateinstock'] ?? '' ),
+				'readonly' => true,
+			),
+			array(
+				'label'    => 'VDP URL',
+				'name'     => 'url_display',
+				'value'    => $vehicle['url'] ?? '',
+				'readonly' => true,
+			),
+			array(
+				'label' => 'Comment 1',
+				'name'  => 'comment1',
+				'value' => $payload['comment1'] ?? '',
+			),
+			array(
+				'label' => 'Comment 2',
+				'name'  => 'comment2',
+				'value' => $payload['comment2'] ?? '',
+			),
+			array(
+				'label' => 'Comment 3',
+				'name'  => 'comment3',
+				'value' => $payload['comment3'] ?? '',
+			),
+			array(
+				'label' => 'Comment 4',
+				'name'  => 'comment4',
+				'value' => $payload['comment4'] ?? '',
+			),
+			array(
+				'label' => 'Comment 5',
+				'name'  => 'comment5',
+				'value' => $payload['comment5'] ?? '',
+			),
 		),
 	),
 	'fuel'        => array(
@@ -232,6 +297,11 @@ $tabs = array(
 				'label' => 'EPA Class',
 				'name'  => 'epaclassification',
 				'value' => $payload['epaclassification'] ?? '',
+			),
+			array(
+				'label' => 'Fuel Type',
+				'name'  => 'fuel_type',
+				'value' => $vehicle['fuel_type'] ?? '',
 			),
 		),
 	),
@@ -267,6 +337,21 @@ $tabs = array(
 				'label' => 'Wheelbase Code',
 				'name'  => 'wheelbase_code',
 				'value' => $payload['wheelbase_code'] ?? '',
+			),
+			array(
+				'label' => 'Transmission Description',
+				'name'  => 'transmission_description',
+				'value' => $payload['transmission_description'] ?? '',
+			),
+			array(
+				'label' => 'Engine Size UOM',
+				'name'  => 'enginesizeuom',
+				'value' => $payload['enginesizeuom'] ?? '',
+			),
+			array(
+				'label' => 'Drivetrain',
+				'name'  => 'drivetrain',
+				'value' => $vehicle['drivetrain'] ?? '',
 			),
 		),
 	),
@@ -313,6 +398,11 @@ $tabs = array(
 				'name'  => 'totalofpmts',
 				'value' => $payload['totalofpmts'] ?? '',
 			),
+			array(
+				'label' => 'Loan Payment Sort (Alt)',
+				'name'  => 'loan_payment_sort_1',
+				'value' => $payload['loan_payment_sort_1'] ?? '',
+			),
 		),
 	),
 	'pricing'     => array(
@@ -353,6 +443,31 @@ $tabs = array(
 				'name'  => 'customprice3',
 				'value' => $payload['customprice3'] ?? '',
 			),
+			array(
+				'label' => 'Cost',
+				'name'  => 'cost',
+				'value' => $payload['cost'] ?? '',
+			),
+			array(
+				'label' => 'Holdback',
+				'name'  => 'holdback',
+				'value' => $payload['holdback'] ?? '',
+			),
+			array(
+				'label' => 'Pack',
+				'name'  => 'pack',
+				'value' => $payload['pack'] ?? '',
+			),
+			array(
+				'label' => 'Default Book Value',
+				'name'  => 'defaultbookvalue',
+				'value' => $payload['defaultbookvalue'] ?? '',
+			),
+			array(
+				'label' => 'Price Sort',
+				'name'  => 'price_sort',
+				'value' => $vehicle['price_sort'] ?? '',
+			),
 		),
 	),
 	'media'       => array(
@@ -366,6 +481,7 @@ $tabs = array(
 				'label' => 'Vehicle Overview',
 				'name'  => 'vehicle_overview',
 				'value' => $payload['vehicle_overview'] ?? '',
+				'type'  => 'textarea',
 			),
 			array(
 				'label' => 'Certified URL',
@@ -396,6 +512,41 @@ $tabs = array(
 				'label' => 'Int Color Hex',
 				'name'  => 'intcolorhexcode',
 				'value' => $payload['intcolorhexcode'] ?? '',
+			),
+			array(
+				'label' => 'Ext Color Code',
+				'name'  => 'ext_color_code',
+				'value' => $payload['ext_color_code'] ?? '',
+			),
+			array(
+				'label' => 'Int Color Code',
+				'name'  => 'int_color_code',
+				'value' => $payload['int_color_code'] ?? '',
+			),
+			array(
+				'label' => 'Model Number',
+				'name'  => 'modelnumber',
+				'value' => $payload['modelnumber'] ?? '',
+			),
+			array(
+				'label' => 'Factory Codes',
+				'name'  => 'factory_codes',
+				'value' => $payload['factory_codes'] ?? '',
+			),
+			array(
+				'label' => 'Photo Timestamp',
+				'name'  => 'photo_timestamp',
+				'value' => $payload['photo_timestamp'] ?? '',
+			),
+			array(
+				'label' => 'Ext Color Generic',
+				'name'  => 'ext_color_generic',
+				'value' => $payload['ext_color_generic'] ?? '',
+			),
+			array(
+				'label' => 'Int Color Generic',
+				'name'  => 'int_color_generic',
+				'value' => $payload['int_color_generic'] ?? '',
 			),
 		),
 	),
@@ -435,6 +586,18 @@ $tabs = array(
 						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M200-120q-33 0-56.5-23.5T120-200v-120q0-17 11.5-28.5T160-360q17 0 28.5 11.5T200-320v120h560v-560H200v120q0-17-11.5-28.5T160-600q-17 0-28.5-11.5T120-640v-120q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm266-320H160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520h306l-74-74q-12-12-11.5-28t11.5-28q12-12 28.5-12.5T449-651l143 143q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L449-309q-12 12-28.5 11.5T392-310q-11-12-11.5-28t11.5-28l74-74Z"/></svg>
 						<?php esc_html_e( 'exit', 'shopperexpress' ); ?>
 					</button>
+					<button type="button" class="btn btn-danger" aria-label="Trash" data-toggle="modal" data-target="#confirmDelete">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff">
+							<path d="M280-120q-33 0-56.5-23.5T200-200v-520q-17 0-28.5-11.5T160-760q0-17 11.5-28.5T200-800h160q0-17 11.5-28.5T400-840h160q17 0 28.5 11.5T600-800h160q17 0 28.5 11.5T800-760q0 17-11.5 28.5T760-720v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM400-280q17 0 28.5-11.5T440-320v-280q0-17-11.5-28.5T400-640q-17 0-28.5 11.5T360-600v280q0 17 11.5 28.5T400-280Zm160 0q17 0 28.5-11.5T600-320v-280q0-17-11.5-28.5T560-640q-17 0-28.5 11.5T520-600v280q0 17 11.5 28.5T560-280ZM280-720v520-520Z"/>
+						</svg>
+						<?php esc_html_e( 'trash', 'shopperexpress' ); ?>
+					</button>
+					<button type="button" class="btn btn-primary" aria-label="Clear Cache" data-clear="<?php echo esc_attr( $post_type ); ?>">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff">
+							<path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h447q16 0 30.5 6t25.5 17l114 114q11 11 17 25.5t6 30.5v447q0 33-23.5 56.5T760-120H200Zm560-526L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM280-560h280q17 0 28.5-11.5T600-600v-80q0-17-11.5-28.5T560-720H280q-17 0-28.5 11.5T240-680v80q0 17 11.5 28.5T280-560Zm-80-86v446-560 114Z"/>
+						</svg>
+						<?php esc_html_e( 'Clear Cache', 'shopperexpress' ); ?>
+					</button>
 					<button type="button" class="btn btn-primary" aria-label="Save" data-save>
 						<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h447q16 0 30.5 6t25.5 17l114 114q11 11 17 25.5t6 30.5v447q0 33-23.5 56.5T760-120H200Zm560-526L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM280-560h280q17 0 28.5-11.5T600-600v-80q0-17-11.5-28.5T560-720H280q-17 0-28.5 11.5T240-680v80q0 17 11.5 28.5T280-560Zm-80-86v446-560 114Z"/></svg>
 						<?php esc_html_e( 'Save', 'shopperexpress' ); ?>
@@ -453,12 +616,14 @@ $tabs = array(
 				<form id="api-edit-form" class="acf-form" method="post">
 					<input type="hidden" name="vin"   value="<?php echo esc_attr( $vin ); ?>">
 					<input type="hidden" name="nonce" value="<?php echo esc_attr( wp_create_nonce( 'wps_api_save_vehicle' ) ); ?>">
+					<input type="hidden" name="delete_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wps_api_delete_vehicle' ) ); ?>">
 
 					<!-- Vehicle card header -->
+					<?php $header_image = $vehicle['images'][0] ?? ( $vehicle['image'] ?? '' ); ?>
 					<div class="card-horizontal">
-						<?php if ( ! empty( $vehicle['image'] ) ) : ?>
+						<?php if ( ! empty( $header_image ) ) : ?>
 							<div class="card-img">
-								<img src="<?php echo esc_url( $vehicle['image'] ); ?>" alt="<?php echo esc_attr( $title ); ?>">
+								<img src="<?php echo esc_url( $header_image ); ?>" alt="<?php echo esc_attr( $title ); ?>">
 							</div>
 						<?php endif; ?>
 						<div class="card-body">
@@ -506,6 +671,18 @@ endforeach;
 								<?php if ( ! empty( $tab['custom'] ) && 'media' === $key ) : ?>
 									<?php
 									_api_modal_field(
+										__( 'Primary Image URL', 'shopperexpress' ),
+										'primary_image_url',
+										$vehicle['image'] ?? '',
+										'text'
+									);
+									_api_modal_field(
+										__( 'Primary Thumb URL', 'shopperexpress' ),
+										'primary_thumb_url',
+										$vehicle['thumb'] ?? '',
+										'text'
+									);
+									_api_modal_field(
 										__( 'Active Image List', 'shopperexpress' ),
 										'use_images_list',
 										$vehicle['active_image_list'] ?? 'primary',
@@ -533,6 +710,20 @@ endforeach;
 						?>
 					</div>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Confirm delete Modal (API mode) -->
+<div class="modal fade modal-confirm" data-backdrop="static" data-keyboard="false" id="confirmDelete" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-scrollable modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-body">
+				<p class="text-center mb-0"><?php esc_html_e( 'Are you sure you want to delete the data?', 'shopperexpress' ); ?></p>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-secondary" type="button" data-dismiss="modal"><?php esc_html_e( 'no', 'shopperexpress' ); ?></button>
+				<button class="btn btn-danger" data-vin="<?php echo esc_attr( $vin ); ?>" type="button" id="confirmYes"><?php esc_html_e( 'yes', 'shopperexpress' ); ?></button>
 			</div>
 		</div>
 	</div>

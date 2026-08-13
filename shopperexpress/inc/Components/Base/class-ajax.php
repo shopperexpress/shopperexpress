@@ -60,7 +60,8 @@ class Ajax implements Theme_Component {
 				'save_listing'       => 'save_listing',
 				'delete_listings'    => 'delete_listings',
 				'clear'              => 'clear_action',
-				'wps_api_save_vehicle' => 'api_save_vehicle',
+				'wps_api_save_vehicle'   => 'api_save_vehicle',
+				'wps_api_delete_vehicle' => 'api_delete_vehicle',
 			),
 			'template_redirect' => array(
 				'unlock_form',
@@ -756,9 +757,16 @@ class Ajax implements Theme_Component {
 		// Top-level API vehicle fields.
 		$top_level_fields = array(
 			'year', 'make', 'model', 'trim', 'condition', 'mileage',
-			'price', 'msrp', 'stock', 'exterior_color', 'interior_color',
+			'price', 'msrp', 'price_sort', 'stock', 'exterior_color', 'interior_color',
 			'body_style', 'drivetrain', 'fuel_type', 'transmission',
 			'certified', 'sold', 'use_images_list',
+			'primary_image_url', 'primary_thumb_url',
+		);
+
+		// Multi-line payload fields — preserve line breaks instead of
+		// collapsing them with sanitize_text_field().
+		$textarea_fields = array(
+			'message', 'information', 'vehicle_overview',
 		);
 
 		$top    = array();
@@ -768,7 +776,9 @@ class Ajax implements Theme_Component {
 			if ( in_array( $key, array( 'action', 'vin', 'nonce' ), true ) ) {
 				continue;
 			}
-			$clean_value = sanitize_text_field( wp_unslash( $value ) );
+			$clean_value = in_array( $key, $textarea_fields, true )
+				? sanitize_textarea_field( wp_unslash( $value ) )
+				: sanitize_text_field( wp_unslash( $value ) );
 			if ( in_array( $key, $top_level_fields, true ) ) {
 				$top[ $key ] = $clean_value;
 			} else {
@@ -788,5 +798,42 @@ class Ajax implements Theme_Component {
 		}
 
 		wp_send_json_success( array( 'message' => __( 'Data saved successfully!', 'shopperexpress' ) ) );
+	}
+
+	/**
+	 * Trash a vehicle via Intice Nexus API (API mode VDP edit modal).
+	 *
+	 * Expects POST: vin, nonce. Soft-deletes the vehicle on the Nexus side
+	 * (DELETE /api/v1/vehicles/{vin}) — it disappears from the site immediately
+	 * but is restored automatically on the next re-sync if still in the source feed.
+	 *
+	 * @return void
+	 */
+	public function api_delete_vehicle(): void {
+		if ( ! wps_check_current_usser() ) {
+			wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
+		}
+
+		if ( ! check_ajax_referer( 'wps_api_delete_vehicle', 'nonce', false ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce' ), 403 );
+		}
+
+		$vin = strtoupper( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) );
+
+		if ( ! $vin || ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/i', $vin ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid VIN' ) );
+		}
+
+		if ( ! class_exists( '\App\Components\Api\Intice_Api_Client' ) ) {
+			wp_send_json_error( array( 'message' => 'API client not available' ) );
+		}
+
+		$result = \App\Components\Api\Intice_Api_Client::instance()->delete_vehicle( $vin );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Vehicle trashed.', 'shopperexpress' ) ) );
 	}
 }

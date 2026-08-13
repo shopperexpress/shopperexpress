@@ -26,10 +26,11 @@ if ( $_intice_vehicle ) :
 	$_intice_payload = $_intice_vehicle['payload'] ?? array();
 	$_intice_options = $_intice_payload['options'] ?? array();
 	if ( ! empty( $_intice_options ) ) :
-		$_intice_options = explode( '|', $_intice_options );
+		$_intice_options = explode( ';', $_intice_options );
 		?>
 		<ul class="modal-content-list">
 			<?php foreach ( $_intice_options as $_option ) : ?>
+				<?php $_option = trim( $_option ); ?>
 				<?php if ( $_option ) : ?>
 					<li><?php echo esc_html( $_option ); ?></li>
 				<?php endif; ?>

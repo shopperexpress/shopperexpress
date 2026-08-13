@@ -93,7 +93,7 @@ if ( $key && $value ) :
 				<div class="filter-row range-row">
 					<label for="range-payment" class="filter-title"><?php echo $label_2; ?></label>
 					<div class="range-box">
-						<input id="range-price" value="0,55500" min="0" max="55500" step="1" type="range" multiple />
+						<input id="range-payment" value="0,55500" min="0" max="55500" step="1" type="range" multiple />
 						<div class="value-row">
 							<input class="range-input min-price" type="text" />
 							<span class="sep"></span>

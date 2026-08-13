@@ -550,14 +550,7 @@ class JSON_LD implements Theme_Component {
 		$dealer_name = wp_strip_all_tags( (string) get_field( 'dealer_name', $post_id ) );
 		$dealer_url  = get_field( 'dealer_url', $post_id );
 		if ( $dealer_name ) {
-			$seller = array(
-				'@type' => 'AutoDealer',
-				'name'  => $dealer_name,
-			);
-			if ( $dealer_url ) {
-				$seller['url'] = esc_url( $dealer_url );
-			}
-			$offer['seller'] = $seller;
+			$offer['seller'] = self::build_seller_nap( $post_id, $dealer_name, $dealer_url );
 		}
 
 		$schema['offers'] = $offer;
@@ -754,11 +747,7 @@ class JSON_LD implements Theme_Component {
 			$dealer_name = wp_strip_all_tags( (string) get_field( $seller_n_acf, $post_id ) );
 			$dealer_url  = get_field( $seller_u_acf, $post_id );
 			if ( $dealer_name ) {
-				$seller = array( '@type' => 'AutoDealer', 'name' => $dealer_name );
-				if ( $dealer_url ) {
-					$seller['url'] = esc_url( $dealer_url );
-				}
-				$offer['seller'] = $seller;
+				$offer['seller'] = self::build_seller_nap( $post_id, $dealer_name, $dealer_url );
 			}
 			$schema['offers'] = $offer;
 		}
@@ -1112,6 +1101,61 @@ class JSON_LD implements Theme_Component {
 		$json = wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
 
 		return '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>' . "\n";
+	}
+
+	// ── Seller (AutoDealer) NAP helper ───────────────────────────────────────
+
+	/**
+	 * Build an AutoDealer seller object with NAP (name/address/phone) data.
+	 *
+	 * Address/phone come from the per-vehicle ACF fields populated by the
+	 * dealer's feed import (dealer_address, dealer_city, dealer_state,
+	 * dealer_zip, dealer_phone) — same field group as dealer_name/dealer_url,
+	 * not a site-wide options value (there isn't one with real data).
+	 *
+	 * @param int    $post_id Vehicle post ID.
+	 * @param string $name    Dealer name (already resolved by the caller — may be from a custom ACF key in builder mode).
+	 * @param mixed  $url     Dealer URL (already resolved by the caller), or empty.
+	 * @return array{'@type': string, name: string, url?: string, telephone?: string, address?: array}
+	 */
+	private static function build_seller_nap( int $post_id, string $name, $url ): array {
+		$seller = array(
+			'@type' => 'AutoDealer',
+			'name'  => $name,
+		);
+
+		if ( $url ) {
+			$seller['url'] = esc_url( $url );
+		}
+
+		$phone = wp_strip_all_tags( (string) get_field( 'dealer_phone', $post_id ) );
+		if ( $phone ) {
+			$seller['telephone'] = $phone;
+		}
+
+		$street = wp_strip_all_tags( (string) get_field( 'dealer_address', $post_id ) );
+		$city   = wp_strip_all_tags( (string) get_field( 'dealer_city', $post_id ) );
+		$state  = wp_strip_all_tags( (string) get_field( 'dealer_state', $post_id ) );
+		$zip    = wp_strip_all_tags( (string) get_field( 'dealer_zip', $post_id ) );
+
+		if ( $street || $city || $state || $zip ) {
+			$address = array( '@type' => 'PostalAddress' );
+			if ( $street ) {
+				$address['streetAddress'] = $street;
+			}
+			if ( $city ) {
+				$address['addressLocality'] = $city;
+			}
+			if ( $state ) {
+				$address['addressRegion'] = $state;
+			}
+			if ( $zip ) {
+				$address['postalCode'] = $zip;
+			}
+			$seller['address'] = $address;
+		}
+
+		return $seller;
 	}
 
 	// ── Features helper ───────────────────────────────────────────────────────

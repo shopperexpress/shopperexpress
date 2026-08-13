@@ -232,6 +232,62 @@ class Intice_Api_Client {
 	}
 
 	/**
+	 * Get a matching-vehicle count only, without fetching full vehicle payloads.
+	 *
+	 * Same filters as get_vehicles() (make, model, trim, condition, year_from,
+	 * year_to, ...), but requests per_page=1 and reads meta.total instead of
+	 * forcing mode=full — used for homepage/menu inventory counts where only
+	 * the number matters, not the vehicle data itself.
+	 *
+	 * @param array $filters Query parameters to forward to the API.
+	 * @return int|\WP_Error Vehicle count or WP_Error on failure.
+	 */
+	public function get_vehicles_count( array $filters = array() ) {
+		unset( $filters['mode'] );
+		$filters['per_page'] = 1;
+
+		$live_key  = self::CACHE_PREFIX . 'vehicles_count_' . md5( serialize( $filters ) );
+		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_count_' . md5( serialize( $filters ) );
+
+		if ( ! self::$regenerating ) {
+			if ( ! $this->is_cache_enabled() ) {
+				$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
+
+				return is_wp_error( $response ) ? $response : (int) ( $response['meta']['total'] ?? 0 );
+			}
+
+			$cached = get_transient( $live_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+
+			$stale = get_transient( $stale_key );
+			if ( false !== $stale ) {
+				return $stale;
+			}
+		}
+
+		$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
+
+		if ( is_wp_error( $response ) ) {
+			$stale = get_transient( $stale_key );
+
+			return false !== $stale ? $stale : $response;
+		}
+
+		$count = (int) ( $response['meta']['total'] ?? 0 );
+
+		if ( self::$regenerating || $this->is_cache_enabled() ) {
+			set_transient( $live_key, $count, self::CACHE_TTL_VEHICLES );
+			set_transient( $stale_key, $count, self::STALE_TTL );
+			self::track_key( $live_key, 'vehicles', self::CACHE_TTL_VEHICLES );
+			self::track_key( $stale_key, 'vehicles', self::STALE_TTL );
+		}
+
+		return $count;
+	}
+
+	/**
 	 * Flush live cache with stale-while-revalidate: copies current transients to a stale
 	 * prefix (2h TTL) so existing data keeps being served while a background cron regenerates
 	 * the fresh cache.
@@ -397,6 +453,27 @@ class Intice_Api_Client {
 	public function update_vehicle( string $vin, array $data ) {
 		$vin    = strtoupper( trim( $vin ) );
 		$result = $this->request( 'PATCH', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), $data );
+
+		if ( ! is_wp_error( $result ) ) {
+			delete_transient( self::CACHE_PREFIX . 'vehicle_' . $vin );
+			delete_transient( self::CACHE_PREFIX_STALE . 'vehicle_' . $vin );
+			self::untrack_key( self::CACHE_PREFIX . 'vehicle_' . $vin );
+			self::untrack_key( self::CACHE_PREFIX_STALE . 'vehicle_' . $vin );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Trash a vehicle via DELETE /api/v1/vehicles/{vin} (soft-delete on the Nexus side).
+	 * Busts the per-VIN transient cache on success.
+	 *
+	 * @param string $vin Uppercase 17-char VIN.
+	 * @return array|\WP_Error Decoded response array or WP_Error on failure.
+	 */
+	public function delete_vehicle( string $vin ) {
+		$vin    = strtoupper( trim( $vin ) );
+		$result = $this->request( 'DELETE', '/api/v1/vehicles/' . rawurlencode( $vin ) );
 
 		if ( ! is_wp_error( $result ) ) {
 			delete_transient( self::CACHE_PREFIX . 'vehicle_' . $vin );

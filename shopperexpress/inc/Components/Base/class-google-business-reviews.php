@@ -541,10 +541,42 @@ class Google_Business_Reviews implements Theme_Component {
 		}
 
 		if ( $this->is_connected() && get_option( self::OPTION_ACCOUNT_ID, '' ) && get_option( self::OPTION_LOCATION_ID, '' ) ) {
-			return $this->get_reviews_business_profile( $page_token );
+			$data = $this->get_reviews_business_profile( $page_token );
+		} else {
+			$data = $this->get_reviews_places( $place_id, $lang );
 		}
 
-		return $this->get_reviews_places( $place_id, $lang );
+		if ( ! is_wp_error( $data ) ) {
+			// Only surface 5-star reviews that have written text — matches what
+			// gets rendered in the widget and what backs the Review JSON-LD.
+			// average_rating/total_review_count are left untouched: those are
+			// Google's real aggregate stats for the business, not a count of
+			// what's displayed in the list below.
+			$data['reviews'] = $this->filter_reviews( $data['reviews'] );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Keep only reviews that are 5 stars and have non-empty text.
+	 *
+	 * @param array $reviews Normalized review rows (see normalize_places_review()
+	 *                        / get_reviews_business_profile()).
+	 * @return array
+	 */
+	private function filter_reviews( array $reviews ): array {
+		return array_values(
+			array_filter(
+				$reviews,
+				static function ( $review ) {
+					$rating = (int) ( $review['rating'] ?? 0 );
+					$text   = trim( wp_strip_all_tags( (string) ( $review['text'] ?? '' ) ) );
+
+					return 5 === $rating && '' !== $text;
+				}
+			)
+		);
 	}
 
 	/**

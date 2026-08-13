@@ -580,6 +580,22 @@
             $row.find('.soc-filter-custom-key').toggle($(this).val() === 'custom');
         });
 
+        // Empty/Not Empty don't need a value — hide the input so it can't be
+        // typed into and mistaken for something the operator actually reads.
+        const VALUELESS_OPERATORS = ['empty', 'not_empty'];
+        const toggleFilterValue = function ($row) {
+            const operator = $row.find('.soc-filter-operator').val();
+            $row.find('.soc-filter-value').toggle(!VALUELESS_OPERATORS.includes(operator));
+        };
+
+        $(document).on('change', '.soc-filter-operator', function () {
+            toggleFilterValue($(this).closest('.soc-filters-row'));
+        });
+
+        $('.soc-filters-row').each(function () {
+            toggleFilterValue($(this));
+        });
+
         // Add a row by cloning the shared <template>.
         $(document).on('click', '.soc-filter-add-row', function () {
             const $tbody = $(this).closest('.soc-section').find('.soc-filters-rows');
@@ -587,6 +603,7 @@
             const $newRow = $(template.content.cloneNode(true)).find('.soc-filters-row');
 
             $tbody.append($newRow);
+            toggleFilterValue($newRow);
         });
 
         // Remove a row.

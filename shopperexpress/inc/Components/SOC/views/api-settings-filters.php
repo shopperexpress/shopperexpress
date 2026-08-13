@@ -51,7 +51,14 @@ $render_filter_row = function ( array $row ) {
 				<?php endforeach; ?>
 			</select>
 		</td>
-		<td><input type="text" class="soc-filter-value regular-text" value="<?php echo esc_attr( $row['value'] ); ?>" /></td>
+		<td>
+			<input
+				type="text"
+				class="soc-filter-value regular-text"
+				value="<?php echo esc_attr( $row['value'] ); ?>"
+				<?php echo in_array( $row['operator'], Api_Settings::VALUELESS_OPERATORS, true ) ? 'style="display:none"' : ''; ?>
+			/>
+		</td>
 		<td>
 			<button type="button" class="button button-small soc-filter-remove-row" aria-label="<?php esc_attr_e( 'Remove row', 'shopperexpress' ); ?>">
 				&times;

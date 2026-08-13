@@ -1977,6 +1977,27 @@
             "rows_per_page": 20,
             "sub_fields": [
                 {
+                    "key": "field_690f1a2b3c4d5",
+                    "label": "Template Name",
+                    "name": "template_name",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "Stable identifier for this template — used to select it per-form in the WPForms builder. Give it a unique name (e.g. \"Store 1 - Standard\") and avoid renaming it later, since forms reference templates by this name, not by row position.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "e.g. Store 1 - Standard",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_65148a3b7d3b6"
+                },
+                {
                     "key": "field_6514900dc1852",
                     "label": "Subject",
                     "name": "subject",

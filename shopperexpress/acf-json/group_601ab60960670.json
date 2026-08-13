@@ -3720,7 +3720,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m\/d\/Y",
+                                    "display_format": "m/d/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -3740,7 +3740,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m\/d\/Y",
+                                    "display_format": "m/d/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -3890,7 +3890,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m\/d\/Y",
+                                            "display_format": "m/d/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -3909,7 +3909,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m\/d\/Y",
+                                            "display_format": "m/d/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -4718,7 +4718,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d\/m\/Y",
+                                    "display_format": "d/m/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -4739,7 +4739,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d\/m\/Y",
+                                    "display_format": "d/m/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -5078,7 +5078,7 @@
                                             },
                                             "default_value": "",
                                             "placeholder": "",
-                                            "mode": "text\/html",
+                                            "mode": "text/html",
                                             "lines": 1,
                                             "indent_unit": 4,
                                             "maxlength": "",
@@ -5470,7 +5470,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -5625,7 +5625,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6419,7 +6419,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6487,7 +6487,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6659,7 +6659,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text\/html",
+                                    "mode": "text/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -7029,7 +7029,7 @@
                                                             },
                                                             "default_value": "",
                                                             "placeholder": "",
-                                                            "mode": "text\/html",
+                                                            "mode": "text/html",
                                                             "lines": 1,
                                                             "indent_unit": 4,
                                                             "maxlength": "",
@@ -7198,6 +7198,263 @@
                     "acfe_flexible_settings_size": false,
                     "acfe_flexible_modal_edit_size": false,
                     "acfe_flexible_category": false
+                },
+                "layout_9a1b2c3d4e000": {
+                    "key": "layout_9a1b2c3d4e000",
+                    "name": "team-section",
+                    "label": "Team Section",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_9a1b2c3d4e001",
+                            "label": "Heading",
+                            "name": "heading",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Meet Our Team",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e002",
+                            "label": "Description",
+                            "name": "description",
+                            "aria_label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": 4,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e003",
+                            "label": "Members",
+                            "name": "members",
+                            "aria_label": "",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_9a1b2c3d4e005",
+                            "button_label": "Add Team Member",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_9a1b2c3d4e004",
+                                    "label": "Photo",
+                                    "name": "photo",
+                                    "aria_label": "",
+                                    "type": "image",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "id",
+                                    "library": "all",
+                                    "min_width": "",
+                                    "min_height": "",
+                                    "min_size": "",
+                                    "max_width": "",
+                                    "max_height": "",
+                                    "max_size": "",
+                                    "mime_types": "",
+                                    "preview_size": "medium",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                },
+                                {
+                                    "key": "field_9a1b2c3d4e005",
+                                    "label": "Name",
+                                    "name": "name",
+                                    "aria_label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 1,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                },
+                                {
+                                    "key": "field_9a1b2c3d4e006",
+                                    "label": "Position",
+                                    "name": "position",
+                                    "aria_label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                },
+                                {
+                                    "key": "field_9a1b2c3d4e007",
+                                    "label": "Phone",
+                                    "name": "phone",
+                                    "aria_label": "",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "(908) 753-1500",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                },
+                                {
+                                    "key": "field_9a1b2c3d4e008",
+                                    "label": "Email",
+                                    "name": "email",
+                                    "aria_label": "",
+                                    "type": "email",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "50",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                },
+                                {
+                                    "key": "field_9a1b2c3d4e009",
+                                    "label": "Category",
+                                    "name": "category",
+                                    "aria_label": "",
+                                    "type": "text",
+                                    "instructions": "Used to build the filter buttons above the grid (e.g. Management, Sales & Finance, In Memoriam).",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9a1b2c3d4e003"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e010",
+                            "label": "Footer Heading",
+                            "name": "footer_heading",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Join Our Team",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e011",
+                            "label": "Footer Button Text",
+                            "name": "footer_button_text",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "See Job Openings",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e012",
+                            "label": "Footer Button URL",
+                            "name": "footer_button_url",
+                            "aria_label": "",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array"
+                        }
+                    ]
                 }
             },
             "min": "",
@@ -7240,7 +7497,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "pages\/template-flexible.php"
+                "value": "pages/template-flexible.php"
             }
         ]
     ],
@@ -7265,5 +7522,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1779357649
+    "modified": 1786626202
 }
