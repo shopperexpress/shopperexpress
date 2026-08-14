@@ -264,7 +264,7 @@ class Scripts implements Theme_Component {
 		);
 		wp_enqueue_script(
 			'shopperexpress/google-map',
-			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker&loading=async&callback=initCustomMap&libraries=places',
+			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker,places&loading=async&callback=initCustomMap',
 			array( 'jquery' ),
 			$theme_version,
 			false
@@ -273,11 +273,11 @@ class Scripts implements Theme_Component {
 			'shopperexpress/jquery',
 			'ajax',
 			array(
-				'admin'              => admin_url( 'admin-ajax.php' ),
-				'request'            => ! empty( $_GET ) ? $_GET : '',
-				'nonce'              => wp_create_nonce( 'shopperexpress_nonce' ),
-				'adf_lead_nonce'     => wp_create_nonce( 'submit_adf_lead' ),
-				'api_mode'           => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
+				'admin'               => admin_url( 'admin-ajax.php' ),
+				'request'             => ! empty( $_GET ) ? $_GET : '',
+				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
+				'adf_lead_nonce'      => wp_create_nonce( 'submit_adf_lead' ),
+				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
 				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
 			)
 		);
