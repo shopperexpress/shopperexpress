@@ -7455,6 +7455,114 @@
                             "return_format": "array"
                         }
                     ]
+                },
+                "layout_9b0c1d2e3f000": {
+                    "key": "layout_9b0c1d2e3f000",
+                    "name": "reviews-section",
+                    "label": "Reviews Section",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_9b0c1d2e3f001",
+                            "label": "Heading",
+                            "name": "heading",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Google Reviews",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9b0c1d2e3f002",
+                            "label": "Description",
+                            "name": "description",
+                            "aria_label": "",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "basic",
+                            "media_upload": 0,
+                            "delay": 0
+                        },
+                        {
+                            "key": "field_9b0c1d2e3f003",
+                            "label": "Layout Style",
+                            "name": "layout_style",
+                            "aria_label": "",
+                            "type": "button_group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "list": "List",
+                                "slider": "Slider"
+                            },
+                            "default_value": "list",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "layout": "horizontal"
+                        },
+                        {
+                            "key": "field_9b0c1d2e3f004",
+                            "label": "CTA Button Text",
+                            "name": "cta_text",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Review us on Google",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9b0c1d2e3f005",
+                            "label": "CTA Button URL",
+                            "name": "cta_url",
+                            "aria_label": "",
+                            "type": "url",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": ""
+                        }
+                    ]
                 }
             },
             "min": "",
