@@ -21,6 +21,7 @@ use App\Components\SOC\Modules\Lead_Delivery;
 use App\Components\SOC\Modules\VDR_Requests;
 use App\Components\SOC\Modules\Json_Ld_Settings;
 use App\Components\SOC\Modules\Google_Reviews;
+use App\Components\SOC\Modules\AI_Vdp_Log;
 
 /**
  * SOC Component
@@ -74,6 +75,7 @@ class SOC implements Theme_Component {
 			new VDR_Requests(),
 			new Json_Ld_Settings(),
 			new Google_Reviews(),
+			new AI_Vdp_Log(),
 		);
 
 		foreach ( $module_classes as $module ) {

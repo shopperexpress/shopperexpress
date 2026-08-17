@@ -104,6 +104,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'App\\Components\\Gutenberg\\Gutenberg_Color_Palette' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-gutenberg-color-palette.php',
         'App\\Components\\Gutenberg\\Register_Gutenberg_Blocks' => __DIR__ . '/../..' . '/inc/Components/Gutenberg/class-register-gutenberg-blocks.php',
         'App\\Components\\SOC\\Contracts\\SOC_Module' => __DIR__ . '/../..' . '/inc/Components/SOC/Contracts/interface-soc-module.php',
+        'App\\Components\\SOC\\Modules\\AI_Vdp_Log' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-ai-vdp-log.php',
         'App\\Components\\SOC\\Modules\\Api_Health' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-api-health.php',
         'App\\Components\\SOC\\Modules\\Api_Settings' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-api-settings.php',
         'App\\Components\\SOC\\Modules\\Cache_Manager' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-cache-manager.php',

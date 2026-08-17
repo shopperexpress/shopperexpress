@@ -154,9 +154,11 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									if ( ! empty( $onclick ) ) :
 										?>
 										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="desktop-button" style="color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;"><?php echo esc_html( $desktop_button_text ); ?></a>
-							</div>
 									<?php
 							endif;
+							?>
+							</div>
+							<?php
 						endif;
 					elseif ( $layout == 'button_2' ) :
 						if ( have_rows( 'buttons' ) ) :

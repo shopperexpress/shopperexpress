@@ -23,6 +23,7 @@ class ACF implements Theme_Component {
 
 		add_action( 'after_setup_theme', array( $this, 'maybe_create_lead_log_table' ) );
 		add_action( 'after_setup_theme', array( $this, 'maybe_create_vdr_log_table' ) );
+		add_action( 'after_setup_theme', array( $this, 'maybe_create_ai_vdp_log_table' ) );
 
 		add_action(
 			'acf/init',
@@ -133,6 +134,43 @@ class ACF implements Theme_Component {
 		dbDelta( $sql );
 
 		update_option( 'vdr_log_table_version', self::VDR_LOG_TABLE_VERSION );
+	}
+
+	const AI_VDP_LOG_TABLE_VERSION = 1;
+
+	public function maybe_create_ai_vdp_log_table(): void {
+		global $wpdb;
+
+		$table           = $wpdb->prefix . 'ai_vdp_log';
+		$current_version = (int) get_option( 'ai_vdp_log_table_version', 0 );
+
+		if ( $current_version >= self::AI_VDP_LOG_TABLE_VERSION ) {
+			return;
+		}
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+		$sql = "CREATE TABLE `{$table}` (
+			id         bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			logged_at  datetime            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			post_id    bigint(20) UNSIGNED NOT NULL DEFAULT 0,
+			post_type  varchar(30)         NOT NULL DEFAULT '',
+			vin        varchar(17)         NOT NULL DEFAULT '',
+			vehicle    varchar(255)        NOT NULL DEFAULT '',
+			status     enum('success','error') NOT NULL DEFAULT 'error',
+			reason     varchar(500)        NOT NULL DEFAULT '',
+			trigger_source varchar(30)     NOT NULL DEFAULT '',
+			PRIMARY KEY (id),
+			KEY post_id (post_id),
+			KEY logged_at (logged_at),
+			KEY status (status)
+		) {$charset_collate};";
+
+		dbDelta( $sql );
+
+		update_option( 'ai_vdp_log_table_version', self::AI_VDP_LOG_TABLE_VERSION );
 	}
 
 	/**

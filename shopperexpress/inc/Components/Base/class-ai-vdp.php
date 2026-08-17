@@ -233,7 +233,7 @@ class AI_VDP implements Theme_Component {
 			return;
 		}
 
-		$result = $this->process_post( $post_id );
+		$result = $this->process_post( $post_id, false, 'acf_save_post' );
 
 		if ( is_wp_error( $result ) ) {
 			$this->log( sprintf( 'Post #%d: on_acf_save_post generation failed — %s', $post_id, $result->get_error_message() ) );
@@ -277,18 +277,19 @@ class AI_VDP implements Theme_Component {
 		$this->log( sprintf( 'Found %d %s posts without AI descriptions.', count( $post_ids ), $post_type ) );
 
 		foreach ( $post_ids as $post_id ) {
-			$this->process_post( (int) $post_id );
+			$this->process_post( (int) $post_id, false, 'import_batch' );
 		}
 	}
 
 	/**
 	 * Core processor: collect → validate → generate → store.
 	 *
-	 * @param int  $post_id Post ID to process.
-	 * @param bool $force   When true, regenerate even if a description already exists.
+	 * @param int    $post_id Post ID to process.
+	 * @param bool   $force   When true, regenerate even if a description already exists.
+	 * @param string $trigger Where this call originated from (for the SOC log table).
 	 * @return string|\WP_Error Generated HTML on success, WP_Error on failure.
 	 */
-	public function process_post( int $post_id, bool $force = false ): string|\WP_Error {
+	public function process_post( int $post_id, bool $force = false, string $trigger = 'manual' ): string|\WP_Error {
 		// Return cached value when not forcing a regeneration.
 		if ( ! $force ) {
 			$cached = get_field( self::FIELD_KEY, $post_id );
@@ -301,10 +302,12 @@ class AI_VDP implements Theme_Component {
 		$post_type = get_post_type( $post_id );
 
 		if ( ! in_array( $post_type, self::SUPPORTED_TYPES, true ) ) {
-			return new \WP_Error(
+			$error = new \WP_Error(
 				'unsupported_type',
 				sprintf( "Post type '%s' is not supported for AI VDP generation.", $post_type )
 			);
+			$this->log_db( $post_id, (string) $post_type, array(), 'error', $error->get_error_message(), $trigger );
+			return $error;
 		}
 
 		$vehicle_data = $this->get_vehicle_data( $post_id );
@@ -314,10 +317,12 @@ class AI_VDP implements Theme_Component {
 			if ( empty( $vehicle_data[ $field ] ) ) {
 				$this->log( sprintf( 'Post #%d: skipped — required field "%s" is empty.', $post_id, $field ) );
 
-				return new \WP_Error(
+				$error = new \WP_Error(
 					'missing_required_field',
 					sprintf( "Required field '%s' is empty for post #%d.", $field, $post_id )
 				);
+				$this->log_db( $post_id, $post_type, $vehicle_data, 'error', $error->get_error_message(), $trigger );
+				return $error;
 			}
 		}
 
@@ -325,15 +330,20 @@ class AI_VDP implements Theme_Component {
 
 		if ( is_wp_error( $html ) ) {
 			$this->log( sprintf( 'Post #%d: API error — %s', $post_id, $html->get_error_message() ) );
+			$this->log_db( $post_id, $post_type, $vehicle_data, 'error', $html->get_error_message(), $trigger );
 			return $html;
 		}
 
 		if ( empty( $html ) ) {
-			return new \WP_Error( 'empty_response', 'AI returned an empty response.' );
+			$error = new \WP_Error( 'empty_response', 'AI returned an empty response.' );
+			$this->log_db( $post_id, $post_type, $vehicle_data, 'error', $error->get_error_message(), $trigger );
+			return $error;
 		}
 
 		update_field( self::FIELD_KEY, $html, $post_id );
 		update_post_meta( $post_id, self::META_KEY, $html );
+
+		$this->log_db( $post_id, $post_type, $vehicle_data, 'success', '', $trigger );
 
 		return $html;
 	}
@@ -619,5 +629,55 @@ class AI_VDP implements Theme_Component {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			error_log( '[AI_VDP] ' . $message );
 		}
+	}
+
+	/**
+	 * Record a generation attempt in the `{prefix}_ai_vdp_log` table so failures
+	 * are visible in Operation Center → AI VDP Log without needing WP_DEBUG_LOG.
+	 *
+	 * @param int                    $post_id      Post ID being processed.
+	 * @param string                 $post_type    Post type slug.
+	 * @param array<string, string>  $vehicle_data Vehicle attributes (for VIN/label).
+	 * @param string                 $status       'success' or 'error'.
+	 * @param string                 $reason       Error message (empty on success).
+	 * @param string                 $trigger      Origin of the call: acf_save_post|import_batch|manual.
+	 * @return void
+	 */
+	private function log_db( int $post_id, string $post_type, array $vehicle_data, string $status, string $reason, string $trigger ): void {
+		global $wpdb;
+
+		$vin = (string) get_field( 'vin_number', $post_id );
+		if ( empty( $vin ) ) {
+			$vin = (string) get_post_meta( $post_id, 'vin_number', true );
+		}
+
+		$vehicle = trim(
+			implode(
+				' ',
+				array_filter(
+					array(
+						$vehicle_data['year'] ?? '',
+						$vehicle_data['make'] ?? '',
+						$vehicle_data['model'] ?? '',
+						$vehicle_data['trim'] ?? '',
+					)
+				)
+			)
+		);
+
+		$wpdb->insert(
+			$wpdb->prefix . 'ai_vdp_log',
+			array(
+				'logged_at'      => current_time( 'mysql' ),
+				'post_id'        => $post_id,
+				'post_type'      => $post_type,
+				'vin'            => $vin,
+				'vehicle'        => $vehicle,
+				'status'         => 'success' === $status ? 'success' : 'error',
+				'reason'         => mb_substr( $reason, 0, 500 ),
+				'trigger_source' => $trigger,
+			),
+			array( '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s' )
+		);
 	}
 }

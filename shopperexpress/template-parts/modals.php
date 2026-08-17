@@ -46,9 +46,12 @@ elseif ( have_rows( 'features_options' ) ) :
 			the_row();
 			$text = get_sub_field( 'text' );
 			if ( $text ) :
-				?>
-				<li><?php echo $text; ?></li>
-				<?php
+				$text_items = strpos( $text, ';' ) !== false ? array_filter( array_map( 'trim', explode( ';', $text ) ) ) : array( $text );
+				foreach ( $text_items as $text_item ) :
+					?>
+					<li><?php echo $text_item; ?></li>
+					<?php
+				endforeach;
 			endif;
 		endwhile;
 		?>

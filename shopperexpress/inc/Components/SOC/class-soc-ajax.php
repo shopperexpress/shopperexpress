@@ -67,6 +67,8 @@ class SOC_Ajax {
 		'soc_lead_log_filter'         => 'handle_lead_log_filter',
 		// VDR Requests.
 		'soc_vdr_log_filter'          => 'handle_vdr_log_filter',
+		// AI VDP Log.
+		'soc_ai_vdp_log_filter'       => 'handle_ai_vdp_log_filter',
 		// JSON-LD Schema Builder.
 		'soc_json_ld_save'            => 'handle_json_ld_save',
 		'soc_json_ld_preview'         => 'handle_json_ld_preview',
@@ -919,6 +921,30 @@ class SOC_Ajax {
 
 		ob_start();
 		require get_template_directory() . '/inc/Components/SOC/views/vdr-requests-table.php';
+		$html = ob_get_clean();
+
+		SOC_Response::success( array( 'html' => $html ) );
+	}
+
+	/**
+	 * Return a filtered/paginated HTML fragment of the AI VDP generation log table.
+	 *
+	 * Expected POST: status (all|success|error), page (int).
+	 */
+	private function handle_ai_vdp_log_filter(): void {
+		$status = sanitize_key( $_POST['status'] ?? 'all' );
+		$page   = max( 1, (int) ( $_POST['page'] ?? 1 ) );
+
+		$module = $this->modules['ai-vdp-log'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'AI VDP Log module not available.' );
+		}
+
+		$logs = $module->fetch_logs( $status, $page );
+
+		ob_start();
+		require get_template_directory() . '/inc/Components/SOC/views/ai-vdp-log-table.php';
 		$html = ob_get_clean();
 
 		SOC_Response::success( array( 'html' => $html ) );

@@ -92,6 +92,10 @@
   }
 }
 
+#page-container .review-section .widget-review__head a {
+  color: $white;
+}
+
 .widget-review {
   &__head {
     background-color: #f8f8f8;
@@ -124,10 +128,6 @@
       @include media('>=tablet') {
         justify-content: flex-start;
       }
-    }
-
-    a {
-      color: $white;
     }
 
     img {
