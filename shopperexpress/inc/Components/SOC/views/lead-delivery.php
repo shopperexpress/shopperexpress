@@ -12,12 +12,11 @@
  *   $data['timeout']            int
  *   $data['secret_key_masked']  string  masked value or ''
  *   $data['site_name']          string
- *   $data['provider_source']    string  ADF <id source> / <service> value (default 'shopperexpress')
  *   $data['notify_admin']       bool
  *   $data['notify_email']       string
  *   $data['max_retries']        int
  *   $data['dedup_minutes']      int
- *   $data['wpforms_ids']        string  comma-separated form IDs
+ *   $data['wpforms_form_ids']   string  comma-separated WP Forms IDs
  *   $data['logs']               array   {rows, total, per_page, page}
  *   $data['stats']              array   {total_24h, success_24h, failed_24h, total_7d, failed_7d}
  */
@@ -112,17 +111,6 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					<p class="description"><?php esc_html_e( 'Included as dealer_id in every ADF-XML API payload.', 'shopperexpress' ); ?></p>
 				</td>
 			</tr>
-			<tr>
-				<th><?php esc_html_e( 'Provider Source', 'shopperexpress' ); ?></th>
-				<td>
-					<input type="text"
-						id="soc-lead-provider-source"
-						class="regular-text"
-						value="<?php echo esc_attr( $data['provider_source'] ?? 'shopperexpress' ); ?>"
-						placeholder="shopperexpress">
-					<p class="description"><?php esc_html_e( 'Sent as the ADF-XML <id source> / <service> value on every lead (email and API). Set this to the vendor identifier your OEM/lead partner (e.g. Honda) has registered for this dealer, if "shopperexpress" is not accepted.', 'shopperexpress' ); ?></p>
-				</td>
-			</tr>
 			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
 				<th><?php esc_html_e( 'API Key (X-API-Key)', 'shopperexpress' ); ?></th>
 				<td>
@@ -153,6 +141,17 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 						<input type="checkbox" id="soc-lead-fallback" <?php checked( $data['fallback_email'] ?? false ); ?>>
 						<span class="soc-toggle__slider"></span>
 					</label>
+				</td>
+			</tr>
+			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
+				<th><?php esc_html_e( 'WP Forms — ADF Form IDs', 'shopperexpress' ); ?></th>
+				<td>
+					<input type="text"
+						id="soc-lead-wpforms-ids"
+						class="regular-text"
+						value="<?php echo esc_attr( $data['wpforms_form_ids'] ?? '' ); ?>"
+						placeholder="12, 45, Contact Us">
+					<p class="description"><?php esc_html_e( 'Comma-separated WP Forms IDs and/or exact form names allowed to send leads via the API when Delivery Method is API or Both. Matches by form_id if the webhook sends one, otherwise by Form_Name (already sent by every existing webhook) — no webhook reconfiguration required. Leave empty to allow all forms (no restriction). Forms not listed here still deliver via email as before; their leads are simply never sent to the API endpoint.', 'shopperexpress' ); ?></p>
 				</td>
 			</tr>
 			<tr class="soc-lead-api-row" <?php echo $show_api ? '' : 'style="display:none"'; ?>>
@@ -190,40 +189,6 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 					<input type="number" id="soc-lead-dedup" class="small-text"
 						value="<?php echo esc_attr( $data['dedup_minutes'] ?? 0 ); ?>" min="0" max="1440">
 					<p class="description"><?php esc_html_e( 'Block re-submission of the same email+phone within this many minutes. 0 = disabled.', 'shopperexpress' ); ?></p>
-				</td>
-			</tr>
-
-			<!-- WP Forms integration -->
-			<tr>
-				<th><?php esc_html_e( 'WP Forms — ADF Form IDs', 'shopperexpress' ); ?></th>
-				<td>
-					<input type="text" id="soc-lead-wpforms-ids" class="regular-text"
-						value="<?php echo esc_attr( $data['wpforms_ids'] ?? '' ); ?>"
-						placeholder="123, 456:Store 1 - Standard, 789">
-					<p class="description">
-						<?php esc_html_e( 'Comma-separated WP Forms IDs whose submissions should trigger ADF delivery.', 'shopperexpress' ); ?>
-						<?php esc_html_e( 'Optionally append ":Template Name" to a form ID to use a specific row from the ADF Templates repeater (Theme Options → Email Notification) for that form — e.g. "456:Store 1 - Standard". A bare form ID (no ":") keeps using the default ADF structure.', 'shopperexpress' ); ?>
-					</p>
-					<?php
-					$adf_template_names = array();
-					while ( have_rows( 'adf_templates', 'options' ) ) :
-						the_row();
-						$name = trim( (string) get_sub_field( 'template_name' ) );
-						if ( '' !== $name ) {
-							$adf_template_names[] = $name;
-						}
-					endwhile;
-					?>
-					<?php if ( ! empty( $adf_template_names ) ) : ?>
-						<p class="description">
-							<?php esc_html_e( 'Available template names:', 'shopperexpress' ); ?>
-							<?php echo esc_html( implode( ', ', $adf_template_names ) ); ?>
-						</p>
-					<?php else : ?>
-						<p class="description">
-							<?php esc_html_e( 'No named templates yet — give a row in the ADF Templates repeater a "Template Name" to make it selectable here.', 'shopperexpress' ); ?>
-						</p>
-					<?php endif; ?>
 				</td>
 			</tr>
 

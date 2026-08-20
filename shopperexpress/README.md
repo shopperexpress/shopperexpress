@@ -99,7 +99,7 @@ Leads submitted via WP Forms or direct AJAX can be delivered by **email** (legac
 ### How it works
 
 1. A lead form is submitted (WP Forms or AJAX action `submit_adf_lead` / `adf`)
-2. `wps_build_adf_xml()` builds the ADFXML string
+2. `wps_render_adf_template()` (with a template from `wps_resolve_adf_template()`) builds the ADFXML string
 3. `wps_dispatch_adf()` checks `adf_delivery_method` option:
    - **email** → `wps_send_adf_email()` → `wp_mail()` to configured recipients
    - **api** → `ADF_Api_Client::send()` → `POST` to Intice IO endpoint
@@ -129,7 +129,9 @@ Authentication: `Authorization: Bearer {secret_key}` (key stored AES-256-CBC enc
 
 ### WP Forms integration
 
-Set comma-separated WP Forms IDs in SOC → Lead Delivery → "WP Forms — ADF Form IDs". Submissions for those forms automatically trigger ADF delivery. Field mapping is by WP Forms field type (`name`, `email`, `phone`, `textarea`/`text` by label).
+WP Forms submissions reach ADF through per-form **Webhook** notifications (WP Forms → form → Settings → Notifications → Webhooks add-on) posting to `admin-ajax.php?action=adf`, handled by `Ajax::adf_action()`.
+
+Set a comma-separated whitelist in SOC → Lead Delivery → "WP Forms — ADF Form IDs" — entries can be numeric WP Forms IDs and/or exact form names. Matching is by `form_id` when the webhook sends one, otherwise by `Form_Name` (already present in every existing webhook payload), so no webhook reconfiguration is required. Only whitelisted forms are allowed to use the **API** leg when Delivery Method is `api`/`both` — everything else about the configured delivery method is unchanged. Forms not in the list still deliver by email as before; their leads are simply never sent to the API endpoint. Leave the field empty to not restrict anything (default).
 
 ### Lead log columns
 
@@ -141,7 +143,7 @@ Set comma-separated WP Forms IDs in SOC → Lead Delivery → "WP Forms — ADF 
 
 ```
 inc/
-  theme-functions.php                        # wps_build_adf_xml, wps_dispatch_adf, WP Forms hook
+  theme-functions.php                        # wps_render_adf_template, wps_dispatch_adf, WP Forms tracked-form-ID gate
   Components/
     class-theme.php                          # Component registry (DIC)
     Base/

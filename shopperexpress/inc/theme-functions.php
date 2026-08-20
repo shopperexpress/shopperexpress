@@ -146,68 +146,55 @@ add_shortcode(
 );
 
 /**
- * Build an ADFXML string from lead field data.
+ * Return the configured whitelist entries that are allowed to trigger ADF *API*
+ * delivery. Each entry may be either a WP Forms numeric form ID or an exact
+ * form name/title — both are supported so the feature works even for webhook
+ * notifications that don't (yet) pass a `form_id` body param.
  *
- * @param array $fields Associative array: first_name, last_name, email, phone, comments, zip.
- * @return string Complete ADFXML payload.
+ * @return string[] Trimmed, non-empty whitelist entries.
  */
-function wps_build_adf_xml( array $fields ): string {
-	$first_name = ! empty( $fields['first_name'] ) ? sanitize_text_field( $fields['first_name'] ) : '';
-	$last_name  = ! empty( $fields['last_name'] ) ? sanitize_text_field( $fields['last_name'] ) : '';
-	$email      = ! empty( $fields['email'] ) ? sanitize_email( $fields['email'] ) : '';
-	$phone      = ! empty( $fields['phone'] ) ? sanitize_text_field( $fields['phone'] ) : '';
-	$comments   = ! empty( $fields['comments'] ) ? wp_kses_post( $fields['comments'] ) : '';
-	$zip        = ! empty( $fields['zip'] ) ? sanitize_text_field( $fields['zip'] ) : '';
+function wps_get_adf_tracked_form_ids(): array {
+	$raw     = (string) get_option( 'adf_wpforms_form_ids', '' );
+	$entries = array_filter( array_map( 'trim', explode( ',', $raw ) ) );
+	return array_values( array_unique( $entries ) );
+}
 
-	$provider_source = sanitize_text_field( get_option( 'adf_provider_source', 'shopperexpress' ) );
+/**
+ * Whether a given WP Forms submission is allowed to send its lead via the ADF API.
+ *
+ * Matches against the whitelist by numeric form ID first (when the webhook was
+ * configured to send one), falling back to a case-insensitive match on the
+ * form name — which is already present in every existing webhook payload via
+ * the `Form_Name` field, so the whitelist works without touching WP Forms'
+ * webhook configuration.
+ *
+ * An empty whitelist means the feature hasn't been configured yet, so nothing is
+ * restricted (preserves existing behavior until the site owner opts in).
+ *
+ * @param string $form_id   Raw form ID from the incoming request (may be empty).
+ * @param string $form_name Form name/title from the incoming request (may be empty).
+ * @return bool
+ */
+function wps_is_adf_tracked_form( string $form_id, string $form_name = '' ): bool {
+	$tracked = wps_get_adf_tracked_form_ids();
 
-	return '<?xml version="1.0" encoding="utf-8"?>
-<?ADF version="1.0"?>
-<adf>
-	<prospect>
-		<id source="' . wps_esc_xml( $provider_source ) . '" sequence="1"></id>
-		<requestdate>' . gmdate( 'm-d-Y' ) . '</requestdate>
-		<customer>
-			<contact primarycontact="1">
-				<name part="first">' . wps_esc_xml( $first_name ) . '</name>
-				<name part="last">' . wps_esc_xml( $last_name ) . '</name>
-				<name part="full">' . wps_esc_xml( $first_name . ' ' . $last_name ) . '</name>
-				<email>' . wps_esc_xml( $email ) . '</email>
-				<phone time="day" type="voice">' . wps_esc_xml( $phone ) . '</phone>
-				<address>
-					<street line="1"></street>
-					<street line="2"></street>
-					<city></city>
-					<regioncode></regioncode>
-					<postalcode>' . wps_esc_xml( $zip ) . '</postalcode>
-					<country></country>
-				</address>
-			</contact>
-			<comments>' . wps_esc_xml( $comments ) . '</comments>
-		</customer>
-		<provider>
-			<name part="full">intice</name>
-			<service>' . wps_esc_xml( $provider_source ) . '</service>
-			<url>http://www.inticeinc.com</url>
-			<email>support@inticeinc.com</email>
-			<phone>855-747-7770</phone>
-			<contact primarycontact="1">
-				<name part="full">Intice Inc</name>
-				<email>support@inticeinc.com</email>
-				<phone time="day" type="voice">855-747-7770</phone>
-				<phone time="day" type="fax">888-220-2913</phone>
-				<address>
-					<street line="1">2660 Cypress Ridge Blvd.</street>
-					<street line="2">Suite 103</street>
-					<city>Wesley Chapel</city>
-					<regioncode>FL</regioncode>
-					<postalcode>33544</postalcode>
-					<country>USA</country>
-				</address>
-			</contact>
-		</provider>
-	</prospect>
-</adf>';
+	if ( empty( $tracked ) ) {
+		return true;
+	}
+
+	if ( '' !== $form_id && in_array( $form_id, $tracked, true ) ) {
+		return true;
+	}
+
+	if ( '' !== $form_name ) {
+		foreach ( $tracked as $entry ) {
+			if ( 0 === strcasecmp( $entry, $form_name ) ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -215,7 +202,7 @@ function wps_build_adf_xml( array $fields ): string {
  *
  * Writes a row to {prefix}_adf_lead_log regardless of outcome.
  *
- * @param string $xml    ADFXML string produced by wps_build_adf_xml().
+ * @param string $xml    Rendered ADF template produced by wps_render_adf_template().
  * @param array  $fields Original lead fields (first_name, last_name, email, phone, form_name …).
  * @return array{success: bool, method: string, response_code: int, error_message: string}
  */
@@ -413,25 +400,28 @@ function wps_send_adf_email( string $xml, string $first_name, string $last_name 
 }
 
 /**
- * Backward-compatible wrapper — builds XML and dispatches via configured method.
+ * Backward-compatible wrapper — renders the configured ADF template and dispatches
+ * via the configured delivery method. No-op when no `adf_templates` row exists.
  *
  * @param array $fields Lead fields: first_name, last_name, email, phone, comments, zip.
  * @return void
  */
 function adf_email( $fields = array() ) {
-	$xml = wps_build_adf_xml( $fields );
-	wps_dispatch_adf( $xml, $fields );
-}
+	$template_row = wps_resolve_adf_template();
 
-function wps_esc_xml( $data ) {
-	return htmlspecialchars( $data, ENT_XML1 | ENT_COMPAT, 'UTF-8' );
+	if ( null === $template_row ) {
+		return;
+	}
+
+	$xml = wps_render_adf_template( $template_row['template'], $fields );
+
+	wps_dispatch_adf( $xml, $fields );
 }
 
 /**
  * Substitute {{token}} placeholders (and {{date}}) into an ADF template string.
  * Same substitution rules as the `adf_action()` ajax handler, factored out so
- * other callers (e.g. wps_wpforms_maybe_dispatch_adf()) can reuse a custom
- * `adf_templates` row instead of the hardcoded wps_build_adf_xml() structure.
+ * other callers can reuse an `adf_templates` row.
  *
  * @param string $template Raw template string (subject or XML body) containing {{token}} placeholders.
  * @param array  $tokens   Flat key => scalar value map. Keys are matched without the surrounding {{ }}.
@@ -476,35 +466,37 @@ function wps_get_adf_template_by_name( string $name ): ?array {
 }
 
 /**
- * Parse the `adf_wpforms_ids` option into a form_id => template_name map.
+ * Resolve which `adf_templates` (Theme Options) row a lead should render through.
  *
- * Backward-compatible with the original plain "123, 456, 789" format (each
- * entry maps to an empty template_name, meaning "use the default hardcoded
- * ADF structure" — unchanged behavior). New optional syntax per entry:
- * "123:Store 1 - Standard" selects a named row from the `adf_templates` repeater.
+ * Looks up an exact named template first, then falls back to the first
+ * configured row so callers that don't have (or care about) a specific
+ * template name still work. Returns null when the `adf_templates` repeater
+ * has no rows at all — callers must treat that as "nothing to send" rather
+ * than falling back to a hardcoded structure.
  *
- * @param string $raw Raw option value.
- * @return array<int, string> Map of WP Forms form ID => template_name ('' = default/unset).
+ * @param string $template_name Optional exact template_name to look up first.
+ * @return array{subject: string, template: string}|null
  */
-function wps_parse_adf_wpforms_ids( string $raw ): array {
-	$map = array();
-
-	foreach ( explode( ',', $raw ) as $entry ) {
-		$entry = trim( $entry );
-		if ( '' === $entry ) {
-			continue;
-		}
-
-		$parts    = explode( ':', $entry, 2 );
-		$form_id  = (int) trim( $parts[0] );
-		$template = isset( $parts[1] ) ? trim( $parts[1] ) : '';
-
-		if ( $form_id > 0 ) {
-			$map[ $form_id ] = $template;
+function wps_resolve_adf_template( string $template_name = '' ): ?array {
+	if ( '' !== $template_name ) {
+		$named = wps_get_adf_template_by_name( $template_name );
+		if ( null !== $named ) {
+			return $named;
 		}
 	}
 
-	return $map;
+	$default = null;
+
+	while ( have_rows( 'adf_templates', 'options' ) ) :
+		the_row();
+		$default = array(
+			'subject'  => (string) get_sub_field( 'subject' ),
+			'template' => (string) get_sub_field( 'template' ),
+		);
+		break;
+	endwhile;
+
+	return $default;
 }
 
 add_action(
@@ -528,112 +520,10 @@ add_action(
 			}
 		}
 
-		// ADF delivery: check if this form ID is in the configured ADF forms list.
-		wps_wpforms_maybe_dispatch_adf( $fields, $entry, $form_data );
 	},
 	10,
 	4
 );
-
-/**
- * Dispatch an ADF lead from a WP Forms submission if the form is configured for ADF delivery.
- *
- * Form IDs are stored in option `adf_wpforms_ids` as a comma-separated string.
- * Field mapping tries to extract lead data by WP Forms field type, then by label.
- *
- * @param array $fields    WP Forms field data.
- * @param array $entry     Form entry meta.
- * @param array $form_data Form configuration.
- * @return void
- */
-function wps_wpforms_maybe_dispatch_adf( array $fields, array $entry, array $form_data ): void {
-	$configured_ids_raw = get_option( 'adf_wpforms_ids', '' );
-	if ( '' === trim( $configured_ids_raw ) ) {
-		return;
-	}
-
-	$form_id      = (int) ( $form_data['id'] ?? 0 );
-	$template_map = wps_parse_adf_wpforms_ids( $configured_ids_raw );
-
-	if ( ! array_key_exists( $form_id, $template_map ) ) {
-		return;
-	}
-
-	$lead = array(
-		'first_name'  => '',
-		'last_name'   => '',
-		'email'       => '',
-		'phone'       => '',
-		'comments'    => '',
-		'zip'         => '',
-		'form_name'   => sanitize_text_field( $form_data['settings']['form_title'] ?? "WP Form #{$form_id}" ),
-		'lead_source' => wp_get_referer() ?: '',
-	);
-
-	foreach ( $fields as $field ) {
-		$type  = $field['type'] ?? '';
-		$label = strtolower( $field['label'] ?? '' );
-		$value = $field['value'] ?? '';
-
-		switch ( $type ) {
-			case 'name':
-				if ( isset( $field['first'] ) || isset( $field['last'] ) ) {
-					$lead['first_name'] = sanitize_text_field( $field['first'] ?? '' );
-					$lead['last_name']  = sanitize_text_field( $field['last'] ?? '' );
-				} else {
-					// Simple (single-input) Name field format: split on the last space.
-					$parts              = explode( ' ', trim( (string) $value ), 2 );
-					$lead['first_name'] = sanitize_text_field( $parts[0] ?? '' );
-					$lead['last_name']  = sanitize_text_field( $parts[1] ?? '' );
-				}
-				break;
-			case 'email':
-				if ( '' === $lead['email'] ) {
-					$lead['email'] = sanitize_email( $value );
-				}
-				break;
-			case 'phone':
-				if ( '' === $lead['phone'] ) {
-					$lead['phone'] = sanitize_text_field( $value );
-				}
-				break;
-			case 'textarea':
-			case 'text':
-				if ( str_contains( $label, 'comment' ) || str_contains( $label, 'message' ) || str_contains( $label, 'note' ) ) {
-					$lead['comments'] = wp_kses_post( $value );
-				}
-				if ( str_contains( $label, 'zip' ) || str_contains( $label, 'postal' ) ) {
-					$lead['zip'] = sanitize_text_field( $value );
-				}
-				// Fallback: if first_name still empty, try text field labelled "first name" / "name".
-				if ( '' === $lead['first_name'] && ( str_contains( $label, 'first' ) || 'name' === $label ) ) {
-					$lead['first_name'] = sanitize_text_field( $value );
-				}
-				if ( '' === $lead['last_name'] && str_contains( $label, 'last' ) ) {
-					$lead['last_name'] = sanitize_text_field( $value );
-				}
-				break;
-		}
-	}
-
-	// Require at minimum first name and email.
-	if ( '' === $lead['first_name'] || ! is_email( $lead['email'] ) ) {
-		return;
-	}
-
-	// If this form has a named ADF template configured, render that custom
-	// XML instead of the default hardcoded structure. Falls back to the
-	// original behavior when no template is set or the name doesn't match
-	// any row — existing forms with a bare form ID keep working unchanged.
-	$template_name = $template_map[ $form_id ];
-	$template_row  = '' !== $template_name ? wps_get_adf_template_by_name( $template_name ) : null;
-
-	$xml = null !== $template_row
-		? wps_render_adf_template( $template_row['template'], $lead )
-		: wps_build_adf_xml( $lead );
-
-	wps_dispatch_adf( $xml, $lead );
-}
 
 add_action(
 	'template_redirect',

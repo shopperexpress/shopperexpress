@@ -14,6 +14,17 @@ defined( 'ABSPATH' ) || exit; ?>
 	</h1>
 
 	<main class="soc-content" id="soc-panel" data-module="<?php echo esc_attr( $active_slug ); ?>">
+		<?php if ( isset( $group_tabs ) && count( $group_tabs ) > 1 ) : ?>
+			<nav class="soc-tabs nav-tab-wrapper">
+				<?php foreach ( $group_tabs as $tab_module ) : ?>
+					<a href="<?php echo esc_url( admin_url( 'admin.php?page=soc-' . $tab_module->get_slug() ) ); ?>"
+						class="nav-tab soc-tab<?php echo $tab_module->get_slug() === $active_slug ? ' nav-tab-active' : ''; ?>">
+						<span class="dashicons <?php echo esc_attr( $tab_module->get_icon() ); ?>"></span>
+						<?php echo esc_html( $tab_module->get_label() ); ?>
+					</a>
+				<?php endforeach; ?>
+			</nav>
+		<?php endif; ?>
 		<div class="soc-panel-header">
 			<h2>
 				<span class="dashicons <?php echo esc_attr( $module->get_icon() ); ?>"></span>

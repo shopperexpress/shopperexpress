@@ -81,27 +81,31 @@ $places_masked = $data['places_key_masked'] ?? '';
 			<tr>
 				<td style="width:180px;"><strong><?php esc_html_e( 'Account', 'shopperexpress' ); ?></strong></td>
 				<td>
-					<select id="soc-gr-account-select" class="regular-text">
-						<?php if ( $account_id ) : ?>
-							<option value="<?php echo esc_attr( $account_id ); ?>" selected><?php echo esc_html( $account_id ); ?></option>
-						<?php endif; ?>
-					</select>
-					<button type="button" id="soc-gr-load-accounts" class="button button-small" style="margin-left:8px;">
-						<?php esc_html_e( 'Load Accounts', 'shopperexpress' ); ?>
-					</button>
+					<div class="soc-gr-inline-field">
+						<select id="soc-gr-account-select" class="regular-text">
+							<?php if ( $account_id ) : ?>
+								<option value="<?php echo esc_attr( $account_id ); ?>" selected><?php echo esc_html( $account_id ); ?></option>
+							<?php endif; ?>
+						</select>
+						<button type="button" id="soc-gr-load-accounts" class="button button-small">
+							<?php esc_html_e( 'Load Accounts', 'shopperexpress' ); ?>
+						</button>
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td><strong><?php esc_html_e( 'Location', 'shopperexpress' ); ?></strong></td>
 				<td>
-					<select id="soc-gr-location-select" class="regular-text">
-						<?php if ( $location_id ) : ?>
-							<option value="<?php echo esc_attr( $location_id ); ?>" selected><?php echo esc_html( $location_id ); ?></option>
-						<?php endif; ?>
-					</select>
-					<button type="button" id="soc-gr-load-locations" class="button button-small" style="margin-left:8px;">
-						<?php esc_html_e( 'Load Locations', 'shopperexpress' ); ?>
-					</button>
+					<div class="soc-gr-inline-field">
+						<select id="soc-gr-location-select" class="regular-text">
+							<?php if ( $location_id ) : ?>
+								<option value="<?php echo esc_attr( $location_id ); ?>" selected><?php echo esc_html( $location_id ); ?></option>
+							<?php endif; ?>
+						</select>
+						<button type="button" id="soc-gr-load-locations" class="button button-small">
+							<?php esc_html_e( 'Load Locations', 'shopperexpress' ); ?>
+						</button>
+					</div>
 				</td>
 			</tr>
 		</table>

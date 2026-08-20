@@ -36,7 +36,6 @@ $status_badge = static function ( string $status ): string {
 			<th><?php esc_html_e( 'Date', 'shopperexpress' ); ?></th>
 			<th><?php esc_html_e( 'Site', 'shopperexpress' ); ?></th>
 			<th><?php esc_html_e( 'Form', 'shopperexpress' ); ?></th>
-			<th><?php esc_html_e( 'Source', 'shopperexpress' ); ?></th>
 			<th><?php esc_html_e( 'Name', 'shopperexpress' ); ?></th>
 			<th><?php esc_html_e( 'Email', 'shopperexpress' ); ?></th>
 			<th><?php esc_html_e( 'Phone', 'shopperexpress' ); ?></th>
@@ -53,12 +52,6 @@ $status_badge = static function ( string $status ): string {
 				<td><?php echo esc_html( $row['submitted_at'] ?? '' ); ?></td>
 				<td><?php echo esc_html( $row['site_name'] ?? '' ); ?></td>
 				<td><?php echo esc_html( $row['form_name'] ?? '' ); ?></td>
-				<td class="soc-lead-source-cell" title="<?php echo esc_attr( $row['lead_source'] ?? '' ); ?>">
-					<?php
-					$src = $row['lead_source'] ?? '';
-					echo esc_html( strlen( $src ) > 40 ? substr( $src, -40 ) : $src );
-					?>
-				</td>
 				<td><?php echo esc_html( trim( ( $row['first_name'] ?? '' ) . ' ' . ( $row['last_name'] ?? '' ) ) ); ?></td>
 				<td><?php echo esc_html( $row['email'] ?? '' ); ?></td>
 				<td><?php echo esc_html( $row['phone'] ?? '' ); ?></td>

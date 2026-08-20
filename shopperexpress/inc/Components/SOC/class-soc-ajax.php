@@ -779,12 +779,11 @@ class SOC_Ajax {
 		$timeout      = (int) ( $_POST['timeout'] ?? 10 );
 		$fallback     = ! empty( $_POST['fallback_email'] ) ? 1 : 0;
 		$site_name    = sanitize_text_field( wp_unslash( $_POST['site_name'] ?? '' ) );
-		$provider_src = sanitize_text_field( wp_unslash( $_POST['provider_source'] ?? '' ) );
 		$notify_admin = ! empty( $_POST['notify_admin'] ) ? 1 : 0;
 		$notify_email = sanitize_email( wp_unslash( $_POST['notify_email'] ?? '' ) );
 		$max_retries  = max( 0, min( 10, (int) ( $_POST['max_retries'] ?? 3 ) ) );
 		$dedup        = max( 0, (int) ( $_POST['dedup_minutes'] ?? 0 ) );
-		$wpforms_ids  = sanitize_text_field( wp_unslash( $_POST['wpforms_ids'] ?? '' ) );
+		$wpforms_ids  = sanitize_text_field( wp_unslash( $_POST['wpforms_form_ids'] ?? '' ) );
 
 		if ( ! in_array( $method, array( 'email', 'api', 'both' ), true ) ) {
 			SOC_Response::error( 'Invalid delivery method.' );
@@ -793,11 +792,10 @@ class SOC_Ajax {
 		update_option( 'adf_delivery_method', $method );
 		update_option( 'adf_api_fallback_email', $fallback );
 		update_option( 'adf_site_name', $site_name );
-		update_option( 'adf_provider_source', '' !== $provider_src ? $provider_src : 'shopperexpress' );
 		update_option( 'adf_notify_admin_on_failure', $notify_admin );
 		update_option( 'adf_max_retries', $max_retries );
 		update_option( 'adf_dedup_minutes', $dedup );
-		update_option( 'adf_wpforms_ids', $wpforms_ids );
+		update_option( 'adf_wpforms_form_ids', $wpforms_ids );
 
 		if ( is_email( $notify_email ) ) {
 			update_option( 'adf_notify_email', $notify_email );

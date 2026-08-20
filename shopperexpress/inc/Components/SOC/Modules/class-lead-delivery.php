@@ -78,12 +78,11 @@ class Lead_Delivery implements SOC_Module {
 			'timeout'           => (int) get_option( ADF_Api_Client::OPTION_TIMEOUT, 10 ),
 			'secret_key_masked' => $this->mask_secret_key(),
 			'site_name'         => get_option( 'adf_site_name', get_bloginfo( 'name' ) ),
-			'provider_source'   => get_option( 'adf_provider_source', 'shopperexpress' ),
 			'notify_admin'      => (bool) get_option( 'adf_notify_admin_on_failure', 0 ),
 			'notify_email'      => get_option( 'adf_notify_email', get_option( 'admin_email' ) ),
 			'max_retries'       => (int) get_option( 'adf_max_retries', 3 ),
 			'dedup_minutes'     => (int) get_option( 'adf_dedup_minutes', 0 ),
-			'wpforms_ids'       => get_option( 'adf_wpforms_ids', '' ),
+			'wpforms_form_ids'  => get_option( 'adf_wpforms_form_ids', '' ),
 			'logs'              => $this->fetch_logs(),
 			'stats'             => $this->fetch_stats(),
 		);

@@ -41,6 +41,24 @@ $soc-radius: 4px;
     overflow: hidden;
 }
 
+.soc-tabs.nav-tab-wrapper {
+    padding: 0 12px;
+    background: $soc-bg;
+    border-bottom: 1px solid $soc-border;
+
+    .soc-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        .dashicons {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
+
 .soc-panel-header {
     display: flex;
     align-items: center;
@@ -637,13 +655,22 @@ $soc-radius: 4px;
     }
 }
 
-.soc-lead-source-cell {
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 11px;
-    color: $soc-gray;
+.soc-gr-inline-field {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+
+    select.regular-text {
+        width: auto;
+        max-width: 260px;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .button {
+        flex: 0 0 auto;
+    }
 }
 
 .soc-lead-actions-cell {

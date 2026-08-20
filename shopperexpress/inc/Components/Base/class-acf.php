@@ -54,7 +54,7 @@ class ACF implements Theme_Component {
 	/**
 	 * Current schema version. Bump this when columns are added/changed.
 	 */
-	const ADF_LOG_TABLE_VERSION = 2;
+	const ADF_LOG_TABLE_VERSION = 3;
 
 	public function maybe_create_lead_log_table(): void {
 		global $wpdb;
@@ -81,7 +81,7 @@ class ACF implements Theme_Component {
 			last_name       varchar(100)         NOT NULL DEFAULT '',
 			email           varchar(255)         NOT NULL DEFAULT '',
 			phone           varchar(50)          NOT NULL DEFAULT '',
-			delivery_method enum('email','api')  NOT NULL DEFAULT 'email',
+			delivery_method enum('email','api','both')  NOT NULL DEFAULT 'email',
 			api_endpoint    varchar(500)         NOT NULL DEFAULT '',
 			response_code   smallint(6)          NOT NULL DEFAULT 0,
 			response_body   text                 NOT NULL,

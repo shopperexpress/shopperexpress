@@ -411,18 +411,73 @@ class Ajax implements Theme_Component {
 				$template = str_replace( '{{' . $index . '}}', $value, $template );
 			}
 
+			// Only forms in the "WP Forms — ADF Form IDs" whitelist (SOC → Lead Delivery)
+			// are allowed to trigger the *API* leg. An empty whitelist leaves everything
+			// exactly as it was before this check existed. Matches by form_id when the
+			// webhook sends one, otherwise falls back to Form_Name — which every existing
+			// webhook already sends — so no webhook reconfiguration is required.
+			$form_id    = sanitize_text_field( wp_unslash( $_REQUEST['form_id'] ?? '' ) );
+			$form_name  = sanitize_text_field( wp_unslash( $_REQUEST['Form_Name'] ?? '' ) );
+			$is_tracked = wps_is_adf_tracked_form( $form_id, $form_name );
+
 			if ( ! empty( $_REQUEST['delivery_address'] ) ) {
-				// Explicit delivery address bypasses the global delivery method setting.
-				wp_mail( $_REQUEST['delivery_address'], $subject, $template, array( 'content-type: text/plain' ) );
+				$adf_method = get_option( 'adf_delivery_method', 'email' );
+
+				// Downgrade api/both to email-only when this form isn't tracked — the
+				// configured delivery method itself is otherwise left untouched.
+				if ( ! $is_tracked && 'email' !== $adf_method ) {
+					$adf_method = 'email';
+				}
+
+				// Email leg — unchanged legacy behavior for 'email' and 'both' delivery methods.
+				if ( 'api' !== $adf_method ) {
+					wp_mail( $_REQUEST['delivery_address'], $subject, $template, array( 'content-type: text/plain' ) );
+				}
+
+				// API leg — reuse the existing wps_dispatch_adf() API path (same code that
+				// already sends/logs API leads elsewhere) for 'api' and 'both'. Force the
+				// method to 'api' for this one call so it never also fires its own email
+				// leg here — the email above already covers 'email' and 'both'.
+				if ( 'api' === $adf_method || 'both' === $adf_method ) {
+					$lead_fields = array(
+						'first_name'  => sanitize_text_field( $_REQUEST['first_name'] ?? '' ),
+						'last_name'   => sanitize_text_field( $_REQUEST['last_name'] ?? '' ),
+						'email'       => sanitize_email( $_REQUEST['email'] ?? '' ),
+						'phone'       => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
+						'form_name'   => sanitize_text_field( $_REQUEST['Form_Name'] ?? 'adf_action' ),
+						'lead_source' => sanitize_text_field( $_REQUEST['prospect_source'] ?? '' ),
+					);
+
+					$force_api = static function () {
+						return 'api';
+					};
+					add_filter( 'pre_option_adf_delivery_method', $force_api );
+					wps_dispatch_adf( $template, $lead_fields );
+					remove_filter( 'pre_option_adf_delivery_method', $force_api );
+				}
 			} else {
+				$adf_method = get_option( 'adf_delivery_method', 'email' );
+
+				if ( ! $is_tracked && ( 'api' === $adf_method || 'both' === $adf_method ) ) {
+					$force_email = static function () {
+						return 'email';
+					};
+					add_filter( 'pre_option_adf_delivery_method', $force_email );
+				}
+
 				$lead_fields = array(
-					'first_name' => sanitize_text_field( $_REQUEST['first_name'] ?? '' ),
-					'last_name'  => sanitize_text_field( $_REQUEST['last_name'] ?? '' ),
-					'email'      => sanitize_email( $_REQUEST['email'] ?? '' ),
-					'phone'      => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
-					'form_name'  => 'adf_action',
+					'first_name'  => sanitize_text_field( $_REQUEST['first_name'] ?? '' ),
+					'last_name'   => sanitize_text_field( $_REQUEST['last_name'] ?? '' ),
+					'email'       => sanitize_email( $_REQUEST['email'] ?? '' ),
+					'phone'       => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
+					'form_name'   => sanitize_text_field( $_REQUEST['Form_Name'] ?? 'adf_action' ),
+					'lead_source' => sanitize_text_field( $_REQUEST['prospect_source'] ?? '' ),
 				);
 				wps_dispatch_adf( $template, $lead_fields );
+
+				if ( isset( $force_email ) ) {
+					remove_filter( 'pre_option_adf_delivery_method', $force_email );
+				}
 			}
 
 			wp_send_json_success(
@@ -465,16 +520,23 @@ class Ajax implements Theme_Component {
 			wp_send_json_error( array( 'message' => 'Missing required fields.' ), 422 );
 		}
 
-		$xml    = wps_build_adf_xml(
-			array(
-				'first_name' => $first_name,
-				'last_name'  => $last_name,
-				'email'      => $email,
-				'phone'      => $phone,
-				'comments'   => sanitize_text_field( wp_unslash( $_POST['comments'] ?? '' ) ),
-				'zip'        => sanitize_text_field( wp_unslash( $_POST['zip'] ?? '' ) ),
-			)
+		$lead_fields = array(
+			'first_name' => $first_name,
+			'last_name'  => $last_name,
+			'email'      => $email,
+			'phone'      => $phone,
+			'comments'   => sanitize_text_field( wp_unslash( $_POST['comments'] ?? '' ) ),
+			'zip'        => sanitize_text_field( wp_unslash( $_POST['zip'] ?? '' ) ),
 		);
+
+		$template_row = wps_resolve_adf_template();
+
+		if ( null === $template_row ) {
+			wp_send_json_error( array( 'message' => 'No ADF template is configured.' ), 500 );
+		}
+
+		$xml = wps_render_adf_template( $template_row['template'], $lead_fields );
+
 		$result = wps_dispatch_adf(
 			$xml,
 			array(

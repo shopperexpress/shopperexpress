@@ -845,12 +845,11 @@
                     timeout         : parseInt( $('#soc-lead-timeout').val(), 10 ) || 10,
                     fallback_email  : $('#soc-lead-fallback').is(':checked') ? 1 : 0,
                     site_name       : $('#soc-lead-site-name').val().trim(),
-                    provider_source : $('#soc-lead-provider-source').val().trim(),
                     notify_admin    : $('#soc-lead-notify-admin').is(':checked') ? 1 : 0,
                     notify_email    : $('#soc-lead-notify-email').val().trim(),
                     max_retries     : parseInt( $('#soc-lead-max-retries').val(), 10 ) || 0,
                     dedup_minutes   : parseInt( $('#soc-lead-dedup').val(), 10 ) || 0,
-                    wpforms_ids     : $('#soc-lead-wpforms-ids').val().trim(),
+                    wpforms_form_ids: $('#soc-lead-wpforms-ids').val().trim(),
                 },
                 function (data) {
                     SOC.showSuccess('Settings saved.');
