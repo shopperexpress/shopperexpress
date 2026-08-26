@@ -50,6 +50,7 @@
 
 <?php
 get_template_part( 'template-parts/modals' );
+get_template_part( 'template-parts/compare' );
 get_template_part( 'template-parts/cookie', 'modal' );
 do_action( 'filter_modal' );
 wp_footer();

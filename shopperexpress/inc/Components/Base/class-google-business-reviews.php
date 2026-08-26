@@ -357,6 +357,7 @@ class Google_Business_Reviews implements Theme_Component {
 					),
 					'page_token' => array( 'required' => false ),
 					'lang'       => array( 'required' => false ),
+					'keyword'    => array( 'required' => false ),
 				),
 			)
 		);
@@ -404,15 +405,16 @@ class Google_Business_Reviews implements Theme_Component {
 
 		$page_token = sanitize_text_field( (string) $request->get_param( 'page_token' ) );
 		$lang       = sanitize_text_field( (string) $request->get_param( 'lang' ) );
+		$keyword    = sanitize_text_field( (string) $request->get_param( 'keyword' ) );
 
-		$cache_key = 'google_reviews_data_' . md5( $place_id . '|' . $page_token . '|' . $lang );
+		$cache_key = 'google_reviews_data_' . md5( $place_id . '|' . $page_token . '|' . $lang . '|' . $keyword );
 
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			return rest_ensure_response( $cached );
 		}
 
-		$data = $this->get_reviews( $place_id, $page_token, $lang );
+		$data = $this->get_reviews( $place_id, $page_token, $lang, $keyword );
 
 		if ( is_wp_error( $data ) ) {
 			return new \WP_REST_Response( array( 'error' => $data->get_error_message() ), 502 );
@@ -533,9 +535,11 @@ class Google_Business_Reviews implements Theme_Component {
 	 * @param string $place_id   Google Place ID (used for the fallback path and CTA links).
 	 * @param string $page_token Business Profile pagination token from a prior response.
 	 * @param string $lang       BCP-47 language code for the Places API fallback. Defaults to the site locale.
+	 * @param string $keyword    Optional comma-separated keyword(s) — only reviews whose text
+	 *                            contains at least one of them (case-insensitive) are returned.
 	 * @return array{source: string, reviews: array, average_rating: float, total_review_count: int, next_page_token?: string}|\WP_Error
 	 */
-	public function get_reviews( string $place_id, string $page_token = '', string $lang = '' ) {
+	public function get_reviews( string $place_id, string $page_token = '', string $lang = '', string $keyword = '' ) {
 		if ( ! preg_match( self::PLACE_ID_REGEX, $place_id ) ) {
 			return new \WP_Error( 'invalid_place_id', __( 'Invalid Google Place ID.', 'shopperexpress' ) );
 		}
@@ -552,28 +556,48 @@ class Google_Business_Reviews implements Theme_Component {
 			// average_rating/total_review_count are left untouched: those are
 			// Google's real aggregate stats for the business, not a count of
 			// what's displayed in the list below.
-			$data['reviews'] = $this->filter_reviews( $data['reviews'] );
+			$data['reviews'] = $this->filter_reviews( $data['reviews'], $keyword );
 		}
 
 		return $data;
 	}
 
 	/**
-	 * Keep only reviews that are 5 stars and have non-empty text.
+	 * Keep only reviews that are 5 stars, have non-empty text, and (when a
+	 * keyword filter is set) mention at least one of the given keywords.
 	 *
-	 * @param array $reviews Normalized review rows (see normalize_places_review()
-	 *                        / get_reviews_business_profile()).
+	 * @param array  $reviews Normalized review rows (see normalize_places_review()
+	 *                         / get_reviews_business_profile()).
+	 * @param string $keyword Optional comma-separated keyword(s), case-insensitive.
 	 * @return array
 	 */
-	private function filter_reviews( array $reviews ): array {
+	private function filter_reviews( array $reviews, string $keyword = '' ): array {
+		$keywords = array_values(
+			array_filter( array_map( 'trim', explode( ',', $keyword ) ) )
+		);
+
 		return array_values(
 			array_filter(
 				$reviews,
-				static function ( $review ) {
+				static function ( $review ) use ( $keywords ) {
 					$rating = (int) ( $review['rating'] ?? 0 );
 					$text   = trim( wp_strip_all_tags( (string) ( $review['text'] ?? '' ) ) );
 
-					return 5 === $rating && '' !== $text;
+					if ( 5 !== $rating || '' === $text ) {
+						return false;
+					}
+
+					if ( empty( $keywords ) ) {
+						return true;
+					}
+
+					foreach ( $keywords as $needle ) {
+						if ( false !== stripos( $text, $needle ) ) {
+							return true;
+						}
+					}
+
+					return false;
 				}
 			)
 		);

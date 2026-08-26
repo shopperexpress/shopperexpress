@@ -15,6 +15,11 @@ if ( \App\Components\Gutenberg\Block_Preview_Helper::render( $block ) ) {
 	return;
 }
 
+if ( $is_preview ) {
+	\App\Components\Gutenberg\Block_Preview_Helper::render( $block, true );
+	return;
+}
+
 $logos = array();
 if ( have_rows( 'logos' ) ) {
 	while ( have_rows( 'logos' ) ) {

@@ -53,6 +53,26 @@ function get_date_archive_link() {
 }
 
 /**
+ * Split a comma-separated team member category string into a clean array.
+ *
+ * Lets a single member belong to multiple filter groups (e.g. "Sales, Management").
+ *
+ * @param  string $category Raw category value, comma-separated.
+ * @return array
+ */
+function wps_team_split_categories( string $category ): array {
+	if ( '' === trim( $category ) ) {
+		return array();
+	}
+
+	return array_values(
+		array_filter(
+			array_map( 'trim', explode( ',', $category ) )
+		)
+	);
+}
+
+/**
  * Get link
  *
  * @param  array  $link link array.
@@ -215,6 +235,7 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 	$email       = sanitize_email( $fields['email'] ?? '' );
 	$phone       = sanitize_text_field( $fields['phone'] ?? '' );
 	$form_name   = sanitize_text_field( $fields['form_name'] ?? '' );
+	$form_id     = sanitize_text_field( $fields['form_id'] ?? '' );
 	$lead_source = sanitize_text_field( $fields['lead_source'] ?? wp_get_referer() ?: '' );
 	$site_name   = sanitize_text_field( get_option( 'adf_site_name', get_bloginfo( 'name' ) ) );
 
@@ -248,6 +269,7 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 		'submitted_at'    => current_time( 'mysql' ),
 		'site_name'       => $site_name,
 		'form_name'       => $form_name,
+		'form_id'         => $form_id,
 		'lead_source'     => $lead_source,
 		'first_name'      => $first_name,
 		'last_name'       => $last_name,
@@ -297,7 +319,7 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 	$wpdb->insert(
 		$wpdb->prefix . 'adf_lead_log',
 		$log,
-		array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s', '%s' )
+		array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s', '%s' )
 	);
 
 	return array(

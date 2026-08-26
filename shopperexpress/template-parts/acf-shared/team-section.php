@@ -8,6 +8,8 @@
  *   @type string $heading             Section heading.
  *   @type string $description        Section intro text.
  *   @type array  $members             Array of items, each with keys: photo, name, position, phone, email, category.
+ *                                     `category` may contain multiple, comma-separated values (e.g. "Sales, Management")
+ *                                     so a member can belong to more than one filter group.
  *   @type string $footer_heading      "Join Our Team" style heading.
  *   @type string $footer_button_text  Footer CTA button label.
  *   @type array  $footer_button_url   ACF link array (url, title, target).
@@ -23,8 +25,10 @@ $footer_button_url  = $args['footer_button_url'] ?? null;
 
 $categories = array();
 foreach ( $members as $member ) {
-	if ( ! empty( $member['category'] ) && ! in_array( $member['category'], $categories, true ) ) {
-		$categories[] = $member['category'];
+	foreach ( wps_team_split_categories( $member['category'] ?? '' ) as $category ) {
+		if ( ! in_array( $category, $categories, true ) ) {
+			$categories[] = $category;
+		}
 	}
 }
 
@@ -53,12 +57,12 @@ if ( ! empty( $members ) ) :
 			<div class="team-grid">
 				<?php foreach ( $members as $member ) : ?>
 					<?php
-					$photo    = $member['photo'] ?? '';
-					$name     = $member['name'] ?? '';
-					$position = $member['position'] ?? '';
-					$phone    = $member['phone'] ?? '';
-					$email    = $member['email'] ?? '';
-					$category = $member['category'] ?? '';
+					$photo       = $member['photo'] ?? '';
+					$name        = $member['name'] ?? '';
+					$position    = $member['position'] ?? '';
+					$phone       = $member['phone'] ?? '';
+					$email       = $member['email'] ?? '';
+					$member_cats = wps_team_split_categories( $member['category'] ?? '' );
 					?>
 					<div class="card-team">
 						<?php if ( $photo ) : ?>
@@ -81,9 +85,9 @@ if ( ! empty( $members ) ) :
 									<?php endif; ?>
 								</div>
 							<?php endif; ?>
-							<?php if ( $category ) : ?>
+							<?php foreach ( $member_cats as $category ) : ?>
 								<span class="team-filter hidden"><?php echo esc_html( $category ); ?></span>
-							<?php endif; ?>
+							<?php endforeach; ?>
 						</div>
 					</div>
 				<?php endforeach; ?>

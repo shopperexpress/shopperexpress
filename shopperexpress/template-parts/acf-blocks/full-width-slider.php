@@ -15,6 +15,11 @@ if ( \App\Components\Gutenberg\Block_Preview_Helper::render( $block ) ) {
 	return;
 }
 
+if ( $is_preview ) {
+	\App\Components\Gutenberg\Block_Preview_Helper::render( $block, true );
+	return;
+}
+
 $slider_speed   = get_field( 'slider_speed' ) ?: 500;
 $autoplay_speed = get_field( 'autoplay_speed' ) ?: 5000;
 $today          = date( 'Ymd' );

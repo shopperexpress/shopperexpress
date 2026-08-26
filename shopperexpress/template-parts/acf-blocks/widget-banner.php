@@ -12,6 +12,15 @@
  * @package Shopperexpress
  */
 
+if ( \App\Components\Gutenberg\Block_Preview_Helper::render( $block ) ) {
+	return;
+}
+
+if ( $is_preview ) {
+	\App\Components\Gutenberg\Block_Preview_Helper::render( $block, true );
+	return;
+}
+
 $block_id = ! empty( $block['id'] ) ? 'block-' . $block['id'] : '';
 if ( ! empty( $block['anchor'] ) ) {
 	$block_id = $block['anchor'];

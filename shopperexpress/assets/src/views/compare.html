@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>ShopperExpress.com</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- include jQuery library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <!-- include jQuery library local file if cdn link doesn't work -->
+  <script>
+    window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+  </script>
+  <!-- include minified bootstrap bundle js -->
+  <script src="js/bootstrap.bundle.min.js" defer></script>
+  <!-- include app js file  -->
+  <script src="js/app.js" defer></script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=&libraries=marker&loading=async&callback=initCustomMap" defer async></script>
+</head>
+<body>
+  <style>
+    :root {
+      --primary: #0074b3;
+      --primary-rgb: 0, 116, 179;
+      --header-nav-drop-bg: #004fb0;
+      --header-nav-link-color: #00c700;
+      --header-nav-link-hover-color: #00d1d4;
+      --overlay-opacity: 0.75;
+      --overlay-color-rgb: 0, 116, 179;
+    }
+  </style>
+  <div id="wrapper">
+    <header id="header">
+      <div class="container">
+        header
+      </div>
+    </header>
+    <!-- main container of all the page elements -->
+    <main id="main">
+      <div class="container">
+        <div class="compare-table">
+          <div class="compare-table__column">
+            <div>
+              <div class="card-compare">
+                <button class="card-compare__btn-del" type="button" aria-label="Delete item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M16 0c-8.822 0-16 7.178-16 16s7.178 16 16 16c8.822 0 16-7.178 16-16s-7.178-16-16-16zM16 30.221c-7.842 0-14.223-6.379-14.223-14.221s6.38-14.223 14.223-14.223 14.221 6.38 14.221 14.223-6.379 14.221-14.221 14.221zM17.272 15.995l4.394-4.393c0.226-0.226 0.314-0.555 0.231-0.864s-0.324-0.549-0.632-0.632c-0.309-0.083-0.638 0.006-0.863 0.232l-4.393 4.394-4.394-4.394c-0.35-0.344-0.912-0.342-1.258 0.005s-0.349 0.909-0.005 1.258l4.394 4.393-4.394 4.394c-0.232 0.224-0.325 0.557-0.244 0.869s0.326 0.556 0.638 0.638c0.312 0.082 0.645-0.011 0.869-0.244l4.394-4.393 4.393 4.393c0.225 0.229 0.556 0.319 0.866 0.237s0.553-0.325 0.635-0.635-0.008-0.641-0.237-0.866l-4.393-4.394z"/>
+                  </svg>
+                </button>
+                <div class="card-compare__image">
+                  <img src="images/product-1.png" alt="image description">
+                </div>
+                <div class="card-compare__body">
+                  <div class="card-compare__row">
+                    <span class="card-compare__price">MSRP: $53,340</span>
+                    <button class="simplefavorite-button"><i class="sf-icon-star-empty"></i></button>
+                  </div>
+                  <strong class="card-compare__title"><a href="#">2024 Mazda CX-90 PHEV Preferred</a></strong>
+                </div>
+              </div>
+            </div>
+            <div>
+              <strong class="compare-table__title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path>
+                </svg>
+                Featured Highlights
+              </strong>
+            </div>
+            <div>
+              <span class="compare-table__vin">VIN: JM3KKBHA8R1159262</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Year</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Make</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Model</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Trim</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Body Style</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Exterior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Interior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Drive Train</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Engine</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Fuel</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Key Features</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Vehicle Status</span>
+              <span class="compare-table__text">—</span>
+            </div>
+          </div>
+          <div class="compare-table__column">
+            <div>
+              <div class="card-compare">
+                <button class="card-compare__btn-del" type="button" aria-label="Delete item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" aria-hidden="true">
+                    <path d="M16 0c-8.822 0-16 7.178-16 16s7.178 16 16 16c8.822 0 16-7.178 16-16s-7.178-16-16-16zM16 30.221c-7.842 0-14.223-6.379-14.223-14.221s6.38-14.223 14.223-14.223 14.221 6.38 14.221 14.223-6.379 14.221-14.221 14.221zM17.272 15.995l4.394-4.393c0.226-0.226 0.314-0.555 0.231-0.864s-0.324-0.549-0.632-0.632c-0.309-0.083-0.638 0.006-0.863 0.232l-4.393 4.394-4.394-4.394c-0.35-0.344-0.912-0.342-1.258 0.005s-0.349 0.909-0.005 1.258l4.394 4.393-4.394 4.394c-0.232 0.224-0.325 0.557-0.244 0.869s0.326 0.556 0.638 0.638c0.312 0.082 0.645-0.011 0.869-0.244l4.394-4.393 4.393 4.393c0.225 0.229 0.556 0.319 0.866 0.237s0.553-0.325 0.635-0.635-0.008-0.641-0.237-0.866l-4.393-4.394z"/>
+                  </svg>
+                </button>
+                <div class="card-compare__image">
+                  <img src="images/product-1.png" alt="image description">
+                </div>
+                <div class="card-compare__body">
+                  <div class="card-compare__row">
+                    <span class="card-compare__price">MSRP: $53,340</span>
+                    <button class="simplefavorite-button"><i class="sf-icon-star-empty"></i></button>
+                  </div>
+                  <strong class="card-compare__title"><a href="#">2024 Mazda CX-90 PHEV Preferred</a></strong>
+                </div>
+              </div>
+            </div>
+            <div></div>
+            <div>
+              <span class="compare-table__vin">VIN: JM3KKBHA8R1159262</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Year</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Make</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Model</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Trim</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Body Style</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Exterior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Interior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Drive Train</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Engine</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Fuel</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Key Features</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Vehicle Status</span>
+              <span class="compare-table__text">—</span>
+            </div>
+          </div>
+          <div class="compare-table__column is-empty">
+            <div>
+              <div class="card-compare-add">
+                <strong class="card-compare-add__title">Add <span>3</span> More Vehicles</strong>
+                <button class="btn-compare" type="button" data-dismiss="modal">
+                  Continue Shopping
+                </button>
+              </div>
+            </div>
+            <div></div>
+            <div></div>
+            <div>
+              <span class="compare-table__subtitle">Year</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Make</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Model</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Trim</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Body Style</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Exterior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Interior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Drive Train</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Engine</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Fuel</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Key Features</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Vehicle Status</span>
+              <span class="compare-table__text">—</span>
+            </div>
+          </div>
+          <div class="compare-table__column is-empty">
+            <div>
+              <div class="compare-skeleton">
+                <div class="square w-100"></div>
+                <div class="compare-skeleton__body">
+                  <div class="compare-skeleton__row">
+                    <div class="line w-50"></div>
+                    <div class="circle"></div>
+                  </div>
+                  <div class="compare-skeleton__row">
+                    <div class="line w-100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div></div>
+            <div></div>
+            <div>
+              <span class="compare-table__subtitle">Year</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Make</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Model</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Trim</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Body Style</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Exterior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Interior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Drive Train</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Engine</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Fuel</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Key Features</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Vehicle Status</span>
+              <span class="compare-table__text">—</span>
+            </div>
+          </div>
+          <div class="compare-table__column is-empty">
+            <div>
+              <div class="compare-skeleton">
+                <div class="square w-100"></div>
+                <div class="compare-skeleton__body">
+                  <div class="compare-skeleton__row">
+                    <div class="line w-50"></div>
+                    <div class="circle"></div>
+                  </div>
+                  <div class="compare-skeleton__row">
+                    <div class="line w-100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div></div>
+            <div></div>
+            <div>
+              <span class="compare-table__subtitle">Year</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Make</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Model</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Trim</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Body Style</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Exterior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Interior Color</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Drive Train</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Engine</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Fuel</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Key Features</span>
+              <span class="compare-table__text">—</span>
+            </div>
+            <div>
+              <span class="compare-table__subtitle">Vehicle Status</span>
+              <span class="compare-table__text">—</span>
+            </div>
+          </div>
+        </div>
+        <div class="compare-table__switcher custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="compareSwitcher" role="switch">
+          <label class="custom-control-label" for="compareSwitcher">Hide Similarities</label>
+        </div>
+      </div>
+      <div class="container">
+        <button class="compare__btn" type="button" aria-label="Compare">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M10.2666626,4.0002441h-3.7297363c-.3166504,0-.604126.0916748-.8624878.2749634-.2583008.1833496-.4375.4249878-.5374756.7250366l-2.1000366,6v8c0,.2833252.0958252.520813.2875366.7124634.1916504.1916504.4291382.2875366.7124634.2875366h1c.2833252,0,.520874-.0958862.7125244-.2875366s.2874756-.4291382.2874756-.7124634v-1h4.2297363v4.600647h1.5408936V.7614746h-1.5408936v3.2387695ZM6.8869629,6.0002441h3.3796997v3h-4.4297485l1.0500488-3ZM5.0369263,16.0002441v-5h5.2297363v5h-5.2297363ZM9.0369263,13.5002441c0,.416626-.145813.770813-.4375,1.0625-.291626.291626-.645813.4375-1.0625.4375-.416626,0-.770813-.145874-1.0625-.4375-.291626-.291687-.4375-.645874-.4375-1.0625,0-.416687.145874-.770874.4375-1.0625.291687-.291687.645874-.4375,1.0625-.4375.416687,0,.770874.145813,1.0625.4375.291687.291626.4375.645813.4375,1.0625ZM21.0369263,11.0002441v8c0,.2833252-.0958252.520813-.2874756.7124634s-.4291992.2875366-.7125244.2875366h-1c-.2833252,0-.520813-.0958862-.7124634-.2875366-.1917114-.1916504-.2875366-.4291382-.2875366-.7124634v-1h-4.9998169v-2h5.9998169v-5h-5.9998169v-2h5.1998291l-1.0499878-3h-4.1498413v-2h4.4998169c.3167114,0,.604187.0916748.8624878.2749634.2583618.1833496.4375.4249878.5375366.7250366l2.0999756,6ZM16.5369263,15.0002441c-.416626,0-.770813-.145874-1.0625-.4375-.291626-.291687-.4375-.645874-.4375-1.0625,0-.416687.145874-.770874.4375-1.0625.291687-.291687.645874-.4375,1.0625-.4375.416687,0,.770874.145813,1.0625.4375.291687.291626.4375.645813.4375,1.0625,0,.416626-.145813.770813-.4375,1.0625-.291626.291626-.645813.4375-1.0625.4375Z"/>
+          </svg>
+        </button>
+        <button class="card-compare__btn-del" type="button" aria-label="Delete item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32">
+            <path d="M16 0c-8.822 0-16 7.178-16 16s7.178 16 16 16c8.822 0 16-7.178 16-16s-7.178-16-16-16zM16 30.221c-7.842 0-14.223-6.379-14.223-14.221s6.38-14.223 14.223-14.223 14.221 6.38 14.221 14.223-6.379 14.221-14.221 14.221zM17.272 15.995l4.394-4.393c0.226-0.226 0.314-0.555 0.231-0.864s-0.324-0.549-0.632-0.632c-0.309-0.083-0.638 0.006-0.863 0.232l-4.393 4.394-4.394-4.394c-0.35-0.344-0.912-0.342-1.258 0.005s-0.349 0.909-0.005 1.258l4.394 4.393-4.394 4.394c-0.232 0.224-0.325 0.557-0.244 0.869s0.326 0.556 0.638 0.638c0.312 0.082 0.645-0.011 0.869-0.244l4.394-4.393 4.393 4.393c0.225 0.229 0.556 0.319 0.866 0.237s0.553-0.325 0.635-0.635-0.008-0.641-0.237-0.866l-4.393-4.394z"/>
+          </svg>
+        </button>
+      </div>
+      <div class="compare-popup is-active">
+        <div class="compare-popup__head">
+          <strong class="compare-popup__title">Add up to 4 more vehicles</strong>
+          <button class="compare-popup__close" type="button" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px">
+              <path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="compare-popup__body">
+          <ul class="compare-popup__list">
+            <li>
+              <img src="images/product-1.png" alt="image description">
+              <button class="compare-popup__list-btn-del" type="button" aria-label="Delete item">
+                <svg aria-hidden="true" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14.59 8 12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8"></path>
+                </svg>
+              </button>
+            </li>
+          </ul>
+          <span class="compare-popup__text">Select 2 - 5 Vehicles to Compare</span>
+          <span class="compare-popup__info">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"></path>
+            </svg>
+            Maximum of 5 Vehicles Compared.
+          </span>
+        </div>
+        <div class="compare-popup__footer">
+          <button class="btn-compare" type="button" data-toggle="modal" data-target="#compareModal">
+            Compare
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4,11V13H16L10.5,18.5L11.92,19.92L19.84,12L11.92,4.08L10.5,5.5L16,11H4Z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="container-fluid">
+        footer
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

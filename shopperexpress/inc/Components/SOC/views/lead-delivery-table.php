@@ -80,7 +80,8 @@ $status_badge = static function ( string $status ): string {
 							data-payload="<?php echo esc_attr( $row['adfxml_payload'] ?? '' ); ?>"
 							data-code="<?php echo (int) ( $row['response_code'] ?? 0 ); ?>"
 							data-name="<?php echo esc_attr( trim( ( $row['first_name'] ?? '' ) . ' ' . ( $row['last_name'] ?? '' ) ) ); ?>"
-							data-time="<?php echo esc_attr( $row['submitted_at'] ?? '' ); ?>">
+							data-time="<?php echo esc_attr( $row['submitted_at'] ?? '' ); ?>"
+							data-formid="<?php echo esc_attr( $row['form_id'] ?? '' ); ?>">
 							<?php esc_html_e( 'Details', 'shopperexpress' ); ?>
 						</button>
 					<?php endif; ?>

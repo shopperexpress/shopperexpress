@@ -12,7 +12,12 @@ $post_type = get_field( 'post_type' );
 if ( empty( $post_type ) ) {
 	$post_type = is_post_type_archive() ? get_queried_object()->name : get_post_type( get_the_id() );
 }
-$vehicle_overview = get_field( 'vehicle_overview' ) ? wp_kses_post( str_replace( array( '<div>', '</div>' ), '', get_field( 'vehicle_overview' ) ) ) : '';
+$_intice_vehicle_overview = $GLOBALS['intice_vehicle']['payload']['vehicle_overview'] ?? '';
+if ( $_intice_vehicle_overview ) {
+	$vehicle_overview = wp_kses_post( str_replace( array( '<div>', '</div>' ), '', $_intice_vehicle_overview ) );
+} else {
+	$vehicle_overview = get_field( 'vehicle_overview' ) ? wp_kses_post( str_replace( array( '<div>', '</div>' ), '', get_field( 'vehicle_overview' ) ) ) : '';
+}
 $modals[]         = array(
 	'id'              => 'overviewModal',
 	'title'           => '<h5 class="modal-title">' . esc_html__( 'Overview', 'shopperexpress' ) . '</h5>',

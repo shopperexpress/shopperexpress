@@ -823,3 +823,105 @@
 .modal-backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+.compare-modal {
+  @include media('<desktop') {
+    padding: 0 !important;
+    overflow: hidden;
+  }
+
+  @include media('>=desktop') {
+    padding-inline: 16px;
+  }
+
+  .table-responsive {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) $white;
+  }
+
+  .modal-dialog {
+    max-width: 1312px;
+
+    @include media('<desktop') {
+      margin: 0;
+      max-width: none;
+      height: 100%;
+    }
+  }
+
+  .modal-body-wrap {
+    &::after,
+    &::before {
+      display: none;
+    }
+  }
+
+  .modal-header {
+    @include media('<desktop') {
+      flex-shrink: 0;
+    }
+  }
+
+  .modal-content {
+    @include media('<desktop') {
+      height: 100%;
+    }
+  }
+
+  .modal-body {
+    background-color: $white;
+
+    @include media('<desktop') {
+      height: auto;
+    }
+  }
+
+  .content-holder {
+    padding: 0;
+
+    @include media('>=desktop') {
+      padding: 0;
+    }
+  }
+
+  .modal-footer {
+    justify-content: flex-end;
+
+    @include media('<desktop') {
+      flex-shrink: 0;
+      padding-bottom: 15px;
+    }
+
+    .btn {
+      @include animate(background-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50rem;
+      padding: 8px 16px;
+      gap: 4px;
+      font-size: 14px;
+      line-height: 1.2875;
+      font-weight: 600;
+      color: $white;
+      background-color: var(--primary);
+
+      &[disabled] {
+        background-color: $gray-400;
+        color: $gray-600;
+      }
+
+      &:hover {
+        background-color: rgba(var(--primary-rgb), 0.8);
+      }
+
+      svg {
+        flex-shrink: 0;
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+      }
+    }
+  }
+}

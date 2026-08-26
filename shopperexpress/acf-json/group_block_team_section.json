@@ -170,7 +170,7 @@
                     "label": "Category",
                     "name": "category",
                     "type": "text",
-                    "instructions": "Used to build the filter buttons above the grid (e.g. Management, Sales & Finance, In Memoriam).",
+                    "instructions": "Used to build the filter buttons above the grid (e.g. Management, Sales & Finance, In Memoriam). Separate multiple categories with a comma to include this member in more than one filter (e.g. \"Sales, Management\").",
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {

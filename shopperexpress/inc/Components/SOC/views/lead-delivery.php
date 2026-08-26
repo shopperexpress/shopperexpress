@@ -292,6 +292,7 @@ $logs      = $data['logs']  ?? array( 'rows' => array(), 'total' => 0 );
 				<tbody>
 					<tr><th><?php esc_html_e( 'Lead', 'shopperexpress' ); ?></th><td id="soc-modal-name"></td></tr>
 					<tr><th><?php esc_html_e( 'Submitted', 'shopperexpress' ); ?></th><td id="soc-modal-time"></td></tr>
+					<tr><th><?php esc_html_e( 'Form ID', 'shopperexpress' ); ?></th><td id="soc-modal-formid"></td></tr>
 					<tr><th><?php esc_html_e( 'HTTP Code', 'shopperexpress' ); ?></th><td id="soc-modal-code"></td></tr>
 					<tr><th><?php esc_html_e( 'Error', 'shopperexpress' ); ?></th><td id="soc-modal-error"></td></tr>
 				</tbody>

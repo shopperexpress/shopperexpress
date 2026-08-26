@@ -63,6 +63,25 @@
             "layout": "horizontal"
         },
         {
+            "key": "field_7a0b1c2d3f007",
+            "label": "Keyword Filter",
+            "name": "keyword_filter",
+            "type": "text",
+            "instructions": "Optional. Only show reviews whose text mentions one of these keywords/phrases (comma-separated, case-insensitive). Useful for department- or service-specific pages, e.g. \"oil change, service, technician\" on a Service page. Leave blank to show all reviews.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "e.g. oil change, service department",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_7a0b1c2d3f004",
             "label": "CTA Button Text",
             "name": "cta_text",

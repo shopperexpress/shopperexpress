@@ -15,19 +15,26 @@ namespace App\Components\Gutenberg;
  *   if ( Block_Preview_Helper::render( $block ) ) { return; }
  *
  * ACF sets $block['data']['preview_image_help'] when the block inserter thumbnail
- * is being generated — that is the only signal we need; $is_preview is not
- * available in the include scope of acf_render_callback.
+ * is being generated — that is the only signal we need for that case.
+ *
+ * Pass $force = true to also show the same image as a static editor-canvas
+ * placeholder for the whole time the block is being edited — the block always
+ * shows its preview image in the editor and only renders live markup on the
+ * frontend, so editing never flickers between placeholder and partial content:
+ *
+ *   if ( $is_preview ) { Block_Preview_Helper::render( $block, true ); return; }
  */
 class Block_Preview_Helper {
 
 	/**
-	 * Render the block preview if ACF is requesting the inserter thumbnail.
+	 * Render the block preview image (inserter thumbnail, or forced editor placeholder).
 	 *
 	 * @param  array $block ACF $block array passed to the render callback.
+	 * @param  bool  $force Render the placeholder even when ACF isn't requesting the inserter thumbnail.
 	 * @return bool  True when preview was rendered (caller must return), false otherwise.
 	 */
-	public static function render( array $block ): bool {
-		if ( empty( $block['data']['preview_image_help'] ) ) {
+	public static function render( array $block, bool $force = false ): bool {
+		if ( ! $force && empty( $block['data']['preview_image_help'] ) ) {
 			return false;
 		}
 
@@ -36,22 +43,15 @@ class Block_Preview_Helper {
 		$abs      = get_theme_file_path( $relative );
 		$title    = $block['title'] ?? $slug;
 
-		if ( file_exists( $abs ) ) {
-			printf(
-				'<img src="%s" style="width:100%%;height:auto;" alt="%s" />',
-				esc_url( get_theme_file_uri( $relative ) ),
-				esc_attr( $title . ' preview' )
-			);
-		} else {
-			printf(
-				'<div style="background:#f6f7f7;border:2px dashed #c3c4c7;padding:32px 20px;text-align:center;font-family:-apple-system,sans-serif;border-radius:4px;">' .
-				'<strong style="display:block;font-size:14px;margin-bottom:4px;">%s</strong>' .
-				'<em style="font-size:12px;color:#888;">Block preview — add %s to customise</em>' .
-				'</div>',
-				esc_html( $title ),
-				esc_html( $relative )
-			);
+		if ( ! file_exists( $abs ) ) {
+			$relative = 'assets/images/block-previews/default-preview.svg';
 		}
+
+		printf(
+			'<img src="%s" style="width:100%%;height:auto;" alt="%s" />',
+			esc_url( get_theme_file_uri( $relative ) ),
+			esc_attr( $title . ' preview' )
+		);
 
 		return true;
 	}

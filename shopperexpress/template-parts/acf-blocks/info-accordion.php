@@ -15,6 +15,11 @@ if ( \App\Components\Gutenberg\Block_Preview_Helper::render( $block ) ) {
 	return;
 }
 
+if ( $is_preview ) {
+	\App\Components\Gutenberg\Block_Preview_Helper::render( $block, true );
+	return;
+}
+
 $accordion = array();
 if ( have_rows( 'accordion' ) ) {
 	while ( have_rows( 'accordion' ) ) {

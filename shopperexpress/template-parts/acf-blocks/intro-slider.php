@@ -15,6 +15,11 @@ if ( \App\Components\Gutenberg\Block_Preview_Helper::render( $block ) ) {
 	return;
 }
 
+if ( $is_preview ) {
+	\App\Components\Gutenberg\Block_Preview_Helper::render( $block, true );
+	return;
+}
+
 $show_slider    = get_field( 'show_slider' );
 $sort_offers_by = get_field( 'sort_offers_by' );
 $no_margin      = get_field( 'no_margin' );

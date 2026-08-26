@@ -38,7 +38,15 @@ if ( get_field( 'api_new_car_incentives', 'option' ) ) :
 			$json,
 			static function ( $item ) use ( $keywords ) {
 				$text = mb_strtolower(
-					implode( ' ', array_map( 'strval', $item ) )
+					implode(
+							' ',
+							array_map(
+								static function ( $value ) {
+									return is_array( $value ) ? implode( ' ', array_map( 'strval', $value ) ) : (string) $value;
+								},
+								$item
+							)
+						)
 				);
 
 				foreach ( $keywords as $keyword ) {

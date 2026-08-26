@@ -370,6 +370,18 @@ class Ajax implements Theme_Component {
 
 	public function adf_action() {
 
+		// Some webhooks (e.g. intice.io) send a raw JSON body instead of
+		// form-urlencoded fields. PHP only populates $_POST/$_REQUEST for
+		// form-urlencoded/multipart bodies, so a JSON body leaves every field
+		// (including form_id) empty unless we decode and merge it in here.
+		$content_type = isset( $_SERVER['CONTENT_TYPE'] ) ? strtolower( $_SERVER['CONTENT_TYPE'] ) : '';
+		if ( false !== strpos( $content_type, 'application/json' ) ) {
+			$json_body = json_decode( file_get_contents( 'php://input' ), true );
+			if ( is_array( $json_body ) ) {
+				$_REQUEST = array_merge( $json_body, $_REQUEST ); // phpcs:ignore WordPress.Security.NonceVerification
+			}
+		}
+
 		$template = null;
 
 		if ( ! empty( $_REQUEST['template'] ) ) {
@@ -445,6 +457,7 @@ class Ajax implements Theme_Component {
 						'email'       => sanitize_email( $_REQUEST['email'] ?? '' ),
 						'phone'       => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
 						'form_name'   => sanitize_text_field( $_REQUEST['Form_Name'] ?? 'adf_action' ),
+						'form_id'     => $form_id,
 						'lead_source' => sanitize_text_field( $_REQUEST['prospect_source'] ?? '' ),
 					);
 
@@ -471,6 +484,7 @@ class Ajax implements Theme_Component {
 					'email'       => sanitize_email( $_REQUEST['email'] ?? '' ),
 					'phone'       => sanitize_text_field( $_REQUEST['phone'] ?? '' ),
 					'form_name'   => sanitize_text_field( $_REQUEST['Form_Name'] ?? 'adf_action' ),
+					'form_id'     => $form_id,
 					'lead_source' => sanitize_text_field( $_REQUEST['prospect_source'] ?? '' ),
 				);
 				wps_dispatch_adf( $template, $lead_fields );

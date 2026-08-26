@@ -118,19 +118,20 @@ class Register_Gutenberg_Blocks implements Theme_Component {
 
 				acf_register_block(
 					array(
-						'name'            => $name,
-						'title'           => $block_data['title'],
-						'description'     => $block_data['description'],
-						'category'        => $block_data['category'],
-						'icon'            => $block_data['icon'],
-						'keywords'        => $block_data['keywords'],
-						'mode'            => 'edit',
-						'render_callback' => array( $this, 'acf_render_callback' ),
-						'supports'        => array(
+						'name'              => $name,
+						'title'             => $block_data['title'],
+						'description'       => $block_data['description'],
+						'category'          => $block_data['category'],
+						'icon'              => $block_data['icon'],
+						'keywords'          => $block_data['keywords'],
+						'mode'              => 'edit',
+						'acf_block_version' => 3,
+						'render_callback'   => array( $this, 'acf_render_callback' ),
+						'supports'          => array(
 							'align' => false,
 							'mode'  => true,
 						),
-						'example'         => array(
+						'example'           => array(
 							'attributes' => array(
 								'mode' => 'preview',
 								'data' => array(

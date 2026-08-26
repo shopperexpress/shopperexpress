@@ -11,6 +11,10 @@
  *   @type string $place_id     Google Place ID — resolved server-side from the connected
  *                               Business Profile location (not an ACF field; see
  *                               App\Components\Base\Google_Business_Reviews::get_settings()).
+ *   @type string $keyword_filter Optional comma-separated keyword(s) — only reviews whose text
+ *                               mentions at least one of them (case-insensitive) are shown/schema'd.
+ *                               Lets a page (e.g. an Oil Change service page) surface only the
+ *                               reviews relevant to it.
  *   @type string $cta_text     "Review us on Google" button label.
  *   @type string $cta_url      "Review us on Google" button link.
  * }
@@ -23,19 +27,20 @@
  * Places API (New) — capped at 5 reviews with no pagination — otherwise.
  */
 
-$heading      = $args['heading'] ?? '';
-$description  = $args['description'] ?? '';
-$layout_style = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
-$place_id     = $args['place_id'] ?? '';
-$cta_text     = $args['cta_text'] ?? '';
-$cta_url      = $args['cta_url'] ?? '#';
-$is_slider    = 'slider' === $layout_style;
+$heading        = $args['heading'] ?? '';
+$description    = $args['description'] ?? '';
+$layout_style   = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
+$place_id       = $args['place_id'] ?? '';
+$keyword_filter = $args['keyword_filter'] ?? '';
+$cta_text       = $args['cta_text'] ?? '';
+$cta_url        = $args['cta_url'] ?? '#';
+$is_slider      = 'slider' === $layout_style;
 
 if ( $place_id ) :
 	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
-	// filtered) data the widget displays, so search engines see it without
-	// needing to run the client-side Google Reviews JS module.
-	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id );
+	// + keyword filtered) data the widget displays, so search engines see it
+	// without needing to run the client-side Google Reviews JS module.
+	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id, '', '', $keyword_filter );
 
 	if ( ! is_wp_error( $reviews_data ) && ! empty( $reviews_data['reviews'] ) ) :
 		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
@@ -87,7 +92,10 @@ if ( $place_id ) :
 		class="review-section<?php echo $is_slider ? ' review-section--slider' : ''; ?>"
 		data-google-reviews
 		data-google-reviews-style="<?php echo esc_attr( $layout_style ); ?>"
-		data-google-reviews-place-id="<?php echo esc_attr( $place_id ); ?>">
+		data-google-reviews-place-id="<?php echo esc_attr( $place_id ); ?>"
+		<?php if ( $keyword_filter ) : ?>
+		data-google-reviews-keyword-filter="<?php echo esc_attr( $keyword_filter ); ?>"
+		<?php endif; ?>>
 		<div class="container">
 			<?php if ( ! $is_slider && ( $heading || $description ) ) : ?>
 				<div class="review-section__heading">

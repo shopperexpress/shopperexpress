@@ -139,7 +139,7 @@ class Lead_Delivery implements SOC_Module {
 		$count_sql = "SELECT COUNT(*) FROM `{$table}` {$where}";
 		$total     = (int) ( $args ? $wpdb->get_var( $wpdb->prepare( $count_sql, ...$args ) ) : $wpdb->get_var( $count_sql ) );
 
-		$rows_sql = "SELECT id, submitted_at, site_name, form_name, lead_source, first_name, last_name,
+		$rows_sql = "SELECT id, submitted_at, site_name, form_name, form_id, lead_source, first_name, last_name,
 		                    email, phone, delivery_method, api_endpoint, response_code, response_body,
 		                    status, retry_count, error_message, adfxml_payload
 		             FROM `{$table}` {$where}
@@ -213,6 +213,7 @@ class Lead_Delivery implements SOC_Module {
 			'email'      => $row['email'],
 			'phone'      => $row['phone'],
 			'form_name'  => $row['form_name'],
+			'form_id'    => $row['form_id'] ?? '',
 		);
 
 		$result = wps_dispatch_adf( $row['adfxml_payload'], $fields );

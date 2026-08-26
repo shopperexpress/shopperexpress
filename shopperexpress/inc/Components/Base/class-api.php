@@ -639,6 +639,9 @@ class Api implements Theme_Component {
 						$vehicle_data['year']        = ! empty( $get_field['year'] ) ? $get_field['year'] : '';
 						$vehicle_data['dealer_name'] = ! empty( $get_field['dealer_name'] ) ? $get_field['dealer_name'] : '';
 						$vehicle_data['photo']       = ! empty( $get_field['primaryimageurl'] ) ? $get_field['primaryimageurl'] : '';
+						if ( preg_match( '/<img[^>]+src="([^"]+)"/', $html, $photo_match ) ) {
+							$vehicle_data['photo'] = $photo_match[1];
+						}
 						break;
 
 					case 'lease-offers':
@@ -936,6 +939,9 @@ class Api implements Theme_Component {
 
 						$vehicle_data['year']  = get_field( 'year', $post_id );
 						$vehicle_data['photo'] = ! empty( get_field( 'primaryimageurl', $post_id ) ) ? get_field( 'primaryimageurl', $post_id ) : '';
+						if ( preg_match( '/<img[^>]+src="([^"]+)"/', $html, $photo_match ) ) {
+							$vehicle_data['photo'] = $photo_match[1];
+						}
 						break;
 
 					case 'lease-offers':

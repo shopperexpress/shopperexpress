@@ -54,7 +54,7 @@ class ACF implements Theme_Component {
 	/**
 	 * Current schema version. Bump this when columns are added/changed.
 	 */
-	const ADF_LOG_TABLE_VERSION = 3;
+	const ADF_LOG_TABLE_VERSION = 4;
 
 	public function maybe_create_lead_log_table(): void {
 		global $wpdb;
@@ -76,6 +76,7 @@ class ACF implements Theme_Component {
 			submitted_at    datetime             NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			site_name       varchar(255)         NOT NULL DEFAULT '',
 			form_name       varchar(255)         NOT NULL DEFAULT '',
+			form_id         varchar(100)         NOT NULL DEFAULT '',
 			lead_source     varchar(500)         NOT NULL DEFAULT '',
 			first_name      varchar(100)         NOT NULL DEFAULT '',
 			last_name       varchar(100)         NOT NULL DEFAULT '',
