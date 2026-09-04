@@ -202,7 +202,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				<th><?php esc_html_e( 'Entries', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Status', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Expires', 'shopperexpress' ); ?></th>
-				<th><?php esc_html_e( 'Default TTL', 'shopperexpress' ); ?></th>
+				<th><?php esc_html_e( 'Cached At', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Actions', 'shopperexpress' ); ?></th>
 			</tr>
 		</thead>
@@ -215,7 +215,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
 
-			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom' );
+			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 			foreach ( $data['api_cache'] as $i => $row ) :
 				$st    = $row['status'] ?? 'missing';
@@ -234,7 +234,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 						<?php endif; ?>
 					</td>
 					<td><?php echo $row['expires_at'] ? esc_html( $row['expires_at'] ) : '—'; ?></td>
-					<td><code><?php echo esc_html( $row['ttl_label'] ); ?></code></td>
+					<td><?php echo $row['cached_at'] ? esc_html( $row['cached_at'] ) : '—'; ?></td>
 					<td>
 						<button
 							class="button button-small soc-flush-api-cache-group"

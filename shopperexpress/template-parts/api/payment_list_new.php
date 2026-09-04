@@ -32,19 +32,40 @@ if ( empty( $vehicle ) ) {
 
 $payload = $vehicle['payload'] ?? array();
 
-// Map ACF field name → Intice API value for matching and calculations.
-$field_map = array(
-	'year'           => (string) ( $vehicle['year'] ?? '' ),
-	'make'           => (string) ( $vehicle['make'] ?? '' ),
-	'model'          => (string) ( $vehicle['model'] ?? '' ),
-	'trim'           => (string) ( $vehicle['trim'] ?? '' ),
-	'loan_payment'   => (int) ( $payload['loan_payment'] ?? $payload['loan_payment_sort'] ?? 0 ),
-	'lease_payment'  => (int) ( $payload['lease_payment'] ?? $payload['lease_payment_sort'] ?? 0 ),
-	'original_price' => (int) ( $vehicle['msrp'] ?? $payload['msrp'] ?? 0 ),
-	'price'          => (int) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
-	'price_sort'     => (int) ( $vehicle['price_sort'] ?? $vehicle['price'] ?? 0 ),
-	'down_payment'   => (int) ( $payload['down_payment'] ?? 0 ),
+// A few ACF field-name tokens (from the "Calculated Value"/"Value from field"
+// select choices) don't match their Nexus payload key 1:1 — map each to the
+// candidate key(s) to actually look up, tried in order.
+$field_aliases = array(
+	'original_price' => array( 'msrp' ),
+	'price'          => array( 'price_sort', 'price' ),
+	'price_sort'     => array( 'price_sort', 'price' ),
+	'loan_payment'   => array( 'loan_payment', 'loan_payment_sort' ),
+	'lease_payment'  => array( 'lease_payment', 'lease_payment_sort' ),
 );
+
+/**
+ * Resolve an ACF-field-name-style token (as picked in the "Calculated Value" /
+ * "Value from field" select, or the year/make/model/trim matching rules)
+ * against the raw Intice vehicle array — top-level fields first, then the
+ * dealer-mapped `payload` bag. Same fallback pattern as
+ * Intice_Rest::build_terms()/resolve_field(). Unlike a hardcoded allowlist,
+ * this resolves ANY payload key (invoiceamount, holdback, cost, pack, ...)
+ * without needing a matching map entry.
+ *
+ * @param string $key Lowercased field token, e.g. 'year', 'invoiceamount', 'holdback'.
+ * @return string
+ */
+$resolve_field = function ( string $key ) use ( $vehicle, $payload, $field_aliases ) {
+	foreach ( $field_aliases[ $key ] ?? array( $key ) as $candidate ) {
+		$value = $vehicle[ $candidate ] ?? ( $payload[ $candidate ] ?? null );
+
+		if ( null !== $value && '' !== $value ) {
+			return (string) $value;
+		}
+	}
+
+	return '';
+};
 
 // search_in field values — same as original.
 $search_in_map = array(
@@ -86,7 +107,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			case 1:
 				$result = false;
 				foreach ( $tax as $item ) {
-					if ( false !== strpos( $search, strtolower( $field_map[ $item ] ?? '' ) ) ) {
+					if ( false !== strpos( $search, strtolower( $resolve_field( $item ) ) ) ) {
 						$result = true;
 						break;
 					}
@@ -96,7 +117,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			case 2:
 				$result = true;
 				foreach ( $tax as $item ) {
-					if ( strtolower( $field_map[ $item ] ?? '' ) === $search ) {
+					if ( strtolower( $resolve_field( $item ) ) === $search ) {
 						$result = false;
 						break;
 					}
@@ -106,7 +127,7 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 			case 3:
 				$tax_values = array();
 				foreach ( $tax as $item ) {
-					$tax_values[] = (string) ( $field_map[ $item ] ?? '' );
+					$tax_values[] = $resolve_field( $item );
 				}
 				$result = ! empty( $tax_values ) && strtolower( implode( ' ', $tax_values ) ) === $search;
 				break;
@@ -124,10 +145,10 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 	if ( 2 === $select_value_type || 4 === $select_value_type ) {
 		$calculated_key = strtolower( (string) get_sub_field( 'calculated_value' ) );
-		$calculated     = (int) ( $field_map[ $calculated_key ] ?? 0 );
+		$calculated     = (int) $resolve_field( $calculated_key );
 		$operand        = 2 === $select_value_type
 			? (int) $value
-			: (int) ( $field_map[ strtolower( (string) get_sub_field( 'calculated_field' ) ) ] ?? 0 );
+			: (int) $resolve_field( strtolower( (string) get_sub_field( 'calculated_field' ) ) );
 
 		switch ( get_sub_field( 'operator' ) ) {
 			case 'Subtract':
@@ -142,10 +163,10 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 	} elseif ( 3 === $select_value_type || 5 === $select_value_type ) {
 		$from_key   = strtolower( (string) get_sub_field( 'value_from_field' ) );
-		$from_value = (int) ( $field_map[ $from_key ] ?? 0 );
+		$from_value = (int) $resolve_field( $from_key );
 		$value_1    = 5 === $select_value_type
 			? (int) get_sub_field( 'value_1' )
-			: (int) ( $field_map[ strtolower( (string) get_sub_field( 'calculated_field_1' ) ) ] ?? 0 );
+			: (int) $resolve_field( strtolower( (string) get_sub_field( 'calculated_field_1' ) ) );
 		$condition  = false;
 
 		switch ( get_sub_field( 'operator_1' ) ) {
@@ -165,10 +186,10 @@ while ( have_rows( 'payment_list_new', 'options' ) ) :
 
 		if ( $condition ) {
 			$calculated_key = strtolower( (string) get_sub_field( 'calculated_value' ) );
-			$calculated     = (int) ( $field_map[ $calculated_key ] ?? 0 );
+			$calculated     = (int) $resolve_field( $calculated_key );
 			$operand        = 3 === $select_value_type
 				? (int) $value
-				: (int) ( $field_map[ strtolower( (string) get_sub_field( 'calculated_field' ) ) ] ?? 0 );
+				: (int) $resolve_field( strtolower( (string) get_sub_field( 'calculated_field' ) ) );
 
 			switch ( get_sub_field( 'operator' ) ) {
 				case 'Subtract':

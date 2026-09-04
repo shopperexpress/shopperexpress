@@ -104,9 +104,10 @@ while ( have_posts() ) :
 							<?php
 							$status = get_field( 'vehicle-status', $post_id ) ? get_field( 'vehicle-status', $post_id ) : null;
 							if ( $status ) :
+								$badge = \App\resolve_badge_style( $status, 'vdp', $post_type );
 								?>
 								<div class="badges-list">
-									<span class="card-badge-status"><?php echo $status; ?></span>
+									<span class="card-badge-status"<?php echo $badge['style'] ? ' style="' . esc_attr( $badge['style'] ) . '"' : ''; ?>><?php echo esc_html( $badge['text'] ); ?></span>
 								</div>
 							<?php endif; ?>
 							<?php if ( wps_check_current_usser() ) : ?>

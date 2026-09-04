@@ -86,17 +86,31 @@ function _api_modal_field( string $label, string $name, string $value, string $t
 /**
  * Helper: render a read-only thumbnail strip for one image list.
  */
-function _api_modal_gallery_preview( string $label, array $urls ): void {
+function _api_modal_gallery_preview( string $label, array $images ): void {
 	?>
 	<div class="acf-field acf-field-gallery-preview">
 		<div class="acf-label"><label><?php echo esc_html( $label ); ?></label></div>
 		<div class="acf-input">
-			<?php if ( empty( $urls ) ) : ?>
+			<?php if ( empty( $images ) ) : ?>
 				<p class="description"><?php esc_html_e( 'No images in this list.', 'shopperexpress' ); ?></p>
 			<?php else : ?>
 				<ul class="gallery-preview-list">
-					<?php foreach ( $urls as $url ) : ?>
-						<li><img src="<?php echo esc_url( $url ); ?>" loading="lazy" alt=""></li>
+					<?php foreach ( $images as $img ) : ?>
+						<?php
+						$url = is_array( $img ) ? ( $img['url'] ?? '' ) : $img;
+						$tag = array_filter(
+							array(
+								! empty( $img['is_background'] ) ? __( 'BG', 'shopperexpress' ) : '',
+								! empty( $img['is_reverse'] ) ? __( 'Rev', 'shopperexpress' ) : '',
+							)
+						);
+						?>
+						<li>
+							<img src="<?php echo esc_url( $url ); ?>" loading="lazy" alt="">
+							<?php if ( $tag ) : ?>
+								<span class="gallery-preview-tag"><?php echo esc_html( implode( ' · ', $tag ) ); ?></span>
+							<?php endif; ?>
+						</li>
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
@@ -619,7 +633,7 @@ $tabs = array(
 					<input type="hidden" name="delete_nonce" value="<?php echo esc_attr( wp_create_nonce( 'wps_api_delete_vehicle' ) ); ?>">
 
 					<!-- Vehicle card header -->
-					<?php $header_image = $vehicle['images'][0] ?? ( $vehicle['image'] ?? '' ); ?>
+					<?php $header_image = $vehicle['images'][0]['url'] ?? ( $vehicle['image'] ?? '' ); ?>
 					<div class="card-horizontal">
 						<?php if ( ! empty( $header_image ) ) : ?>
 							<div class="card-img">
@@ -682,10 +696,18 @@ endforeach;
 										$vehicle['thumb'] ?? '',
 										'text'
 									);
+
+									// Same source used to render the site (\App\resolve_vehicle_gallery()):
+									// payload.use_images_list first, falling back to Nexus's own
+									// active_image_list. Normalize both known terms ('alternative' from
+									// the ACF/import side, 'srp' from this select) to the select's keys
+									// so the dropdown actually reflects the current value.
+									$active_image_list = $payload['use_images_list'] ?? ( $vehicle['active_image_list'] ?? 'primary' );
+									$active_image_list = in_array( $active_image_list, array( 'alternative', 'srp' ), true ) ? 'srp' : 'primary';
 									_api_modal_field(
 										__( 'Active Image List', 'shopperexpress' ),
 										'use_images_list',
-										$vehicle['active_image_list'] ?? 'primary',
+										$active_image_list,
 										'select',
 										array(
 											'primary' => __( 'Primary', 'shopperexpress' ),

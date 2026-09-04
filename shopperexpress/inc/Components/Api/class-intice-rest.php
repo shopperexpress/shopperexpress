@@ -15,6 +15,7 @@
 namespace App\Components\Api;
 
 use App\Components\SOC\Modules\Api_Settings;
+use App\Components\SOC\Support\SOC_Logger;
 use App\Components\Theme_Component;
 
 /**
@@ -100,6 +101,62 @@ class Intice_Rest implements Theme_Component {
 				'permission_callback' => '__return_true',
 			)
 		);
+
+		register_rest_route(
+			'v1',
+			'/intice/cache/refresh',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_cache_refresh' ),
+				'permission_callback' => array( $this, 'verify_intice_api_key' ),
+			)
+		);
+	}
+
+	/**
+	 * Permission callback for /intice/cache/refresh — Nexus authenticates with
+	 * the same X-API-KEY it issues for this site's own API access (stored here
+	 * via SOC → API Settings), sent in reverse for this inbound notification.
+	 *
+	 * @param \WP_REST_Request $request
+	 * @return bool
+	 */
+	public function verify_intice_api_key( \WP_REST_Request $request ): bool {
+		$provided = $request->get_header( 'x-api-key' );
+		$expected = get_option( Api_Settings::OPTION_API_KEY, '' );
+
+		return ! empty( $expected ) && is_string( $provided ) && hash_equals( $expected, $provided );
+	}
+
+	/**
+	 * POST /wp-json/v1/intice/cache/refresh
+	 *
+	 * Called by Nexus right after an import run finishes for this site, so the
+	 * cache is proactively rebuilt instead of waiting for the next visitor to
+	 * hit a stale/expired entry. Two layers sit between a visitor and Nexus —
+	 * both must be flushed or the SRP HTML would just rebuild from a still-stale
+	 * raw API response and nothing would actually change:
+	 *   1. Intice_Api_Client's raw /api/v1/vehicles response cache (10 min TTL).
+	 *   2. Intice_Rest's assembled SRP HTML cache (15 min TTL), built from (1).
+	 * Both flushes are stale-while-revalidate — current data keeps serving from
+	 * a 2h stale copy while a background cron rebuilds each entry.
+	 *
+	 * @return \WP_REST_Response
+	 */
+	public function handle_cache_refresh(): \WP_REST_Response {
+		Intice_Api_Client::instance()->flush_cache();
+
+		foreach ( array( 'listings', 'used-listings' ) as $post_type ) {
+			foreach ( array( false, true ) as $custom_sort ) {
+				self::clear_cache( $post_type, $custom_sort );
+			}
+		}
+
+		self::clear_cache( 'vehicles-feed', false );
+
+		SOC_Logger::write( 'cache', 'Intice cache auto-refreshed after Nexus import.' );
+
+		return rest_ensure_response( array( 'refreshed' => true ) );
 	}
 
 	// ─── Handlers ─────────────────────────────────────────────────────────────
@@ -117,11 +174,11 @@ class Intice_Rest implements Theme_Component {
 	public function get_vehicles( \WP_REST_Request $request ): \WP_REST_Response {
 		$post_type = sanitize_key( $request->get_param( 'post_type' ) );
 
-		if ( ! in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
+		if ( ! in_array( $post_type, array( 'listings', 'used-listings', 'vehicles-feed' ), true ) ) {
 			return new \WP_REST_Response( array( 'error' => 'Post type not supported in API mode.' ), 400 );
 		}
 
-		$custom_sort = ! empty( $_REQUEST['sort'] ) && 'custom' === $_REQUEST['sort'];
+		$custom_sort = ! empty( $_REQUEST['sort'] ) && 'custom' === $_REQUEST['sort'] && 'vehicles-feed' !== $post_type;
 		$clear       = ! empty( $_REQUEST['clear'] );
 		$loged       = ! empty( $_REQUEST['loged'] ) ? $_REQUEST['loged'] : '';
 		$cache_key   = self::cache_key( $post_type, $custom_sort );
@@ -145,7 +202,9 @@ class Intice_Rest implements Theme_Component {
 			}
 		}
 
-		$output = $this->build_srp_payload( $post_type, $custom_sort, $loged );
+		$output = 'vehicles-feed' === $post_type
+			? $this->build_feed_payload()
+			: $this->build_srp_payload( $post_type, $custom_sort, $loged );
 
 		if ( is_wp_error( $output ) ) {
 			return new \WP_REST_Response(
@@ -173,7 +232,9 @@ class Intice_Rest implements Theme_Component {
 	 * @return void
 	 */
 	public function handle_srp_cache_regen( string $post_type, bool $custom_sort ): void {
-		$output = $this->build_srp_payload( $post_type, $custom_sort, '' );
+		$output = 'vehicles-feed' === $post_type
+			? $this->build_feed_payload()
+			: $this->build_srp_payload( $post_type, $custom_sort, '' );
 
 		if ( is_wp_error( $output ) ) {
 			return;
@@ -273,10 +334,9 @@ class Intice_Rest implements Theme_Component {
 				'price'   => (float) ( $this->get_sort_field_value( $vehicle, 'price' ) ?? 0 ),
 				'payment' => (float) ( $this->get_sort_field_value( $vehicle, 'loan_payment_sort' ) ?? 0 ),
 				'year'    => (string) $year,
-				// Prefer the gallery-resolved list (respects use_images_list,
-				// same as the rendered card in 'html' above) over the flat
-				// primary-only thumb/image fields.
-				'photo'   => $vehicle['images'][0] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) ),
+				// Resolved directly from payload.use_images_list, same as the
+				// rendered card in 'html' above — see \App\resolve_vehicle_gallery().
+				'photo'   => \App\resolve_vehicle_gallery( $vehicle )[0]['url'] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) ),
 			);
 		}
 
@@ -284,6 +344,87 @@ class Intice_Rest implements Theme_Component {
 			'vehicles' => $vehicles,
 			'cards'    => array(),
 		);
+	}
+
+	/**
+	 * Build a flat, combined new+used vehicles feed from the Nexus API.
+	 *
+	 * Unlike build_srp_payload(), this returns only scalar fields (no rendered
+	 * HTML card, no taxonomy terms) for a lightweight export — mirrors
+	 * Api::generate_vehicles_feed_data() in WP mode.
+	 *
+	 * @return array|\WP_Error
+	 */
+	private function build_feed_payload() {
+		$client = Intice_Api_Client::instance();
+
+		// Fetch new/used separately (same as build_srp_payload()) rather than one
+		// unfiltered 'mode=full' call — an unconditioned request returns the full
+		// combined inventory in one go, which on a real dealer's data volume can
+		// exceed the client's hardcoded 15s HTTP timeout (class-intice-api-client.php).
+		// Each condition call reuses the same Layer-1 cache as the existing SRP
+		// endpoints, so this is also cheaper once that cache is warm.
+		$raw_vehicles = array();
+		$last_error   = null;
+
+		foreach ( array( 'new', 'used' ) as $condition ) {
+			$api_data = $client->get_vehicles( array( 'condition' => $condition ) );
+
+			if ( is_wp_error( $api_data ) ) {
+				$last_error = $api_data;
+				continue;
+			}
+
+			$raw_vehicles = array_merge( $raw_vehicles, $api_data['data'] ?? array() );
+		}
+
+		if ( empty( $raw_vehicles ) && $last_error ) {
+			return $last_error;
+		}
+
+		$vehicles = array();
+
+		foreach ( $raw_vehicles as $vehicle ) {
+			$vin       = strtoupper( $vehicle['vin'] ?? '' );
+			$post_type = 'used' === ( $vehicle['condition'] ?? '' ) ? 'used-listings' : 'listings';
+
+			$vehicles[] = array(
+				'vin'        => $vin,
+				'year'       => $vehicle['year'] ?? '',
+				'make'       => $vehicle['make'] ?? '',
+				'model'      => $vehicle['model'] ?? '',
+				'trim'       => $vehicle['trim'] ?? '',
+				'drivetrain' => self::resolve_field( $vehicle, 'drivetrain' ),
+				'body_style' => self::resolve_field( $vehicle, 'body_style' ),
+				'price'      => (float) ( $this->get_sort_field_value( $vehicle, 'price' ) ?? 0 ),
+				'photo'      => \App\resolve_vehicle_gallery( $vehicle )[0]['url'] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) ),
+				'link'       => $vin ? Intice_VDP::vdp_url( $vin, $post_type, $vehicle ) : '',
+			);
+		}
+
+		return array( 'vehicles' => $vehicles );
+	}
+
+	/**
+	 * Resolve a scalar field from a raw Intice vehicle array, checking the
+	 * top-level field first (and its underscore variant), then falling back
+	 * to the dealer-mapped `payload` bag — same pattern as build_terms().
+	 *
+	 * @param array  $vehicle Raw Intice vehicle array.
+	 * @param string $key     Field key to resolve.
+	 * @return string
+	 */
+	private static function resolve_field( array $vehicle, string $key ): string {
+		$payload        = $vehicle['payload'] ?? array();
+		$key_underscore = str_replace( '-', '_', $key );
+
+		$value = $vehicle[ $key ]
+			?? $vehicle[ $key_underscore ]
+			?? $payload[ $key ]
+			?? $payload[ $key_underscore ]
+			?? '';
+
+		return (string) $value;
 	}
 
 	/**

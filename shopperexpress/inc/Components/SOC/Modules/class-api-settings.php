@@ -341,6 +341,7 @@ class Api_Settings implements SOC_Module {
 			array( 'key' => 'srp_used-listings', 'label' => 'Used Listings (SRP)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
 			array( 'key' => 'srp_listings_custom', 'label' => 'New Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
 			array( 'key' => 'srp_used-listings_custom', 'label' => 'Used Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
+			array( 'key' => 'srp_vehicles-feed', 'label' => 'Vehicles Feed', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
 		);
 
 		$rows = array();
@@ -367,9 +368,13 @@ class Api_Settings implements SOC_Module {
 			$count      = count( $live_entries );
 			$status     = 'missing';
 			$expires_at = null;
+			$cached_at  = null;
 
 			if ( $count > 0 ) {
 				$earliest = min( array_column( $live_entries, 'expires_at' ) );
+				// track_key() always stores expires_at = write_time + ttl, so the write
+				// time is recoverable without storing it separately.
+				$cached_at = $earliest - $group['ttl'];
 
 				if ( $earliest > $now ) {
 					$status     = 'valid';
@@ -390,7 +395,7 @@ class Api_Settings implements SOC_Module {
 				'count'      => $count,
 				'status'     => $status,
 				'expires_at' => $expires_at,
-				'ttl_label'  => human_readable_duration( gmdate( 'H:i:s', $group['ttl'] ) ),
+				'cached_at'  => $cached_at ? wp_date( 'M j, Y g:i A', $cached_at ) : null,
 			);
 		}
 
@@ -416,7 +421,7 @@ class Api_Settings implements SOC_Module {
 	/**
 	 * Flush a specific cache group.
 	 *
-	 * @param string $group  'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', or 'used-custom'.
+	 * @param string $group  'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
 	 * @return int Deleted rows.
 	 */
 	public function flush_api_cache_group( string $group ): int {
@@ -425,6 +430,7 @@ class Api_Settings implements SOC_Module {
 			'used'        => array( 'used-listings', false ),
 			'new-custom'  => array( 'listings', true ),
 			'used-custom' => array( 'used-listings', true ),
+			'feed'        => array( 'vehicles-feed', false ),
 		);
 
 		if ( isset( $srp_map[ $group ] ) ) {

@@ -171,10 +171,10 @@
       font-size: 14px;
       line-height: 1.2857;
       text-transform: none;
-      background-color: #077cc3;
+      background-color: #0074b3;
 
       &:hover {
-        background-color: #2089c9;
+        background-color: rgba(0, 116, 179, 0.9);
       }
 
       &:focus-visible {
@@ -222,7 +222,7 @@
   &__stars-row {
     position: relative;
     display: inline-block;
-    color: #dadce0;
+    color: #6b6b6b;
     font-size: 25px;
     line-height: 1;
     letter-spacing: 1px;
@@ -251,7 +251,7 @@
     left: 0;
     width: var(--fill, 0%);
     overflow: hidden;
-    color: #fbbc04;
+    color: #0074b3;
   }
 }
 
@@ -289,7 +289,7 @@
       }
 
       a {
-        color: rgb(0, 124, 195);
+        color: rgb(0, 86, 133);
         text-transform: capitalize;
 
         &:hover {
@@ -357,7 +357,7 @@
   &__info {
     font-size: 12px;
     line-height: 1.3333;
-    color: rgba($dark-gray, 0.5);
+    color: rgba($dark-gray, 0.8);
 
     a {
       color: #1f88c8;

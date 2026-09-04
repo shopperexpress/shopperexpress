@@ -27,9 +27,12 @@ $alt_array      = array( $year, $make, $model, $trim, $exterior_color, '- ' . ge
 			<a class="ghost-link" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" aria-label="<?php echo esc_attr( implode( ' ', $aria_label ) ); ?>"></a>
 			<div class="card-head">
 				<div class="card-head__holder">
-					<?php if ( $status = get_field( 'vehicle-status', $post_id ) ) : ?>
+					<?php
+					if ( $status = get_field( 'vehicle-status', $post_id ) ) :
+						$badge = \App\resolve_badge_style( $status, 'srp', $post_type );
+						?>
 						<div class="badges-list">
-							<span class="card-badge-status"><?php echo $status; ?></span>
+							<span class="card-badge-status"<?php echo $badge['style'] ? ' style="' . esc_attr( $badge['style'] ) . '"' : ''; ?>><?php echo esc_html( $badge['text'] ); ?></span>
 						</div>
 					<?php endif ?>
 					<span class="card-brand"><?php echo esc_html( $year ); ?> <?php echo esc_html( $make ); ?></span>
@@ -87,12 +90,12 @@ $alt_array      = array( $year, $make, $model, $trim, $exterior_color, '- ' . ge
 					</span>
 				<?php endif; ?>
 				<div class="nav card-tabs" role="tablist">
-					<button class="card-tabs-link" id="detail-tab-<?php echo $post_id ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $post_id ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $post_id ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
-					<button class="card-tabs-link active" id="price-tab-<?php echo $post_id ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $post_id ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $post_id ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link" id="detail-tab-<?php echo $post_id; ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $post_id; ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $post_id; ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link active" id="price-tab-<?php echo $post_id; ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $post_id; ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $post_id; ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
 				</div>
 			</div>
 			<div class="tab-content">
-				<div class="tab-pane fade" id="product-detail-info-<?php echo $post_id ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $post_id ?>">
+				<div class="tab-pane fade" id="product-detail-info-<?php echo $post_id; ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $post_id; ?>">
 					<?php
 					get_template_part(
 						'template-parts/detail',
@@ -105,7 +108,7 @@ $alt_array      = array( $year, $make, $model, $trim, $exterior_color, '- ' . ge
 					);
 					?>
 				</div>
-				<div class="tab-pane fade show active" id="product-price-info-<?php echo $post_id ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $post_id ?>">
+				<div class="tab-pane fade show active" id="product-price-info-<?php echo $post_id; ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $post_id; ?>">
 					<ul class="payment-info">
 						<?php
 						get_template_part(
@@ -138,7 +141,17 @@ $alt_array      = array( $year, $make, $model, $trim, $exterior_color, '- ' . ge
 								'type'      => 'srp',
 							)
 						);
-					?>
+						get_template_part(
+							'template-parts/detail',
+							'info',
+							array(
+								'post_type' => $post_type,
+								'post_id'   => $post_id,
+								'class'     => 'card-detail',
+								'show_on'   => 'pricing',
+							)
+						);
+						?>
 				</div>
 			</div>
 			<?php

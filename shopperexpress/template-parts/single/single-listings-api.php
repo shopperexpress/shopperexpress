@@ -55,7 +55,10 @@ $stock       = $v['stock'] ?? '';
 $vin_number  = $vin;
 $sold        = ! empty( $v['sold'] );
 $certified   = ! empty( $v['certified'] );
-$images      = $v['images'] ?? ( ! empty( $v['image'] ) ? array( $v['image'] ) : array() );
+// Resolved directly from payload.use_images_list, not Nexus's own
+// active_image_list — see \App\resolve_vehicle_gallery(). Each item is
+// {url, is_background, is_reverse}.
+$images      = \App\resolve_vehicle_gallery( $v );
 $features    = $v['features'] ?? array();
 $condition   = $v['condition'] ?? '';
 $status      = $payload['special field 3'] ?? '';
@@ -98,7 +101,7 @@ if ( ! empty( $payload['seo_description'] ) ) {
 // payload.seo_image overrides the primary image used for OG/Twitter cards.
 $_seo_image = ! empty( $payload['seo_image'] )
 	? $payload['seo_image']
-	: ( ! empty( $v['images'][0] ) ? $v['images'][0] : ( $v['image'] ?? '' ) );
+	: ( ! empty( $v['images'][0]['url'] ) ? $v['images'][0]['url'] : ( $v['image'] ?? '' ) );
 $_seo_url   = \App\Components\Api\Intice_VDP::vdp_url( $vin, $post_type );
 
 add_filter( 'wpseo_title', fn() => $_seo_title, 20 );
@@ -127,7 +130,9 @@ add_action(
 	5
 );
 // ─────────────────────────────────────────────────────────────────────────────
-
+if ( is_user_logged_in() ) {
+	acf_form_head();
+}
 get_header();
 ?>
 
@@ -172,9 +177,11 @@ get_header();
 						<?php endif; ?>
 					</div> <!-- Status badge -->
 					<div class="badges-wrapp">
-						<?php if ( $status ) : ?>
+						<?php if ( $status ) :
+							$badge = \App\resolve_badge_style( $status, 'vdp', $post_type );
+							?>
 							<div class="badges-list">
-								<span class="card-badge-status"><?php echo $status; ?></span>
+								<span class="card-badge-status"<?php echo $badge['style'] ? ' style="' . esc_attr( $badge['style'] ) . '"' : ''; ?>><?php echo esc_html( $badge['text'] ); ?></span>
 							</div>
 						<?php endif; ?>
 						<?php if ( wps_check_current_usser() ) : ?>
@@ -717,7 +724,7 @@ get_template_part(
 	null,
 	array(
 		'post_id'      => 0,
-		'image'        => $images[0] ?? '',
+		'image'        => $images[0]['url'] ?? '',
 		'title'        => $page_title,
 		'vin'          => $vin_number,
 		'stock_number' => $stock,

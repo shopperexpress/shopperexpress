@@ -533,6 +533,36 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_660bea0639375"
+                },
+                {
+                    "key": "field_68f1detail0001",
+                    "label": "Show on",
+                    "name": "show_on",
+                    "aria-label": "",
+                    "type": "checkbox",
+                    "instructions": "Where this row appears. Defaults to the Detail tab/section.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "detail": "Detail",
+                        "pricing": "Pricing"
+                    },
+                    "default_value": [
+                        "detail"
+                    ],
+                    "return_format": "value",
+                    "allow_custom": 0,
+                    "allow_in_bindings": 0,
+                    "layout": "horizontal",
+                    "toggle": 0,
+                    "save_custom": 0,
+                    "custom_choice_button_text": "Add new choice",
+                    "parent_repeater": "field_660bea0639375"
                 }
             ]
         },
@@ -764,5 +794,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1779357694
+    "modified": 1788443806
 }

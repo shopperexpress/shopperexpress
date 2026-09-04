@@ -170,6 +170,17 @@ class Scripts implements Theme_Component {
 	}
 
 	/**
+	 * Combined new+used vehicles feed REST URL for the currently active API mode.
+	 *
+	 * @return string
+	 */
+	private function vehicles_feed_url(): string {
+		return \App\is_api_mode()
+			? rest_url( 'v1/intice/vehicles/vehicles-feed' )
+			: rest_url( 'v1/vehicles/vehicles-feed' );
+	}
+
+	/**
 	 * Theme scripts enqueue.
 	 *
 	 * @return void
@@ -279,6 +290,7 @@ class Scripts implements Theme_Component {
 				'adf_lead_nonce'      => wp_create_nonce( 'submit_adf_lead' ),
 				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
 				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
+				'vehicles_feed_rest'  => $this->vehicles_feed_url(),
 			)
 		);
 		wp_enqueue_script(
@@ -298,6 +310,7 @@ class Scripts implements Theme_Component {
 				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
 				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
 				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
+				'vehicles_feed_rest'  => $this->vehicles_feed_url(),
 			)
 		);
 	}

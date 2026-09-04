@@ -163,7 +163,7 @@ class Api implements Theme_Component {
 									if ( $key != 'model' . $post_type ) {
 										$model = ! empty( $vehicle['terms'][ 'model' . $post_type ] ) ? $vehicle['terms'][ 'model' . $post_type ][0] : '';
 									}
-									$trim = ! empty( $vehicle['terms'][ 'trim' . $post_type ] ) ? $vehicle['terms'][ 'trim' . $post_type ][0] : '';
+									$trim    = ! empty( $vehicle['terms'][ 'trim' . $post_type ] ) ? $vehicle['terms'][ 'trim' . $post_type ][0] : '';
 									$title   = array();
 									$title[] = $value;
 									if ( ! empty( $model ) ) {
@@ -379,6 +379,8 @@ class Api implements Theme_Component {
 			} else {
 				$output['vehicles'] = ( isset( $_REQUEST['similar'] ) && $_REQUEST['similar'] == 'true' ) || ( isset( $_REQUEST['sort'] ) && $_REQUEST['sort'] == 'unique' ) ? $this->generate_vehicles_data( $post_type, true ) : $this->generate_vehicles_data( $post_type );
 			}
+		} elseif ( 'vehicles-feed' === $post_type ) {
+			$output['vehicles'] = $this->generate_vehicles_feed_data();
 		} else {
 			$output['vehicles'] = $this->generate_vehicles_data( $post_type );
 		}
@@ -1005,6 +1007,48 @@ class Api implements Theme_Component {
 		}
 
 		return rest_ensure_response( $output );
+	}
+
+	/**
+	 * Generate a flat, combined new+used vehicles feed.
+	 *
+	 * Unlike generate_vehicles_data()/generate_vehicles_data_new(), this returns only
+	 * scalar fields (no rendered HTML card, no taxonomy terms) for a lightweight export.
+	 *
+	 * @return array List of { vin, year, make, model, trim, drivetrain, body_style, price, photo, link }.
+	 */
+	private function generate_vehicles_feed_data(): array {
+		$query = get_posts(
+			array(
+				'post_type'      => array( 'listings', 'used-listings' ),
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+			)
+		);
+
+		$vehicles = array();
+
+		foreach ( $query as $post_id ) {
+			$price = get_field( 'price_sort', $post_id );
+			if ( '' === $price || null === $price ) {
+				$price = get_field( 'price', $post_id );
+			}
+
+			$vehicles[] = array(
+				'vin'        => get_field( 'vin_number', $post_id ),
+				'year'       => get_field( 'year', $post_id ),
+				'make'       => get_field( 'make', $post_id ),
+				'model'      => get_field( 'model', $post_id ),
+				'trim'       => get_field( 'trim', $post_id ),
+				'drivetrain' => get_field( 'drivetrain', $post_id ),
+				'body_style' => get_field( 'body_style', $post_id ),
+				'price'      => (float) $price,
+				'photo'      => get_field( 'primaryimageurl', $post_id ),
+				'link'       => get_the_permalink( $post_id ),
+			);
+		}
+
+		return $vehicles;
 	}
 
 	/**

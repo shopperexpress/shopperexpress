@@ -749,7 +749,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom' );
+		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );

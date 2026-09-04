@@ -17,7 +17,7 @@ if ( ! in_array( $_compare_post_type, array( 'listings', 'used-listings', 'offer
 <!-- Compare Popup -->
 <div class="compare-popup">
 	<div class="compare-popup__head">
-		<strong class="compare-popup__title"><?php esc_html_e( 'Add up to 4 more vehicles', 'shopperexpress' ); ?></strong>
+		<strong class="compare-popup__title" data-max-text="<?php esc_attr_e( 'Compare', 'shopperexpress' ); ?>"><?php esc_html_e( 'Add up to', 'shopperexpress' ); ?> <span class="compare-popup__count">4</span> <?php esc_html_e( 'more vehicles', 'shopperexpress' ); ?></strong>
 		<button class="compare-popup__close" type="button" aria-label="<?php esc_attr_e( 'Close', 'shopperexpress' ); ?>">
 			<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px">
 				<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"></path>

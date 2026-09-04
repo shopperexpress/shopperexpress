@@ -876,9 +876,14 @@ class JSON_LD implements Theme_Component {
 
 		$p = $prop( 'image' );
 		if ( $p['enabled'] ) {
-			$img = '' !== $p['static_value']
-				? $p['static_value']
-				: ( $v[ $p['acf_key'] ?: 'images' ][0] ?? ( $v['image'] ?? '' ) );
+			if ( '' !== $p['static_value'] ) {
+				$img = $p['static_value'];
+			} else {
+				$img = $v[ $p['acf_key'] ?: 'images' ][0] ?? ( $v['image'] ?? '' );
+				if ( is_array( $img ) ) {
+					$img = $img['url'] ?? '';
+				}
+			}
 			if ( $img ) {
 				$schema['image'] = esc_url( $img );
 			}

@@ -30,6 +30,17 @@ class Cache_Registry {
 		'lease-offers',
 		'finance-offers',
 		'conditional-offers',
+		'vehicles-feed',
+	);
+
+	/**
+	 * Pseudo post types that participate in the `v1/vehicles/{post_type}` cache
+	 * scheme but aren't real registered CPTs (e.g. the combined new+used feed).
+	 *
+	 * @var string[]
+	 */
+	private static array $virtual_types = array(
+		'vehicles-feed',
 	);
 
 	/**
@@ -40,8 +51,13 @@ class Cache_Registry {
 		$detected = self::detect_from_acf();
 		$merged   = array_unique( array_merge( self::$known_types, $detected ) );
 
-		// Filter to only types that actually exist in WordPress.
-		return array_values( array_filter( $merged, static fn( $t ) => post_type_exists( $t ) ) );
+		// Filter to only types that actually exist in WordPress, plus known virtual types.
+		return array_values(
+			array_filter(
+				$merged,
+				static fn( $t ) => post_type_exists( $t ) || in_array( $t, self::$virtual_types, true )
+			)
+		);
 	}
 
 	/**

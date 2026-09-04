@@ -30,12 +30,10 @@ $mileage        = $vehicle['mileage'] ?? 0;
 $price          = $vehicle['price'] ?? 0;
 $vin            = strtoupper( $vehicle['vin'] ?? '' );
 
-// `images` is already resolved server-side to the active gallery
-// (use_images_list → primary/srp — see VehicleApiResource::toArray());
-// prefer it so the SRP card matches the selected list, same as standard
-// mode's template-parts/gallery.php:71. Fall back to the flat thumb/image
-// fields only if the vehicle has no images at all.
-$thumb     = $vehicle['images'][0] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) );
+// Resolved directly from payload.use_images_list (images_primary/images_srp),
+// not Nexus's own active_image_list — see \App\resolve_vehicle_gallery().
+// Same source used by the VDP gallery, template-parts/api/gallery.php.
+$thumb     = \App\resolve_vehicle_gallery( $vehicle )[0]['url'] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) );
 $features  = $vehicle['features'] ?? array();
 $sold      = ! empty( $vehicle['sold'] );
 $certified = ! empty( $vehicle['certified'] );
@@ -62,17 +60,23 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 			<a class="ghost-link" href="<?php echo esc_url( $permalink ); ?>" aria-label="<?php echo esc_attr( $aria_label ); ?>"></a>
 			<div class="card-head">
 				<div class="card-head__holder">
-					<?php if ( $status ) : ?>
+					<?php
+					if ( $status ) :
+						$badge = \App\resolve_badge_style( $status, 'srp', $post_type );
+						?>
 						<div class="badges-list">
-							<span class="card-badge-status"><?php echo esc_html( $status ); ?></span>
+							<span class="card-badge-status"<?php echo $badge['style'] ? ' style="' . esc_attr( $badge['style'] ) . '"' : ''; ?>><?php echo esc_html( $badge['text'] ); ?></span>
 						</div>
 					<?php endif; ?>
 					<span class="card-brand"><?php echo esc_html( $year . ' ' . $make ); ?></span>
-					<?php
-					if ( $vin ) {
-						echo '<button class="api-favorite-button" data-postid="' . esc_attr( $vin ) . '" data-posttype="' . esc_attr( $post_type ) . '"><i class="sf-icon-star-empty"></i></button>';
-					}
-					?>
+					<?php if ( $vin ) : ?>
+						<button class="compare__btn" type="button" aria-label="<?php esc_attr_e( 'Compare', 'shopperexpress' ); ?>" data-postid="<?php echo esc_attr( $vin ); ?>" data-posttype="<?php echo esc_attr( $post_type ); ?>" data-toggle="tooltip" data-placement="top" title="+Compare">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+								<path d="M10.2666626,4.0002441h-3.7297363c-.3166504,0-.604126.0916748-.8624878.2749634-.2583008.1833496-.4375.4249878-.5374756.7250366l-2.1000366,6v8c0,.2833252.0958252.520813.2875366.7124634.1916504.1916504.4291382.2875366.7124634.2875366h1c.2833252,0,.520874-.0958862.7125244-.2875366s.2874756-.4291382.2874756-.7124634v-1h4.2297363v4.600647h1.5408936V.7614746h-1.5408936v3.2387695ZM6.8869629,6.0002441h3.3796997v3h-4.4297485l1.0500488-3ZM5.0369263,16.0002441v-5h5.2297363v5h-5.2297363ZM9.0369263,13.5002441c0,.416626-.145813.770813-.4375,1.0625-.291626.291626-.645813.4375-1.0625.4375-.416626,0-.770813-.145874-1.0625-.4375-.291626-.291687-.4375-.645874-.4375-1.0625,0-.416687.145874-.770874.4375-1.0625.291687-.291687.645874-.4375,1.0625-.4375.416687,0,.770874.145813,1.0625.4375.291687.291626.4375.645813.4375,1.0625ZM21.0369263,11.0002441v8c0,.2833252-.0958252.520813-.2874756.7124634s-.4291992.2875366-.7125244.2875366h-1c-.2833252,0-.520813-.0958862-.7124634-.2875366-.1917114-.1916504-.2875366-.4291382-.2875366-.7124634v-1h-4.9998169v-2h5.9998169v-5h-5.9998169v-2h5.1998291l-1.0499878-3h-4.1498413v-2h4.4998169c.3167114,0,.604187.0916748.8624878.2749634.2583618.1833496.4375.4249878.5375366.7250366l2.0999756,6ZM16.5369263,15.0002441c-.416626,0-.770813-.145874-1.0625-.4375-.291626-.291687-.4375-.645874-.4375-1.0625,0-.416687.145874-.770874.4375-1.0625.291687-.291687.645874-.4375,1.0625-.4375.416687,0,.770874.145813,1.0625.4375.291687.291626.4375.645813.4375,1.0625,0,.416626-.145813.770813-.4375,1.0625-.291626.291626-.645813.4375-1.0625.4375Z"></path>
+							</svg>
+						</button>
+						<button class="api-favorite-button" data-postid="<?php echo esc_attr( $vin ); ?>" data-posttype="<?php echo esc_attr( $post_type ); ?>"><i class="sf-icon-star-empty"></i></button>
+					<?php endif; ?>
 				</div>
 				<strong class="card-model"><?php echo esc_html( trim( $model . ' ' . $drivetrain . ' ' . $trim ) ); ?></strong>
 			</div>
@@ -98,69 +102,92 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 					</button>
 				<?php endif; ?>
 				<div class="nav card-tabs" role="tablist">
-					<button class="card-tabs-link" id="detail-tab-<?php echo $vin ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $vin ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $vin ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
-					<button class="card-tabs-link active" id="price-tab-<?php echo $vin ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $vin ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $vin ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link" id="detail-tab-<?php echo $vin; ?>" data-toggle="tab" data-target="#product-detail-info-<?php echo $vin; ?>" type="button" role="tab" aria-controls="product-detail-info-<?php echo $vin; ?>" aria-selected="false"><?php esc_html_e( 'Detail', 'shopperexpress' ); ?></button>
+					<button class="card-tabs-link active" id="price-tab-<?php echo $vin; ?>" data-toggle="tab" data-target="#product-price-info-<?php echo $vin; ?>" type="button" role="tab" aria-controls="product-price-info-<?php echo $vin; ?>" aria-selected="true"><?php esc_html_e( 'Pricing', 'shopperexpress' ); ?></button>
 				</div>
 			</div>
 			<div class="tab-content">
-				<div class="tab-pane fade" id="product-detail-info-<?php echo $vin ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $vin ?>">
-					<!-- Detail info -->
-					<?php if ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) : ?>
-						<dl class="card-detail">
+				<?php
+				/**
+				 * Render `listings-detail_srp_detail_info` rows whose `show_on`
+				 * checkbox (defaults to 'detail') matches $show_on — used for both
+				 * the Detail tab and the optional Pricing-tab detail block below.
+				 * Renders nothing if no row matches.
+				 */
+				$render_srp_detail_rows = function ( string $show_on ) use ( $vehicle ) {
+					if ( ! have_rows( 'listings-detail_srp_detail_info', 'options' ) ) {
+						return;
+					}
+
+					ob_start();
+					while ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) :
+						the_row();
+						$label       = get_sub_field( 'label' );
+						$value       = get_sub_field( 'value' );
+						$row_show_on = get_sub_field( 'show_on' );
+						$row_show_on = ! empty( $row_show_on ) ? (array) $row_show_on : array( 'detail' );
+
+						if ( ! in_array( $show_on, $row_show_on, true ) ) {
+							continue;
+						}
+
+						if ( ! empty( $value ) ) {
+
+							$result = preg_replace_callback(
+								'/\b([a-z_]+)\b/',
+								function ( $match ) use ( $vehicle ) {
+
+									$field = $match[1];
+									if ( 'vin_number' === $field ) {
+										$field = 'vin';
+									} elseif ( 'stock_number' === $field ) {
+										$field = 'stock';
+									} elseif ( 'miles_display' === $field ) {
+										$field = 'mileage';
+									}
+
+									$value = $vehicle[ $field ] ?? null;
+									if ( $value === null || $value === '' ) {
+										$value = $vehicle['payload'][ $field ] ?? null;
+									}
+
+									return ( $value !== null && $value !== '' ) ? $value : '';
+								},
+								$value
+							);
+						}
+						if ( ! empty( $result ) && ! empty( $label ) ) :
+							if ( $label ) :
+								?>
+								<dt><?php echo esc_html( $label ); ?></dt>
+							<?php endif; ?>
+							<dd
+								<?php
+								if ( str_contains( strtolower( $label ), 'vin' ) ) :
+									?>
+								class="vin" <?php endif; ?>>
+								<?php echo str_replace( '&nbsp;', ' ', esc_html( $result ) ); ?>
+							</dd>
 							<?php
-							while ( have_rows( 'listings-detail_srp_detail_info', 'options' ) ) :
-								the_row();
-								$label = get_sub_field( 'label' );
-								$value = get_sub_field( 'value' );
+						endif;
+					endwhile;
+					$rows_html = ob_get_clean();
 
-								if ( ! empty( $value ) ) {
-
-									$result = preg_replace_callback(
-										'/\b([a-z_]+)\b/',
-										function ( $match ) use ( $vehicle ) {
-
-											$field = $match[1];
-											if ( 'vin_number' === $field ) {
-												$field = 'vin';
-											} elseif ( 'stock_number' === $field ) {
-												$field = 'stock';
-											} elseif ( 'miles_display' === $field ) {
-												$field = 'mileage';
-											}
-
-											$value = $vehicle[ $field ];
-
-											if ( $value !== null && $value !== '' ) {
-												return $value;
-											} else {
-												return '';
-											}
-										},
-										$value
-									);
-								}
-								if ( ! empty( $result ) && ! empty( $label ) ) :
-									if ( $label ) :
-										?>
-										<dt><?php echo esc_html( $label ); ?></dt>
-									<?php endif; ?>
-									<dd
-										<?php
-										if ( str_contains( strtolower( $label ), 'vin' ) ) :
-											?>
-										class="vin" <?php endif; ?>>
-										<?php echo str_replace( '&nbsp;', ' ', esc_html( $result ) ); ?>
-									</dd>
-									<?php
-								endif;
-							endwhile;
-							?>
-						</dl>
-						<?php
-					endif;
+					if ( '' === trim( $rows_html ) ) {
+						return;
+					}
 					?>
+					<dl class="card-detail">
+						<?php echo $rows_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- already escaped per-row above. ?>
+					</dl>
+					<?php
+				};
+				?>
+				<div class="tab-pane fade" id="product-detail-info-<?php echo $vin; ?>" role="tabpanel" aria-labelledby="detail-tab-<?php echo $vin; ?>">
+					<!-- Detail info -->
+					<?php $render_srp_detail_rows( 'detail' ); ?>
 				</div>
-				<div class="tab-pane fade show active" id="product-price-info-<?php echo $vin ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $vin ?>">
+				<div class="tab-pane fade show active" id="product-price-info-<?php echo $vin; ?>" role="tabpanel" aria-labelledby="price-tab-<?php echo $vin; ?>">
 					<ul class="payment-info">
 						<?php
 						get_template_part(
@@ -196,6 +223,7 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 								'type'      => 'srp',
 							)
 						);
+						$render_srp_detail_rows( 'pricing' );
 						?>
 				</div>
 			</div>

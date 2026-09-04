@@ -4,6 +4,21 @@
 
 .full-width-image-slider {
   .slick-dots {
+    align-items: center;
+    bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    left: 10px;
+    position: absolute;
+    right: 10px;
+    z-index: 2;
+    pointer-events: none;
+
+    > li {
+      pointer-events: auto;
+    }
+
     button {
       @include animate(background-color);
       @include size(14px);

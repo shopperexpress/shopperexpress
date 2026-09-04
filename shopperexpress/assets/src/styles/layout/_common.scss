@@ -5182,7 +5182,7 @@ body {
 }
 
 .btn-disclosure {
-  @include animate(color);
+  @include animate(color box-shadow);
   display: inline-flex;
   align-items: center;
   vertical-align: top;
@@ -5199,10 +5199,6 @@ body {
 
   &:hover {
     color: $black;
-
-    svg {
-      fill: $black;
-    }
   }
 
   &.btn-fill {
@@ -5213,6 +5209,12 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+    color: $gray-700;
+
+    &:hover {
+      color: $black;
+      box-shadow: 0 0 3px rgba($black, 0.7);
+    }
 
     svg {
       position: static;
@@ -5226,7 +5228,7 @@ body {
     left: 0;
     width: 18px;
     height: auto;
-    fill: var(--primary);
+    fill: currentColor;
   }
 
   i {

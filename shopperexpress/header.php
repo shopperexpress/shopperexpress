@@ -267,6 +267,11 @@
 						</svg>
 					</button>
 				<?php endif; ?>
+				<button type="button" class="toggle-search-modal" aria-expanded="false" aria-controls="searchModal" aria-label="<?php esc_attr_e( 'Search inventory', 'shopperexpress' ); ?>">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+						<path fill="currentColor" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"></path>
+					</svg>
+				</button>
 				<button type="button" class="navigation-opener" aria-label="<?php _e( 'Main navigation toggle', 'shopperexpress' ); ?>">
 					<svg class="menu-close" xmlns="http://www.w3.org/2000/svg" height="24px" aria-hidden="true" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 						<path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path>
@@ -489,6 +494,49 @@
 					</div>
 				<?php endif; ?>
 			</nav>
+			<!-- search modal -->
+			<div class="search-modal" id="searchModal" aria-hidden="true">
+				<div class="search-modal__backdrop" data-search-modal-close></div>
+				<div class="search-modal__panel">
+					<div class="search-modal__field">
+						<svg class="search-modal__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+							<path fill="currentColor" d="M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14"></path>
+						</svg>
+						<input type="search" class="search-modal__input" name="search" placeholder="<?php esc_attr_e( 'Search all inventory...', 'shopperexpress' ); ?>" autocomplete="off">
+						<button type="button" class="search-modal__submit"><?php esc_html_e( 'GO', 'shopperexpress' ); ?></button>
+					</div>
+					<div class="search-modal__results-wrap">
+						<ul class="search-modal__results" data-search-modal-results hidden>
+							<li class="search-modal__empty" data-search-modal-empty hidden><?php esc_html_e( 'No results found', 'shopperexpress' ); ?></li>
+						</ul>
+					</div>
+					<div class="search-modal__loader" data-search-modal-loader>
+						<div class="spinner-border" role="status">
+							<span class="sr-only"><?php esc_html_e( 'Loading...', 'shopperexpress' ); ?></span>
+						</div>
+					</div>
+					<script id="search-modal-view-all-template" type="text/x-handlebars-template">
+						<li class='search-modal__view-all'>
+							<svg class='search-modal__view-all-icon' xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' aria-hidden='true'><path
+									fill='currentColor'
+									d='M9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l5.6 5.6q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-5.6-5.6q-.75.6-1.725.95T9.5 16m0-2q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14'
+								/></svg>
+							<?php esc_html_e( 'View all results for', 'shopperexpress' ); ?> "{{query}}"
+						</li>
+					</script>
+					<script id="search-modal-item-template" type="text/x-handlebars-template">
+						<li class='search-modal__item'>
+							<a class='search-modal__item-link' href='{{link}}'>
+								<img class='search-modal__item-photo' src='{{photo}}' alt='{{title}}'>
+								<span class='search-modal__item-info'>
+									<span class='search-modal__item-title'>{{title}}</span>
+									<span class='search-modal__item-price'>{{price}}</span>
+								</span>
+							</a>
+						</li>
+					</script>
+				</div>
+			</div>
 		</header>
 		<main id="main">
 			<?php

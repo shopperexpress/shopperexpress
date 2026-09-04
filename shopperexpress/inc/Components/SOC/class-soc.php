@@ -55,7 +55,7 @@ class SOC implements Theme_Component {
 		'integrations' => array(
 			'label'   => 'API & Integrations',
 			'icon'    => 'dashicons-rest-api',
-			'modules' => array( 'api-health', 'api-settings', 'developer-tools' ),
+			'modules' => array( 'api-settings', 'developer-tools', 'api-health' ),
 		),
 		'leads'        => array(
 			'label'   => 'Leads & Vehicles',
