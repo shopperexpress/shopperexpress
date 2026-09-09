@@ -415,6 +415,13 @@ while ( have_posts() ) :
 							endwhile;
 						endif;
 
+						$ipacket_field = $post_type === 'used-listings' ? 'ipacket_used' : 'ipacket_new';
+						$ipacket       = get_field( $ipacket_field, 'options' );
+						if ( $ipacket && ! empty( $ipacket['show'] ) && ! empty( $ipacket['image'] ) && ! empty( $ipacket['url'] ) ) {
+							$ipacket_url  = str_replace( '{VIN}', $vin_number, $ipacket['url'] );
+							$badges_html .= '<li><a href="' . esc_url( $ipacket_url ) . '" target="_blank">' . get_attachment_image( $ipacket['image'] ) . '</a></li>';
+						}
+
 						if ( ! empty( $badges_html ) ) :
 							?>
 							<div class="details-html">

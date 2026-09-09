@@ -37,8 +37,8 @@ $payload = $vehicle['payload'] ?? array();
 // candidate key(s) to actually look up, tried in order.
 $field_aliases = array(
 	'original_price' => array( 'msrp' ),
-	'price'          => array( 'price_sort', 'price' ),
-	'price_sort'     => array( 'price_sort', 'price' ),
+	'price'          => array( 'price' ),
+	'price_sort'     => array( 'price_sort' ),
 	'loan_payment'   => array( 'loan_payment', 'loan_payment_sort' ),
 	'lease_payment'  => array( 'lease_payment', 'lease_payment_sort' ),
 );

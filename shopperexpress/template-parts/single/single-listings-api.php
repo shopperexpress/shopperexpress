@@ -47,14 +47,14 @@ $GLOBALS['intice_vehicle'] = $v;
 
 \App\Components\Base\Vehicle_Views::record_view( $vin );
 
-$year        = $v['year'] ?? '';
-$make        = $v['make'] ?? '';
-$model       = $v['model'] ?? '';
-$trim        = $v['trim'] ?? '';
-$stock       = $v['stock'] ?? '';
-$vin_number  = $vin;
-$sold        = ! empty( $v['sold'] );
-$certified   = ! empty( $v['certified'] );
+$year       = $v['year'] ?? '';
+$make       = $v['make'] ?? '';
+$model      = $v['model'] ?? '';
+$trim       = $v['trim'] ?? '';
+$stock      = $v['stock'] ?? '';
+$vin_number = $vin;
+$sold       = ! empty( $v['sold'] );
+$certified  = ! empty( $v['certified'] );
 // Resolved directly from payload.use_images_list, not Nexus's own
 // active_image_list — see \App\resolve_vehicle_gallery(). Each item is
 // {url, is_background, is_reverse}.
@@ -177,7 +177,8 @@ get_header();
 						<?php endif; ?>
 					</div> <!-- Status badge -->
 					<div class="badges-wrapp">
-						<?php if ( $status ) :
+						<?php
+						if ( $status ) :
 							$badge = \App\resolve_badge_style( $status, 'vdp', $post_type );
 							?>
 							<div class="badges-list">
@@ -265,6 +266,13 @@ get_header();
 							}
 							endwhile;
 						endif;
+
+						$ipacket_field = $post_type === 'used-listings' ? 'ipacket_used' : 'ipacket_new';
+						$ipacket       = get_field( $ipacket_field, 'options' );
+					if ( $ipacket && ! empty( $ipacket['show'] ) && ! empty( $ipacket['image'] ) && ! empty( $ipacket['url'] ) ) {
+						$ipacket_url  = str_replace( '{VIN}', $vin_number, $ipacket['url'] );
+						$badges_html .= '<li><a href="' . esc_url( $ipacket_url ) . '" target="_blank">' . get_attachment_image( $ipacket['image'] ) . '</a></li>';
+					}
 
 					if ( ! empty( $badges_html ) ) :
 						?>
@@ -502,7 +510,7 @@ get_header();
 										<li>
 											<div class="text-holder">
 												<?php if ( $row_title ) : ?>
-													<h4 class="h3"><?php echo esc_html( $row_title ); ?></h4>
+													<h4 class="h3"><?php echo $row_title; ?></h4>
 												<?php endif; ?>
 												<?php the_sub_field( 'description' ); ?>
 											</div>

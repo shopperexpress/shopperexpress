@@ -15,7 +15,7 @@ $vehicle = $args['vehicle'] ?? array();
 $payload = $vehicle['payload'] ?? array();
 
 $vdp_description = get_field( 'vdp_description', 'options' );
-$ai_description  = $payload['ai_vdp_description'] ?? '';
+$ai_description  = $payload['ai_description'] ?? '';
 
 if ( ! $vdp_description && ! $ai_description ) {
 	return;
@@ -49,7 +49,11 @@ if ( ! $heading && ! $body && ! trim( $list_items ) ) {
 			<?php if ( $heading ) : ?>
 				<strong class="title"><?php echo esc_html( $heading ); ?></strong>
 			<?php endif; ?>
-			<?php if ( $body ) : echo wp_kses_post( $body ); endif; ?>
+			<?php
+			if ( $body ) :
+				echo wp_kses_post( $body );
+endif;
+			?>
 			<?php if ( trim( $list_items ) ) : ?>
 				<ul class="vdp-list">
 					<?php echo $list_items; ?>
