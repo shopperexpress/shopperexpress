@@ -199,9 +199,8 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 		<thead>
 			<tr>
 				<th><?php esc_html_e( 'Cache Group', 'shopperexpress' ); ?></th>
-				<th><?php esc_html_e( 'Entries', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Status', 'shopperexpress' ); ?></th>
-				<th><?php esc_html_e( 'Expires', 'shopperexpress' ); ?></th>
+				<th><?php esc_html_e( 'Cleared By', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Cached At', 'shopperexpress' ); ?></th>
 				<th><?php esc_html_e( 'Actions', 'shopperexpress' ); ?></th>
 			</tr>
@@ -210,8 +209,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 			<?php
 			$status_map = array(
 				'valid'   => array( 'class' => 'soc-badge--ok',      'label' => 'Valid' ),
-				'stale'   => array( 'class' => 'soc-badge--warn',    'label' => 'Stale' ),
-				'expired' => array( 'class' => 'soc-badge--fail',    'label' => 'Expired' ),
+				'pending' => array( 'class' => 'soc-badge--warn',    'label' => 'Pending' ),
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
 
@@ -224,22 +222,30 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				?>
 				<tr>
 					<td><strong><?php echo esc_html( $row['label'] ); ?></strong></td>
-					<td><?php echo esc_html( $row['count'] ); ?></td>
 					<td>
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
-						<?php if ( $st === 'stale' ) : ?>
+						<?php if ( $st === 'pending' ) : ?>
 							<small style="margin-left:4px;color:#856404;"><?php esc_html_e( 'regen pending…', 'shopperexpress' ); ?></small>
 						<?php endif; ?>
 					</td>
-					<td><?php echo $row['expires_at'] ? esc_html( $row['expires_at'] ) : '—'; ?></td>
+					<td>
+						<?php if ( ! empty( $row['cleared_by'] ) ) : ?>
+							<?php echo esc_html( $row['cleared_by'] ); ?>
+							<?php if ( ! empty( $row['cleared_at'] ) ) : ?>
+								<br /><small style="color:#666;"><?php echo esc_html( $row['cleared_at'] ); ?></small>
+							<?php endif; ?>
+						<?php else : ?>
+							—
+						<?php endif; ?>
+					</td>
 					<td><?php echo $row['cached_at'] ? esc_html( $row['cached_at'] ) : '—'; ?></td>
 					<td>
 						<button
 							class="button button-small soc-flush-api-cache-group"
 							data-group="<?php echo esc_attr( $group ); ?>"
-							<?php echo $row['count'] === 0 ? 'disabled' : ''; ?>
+							<?php echo $st === 'missing' ? 'disabled' : ''; ?>
 						>
 							<?php esc_html_e( 'Flush', 'shopperexpress' ); ?>
 						</button>

@@ -25,6 +25,30 @@ class Api_Settings implements SOC_Module {
 	const OPTION_API_URL        = 'shopperexpress_intice_api_url';
 	const OPTION_CACHE_ENABLED  = 'shopperexpress_intice_cache_enabled';
 	const OPTION_VEHICLE_FILTERS = 'shopperexpress_vehicle_filters';
+	const OPTION_CACHE_CLEARED_BY = 'shopperexpress_intice_cache_cleared_by';
+
+	/**
+	 * Label recorded as the "cleared by" value when Nexus proactively refreshes
+	 * the cache right after an import run — see Intice_Rest::handle_cache_refresh().
+	 */
+	const CLEARED_BY_IMPORT = 'Intice (после импорта)';
+
+	/**
+	 * All tracking keys used by collect_api_cache() — kept in one place so a
+	 * "flush everything" action can stamp every group in one call.
+	 *
+	 * @var string[]
+	 */
+	const ALL_CACHE_GROUP_KEYS = array(
+		'vehicles',
+		'vehicle',
+		'meta',
+		'srp_listings',
+		'srp_used-listings',
+		'srp_listings_custom',
+		'srp_used-listings_custom',
+		'srp_vehicles-feed',
+	);
 
 	/**
 	 * Static reference of filterable vehicle fields — same choices/semantics as the
@@ -344,7 +368,8 @@ class Api_Settings implements SOC_Module {
 			array( 'key' => 'srp_vehicles-feed', 'label' => 'Vehicles Feed', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
 		);
 
-		$rows = array();
+		$cleared_by_all = get_option( self::OPTION_CACHE_CLEARED_BY, array() );
+		$rows           = array();
 
 		foreach ( $groups as $group ) {
 			$live_entries  = array();
@@ -365,41 +390,56 @@ class Api_Settings implements SOC_Module {
 				}
 			}
 
-			$count      = count( $live_entries );
-			$status     = 'missing';
-			$expires_at = null;
-			$cached_at  = null;
+			$count     = count( $live_entries );
+			$status    = 'missing';
+			$cached_at = null;
 
 			if ( $count > 0 ) {
 				$earliest = min( array_column( $live_entries, 'expires_at' ) );
 				// track_key() always stores expires_at = write_time + ttl, so the write
 				// time is recoverable without storing it separately.
 				$cached_at = $earliest - $group['ttl'];
-
-				if ( $earliest > $now ) {
-					$status     = 'valid';
-					$expires_at = human_time_diff( $now, $earliest ) . ' left';
-				} else {
-					$status     = 'expired';
-					$expires_at = 'Expired';
-				}
+				$status    = $earliest > $now ? 'valid' : 'pending';
+			} elseif ( ! empty( $stale_entries ) ) {
+				// Live copy is gone but a stale-while-revalidate copy is still being
+				// served while a background cron rebuilds it — same "pending" state.
+				$status = 'pending';
 			}
 
-			if ( 'missing' === $status && ! empty( $stale_entries ) ) {
-				$status = 'stale';
-			}
+			$cleared = $cleared_by_all[ $group['key'] ] ?? null;
 
 			$rows[] = array(
 				'label'      => $group['label'],
 				'key'        => $group['key'],
-				'count'      => $count,
 				'status'     => $status,
-				'expires_at' => $expires_at,
 				'cached_at'  => $cached_at ? wp_date( 'M j, Y g:i A', $cached_at ) : null,
+				'cleared_by' => $cleared['by'] ?? null,
+				'cleared_at' => ! empty( $cleared['at'] ) ? wp_date( 'M j, Y g:i A', $cleared['at'] ) : null,
 			);
 		}
 
 		return $rows;
+	}
+
+	/**
+	 * Record who last cleared/refreshed one or more cache groups — shown in the
+	 * "Cleared By" column instead of the old (unreliable) "Expires" countdown.
+	 * Called either with a WP user's email (manual "Flush" click in SOC) or
+	 * with self::CLEARED_BY_IMPORT (Nexus's post-import cache refresh webhook).
+	 *
+	 * @param string[] $group_keys Tracking keys, see self::ALL_CACHE_GROUP_KEYS.
+	 * @param string   $by
+	 * @return void
+	 */
+	public static function mark_cache_cleared( array $group_keys, string $by ): void {
+		$all = get_option( self::OPTION_CACHE_CLEARED_BY, array() );
+		$now = time();
+
+		foreach ( $group_keys as $key ) {
+			$all[ $key ] = array( 'by' => $by, 'at' => $now );
+		}
+
+		update_option( self::OPTION_CACHE_CLEARED_BY, $all, false );
 	}
 
 	/**
@@ -412,7 +452,9 @@ class Api_Settings implements SOC_Module {
 		$flushed = $client->flush_cache();
 
 		$user = wp_get_current_user();
-		SOC_Logger::write( 'cache', 'Intice API cache flushed by: ' . ( $user->user_email ?: 'unknown' ) );
+		$by   = $user->user_email ?: 'unknown';
+		self::mark_cache_cleared( self::ALL_CACHE_GROUP_KEYS, $by );
+		SOC_Logger::write( 'cache', 'Intice API cache flushed by: ' . $by );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
 		return $flushed;
@@ -425,20 +467,25 @@ class Api_Settings implements SOC_Module {
 	 * @return int Deleted rows.
 	 */
 	public function flush_api_cache_group( string $group ): int {
+		// Maps the flush-button group id to the post-type/sort pair AND to the
+		// tracking key used by collect_api_cache()/mark_cache_cleared().
 		$srp_map = array(
-			'new'         => array( 'listings', false ),
-			'used'        => array( 'used-listings', false ),
-			'new-custom'  => array( 'listings', true ),
-			'used-custom' => array( 'used-listings', true ),
-			'feed'        => array( 'vehicles-feed', false ),
+			'new'         => array( 'listings', false, 'srp_listings' ),
+			'used'        => array( 'used-listings', false, 'srp_used-listings' ),
+			'new-custom'  => array( 'listings', true, 'srp_listings_custom' ),
+			'used-custom' => array( 'used-listings', true, 'srp_used-listings_custom' ),
+			'feed'        => array( 'vehicles-feed', false, 'srp_vehicles-feed' ),
 		);
 
+		$user = wp_get_current_user();
+		$by   = $user->user_email ?: 'unknown';
+
 		if ( isset( $srp_map[ $group ] ) ) {
-			[ $post_type, $custom_sort ] = $srp_map[ $group ];
+			[ $post_type, $custom_sort, $tracking_key ] = $srp_map[ $group ];
 			$deleted = Intice_Rest::clear_cache( $post_type, $custom_sort );
 
-			$user = wp_get_current_user();
-			SOC_Logger::write( 'cache', "Intice SRP cache flushed [{$group}] by: " . ( $user->user_email ?: 'unknown' ) );
+			self::mark_cache_cleared( array( $tracking_key ), $by );
+			SOC_Logger::write( 'cache', "Intice SRP cache flushed [{$group}] by: {$by}" );
 			SOC_Cache::forget( $this->get_slug(), 'data' );
 
 			return $deleted;
@@ -452,8 +499,8 @@ class Api_Settings implements SOC_Module {
 		// while a background cron regenerates the live cache for this group.
 		$deleted = Intice_Api_Client::instance()->flush_group( $group );
 
-		$user = wp_get_current_user();
-		SOC_Logger::write( 'cache', "Intice API cache flushed [{$group}] by: " . ( $user->user_email ?: 'unknown' ) );
+		self::mark_cache_cleared( array( $group ), $by );
+		SOC_Logger::write( 'cache', "Intice API cache flushed [{$group}] by: {$by}" );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
 		return $deleted;

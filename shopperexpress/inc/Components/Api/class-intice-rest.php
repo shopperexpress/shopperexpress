@@ -154,6 +154,7 @@ class Intice_Rest implements Theme_Component {
 
 		self::clear_cache( 'vehicles-feed', false );
 
+		Api_Settings::mark_cache_cleared( Api_Settings::ALL_CACHE_GROUP_KEYS, Api_Settings::CLEARED_BY_IMPORT );
 		SOC_Logger::write( 'cache', 'Intice cache auto-refreshed after Nexus import.' );
 
 		return rest_ensure_response( array( 'refreshed' => true ) );
@@ -675,23 +676,19 @@ class Intice_Rest implements Theme_Component {
 			case 'price':
 				return self::first_usable(
 					array(
-						$vehicle['price_sort'] ?? null,
 						$payload['price_sort'] ?? null,
-						$vehicle['price'] ?? null,
 						$payload['price'] ?? null,
 					)
 				);
 			case 'original_price':
 				return self::first_usable(
 					array(
-						$vehicle['msrp'] ?? null,
 						$payload['msrp'] ?? null,
 					)
 				);
 			case 'loan_payment_sort':
 				return self::first_usable(
 					array(
-						$vehicle['payment_sort'] ?? null,
 						$payload['loan_payment_sort'] ?? null,
 						$payload['loan_payment'] ?? null,
 					)

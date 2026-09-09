@@ -7,6 +7,7 @@
 
 namespace App\Components\Base;
 
+use App\Components\Api\Intice_Rest;
 use App\Components\Theme_Component;
 use WP_Query;
 
@@ -107,6 +108,17 @@ class Shortcode implements Theme_Component {
 	public function stock( $atts = array() ) {
 		$condition = ! empty( $atts['condition'] ) ? strtolower( $atts['condition'] ) : 'new';
 		$post_type = $condition == 'used' ? 'used-listings' : 'listings';
+
+		if ( \App\is_api_mode() ) {
+			// get_vehicles_count() only reads meta.total from the raw API response, so it
+			// can't apply the SOC → API Settings → Filters exclusion rules (those run against
+			// full vehicle data). Reuse the same cached fetch + filter pass as
+			// get_listings_count() so this never shows a number the SRP grid doesn't back up.
+			$vehicles = \get_api_vehicles_by_condition( $condition );
+			$vehicles = Intice_Rest::apply_vehicle_filters( $vehicles, $post_type );
+
+			return count( $vehicles );
+		}
 
 		$args = array(
 			'post_type'      => $post_type,
