@@ -20,18 +20,18 @@ use App\Components\SOC\Support\SOC_Logger;
  */
 class Api_Settings implements SOC_Module {
 
-	const OPTION_API_MODE       = 'shopperexpress_api_mode_enabled';
-	const OPTION_API_KEY        = 'shopperexpress_intice_api_key';
-	const OPTION_API_URL        = 'shopperexpress_intice_api_url';
-	const OPTION_CACHE_ENABLED  = 'shopperexpress_intice_cache_enabled';
-	const OPTION_VEHICLE_FILTERS = 'shopperexpress_vehicle_filters';
+	const OPTION_API_MODE         = 'shopperexpress_api_mode_enabled';
+	const OPTION_API_KEY          = 'shopperexpress_intice_api_key';
+	const OPTION_API_URL          = 'shopperexpress_intice_api_url';
+	const OPTION_CACHE_ENABLED    = 'shopperexpress_intice_cache_enabled';
+	const OPTION_VEHICLE_FILTERS  = 'shopperexpress_vehicle_filters';
 	const OPTION_CACHE_CLEARED_BY = 'shopperexpress_intice_cache_cleared_by';
 
 	/**
 	 * Label recorded as the "cleared by" value when Nexus proactively refreshes
 	 * the cache right after an import run — see Intice_Rest::handle_cache_refresh().
 	 */
-	const CLEARED_BY_IMPORT = 'Intice (после импорта)';
+	const CLEARED_BY_IMPORT = 'Intice (after import)';
 
 	/**
 	 * All tracking keys used by collect_api_cache() — kept in one place so a
@@ -145,7 +145,7 @@ class Api_Settings implements SOC_Module {
 		$api_url = get_option( self::OPTION_API_URL, '' );
 		$api_key = get_option( self::OPTION_API_KEY, '' );
 
-		$api_mode     = (bool) get_option( self::OPTION_API_MODE, false );
+		$api_mode      = (bool) get_option( self::OPTION_API_MODE, false );
 		$cache_enabled = (bool) get_option( self::OPTION_CACHE_ENABLED, true );
 
 		$data = array(
@@ -215,7 +215,12 @@ class Api_Settings implements SOC_Module {
 		$rows = is_array( $all[ $post_type ] ?? null ) ? $all[ $post_type ] : array();
 
 		if ( empty( $rows ) ) {
-			$rows[] = array( 'field' => '', 'custom_key' => '', 'operator' => '>=', 'value' => '' );
+			$rows[] = array(
+				'field'      => '',
+				'custom_key' => '',
+				'operator'   => '>=',
+				'value'      => '',
+			);
 		}
 
 		return $rows;
@@ -310,7 +315,10 @@ class Api_Settings implements SOC_Module {
 		$key  = get_option( self::OPTION_API_KEY, '' );
 
 		if ( empty( $url ) || empty( $key ) ) {
-			return array( 'ok' => false, 'error' => 'API URL or key not configured.' );
+			return array(
+				'ok'    => false,
+				'error' => 'API URL or key not configured.',
+			);
 		}
 
 		$start    = microtime( true );
@@ -325,10 +333,14 @@ class Api_Settings implements SOC_Module {
 				),
 			)
 		);
-		$ms = round( ( microtime( true ) - $start ) * 1000, 2 );
+		$ms       = round( ( microtime( true ) - $start ) * 1000, 2 );
 
 		if ( is_wp_error( $response ) ) {
-			return array( 'ok' => false, 'error' => $response->get_error_message(), 'ms' => $ms );
+			return array(
+				'ok'    => false,
+				'error' => $response->get_error_message(),
+				'ms'    => $ms,
+			);
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
@@ -358,14 +370,54 @@ class Api_Settings implements SOC_Module {
 		$now      = time();
 
 		$groups = array(
-			array( 'key' => 'vehicles', 'label' => 'Vehicles (SRP)', 'ttl' => Intice_Api_Client::CACHE_TTL_VEHICLES, 'api_group' => true ),
-			array( 'key' => 'vehicle', 'label' => 'Single Vehicle (VDP)', 'ttl' => Intice_Api_Client::CACHE_TTL_VEHICLE, 'api_group' => true ),
-			array( 'key' => 'meta', 'label' => 'Filters Meta', 'ttl' => Intice_Api_Client::CACHE_TTL_META, 'api_group' => true ),
-			array( 'key' => 'srp_listings', 'label' => 'New Listings (SRP)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
-			array( 'key' => 'srp_used-listings', 'label' => 'Used Listings (SRP)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
-			array( 'key' => 'srp_listings_custom', 'label' => 'New Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
-			array( 'key' => 'srp_used-listings_custom', 'label' => 'Used Listings (Custom Sort)', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
-			array( 'key' => 'srp_vehicles-feed', 'label' => 'Vehicles Feed', 'ttl' => Intice_Rest::CACHE_TTL, 'api_group' => false ),
+			array(
+				'key'       => 'vehicles',
+				'label'     => 'Vehicles (SRP)',
+				'ttl'       => Intice_Api_Client::CACHE_TTL_VEHICLES,
+				'api_group' => true,
+			),
+			array(
+				'key'       => 'vehicle',
+				'label'     => 'Single Vehicle (VDP)',
+				'ttl'       => Intice_Api_Client::CACHE_TTL_VEHICLE,
+				'api_group' => true,
+			),
+			array(
+				'key'       => 'meta',
+				'label'     => 'Filters Meta',
+				'ttl'       => Intice_Api_Client::CACHE_TTL_META,
+				'api_group' => true,
+			),
+			array(
+				'key'       => 'srp_listings',
+				'label'     => 'New Listings (SRP)',
+				'ttl'       => Intice_Rest::CACHE_TTL,
+				'api_group' => false,
+			),
+			array(
+				'key'       => 'srp_used-listings',
+				'label'     => 'Used Listings (SRP)',
+				'ttl'       => Intice_Rest::CACHE_TTL,
+				'api_group' => false,
+			),
+			array(
+				'key'       => 'srp_listings_custom',
+				'label'     => 'New Listings (Custom Sort)',
+				'ttl'       => Intice_Rest::CACHE_TTL,
+				'api_group' => false,
+			),
+			array(
+				'key'       => 'srp_used-listings_custom',
+				'label'     => 'Used Listings (Custom Sort)',
+				'ttl'       => Intice_Rest::CACHE_TTL,
+				'api_group' => false,
+			),
+			array(
+				'key'       => 'srp_vehicles-feed',
+				'label'     => 'Vehicles Feed',
+				'ttl'       => Intice_Rest::CACHE_TTL,
+				'api_group' => false,
+			),
 		);
 
 		$cleared_by_all = get_option( self::OPTION_CACHE_CLEARED_BY, array() );
@@ -436,7 +488,10 @@ class Api_Settings implements SOC_Module {
 		$now = time();
 
 		foreach ( $group_keys as $key ) {
-			$all[ $key ] = array( 'by' => $by, 'at' => $now );
+			$all[ $key ] = array(
+				'by' => $by,
+				'at' => $now,
+			);
 		}
 
 		update_option( self::OPTION_CACHE_CLEARED_BY, $all, false );
@@ -482,7 +537,7 @@ class Api_Settings implements SOC_Module {
 
 		if ( isset( $srp_map[ $group ] ) ) {
 			[ $post_type, $custom_sort, $tracking_key ] = $srp_map[ $group ];
-			$deleted = Intice_Rest::clear_cache( $post_type, $custom_sort );
+			$deleted                                    = Intice_Rest::clear_cache( $post_type, $custom_sort );
 
 			self::mark_cache_cleared( array( $tracking_key ), $by );
 			SOC_Logger::write( 'cache', "Intice SRP cache flushed [{$group}] by: {$by}" );
@@ -519,88 +574,368 @@ class Api_Settings implements SOC_Module {
 	private function get_listings_fields_reference(): array {
 		return array(
 			'General'     => array(
-				array( 'label' => 'VIN', 'slug' => 'vin_number', 'demo' => '1HGCM82633A004352' ),
-				array( 'label' => 'Stock', 'slug' => 'stock_number', 'demo' => 'A12345' ),
-				array( 'label' => 'Year', 'slug' => 'year', 'demo' => '2024' ),
-				array( 'label' => 'Make', 'slug' => 'make', 'demo' => 'Toyota' ),
-				array( 'label' => 'Model', 'slug' => 'model', 'demo' => 'Camry' ),
-				array( 'label' => 'Trim', 'slug' => 'trim', 'demo' => 'SE' ),
-				array( 'label' => 'VehicleType', 'slug' => 'condition', 'demo' => 'new' ),
-				array( 'label' => 'BodyStyle', 'slug' => 'bodystyle', 'demo' => 'Sedan' ),
-				array( 'label' => 'Style', 'slug' => 'body_style', 'demo' => 'Sedan' ),
-				array( 'label' => 'TransmissionType', 'slug' => 'transmission', 'demo' => 'Automatic' ),
-				array( 'label' => 'InteriorType', 'slug' => 'interiortype', 'demo' => 'Cloth' ),
-				array( 'label' => 'InteriorColor', 'slug' => 'interior_color', 'demo' => 'Black' ),
-				array( 'label' => 'ExteriorColor', 'slug' => 'exterior_color', 'demo' => 'Silver' ),
-				array( 'label' => 'Mileage', 'slug' => 'mileage', 'demo' => '12345' ),
-				array( 'label' => 'Miles Display', 'slug' => 'miles_display', 'demo' => '12,345 mi' ),
-				array( 'label' => 'DateInStock', 'slug' => 'dateinstock', 'demo' => '2026-06-01' ),
-				array( 'label' => 'Sold', 'slug' => 'sold', 'demo' => '' ),
-				array( 'label' => 'Vehicle Status', 'slug' => 'vehicle-status', 'demo' => 'Available' ),
-				array( 'label' => 'Status_Code', 'slug' => 'status_code', 'demo' => 'A' ),
-				array( 'label' => 'Url', 'slug' => 'url', 'demo' => '/listings/new-2024-toyota-camry-sedan-se-1hgcm82633a004352-a12345/' ),
-				array( 'label' => 'Information', 'slug' => 'information', 'demo' => 'Internal notes text.' ),
-				array( 'label' => 'Comment1–5', 'slug' => 'comment1 … comment5', 'demo' => 'Free-text comment' ),
+				array(
+					'label' => 'VIN',
+					'slug'  => 'vin_number',
+					'demo'  => '1HGCM82633A004352',
+				),
+				array(
+					'label' => 'Stock',
+					'slug'  => 'stock_number',
+					'demo'  => 'A12345',
+				),
+				array(
+					'label' => 'Year',
+					'slug'  => 'year',
+					'demo'  => '2024',
+				),
+				array(
+					'label' => 'Make',
+					'slug'  => 'make',
+					'demo'  => 'Toyota',
+				),
+				array(
+					'label' => 'Model',
+					'slug'  => 'model',
+					'demo'  => 'Camry',
+				),
+				array(
+					'label' => 'Trim',
+					'slug'  => 'trim',
+					'demo'  => 'SE',
+				),
+				array(
+					'label' => 'VehicleType',
+					'slug'  => 'condition',
+					'demo'  => 'new',
+				),
+				array(
+					'label' => 'BodyStyle',
+					'slug'  => 'bodystyle',
+					'demo'  => 'Sedan',
+				),
+				array(
+					'label' => 'Style',
+					'slug'  => 'body_style',
+					'demo'  => 'Sedan',
+				),
+				array(
+					'label' => 'TransmissionType',
+					'slug'  => 'transmission',
+					'demo'  => 'Automatic',
+				),
+				array(
+					'label' => 'InteriorType',
+					'slug'  => 'interiortype',
+					'demo'  => 'Cloth',
+				),
+				array(
+					'label' => 'InteriorColor',
+					'slug'  => 'interior_color',
+					'demo'  => 'Black',
+				),
+				array(
+					'label' => 'ExteriorColor',
+					'slug'  => 'exterior_color',
+					'demo'  => 'Silver',
+				),
+				array(
+					'label' => 'Mileage',
+					'slug'  => 'mileage',
+					'demo'  => '12345',
+				),
+				array(
+					'label' => 'Miles Display',
+					'slug'  => 'miles_display',
+					'demo'  => '12,345 mi',
+				),
+				array(
+					'label' => 'DateInStock',
+					'slug'  => 'dateinstock',
+					'demo'  => '2026-06-01',
+				),
+				array(
+					'label' => 'Sold',
+					'slug'  => 'sold',
+					'demo'  => '',
+				),
+				array(
+					'label' => 'Vehicle Status',
+					'slug'  => 'vehicle-status',
+					'demo'  => 'Available',
+				),
+				array(
+					'label' => 'Status_Code',
+					'slug'  => 'status_code',
+					'demo'  => 'A',
+				),
+				array(
+					'label' => 'Url',
+					'slug'  => 'url',
+					'demo'  => '/listings/new-2024-toyota-camry-sedan-se-1hgcm82633a004352-a12345/',
+				),
+				array(
+					'label' => 'Information',
+					'slug'  => 'information',
+					'demo'  => 'Internal notes text.',
+				),
+				array(
+					'label' => 'Comment1–5',
+					'slug'  => 'comment1 … comment5',
+					'demo'  => 'Free-text comment',
+				),
 			),
 			'Fuel'        => array(
-				array( 'label' => 'MPGCity', 'slug' => 'city_mpg', 'demo' => '28' ),
-				array( 'label' => 'MPGHwy', 'slug' => 'highway_mpg', 'demo' => '39' ),
-				array( 'label' => 'EPAClassification', 'slug' => 'epaclassification', 'demo' => 'Midsize Cars' ),
-				array( 'label' => 'Fuel Type', 'slug' => 'fuel_type', 'demo' => 'Gasoline' ),
+				array(
+					'label' => 'MPGCity',
+					'slug'  => 'city_mpg',
+					'demo'  => '28',
+				),
+				array(
+					'label' => 'MPGHwy',
+					'slug'  => 'highway_mpg',
+					'demo'  => '39',
+				),
+				array(
+					'label' => 'EPAClassification',
+					'slug'  => 'epaclassification',
+					'demo'  => 'Midsize Cars',
+				),
+				array(
+					'label' => 'Fuel Type',
+					'slug'  => 'fuel_type',
+					'demo'  => 'Gasoline',
+				),
 			),
 			'Mechanical'  => array(
-				array( 'label' => 'EngineSize', 'slug' => 'engine', 'demo' => '2.5L' ),
-				array( 'label' => 'EngineDisplacement', 'slug' => 'enginedisplacement', 'demo' => '2487' ),
-				array( 'label' => 'EngineSizeUOM', 'slug' => 'enginesizeuom', 'demo' => 'cc' ),
-				array( 'label' => 'EngineBlock', 'slug' => 'engineblock', 'demo' => 'I' ),
-				array( 'label' => 'EngineCylinders', 'slug' => 'enginecylinders', 'demo' => '4' ),
-				array( 'label' => 'Transmission_Speed', 'slug' => 'transmission_speed', 'demo' => '8' ),
-				array( 'label' => 'Transmission_Description', 'slug' => 'transmission_description', 'demo' => '8-Speed Automatic' ),
-				array( 'label' => 'DriveTrain', 'slug' => 'drivetrain', 'demo' => 'FWD' ),
-				array( 'label' => 'Wheelbase_Code', 'slug' => 'wheelbase_code', 'demo' => 'WB1' ),
+				array(
+					'label' => 'EngineSize',
+					'slug'  => 'engine',
+					'demo'  => '2.5L',
+				),
+				array(
+					'label' => 'EngineDisplacement',
+					'slug'  => 'enginedisplacement',
+					'demo'  => '2487',
+				),
+				array(
+					'label' => 'EngineSizeUOM',
+					'slug'  => 'enginesizeuom',
+					'demo'  => 'cc',
+				),
+				array(
+					'label' => 'EngineBlock',
+					'slug'  => 'engineblock',
+					'demo'  => 'I',
+				),
+				array(
+					'label' => 'EngineCylinders',
+					'slug'  => 'enginecylinders',
+					'demo'  => '4',
+				),
+				array(
+					'label' => 'Transmission_Speed',
+					'slug'  => 'transmission_speed',
+					'demo'  => '8',
+				),
+				array(
+					'label' => 'Transmission_Description',
+					'slug'  => 'transmission_description',
+					'demo'  => '8-Speed Automatic',
+				),
+				array(
+					'label' => 'DriveTrain',
+					'slug'  => 'drivetrain',
+					'demo'  => 'FWD',
+				),
+				array(
+					'label' => 'Wheelbase_Code',
+					'slug'  => 'wheelbase_code',
+					'demo'  => 'WB1',
+				),
 			),
 			'Payment'     => array(
-				array( 'label' => 'Lease Payment', 'slug' => 'lease_payment', 'demo' => '349' ),
-				array( 'label' => 'Loan Payment', 'slug' => 'loan_payment', 'demo' => '429' ),
-				array( 'label' => 'Loan Payment (sort)', 'slug' => 'loan_payment_sort', 'demo' => '429' ),
-				array( 'label' => 'Loan Payment (sort 1)', 'slug' => 'loan_payment_sort_1', 'demo' => '429' ),
-				array( 'label' => 'DueAtSigning', 'slug' => 'down_payment', 'demo' => '2999' ),
-				array( 'label' => 'LeaseTerm', 'slug' => 'leaseterm', 'demo' => '36' ),
-				array( 'label' => 'LoanTerm', 'slug' => 'loanterm', 'demo' => '60' ),
-				array( 'label' => 'LoanAPR', 'slug' => 'loanapr', 'demo' => '4.9' ),
-				array( 'label' => 'TotalOfPmts', 'slug' => 'totalofpmts', 'demo' => '25740' ),
+				array(
+					'label' => 'Lease Payment',
+					'slug'  => 'lease_payment',
+					'demo'  => '349',
+				),
+				array(
+					'label' => 'Loan Payment',
+					'slug'  => 'loan_payment',
+					'demo'  => '429',
+				),
+				array(
+					'label' => 'Loan Payment (sort)',
+					'slug'  => 'loan_payment_sort',
+					'demo'  => '429',
+				),
+				array(
+					'label' => 'Loan Payment (sort 1)',
+					'slug'  => 'loan_payment_sort_1',
+					'demo'  => '429',
+				),
+				array(
+					'label' => 'DueAtSigning',
+					'slug'  => 'down_payment',
+					'demo'  => '2999',
+				),
+				array(
+					'label' => 'LeaseTerm',
+					'slug'  => 'leaseterm',
+					'demo'  => '36',
+				),
+				array(
+					'label' => 'LoanTerm',
+					'slug'  => 'loanterm',
+					'demo'  => '60',
+				),
+				array(
+					'label' => 'LoanAPR',
+					'slug'  => 'loanapr',
+					'demo'  => '4.9',
+				),
+				array(
+					'label' => 'TotalOfPmts',
+					'slug'  => 'totalofpmts',
+					'demo'  => '25740',
+				),
 			),
 			'Pricing'     => array(
-				array( 'label' => 'Price', 'slug' => 'price', 'demo' => '25999' ),
-				array( 'label' => 'Price (sort)', 'slug' => 'price_sort', 'demo' => '25999' ),
-				array( 'label' => 'MSRP', 'slug' => 'original_price', 'demo' => '28450' ),
-				array( 'label' => 'InvoiceAmount', 'slug' => 'invoiceamount', 'demo' => '26800' ),
-				array( 'label' => 'DefaultBookValue', 'slug' => 'defaultbookvalue', 'demo' => '27100' ),
-				array( 'label' => 'InternetPrice', 'slug' => 'internetprice', 'demo' => '25999' ),
-				array( 'label' => 'CustomPrice1–3', 'slug' => 'customprice1 … customprice3', 'demo' => '25499' ),
-				array( 'label' => 'Pack', 'slug' => 'pack', 'demo' => '395' ),
-				array( 'label' => 'Holdback', 'slug' => 'holdback', 'demo' => '812' ),
-				array( 'label' => 'Cost', 'slug' => 'cost', 'demo' => '24200' ),
+				array(
+					'label' => 'Price',
+					'slug'  => 'price',
+					'demo'  => '25999',
+				),
+				array(
+					'label' => 'Price (sort)',
+					'slug'  => 'price_sort',
+					'demo'  => '25999',
+				),
+				array(
+					'label' => 'MSRP',
+					'slug'  => 'original_price',
+					'demo'  => '28450',
+				),
+				array(
+					'label' => 'InvoiceAmount',
+					'slug'  => 'invoiceamount',
+					'demo'  => '26800',
+				),
+				array(
+					'label' => 'DefaultBookValue',
+					'slug'  => 'defaultbookvalue',
+					'demo'  => '27100',
+				),
+				array(
+					'label' => 'InternetPrice',
+					'slug'  => 'internetprice',
+					'demo'  => '25999',
+				),
+				array(
+					'label' => 'CustomPrice1–3',
+					'slug'  => 'customprice1 … customprice3',
+					'demo'  => '25499',
+				),
+				array(
+					'label' => 'Pack',
+					'slug'  => 'pack',
+					'demo'  => '395',
+				),
+				array(
+					'label' => 'Holdback',
+					'slug'  => 'holdback',
+					'demo'  => '812',
+				),
+				array(
+					'label' => 'Cost',
+					'slug'  => 'cost',
+					'demo'  => '24200',
+				),
 			),
 			'Media'       => array(
-				array( 'label' => 'PrimaryImageUrl', 'slug' => 'primaryimageurl', 'demo' => 'https://cdn.example.com/vehicles/abc123.jpg' ),
-				array( 'label' => 'PrimaryThumbUrl', 'slug' => 'primarythumburl', 'demo' => 'https://cdn.example.com/vehicles/abc123_thumb.jpg' ),
-				array( 'label' => 'Use Images list', 'slug' => 'use_images_list', 'demo' => 'primary' ),
-				array( 'label' => 'ImageUrlList Primary', 'slug' => 'gallery', 'demo' => '[ { image_url: … }, … ]' ),
-				array( 'label' => 'ImageUrlList Alternative', 'slug' => 'gallery_srp', 'demo' => '[ { image_url: … }, … ]' ),
+				array(
+					'label' => 'PrimaryImageUrl',
+					'slug'  => 'primaryimageurl',
+					'demo'  => 'https://cdn.example.com/vehicles/abc123.jpg',
+				),
+				array(
+					'label' => 'PrimaryThumbUrl',
+					'slug'  => 'primarythumburl',
+					'demo'  => 'https://cdn.example.com/vehicles/abc123_thumb.jpg',
+				),
+				array(
+					'label' => 'Use Images list',
+					'slug'  => 'use_images_list',
+					'demo'  => 'primary',
+				),
+				array(
+					'label' => 'ImageUrlList Primary',
+					'slug'  => 'gallery',
+					'demo'  => '[ { image_url: … }, … ]',
+				),
+				array(
+					'label' => 'ImageUrlList Alternative',
+					'slug'  => 'gallery_srp',
+					'demo'  => '[ { image_url: … }, … ]',
+				),
 			),
 			'Description' => array(
-				array( 'label' => 'Description', 'slug' => 'vehicle_overview', 'demo' => 'This Camry SE features…' ),
-				array( 'label' => 'Photo_Timestamp', 'slug' => 'photo_timestamp', 'demo' => '1735689600' ),
-				array( 'label' => 'PassengerCapacity', 'slug' => 'passengercapacity', 'demo' => '5' ),
-				array( 'label' => 'MarketClass', 'slug' => 'marketclass', 'demo' => 'Midsize Cars' ),
-				array( 'label' => 'Factory_Codes', 'slug' => 'factory_codes', 'demo' => '1234, 5678' ),
-				array( 'label' => 'Certified', 'slug' => 'certified', 'demo' => 'Yes' ),
-				array( 'label' => 'Certified Custom URL', 'slug' => 'certified_custom_url', 'demo' => 'https://example.com/certified' ),
-				array( 'label' => 'Int_Color_Code', 'slug' => 'int_color_code', 'demo' => '1G3' ),
-				array( 'label' => 'Ext_Color_Code', 'slug' => 'ext_color_code', 'demo' => '1F7' ),
-				array( 'label' => 'ModelNumber', 'slug' => 'modelnumber', 'demo' => '2532' ),
-				array( 'label' => 'Doors', 'slug' => 'doors', 'demo' => '4' ),
+				array(
+					'label' => 'Description',
+					'slug'  => 'vehicle_overview',
+					'demo'  => 'This Camry SE features…',
+				),
+				array(
+					'label' => 'Photo_Timestamp',
+					'slug'  => 'photo_timestamp',
+					'demo'  => '1735689600',
+				),
+				array(
+					'label' => 'PassengerCapacity',
+					'slug'  => 'passengercapacity',
+					'demo'  => '5',
+				),
+				array(
+					'label' => 'MarketClass',
+					'slug'  => 'marketclass',
+					'demo'  => 'Midsize Cars',
+				),
+				array(
+					'label' => 'Factory_Codes',
+					'slug'  => 'factory_codes',
+					'demo'  => '1234, 5678',
+				),
+				array(
+					'label' => 'Certified',
+					'slug'  => 'certified',
+					'demo'  => 'Yes',
+				),
+				array(
+					'label' => 'Certified Custom URL',
+					'slug'  => 'certified_custom_url',
+					'demo'  => 'https://example.com/certified',
+				),
+				array(
+					'label' => 'Int_Color_Code',
+					'slug'  => 'int_color_code',
+					'demo'  => '1G3',
+				),
+				array(
+					'label' => 'Ext_Color_Code',
+					'slug'  => 'ext_color_code',
+					'demo'  => '1F7',
+				),
+				array(
+					'label' => 'ModelNumber',
+					'slug'  => 'modelnumber',
+					'demo'  => '2532',
+				),
+				array(
+					'label' => 'Doors',
+					'slug'  => 'doors',
+					'demo'  => '4',
+				),
 			),
 		);
 	}
