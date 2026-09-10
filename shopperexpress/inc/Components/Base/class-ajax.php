@@ -600,9 +600,9 @@ class Ajax implements Theme_Component {
 	}
 
 	/**
-	 * Look up a vehicle field by key, checking the top-level Nexus response first
-	 * and falling back to the same key(s) inside `payload` (the raw feed data
-	 * duplicates most fields there, sometimes under a different name).
+	 * Look up a vehicle field by key, checking `payload` first (the raw feed data —
+	 * usually the more complete/authoritative source) and falling back to the
+	 * same key(s) at the top level of the Nexus response.
 	 *
 	 * @param array    $vehicle Vehicle data as returned by Intice_Api_Client::get_vehicle().
 	 * @param string[] $keys    Candidate keys to try, in priority order.
@@ -612,11 +612,11 @@ class Ajax implements Theme_Component {
 		$payload = $vehicle['payload'] ?? array();
 
 		foreach ( $keys as $key ) {
-			if ( isset( $vehicle[ $key ] ) && '' !== $vehicle[ $key ] ) {
-				return $vehicle[ $key ];
-			}
 			if ( isset( $payload[ $key ] ) && '' !== $payload[ $key ] ) {
 				return $payload[ $key ];
+			}
+			if ( isset( $vehicle[ $key ] ) && '' !== $vehicle[ $key ] ) {
+				return $vehicle[ $key ];
 			}
 		}
 

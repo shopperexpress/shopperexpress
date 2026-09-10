@@ -237,7 +237,6 @@ add_filter(
 			'make'               => array( 'make', 'make' ),
 			'model'              => array( 'model', 'model' ),
 			'trim'               => array( 'trim', 'trim' ),
-			'miles'              => array( 'mileage', 'mileage' ),
 			'vin'                => array( 'vin_number', 'vin', 'upper' ),
 			'stock'              => array( 'stock-number', 'stock' ),
 			'type'               => array( 'condition', 'condition' ),
@@ -279,16 +278,40 @@ add_filter(
 		// Special cases that don't fit the simple get→replace pattern.
 		switch ( $tag ) {
 
+			case 'miles':
+				if ( $api_vehicle ) {
+					$payload = $api_vehicle['payload'] ?? array();
+					$raw     = $payload['mileage']
+						?? ( $payload['miles_display'] ?? ( $payload['miles'] ?? ( $api_vehicle['mileage'] ?? null ) ) );
+				} else {
+					$raw = get_field( 'mileage', $post_id );
+				}
+				$value = ( null !== $raw && '' !== $raw ) ? $raw : null;
+				break;
+
 			case 'msrp':
-				$raw   = $api_vehicle ? ( $api_vehicle['msrp'] ?? 0 ) : get_field( 'price', $post_id );
-				$value = $raw ? number_format( (int) $raw ) : null;
+				if ( $api_vehicle ) {
+					$payload = $api_vehicle['payload'] ?? array();
+					$raw     = $payload['msrp'] ?? ( $api_vehicle['msrp'] ?? null );
+				} else {
+					$raw = get_field( 'price', $post_id );
+				}
+				$value = ( null !== $raw && '' !== $raw ) ? number_format( (int) $raw ) : null;
 				break;
 
 			case 'best_price':
-				$raw   = $api_vehicle
-					? ( $api_vehicle['price_sort'] ?? $api_vehicle['price'] ?? 0 )
-					: get_field( 'price', $post_id );
-				$value = $raw ? number_format( (int) $raw ) : null;
+				if ( $api_vehicle ) {
+					$payload    = $api_vehicle['payload'] ?? array();
+					$price      = $payload['price'] ?? ( $api_vehicle['price'] ?? null );
+					// price_sort is meant to be the "best" advertised price, but some
+					// feed rows carry a negative sentinel there (e.g. "call for price")
+					// instead of a real number — fall back to the plain price then.
+					$price_sort = $payload['price_sort'] ?? ( $api_vehicle['price_sort'] ?? null );
+					$raw        = ( is_numeric( $price_sort ) && $price_sort > 0 ) ? $price_sort : $price;
+				} else {
+					$raw = get_field( 'price', $post_id );
+				}
+				$value = ( null !== $raw && '' !== $raw ) ? number_format( (int) $raw ) : null;
 				break;
 
 			case 'internet_price':
@@ -322,7 +345,7 @@ add_filter(
 				$value = null;
 		}
 
-		if ( ! empty( $value ) ) {
+		if ( null !== $value && '' !== $value ) {
 			$content = str_replace( '{' . $tag . '}', $value, $content );
 		}
 
