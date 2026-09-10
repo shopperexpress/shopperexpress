@@ -1,0 +1,73 @@
+.section-full-width-slider {
+  padding: 50px 0;
+}
+
+.full-width-image-slider {
+  .slick-dots {
+    align-items: center;
+    bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    left: 10px;
+    position: absolute;
+    right: 10px;
+    z-index: 2;
+    pointer-events: none;
+
+    > li {
+      pointer-events: auto;
+    }
+
+    button {
+      @include animate(background-color);
+      @include size(14px);
+      text-indent: -9999px;
+      overflow: hidden;
+      display: block;
+      border-radius: 50rem;
+      border: 1px solid var(--primary) !important;
+      background-color: transparent;
+      padding: 0;
+
+      &:hover {
+        background-color: var(--primary);
+      }
+    }
+
+    li.slick-active button {
+      background-color: var(--primary);
+    }
+  }
+
+  .slick-slide > div > a {
+    display: block;
+  }
+
+  .slick-slide {
+    position: relative;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+
+    @include media('>=tablet') {
+      border-radius: 12px;
+    }
+  }
+
+  .btn-disclosure {
+    position: absolute;
+    bottom: 24px;
+    right: 10px;
+    z-index: 10;
+    margin: 0;
+
+    @include media('>=tablet') {
+      bottom: 10px;
+    }
+  }
+}

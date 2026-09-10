@@ -1,7 +1,5 @@
-*.DS_Store
-
-vendor/
-.vscode/
-.idea/
-composer.lock
-CLAUDE.md
+/node_modules/
+yarn-error.log
+package-lock.json
+yarn.lock
+.idea

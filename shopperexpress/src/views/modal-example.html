@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ShopperExpress.com</title>
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Rounded" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <!-- include jQuery library -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <!-- include jQuery library local file if cdn link doesn't work -->
+    <script>
+      window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+    </script>
+    <!-- include minified bootstrap bundle js -->
+    <script src="js/bootstrap.bundle.min.js" defer></script>
+    <!-- include app js file  -->
+    <script src="js/app.js" defer></script>
+    <script
+      type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=&libraries=marker&loading=async&callback=initCustomMap"
+      defer
+      async
+    ></script>
+  </head>
+  <body>
+    <style>
+      :root {
+        --primary: #e88700;
+        --primary-rgb: 232, 135, 0;
+        --header-nav-drop-bg: #004fb0;
+        --header-nav-link-color: #00c700;
+        --header-nav-link-hover-color: #00d1d4;
+      }
+    </style>
+    <div id="wrapper">
+      <!-- main container of all the page elements -->
+      <main id="main">
+        <div class="container text-center my-5">
+          <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" onclick="$('#getBookModal').modal('show')">Launch Get Book modal</button>
+          <!-- Modal Get Book -->
+          <div class="modal fade modal-get-book" id="getBookModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" style="fill: white">
+                      <path d="M0 0h24v24H0V0z" fill="none"></path>
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <iframe src="https://ldti.syndication.kbb.com/?profileid=62f747d9-aabb-4c9e-98e0-2957063237af&did=09236" frameborder="0"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer id="footer">
+        <div class="container">
+          <div class="row flex-sm-row-reverse">
+            <div class="col-sm-4 col-md-6 col-lg-7 footer-col">
+              <strong class="logo d-block d-sm-none">
+                <a href="#"><img src="images/logo-morgan.svg" alt="MORGAN" /></a>
+              </strong>
+              <h5>Morgan Auto Group</h5>
+              <ul class="list-unstyled footer-list">
+                <li><a href="#">Locations</a></li>
+                <li><a href="#">About US</a></li>
+                <li><a href="#">Contact</a></li>
+              </ul>
+            </div>
+            <div class="col-sm-8 col-md-6 col-lg-5">
+              <strong class="logo d-none d-sm-block">
+                <a href="#"><img src="images/logo-morgan.svg" alt="MORGAN" /></a>
+              </strong>
+              <span class="copyright">© 2021 <a href="#">MORGAN AUTO GROUP</a> ALL RIGHTS RESERVED</span>
+              <ul class="social-networks">
+                <li>
+                  <a href="#">
+                    <svg class="icon-twitter" viewBox="0 0 40 32">
+                      <path
+                        d="M39.486 3.784c-1.481 0.658-3.044 1.069-4.689 1.234 1.645-0.987 2.961-2.55 3.537-4.442-1.563 0.905-3.291 1.563-5.1 1.974-1.481-1.563-3.62-2.55-5.923-2.55-4.442 0-8.062 3.62-8.062 8.062 0 0.658 0.082 1.234 0.165 1.892-6.663-0.329-12.668-3.537-16.699-8.473-0.658 1.234-1.069 2.55-1.069 4.113 0 2.797 1.398 5.265 3.62 6.745-1.316-0.082-2.55-0.411-3.62-0.987v0.082c0 3.949 2.797 7.157 6.499 7.897-0.658 0.165-1.398 0.247-2.139 0.247-0.494 0-0.987-0.082-1.563-0.165 0.987 3.208 4.031 5.512 7.568 5.594-2.797 2.139-6.252 3.455-10.036 3.455-0.658 0-1.316 0-1.974-0.082 3.62 2.303 7.815 3.62 12.422 3.62 14.889 0 23.033-12.339 23.033-23.033 0-0.329 0-0.74 0-1.069 1.481-1.069 2.879-2.468 4.031-4.113z"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <svg class="icon-facebook" viewBox="0 0 32 32">
+                      <path
+                        d="M16.069 0c-8.866 0-16.069 7.203-16.069 16.069 0 8.035 5.887 14.684 13.576 15.861v-11.221h-4.087v-4.641h4.087v-3.532c0-4.017 2.424-6.234 6.095-6.234 1.732 0 3.602 0.346 3.602 0.346v3.948h-2.009c-2.009 0-2.632 1.247-2.632 2.494v3.048h4.433l-0.693 4.641h-3.74v11.221c7.688-1.247 13.576-7.896 13.576-15.931 0-8.866-7.203-16.069-16.139-16.069z"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="#">
+                    <svg class="icon-instagram" viewBox="0 0 32 32">
+                      <path
+                        d="M16 7.771c-4.571 0-8.229 3.657-8.229 8.229s3.657 8.229 8.229 8.229c4.571 0 8.229-3.657 8.229-8.229s-3.657-8.229-8.229-8.229zM16 21.333c-2.895 0-5.333-2.362-5.333-5.333s2.362-5.333 5.333-5.333c2.971 0 5.333 2.362 5.333 5.333 0 2.895-2.438 5.333-5.333 5.333z"
+                      ></path>
+                      <path d="M26.438 7.467c0 1.052-0.853 1.905-1.905 1.905s-1.905-0.853-1.905-1.905c0-1.052 0.853-1.905 1.905-1.905s1.905 0.853 1.905 1.905z"></path>
+                      <path
+                        d="M31.848 9.371c-0.076-2.514-0.686-4.8-2.59-6.705-1.829-1.829-4.114-2.438-6.705-2.59-2.59-0.076-10.514-0.076-13.181 0-2.514 0.152-4.8 0.762-6.705 2.59-1.829 1.905-2.438 4.19-2.59 6.705-0.076 2.667-0.076 10.59 0 13.181 0.152 2.59 0.762 4.876 2.59 6.705 1.905 1.905 4.114 2.438 6.705 2.59 2.667 0.152 10.59 0.152 13.181 0s4.8-0.686 6.705-2.59c1.905-1.905 2.438-4.114 2.59-6.705s0.152-10.514 0-13.181zM28.495 25.448c-0.533 1.371-1.6 2.438-3.048 3.048-2.133 0.838-7.086 0.61-9.448 0.61s-7.314 0.152-9.448-0.61c-1.371-0.533-2.438-1.6-3.048-3.048-0.838-2.133-0.61-7.162-0.61-9.448 0-2.362-0.152-7.314 0.61-9.448 0.533-1.371 1.6-2.438 3.048-3.048 2.133-0.838 7.086-0.61 9.448-0.61s7.314-0.152 9.448 0.61c1.371 0.533 2.438 1.6 3.048 3.048 0.838 2.133 0.61 7.086 0.61 9.448 0 2.286 0.229 7.314-0.61 9.448z"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

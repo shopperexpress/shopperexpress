@@ -1,0 +1,133 @@
+.section-info-accordion {
+  padding: 30px 0;
+}
+
+.accordion-info {
+  @extend %listreset;
+  text-align: left;
+
+  > li {
+    & + li {
+      margin-top: 8px;
+    }
+  }
+
+  ol,
+  ul {
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    padding: 0;
+    list-style-position: inside;
+    list-style-type: disc;
+  }
+
+  ol {
+    padding: 0;
+    list-style-position: inside;
+  }
+
+  .accordion-info-opener {
+    @include animate(color background-color, 0.15s, linear);
+    display: block;
+    width: 100%;
+    background-color: $gray-200;
+    color: $black;
+    padding: 18px 50px 18px 20px;
+    border: none;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.3;
+    text-align: left;
+    position: relative;
+
+    @include media ('>=desktop') {
+      font-size: 20px;
+      padding-right: 70px;
+    }
+
+    &:hover {
+      background-color: var(--primary);
+      color: $white;
+    }
+
+    &:not(.collapsed) {
+      background-color: var(--primary);
+      color: $white;
+
+      svg {
+        transform: translateY(-50%) rotate(-90deg);
+      }
+    }
+
+    svg {
+      @include animate(transform fill);
+      position: absolute;
+      top: 50%;
+      right: 15px;
+      fill: currentColor;
+      transform: translateY(-50%) rotate(90deg);
+      width: 30px;
+      height: auto;
+
+      @include media ('>=desktop') {
+        width: 38px;
+        right: 25px;
+      }
+    }
+  }
+
+  .collapse {
+    overflow: hidden !important;
+  }
+
+  .accordion-info-body {
+    padding: 30px;
+    background-color: $gray-200;
+
+    * {
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+
+  .acc-btn-group {
+    @extend %listreset;
+    display: grid;
+    gap: 16px;
+
+    @include media ('>=phone') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include media ('>=desktop') {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    a {
+      transition: opacity 0.15s linear !important;
+      text-decoration: none;
+      border-radius: 4px;
+      text-transform: capitalize;
+      padding: 14px;
+      font-size: 16px;
+      line-height: 1.2;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: $white !important;
+      background-color: var(--primary);
+      font-weight: 600;
+      text-align: center;
+
+      &:hover {
+        color: $white !important;
+        opacity: 0.8;
+      }
+    }
+  }
+}

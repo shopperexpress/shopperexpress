@@ -1,0 +1,121 @@
+.accordion-detail-info {
+	padding: 30px 0;
+	border-top: 1px solid $gray-300;
+}
+
+.accordion-detail {
+	@extend %listreset;
+	text-align: left;
+
+	li {
+		& + li {
+			margin-top: 8px;
+		}
+	}
+
+	h3 {
+		margin: 0;
+	}
+
+	.accordion-detail-opener {
+		@include animate(color background-color, 0.15s, linear);
+		display: block;
+		width: 100%;
+		background-color: $gray-200;
+		color: $black;
+		padding: 18px 50px 18px 20px;
+		border: none;
+		font-weight: 700;
+		font-size: 16px;
+		line-height: 1.3;
+		text-align: left;
+		position: relative;
+
+		@include media ('>=desktop') {
+			font-size: 20px;
+			padding-right: 70px;
+		}
+
+		&:hover {
+			background-color: var(--primary);
+			color: $white;
+
+      svg {
+        fill: $white;
+      }
+		}
+
+		&:not(.collapsed) {
+			background-color: var(--primary);
+			color: $white;
+
+      svg {
+        transform: translateY(-50%) rotate(-90deg);
+        fill: $white;
+      }
+		}
+
+    svg {
+      @include animate(transform fill);
+			position: absolute;
+      width: 30px;
+      height: auto;
+			top: 50%;
+			right: 15px;
+      fill: var(--primary);
+			transform: translateY(-50%) rotate(90deg);
+
+			@include media ('>=desktop') {
+				width: 38px;
+				right: 25px;
+			}
+    }
+	}
+
+	.collapse {
+		overflow: hidden;
+	}
+
+	.card-body {
+		padding: 0;
+		background-color: $gray-200;
+	}
+
+	.options-list {
+		@extend %listreset;
+		display: flex;
+		flex-wrap: wrap;
+		font-size: 16px;
+		font-weight: 700;
+		color: $black;
+		padding: 36px 30px 24px;
+		text-transform: capitalize;
+
+		@include media ('>=tablet') {
+			padding-bottom: 30px;
+		}
+
+		li {
+			margin: 0 0 12px;
+			width: 100%;
+			padding: 10px 17px;
+			background-color: $white;
+			min-height: 70px;
+			display: flex;
+			align-items: center;
+
+			@include media ('>=tablet') {
+				width: calc(50% - 12px);
+				margin: 6px;
+			}
+
+			@include media ('>=desktop') {
+				min-height: 82px;
+			}
+
+			@include media ('>=widescreen') {
+				width: calc(33.33% - 12px);
+			}
+		}
+	}
+}

@@ -82,6 +82,7 @@ class ADF_Api_Client {
 				'timeout'     => max( 5, $timeout ),
 				'redirection' => 3,
 				'httpversion' => '1.1',
+				'sslverify'   => ! $this->is_local_environment(),
 				'headers'     => array(
 					'Content-Type' => 'application/json',
 					'Accept'       => 'application/json',
@@ -100,6 +101,24 @@ class ADF_Api_Client {
 		$success       = $code >= 200 && $code < 300;
 
 		return $this->result( $success, $code, $response_body, $success ? '' : "HTTP {$code}" );
+	}
+
+	/**
+	 * Whether the current request is running on a local development environment.
+	 *
+	 * Used to skip SSL verification for endpoints served over self-signed/local
+	 * certs (e.g. OSPanel's *.local hosts) without weakening it in production.
+	 *
+	 * @return bool
+	 */
+	private function is_local_environment(): bool {
+		if ( function_exists( 'wp_get_environment_type' ) && 'local' === wp_get_environment_type() ) {
+			return true;
+		}
+
+		$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+
+		return (bool) preg_match( '/\.(local|test)$/i', $host );
 	}
 
 	/**

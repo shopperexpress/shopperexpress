@@ -7,6 +7,28 @@
 
 add_filter( 'big_image_size_threshold', '__return_false' );
 
+/**
+ * WPForms Webhooks (used for the intice360 ADF-XML webhook) posts to
+ * admin-ajax.php over HTTPS. On local dev hosts (self-signed/local CA certs)
+ * that cURL request fails with "SSL certificate ... unable to get local
+ * issuer certificate". Skip verification only when running locally.
+ */
+add_filter(
+	'wpforms_webhooks_process_delivery_request_options',
+	function ( $options ) {
+		$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+
+		$is_local = ( function_exists( 'wp_get_environment_type' ) && 'local' === wp_get_environment_type() )
+			|| (bool) preg_match( '/\.(local|test)$/i', $host );
+
+		if ( $is_local ) {
+			$options['sslverify'] = false;
+		}
+
+		return $options;
+	}
+);
+
 add_filter(
 	'body_class',
 	function ( $classes ) {
@@ -188,18 +210,22 @@ add_filter(
 
 		// API mode: if post_id in the request is a non-numeric VIN, fetch vehicle
 		// from the Intice API instead of reading ACF fields from a WP post.
-		$api_vehicle    = null;
+		// Prefer the vehicle already resolved for the current VDP request (set in
+		// single-listings-api.php) — forms rendered directly on the page load
+		// never receive a post_id in $_REQUEST, only the AJAX unlock/offers flows do.
+		$api_vehicle    = ! empty( $GLOBALS['intice_vehicle'] ) ? $GLOBALS['intice_vehicle'] : null;
 		$raw_request_id = isset( $_REQUEST['post_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post_id'] ) ) : '';
 
 		if (
-			$raw_request_id
+			! $api_vehicle
+			&& $raw_request_id
 			&& ! is_numeric( $raw_request_id )
 			&& get_option( 'shopperexpress_api_mode_enabled' )
 			&& class_exists( '\App\Components\Api\Intice_Api_Client' )
 		) {
 			$api_result = \App\Components\Api\Intice_Api_Client::instance()->get_vehicle( $raw_request_id );
-			if ( ! is_wp_error( $api_result ) && ! empty( $api_result ) ) {
-				$api_vehicle = $api_result;
+			if ( ! is_wp_error( $api_result ) && ! empty( $api_result['data'] ) ) {
+				$api_vehicle = $api_result['data'];
 			}
 		}
 
@@ -304,14 +330,22 @@ add_filter(
 				$field_type = get_sub_field( 'field_type' );
 			if ( $tag === $field['value'] ) {
 
-				switch ( $field_type ) {
-					case 'price':
-						$get_field = get_field( $tag, $post_id ) ? number_format( get_field( $tag, $post_id ) ) : null;
-						break;
-					case 'text':
-					default:
-						$get_field = get_field( $tag, $post_id ) ? get_field( $tag, $post_id ) : null;
-						break;
+				$get_field = null;
+
+				if ( $api_vehicle ) {
+					$payload = $api_vehicle['payload'] ?? array();
+					$raw     = $api_vehicle[ $tag ] ?? ( $payload[ $tag ] ?? null );
+					$get_field = ( 'price' === $field_type && $raw ) ? number_format( (int) $raw ) : $raw;
+				} else {
+					switch ( $field_type ) {
+						case 'price':
+							$get_field = get_field( $tag, $post_id ) ? number_format( get_field( $tag, $post_id ) ) : null;
+							break;
+						case 'text':
+						default:
+							$get_field = get_field( $tag, $post_id ) ? get_field( $tag, $post_id ) : null;
+							break;
+					}
 				}
 				if ( $get_field ) {
 					$content = str_replace( '{' . $tag . '}', $get_field, $content );

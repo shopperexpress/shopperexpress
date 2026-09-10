@@ -193,6 +193,22 @@ function initHoverClass() {
 	});
 }
 
+// Team member details modal
+function initTeamModal() {
+	const modal = document.getElementById('teamMemberModal');
+
+	if (!modal) return;
+
+	jQuery(modal).on('show.bs.modal', function(e) {
+		const button = e.relatedTarget;
+		const index = button && button.getAttribute('data-member-index');
+		const tpl = document.querySelector(`.team-modal-tpl[data-member-index="${index}"]`);
+		const body = modal.querySelector('.team-modal-body');
+
+		body.innerHTML = tpl ? tpl.innerHTML : '';
+	});
+}
+
 function initOpenPdfInNewTab() {
 	document.querySelectorAll('.details-badges').forEach((holder) => {
 		const links = holder.querySelectorAll('a[data-pdf]');
@@ -12613,6 +12629,7 @@ jQuery(function() {
 	initAddCssVariales();
 	initChat();
 	initHoverClass();
+	initTeamModal();
 	jQuery('.payment-info .btn.btn-primary').on('click', function(e) {
 		e.preventDefault();
 	});

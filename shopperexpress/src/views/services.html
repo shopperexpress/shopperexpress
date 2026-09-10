@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ShopperExpress.com</title>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet"> -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+    <script src="https://fast.wistia.com/embed/medias/8w2t3omdv3.jsonp" async></script>
+    <script src="https://fast.wistia.com/assets/external/E-v1.js" async></script>
+    <!-- include jQuery library -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      defer
+    ></script>
+    <!-- include jQuery library local file if cdn link doesn't work -->
+    <script>
+      window.jQuery || document.write('<script src="js/jquery-3.6.0.min.js" defer><\/script>');
+    </script>
+    <!-- include minified bootstrap bundle js -->
+    <script src="js/bootstrap.bundle.min.js" defer></script>
+    <!-- include app js file  -->
+    <script src="js/app.js" defer></script>
+    <style>
+      :root {
+        --primary: #17a2b8;
+        --primary-rgb: 23, 162, 184;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper">
+      <header id="header">
+        <nav class="navbar navbar-light">
+          <div class="navbar-holder">
+            <a class="nav-opener" href="#">
+              <i class="menu-close material-icons">menu</i>
+              <i class="menu-open material-icons">close</i>
+            </a>
+            <a class="navbar-brand" href="#">
+              <img class="brand-img" src="images/toyota-logo.png" alt="ABS Toyota" />
+            </a>
+          </div>
+          <div class="header-frame">
+            <ul class="main-navigation">
+              <li>
+                <a href="#" class="drop-opener">Express Car Buying<i class="material-icons">expand_more</i></a>
+                <div class="drop slide">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Search Cars</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Specail Offers</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Shopper Express: How it Works</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Protection Products</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Sell/Trade</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Activation</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Express Test Drive</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>TradeValue-Express</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>TradeValue-Express-Banner</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>CreditScore-Express</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Express-CashOffer-MiniTool</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Express-CashOffer-Banner</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <a href="#" class="drop-opener">Sun Toyota<i class="material-icons">expand_more</i></a>
+                <div class="drop slide">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Lorem Ipsum</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Lorem Ipsum</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Lorem Ipsum</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Lorem Ipsum</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Lorem Ipsum</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              <li>
+                <a href="#" class="drop-opener">Customer Help<i class="material-icons">expand_more</i></a>
+                <div class="drop slide">
+                  <ul>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Contact Us</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Hours & Map</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>About</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Site Map</a>
+                    </li>
+                    <li>
+                      <a href="#"><i class="material-icons">help</i>Accessibility</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            <div class="drop-models-popup group-models">
+              <a class="btn-models" href="#"><span>toyota</span> models</a>
+              <div class="dropdown-models">
+                <div class="scroll-holder">
+                  <div class="jcf-scrollable">
+                    <ul class="drop-model-slider" data-filter-group="car-type">
+                      <li class="active"><a href="#" data-filter="all">all vehicles</a></li>
+                      <li><a href="#" data-filter="cars">cars &amp; minivans</a></li>
+                      <li><a href="#" data-filter="crossovers">cross overs &amp; suvs</a></li>
+                      <li><a href="#" data-filter="hybrids">hybrids &amp; fuel cells</a></li>
+                      <li><a href="#" data-filter="trucks">trucks</a></li>
+                    </ul>
+                  </div>
+                </div>
+                <ul class="drop-model-list list-unstyled">
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_1.svg" alt="image description" />
+                      </div>
+                      <span class="model">Highlander</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_2.svg" alt="image description" />
+                      </div>
+                      <span class="model">Corolla Hatchback</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_3.svg" alt="image description" />
+                      </div>
+                      <span class="model">Prius</span>
+                      <span class="car-type hidden">hybrids</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_4.svg" alt="image description" />
+                      </div>
+                      <span class="model">Rav4</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_5.svg" alt="image description" />
+                      </div>
+                      <span class="model">Tacoma</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_6.svg" alt="image description" />
+                      </div>
+                      <span class="model">Tundra</span>
+                      <span class="car-type hidden">trucks</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_8.svg" alt="image description" />
+                      </div>
+                      <span class="model">4Runner</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_9.svg" alt="image description" />
+                      </div>
+                      <span class="model">Corolla</span>
+                      <span class="car-type hidden">cars</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_10.svg" alt="image description" />
+                      </div>
+                      <span class="model">Camry</span>
+                      <span class="car-type hidden">cars</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_8.svg" alt="image description" />
+                      </div>
+                      <span class="model">4Runner</span>
+                      <span class="car-type hidden">crossovers</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_9.svg" alt="image description" />
+                      </div>
+                      <span class="model">Corolla</span>
+                      <span class="car-type hidden">cars</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <div class="img-box">
+                        <img src="images/toyota_model_10.svg" alt="image description" />
+                      </div>
+                      <span class="model">Camry</span>
+                      <span class="car-type hidden">cars</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <a class="navigation-opener" href="#">
+            <i class="menu-close material-icons">menu</i>
+            <i class="menu-open material-icons">menu_open</i>
+          </a>
+          <div class="btn-toolbar">
+            <div class="btn-group">
+              <button type="button" class="btn header-btn btn-app dropdown-toggle" id="dropdownMenuApps" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="material-icons">apps</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuApps">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+              </div>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn header-btn btn-user dropdown-toggle" id="dropdownMenuUser" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="material-icons">account_circle</i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuUser">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+              </div>
+            </div>
+          </div>
+          <div class="main-nav">
+            <ul id="nav">
+              <li>
+                <ul>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> http://www.abctoyota.com/</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="active">
+                <a class="slide-opener" href="#">Shopper Express <i class="material-icons">expand_more</i></a>
+                <ul class="menu-slide">
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Explore All Models</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> How it Works</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="active">
+                <a class="slide-opener" href="#">ABC Toyota <i class="material-icons">expand_more</i></a>
+                <ul class="menu-slide">
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Main Website</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Financing</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Service</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Parts</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Privacy Policy</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="active">
+                <a class="slide-opener" href="#">Customer Help <i class="material-icons">expand_more</i></a>
+                <ul class="menu-slide">
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Contact Us</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Hours & Map</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> About</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Site Map</a>
+                  </li>
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Accessibility</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="active">
+                <a class="slide-opener" href="#">Manufacture <i class="material-icons">expand_more</i></a>
+                <ul class="menu-slide">
+                  <li>
+                    <a href="#"><i class="material-icons">help</i> Toyota</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <main id="main">
+        <div class="intro text-white" data-theme>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-lg-3 item-col item-left"></div>
+              <div class="col-lg-6 text-center">
+                <div class="text-holder">
+                  <p>Our process is designed around the way you want to buy. Buy 100% online or 100% in our state-of-the-art showroom, or somewhere in the middle.</p>
+                  <h1>WahooCar</h1>
+                </div>
+              </div>
+              <div class="col-lg-3 item-col item-right">
+                <span class="customer">CUSTOMER ZIP <strong class="customer-name">Wesley Chapel</strong></span>
+              </div>
+              <div class="col-12 btn-holder btns-large text-center">
+                <a class="btn btn-outline-light" href="#">Express Car Offer</a>
+                <span class="wistia_embed wistia_async_8w2t3omdv3 popover=true popoverContent=link" style="display: inline; position: relative">
+                  <a class="btn btn-link" href="#"><i class="material-icons">play_circle</i> watch video</a>
+                </span>
+              </div>
+            </div>
+            <div class="col-12">
+              <span class="by">powered by <a href="#">INTICE</a></span>
+            </div>
+          </div>
+        </div>
+        <div id="page-container">
+          <!-- header of the page -->
+          <div class="content-header">
+            <div class="container">
+              <h1>Car Buying should be easy.</h1>
+              <!-- page logo -->
+              <strong class="logo">
+                <a href="#">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    x="0px"
+                    y="0px"
+                    viewBox="0 0 800 96.3"
+                    style="enable-background: new 0 0 800 96.3"
+                    xml:space="preserve"
+                  >
+                    <path
+                      class="st0"
+                      d="M447.1,57.4h-16.9c-3.2,0-5.9,2.6-5.9,5.9v0.3c0,3.2,2.6,5.9,5.9,5.9h16.9c3.2,0,5.9-2.6,5.9-5.9v-0.3
+										C452.9,60,450.3,57.4,447.1,57.4z"
+                    />
+                    <g>
+                      <path
+                        d="M46.7,39.8c-1.7-1.8-3.8-3.4-6.2-4.7c-2.4-1.3-5.1-2.5-8-3.5l-4.6-1.5c-4.1-1.4-7.1-2.9-9-4.4C17,24.1,16,22.3,16,20.1
+											c0-2.2,1-4,2.9-5.4c2-1.4,4.4-2.1,7.4-2.1c3.1,0,5.6,0.8,7.4,2.4c1.8,1.6,3,3.5,3.7,5.5l12.1-5.1c-0.5-1.6-1.4-3.4-2.5-5.2
+											c-1.2-1.8-2.7-3.5-4.5-5c-1.9-1.5-4.1-2.8-6.8-3.8C33,0.5,29.9,0,26.2,0c-3.5,0-6.7,0.5-9.6,1.6c-2.9,1.1-5.3,2.5-7.4,4.4
+											c-2.1,1.9-3.7,4-4.8,6.5c-1.1,2.5-1.7,5.1-1.7,8c0,2.8,0.5,5.3,1.6,7.5c1,2.2,2.4,4.1,4,5.7c1.6,1.6,3.4,3,5.4,4.2
+											c2,1.1,4,2.1,5.9,2.7l4.5,1.6c2.6,1,4.9,1.9,6.7,2.7c1.8,0.9,3.2,1.8,4.4,2.7c1.1,0.9,1.9,2,2.4,3c0.5,1.1,0.7,2.3,0.7,3.7
+											c0,1.4-0.3,2.7-0.9,3.8c-0.6,1.1-1.4,2-2.5,2.7c-1.1,0.7-2.2,1.3-3.6,1.6C30,62.8,28.6,63,27.2,63c-3.9,0-7-1.2-9.3-3.6
+											c-2.4-2.4-4-5.4-5-9.1L0,55.3c1,3.4,2.4,6.3,4.2,8.9c1.8,2.5,3.8,4.7,6.2,6.4c2.4,1.8,5,3.1,7.8,4C21,75.5,24,76,27.1,76
+											c2.8,0,5.8-0.4,8.7-1.3c3-0.9,5.7-2.2,8-4c2.4-1.8,4.3-4,5.8-6.8c1.5-2.7,2.3-6,2.3-9.8c0-3-0.5-5.7-1.4-8.1
+											C49.7,43.7,48.4,41.6,46.7,39.8z"
+                      />
+                      <path
+                        d="M90.1,23c-3.3,0-6.3,0.8-9,2.3c-2.7,1.5-4.7,3.5-6.1,5.8h-0.8l0.8-9V1.6H61.6v72.7h13.3V50.1c0-2,0.3-3.9,0.8-5.7
+											c0.5-1.8,1.3-3.4,2.2-4.7c1-1.4,2.2-2.4,3.6-3.2c1.4-0.8,3-1.2,4.9-1.2c2.9,0,5.2,0.9,6.8,2.7c1.6,1.8,2.4,4.4,2.4,7.9v28.5H109
+											V44.2c0-6.6-1.5-11.7-4.6-15.5C101.3,24.8,96.5,23,90.1,23z"
+                      />
+                      <path
+                        d="M162.4,30.4c-2.3-2.3-5.1-4.2-8.3-5.5c-3.2-1.3-6.8-2-10.6-2c-3.9,0-7.4,0.7-10.6,2c-3.2,1.3-6,3.1-8.3,5.5
+											c-2.3,2.3-4.2,5.1-5.5,8.4c-1.3,3.3-2,6.8-2,10.7c0,3.9,0.7,7.4,2,10.7c1.3,3.3,3.1,6,5.5,8.4c2.3,2.3,5.1,4.2,8.3,5.5
+											c3.2,1.3,6.8,2,10.6,2c3.9,0,7.4-0.7,10.6-2c3.2-1.3,6-3.1,8.3-5.5c2.3-2.3,4.2-5.1,5.5-8.4c1.3-3.2,2-6.8,2-10.7
+											c0-3.9-0.7-7.4-2-10.7C166.6,35.5,164.8,32.7,162.4,30.4z M155.5,55.4c-0.7,1.8-1.7,3.2-2.9,4.5c-1.2,1.2-2.6,2.2-4.2,2.8
+											c-1.6,0.6-3.2,1-4.9,1c-1.8,0-3.4-0.3-5-1c-1.6-0.6-2.9-1.6-4.2-2.8c-1.2-1.2-2.2-2.7-2.9-4.5s-1.1-3.8-1.1-6c0-2.2,0.4-4.2,1.1-6
+											c0.7-1.8,1.7-3.3,2.9-4.5c1.2-1.2,2.6-2.1,4.2-2.8c1.6-0.6,3.2-1,5-1c1.7,0,3.3,0.3,4.9,1c1.6,0.6,3,1.6,4.2,2.8
+											c1.2,1.2,2.2,2.7,2.9,4.5s1.1,3.8,1.1,6C156.6,51.7,156.2,53.7,155.5,55.4z"
+                      />
+                      <path
+                        d="M222.7,30.4c-2.2-2.3-4.7-4.2-7.6-5.5c-2.9-1.3-5.9-2-9.1-2c-3.8,0-7,0.7-9.5,2.2c-2.6,1.5-4.5,3.3-5.7,5.4H190v-6h-12.5
+											v71.7h13.3V75.5l0-7.1c1.2,2.1,3.1,3.9,5.7,5.4c2.6,1.5,5.8,2.2,9.5,2.2c3.2,0,6.2-0.7,9.1-2c2.9-1.3,5.4-3.1,7.6-5.5
+											c2.2-2.3,3.9-5.1,5.2-8.4c1.3-3.2,1.9-6.8,1.9-10.7c0-3.9-0.6-7.4-1.9-10.7C226.7,35.5,224.9,32.8,222.7,30.4z M215.5,55.3
+											c-0.7,1.8-1.7,3.3-2.9,4.5c-1.2,1.2-2.6,2.2-4.2,2.8c-1.6,0.7-3.3,1-5,1s-3.4-0.3-5-1c-1.6-0.6-3-1.6-4.2-2.8
+											c-1.2-1.2-2.2-2.7-2.9-4.5s-1.1-3.8-1.1-6c0-2.2,0.4-4.2,1.1-6c0.7-1.8,1.7-3.3,2.9-4.5c1.2-1.2,2.6-2.1,4.2-2.8c1.6-0.6,3.3-1,5-1
+											s3.4,0.3,5,1s3,1.6,4.2,2.8s2.2,2.7,2.9,4.5c0.7,1.8,1.1,3.7,1.1,5.9C216.6,51.6,216.2,53.6,215.5,55.3z"
+                      />
+                      <path
+                        d="M282.3,30.4c-2.2-2.3-4.7-4.2-7.6-5.5c-2.9-1.3-5.9-2-9.1-2c-3.8,0-7,0.7-9.5,2.2c-2.6,1.5-4.5,3.3-5.7,5.4h-0.8v-6H237
+											v71.7h13.3V75.5v-7.1c1.2,2.1,3.1,3.9,5.7,5.4c2.6,1.5,5.8,2.2,9.5,2.2c3.2,0,6.2-0.7,9.1-2c2.9-1.3,5.4-3.1,7.6-5.5
+											c2.2-2.3,3.9-5.1,5.2-8.4c1.3-3.2,1.9-6.8,1.9-10.7c0-3.9-0.6-7.4-1.9-10.7C286.2,35.5,284.5,32.8,282.3,30.4z M275,55.3
+											c-0.7,1.8-1.7,3.3-2.9,4.5c-1.2,1.2-2.6,2.2-4.2,2.8c-1.6,0.7-3.3,1-5,1s-3.4-0.3-5-1c-1.6-0.6-3-1.6-4.2-2.8
+											c-1.2-1.2-2.2-2.7-2.9-4.5c-0.7-1.8-1.1-3.8-1.1-6c0-2.2,0.4-4.2,1.1-6c0.7-1.8,1.7-3.3,2.9-4.5c1.2-1.2,2.6-2.1,4.2-2.8
+											c1.6-0.6,3.3-1,5-1s3.4,0.3,5,1s3,1.6,4.2,2.8s2.2,2.7,2.9,4.5c0.7,1.8,1.1,3.7,1.1,5.9C276.1,51.6,275.7,53.6,275,55.3z"
+                      />
+                      <path
+                        d="M339.5,30.4c-2.1-2.3-4.7-4.2-7.8-5.5c-3.1-1.3-6.7-2-10.7-2c-3.8,0-7.3,0.7-10.4,2.1c-3.1,1.4-5.9,3.3-8.2,5.7
+											c-2.3,2.4-4.1,5.2-5.4,8.4c-1.3,3.2-1.9,6.6-1.9,10.2c0,3.9,0.7,7.4,2,10.6c1.3,3.2,3.2,6,5.5,8.4c2.4,2.4,5.2,4.2,8.4,5.5
+											c3.2,1.3,6.7,2,10.5,2c5.6,0,10.4-1.3,14.3-3.8c3.9-2.5,7-5.8,9.3-9.9L334,56.9c-1.2,2.1-2.7,3.8-4.7,5.2c-2,1.4-4.5,2.1-7.6,2.1
+											c-1.6,0-3.1-0.2-4.6-0.7c-1.5-0.4-2.9-1.2-4.1-2.1c-1.3-1-2.3-2.2-3.1-3.7c-0.8-1.5-1.4-3.2-1.7-5.2h37.5c0-0.4,0-0.8,0.1-1.1
+											c0-0.3,0-0.7,0.1-1.1c0-0.3,0-0.7,0-1.2c0-3.7-0.5-7.2-1.6-10.4C343.2,35.5,341.6,32.8,339.5,30.4z M308.9,43.1
+											c0.9-2.9,2.4-5.2,4.6-6.8c2.2-1.6,4.7-2.4,7.5-2.4c2,0,3.8,0.3,5.2,0.9c1.5,0.6,2.7,1.4,3.7,2.3c1,0.9,1.7,2,2.2,3
+											c0.5,1.1,0.8,2.1,0.9,2.9H308.9z"
+                      />
+                      <path
+                        d="M377.6,23.6c-1.5,0.5-2.8,1.1-4.1,1.8c-1.3,0.8-2.4,1.6-3.4,2.7c-1,1-1.8,2.1-2.4,3.4h-0.8v-6.9h-12.5v49.8h13.3V49.8
+											c0-2,0.3-3.9,0.9-5.7c0.6-1.7,1.4-3.3,2.4-4.5c1-1.3,2.3-2.3,3.8-3c1.5-0.7,3.1-1.1,5-1.1c1.4,0,2.6,0.1,3.6,0.4
+											c1,0.2,1.9,0.6,2.7,1V23.5h0c-1.2-0.3-2.5-0.5-4.2-0.5C380.5,23,379.1,23.2,377.6,23.6z"
+                      />
+                      <polygon
+                        points="510.8,45 513.5,31.4 482.9,31.4 486.3,13.7 520.3,13.7 523,0 474.6,0 459.7,76.4 508.1,76.4 510.8,62.7
+											476.8,62.7 480.2,45 	"
+                      />
+                      <polygon
+                        points="566.2,31.3 551.5,31.3 541.3,43.8 540.7,43.8 534.9,31.3 520.7,31.3 531.8,53.5 511.7,76.4 526,76.4 536.7,63.5
+											537.3,63.5 543.3,76.4 557.5,76.4 546.1,53.5 	"
+                      />
+                      <path
+                        d="M611.8,36.6c-1.6-2.1-3.6-3.8-5.9-5c-2.4-1.2-5-1.8-7.9-1.8c-3.4,0-6.4,0.7-9,2c-2.6,1.4-4.6,3-6.1,4.9h-0.7l1.1-5.4h-11.3
+											l-12.6,64.9h12l3.7-18.9l1.3-6.4c0.7,1.9,2.1,3.5,4.2,4.9c2.1,1.3,4.8,2,8.3,2c2.9,0,5.7-0.6,8.6-1.8c2.8-1.2,5.5-2.9,7.9-5
+											c2.4-2.1,4.5-4.6,6.2-7.6c1.7-2.9,2.9-6.2,3.6-9.7c0.7-3.5,0.7-6.7,0.1-9.7C614.5,41.3,613.4,38.7,611.8,36.6z M602.9,53.9
+											c-0.4,2-1.1,3.7-2.1,5.3c-1,1.6-2.1,2.9-3.5,4s-2.8,2-4.3,2.6s-3.1,0.9-4.7,0.9s-3.1-0.3-4.4-0.9c-1.3-0.6-2.4-1.4-3.3-2.5
+											s-1.5-2.5-1.9-4c-0.4-1.6-0.3-3.4,0-5.4c0.4-2,1.1-3.8,2.1-5.4c1-1.6,2.1-2.9,3.5-4c1.3-1.1,2.8-1.9,4.3-2.5s3.1-0.9,4.7-0.9
+											s3.1,0.3,4.4,0.9c1.3,0.6,2.4,1.5,3.3,2.6s1.5,2.5,1.9,4C603.2,50.1,603.2,51.9,602.9,53.9z"
+                      />
+                      <path
+                        d="M651.8,29.9c-1.3,0-2.6,0.2-4,0.6c-1.4,0.4-2.7,1-4,1.7c-1.3,0.7-2.5,1.5-3.5,2.4c-1.1,0.9-2,1.9-2.8,3h-0.7l1.2-6.3h-11.3
+											l-8.8,45.1h12.1l4.3-22.2c0.4-1.8,1-3.6,1.8-5.1c0.8-1.6,1.8-2.9,3-4.1s2.5-2.1,4-2.7c1.5-0.6,3-1,4.7-1c1.3,0,2.4,0.1,3.2,0.3
+											c0.8,0.2,1.6,0.5,2.3,0.9l2.4-12.1C654.4,30,653.2,29.9,651.8,29.9z"
+                      />
+                      <path
+                        d="M697.8,36.6c-1.5-2.1-3.5-3.8-6.1-5c-2.6-1.2-5.7-1.8-9.3-1.8c-3.4,0-6.7,0.6-9.8,1.9c-3.1,1.3-5.9,3-8.4,5.2
+											c-2.5,2.2-4.6,4.7-6.4,7.6c-1.7,2.9-2.9,6-3.5,9.2c-0.7,3.5-0.7,6.7-0.1,9.6c0.6,2.9,1.8,5.4,3.5,7.6c1.7,2.1,3.9,3.8,6.6,5
+											c2.7,1.2,5.7,1.8,9.2,1.8c5.1,0,9.6-1.1,13.6-3.4c4-2.3,7.3-5.2,10.2-8.9l-9.1-5c-1.4,1.9-3.1,3.5-5.2,4.7
+											c-2.1,1.3-4.5,1.9-7.2,1.9c-1.4,0-2.8-0.2-4-0.6c-1.3-0.4-2.4-1-3.3-1.9c-1-0.9-1.7-2-2.2-3.3c-0.5-1.3-0.7-2.9-0.6-4.7h33.9
+											c0.1-0.4,0.2-0.7,0.3-1c0.1-0.3,0.2-0.6,0.3-1c0.1-0.3,0.1-0.7,0.2-1.1c0.7-3.4,0.8-6.5,0.4-9.4S699.3,38.7,697.8,36.6z
+											 M689.7,48.1L689.7,48.1l-21.8,0c1.3-2.6,3.1-4.7,5.3-6.2c2.3-1.5,4.7-2.2,7.2-2.2c1.8,0,3.4,0.3,4.6,0.8c1.2,0.6,2.2,1.3,2.9,2.1
+											c0.7,0.9,1.2,1.8,1.5,2.8S689.8,47.3,689.7,48.1z"
+                      />
+                      <path
+                        d="M723.5,40.7c1.4-0.7,3-1.1,4.7-1.1c1.7,0,3.2,0.4,4.7,1.2c1.5,0.8,2.5,2.1,3,3.9l11.2-4.2c-0.9-3.7-2.8-6.4-5.9-8.1
+											c-3-1.7-6.7-2.5-11-2.5c-2.6,0-5,0.3-7.4,1c-2.4,0.6-4.5,1.6-6.4,2.8c-1.9,1.2-3.5,2.7-4.8,4.4c-1.3,1.7-2.1,3.7-2.6,5.9
+											c-0.4,2-0.3,3.7,0.2,5.2c0.5,1.5,1.3,2.7,2.3,3.8c1,1,2.2,1.9,3.6,2.6c1.4,0.7,2.7,1.2,4.1,1.5l6.1,1.4c2.5,0.6,4.2,1.3,5.2,2.1
+											c0.9,0.8,1.3,1.8,1,3c-0.2,1.1-1,2.1-2.5,2.8c-1.4,0.8-3.3,1.2-5.5,1.2c-2.1,0-4-0.6-5.5-1.7c-1.5-1.1-2.6-2.9-3.2-5.2L703.4,65
+											c0.3,1.6,0.9,3.2,1.7,4.7c0.9,1.6,2,2.9,3.5,4.1c1.5,1.2,3.3,2.2,5.4,2.9c2.2,0.7,4.7,1.1,7.7,1.1c2.9,0,5.6-0.4,8.1-1.2
+											c2.5-0.8,4.8-1.9,6.7-3.3c2-1.4,3.6-3,4.8-4.7s2.1-3.7,2.5-5.6c0.6-3.3,0.1-6.2-1.7-8.6c-1.8-2.4-4.8-4.2-9.2-5.3l-6.6-1.7
+											c-1.7-0.5-3.1-1-4-1.7c-1-0.6-1.3-1.4-1.1-2.5C721.3,42.3,722.1,41.4,723.5,40.7z"
+                      />
+                      <path
+                        d="M768,40.7c1.4-0.7,3-1.1,4.7-1.1c1.7,0,3.2,0.4,4.7,1.2c1.5,0.8,2.5,2.1,3,3.9l11.2-4.2c-0.9-3.7-2.8-6.4-5.9-8.1
+											c-3-1.7-6.7-2.5-11-2.5c-2.6,0-5,0.3-7.4,1c-2.4,0.6-4.5,1.6-6.4,2.8c-1.9,1.2-3.5,2.7-4.8,4.4c-1.3,1.7-2.1,3.7-2.6,5.9
+											c-0.4,2-0.3,3.7,0.2,5.2c0.5,1.5,1.3,2.7,2.3,3.8c1,1,2.2,1.9,3.6,2.6c1.4,0.7,2.7,1.2,4.1,1.5l6.1,1.4c2.5,0.6,4.2,1.3,5.2,2.1
+											c0.9,0.8,1.3,1.8,1,3c-0.2,1.1-1,2.1-2.5,2.8c-1.4,0.8-3.3,1.2-5.5,1.2c-2.1,0-4-0.6-5.5-1.7c-1.5-1.1-2.6-2.9-3.2-5.2L747.8,65
+											c0.3,1.6,0.9,3.2,1.7,4.7c0.9,1.6,2,2.9,3.5,4.1c1.5,1.2,3.3,2.2,5.4,2.9c2.2,0.7,4.7,1.1,7.7,1.1c2.9,0,5.6-0.4,8.1-1.2
+											c2.5-0.8,4.8-1.9,6.7-3.3c2-1.4,3.6-3,4.8-4.7c1.3-1.8,2.1-3.7,2.5-5.6c0.6-3.3,0.1-6.2-1.7-8.6c-1.8-2.4-4.8-4.2-9.2-5.3l-6.6-1.7
+											c-1.7-0.5-3.1-1-4-1.7c-1-0.6-1.3-1.4-1.1-2.5C765.7,42.3,766.6,41.4,768,40.7z"
+                      />
+                      <path
+                        d="M456.9,18.9c3.2,0,5.9-2.6,5.9-5.9v-0.3c0-3.2-2.6-5.9-5.9-5.9h-36.2c-3.2,0-5.9,2.6-5.9,5.9v0.3c0,3.2,2.6,5.9,5.9,5.9
+											H456.9z"
+                      />
+                      <path d="M451.8,32.1h-26.5c-3.3,0-6,2.7-6,6c0,3.3,2.7,6,6,6h26.5c3.3,0,6-2.7,6-6C457.8,34.8,455.1,32.1,451.8,32.1z" />
+                      <path
+                        d="M798.8,27.3c-0.8-0.8-1.8-1.2-2.9-1.2c-1.1,0-2.1,0.4-2.9,1.2c-0.8,0.8-1.2,1.7-1.2,2.9c0,1.1,0.4,2.1,1.2,2.9
+											c0.8,0.8,1.8,1.2,2.9,1.2c1.1,0,2.1-0.4,2.9-1.2c0.8-0.8,1.2-1.8,1.2-2.9C800,29,799.6,28.1,798.8,27.3z M798.2,32.4
+											c-0.6,0.6-1.4,0.9-2.3,0.9c-0.9,0-1.6-0.3-2.3-1c-0.6-0.6-1-1.4-1-2.3c0-0.9,0.3-1.6,0.9-2.3c0.6-0.6,1.4-1,2.3-1
+											c0.9,0,1.7,0.3,2.3,0.9c0.6,0.6,0.9,1.4,0.9,2.3C799.1,31,798.8,31.8,798.2,32.4z"
+                      />
+                      <path
+                        d="M796.7,30.6c0.3-0.1,0.5-0.2,0.6-0.4c0.2-0.2,0.2-0.5,0.2-0.7c0-0.4-0.1-0.7-0.4-0.9c-0.3-0.2-0.6-0.4-0.9-0.4h-1.7v4h0.8
+											v-1.5h0.4l1,1.5v0h0.9v0L796.7,30.6L796.7,30.6z M796.2,29.9h-0.8v-1h0.7c0.4,0,0.7,0.2,0.7,0.5c0,0.1-0.1,0.3-0.2,0.4
+											C796.5,29.8,796.3,29.9,796.2,29.9z"
+                      />
+                    </g>
+                  </svg>
+                </a>
+              </strong>
+              <div class="text-holder">
+                <p>Say Hello to Shopper Express, the way car buying should be.</p>
+                <p>Our process is designed around they way you want to buy. Buy 100% online or 100% in our state of the art showroom, or somewhere in the middle.</p>
+              </div>
+            </div>
+          </div>
+          <!-- contain main informative part of the site -->
+          <div class="block">
+            <div class="container">
+              <div class="block-holder products-page">
+                <!-- content block -->
+                <section class="content-block preferred">
+                  <div class="text-box">
+                    <div class="heading">
+                      <div class="icon">
+                        <svg
+                          version="1.1"
+                          xmlns="http://www.w3.org/2000/svg"
+                          xmlns:xlink="http://www.w3.org/1999/xlink"
+                          x="0px"
+                          y="0px"
+                          viewBox="0 0 82.533 100"
+                          xml:space="preserve"
+                        >
+                          <path
+                            class="st0"
+                            d="M37.555,0.801L5.467,15.045c-3.317,1.479-5.458,4.768-5.467,8.4v21.533C0,70.422,17.6,94.222,41.266,100
+												c23.666-5.778,41.266-29.578,41.266-55.022V23.445c-0.009-3.632-2.149-6.921-5.467-8.4L44.977,0.801
+												C42.619-0.267,39.914-0.267,37.555,0.801z M41.266,49.534h32.089c-2.422,18.889-15.044,35.711-32.089,40.977V49.578H9.178V23.445
+												L41.266,9.178V49.534z"
+                          />
+                        </svg>
+                      </div>
+                      <h2><span>Preferred </span>PRODUCTS</h2>
+                    </div>
+                    <div class="holder">
+                      <p>
+                        Plus, research and select available protection plans. We understand that making a vehicle purchase is a major decision that should be taken with care and
+                        understanding. We provide many options to help you choose the vehicle protection plan that is right for your needs. Learn more about how you can protect
+                        yourself and your loved ones.
+                      </p>
+                    </div>
+                    <a class="more" href="#">Find Your Car Now.</a>
+                  </div>
+                  <div class="img-box">
+                    <img class="rotate-image" src="images/shopperexpress_car4_products.png" alt="Vehicle protection products" />
+                    <img class="descrition-image" src="images/shopperexpress_products_under.png" alt="Vehicle Service Contract" />
+                  </div>
+                  <div class="img-wrapp">
+                    <img src="images/shopperexpress_tablet1.png" alt="Online F&I Menu" />
+                  </div>
+                </section>
+              </div>
+            </div>
+            <!-- product block -->
+            <section class="video-holder">
+              <div class="container">
+                <!-- product article -->
+                <article class="product-article">
+                  <div class="text-box">
+                    <h2>Vehicle <br />Prorection Plan</h2>
+                    <p>
+                      <strong
+                        >It’s no surprise that most major repairs are needed after the original factory warranty has expired, which means you will have to deal with all the
+                        inconvenience, time, energy and expense of those repairs.</strong
+                      >
+                    </p>
+                    <p>
+                      Depending on the age and mileage of your vehicle, you can purchase up to 120,000 miles of coverage. The Vehicle Protection Plan begins on the purchase date
+                      and expires according to the term and mileage selected, whichever occurs ﬁrst, and may include a deductible depending on the option selected. You can select
+                      from a national network of over 6,000 authorized service centers or any licensed repair facility in the U.S. or Canada.
+                    </p>
+                    <a class="more" href="#">Learn More</a>
+                  </div>
+                  <div class="video-box">
+                    <div class="wistia_responsive_padding" style="padding: 61.46% 0 0 0; position: relative">
+                      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+                        <div class="wistia_embed wistia_async_hpw61dnyue videoFoam=true" style="height: 100%; position: relative; width: 100%">
+                          <div
+                            class="wistia_swatch"
+                            style="height: 100%; left: 0; opacity: 0; overflow: hidden; position: absolute; top: 0; transition: opacity 200ms; width: 100%"
+                          >
+                            <img
+                              src="https://fast.wistia.com/embed/medias/hpw61dnyue/swatch"
+                              style="filter: blur(5px); height: 100%; object-fit: contain; width: 100%"
+                              alt=""
+                              aria-hidden="true"
+                              onload="this.parentNode.style.opacity=1;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <!-- product article -->
+                <article class="product-article">
+                  <div class="text-box">
+                    <h2>Road Hazard <br />Tire &amp; Wheel Protection</h2>
+                    <p><strong class="text-uppercase">ENJOY YOUR JOURNEY KNOWING YOUR TIRES AND WHEELS ARE PROTECTED.</strong></p>
+                    <p>
+                      Even the most cautious drivers encounter a ﬂat tire or damaged wheel along the way. Help safeguard your tires with the road hazard tire and wheel protection
+                      plan.
+                    </p>
+                    <p>
+                      Road Hazard Tire & Wheel Protection Plan repairs or replaces tires damaged by Road Hazards, which include debris on the road surface or road surface
+                      conditions such as potholes, cracks and breaks.
+                    </p>
+                    <a class="more" href="#">Learn More</a>
+                  </div>
+                  <div class="video-box">
+                    <div class="wistia_responsive_padding" style="padding: 61.46% 0 0 0; position: relative">
+                      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+                        <div class="wistia_embed wistia_async_hpw61dnyue videoFoam=true" style="height: 100%; position: relative; width: 100%">
+                          <div
+                            class="wistia_swatch"
+                            style="height: 100%; left: 0; opacity: 0; overflow: hidden; position: absolute; top: 0; transition: opacity 200ms; width: 100%"
+                          >
+                            <img
+                              src="https://fast.wistia.com/embed/medias/hpw61dnyue/swatch"
+                              style="filter: blur(5px); height: 100%; object-fit: contain; width: 100%"
+                              alt=""
+                              aria-hidden="true"
+                              onload="this.parentNode.style.opacity=1;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <!-- product article -->
+                <article class="product-article">
+                  <div class="text-box">
+                    <h2>Car Care <br />Service Plan</h2>
+                    <p><strong>Most factory warranties are valid only if you maintain your vehicle regularly.</strong></p>
+                    <p>The Car Care Service Plan includes valuable maintenance services that help you keep your vehicle qualiﬁed for factory warranty protection.</p>
+                    <p>The Car Care Service Plan is simple:</p>
+                    <ul>
+                      <li>Maintenance visits can be pre-scheduled.</li>
+                      <li>Bring your car and coupon booklet to your service department.</li>
+                    </ul>
+                    <p>Major repairs on today’s automobiles can be costly. Help protect your investment and your peace of mind with a Car Care Service Plan.</p>
+                    <a class="more" href="#">Learn More</a>
+                  </div>
+                  <div class="video-box">
+                    <div class="wistia_responsive_padding" style="padding: 61.46% 0 0 0; position: relative">
+                      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+                        <div class="wistia_embed wistia_async_hpw61dnyue videoFoam=true" style="height: 100%; position: relative; width: 100%">
+                          <div
+                            class="wistia_swatch"
+                            style="height: 100%; left: 0; opacity: 0; overflow: hidden; position: absolute; top: 0; transition: opacity 200ms; width: 100%"
+                          >
+                            <img
+                              src="https://fast.wistia.com/embed/medias/hpw61dnyue/swatch"
+                              style="filter: blur(5px); height: 100%; object-fit: contain; width: 100%"
+                              alt=""
+                              aria-hidden="true"
+                              onload="this.parentNode.style.opacity=1;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <!-- product article -->
+                <article class="product-article">
+                  <div class="text-box">
+                    <h2>Total Loss <br />Protection Plan</h2>
+                    <p>
+                      <strong
+                        >It’s called the "gap." It’s the difference between the Amount Owed on your Retail Installment Sales Contract/Lease Agreement and the Actual Cash Value of
+                        your vehicle at the time of a Total Loss.</strong
+                      >
+                    </p>
+                    <p>
+                      The Amount Owed does not include missed payments, payment extensions, deferred payments, accrued interest, late fees, disposition fees, penalty fees, early
+                      termination fees or ﬁnance charges incurred after the date of loss. Also, if the insurance company valuation used to calculate the Actual Cash Value is less
+                      than 90% of the NADA value of your vehicle, the NADA value will be used in determining the "gap" amount waived (which means a smaller amount may be waived).
+                    </p>
+                    <p>
+                      Depending on the plan you purchase, amounts ﬁnanced in excess of 120% or 150% of the Manufacturer’s Suggested Retail Price (MSRP) of your new car or NADA
+                      retail value of your used car will not be waived and you will owe these over-ﬁnanced amounts even after a Total Loss. Please read your contract carefully to
+                      make sure you understand these limitations.
+                    </p>
+                    <p>
+                      If your car is determined to be a Total Loss, this "gap" could translate into thousands of dollars that you would still owe after the settlement from the auto
+                      insurance company. The Plan excludes total loss claims denied by your automobile insurance company. This is an optional waiver product and not a product of
+                      insurance. It is not required for you to obtain ﬁnancing for the purchase or lease of a vehicle.
+                    </p>
+                    <a class="more" href="#">Learn More</a>
+                  </div>
+                  <div class="video-box">
+                    <div class="wistia_responsive_padding" style="padding: 61.46% 0 0 0; position: relative">
+                      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+                        <div class="wistia_embed wistia_async_hpw61dnyue videoFoam=true" style="height: 100%; position: relative; width: 100%">
+                          <div
+                            class="wistia_swatch"
+                            style="height: 100%; left: 0; opacity: 0; overflow: hidden; position: absolute; top: 0; transition: opacity 200ms; width: 100%"
+                          >
+                            <img
+                              src="https://fast.wistia.com/embed/medias/hpw61dnyue/swatch"
+                              style="filter: blur(5px); height: 100%; object-fit: contain; width: 100%"
+                              alt=""
+                              aria-hidden="true"
+                              onload="this.parentNode.style.opacity=1;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <!-- product article -->
+                <article class="product-article">
+                  <div class="text-box">
+                    <h2>Excess Wear &amp; Tear <br />For Leased Vehicles</h2>
+                    <p><strong>Leasing a new car should be a carefree and enjoyable alternative to the responsibilities of auto ownership.</strong></p>
+                    <p>
+                      But many of the risks of driving a car – the small dents and dings that happen in parking lots, chipped paint, even worn tires – are your responsibility at
+                      lease-end. You either repair them, or you pay the leasing company to perform the repairs. You may lose part of your security deposit, all of it, or maybe even
+                      more… Why worry about things that happen to almost any car?
+                    </p>
+                    <p>
+                      The optional Leased Vehicle Excess Wear &amp; Tear Plan may waive up to $7,500 of the cost of repairing covered parts including dents, dings, scratches and
+                      wear and tear on your vehicle at lease-end. You must turn in your vehicle at any time prior to or within 1 year after the original scheduled maturity date
+                      stated on your contract and you must not exercise the purchase option.
+                    </p>
+                    <a class="more" href="#">Learn More</a>
+                  </div>
+                  <div class="video-box">
+                    <div class="wistia_responsive_padding" style="padding: 61.46% 0 0 0; position: relative">
+                      <div class="wistia_responsive_wrapper" style="height: 100%; left: 0; position: absolute; top: 0; width: 100%">
+                        <div class="wistia_embed wistia_async_hpw61dnyue videoFoam=true" style="height: 100%; position: relative; width: 100%">
+                          <div
+                            class="wistia_swatch"
+                            style="height: 100%; left: 0; opacity: 0; overflow: hidden; position: absolute; top: 0; transition: opacity 200ms; width: 100%"
+                          >
+                            <img
+                              src="https://fast.wistia.com/embed/medias/hpw61dnyue/swatch"
+                              style="filter: blur(5px); height: 100%; object-fit: contain; width: 100%"
+                              alt=""
+                              aria-hidden="true"
+                              onload="this.parentNode.style.opacity=1;"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
+          </div>
+          <!-- info section -->
+          <section class="info-section">
+            <div class="container">
+              <div class="info-wrapp">
+                <!-- info list -->
+                <ul class="info-list">
+                  <li>
+                    <a href="#"
+                      ><strong><span class="mark">Find</span>New Vehicles</strong></a
+                    >
+                  </li>
+                  <li>
+                    <a href="#"
+                      ><strong><span class="mark">Find</span>Used Vehicles</strong></a
+                    >
+                  </li>
+                  <li>
+                    <a onclick="javascript:inticeEvents.launchLoanmaker(519);"
+                      ><strong><span class="mark">Express</span>Credit Application</strong></a
+                    >
+                  </li>
+                  <li>
+                    <a onclick="javascript:inticeEvents.launchTrademaker();"
+                      ><strong><span class="mark">Express</span>Trade Value</strong></a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer id="footer">
+        <div class="container-fluid">
+          <div class="row footer-holder">
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h4>Express Car Buying</h4>
+              <ul class="list-unstyled">
+                <li><a href="#">Explore All Models</a></li>
+                <li><a href="#">How it Works</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h4>ABC Toyota</h4>
+              <ul class="list-unstyled">
+                <li><a href="#">Main Website</a></li>
+                <li><a href="#">Financing</a></li>
+                <li><a href="#">Service</a></li>
+                <li><a href="#">Parts</a></li>
+                <li><a href="#">Cookie Policy</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h4>Customer Help</h4>
+              <ul class="list-unstyled">
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Hours & Map</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Site Map</a></li>
+                <li><a href="#">Accessibility</a></li>
+              </ul>
+            </div>
+            <div class="col-6 col-sm-3 col-lg-2">
+              <h4>Manufacture</h4>
+              <ul class="list-unstyled">
+                <li><a href="#">Toyota</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <span class="copyright">© 2020 <a href="#">INTICE - All Rights Reserved</a></span>
+            </div>
+            <div class="col-sm-6">
+              <span class="by">ShopperExpress by <a href="#">INTICE</a></span>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- Overview Modal -->
+    <div class="modal fade" id="overviewModal" tabindex="-1" aria-labelledby="overviewModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Overview</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">close</i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="content-holder">
+              <p>
+                Scores 29 Highway MPG and 21 City MPG! This Toyota Highlander boasts a Regular Unleaded V-6 3.5 L/211 engine powering this Automatic transmission. RADIO: PREMIUM
+                AUDIO W/NAVIGATION -inc: 6 speakers 8″ touch-screen HD Radio USB media port dynamic navigation w/up to 3-year trial dynamic POI search dynamic voice recognition
+                hands-free phone capability music streaming via Bluetooth wireless technology Android Auto Apple CarPlay Amazon Alexa compatibility SiriusXM w/3-month all access
+                trial Safety Connect w/1-year trial Service Connect w/10-year trial Remote Connect w/1-year trial Wi-Fi Connect w/up to 2GB within 3-month trial Destination Assist
+                w/1-year trial See Toyota.com/audio-multimedia for details Window Grid Diversity Antenna Wheels: 18″ Machined Alloy.*This Toyota Highlander Comes Equipped with
+                These Options *Wheels w/Machined w/Painted Accents Accents Variable Intermittent Wipers w/Heated Wiper Park Trunk/Hatch Auto-Latch Trip Computer Transmission:
+                8-Speed Automatic -inc: Direct shift and electronically controlled Transmission w/Oil Cooler Towing Equipment -inc: Trailer Sway Control Tires: P235/65R18M Tire
+                Specific Low Tire Pressure Warning Tailgate/Rear Door Lock Included w/Power Door Locks.* Stop By Today *For a must-own Toyota Highlander come see us at Sun Toyota
+                3001 US 19 Holiday FL 34691. Just minutes away!
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium consectetur cupiditate doloribus fugit iusto laudantium provident quam, quos ratione veniam. A
+                delectus eaque earum excepturi, id impedit ipsam, non praesentium quasi qui quidem ratione sit suscipit voluptas, voluptatem. Ad adipisci consectetur deleniti
+                dolore dolorum eius ipsam laborum, minus molestiae, neque nihil odit quidem saepe sint veniam. Cumque dolorum illo neque quae quia quod reiciendis soluta vel veniam
+                voluptate? Accusantium alias amet architecto at blanditiis dolor doloribus dolorum excepturi facilis fuga, illo incidunt itaque iusto laborum maiores molestiae
+                nulla odio officiis omnis quas quis sint, sunt ut vel velit veniam voluptatibus.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Features And Options Modal -->
+    <div class="modal fade" id="featuresAndOptionsModal" tabindex="-1" aria-labelledby="featuresAndOptionsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title">Features & Options</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">close</i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="content-holder">
+              <p>
+                Front Wheel Drive Power Steering ABS 4-Wheel Disc Brakes Brake Assist Aluminum Wheels Tires - Front Performance Tires - Rear Performance Wheel Covers Heated Mirrors
+                Power Mirror(s) Rear Defrost Intermittent Wipers Variable Speed Intermittent Wipers Daytime Running Lights Automatic Headlights AM/FM Stereo MP3 Player Bluetooth
+                Connection Telematics Auxiliary Audio Input WiFi Hotspot Smart Device Integration Requires Subscription Steering Wheel Audio Controls Bucket Seats Pass-Through Rear
+                Seat Rear Bench Seat Adjustable Steering Wheel Trip Computer Power Windows Remote Trunk Release Keyless Entry Power Door Locks Keyless Start Keyless Entry Power
+                Door Locks Cruise Control Adaptive Cruise Control Climate Control A/C Cloth Seats Driver Vanity Mirror Passenger Vanity Mirror Driver Illuminated Vanity Mirror
+                Passenger Illuminated Visor Mirror Power Windows Power Door Locks Trip Computer Engine Immobilizer Security System Traction Control Stability Control Traction
+                Control Front Side Air Bag Lane Departure Warning Lane Keeping Assist Lane Departure Warning Tire Pressure Monitor Driver Air Bag Passenger Air Bag Front Head Air
+                Bag Rear Head Air Bag Passenger Air Bag Sensor Front Side Air Bag Rear Side Air Bag Knee Air Bag Child Safety Locks Back-Up Camera
+              </p>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci assumenda atque eum eveniet recusandae. A aperiam, aut consectetur consequatur ducimus error eum
+                exercitationem explicabo fugit ipsum nesciunt obcaecati odit officia praesentium quam quas qui quia, quod, quos repellat rerum sed soluta tempora veritatis
+                voluptate? Architecto distinctio mollitia non voluptates. Aspernatur deserunt ea eligendi in ipsam ipsum magnam modi molestias nesciunt obcaecati omnis quaerat,
+                quas reiciendis rem repellendus, sit voluptate. Dignissimos dolore eos et ex excepturi laboriosam libero minima mollitia nam nihil pariatur quas quibusdam sint
+                temporibus, vel veniam vitae! Cum debitis deleniti perspiciatis quas velit! Fugit obcaecati quam sed veniam!
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Unlock savings Modal -->
+    <div class="modal fade" id="unlockSavingsModal" tabindex="-1" aria-labelledby="unlockSavingsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-md modal-form modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title text-uppercase">UNLOCK SAVINGS</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <i class="material-icons">close</i>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="lead text-center">
+              <p>Pricing will be displayed instantly on the next page.</p>
+            </div>
+            <form class="form-unlock" action="#">
+              <div class="row row-sm">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="First Name" />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Last Name" />
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <input class="form-control" type="email" placeholder="Email Address" />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input class="form-control" type="tel" placeholder="Mobile Phone" />
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <input class="form-control" type="text" placeholder="Zip Code" />
+                  </div>
+                </div>
+              </div>
+              <div class="text-center btn-holder">
+                <input class="btn btn-primary btn-lg" type="submit" value="UNLOCK SAVINGS" />
+              </div>
+            </form>
+            <div class="form-description text-center">
+              <p>By submittin ghis form, I understand that I may be contact by dealer. I have read and agree to the Terms of Service and Privacy Policy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <!-- intice� InstallationScriptForEvents  -->
+
+  <script async>
+    (function (d, s, id) {
+      var js,
+        inticejs = d.getElementsByTagName('head')[0];
+
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+
+      js.src = 'https://tools.inticeinc.com/assets-new/InstallationScriptForEvents.js';
+      inticejs.appendChild(js, inticejs);
+
+      js.onload = function () {
+        inticeEvents.init({
+          dealerGuid: '51777f2b-1905-421f-b0b9-09b79018b5a3',
+          dealerId: '519',
+          lmprotocoldomain: 'https://tools.inticeinc.com',
+          tmprotocoldomain: 'https://gettradevalue.com',
+          dmprotocoldomain: 'https://my-dealmaker.com',
+          lomprotocoldomain: 'https://my-loanmaker.com/',
+        });
+      };
+    })(document, 'script', 'intice-Events');
+  </script>
+
+  <!-- intice� InstallationScriptForEvents -->
+
+  <!-- intice�  OnClick Events to Install Code for LM, DM , TM & LOM --
+
+For Leadmaker:
+
+onclick="javascript:inticeEvents.launchLeadmaker();"
+
+For DealMaker:
+
+onclick="javascript:inticeEvents.launchDealMaker('INJECT VIN','519','Loan');" // please update VIN number as per the vehicle.
+
+For Trademaker:
+
+onclick="javascript:inticeEvents.launchTrademaker();"
+
+For Loanmaker:
+
+onclick="javascript:inticeEvents.launchLoanmaker(519);"
+
+!-- intice� OnClick Events to Install Code for LM, DM , TM & LOM -->
+</html>

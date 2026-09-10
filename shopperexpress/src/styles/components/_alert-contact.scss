@@ -1,0 +1,78 @@
+.alert-contact {
+  background-color: $black;
+  color: $white;
+  padding: 8px 10px 4px;
+  margin: 0;
+  z-index: 5;
+
+  @include media ('>=tablet') {
+    padding: 9px 8px;
+  }
+
+  @include media ('>=desktop') {
+    padding: 9px 10px;
+  }
+
+  a {
+    color: $white;
+
+    &:hover {
+      color: color-mix(in srgb, var(--primary) 50%, white 50%);
+    }
+  }
+
+  .contact-list {
+    @extend %listreset;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 13px;
+    line-height: 1.2;
+
+    @include media ('>=tablet') {
+      justify-content: flex-end;
+      font-size: 11px;
+    }
+
+    @include media ('>=desktop') {
+      font-size: 14px;
+    }
+
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-grow: 1;
+      padding: 0 3px 5px;
+
+      @include media ('>=tablet') {
+        padding: 0 0 0 10px;
+        width: auto;
+        flex-grow: 0;
+      }
+
+      @include media ('>=desktop') {
+        padding: 0 0 0 15px;
+      }
+    }
+
+    span {
+      padding-right: 4px;
+    }
+
+    svg {
+      width: 16px;
+      height: auto;
+      margin-right: 4px;
+      fill: $white;
+
+      @include media ('>=tablet') {
+        width: 13px;
+      }
+
+      @include media ('>=desktop') {
+        width: 16px;
+      }
+    }
+  }
+}

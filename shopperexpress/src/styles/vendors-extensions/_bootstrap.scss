@@ -1,0 +1,215 @@
+// custom variables and override bootstrap variables
+
+$text-color: #4d4d4d;
+$theme-color: #d71921;
+$dark-gray: #1a1a1a;
+
+$white: #fff;
+$gray-100: #f8f6f6;
+$gray-200: #f2f2f2;
+$gray-300: #e6e6e6;
+$gray-400: #d8d8d8;
+$gray-500: #999999;
+$gray-600: #808080;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
+
+$grays: (
+);
+
+$blue: #007bff !default;
+$indigo: #6610f2 !default;
+$purple: #6f42c1 !default;
+$pink: #e83e8c !default;
+$red: #bb162b;
+$orange: #fd7e14 !default;
+$yellow: #ffc107 !default;
+$green: #28a745 !default;
+$teal: #20c997 !default;
+$cyan: #17a2b8 !default;
+
+$colors: (
+);
+
+$colors: map-merge(("blue": $blue,
+      "indigo": $indigo,
+      "purple": $purple,
+      "pink": $pink,
+      "red": $red,
+      "orange": $orange,
+      "yellow": $yellow,
+      "green": $green,
+      "teal": $teal,
+      "cyan": $cyan,
+      "white": $white,
+      "gray": $gray-600,
+      "gray-dark": $gray-800 ),
+    $colors);
+
+$primary: $red;
+$secondary: $gray-600 !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$danger: $red;
+$light: $gray-200;
+$dark: $gray-800 !default;
+
+$theme-colors: (
+);
+
+$theme-colors: map-merge(("primary": $primary,
+      "secondary": $secondary,
+      "success": $success,
+      "info": $info,
+      "warning": $warning,
+      "danger": $danger,
+      "light": $light,
+      "dark": $dark ),
+    $theme-colors);
+
+// Options
+
+$enable-caret: false;
+$enable-rounded: false;
+$enable-shadows: false !default;
+$enable-gradients: false !default;
+$enable-transitions: true !default;
+$enable-prefers-reduced-motion-media-query: true !default;
+$enable-hover-media-query: false !default; // Deprecated, no longer affects any compiled CSS
+$enable-grid-classes: true !default;
+$enable-pointer-cursor-for-buttons: true !default;
+$enable-print-styles: true !default;
+$enable-responsive-font-sizes: false !default;
+$enable-validation-icons: true !default;
+$enable-deprecation-messages: true !default;
+
+// Spacing
+
+$spacer: 1rem !default;
+$spacers: (
+  ) !default;
+$spacers: map-merge((0: 0,
+      1: ($spacer * .25),
+      2: ($spacer * .5),
+      3: $spacer,
+      4: ($spacer * 1.5),
+      5: ($spacer * 3)),
+    $spacers
+);
+
+$base-min-width: 360px;
+
+// This is the default html and body font-size for the base rem value.
+$rem-base: 16px;
+
+
+// Body
+
+$body-bg: #fff;
+$body-color: $black;
+
+// Links
+
+$link-color: theme-color("primary");
+$link-decoration: none;
+$link-hover-color: darken($link-color, 15%);
+$link-hover-decoration: none;
+
+// Typography
+
+$font-family-sans-serif: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+$font-family-roboto: "Roboto", "Helvetica Neue", Arial, sans-serif;
+$font-family-base: $font-family-sans-serif;
+
+$font-size-base: 1rem; // Assumes the browser default, typically `16px`
+$font-size-lg: $font-size-base * 1.125;
+$font-size-sm: $font-size-base * .8125;
+
+$h1-font-size: $font-size-base * 2.25; // 36
+$h2-font-size: $font-size-base * 1.5; // 24
+$h3-font-size: $font-size-base * 1.125; // 18
+$h4-font-size: $font-size-base * 1.0625; // 17
+$h5-font-size: $font-size-base; // 16
+$h6-font-size: $font-size-base * .875; // 14
+
+$text-muted: #ccc;
+
+// Grid
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1480px
+);
+
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1078px,
+  xxl: 1078px
+);
+
+// Cards
+
+$card-spacer-y: 0.9375rem;
+$card-spacer-x: 0.9375rem;
+$card-color: #666;
+
+// Modals
+
+$modal-content-border-width: 0;
+$modal-content-border-radius: 1rem;
+
+$modal-backdrop-bg: rgba($black, .33);
+$modal-backdrop-opacity: 1;
+$modal-header-border-width: 0;
+$modal-footer-border-width: $modal-header-border-width;
+
+$modal-lg: 824px;
+$modal-md: 640px;
+
+// Buttons
+
+$btn-font-size: 12px;
+$btn-font-size-lg: 18px;
+
+// Forms
+
+$input-padding-y: 13px;
+$input-padding-x: 13px;
+
+$input-font-size: 15px;
+$input-font-weight: 500;
+
+$input-color: $black;
+$input-border-color: $gray-500;
+$input-box-shadow: inset 0 0 0 rgba($black, 0);
+
+$input-focus-border-color: $black;
+$input-focus-box-shadow: 0;
+$input-focus-color: $black;
+
+$input-font-size-lg: 18px;
+
+$input-placeholder-color: $gray-600;
+$input-plaintext-color: $gray-600;
+
+$input-height: 50px;
+$form-group-margin-bottom: 18px;
+
+
+// Tooltips
+
+$tooltip-opacity: 1;
+
+// Printing
+
+$print-page-size: a4;
+$print-body-min-width: map-get($grid-breakpoints, "lg");
