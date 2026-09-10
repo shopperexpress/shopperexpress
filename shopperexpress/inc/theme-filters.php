@@ -204,7 +204,7 @@ add_filter(
 
 add_filter(
 	'wpforms_smart_tag_process',
-	function ( $content, $tag ) {
+	function ( $content, $tag, $form_data = array(), $fields = array() ) {
 
 		$post_id = get_the_ID();
 
@@ -215,6 +215,21 @@ add_filter(
 		// never receive a post_id in $_REQUEST, only the AJAX unlock/offers flows do.
 		$api_vehicle    = ! empty( $GLOBALS['intice_vehicle'] ) ? $GLOBALS['intice_vehicle'] : null;
 		$raw_request_id = isset( $_REQUEST['post_id'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['post_id'] ) ) : '';
+
+		// Confirmation messages are processed at form-submit time, not at
+		// page-render time — the request carries the submitted WPForms field
+		// values (wpforms[fields][...]) but no post_id at all. Recover the VIN
+		// from whichever submitted field already holds one (the hidden
+		// "vehicle_vin"-style field populated when the form was first rendered).
+		if ( ! $api_vehicle && ! $raw_request_id && ! empty( $fields ) && is_array( $fields ) ) {
+			foreach ( $fields as $field ) {
+				$field_value = is_array( $field ) ? ( $field['value'] ?? '' ) : '';
+				if ( is_string( $field_value ) && preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/i', $field_value ) ) {
+					$raw_request_id = strtoupper( $field_value );
+					break;
+				}
+			}
+		}
 
 		if (
 			! $api_vehicle
@@ -238,7 +253,9 @@ add_filter(
 			'model'              => array( 'model', 'model' ),
 			'trim'               => array( 'trim', 'trim' ),
 			'vin'                => array( 'vin_number', 'vin', 'upper' ),
+			'vin_number'         => array( 'vin_number', 'vin', 'upper' ),
 			'stock'              => array( 'stock-number', 'stock' ),
+			'stock_number'       => array( 'stock-number', 'stock' ),
 			'type'               => array( 'condition', 'condition' ),
 			// ACF-only fields.
 			'service_disclaimer' => array( 'offerdisclaimer' ),
@@ -325,6 +342,17 @@ add_filter(
 				}
 				break;
 
+			case 'customprice1':
+				if ( $api_vehicle ) {
+					$payload = $api_vehicle['payload'] ?? array();
+					$raw     = $payload['customprice1'] ?? null;
+					$value   = ( null !== $raw && '' !== $raw ) ? number_format( (int) $raw ) : null;
+				} else {
+					$raw   = get_field( 'customprice1', $post_id );
+					$value = is_float( $raw ) ? number_format( $raw ) : null;
+				}
+				break;
+
 			case 'offer_image':
 				$gallery = get_field( 'gallery', $post_id );
 				$value   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : null;
@@ -382,7 +410,7 @@ add_filter(
 		return $content;
 	},
 	10,
-	2
+	4
 );
 
 /**
