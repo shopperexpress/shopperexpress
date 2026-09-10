@@ -382,6 +382,12 @@ class Ajax implements Theme_Component {
 			}
 		}
 
+		// Some forms name the free-text field "message" instead of "comments" —
+		// the ADF template's {{comments}} token expects the latter.
+		if ( empty( $_REQUEST['comments'] ) && ! empty( $_REQUEST['message'] ) ) {
+			$_REQUEST['comments'] = $_REQUEST['message'];
+		}
+
 		// API mode: the vehicle_* fields the webhook posts only reflect what the
 		// WPForms hidden fields' Smart Tags resolved to at page render time. Overwrite
 		// them with fresh data pulled directly from Nexus so the ADF XML {{vehicle_*}}
@@ -565,24 +571,56 @@ class Ajax implements Theme_Component {
 			return;
 		}
 
-		$v       = $api_result['data'];
-		$payload = $v['payload'] ?? array();
+		$v = $api_result['data'];
 
-		$msrp           = $v['msrp'] ?? 0;
-		$best_price     = $v['price_sort'] ?? ( $v['price'] ?? 0 );
-		$internet_price = $payload['customprice2'] ?? ( $payload['internet_price'] ?? 0 );
+		$msrp  = $this->vehicle_field( $v, array( 'msrp' ) );
+		$price = $this->vehicle_field( $v, array( 'price' ) );
 
-		$_REQUEST['vehicle_year']           = $v['year'] ?? '';
-		$_REQUEST['vehicle_make']           = $v['make'] ?? '';
-		$_REQUEST['vehicle_model']          = $v['model'] ?? '';
-		$_REQUEST['vehicle_trim']           = $v['trim'] ?? '';
-		$_REQUEST['vehicle_miles']          = $v['mileage'] ?? '';
-		$_REQUEST['vehicle_vin']            = strtoupper( $v['vin'] ?? $vin );
-		$_REQUEST['vehicle_stock']          = $v['stock'] ?? '';
-		$_REQUEST['vehicle_type']           = $v['condition'] ?? '';
-		$_REQUEST['vehicle_msrp']           = $msrp ? number_format( (int) $msrp ) : '';
-		$_REQUEST['vehicle_best_price']     = $best_price ? number_format( (int) $best_price ) : '';
-		$_REQUEST['vehicle_internet_price'] = $internet_price ? number_format( (int) $internet_price ) : '';
+		// price_sort is meant to be the "best" advertised price, but some feed rows
+		// carry a negative sentinel there (e.g. "call for price") instead of a real
+		// number — fall back to the plain price whenever it isn't a sane positive value.
+		$price_sort = $this->vehicle_field( $v, array( 'price_sort' ) );
+		$best_price = ( is_numeric( $price_sort ) && $price_sort > 0 ) ? $price_sort : $price;
+
+		$internet_price = $this->vehicle_field( $v, array( 'customprice2', 'internet_price' ) );
+		$mileage        = $this->vehicle_field( $v, array( 'mileage', 'miles_display', 'miles' ) );
+		$stock          = $this->vehicle_field( $v, array( 'stock', 'stock_number' ) );
+
+		$_REQUEST['vehicle_year']           = $this->vehicle_field( $v, array( 'year' ) ) ?? '';
+		$_REQUEST['vehicle_make']           = $this->vehicle_field( $v, array( 'make' ) ) ?? '';
+		$_REQUEST['vehicle_model']          = $this->vehicle_field( $v, array( 'model' ) ) ?? '';
+		$_REQUEST['vehicle_trim']           = $this->vehicle_field( $v, array( 'trim' ) ) ?? '';
+		$_REQUEST['vehicle_miles']          = null !== $mileage ? $mileage : '';
+		$_REQUEST['vehicle_vin']            = strtoupper( $this->vehicle_field( $v, array( 'vin', 'vin_number' ) ) ?? $vin );
+		$_REQUEST['vehicle_stock']          = null !== $stock ? $stock : '';
+		$_REQUEST['vehicle_type']           = $this->vehicle_field( $v, array( 'condition' ) ) ?? '';
+		$_REQUEST['vehicle_msrp']           = is_numeric( $msrp ) ? number_format( (int) $msrp ) : '';
+		$_REQUEST['vehicle_best_price']     = is_numeric( $best_price ) ? number_format( (int) $best_price ) : '';
+		$_REQUEST['vehicle_internet_price'] = is_numeric( $internet_price ) ? number_format( (int) $internet_price ) : '';
+	}
+
+	/**
+	 * Look up a vehicle field by key, checking the top-level Nexus response first
+	 * and falling back to the same key(s) inside `payload` (the raw feed data
+	 * duplicates most fields there, sometimes under a different name).
+	 *
+	 * @param array    $vehicle Vehicle data as returned by Intice_Api_Client::get_vehicle().
+	 * @param string[] $keys    Candidate keys to try, in priority order.
+	 * @return mixed|null First non-empty value found, or null.
+	 */
+	private function vehicle_field( array $vehicle, array $keys ) {
+		$payload = $vehicle['payload'] ?? array();
+
+		foreach ( $keys as $key ) {
+			if ( isset( $vehicle[ $key ] ) && '' !== $vehicle[ $key ] ) {
+				return $vehicle[ $key ];
+			}
+			if ( isset( $payload[ $key ] ) && '' !== $payload[ $key ] ) {
+				return $payload[ $key ];
+			}
+		}
+
+		return null;
 	}
 
 	/**

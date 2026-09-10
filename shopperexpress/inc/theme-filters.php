@@ -264,7 +264,9 @@ add_filter(
 
 			$value = ( $api_vehicle && $api_key ) ? ( $api_vehicle[ $api_key ] ?? null ) : get_field( $acf_key, $post_id );
 
-			if ( $value ) {
+			// Loose truthiness would drop legitimate "0" values (e.g. a brand new
+			// vehicle's mileage is 0) — only treat null/empty string as "no value".
+			if ( null !== $value && '' !== $value ) {
 				if ( 'upper' === $format ) {
 					$value = strtoupper( $value );
 				}
