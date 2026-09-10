@@ -236,7 +236,7 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 					'permalink' => $permalink,
 					'is_single' => false,
 					'loged'     => $loged,
-					'vin'       => $vin,
+					'post_id'   => $vin,
 				)
 			);
 

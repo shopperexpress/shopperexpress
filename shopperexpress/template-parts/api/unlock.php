@@ -11,7 +11,7 @@
  *   is_single  (bool)   — true on VDP, false on SRP
  *   loged      (string) — 'true' | '' (from SRP JS; falls back to is_user_logged_in)
  *   show-image (string) — 'true' (default) | 'false' — whether to render custom images
- *   vin        (string) — VIN passed as post_id to the button (API mode)
+ *   post_id    (string) — VIN passed through as the button's data-post attribute (API mode)
  *
  * @package Shopperexpress
  */
