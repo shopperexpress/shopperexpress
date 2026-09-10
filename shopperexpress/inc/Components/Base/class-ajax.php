@@ -57,9 +57,9 @@ class Ajax implements Theme_Component {
 				'wps_api_render_favorites' => 'api_render_favorites',
 			),
 			'admin-ajax'        => array(
-				'save_listing'       => 'save_listing',
-				'delete_listings'    => 'delete_listings',
-				'clear'              => 'clear_action',
+				'save_listing'           => 'save_listing',
+				'delete_listings'        => 'delete_listings',
+				'clear'                  => 'clear_action',
 				'wps_api_save_vehicle'   => 'api_save_vehicle',
 				'wps_api_delete_vehicle' => 'api_delete_vehicle',
 			),
@@ -382,6 +382,12 @@ class Ajax implements Theme_Component {
 			}
 		}
 
+		// API mode: the vehicle_* fields the webhook posts only reflect what the
+		// WPForms hidden fields' Smart Tags resolved to at page render time. Overwrite
+		// them with fresh data pulled directly from Nexus so the ADF XML {{vehicle_*}}
+		// tokens are correct even if that upstream resolution failed or was stale.
+		$this->maybe_override_adf_vehicle_fields();
+
 		$template = null;
 
 		if ( ! empty( $_REQUEST['template'] ) ) {
@@ -511,6 +517,72 @@ class Ajax implements Theme_Component {
 			);
 		}
 		exit;
+	}
+
+	/**
+	 * In API mode, overwrite the vehicle_* ADF template tokens in $_REQUEST with
+	 * fresh data pulled directly from the Intice Nexus API.
+	 *
+	 * The webhook's vehicle_* body params only carry whatever value the submitted
+	 * WPForms hidden fields happened to have — which depends on the
+	 * wpforms_smart_tag_process filter (theme-filters.php) having successfully
+	 * resolved the vehicle's Smart Tags at page render time. If that upstream
+	 * resolution failed (stale cache, field rendered outside a VDP context, etc.)
+	 * the literal "{year}"/"{vin_number}"/... tag text gets submitted and ends up
+	 * baked into the ADF XML unresolved. Re-fetching by VIN here guarantees the
+	 * final {{vehicle_*}} substitution always uses live vehicle data.
+	 *
+	 * @return void
+	 */
+	private function maybe_override_adf_vehicle_fields(): void {
+		if ( ! get_option( 'shopperexpress_api_mode_enabled' ) || ! class_exists( '\App\Components\Api\Intice_Api_Client' ) ) {
+			return;
+		}
+
+		$vin_pattern = '[A-HJ-NPR-Z0-9]{17}';
+		$vin         = '';
+
+		$raw_vin = isset( $_REQUEST['vehicle_vin'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['vehicle_vin'] ) ) : '';
+		if ( preg_match( '/^' . $vin_pattern . '$/i', $raw_vin ) ) {
+			$vin = strtoupper( $raw_vin );
+		}
+
+		// Fall back to the VIN embedded in the VDP URL slug when the hidden
+		// field never resolved (e.g. still holds the literal "{vin_number}" tag).
+		if ( ! $vin && ! empty( $_REQUEST['Entry_URL'] ) ) {
+			$entry_url = sanitize_text_field( wp_unslash( $_REQUEST['Entry_URL'] ) );
+			if ( preg_match( '/(?:^|-)(' . $vin_pattern . ')(?:-|\/|$)/i', $entry_url, $m ) ) {
+				$vin = strtoupper( $m[1] );
+			}
+		}
+
+		if ( ! $vin ) {
+			return;
+		}
+
+		$api_result = \App\Components\Api\Intice_Api_Client::instance()->get_vehicle( $vin );
+		if ( is_wp_error( $api_result ) || empty( $api_result['data'] ) ) {
+			return;
+		}
+
+		$v       = $api_result['data'];
+		$payload = $v['payload'] ?? array();
+
+		$msrp           = $v['msrp'] ?? 0;
+		$best_price     = $v['price_sort'] ?? ( $v['price'] ?? 0 );
+		$internet_price = $payload['customprice2'] ?? ( $payload['internet_price'] ?? 0 );
+
+		$_REQUEST['vehicle_year']           = $v['year'] ?? '';
+		$_REQUEST['vehicle_make']           = $v['make'] ?? '';
+		$_REQUEST['vehicle_model']          = $v['model'] ?? '';
+		$_REQUEST['vehicle_trim']           = $v['trim'] ?? '';
+		$_REQUEST['vehicle_miles']          = $v['mileage'] ?? '';
+		$_REQUEST['vehicle_vin']            = strtoupper( $v['vin'] ?? $vin );
+		$_REQUEST['vehicle_stock']          = $v['stock'] ?? '';
+		$_REQUEST['vehicle_type']           = $v['condition'] ?? '';
+		$_REQUEST['vehicle_msrp']           = $msrp ? number_format( (int) $msrp ) : '';
+		$_REQUEST['vehicle_best_price']     = $best_price ? number_format( (int) $best_price ) : '';
+		$_REQUEST['vehicle_internet_price'] = $internet_price ? number_format( (int) $internet_price ) : '';
 	}
 
 	/**
@@ -832,20 +904,38 @@ class Ajax implements Theme_Component {
 
 		// Top-level API vehicle fields.
 		$top_level_fields = array(
-			'year', 'make', 'model', 'trim', 'condition', 'mileage',
-			'price', 'msrp', 'price_sort', 'stock', 'exterior_color', 'interior_color',
-			'body_style', 'drivetrain', 'fuel_type', 'transmission',
-			'certified', 'sold', 'use_images_list',
-			'primary_image_url', 'primary_thumb_url',
+			'year',
+			'make',
+			'model',
+			'trim',
+			'condition',
+			'mileage',
+			'price',
+			'msrp',
+			'price_sort',
+			'stock',
+			'exterior_color',
+			'interior_color',
+			'body_style',
+			'drivetrain',
+			'fuel_type',
+			'transmission',
+			'certified',
+			'sold',
+			'use_images_list',
+			'primary_image_url',
+			'primary_thumb_url',
 		);
 
 		// Multi-line payload fields — preserve line breaks instead of
 		// collapsing them with sanitize_text_field().
 		$textarea_fields = array(
-			'message', 'information', 'vehicle_overview',
+			'message',
+			'information',
+			'vehicle_overview',
 		);
 
-		$top    = array();
+		$top     = array();
 		$payload = array();
 
 		foreach ( $_POST as $key => $value ) {
