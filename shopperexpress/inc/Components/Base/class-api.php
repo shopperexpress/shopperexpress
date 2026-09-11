@@ -742,6 +742,23 @@ class Api implements Theme_Component {
 			'fields'         => 'ids',
 		);
 
+		// Offers with `hide_offer` enabled are excluded from the SRP listing —
+		// they stay reachable by direct URL only.
+		if ( 'offers' === $post_type ) {
+			$args['meta_query'] = array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'hide_offer',
+					'compare' => 'NOT EXISTS',
+				),
+				array(
+					'key'     => 'hide_offer',
+					'value'   => '1',
+					'compare' => '!=',
+				),
+			);
+		}
+
 		if ( $sort && in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
 			$meta_query = array( 'relation' => 'AND' );
 			$orderby    = array();

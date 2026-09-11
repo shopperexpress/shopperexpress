@@ -18,6 +18,21 @@ $show_offers_from = $args['show_offers_from'] ?? 'offers';
 $offers_order     = $args['offers_order'] ?? 'offers_first';
 $final_ids        = array();
 
+// Excludes offers with `hide_offer` enabled from sliders/widgets — they stay
+// reachable by direct URL only. `service-offers` doesn't have this field.
+$hide_offer_meta_query = array(
+	'relation' => 'OR',
+	array(
+		'key'     => 'hide_offer',
+		'compare' => 'NOT EXISTS',
+	),
+	array(
+		'key'     => 'hide_offer',
+		'value'   => '1',
+		'compare' => '!=',
+	),
+);
+
 switch ( $show_offers_from ) {
 
 	case 'both':
@@ -27,6 +42,7 @@ switch ( $show_offers_from ) {
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
+				'meta_query'     => $hide_offer_meta_query,
 			)
 		);
 
@@ -53,6 +69,7 @@ switch ( $show_offers_from ) {
 				'post_status'    => 'publish',
 				'posts_per_page' => -1,
 				'fields'         => 'ids',
+				'meta_query'     => 'offers' === $show_offers_from ? $hide_offer_meta_query : array(),
 			)
 		);
 		break;

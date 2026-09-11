@@ -160,9 +160,15 @@ function initHoverClass() {
 
 	if (!holders.length) return;
 
+	function setActiveHolder(activeHolder) {
+		holders.forEach((holder) => {
+			holder.classList.toggle(activeClass, holder === activeHolder);
+		});
+	}
+
 	holders.forEach((holder) => {
 		holder.addEventListener('mouseenter', () => {
-			holder.classList.add(activeClass);
+			setActiveHolder(holder);
 		});
 
 		holder.addEventListener('mouseleave', () => {
@@ -172,7 +178,7 @@ function initHoverClass() {
 		});
 
 		holder.addEventListener('focusin', () => {
-			holder.classList.add(activeClass);
+			setActiveHolder(holder);
 		});
 
 		holder.addEventListener('focusout', (e) => {
@@ -183,13 +189,7 @@ function initHoverClass() {
 	});
 
 	document.addEventListener('click', (e) => {
-		const activeHolder = e.target.closest('.card-team');
-
-		if (!activeHolder) return;
-
-		holders.forEach((holder) => {
-			holder.classList.toggle(activeClass, holder === activeHolder);
-		});
+		setActiveHolder(e.target.closest('.card-team'));
 	});
 }
 

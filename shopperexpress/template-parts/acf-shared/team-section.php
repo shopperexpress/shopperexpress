@@ -7,9 +7,10 @@
  * @param array $args {
  *   @type string $heading             Section heading.
  *   @type string $description        Section intro text.
- *   @type array  $members             Array of items, each with keys: photo, name, position, phone, email, category.
+ *   @type array  $members             Array of items, each with keys: photo, name, position, phone, email, category, bio.
  *                                     `category` may contain multiple, comma-separated values (e.g. "Sales, Management")
  *                                     so a member can belong to more than one filter group.
+ *                                     `bio` is optional WYSIWYG content — when present a "Learn More" button opens it in a modal.
  *   @type string $footer_heading      "Join Our Team" style heading.
  *   @type string $footer_button_text  Footer CTA button label.
  *   @type array  $footer_button_url   ACF link array (url, title, target).
@@ -62,7 +63,9 @@ if ( ! empty( $members ) ) :
 					$position    = $member['position'] ?? '';
 					$phone       = $member['phone'] ?? '';
 					$email       = $member['email'] ?? '';
+					$bio         = $member['bio'] ?? '';
 					$member_cats = wps_team_split_categories( $member['category'] ?? '' );
+					$modal_id    = 'teamModal-' . uniqid();
 					?>
 					<div class="card-team">
 						<?php if ( $photo ) : ?>
@@ -75,13 +78,21 @@ if ( ! empty( $members ) ) :
 							<?php if ( $position ) : ?>
 								<span class="card-team__position"><?php echo esc_html( $position ); ?></span>
 							<?php endif; ?>
-							<?php if ( $phone || $email ) : ?>
+							<?php if ( $phone || $email || $bio ) : ?>
 								<div class="card-team__hover">
 									<?php if ( $phone ) : ?>
 										<p><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a></p>
 									<?php endif; ?>
 									<?php if ( $email ) : ?>
 										<p><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></p>
+									<?php endif; ?>
+									<?php if ( $bio ) : ?>
+										<button type="button" class="card-team__more" data-toggle="modal" data-target="#<?php echo esc_attr( $modal_id ); ?>">
+											<?php esc_html_e( 'See Info', 'shopperexpress' ); ?>
+											<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+												<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+											</svg>
+										</button>
 									<?php endif; ?>
 								</div>
 							<?php endif; ?>
@@ -90,6 +101,55 @@ if ( ! empty( $members ) ) :
 							<?php endforeach; ?>
 						</div>
 					</div>
+					<?php if ( $bio ) : ?>
+						<?php
+						add_action(
+							'wp_footer',
+							function () use ( $modal_id, $photo, $name, $position, $phone, $email, $bio ) {
+								?>
+							<div class="modal fade team-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-labelledby="<?php echo esc_attr( $modal_id ); ?>-label" aria-hidden="true">
+								<div class="modal-dialog modal-lg modal-dialog-centered">
+									<div class="modal-content">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+												<path
+													d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+											</svg>
+										</button>
+										<?php if ( $photo ) : ?>
+											<div class="team-modal__media">
+												<?php echo wp_get_attachment_image( $photo, 'large', false, array( 'alt' => esc_attr( $name ) ) ); ?>
+											</div>
+										<?php endif; ?>
+										<div class="team-modal__body">
+											<div class="team-modal__scroll">
+												<?php if ( $name ) : ?>
+													<h3 id="<?php echo esc_attr( $modal_id ); ?>-label" class="team-modal__name"><?php echo esc_html( $name ); ?></h3>
+												<?php endif; ?>
+												<?php if ( $position ) : ?>
+													<span class="team-modal__position"><?php echo esc_html( $position ); ?></span>
+												<?php endif; ?>
+												<?php if ( $phone || $email ) : ?>
+													<div class="team-modal__contact">
+														<?php if ( $phone ) : ?>
+															<p><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a></p>
+														<?php endif; ?>
+														<?php if ( $email ) : ?>
+															<p><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></p>
+														<?php endif; ?>
+													</div>
+												<?php endif; ?>
+												<div class="team-modal__bio"><?php echo wp_kses_post( $bio ); ?></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+								<?php
+							}
+						);
+						?>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 			<?php if ( $footer_heading || $footer_button_text ) : ?>

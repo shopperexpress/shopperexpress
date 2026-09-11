@@ -204,6 +204,26 @@
             "wpml_cf_preferences": 2
         },
         {
+            "key": "field_69200001hide0",
+            "label": "Hide Offer",
+            "name": "hide_offer",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "When enabled, this offer is hidden from the homepage slider, offer sliders/widgets, and the Offers SRP listing. The single offer page stays reachable directly by URL.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No",
+            "ui": 1
+        },
+        {
             "key": "field_690c81fd26c2c",
             "label": "VDP Description",
             "name": "vdp_description",

@@ -31,6 +31,7 @@ if ( have_rows( 'members' ) ) {
 			'phone'    => get_sub_field( 'phone' ),
 			'email'    => get_sub_field( 'email' ),
 			'category' => get_sub_field( 'category' ),
+			'bio'      => get_sub_field( 'bio' ),
 		);
 	}
 }

@@ -184,6 +184,26 @@
                     "prepend": "",
                     "append": "",
                     "parent_repeater": "field_7a0b1c2d3e003"
+                },
+                {
+                    "key": "field_7a0b1c2d3e013",
+                    "label": "Bio",
+                    "name": "bio",
+                    "type": "wysiwyg",
+                    "instructions": "When filled, a \"Learn More\" button appears on the card that opens this content in a modal.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "tabs": "all",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "delay": 0,
+                    "parent_repeater": "field_7a0b1c2d3e003"
                 }
             ]
         },

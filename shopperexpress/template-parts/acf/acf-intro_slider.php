@@ -68,6 +68,18 @@ if ( $show_slider != 2 ) {
 		'post_status'    => 'publish',
 		'posts_per_page' => -1,
 		'field'          => 'ids',
+		'meta_query'     => array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'hide_offer',
+				'compare' => 'NOT EXISTS',
+			),
+			array(
+				'key'     => 'hide_offer',
+				'value'   => '1',
+				'compare' => '!=',
+			),
+		),
 	);
 	switch ( $sort_offers_by ) {
 		case 'date':
