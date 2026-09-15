@@ -222,7 +222,7 @@
   &__stars-row {
     position: relative;
     display: inline-block;
-    color: #6b6b6b;
+    color: #e0e0e0;
     font-size: 25px;
     line-height: 1;
     letter-spacing: 1px;
@@ -251,7 +251,10 @@
     left: 0;
     width: var(--fill, 0%);
     overflow: hidden;
-    color: #0074b3;
+    color: #fcbf02;
+    // Darker gold outline on top of the original gold fill to meet
+    // accessibility contrast requirements against a white background.
+    -webkit-text-stroke: 0.5px #997404;
   }
 }
 

@@ -99,13 +99,13 @@ $aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ),
 									$lock         = get_sub_field( 'lock' );
 									$show_payment = $lock ? get_sub_field( 'show_payment' ) : false;
 									if ( $price ) {
-										$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
+										$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : number_format( $price );
 									}
 
 
 									switch ( $show_payment ) {
 										case 'lease-payment':
-											if ( $down_payment && $lease_payment ) {
+											if ( '' !== trim( (string) $down_payment ) && $lease_payment ) {
 
 												$lease_payment = ! empty( $lease_payment ) ? '$' . $lease_payment : null;
 												$text          = ! empty( $lease_payment ) ? '$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
@@ -127,7 +127,7 @@ $aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ),
 											break;
 
 										case 'Disclosure_lease':
-											if ( $down_payment && $lease_payment ) {
+											if ( '' !== trim( (string) $down_payment ) && $lease_payment ) {
 												$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
 												$text          = ! empty( $lease_payment ) ? $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '<span class="savings">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
 											} else {

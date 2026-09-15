@@ -591,7 +591,7 @@ while ( have_posts() ) :
 										$show_payment = get_sub_field( 'show_payment' );
 										$lock         = get_sub_field( 'lock' );
 										$event        = get_event_script( get_sub_field( 'event' ), $location, $vin_number );
-										$down_payment = ! empty( $down_payment ) ? $down_payment : null;
+										$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : null;
 
 										switch ( $show_payment ) {
 											case 'lease-payment':

@@ -8,6 +8,8 @@
  *   @type string $heading      Section heading.
  *   @type string $description  Section intro text (allows inline markup/links).
  *   @type string $layout_style "list" (default) or "slider".
+ *   @type bool   $hide_header  Slider only. Hides the logo/rating/count bar above the slider.
+ *   @type int    $slides_per_view Slider only. Number of cards shown side by side on desktop.
  *   @type string $place_id     Google Place ID — resolved server-side from the connected
  *                               Business Profile location (not an ACF field; see
  *                               App\Components\Base\Google_Business_Reviews::get_settings()).
@@ -27,14 +29,16 @@
  * Places API (New) — capped at 5 reviews with no pagination — otherwise.
  */
 
-$heading        = $args['heading'] ?? '';
-$description    = $args['description'] ?? '';
-$layout_style   = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
-$place_id       = $args['place_id'] ?? '';
-$keyword_filter = $args['keyword_filter'] ?? '';
-$cta_text       = $args['cta_text'] ?? '';
-$cta_url        = $args['cta_url'] ?? '#';
-$is_slider      = 'slider' === $layout_style;
+$heading         = $args['heading'] ?? '';
+$description     = $args['description'] ?? '';
+$layout_style    = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
+$place_id        = $args['place_id'] ?? '';
+$keyword_filter  = $args['keyword_filter'] ?? '';
+$cta_text        = $args['cta_text'] ?? '';
+$cta_url         = $args['cta_url'] ?? '#';
+$is_slider       = 'slider' === $layout_style;
+$hide_header     = $is_slider && ! empty( $args['hide_header'] );
+$slides_per_view = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
 
 if ( $place_id ) :
 	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
@@ -95,6 +99,9 @@ if ( $place_id ) :
 		data-google-reviews-place-id="<?php echo esc_attr( $place_id ); ?>"
 		<?php if ( $keyword_filter ) : ?>
 		data-google-reviews-keyword-filter="<?php echo esc_attr( $keyword_filter ); ?>"
+		<?php endif; ?>
+		<?php if ( $slides_per_view > 0 ) : ?>
+		data-google-reviews-slides="<?php echo esc_attr( $slides_per_view ); ?>"
 		<?php endif; ?>>
 		<div class="container">
 			<?php if ( ! $is_slider && ( $heading || $description ) ) : ?>
@@ -107,22 +114,24 @@ if ( $place_id ) :
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
-			<div class="widget-review__head">
-				<div class="widget-review__head-holder">
-					<div class="widget-review__head-row">
-						<img src="<?php echo esc_url( \App\asset_url( 'images/google.svg' ) ); ?>" alt="Google" />
-						<h3><?php echo esc_html( $heading ? $heading : __( 'Reviews', 'shopperexpress' ) ); ?></h3>
+			<?php if ( ! $hide_header ) : ?>
+				<div class="widget-review__head">
+					<div class="widget-review__head-holder">
+						<div class="widget-review__head-row">
+							<img src="<?php echo esc_url( \App\asset_url( 'images/google.svg' ) ); ?>" alt="Google" />
+							<h3><?php echo esc_html( $heading ? $heading : __( 'Reviews', 'shopperexpress' ) ); ?></h3>
+						</div>
+						<div class="widget-review__head-row">
+							<strong class="rating" data-google-reviews-rating></strong>
+							<span class="google-reviews__stars" data-google-reviews-stars></span>
+							<span class="count" data-google-reviews-count></span>
+						</div>
 					</div>
-					<div class="widget-review__head-row">
-						<strong class="rating" data-google-reviews-rating></strong>
-						<span class="google-reviews__stars" data-google-reviews-stars></span>
-						<span class="count" data-google-reviews-count></span>
-					</div>
+					<?php if ( ! $is_slider && $cta_text ) : ?>
+						<a class="btn" href="<?php echo esc_url( $cta_url ); ?>" data-google-reviews-cta target="_blank" rel="noopener"><?php echo esc_html( $cta_text ); ?></a>
+					<?php endif; ?>
 				</div>
-				<?php if ( ! $is_slider && $cta_text ) : ?>
-					<a class="btn" href="<?php echo esc_url( $cta_url ); ?>" data-google-reviews-cta target="_blank" rel="noopener"><?php echo esc_html( $cta_text ); ?></a>
-				<?php endif; ?>
-			</div>
+			<?php endif; ?>
 			<?php if ( $is_slider ) : ?>
 				<div class="reviews-slider" data-google-reviews-list></div>
 			<?php else : ?>

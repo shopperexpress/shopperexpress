@@ -441,11 +441,11 @@ while ( have_posts() ) :
 										$show_event   = get_sub_field( 'show_event' );
 										$show_popup   = get_sub_field( 'show_popup' );
 										$event        = get_event_script( get_sub_field( 'event' ), $location, $vin_number );
-										$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
+										$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : number_format( $price );
 
 										switch ( $show_payment ) {
 											case 'lease-payment':
-												if ( $down_payment && $lease_payment >= 0 ) {
+												if ( '' !== trim( (string) $down_payment ) && $lease_payment >= 0 ) {
 													$lease_payment = ! empty( $lease_payment ) ? '$' . number_format( $lease_payment ) : null;
 													$text          = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 												} else {
@@ -466,7 +466,7 @@ while ( have_posts() ) :
 												break;
 
 											case 'Disclosure_lease':
-												if ( $down_payment && $lease_payment ) {
+												if ( '' !== trim( (string) $down_payment ) && $lease_payment ) {
 													$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
 													$text          = ! empty( $lease_payment ) ? '<span class="savings">' . $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 												} else {

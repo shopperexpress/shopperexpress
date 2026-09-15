@@ -139,11 +139,11 @@ if ( ! $hide_block && $query->posts ) :
 														break;
 												}
 
-												$down_payment = ! empty( $down_payment ) ? $down_payment : null;
+												$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : null;
 
 												switch ( $show_payment ) {
 													case 'lease-payment':
-														if ( $down_payment && $lease_payment >= 0 ) {
+														if ( null !== $down_payment && $lease_payment >= 0 ) {
 															$lease_payment = ! empty( $lease_payment ) ? '$' . number_format( $lease_payment ) : null;
 															$text          = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 														} else {
@@ -164,7 +164,7 @@ if ( ! $hide_block && $query->posts ) :
 														break;
 
 													case 'Disclosure_lease':
-														if ( $down_payment && $lease_payment ) {
+														if ( null !== $down_payment && $lease_payment ) {
 															$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
 															$text          = ! empty( $lease_payment ) ? '<span class="savings">' . $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '</span><span class="price-text">' . $lease_payment . ' <sub>/mo</sub></span>' : null;
 														} else {
@@ -188,7 +188,7 @@ if ( ! $hide_block && $query->posts ) :
 														break;
 												}
 												$title = get_sub_field( 'title' );
-												if ( $condition != 'Used' && $text && ( $down_payment || $loan_payment || $lease_payment || $loanapr || $loanterm ) ) :
+												if ( $condition != 'Used' && $text && ( null !== $down_payment || $loan_payment || $lease_payment || $loanapr || $loanterm ) ) :
 													?>
 													<li>
 														<?php

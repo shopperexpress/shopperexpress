@@ -24,15 +24,17 @@ get_template_part(
 	'template-parts/acf-shared/reviews-section',
 	null,
 	array(
-		'heading'        => get_field( 'heading' ),
-		'description'    => get_field( 'description' ),
-		'layout_style'   => get_field( 'layout_style' ) ?: 'list',
+		'heading'         => get_field( 'heading' ),
+		'description'     => get_field( 'description' ),
+		'layout_style'    => get_field( 'layout_style' ) ?: 'list',
+		'hide_header'     => get_field( 'hide_header' ),
+		'slides_per_view' => get_field( 'slides_per_view' ),
 		// Resolved from the connected Business Profile location's Place ID —
 		// not an editable field, so every block always points at the same
 		// dealership listing the site is actually connected to.
-		'place_id'       => ( new \App\Components\Base\Google_Business_Reviews() )->get_settings()['place_id'],
-		'keyword_filter' => get_field( 'keyword_filter' ),
-		'cta_text'       => get_field( 'cta_text' ),
-		'cta_url'        => get_field( 'cta_url' ),
+		'place_id'        => ( new \App\Components\Base\Google_Business_Reviews() )->get_settings()['place_id'],
+		'keyword_filter'  => get_field( 'keyword_filter' ),
+		'cta_text'        => get_field( 'cta_text' ),
+		'cta_url'         => get_field( 'cta_url' ),
 	)
 );

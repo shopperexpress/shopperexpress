@@ -258,11 +258,11 @@ while ( have_posts() ) :
 												break;
 										}
 
-										$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
+										$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : number_format( $price );
 
 										switch ( $show_payment ) {
 											case 'lease-payment':
-												if ( $down_payment && $lease_payment >= 0 ) {
+												if ( '' !== trim( (string) $down_payment ) && $lease_payment >= 0 ) {
 													$lease_payment = ! empty( $lease_payment ) ? '$' . number_format( $lease_payment ) : null;
 													$text          = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 												} else {

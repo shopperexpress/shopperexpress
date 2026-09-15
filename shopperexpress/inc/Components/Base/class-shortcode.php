@@ -328,11 +328,11 @@ class Shortcode implements Theme_Component {
 					$show_payment = $lock ? get_sub_field( 'show_payment' ) : false;
 					$show_event   = get_sub_field( 'show_event' );
 
-					$down_payment = ! empty( $down_payment ) ? $down_payment : number_format( $price );
+					$down_payment = ( '' !== trim( (string) $down_payment ) ) ? $down_payment : number_format( $price );
 
 					switch ( $atts['type'] ) {
 						case 'lease-payment':
-							if ( $down_payment && $lease_payment ) {
+							if ( '' !== trim( (string) $down_payment ) && $lease_payment ) {
 								$lease_payment = ! empty( $lease_payment ) ? '$' . number_format( $lease_payment ) : null;
 								$output        = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 							} else {
@@ -352,7 +352,7 @@ class Shortcode implements Theme_Component {
 							break;
 
 						case 'Disclosure_lease':
-							if ( $down_payment && $lease_payment ) {
+							if ( '' !== trim( (string) $down_payment ) && $lease_payment ) {
 								$lease_payment = ! empty( $lease_payment ) && $lease_payment != 'None' && $lease_payment > 0 ? '$' . number_format( $lease_payment ) : null;
 								$output        = ! empty( $lease_payment ) ? '<span class="savings">$' . $down_payment . ' ' . __( 'DOWN', 'shopperexpress' ) . ' ' . $leaseterm . ' ' . __( 'mos.', 'shopperexpress' ) . '</span>' . $lease_payment . ' <sub>/mo</sub>' : null;
 							} else {

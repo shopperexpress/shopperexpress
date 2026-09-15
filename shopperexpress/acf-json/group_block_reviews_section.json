@@ -63,6 +63,62 @@
             "layout": "horizontal"
         },
         {
+            "key": "field_7a0b1c2d3f008",
+            "label": "Hide Header",
+            "name": "hide_header",
+            "type": "true_false",
+            "instructions": "Slider only. Hides the logo/rating/count bar above the slider.",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_7a0b1c2d3f006",
+                        "operator": "==",
+                        "value": "slider"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui": 1,
+            "ui_on_text": "",
+            "ui_off_text": ""
+        },
+        {
+            "key": "field_7a0b1c2d3f009",
+            "label": "Reviews Per Slide",
+            "name": "slides_per_view",
+            "type": "number",
+            "instructions": "Slider only. Number of review cards shown side by side on desktop (auto-reduces on smaller screens).",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_7a0b1c2d3f006",
+                        "operator": "==",
+                        "value": "slider"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 6,
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_7a0b1c2d3f007",
             "label": "Keyword Filter",
             "name": "keyword_filter",

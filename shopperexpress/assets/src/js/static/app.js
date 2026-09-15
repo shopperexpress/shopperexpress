@@ -10917,6 +10917,7 @@ class GoogleReviews {
 			placeId: holder?.dataset.googleReviewsPlaceId,
 			style: holder?.dataset.googleReviewsStyle || 'list',
 			keywordFilter: holder?.dataset.googleReviewsKeywordFilter || '',
+			slidesPerView: parseInt(holder?.dataset.googleReviewsSlides, 10) || 6,
 			restUrl: window.ajax?.google_reviews_rest,
 			loadingClass: 'is-loading',
 			errorClass: 'has-error',
@@ -11160,26 +11161,28 @@ class GoogleReviews {
 
 		if (!this.reviews.length) return;
 
+		const slidesToShow = Math.max(1, this.options.slidesPerView || 6);
+
 		$list.slick({
 			slidesToScroll: 1,
 			rows: 0,
-			slidesToShow: 6,
+			slidesToShow,
 			prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z"/></svg></button>',
 			nextArrow: '<button class="slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>',
 			responsive: [{
 				breakpoint: 1570,
 				settings: {
-					slidesToShow: 5
+					slidesToShow: Math.min(slidesToShow, 5)
 				}
 			}, {
 				breakpoint: 1310,
 				settings: {
-					slidesToShow: 4
+					slidesToShow: Math.min(slidesToShow, 4)
 				}
 			}, {
 				breakpoint: 1050,
 				settings: {
-					slidesToShow: 3
+					slidesToShow: Math.min(slidesToShow, 3)
 				}
 			}, {
 				breakpoint: 576,

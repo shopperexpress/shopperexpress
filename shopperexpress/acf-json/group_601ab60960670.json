@@ -7547,6 +7547,64 @@
                             "layout": "horizontal"
                         },
                         {
+                            "key": "field_9b0c1d2e3f007",
+                            "label": "Hide Header",
+                            "name": "hide_header",
+                            "aria_label": "",
+                            "type": "true_false",
+                            "instructions": "Slider only. Hides the logo/rating/count bar above the slider.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_9b0c1d2e3f003",
+                                        "operator": "==",
+                                        "value": "slider"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui": 1,
+                            "ui_on_text": "",
+                            "ui_off_text": ""
+                        },
+                        {
+                            "key": "field_9b0c1d2e3f008",
+                            "label": "Reviews Per Slide",
+                            "name": "slides_per_view",
+                            "aria_label": "",
+                            "type": "number",
+                            "instructions": "Slider only. Number of review cards shown side by side on desktop (auto-reduces on smaller screens).",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_9b0c1d2e3f003",
+                                        "operator": "==",
+                                        "value": "slider"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": 6,
+                            "min": 1,
+                            "max": 6,
+                            "step": 1,
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
                             "key": "field_9b0c1d2e3f006",
                             "label": "Keyword Filter",
                             "name": "keyword_filter",
