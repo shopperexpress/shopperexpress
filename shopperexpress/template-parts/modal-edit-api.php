@@ -554,13 +554,13 @@ $tabs = array(
 			),
 			array(
 				'label' => 'Ext Color Generic',
-				'name'  => 'ext_color_generic',
-				'value' => $payload['ext_color_generic'] ?? '',
+				'name'  => 'exteriorcolor',
+				'value' => $payload['exteriorcolor'] ?? '',
 			),
 			array(
 				'label' => 'Int Color Generic',
-				'name'  => 'int_color_generic',
-				'value' => $payload['int_color_generic'] ?? '',
+				'name'  => 'interiorcolor',
+				'value' => $payload['interiorcolor'] ?? '',
 			),
 		),
 	),

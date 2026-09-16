@@ -149,10 +149,8 @@ if ( $place_id ) :
 							<div class='review-item review-item--vertical'>
 								<div class='review-item__body'>
 									{{{stars}}}
-									<p>{{text}}</p>
-									{{#if googleMapsURI}}
-										<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'><?php esc_html_e( 'read more', 'shopperexpress' ); ?></a>
-									{{/if}}
+									<p class='review-item__text'>{{text}}</p>
+									<button type='button' class='review-item__read-more' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
 								</div>
 								<div class='review-item__head'>
 									<div class='review-item__avatar'>
@@ -227,7 +225,8 @@ if ( $place_id ) :
 							</div>
 							<div class='review-item__body'>
 								{{{stars}}}
-								<p>{{text}}</p>
+								<p class='review-item__text'>{{text}}</p>
+								<button type='button' class='review-item__read-more' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
 							</div>
 						</div>
 					{{else}}

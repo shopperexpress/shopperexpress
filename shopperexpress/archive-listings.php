@@ -199,6 +199,19 @@ if ( $key && $value ) :
 						'orderby'        => 'meta_value_num',
 						'meta_key'       => 'priority',
 						'order'          => 'ASC',
+						// Excludes offers with `hide_offer` enabled — `service-offers` doesn't have this field.
+						'meta_query'     => 'offers' === $get_post_type ? array(
+							'relation' => 'OR',
+							array(
+								'key'     => 'hide_offer',
+								'compare' => 'NOT EXISTS',
+							),
+							array(
+								'key'     => 'hide_offer',
+								'value'   => '1',
+								'compare' => '!=',
+							),
+						) : array(),
 					)
 				);
 				$desktop_banner_image = $mobile_banner_image = $search_key_word = '';

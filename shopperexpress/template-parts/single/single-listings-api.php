@@ -61,7 +61,7 @@ $certified  = ! empty( $v['certified'] );
 $images      = \App\resolve_vehicle_gallery( $v );
 $features    = $v['features'] ?? array();
 $condition   = $v['condition'] ?? '';
-$status      = $payload['special field 3'] ?? '';
+$status      = $payload['vehicle-status'] ?? '';
 $dealer_name = $payload['dealer name'] ?? '';
 
 

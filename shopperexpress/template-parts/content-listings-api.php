@@ -42,7 +42,7 @@ $alt_array = array( $year, $make, $model, $trim, $exterior_color, '- ' . get_blo
 // Payment data from payload (import-template fields).
 $payload      = $vehicle['payload'] ?? array();
 $loan_payment = $payload['loan_payment_sort'] ?? ( $payload['loan_payment'] ?? 0 );
-$status       = $payload['special field 3'] ?? '';
+$status       = $payload['vehicle-status'] ?? '';
 
 $price_display   = $price ? '$' . number_format( (int) $price ) : '';
 $payment_display = $loan_payment ? '$' . number_format( (int) $loan_payment ) . '/mo' : '';

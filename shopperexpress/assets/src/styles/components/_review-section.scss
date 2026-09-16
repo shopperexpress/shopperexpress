@@ -149,7 +149,8 @@
     }
 
     .google-reviews__stars-row {
-      font-size: 25px;
+      width: 21px;
+      overflow: hidden;
     }
 
     .count {
@@ -222,11 +223,13 @@
   &__stars-row {
     position: relative;
     display: inline-block;
-    color: #e0e0e0;
-    font-size: 25px;
-    line-height: 1;
-    letter-spacing: 1px;
     white-space: nowrap;
+    width: 100px;
+
+    svg {
+      width: 20px;
+      flex-shrink: 0;
+    }
 
     .visually-hidden {
       position: absolute;
@@ -241,8 +244,18 @@
     }
   }
 
+  &__stars-bg,
+  &__stars-fg {
+    display: flex;
+    width: 100%;
+  }
+
   &__stars-bg {
-    display: block;
+    svg {
+      path {
+        fill: #c5c5c5;
+      }
+    }
   }
 
   &__stars-fg {
@@ -251,16 +264,18 @@
     left: 0;
     width: var(--fill, 0%);
     overflow: hidden;
-    color: #fcbf02;
-    // Darker gold outline on top of the original gold fill to meet
-    // accessibility contrast requirements against a white background.
-    -webkit-text-stroke: 0.5px #997404;
+
+    svg {
+      path {
+        fill: #fcbf02;
+      }
+    }
   }
 }
 
 .review-item {
   $self: &;
-  background-color: #f8f8f8;
+  background-color: #f2f2f2;
   padding: 24px;
   border-radius: 8px;
 
@@ -285,6 +300,12 @@
         -webkit-line-clamp: 3;
         overflow: hidden;
         margin: 0;
+
+        &.is-expanded {
+          display: block;
+          -webkit-line-clamp: unset;
+          overflow: visible;
+        }
       }
 
       .google-reviews__stars-row {
@@ -432,6 +453,39 @@
       &:last-child {
         margin: 0;
       }
+
+      &.review-item__text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+
+        &.is-expanded {
+          display: block;
+          -webkit-line-clamp: unset;
+          overflow: visible;
+        }
+      }
+    }
+  }
+
+  &__read-more {
+    display: block;
+    margin-top: 4px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: rgb(0, 86, 133);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &[hidden] {
+      display: none;
     }
   }
 }

@@ -20,6 +20,19 @@ $query_args = array(
 	'post_status'    => 'publish',
 	'posts_per_page' => -1,
 	'fields'         => 'ids',
+	// Excludes offers with `hide_offer` enabled — mirrors template-parts/acf-shared/offer-cards.php.
+	'meta_query'     => array(
+		'relation' => 'OR',
+		array(
+			'key'     => 'hide_offer',
+			'compare' => 'NOT EXISTS',
+		),
+		array(
+			'key'     => 'hide_offer',
+			'value'   => '1',
+			'compare' => '!=',
+		),
+	),
 );
 
 $sort_offers_by = $args['sort_offers_by'] ?? '';
