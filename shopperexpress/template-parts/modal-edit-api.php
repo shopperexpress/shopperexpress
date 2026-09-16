@@ -199,7 +199,7 @@ $tabs = array(
 			array(
 				'label' => 'Certified',
 				'name'  => 'certified',
-				'value' => $vehicle['certified'] ?? '',
+				'value' => $payload['certified'] ?? ( $vehicle['certified'] ?? '' ),
 			),
 			array(
 				'label' => 'Sold',

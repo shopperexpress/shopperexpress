@@ -604,8 +604,14 @@ class Intice_Rest implements Theme_Component {
 				?? $payload[ $base_underscore ]
 				?? null;
 
-			if ( $value !== null && $value !== '' ) {
-				$terms[ $key ] = array( (string) $value );
+			// Cast before checking emptiness — a boolean `false` (e.g. certified)
+			// fails the strict `!== ''` check against the raw value (different
+			// types never compare equal) and slips through, only to cast to an
+			// empty string and produce a blank, unlabeled filter option.
+			$string_value = $value !== null ? (string) $value : null;
+
+			if ( $string_value !== null && $string_value !== '' ) {
+				$terms[ $key ] = array( $string_value );
 			}
 		}
 
@@ -614,8 +620,13 @@ class Intice_Rest implements Theme_Component {
 			$terms['condition'] = array( (string) $vehicle['condition'] );
 		}
 
-		if ( isset( $vehicle['certified'] ) && $vehicle['certified'] ) {
-			$terms['certified'] = array( 'true' );
+		// Fall back to payload.certified (raw import value, e.g. "True"/"False")
+		// when the top-level field is missing/stale — same pattern as the
+		// vehicle-or-payload lookup above, via filter_var() since payload's
+		// value is a string rather than a real boolean.
+		$certified = $vehicle['certified'] ?? ( $payload['certified'] ?? null );
+		if ( $certified !== null && filter_var( $certified, FILTER_VALIDATE_BOOLEAN ) ) {
+			$terms['certified'] = array( 'Certified' );
 		}
 
 		return $terms;
