@@ -3618,8 +3618,14 @@ function initUnlockSavings() {
 		setTimeout(() => {
 			// Write the user journey to the input from the local storage
 			updateJourneyField();
+			updateFullCircleFields();
 		}, 500);
 	});
+
+	// Keep the FullCircle hidden fields fresh on focus and right before submit,
+	// matching how the FullCircle tracker itself refreshes them.
+	jQuery(document).on('focusin submit', '.wpforms-form', updateFullCircleFields);
+	updateFullCircleFields();
 
 	jQuery('.wpforms-render-modern').each(function() {
 		const form = jQuery(this);
@@ -3706,6 +3712,7 @@ function initUnlockSavings() {
 
 			// Write the user journey to the input from the local storage
 			updateJourneyField();
+			updateFullCircleFields();
 
 			// Handle the form pages
 			initFormPagesHandler(form);
@@ -11777,6 +11784,21 @@ function updateJourneyField() {
 			elem.value = userJourney;
 		});
 	}
+}
+
+// Populate the FullCircle hidden fields from the browser tracker just before submit.
+// Values are never generated here — only read from window.FullCircle, which the
+// installed FullCircle tracker script owns. Empty when consent hasn't been granted yet.
+function updateFullCircleFields() {
+	const visitorId = (window.FullCircle && window.FullCircle.getVisitorId && window.FullCircle.getVisitorId()) || '';
+	const sessionId = (window.FullCircle && window.FullCircle.getSessionId && window.FullCircle.getSessionId()) || '';
+
+	document.querySelectorAll('input[name="FullCircleVisitorID"]').forEach((elem) => {
+		elem.value = visitorId;
+	});
+	document.querySelectorAll('input[name="FullCircleSessionID"]').forEach((elem) => {
+		elem.value = sessionId;
+	});
 }
 
 /*

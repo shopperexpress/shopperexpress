@@ -30,5 +30,6 @@ get_template_part(
 		'ltd'      => get_field( 'ltd' ),
 		'lng'      => get_field( 'lng' ),
 		'zoom'     => get_field( 'zoom' ),
+		'anchor'   => $block['anchor'] ?? '',
 	)
 );

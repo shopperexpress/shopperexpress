@@ -37,5 +37,6 @@ get_template_part(
 	array(
 		'remove_paddings' => get_field( 'remove_paddings' ),
 		'offers'          => $offers,
+		'anchor'          => $block['anchor'] ?? '',
 	)
 );

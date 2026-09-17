@@ -22,5 +22,6 @@ get_template_part(
 	array(
 		'remove_paddings' => get_sub_field( 'remove_paddings' ),
 		'offers'          => $offers,
+		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );

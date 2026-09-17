@@ -21,5 +21,6 @@ get_template_part(
 		'keyword_filter'  => get_sub_field( 'keyword_filter' ),
 		'cta_text'        => get_sub_field( 'cta_text' ),
 		'cta_url'         => get_sub_field( 'cta_url' ),
+		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );

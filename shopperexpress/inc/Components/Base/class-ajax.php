@@ -388,6 +388,14 @@ class Ajax implements Theme_Component {
 			$_REQUEST['comments'] = $_REQUEST['message'];
 		}
 
+		// FullCircle visitor/session IDs — validate as UUIDs before they can reach
+		// the ADF XML. Never generate a replacement ID; an invalid or missing
+		// value is simply dropped (see wps_inject_fullcircle_ids() below).
+		$fullcircle_visitor_id           = sanitize_text_field( wp_unslash( $_REQUEST['FullCircleVisitorID'] ?? '' ) );
+		$fullcircle_session_id           = sanitize_text_field( wp_unslash( $_REQUEST['FullCircleSessionID'] ?? '' ) );
+		$_REQUEST['FullCircleVisitorID'] = wps_is_valid_uuid( $fullcircle_visitor_id ) ? $fullcircle_visitor_id : '';
+		$_REQUEST['FullCircleSessionID'] = wps_is_valid_uuid( $fullcircle_session_id ) ? $fullcircle_session_id : '';
+
 		// API mode: the vehicle_* fields the webhook posts only reflect what the
 		// WPForms hidden fields' Smart Tags resolved to at page render time. Overwrite
 		// them with fresh data pulled directly from Nexus so the ADF XML {{vehicle_*}}
@@ -434,6 +442,11 @@ class Ajax implements Theme_Component {
 				$subject  = str_replace( '{{' . $index . '}}', $value, $subject );
 				$template = str_replace( '{{' . $index . '}}', $value, $template );
 			}
+
+			// Inject FullCircle IDs directly into the rendered XML (works for both the
+			// plain wp_mail() leg below and the wps_dispatch_adf() leg further down,
+			// regardless of whether this template's <intice> section exists yet).
+			$template = wps_inject_fullcircle_ids( $template, $_REQUEST['FullCircleVisitorID'], $_REQUEST['FullCircleSessionID'] );
 
 			// Only forms in the "WP Forms — ADF Form IDs" whitelist (SOC → Lead Delivery)
 			// are allowed to trigger the *API* leg. An empty whitelist leaves everything
@@ -644,6 +657,9 @@ class Ajax implements Theme_Component {
 			wp_send_json_error( array( 'message' => 'Missing required fields.' ), 422 );
 		}
 
+		$fullcircle_visitor_id = sanitize_text_field( wp_unslash( $_POST['FullCircleVisitorID'] ?? '' ) );
+		$fullcircle_session_id = sanitize_text_field( wp_unslash( $_POST['FullCircleSessionID'] ?? '' ) );
+
 		$lead_fields = array(
 			'first_name' => $first_name,
 			'last_name'  => $last_name,
@@ -664,11 +680,13 @@ class Ajax implements Theme_Component {
 		$result = wps_dispatch_adf(
 			$xml,
 			array(
-				'first_name' => $first_name,
-				'last_name'  => $last_name,
-				'email'      => $email,
-				'phone'      => $phone,
-				'form_name'  => sanitize_text_field( wp_unslash( $_POST['form_name'] ?? 'submit_adf_lead' ) ),
+				'first_name'          => $first_name,
+				'last_name'           => $last_name,
+				'email'               => $email,
+				'phone'               => $phone,
+				'form_name'           => sanitize_text_field( wp_unslash( $_POST['form_name'] ?? 'submit_adf_lead' ) ),
+				'FullCircleVisitorID' => $fullcircle_visitor_id,
+				'FullCircleSessionID' => $fullcircle_session_id,
 			)
 		);
 

@@ -239,6 +239,15 @@ function wps_dispatch_adf( string $xml, array $fields ): array {
 	$lead_source = sanitize_text_field( $fields['lead_source'] ?? wp_get_referer() ?: '' );
 	$site_name   = sanitize_text_field( get_option( 'adf_site_name', get_bloginfo( 'name' ) ) );
 
+	// FullCircle visitor/session IDs — injected into the rendered XML here (rather
+	// than requiring every adf_templates row to reference a token) so this works
+	// for every existing and future template without any admin-side template edits.
+	$xml = wps_inject_fullcircle_ids(
+		$xml,
+		sanitize_text_field( $fields['FullCircleVisitorID'] ?? '' ),
+		sanitize_text_field( $fields['FullCircleSessionID'] ?? '' )
+	);
+
 	// Duplicate prevention: block same email+phone within the configured window.
 	$dedup_minutes = (int) get_option( 'adf_dedup_minutes', 0 );
 	if ( $dedup_minutes > 0 && '' !== $email ) {
@@ -439,6 +448,181 @@ function adf_email( $fields = array() ) {
 
 	wps_dispatch_adf( $xml, $fields );
 }
+
+/**
+ * Validate a string as an RFC 4122 UUID (any version/variant).
+ *
+ * @param string $value Candidate UUID string.
+ * @return bool
+ */
+function wps_is_valid_uuid( string $value ): bool {
+	return (bool) preg_match( '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', trim( $value ) );
+}
+
+/**
+ * Build the `<FullCircleVisitorID>`/`<FullCircleSessionID>` child elements that
+ * belong inside the ADF template's existing `<intice>` section.
+ *
+ * Only emits an element for a value that is non-empty and a valid UUID — never
+ * generates or hardcodes a replacement ID. Omits each element individually
+ * (rather than emitting it empty) when its value doesn't qualify, and returns
+ * an empty string when neither value qualifies.
+ *
+ * @param string $visitor_id Raw FullCircleVisitorID form value.
+ * @param string $session_id Raw FullCircleSessionID form value.
+ * @return string
+ */
+function wps_build_fullcircle_ids_xml( string $visitor_id, string $session_id ): string {
+	$lines = array();
+
+	if ( '' !== $visitor_id && wps_is_valid_uuid( $visitor_id ) ) {
+		$lines[] = '<FullCircleVisitorID>' . esc_html( $visitor_id ) . '</FullCircleVisitorID>';
+	}
+
+	if ( '' !== $session_id && wps_is_valid_uuid( $session_id ) ) {
+		$lines[] = '<FullCircleSessionID>' . esc_html( $session_id ) . '</FullCircleSessionID>';
+	}
+
+	return implode( "\n\t\t", $lines );
+}
+
+/**
+ * Inject FullCircle visitor/session IDs into a rendered ADF XML string.
+ *
+ * Works against any `adf_templates` row without requiring the admin-configured
+ * template text to reference a token: if the template already has an
+ * `<intice>` section, the FullCircle elements are appended inside it;
+ * otherwise a new `<intice>` section is inserted before `</prospect>`. When
+ * neither ID is a valid, non-empty UUID, the XML is returned unchanged.
+ *
+ * @param string $xml        Rendered ADF XML (output of wps_render_adf_template()).
+ * @param string $visitor_id Raw FullCircleVisitorID form value.
+ * @param string $session_id Raw FullCircleSessionID form value.
+ * @return string
+ */
+function wps_inject_fullcircle_ids( string $xml, string $visitor_id, string $session_id ): string {
+	$inner = wps_build_fullcircle_ids_xml( $visitor_id, $session_id );
+
+	if ( '' === $inner ) {
+		return $xml;
+	}
+
+	if ( false !== stripos( $xml, '</intice>' ) ) {
+		return preg_replace( '/<\/intice>/i', "\t\t{$inner}\n\t</intice>", $xml, 1 );
+	}
+
+	if ( false !== stripos( $xml, '</prospect>' ) ) {
+		return preg_replace( '/<\/prospect>/i', "\t<intice>\n\t\t{$inner}\n\t</intice>\n</prospect>", $xml, 1 );
+	}
+
+	return $xml . "\n<intice>\n\t{$inner}\n</intice>";
+}
+
+/**
+ * Echo the FullCircle hidden inputs inside every WPForms-rendered form.
+ *
+ * Field names are intentionally raw (not the wpforms[fields][...] namespace) —
+ * the installed FullCircle tracker script locates and populates elements by
+ * these exact, case-sensitive names during initialization, focus, and submit.
+ *
+ * @return void
+ */
+add_action(
+	'wpforms_display_submit_before',
+	function () {
+		echo '<input type="hidden" name="FullCircleVisitorID" value="">';
+		echo '<input type="hidden" name="FullCircleSessionID" value="">';
+	}
+);
+
+/**
+ * Stash the raw FullCircleVisitorID/FullCircleSessionID POST values keyed by
+ * entry ID, synchronously during the original form submission.
+ *
+ * The WP Forms Webhooks addon delivers webhooks via an Action Scheduler async
+ * task (`as_enqueue_async_action()` in WPForms\Tasks\Task::register_async()),
+ * which runs in a *separate* HTTP request — by the time the webhook actually
+ * fires, $_POST from the original submission is gone. Stashing here (still in
+ * the original request) and reading back by entry_id in the delivery filter
+ * below is the only way these values can survive that async hop.
+ *
+ * @param array $fields    Array of form fields (unused — FullCircle inputs aren't real WPForms fields).
+ * @param array $entry     Submitted form content (unused).
+ * @param array $form_data Form data and settings (unused).
+ * @param int   $entry_id  ID of the saved entry — the key the delivery filter looks this up by.
+ * @return void
+ */
+add_action(
+	'wpforms_process_complete',
+	function ( $fields, $entry, $form_data, $entry_id ) {
+		$visitor_id = sanitize_text_field( wp_unslash( $_POST['FullCircleVisitorID'] ?? '' ) );
+		$session_id = sanitize_text_field( wp_unslash( $_POST['FullCircleSessionID'] ?? '' ) );
+
+		if ( '' === $visitor_id && '' === $session_id ) {
+			return;
+		}
+
+		set_transient(
+			'wps_fullcircle_' . (int) $entry_id,
+			array(
+				'visitor_id' => $visitor_id,
+				'session_id' => $session_id,
+			),
+			HOUR_IN_SECONDS
+		);
+	},
+	20,
+	4
+);
+
+/**
+ * Forward the stashed FullCircleVisitorID/FullCircleSessionID values into
+ * every outgoing WP Forms → Webhooks addon HTTP request body.
+ *
+ * The Webhooks addon builds its outgoing request body from the admin-
+ * configured "Request Body" mapping (field IDs / smart tags) — a raw,
+ * unregistered form input like our FullCircleVisitorID hidden field is never
+ * part of that mapping, so it would otherwise never reach adf_action(). This
+ * filter fires during the addon's async delivery task, so the values are
+ * read back from the transient stashed above (by entry_id) rather than from
+ * $_POST, which no longer reflects the original submission at this point.
+ *
+ * Applied unconditionally (not scoped to a specific webhook URL) — the exact
+ * configured URL/query string varies per site and isn't reliably known here.
+ * Two harmless extra body keys on a non-ADF webhook is an acceptable
+ * trade-off for not silently missing the ADF one.
+ *
+ * @param array $options      HTTP request arguments passed to wp_remote_request().
+ * @param array $webhook_data Configured webhook data, incl. 'url'.
+ * @param array $fields       Array of form fields (unused).
+ * @param array $form_data    Form data and settings (unused).
+ * @param int   $entry_id     ID of the entry that triggered this webhook.
+ * @return array
+ */
+add_filter(
+	'wpforms_webhooks_process_delivery_request_options',
+	function ( array $options, array $webhook_data, $fields = array(), $form_data = array(), $entry_id = 0 ) {
+		$stashed    = $entry_id ? get_transient( 'wps_fullcircle_' . (int) $entry_id ) : false;
+		$visitor_id = is_array( $stashed ) ? sanitize_text_field( (string) ( $stashed['visitor_id'] ?? '' ) ) : '';
+		$session_id = is_array( $stashed ) ? sanitize_text_field( (string) ( $stashed['session_id'] ?? '' ) ) : '';
+
+		if ( is_array( $options['body'] ?? null ) ) {
+			$options['body']['FullCircleVisitorID'] = $visitor_id;
+			$options['body']['FullCircleSessionID'] = $session_id;
+		} elseif ( is_string( $options['body'] ?? null ) ) {
+			$decoded = json_decode( $options['body'], true );
+			if ( is_array( $decoded ) ) {
+				$decoded['FullCircleVisitorID'] = $visitor_id;
+				$decoded['FullCircleSessionID'] = $session_id;
+				$options['body']                = wp_json_encode( $decoded );
+			}
+		}
+
+		return $options;
+	},
+	10,
+	5
+);
 
 /**
  * Substitute {{token}} placeholders (and {{date}}) into an ADF template string.

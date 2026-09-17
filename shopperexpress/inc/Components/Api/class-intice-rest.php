@@ -625,8 +625,8 @@ class Intice_Rest implements Theme_Component {
 		// vehicle-or-payload lookup above, via filter_var() since payload's
 		// value is a string rather than a real boolean.
 		$certified = $vehicle['certified'] ?? ( $payload['certified'] ?? null );
-		if ( $certified !== null && filter_var( $certified, FILTER_VALIDATE_BOOLEAN ) ) {
-			$terms['certified'] = array( 'Certified' );
+		if ( $certified !== null ) {
+			$terms['certified'] = array( $payload['certified'] );
 		}
 
 		return $terms;

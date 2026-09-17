@@ -540,6 +540,55 @@
   display: flex;
   align-items: center;
   margin-right: auto;
+
+  // logo_list_position = "right" — a single toggle class driving everything:
+  // markup order never changes (the logo-slider always stays first in the
+  // DOM), so this just flips which element visually leads vs. trails, and
+  // swaps their sizing to match (whichever trails gets the big/400px
+  // progression .brand-img normally uses, whichever leads gets the small
+  // 36-160px progression .logo-slider normally uses, and only the leading
+  // element carries the horizontal margin that creates the gap between them).
+  &--logo-right {
+    .logo-slider {
+      order: 1;
+      width: 130px;
+      margin: 0;
+
+      @include media('>=tablet') {
+        width: 230px;
+        margin: -9px 0 -6px;
+      }
+
+      @include media('>=widescreen') {
+        width: 320px;
+      }
+
+      @include media('>=1640px') {
+        width: 400px;
+      }
+
+      // Let the image scale by its real aspect ratio (via object-fit: contain
+      // + height: 100%) instead of being stretched to fill the now much
+      // wider trailing slot — width: 100% otherwise forces it edge-to-edge.
+      .slider-item img {
+        width: auto;
+      }
+    }
+
+    .navbar-brand .brand-img {
+      width: 36px;
+      margin-right: 10px;
+
+      @include media('>=tablet') {
+        width: 116px;
+        margin: -9px 20px -6px 0;
+      }
+
+      @include media('>=widescreen') {
+        width: 160px;
+      }
+    }
+  }
 }
 
 .navbar {

@@ -142,7 +142,15 @@
 				</div>
 			<?php endif; ?>
 			<nav class="navbar navbar-light">
-				<div class="navbar-holder">
+				<?php
+				// Markup order never changes — the logo-slider always precedes the main
+				// logo in the DOM. Visual left/right placement (and swapping which one
+				// gets the "big trailing logo" vs. "small leading icon" sizing) is done
+				// purely via a single modifier class on .navbar-holder — see
+				// .navbar-holder--logo-right in _header.scss for all the overrides.
+				$logo_list_after = 'right' === ( get_field( 'logo_list_position', 'options' ) ?: 'left' );
+				?>
+				<div class="navbar-holder<?php echo $logo_list_after ? ' navbar-holder--logo-right' : ''; ?>">
 					<button type="button" class="nav-opener" aria-label="<?php _e( 'Left menu toggle', 'shopperexpress' ); ?>">
 						<svg class="menu-close" xmlns="http://www.w3.org/2000/svg" height="24px" aria-hidden="true" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 							<path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path>

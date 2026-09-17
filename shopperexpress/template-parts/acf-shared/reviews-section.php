@@ -19,6 +19,8 @@
  *                               reviews relevant to it.
  *   @type string $cta_text     "Review us on Google" button label.
  *   @type string $cta_url      "Review us on Google" button link.
+ *   @type string $anchor       Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                               links on the page can scroll directly to this section.
  * }
  *
  * Note: rating, stars, count and the review list itself are populated at
@@ -36,6 +38,7 @@ $place_id        = $args['place_id'] ?? '';
 $keyword_filter  = $args['keyword_filter'] ?? '';
 $cta_text        = $args['cta_text'] ?? '';
 $cta_url         = $args['cta_url'] ?? '#';
+$anchor          = $args['anchor'] ?? '';
 $is_slider       = 'slider' === $layout_style;
 $hide_header     = $is_slider && ! empty( $args['hide_header'] );
 $slides_per_view = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
@@ -93,6 +96,9 @@ if ( $place_id ) :
 	endif;
 	?>
 	<section
+		<?php if ( $anchor ) : ?>
+		id="<?php echo esc_attr( $anchor ); ?>"
+		<?php endif; ?>
 		class="review-section<?php echo $is_slider ? ' review-section--slider' : ''; ?>"
 		data-google-reviews
 		data-google-reviews-style="<?php echo esc_attr( $layout_style ); ?>"

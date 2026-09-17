@@ -138,6 +138,32 @@
             ]
         },
         {
+            "key": "field_68ca1f2b6c001",
+            "label": "Logo list position",
+            "name": "logo_list_position",
+            "aria-label": "",
+            "type": "select",
+            "instructions": "Which side of the main logo the Logo list (above) is displayed on.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "left": "Left of main logo",
+                "right": "Right of main logo"
+            },
+            "default_value": "left",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_6672f4293cf78",
             "label": "Page for saved vehicles",
             "name": "page_for_saved_vehicles",

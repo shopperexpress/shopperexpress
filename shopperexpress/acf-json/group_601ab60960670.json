@@ -2600,6 +2600,26 @@
                             "ui": 1
                         },
                         {
+                            "key": "field_68ca2f0b1c001",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "e.g. offers",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
                             "key": "field_6047672221de2",
                             "label": "Offers",
                             "name": "offers",
@@ -7483,6 +7503,26 @@
                     "label": "Reviews Section",
                     "display": "block",
                     "sub_fields": [
+                        {
+                            "key": "field_68ca2f0b1c002",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "e.g. reviews",
+                            "prepend": "",
+                            "append": ""
+                        },
                         {
                             "key": "field_9b0c1d2e3f001",
                             "label": "Heading",

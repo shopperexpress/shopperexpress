@@ -128,8 +128,9 @@ class Register_Gutenberg_Blocks implements Theme_Component {
 						'acf_block_version' => 3,
 						'render_callback'   => array( $this, 'acf_render_callback' ),
 						'supports'          => array(
-							'align' => false,
-							'mode'  => true,
+							'align'  => false,
+							'mode'   => true,
+							'anchor' => true,
 						),
 						'example'           => array(
 							'attributes' => array(

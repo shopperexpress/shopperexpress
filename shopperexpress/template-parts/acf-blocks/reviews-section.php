@@ -36,5 +36,6 @@ get_template_part(
 		'keyword_filter'  => get_field( 'keyword_filter' ),
 		'cta_text'        => get_field( 'cta_text' ),
 		'cta_url'         => get_field( 'cta_url' ),
+		'anchor'          => $block['anchor'] ?? '',
 	)
 );

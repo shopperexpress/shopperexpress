@@ -11,6 +11,8 @@
  *   @type string $ltd       Latitude.
  *   @type string $lng       Longitude.
  *   @type string $zoom      Map zoom level.
+ *   @type string $anchor    Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                            links on the page can scroll directly to this section.
  * }
  */
 
@@ -20,9 +22,10 @@ $button   = $args['button'] ?? null;
 $ltd      = $args['ltd'] ?? '';
 $lng      = $args['lng'] ?? '';
 $zoom     = $args['zoom'] ?? '';
+$anchor   = $args['anchor'] ?? '';
 ?>
 
-<section class="section-find-us">
+<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-find-us">
 	<div class="container">
 		<div class="row">
 			<?php if ( $title || $subtitle || $button ) : ?>
