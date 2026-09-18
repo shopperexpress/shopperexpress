@@ -11,5 +11,6 @@ get_template_part(
 	array(
 		'video_code'    => get_sub_field( 'video_code' ),
 		'remove_margin' => get_sub_field( 'remove_margin' ),
+		'anchor'        => get_sub_field( 'anchor' ),
 	)
 );

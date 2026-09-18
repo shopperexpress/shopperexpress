@@ -31,5 +31,6 @@ get_template_part(
 		'footer_heading'     => get_sub_field( 'footer_heading' ),
 		'footer_button_text' => get_sub_field( 'footer_button_text' ),
 		'footer_button_url'  => get_sub_field( 'footer_button_url' ),
+		'anchor'             => get_sub_field( 'anchor' ),
 	)
 );

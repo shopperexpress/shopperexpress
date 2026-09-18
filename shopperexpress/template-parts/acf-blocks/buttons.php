@@ -36,5 +36,6 @@ get_template_part(
 	array(
 		'buttons'    => $buttons,
 		'is_preview' => $is_preview,
+		'anchor'     => $block['anchor'] ?? '',
 	)
 );

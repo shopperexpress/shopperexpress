@@ -15,6 +15,8 @@
  *                                  tab_title (HTML), layout ('hours'|'text'|'list'),
  *                                  heading (string), schedule_list (array), text (HTML),
  *                                  lists (array of list column arrays).
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  */
 
@@ -25,8 +27,9 @@ $heading_social  = $args['heading_social'] ?? '';
 $social_media    = $args['social_media'] ?? array();
 $rand            = $args['rand'] ?? mt_rand( 1, 9999 );
 $tabs            = $args['tabs'] ?? array();
+$anchor          = $args['anchor'] ?? '';
 ?>
-<section class="contact-widget">
+<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="contact-widget">
 	<div class="container">
 		<div class="holder">
 			<div class="row">

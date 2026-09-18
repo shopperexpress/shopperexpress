@@ -24,5 +24,6 @@ get_template_part(
 		'text'    => get_sub_field( 'text' ),
 		'slogan'  => get_sub_field( 'slogan' ),
 		'columns' => $columns,
+		'anchor'  => get_sub_field( 'anchor' ),
 	)
 );

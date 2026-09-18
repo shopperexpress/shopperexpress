@@ -30,5 +30,6 @@ get_template_part(
 		'override_video'      => get_field( 'override_video' ),
 		'override_start_date' => get_field( 'override_start_date' ),
 		'override_end_date'   => get_field( 'override_end_date' ),
+		'anchor'              => $block['anchor'] ?? '',
 	)
 );

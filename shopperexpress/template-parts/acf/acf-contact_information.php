@@ -78,5 +78,6 @@ get_template_part(
 		'heading_schedule' => get_sub_field( 'heading_schedule' ),
 		'schedule'         => $schedule,
 		'days'             => $days,
+		'anchor'           => get_sub_field( 'anchor' ),
 	)
 );

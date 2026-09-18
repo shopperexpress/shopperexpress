@@ -11,5 +11,6 @@ get_template_part(
 	array(
 		'title'  => get_sub_field( 'title' ),
 		'images' => get_sub_field( 'images' ),
+		'anchor' => get_sub_field( 'anchor' ),
 	)
 );

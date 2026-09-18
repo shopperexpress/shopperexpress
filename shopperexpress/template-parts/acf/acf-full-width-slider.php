@@ -39,5 +39,6 @@ get_template_part(
 		'slider_speed'    => $slider_speed,
 		'autoplay_speed'  => $autoplay_speed,
 		'slides'          => $slides,
+		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );

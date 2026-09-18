@@ -12,5 +12,6 @@ get_template_part(
 		'background_image' => get_sub_field( 'background_image' ),
 		'text'             => get_sub_field( 'text' ),
 		'for_code'         => get_sub_field( 'for_code' ),
+		'anchor'           => get_sub_field( 'anchor' ),
 	)
 );

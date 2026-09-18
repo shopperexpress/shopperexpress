@@ -54,5 +54,6 @@ get_template_part(
 		'slider_speed'    => $slider_speed,
 		'autoplay_speed'  => $autoplay_speed,
 		'slides'          => $slides,
+		'anchor'          => $block['anchor'] ?? '',
 	)
 );

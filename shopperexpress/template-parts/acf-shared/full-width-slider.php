@@ -12,6 +12,8 @@
  *                                  image (ACF array: id, url), image_mobile (ACF array: url),
  *                                  url (string), open_in_new_tab (bool),
  *                                  ariaLabel (string), disclosure (string).
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  */
 
@@ -19,10 +21,11 @@ $remove_paddings = $args['remove_paddings'] ?? false;
 $slider_speed    = $args['slider_speed'] ?? 500;
 $autoplay_speed  = $args['autoplay_speed'] ?? 5000;
 $slides          = $args['slides'] ?? array();
+$anchor          = $args['anchor'] ?? '';
 
 if ( ! empty( $slides ) ) :
 	?>
-	<section class="section-full-width-slider<?php echo $remove_paddings ? ' py-0' : ''; ?>">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-full-width-slider<?php echo $remove_paddings ? ' py-0' : ''; ?>">
 		<div class="container">
 			<div class="full-width-image-slider slick-item" data-speed="<?php echo esc_html( $slider_speed ); ?>" data-autoplay-speed="<?php echo esc_html( $autoplay_speed ); ?>">
 				<?php foreach ( $slides as $slide ) : ?>

@@ -11,6 +11,8 @@
  *   @type string $text             Intro HTML.
  *   @type array  $images           Array of ACF image arrays (id, url).
  *   @type int    $row_index        Parent row index for fancybox group.
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  */
 
@@ -22,10 +24,11 @@ $remove_paddings = ! empty( $args['remove_paddings'] );
 $text            = $args['text'] ?? '';
 $images          = $args['images'] ?? array();
 $row_index       = $args['row_index'] ?? 0;
+$anchor          = $args['anchor'] ?? '';
 
 if ( ! empty( $images ) || $text ) :
 	?>
-	<section class="gallery-grid<?php echo $gray_background; ?><?php echo $remove_paddings ? ' py-0' : ''; ?>">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="gallery-grid<?php echo $gray_background; ?><?php echo $remove_paddings ? ' py-0' : ''; ?>">
 		<?php
 		echo $text;
 

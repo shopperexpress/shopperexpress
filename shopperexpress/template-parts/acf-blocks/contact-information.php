@@ -93,5 +93,6 @@ get_template_part(
 		'heading_schedule' => get_field( 'heading_schedule' ),
 		'schedule'         => $schedule,
 		'days'             => $days,
+		'anchor'           => $block['anchor'] ?? '',
 	)
 );

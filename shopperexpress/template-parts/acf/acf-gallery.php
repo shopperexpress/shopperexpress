@@ -15,5 +15,6 @@ get_template_part(
 		'text'            => get_sub_field( 'text' ),
 		'images'          => get_sub_field( 'gallery' ),
 		'row_index'       => get_row_index(),
+		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );

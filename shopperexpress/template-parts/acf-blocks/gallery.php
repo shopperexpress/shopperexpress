@@ -30,5 +30,6 @@ get_template_part(
 		'text'            => get_field( 'text' ),
 		'images'          => get_field( 'gallery' ),
 		'row_index'       => 0,
+		'anchor'          => $block['anchor'] ?? '',
 	)
 );

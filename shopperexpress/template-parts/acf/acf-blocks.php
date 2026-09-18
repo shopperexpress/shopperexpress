@@ -27,5 +27,6 @@ get_template_part(
 		'title_for_link'        => get_sub_field( 'title_for_link' ),
 		'first_image_block'     => get_sub_field( 'first_image_block' ),
 		'second_image_block'    => get_sub_field( 'second_image_block' ),
+		'anchor'                => get_sub_field( 'anchor' ),
 	)
 );

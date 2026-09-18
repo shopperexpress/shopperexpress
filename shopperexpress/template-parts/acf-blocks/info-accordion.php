@@ -37,5 +37,6 @@ get_template_part(
 	array(
 		'section_row' => 0,
 		'accordion'   => $accordion,
+		'anchor'      => $block['anchor'] ?? '',
 	)
 );

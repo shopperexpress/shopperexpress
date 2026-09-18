@@ -126,5 +126,6 @@ get_template_part(
 		'social_media'    => $social_media,
 		'rand'            => $rand,
 		'tabs'            => $tabs,
+		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );

@@ -164,8 +164,22 @@
 							<?php
 							while ( have_rows( 'logo_list', 'options' ) ) :
 								the_row();
+								$slider_url = get_sub_field( 'url' );
+								$hash_pos   = strpos( (string) $slider_url, '#' );
+
+								// A URL containing "#section" that points at THIS page (either a bare
+								// "#offers" href, or a full URL sharing the current page's path) is
+								// meant to jump to a spot on the same page — route it through the
+								// theme's smooth-scroll handler (a.btn-anchor) instead of letting the
+								// browser jump instantly.
+								$is_page_anchor = false;
+								if ( false !== $hash_pos ) {
+									$link_path      = untrailingslashit( (string) wp_parse_url( $slider_url, PHP_URL_PATH ) );
+									$current_path   = untrailingslashit( (string) wp_parse_url( home_url( add_query_arg( array() ) ), PHP_URL_PATH ) );
+									$is_page_anchor = '' === $link_path || $link_path === $current_path;
+								}
 								?>
-								<a class="slider-item" href="<?php the_sub_field( 'url' ); ?>">
+								<a class="slider-item<?php echo $is_page_anchor ? ' btn-anchor' : ''; ?>" href="<?php echo esc_url( $slider_url ); ?>">
 									<?php
 									$image = get_sub_field( 'image' );
 									if ( $image ) {

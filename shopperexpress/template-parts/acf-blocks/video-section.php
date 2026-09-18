@@ -73,5 +73,6 @@ get_template_part(
 		'text'               => get_field( 'text' ),
 		'link'               => get_field( 'link' ),
 		'blocks_html'        => $blocks_html,
+		'anchor'             => $block['anchor'] ?? '',
 	)
 );

@@ -12,5 +12,6 @@ get_template_part(
 		'logo_image' => get_sub_field( 'logo_image' ),
 		'title'      => get_sub_field( 'title' ),
 		'text'       => get_sub_field( 'text' ),
+		'anchor'     => get_sub_field( 'anchor' ),
 	)
 );

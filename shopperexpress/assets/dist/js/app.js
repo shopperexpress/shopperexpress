@@ -4,6 +4,7 @@ function initGoogleReviews() {
 		new GoogleReviews(holder, {
 			onRender: function() {
 				jQuery(this.listElement)
+					.add(this.modalListElement)
 					.find('[data-toggle="tooltip"]:not([data-original-title])')
 					.tooltip();
 			}
@@ -1910,6 +1911,8 @@ function initSlickCarousel() {
 		const dotsHolder = holder.find('.dots-holder');
 		const btnPlayPause = controlsHolder.find('.slick-play-pause');
 		const progress = controlsHolder.find('.indicator circle');
+		const hideSearchWidgetClass = 'hide-search-widget';
+		const widgetInvisibleClass = 'widget-invisible';
 		const playingClass = 'playing';
 		const pauseClass = 'pause';
 		const resetClass = 'reset';
@@ -1943,7 +1946,10 @@ function initSlickCarousel() {
 		const btnPrev = buttonsHolder.find('.slick-prev');
 		const btnNext = buttonsHolder.find('.slick-next');
 
-		slider.on('beforeChange', function() {
+		toggleSearchWidget(slider.find('.slide').eq(slider.slick('slickCurrentSlide')));
+
+		slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
+			toggleSearchWidget(slider.find('.slide').eq(nextSlide));
 			resetProgress();
 		}).on('afterChange', function() {
 			if (!controlsHolder.hasClass(pauseClass)) {
@@ -1951,6 +1957,10 @@ function initSlickCarousel() {
 				startProgress();
 			}
 		});
+
+		function toggleSearchWidget(activeSlide) {
+			holder.toggleClass(hideSearchWidgetClass, activeSlide.hasClass(widgetInvisibleClass));
+		}
 
 		btnPlayPause.on('click', function(e) {
 			e.preventDefault();
@@ -10949,6 +10959,19 @@ class GoogleReviews {
 		this.reviews = [];
 		this.nextPageToken = '';
 
+		// Slider "Read more" opens a modal with the full, untruncated review list
+		// instead of expanding the text inline (see data-google-reviews-modal).
+		this.modalElement = this.holder.dataset.googleReviewsModal
+			? document.querySelector(this.holder.dataset.googleReviewsModal)
+			: null;
+
+		if (this.modalElement) {
+			this.modalRatingElement = this.modalElement.querySelector('[data-google-reviews-rating]');
+			this.modalCountElement = this.modalElement.querySelector('[data-google-reviews-count]');
+			this.modalStarsElement = this.modalElement.querySelector('[data-google-reviews-stars]');
+			this.modalListElement = this.modalElement.querySelector('[data-google-reviews-list]');
+		}
+
 		this.holder.classList.add(this.options.loadingClass);
 		this.holder.classList.remove(this.options.errorClass);
 
@@ -11059,6 +11082,12 @@ class GoogleReviews {
 		const template = this.holder.querySelector('[data-google-reviews-template="reviews"]');
 
 		this.reviewsTemplate = Handlebars.compile(template.textContent);
+
+		const modalTemplate = this.holder.querySelector('[data-google-reviews-template="modal-reviews"]');
+
+		if (modalTemplate) {
+			this.modalReviewsTemplate = Handlebars.compile(modalTemplate.textContent);
+		}
 	}
 
 	normalizeReview(review) {
@@ -11152,6 +11181,22 @@ class GoogleReviews {
 			this.listElement.innerHTML = this.reviewsTemplate({ reviews: this.reviews });
 		}
 
+		if (this.modalRatingElement) {
+			this.modalRatingElement.textContent = data.average_rating ?? '';
+		}
+
+		if (this.modalCountElement) {
+			this.modalCountElement.textContent = data.total_review_count ? `(${data.total_review_count.toLocaleString()})` : '';
+		}
+
+		if (this.modalStarsElement) {
+			this.modalStarsElement.innerHTML = this.renderStars(data.average_rating);
+		}
+
+		if (this.modalListElement && this.modalReviewsTemplate) {
+			this.modalListElement.innerHTML = this.modalReviewsTemplate({ reviews: this.reviews });
+		}
+
 		this.initSlider();
 		this.setupReadMore();
 
@@ -11167,6 +11212,9 @@ class GoogleReviews {
 			if (!button || !button.classList.contains('review-item__read-more')) return;
 
 			button.hidden = textElement.scrollHeight <= textElement.clientHeight + 1;
+
+			// Bootstrap's data-api already opens the modal on click for these.
+			if (button.dataset.toggle === 'modal') return;
 
 			if (button.dataset.bound) return;
 			button.dataset.bound = '1';

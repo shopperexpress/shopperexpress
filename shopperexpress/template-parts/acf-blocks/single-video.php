@@ -26,5 +26,6 @@ get_template_part(
 	array(
 		'video_code'    => get_field( 'video_code' ),
 		'remove_margin' => get_field( 'remove_margin' ),
+		'anchor'        => $block['anchor'] ?? '',
 	)
 );

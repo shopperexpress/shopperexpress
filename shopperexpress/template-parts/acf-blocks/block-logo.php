@@ -24,6 +24,7 @@ get_template_part(
 	'template-parts/acf-shared/block-logo',
 	null,
 	array(
-		'logo' => get_field( 'logo' ),
+		'logo'   => get_field( 'logo' ),
+		'anchor' => $block['anchor'] ?? '',
 	)
 );

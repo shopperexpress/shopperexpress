@@ -23,6 +23,8 @@
  *   @type string $title_for_link     Link label.
  *   @type array  $first_image_block  ACF image array.
  *   @type array  $second_image_block ACF image array.
+ *   @type string $anchor             Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                    links on the page can scroll directly to this section.
  * }
  */
 
@@ -44,8 +46,9 @@ $script_for_link       = $args['script_for_link'] ?? '';
 $title_for_link        = $args['title_for_link'] ?? '';
 $first_image_block     = $args['first_image_block'] ?? null;
 $second_image_block    = $args['second_image_block'] ?? null;
+$anchor                = $args['anchor'] ?? '';
 ?>
-<div class="block">
+<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="block">
 	<div class="container">
 		<section class="content-block intro-block">
 			<div class="text-box">

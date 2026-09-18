@@ -585,7 +585,7 @@
       }
 
       @include media('>=widescreen') {
-        width: 160px;
+        width: auto;
       }
     }
   }
@@ -1359,9 +1359,14 @@
     width: 100%;
     height: 100%;
     opacity: 0;
+    // Stacked absolutely on top of each other — without this, whichever item
+    // is last in the DOM always intercepts clicks/hover regardless of which
+    // one is actually visible (opacity: 0 doesn't stop pointer events).
+    pointer-events: none;
 
     &.active {
       opacity: 1;
+      pointer-events: auto;
     }
 
     img {

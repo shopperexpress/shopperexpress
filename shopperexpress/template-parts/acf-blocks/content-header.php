@@ -28,5 +28,6 @@ get_template_part(
 		'title'      => get_field( 'title' ),
 		'text'       => get_field( 'text' ),
 		'is_preview' => $is_preview,
+		'anchor'     => $block['anchor'] ?? '',
 	)
 );

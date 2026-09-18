@@ -13,6 +13,8 @@
  *   @type string $heading_schedule  Schedule column heading.
  *   @type array  $schedule          Flat array of schedule time strings (7 items, Mon–Sun).
  *   @type array  $days              Associative array day_key => day_label.
+ *   @type string $anchor            Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                   links on the page can scroll directly to this section.
  * }
  */
 
@@ -31,8 +33,9 @@ $days             = $args['days'] ?? array(
 	'day_6' => 'Saturday',
 	'day_7' => 'Sunday',
 );
+$anchor           = $args['anchor'] ?? '';
 ?>
-<section class="contact-information">
+<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="contact-information">
 	<div class="container">
 		<div class="holder">
 			<div class="row">

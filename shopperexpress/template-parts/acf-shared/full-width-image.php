@@ -10,6 +10,8 @@
  *   @type bool   $remove_paddings Add py-0 class.
  *   @type string $url             Optional link URL.
  *   @type bool   $open_in_new_tab Open link in new tab.
+ *   @type string $anchor          Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                 links on the page can scroll directly to this section.
  * }
  */
 
@@ -18,11 +20,12 @@ $image_mobile    = $args['image_mobile'] ?? null;
 $remove_paddings = $args['remove_paddings'] ?? false;
 $url             = $args['url'] ?? '';
 $open_in_new_tab = $args['open_in_new_tab'] ?? false;
+$anchor          = $args['anchor'] ?? '';
 
 if ( $image ) :
 	$image_mobile = $image_mobile ?: $image;
 	?>
-	<div class="section-full-width-image<?php echo $remove_paddings ? ' py-0' : ''; ?>">
+	<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-full-width-image<?php echo $remove_paddings ? ' py-0' : ''; ?>">
 		<div class="container">
 			<div class="img-holder">
 				<?php if ( $url ) : ?>

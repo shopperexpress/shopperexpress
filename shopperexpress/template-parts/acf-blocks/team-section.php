@@ -46,5 +46,6 @@ get_template_part(
 		'footer_heading'     => get_field( 'footer_heading' ),
 		'footer_button_text' => get_field( 'footer_button_text' ),
 		'footer_button_url'  => get_field( 'footer_button_url' ),
+		'anchor'             => $block['anchor'] ?? '',
 	)
 );

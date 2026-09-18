@@ -28,5 +28,6 @@ get_template_part(
 		'addresses_list' => get_field( 'addresses_list' ),
 		'schedule_title' => get_field( 'schedule_title' ),
 		'schedule_list'  => get_field( 'schedule_list' ),
+		'anchor'         => $block['anchor'] ?? '',
 	)
 );

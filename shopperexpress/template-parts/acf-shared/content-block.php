@@ -11,6 +11,7 @@
  *   @type string $link          Raw link HTML.
  *   @type array  $first_image   ACF image array (id).
  *   @type array  $second_image  ACF image array (id).
+ *   @type string $anchor        Optional HTML id (Gutenberg block "HTML anchor") so other links on the page can scroll directly to this section.
  * }
  */
 
@@ -21,12 +22,13 @@ $link         = $args['link'] ?? '';
 $first_image  = $args['first_image'] ?? null;
 $second_image = $args['second_image'] ?? null;
 $is_preview   = $args['is_preview'] ? ' id="page-container"' : '';
+$anchor       = $args['anchor'] ?? '';
 ?>
 <div <?php echo $is_preview; ?> class="container">
 	<div class="block-holder">
 		<div class="block">
 			<!-- content block -->
-			<section class="content-block cash-offer">
+			<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="content-block cash-offer">
 				<div class="text-box">
 					<div class="heading">
 						<?php if ( $icon_image ) : ?>

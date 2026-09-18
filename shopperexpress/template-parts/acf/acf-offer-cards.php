@@ -11,5 +11,6 @@ get_template_part(
 	array(
 		'show_offers_from' => get_sub_field( 'show_offers_from' ),
 		'offers_order'     => get_sub_field( 'offers_order' ),
+		'anchor'           => get_sub_field( 'anchor' ),
 	)
 );

@@ -28,5 +28,6 @@ get_template_part(
 		'slider_speed'   => get_field( 'slider_speed' ) ?: 500,
 		'autoplay_speed' => get_field( 'autoplay_speed' ) ?: 5000,
 		'hide_block'     => get_field( 'hide_block' ),
+		'anchor'         => $block['anchor'] ?? '',
 	)
 );

@@ -15,5 +15,6 @@ get_template_part(
 		'link'         => get_sub_field( 'link' ),
 		'first_image'  => get_sub_field( 'first_image' ),
 		'second_image' => get_sub_field( 'second_image' ),
+		'anchor'       => get_sub_field( 'anchor' ),
 	)
 );

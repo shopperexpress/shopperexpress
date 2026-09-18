@@ -8,6 +8,9 @@
  *   @type string $heading                    Section heading (falls back to options page).
  *   @type bool   $sort_by_number_of_vehicles Sort slides by vehicle count.
  *   @type int    $index                      Row index for get_listings_count().
+ *   @type string $anchor                     Optional HTML id (Gutenberg block "HTML anchor")
+ *                                            so other links on the page can scroll directly to
+ *                                            this section.
  * }
  *
  * Note: Reads 'slider' repeater from options page directly — too tightly coupled
@@ -20,10 +23,15 @@ $slide_bg                   = get_field( 'slide_bg', 'options' );
 $show_count                 = get_field( 'show_count', 'options' );
 $index                      = $args['index'] ?? 0;
 $sort_by_number_of_vehicles = $args['sort_by_number_of_vehicles'] ?? false;
+$anchor                     = $args['anchor'] ?? '';
 
 if ( have_rows( 'slider', 'options' ) ) :
 	?>
-	<section class="shop-section filter-section"
+	<section
+		<?php if ( $anchor ) : ?>
+		id="<?php echo esc_attr( $anchor ); ?>"
+		<?php endif; ?>
+		class="shop-section filter-section"
 		<?php
 		if ( $section_bg ) {
 			echo 'style="background-color:' . $section_bg . ';"';

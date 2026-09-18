@@ -31,5 +31,6 @@ get_template_part(
 		'first_image'  => get_field( 'first_image' ),
 		'second_image' => get_field( 'second_image' ),
 		'is_preview'   => $is_preview,
+		'anchor'       => $block['anchor'] ?? '',
 	)
 );

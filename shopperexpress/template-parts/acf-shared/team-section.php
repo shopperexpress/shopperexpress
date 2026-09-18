@@ -14,6 +14,8 @@
  *   @type string $footer_heading      "Join Our Team" style heading.
  *   @type string $footer_button_text  Footer CTA button label.
  *   @type array  $footer_button_url   ACF link array (url, title, target).
+ *   @type string $anchor              Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                     links on the page can scroll directly to this section.
  * }
  */
 
@@ -23,6 +25,7 @@ $members            = $args['members'] ?? array();
 $footer_heading     = $args['footer_heading'] ?? '';
 $footer_button_text = $args['footer_button_text'] ?? '';
 $footer_button_url  = $args['footer_button_url'] ?? null;
+$anchor             = $args['anchor'] ?? '';
 
 $categories = array();
 foreach ( $members as $member ) {
@@ -35,7 +38,7 @@ foreach ( $members as $member ) {
 
 if ( ! empty( $members ) ) :
 	?>
-	<section class="team-section">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="team-section">
 		<div class="container">
 			<?php if ( $heading || $description ) : ?>
 				<div class="team-section__heading">

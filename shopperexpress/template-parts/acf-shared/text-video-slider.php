@@ -9,6 +9,8 @@
  *   @type int    $slider_speed     Transition speed ms.
  *   @type int    $autoplay_speed   Autoplay interval ms.
  *   @type bool   $hide_block       Hide this block entirely.
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  *
  * Note: WP_Query and options-page field reads are intentionally inside this
@@ -65,10 +67,11 @@ $form_special_apr   = get_field( 'form_id_special_apr', 'options' );
 $slider_speed       = $args['slider_speed'] ?? 500;
 $autoplay_speed     = $args['autoplay_speed'] ?? 5000;
 $hide_block         = $args['hide_block'] ?? false;
+$anchor             = $args['anchor'] ?? '';
 
 if ( ! $hide_block && $query->posts ) :
 	?>
-	<div class="section-specials">
+	<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-specials">
 		<div class="specials-slider slick-item" data-speed="<?php echo esc_html( $slider_speed ); ?>" data-autoplay-speed="<?php echo esc_html( $autoplay_speed ); ?>">
 			<?php
 			foreach ( $query->posts as $post_id ) :

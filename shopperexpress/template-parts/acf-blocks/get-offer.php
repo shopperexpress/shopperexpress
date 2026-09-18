@@ -27,5 +27,6 @@ get_template_part(
 		'background_image' => get_field( 'background_image' ),
 		'text'             => get_field( 'text' ),
 		'for_code'         => get_field( 'for_code' ),
+		'anchor'           => $block['anchor'] ?? '',
 	)
 );

@@ -11,6 +11,8 @@
  *   @type bool   $remove_paddings  Remove padding.
  *   @type array  $logos            Array of logo items, each with keys:
  *                                  alt, new_tab (bool), link (url), image (url).
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  */
 
@@ -19,10 +21,11 @@ $logos_backgorund = $args['logos_backgorund'] ?? '';
 $logos_per_row    = $args['logos_per_row'] ?? '';
 $padding          = $args['remove_paddings'] ?? false;
 $logos            = $args['logos'] ?? array();
+$anchor           = $args['anchor'] ?? '';
 
 if ( ! empty( $logos ) ) :
 	?>
-	<section class="section-location"<?php echo $padding ? ' style="padding: 0;"' : ''; ?>>
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-location"<?php echo $padding ? ' style="padding: 0;"' : ''; ?>>
 		<div class="container text-center">
 			<?php
 			if ( $heading ) {

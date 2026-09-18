@@ -15,5 +15,6 @@ get_template_part(
 		'ltd'      => get_sub_field( 'ltd' ),
 		'lng'      => get_sub_field( 'lng' ),
 		'zoom'     => get_sub_field( 'zoom' ),
+		'anchor'   => get_sub_field( 'anchor' ),
 	)
 );

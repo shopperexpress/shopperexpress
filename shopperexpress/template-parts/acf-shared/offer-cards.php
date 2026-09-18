@@ -7,6 +7,8 @@
  * @param array $args {
  *   @type string $show_offers_from  Post type slug or 'both'.
  *   @type string $offers_order      'offers_first' or 'service_first' (used when 'both').
+ *   @type string $anchor            Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                   links on the page can scroll directly to this section.
  * }
  *
  * Note: WP_Query is intentionally inside this shared template because it
@@ -17,6 +19,7 @@
 $show_offers_from = $args['show_offers_from'] ?? 'offers';
 $offers_order     = $args['offers_order'] ?? 'offers_first';
 $final_ids        = array();
+$anchor           = $args['anchor'] ?? '';
 
 // Excludes offers with `hide_offer` enabled from sliders/widgets — they stay
 // reachable by direct URL only. `service-offers` doesn't have this field.
@@ -88,7 +91,7 @@ $query = new WP_Query( $query_args );
 
 if ( $query->posts ) :
 	?>
-	<section class="section-offer-cards">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-offer-cards">
 		<div class="container">
 			<div class="offers-slider-wrap">
 				<div class="offers-slider slick-item">

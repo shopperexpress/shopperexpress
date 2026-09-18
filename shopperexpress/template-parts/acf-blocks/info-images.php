@@ -26,5 +26,6 @@ get_template_part(
 	array(
 		'title'  => get_field( 'title' ),
 		'images' => get_field( 'images' ),
+		'anchor' => $block['anchor'] ?? '',
 	)
 );

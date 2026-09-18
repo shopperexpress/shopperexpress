@@ -39,5 +39,6 @@ get_template_part(
 		'text'    => get_field( 'text' ),
 		'slogan'  => get_field( 'slogan' ),
 		'columns' => $columns,
+		'anchor'  => $block['anchor'] ?? '',
 	)
 );

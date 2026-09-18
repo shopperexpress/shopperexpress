@@ -51,5 +51,6 @@ get_template_part(
 		'text'               => get_sub_field( 'text' ),
 		'link'               => get_sub_field( 'link' ),
 		'blocks_html'        => $blocks_html,
+		'anchor'             => get_sub_field( 'anchor' ),
 	)
 );

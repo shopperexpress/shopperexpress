@@ -11,6 +11,8 @@
  *   @type string $override_video      Override video embed code.
  *   @type string $override_start_date Override start date (Y-m-d).
  *   @type string $override_end_date   Override end date (Y-m-d).
+ *   @type string $anchor              Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                     links on the page can scroll directly to this section.
  * }
  */
 
@@ -20,6 +22,7 @@ $primary_video       = $args['primary_video'] ?? '';
 $override_video      = $args['override_video'] ?? '';
 $override_start_date = $args['override_start_date'] ?? '';
 $override_end_date   = $args['override_end_date'] ?? '';
+$anchor              = $args['anchor'] ?? '';
 
 $video = $primary_video;
 
@@ -32,7 +35,7 @@ if ( $override_video && $override_start_date && $override_end_date ) {
 
 if ( $top_image || $html || $video ) :
 	?>
-		<section class="section-awards">
+		<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-awards">
 			<div class="holder">
 				<div class="container">
 					<div class="row">

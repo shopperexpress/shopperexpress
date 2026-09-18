@@ -29,6 +29,11 @@
  * App\Components\Base\Google_Business_Reviews). That proxy prefers the
  * Business Profile API (real pagination) when connected, falling back to the
  * Places API (New) — capped at 5 reviews with no pagination — otherwise.
+ *
+ * Note: on the slider layout, a truncated review's "Read more" button opens
+ * a companion modal (#$modal_id, wired via data-google-reviews-modal on the
+ * <section>) showing the full, untruncated review list instead of expanding
+ * the text inline.
  */
 
 $heading         = $args['heading'] ?? '';
@@ -42,6 +47,7 @@ $anchor          = $args['anchor'] ?? '';
 $is_slider       = 'slider' === $layout_style;
 $hide_header     = $is_slider && ! empty( $args['hide_header'] );
 $slides_per_view = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
+$modal_id        = $is_slider ? wp_unique_id( 'reviews-modal-' ) : '';
 
 if ( $place_id ) :
 	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
@@ -108,6 +114,9 @@ if ( $place_id ) :
 		<?php endif; ?>
 		<?php if ( $slides_per_view > 0 ) : ?>
 		data-google-reviews-slides="<?php echo esc_attr( $slides_per_view ); ?>"
+		<?php endif; ?>
+		<?php if ( $modal_id ) : ?>
+		data-google-reviews-modal="#<?php echo esc_attr( $modal_id ); ?>"
 		<?php endif; ?>>
 		<div class="container">
 			<?php if ( ! $is_slider && ( $heading || $description ) ) : ?>
@@ -156,7 +165,7 @@ if ( $place_id ) :
 								<div class='review-item__body'>
 									{{{stars}}}
 									<p class='review-item__text'>{{text}}</p>
-									<button type='button' class='review-item__read-more' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
+									<button type='button' class='review-item__read-more btn btn-link' data-toggle='modal' data-target='#<?php echo esc_attr( $modal_id ); ?>' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
 								</div>
 								<div class='review-item__head'>
 									<div class='review-item__avatar'>
@@ -185,6 +194,45 @@ if ( $place_id ) :
 										</span>
 									</div>
 								</div>
+							</div>
+						</div>
+					{{else}}
+						<p>No reviews were found for this place yet.</p>
+					{{/each}}
+				</script>
+				<script type="text/x-handlebars-template" data-google-reviews-template="modal-reviews">
+					{{#each reviews}}
+						<div class='review-item'>
+							<div class='review-item__head'>
+								<div class='review-item__avatar'>
+									<img src='{{authorAttribution.photoURI}}' alt='{{authorAttribution.displayName}} photo' referrerpolicy='no-referrer' />
+									<span class='review-item__source' data-toggle='tooltip' data-placement='top' title='Posted on Google'>
+										<img src='<?php echo esc_url( \App\asset_url( 'images/google-logo.svg' ) ); ?>' alt='Google' />
+									</span>
+								</div>
+								<div class='review-item__head-holder'>
+									<strong class='review-item__name'>
+										{{#if googleMapsURI}}
+											<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
+												<span class='text'>{{authorAttribution.displayName}}</span>
+											</a>
+										{{else}}
+											<span class='text'>{{authorAttribution.displayName}}</span>
+										{{/if}}
+										<span data-toggle='tooltip' data-placement='top' title='Verified Customer'>
+											<img src='<?php echo esc_url( \App\asset_url( 'images/verified.svg' ) ); ?>' aria-hidden='true' alt='' />
+										</span>
+									</strong>
+									<span class='review-item__info'>
+										<span data-toggle='tooltip' data-placement='top' title='{{publishTime}}'>
+											{{relativePublishTimeDescription}}
+										</span>
+									</span>
+								</div>
+							</div>
+							<div class='review-item__body'>
+								{{{stars}}}
+								<p>{{text}}</p>
 							</div>
 						</div>
 					{{else}}
@@ -242,4 +290,35 @@ if ( $place_id ) :
 			<?php endif; ?>
 		</div>
 	</section>
+	<?php if ( $modal_id ) : ?>
+		<div class="modal fade modal-reviews" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-labelledby="<?php echo esc_attr( $modal_id ); ?>-label" aria-hidden="true">
+			<div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
+				<div class="modal-content">
+					<div class="widget-review">
+						<div class="widget-review__head">
+							<div class="widget-review__head-holder">
+								<div class="widget-review__head-row">
+									<img src="<?php echo esc_url( \App\asset_url( 'images/google-logo.svg' ) ); ?>" alt="Google" />
+									<h3 id="<?php echo esc_attr( $modal_id ); ?>-label"><?php echo esc_html( $heading ? $heading : __( 'Reviews', 'shopperexpress' ) ); ?></h3>
+								</div>
+								<div class="widget-review__head-row">
+									<strong class="rating" data-google-reviews-rating></strong>
+									<span class="google-reviews__stars" data-google-reviews-stars></span>
+									<span class="count" data-google-reviews-count></span>
+								</div>
+							</div>
+							<button type="button" class="close" data-dismiss="modal" aria-label="<?php esc_attr_e( 'Close', 'shopperexpress' ); ?>">
+								<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000">
+									<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+								</svg>
+							</button>
+						</div>
+					</div>
+					<div class="modal-body">
+						<div class="review-items-list" data-google-reviews-list></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
 <?php endif; ?>

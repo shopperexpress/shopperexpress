@@ -12,5 +12,6 @@ get_template_part(
 		'heading'                    => get_sub_field( 'heading' ),
 		'sort_by_number_of_vehicles' => get_sub_field( 'sort_by_number_of_vehicles' ),
 		'index'                      => get_row_index(),
+		'anchor'                     => get_sub_field( 'anchor' ),
 	)
 );

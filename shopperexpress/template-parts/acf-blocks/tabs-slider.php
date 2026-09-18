@@ -27,5 +27,6 @@ get_template_part(
 		'heading'                    => get_field( 'heading' ),
 		'sort_by_number_of_vehicles' => get_field( 'sort_by_number_of_vehicles' ),
 		'index'                      => 0,
+		'anchor'                     => $block['anchor'] ?? '',
 	)
 );

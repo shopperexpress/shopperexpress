@@ -22,6 +22,8 @@
  *                                  For intro_section blocks: layout = get_row_layout() per block row.
  *                                  This template re-includes nested block templates.
  *   @type string $blocks_layout    'video_section' or 'intro_section'.
+ *   @type string $anchor           Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                  links on the page can scroll directly to this section.
  * }
  */
 
@@ -39,8 +41,9 @@ $thrid_image        = $args['thrid_image'] ?? null;
 $text               = $args['text'] ?? '';
 $link               = $args['link'] ?? null;
 $blocks_html        = $args['blocks_html'] ?? '';
+$anchor             = $args['anchor'] ?? '';
 ?>
-<div class="block">
+<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="block">
 	<div class="container">
 		<?php if ( $is_video_section ) : ?>
 			<div class="block-holder products-page">

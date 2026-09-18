@@ -10,6 +10,8 @@
  *                                 (array of items with keys: url, svg_icon, text).
  *   @type string $schedule_title  Schedule column heading.
  *   @type array  $schedule_list   Array of items with key 'text'.
+ *   @type string $anchor          Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                 links on the page can scroll directly to this section.
  * }
  */
 
@@ -17,8 +19,9 @@ $main_title     = $args['main_title'] ?? '';
 $addresses_list = $args['addresses_list'] ?? array();
 $schedule_title = $args['schedule_title'] ?? '';
 $schedule_list  = $args['schedule_list'] ?? array();
+$anchor         = $args['anchor'] ?? '';
 ?>
-<section class="contact-information">
+<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="contact-information">
 	<div class="container">
 		<div class="holder">
 			<?php

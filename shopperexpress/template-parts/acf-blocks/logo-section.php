@@ -42,5 +42,6 @@ get_template_part(
 		'logos_per_row'    => get_field( 'logos_per_row' ),
 		'remove_paddings'  => get_field( 'remove_paddings' ),
 		'logos'            => $logos,
+		'anchor'           => $block['anchor'] ?? '',
 	)
 );

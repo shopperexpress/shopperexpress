@@ -32,5 +32,6 @@ get_template_part(
 		'remove_paddings' => get_field( 'remove_paddings' ),
 		'url'             => get_field( 'url' ),
 		'open_in_new_tab' => get_field( 'open_in_new_tab' ),
+		'anchor'          => $block['anchor'] ?? '',
 	)
 );

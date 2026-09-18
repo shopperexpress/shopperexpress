@@ -10,6 +10,8 @@
  *   @type bool   $add_grey_background Add bg-gray class.
  *   @type bool   $remove_paddings     Add p-0 class.
  *   @type string $html                Raw HTML output.
+ *   @type string $anchor              Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                     links on the page can scroll directly to this section.
  * }
  */
 
@@ -18,6 +20,7 @@ $css_class           = $args['css_class'] ?? '';
 $add_grey_background = $args['add_grey_background'] ?? false;
 $remove_paddings     = $args['remove_paddings'] ?? false;
 $html                = $args['html'] ?? '';
+$anchor              = $args['anchor'] ?? '';
 
 $section_classes = 'section-html';
 if ( $add_grey_background ) {
@@ -30,7 +33,7 @@ if ( $css_class ) {
 	$section_classes .= ' ' . $css_class;
 }
 ?>
-<section class="<?php echo esc_attr( $section_classes ); ?>">
+<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="<?php echo esc_attr( $section_classes ); ?>">
 	<?php if ( $is_container ) : ?>
 		<div class="container">
 	<?php endif; ?>

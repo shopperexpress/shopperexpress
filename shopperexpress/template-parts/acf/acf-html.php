@@ -14,5 +14,6 @@ get_template_part(
 		'add_grey_background' => get_sub_field( 'add_grey_background' ),
 		'remove_paddings'     => get_sub_field( 'remove_paddings' ),
 		'html'                => get_sub_field( 'html' ),
+		'anchor'              => get_sub_field( 'anchor' ),
 	)
 );

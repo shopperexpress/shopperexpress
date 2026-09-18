@@ -36,9 +36,10 @@ class ConversionBlock {
 			'template-parts/ConversionBlock',
 			null,
 			array(
-				'vin'      => $this->vin,
-				'location' => $this->getLocation(),
-				'post_id'  => $this->post_id,
+				'vin'       => $this->vin,
+				'location'  => $this->getLocation(),
+				'post_id'   => $this->post_id,
+				'post_type' => $this->post_type,
 			)
 		);
 		$output = ob_get_contents();

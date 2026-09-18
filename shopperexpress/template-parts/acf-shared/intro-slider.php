@@ -13,6 +13,8 @@
  *   @type string $html_manual_slides  Pre-rendered HTML for manual slides.
  *   @type int    $show_slider         1=offers only, 2=manual only, 3=offers+manual, 4=manual+offers.
  *   @type string $overlay_html        Pre-rendered overlay row HTML.
+ *   @type string $anchor              Optional HTML id (Gutenberg block "HTML anchor") so other
+ *                                     links on the page can scroll directly to this section.
  * }
  */
 
@@ -24,6 +26,7 @@ $html_offers_slides = $args['html_offers_slides'] ?? '';
 $html_manual_slides = $args['html_manual_slides'] ?? '';
 $show_slider        = $args['show_slider'] ?? 1;
 $overlay_html       = $args['overlay_html'] ?? '';
+$anchor             = $args['anchor'] ?? '';
 
 switch ( $show_slider ) {
 	case 1:
@@ -44,7 +47,7 @@ switch ( $show_slider ) {
 
 if ( $html ) :
 	?>
-	<div class="visual<?php echo $no_margin ? ' m-0' : ''; ?>">
+	<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="visual<?php echo $no_margin ? ' m-0' : ''; ?>">
 		<div class="visual-holder">
 			<div class="visual-slider slick-item" data-speed="<?php echo esc_html( $slider_speed ); ?>" data-autoplay-speed="<?php echo esc_html( $autoplay_speed ); ?>">
 				<?php echo $html; ?>

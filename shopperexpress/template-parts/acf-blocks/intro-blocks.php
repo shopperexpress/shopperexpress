@@ -42,5 +42,6 @@ get_template_part(
 		'title_for_link'        => get_field( 'title_for_link' ),
 		'first_image_block'     => get_field( 'first_image_block' ),
 		'second_image_block'    => get_field( 'second_image_block' ),
+		'anchor'                => $block['anchor'] ?? '',
 	)
 );

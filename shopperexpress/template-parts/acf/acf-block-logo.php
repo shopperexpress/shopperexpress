@@ -9,6 +9,7 @@ get_template_part(
 	'template-parts/acf-shared/block-logo',
 	null,
 	array(
-		'logo' => get_sub_field( 'logo' ),
+		'logo'   => get_sub_field( 'logo' ),
+		'anchor' => get_sub_field( 'anchor' ),
 	)
 );

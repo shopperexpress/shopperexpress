@@ -27,5 +27,6 @@ get_template_part(
 		'logos_per_row'    => get_sub_field( 'logos_per_row' ),
 		'remove_paddings'  => get_sub_field( 'remove_paddings' ),
 		'logos'            => $logos,
+		'anchor'           => get_sub_field( 'anchor' ),
 	)
 );

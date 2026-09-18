@@ -87,7 +87,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 
 								while ( have_rows( 'events_1' ) ) :
 									the_row();
-									$onclick[] = get_sub_field( 'event' );
+									$onclick[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
 
 								if ( ( $mobile_button_text_1 || $url_1 || $onclick ) && $active_1 ) :
@@ -115,7 +115,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 
 								while ( have_rows( 'events_2' ) ) :
 									the_row();
-									$onclick[] = get_sub_field( 'event' );
+									$onclick[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
 
 								if ( ( $mobile_button_text_2 || $url_2 || $onclick ) && $active_2 ) :
@@ -140,7 +140,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								$onclick             = array();
 								while ( have_rows( 'events' ) ) :
 									the_row();
-									$onclick[] = get_sub_field( 'event' );
+									$onclick[] = str_replace( 'VIN', $vin, get_sub_field( 'event' ) );
 								endwhile;
 
 								if ( ( $desktop_button_text || $url || $onclick ) && $active ) :

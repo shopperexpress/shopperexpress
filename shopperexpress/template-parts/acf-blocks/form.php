@@ -26,6 +26,7 @@ get_template_part(
 	array(
 		'title' => get_field( 'title' ),
 		'text'  => get_field( 'text' ),
-		'form'  => get_field( 'form' ),
+		'form'   => get_field( 'form' ),
+		'anchor' => $block['anchor'] ?? '',
 	)
 );

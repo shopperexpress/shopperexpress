@@ -24,5 +24,6 @@ get_template_part(
 	array(
 		'section_row' => $section_row,
 		'accordion'   => $accordion,
+		'anchor'      => get_sub_field( 'anchor' ),
 	)
 );

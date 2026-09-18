@@ -5,18 +5,20 @@
  * @package ShopperExpress
  *
  * @param array $args {
- *   @type int   $section_row  Parent row index (for unique accordion IDs).
- *   @type array $accordion    Array of items, each with keys: heading, text.
+ *   @type int    $section_row  Parent row index (for unique accordion IDs).
+ *   @type array  $accordion    Array of items, each with keys: heading, text.
+ *   @type string $anchor       Optional HTML id (Gutenberg block "HTML anchor") so other links on the page can scroll directly to this section.
  * }
  */
 
 $section_row = $args['section_row'] ?? 0;
 $accordion   = $args['accordion'] ?? array();
+$anchor      = $args['anchor'] ?? '';
 
 if ( ! empty( $accordion ) ) :
 	$faq_items = array();
 	?>
-	<section class="section-info-accordion">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-info-accordion">
 		<div class="container">
 			<ul class="accordion-info" id="accordionInfo-<?php echo esc_attr( $section_row ); ?>">
 				<?php foreach ( $accordion as $row => $item ) : ?>

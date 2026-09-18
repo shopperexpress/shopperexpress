@@ -193,8 +193,9 @@ if ( $show_slider != 1 ) {
 			} else {
 				$video = get_sub_field( 'video_id' );
 			}
+			$hide_cta = get_sub_field( 'hide_cta' );
 			?>
-			<div class="slide">
+			<div class="slide<?php echo $hide_cta ? ' widget-invisible' : ''; ?>">
 				<a href="<?php echo esc_url( $landing_page_url ); ?>" aria-label="<?php echo esc_attr( $alt_text ); ?>">
 					<?php if ( $video ) : ?>
 						<div data-video='{"type": "<?php echo $video_type; ?>", "video": "<?php echo $video; ?>", "title": "<?php the_sub_field( 'video_title' ); ?>", "autoplay": true, "loop": true}'></div>
@@ -243,5 +244,6 @@ get_template_part(
 		'html_manual_slides' => $html_manually,
 		'show_slider'        => $show_slider,
 		'overlay_html'       => $overlay_html,
+		'anchor'             => $block['anchor'] ?? '',
 	)
 );

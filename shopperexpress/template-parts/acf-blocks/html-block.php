@@ -29,5 +29,6 @@ get_template_part(
 		'add_grey_background' => get_field( 'add_grey_background' ),
 		'remove_paddings'     => get_field( 'remove_paddings' ),
 		'html'                => get_field( 'html' ),
+		'anchor'              => $block['anchor'] ?? '',
 	)
 );

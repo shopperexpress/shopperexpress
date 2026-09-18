@@ -8,13 +8,15 @@
  *   @type int    $logo_image  Attachment ID for logo.
  *   @type string $title       Heading text (may contain HTML).
  *   @type string $text        Body HTML.
+ *   @type string $anchor      Optional HTML id (Gutenberg block "HTML anchor") so other links on the page can scroll directly to this section.
  * }
  */
 
 $logo       = $args['logo_image'] ?? null;
 $title      = $args['title'] ?? '';
 $text       = $args['text'] ?? '';
-$is_preview = $args['is_preview'] ? ' id="page-container"' : '';
+$anchor     = $args['anchor'] ?? '';
+$is_preview = $args['is_preview'] ? ' id="page-container"' : ( $anchor ? ' id="' . esc_attr( $anchor ) . '"' : '' );
 
 if ( $logo || $title || $text ) :
 	?>

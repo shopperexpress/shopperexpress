@@ -20,5 +20,6 @@ get_template_part(
 	null,
 	array(
 		'buttons' => $buttons,
+		'anchor'  => get_sub_field( 'anchor' ),
 	)
 );

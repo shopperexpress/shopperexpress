@@ -26,5 +26,6 @@ get_template_part(
 	array(
 		'show_offers_from' => get_field( 'show_offers_from' ),
 		'offers_order'     => get_field( 'offers_order' ),
+		'anchor'           => $block['anchor'] ?? '',
 	)
 );

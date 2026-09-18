@@ -8,16 +8,18 @@
  *   @type string $text     Heading HTML.
  *   @type string $slogan   Slogan text.
  *   @type array  $columns  Array of column items with keys: icon_image (ID), title, description.
+ *   @type string $anchor   Optional HTML id (Gutenberg block "HTML anchor") so other links on the page can scroll directly to this section.
  * }
  */
 
 $text    = $args['text'] ?? '';
 $slogan  = $args['slogan'] ?? '';
 $columns = $args['columns'] ?? array();
+$anchor  = $args['anchor'] ?? '';
 
 if ( $text || $slogan || ! empty( $columns ) ) :
 	?>
-	<section class="section-buy">
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="section-buy">
 		<div class="container">
 			<div class="row text-center">
 				<?php if ( $text ) : ?>

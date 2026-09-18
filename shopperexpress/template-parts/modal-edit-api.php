@@ -294,6 +294,61 @@ $tabs = array(
 			),
 		),
 	),
+	'dealer'      => array(
+		'label'  => __( 'Dealer', 'shopperexpress' ),
+		'fields' => array(
+			array(
+				'label' => 'Dealer Name',
+				'name'  => 'dealer_name',
+				'value' => $payload['dealer_name'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Address',
+				'name'  => 'dealer_address',
+				'value' => $payload['dealer_address'] ?? '',
+			),
+			array(
+				'label' => 'Dealer City',
+				'name'  => 'dealer_city',
+				'value' => $payload['dealer_city'] ?? '',
+			),
+			array(
+				'label' => 'Dealer State',
+				'name'  => 'dealer_state',
+				'value' => $payload['dealer_state'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Zip',
+				'name'  => 'dealer_zip',
+				'value' => $payload['dealer_zip'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Phone',
+				'name'  => 'dealer_phone',
+				'value' => $payload['dealer_phone'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Email',
+				'name'  => 'dealer_email',
+				'value' => $payload['dealer_email'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Contact',
+				'name'  => 'dealer_contact',
+				'value' => $payload['dealer_contact'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Fax',
+				'name'  => 'dealer_fax',
+				'value' => $payload['dealer_fax'] ?? '',
+			),
+			array(
+				'label' => 'Dealer Special',
+				'name'  => 'dealer_special',
+				'value' => $payload['dealer_special'] ?? '',
+			),
+		),
+	),
 	'fuel'        => array(
 		'label'  => __( 'Fuel', 'shopperexpress' ),
 		'fields' => array(
