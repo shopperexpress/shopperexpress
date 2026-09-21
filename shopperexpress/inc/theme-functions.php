@@ -1793,6 +1793,108 @@ function get_json_from_url( $url = '' ) {
 }
 
 /**
+ * Apply the shared My DealMaker incentive-offer display rules (exclude-keyword
+ * filter, cash-desc sort, ProgramName find/replace) to an already-normalized
+ * offers array (keys: ProgramName, ProgramCash, IncentiveDesc, IncentiveId,
+ * StartsOn, EndsOn).
+ *
+ * Used by the API-mode partials (template-parts/api/incentive_offers.php,
+ * template-parts/api/incentive_offers_badge.php) that read pre-fetched Nexus
+ * payload data instead of calling My DealMaker live. The legacy
+ * template-parts/conditional-offers.php keeps its own inline copy of this
+ * logic since it's the untouched, still-live-fetching non-API path.
+ *
+ * @param array $offers Normalized offers array.
+ * @return array Filtered, sorted, and text-replaced offers array.
+ */
+function intice_normalize_incentive_offers( array $offers ): array {
+	if ( empty( $offers ) ) {
+		return array();
+	}
+
+	$keywords = get_field( 'api_new_car_incentives_exclude_keyword_list', 'option' );
+
+	if ( ! empty( $keywords ) ) {
+		$keywords = explode( ',', $keywords );
+		$keywords = ! is_array( $keywords ) ? array( $keywords ) : $keywords;
+		$offers   = array_values(
+			array_filter(
+				$offers,
+				static function ( $item ) use ( $keywords ) {
+					$text = mb_strtolower( implode( ' ', array_map( 'strval', $item ) ) );
+
+					foreach ( $keywords as $keyword ) {
+						if ( str_contains( $text, mb_strtolower( trim( $keyword ) ) ) ) {
+							return false;
+						}
+					}
+
+					return true;
+				}
+			)
+		);
+	}
+
+	usort(
+		$offers,
+		static function ( $a, $b ) {
+			$cash_a = (float) preg_replace( '/[^0-9.]/', '', (string) ( $a['ProgramCash'] ?? 0 ) );
+			$cash_b = (float) preg_replace( '/[^0-9.]/', '', (string) ( $b['ProgramCash'] ?? 0 ) );
+			return $cash_b <=> $cash_a;
+		}
+	);
+
+	$find_replace = get_field( 'api_new_car_incentives_find_replace', 'option' );
+	$replacements = array();
+
+	if ( ! empty( $find_replace ) ) {
+		foreach ( preg_split( '/\r\n|\r|\n/', $find_replace ) as $line ) {
+			if ( str_contains( $line, '|' ) ) {
+				list( $find, $replace ) = array_map( 'trim', explode( '|', $line, 2 ) );
+				if ( '' !== $find ) {
+					$replacements[ $find ] = $replace;
+				}
+			}
+		}
+	}
+
+	if ( ! empty( $replacements ) ) {
+		foreach ( $offers as $index => $item ) {
+			if ( ! empty( $item['ProgramName'] ) ) {
+				$offers[ $index ]['ProgramName'] = str_replace( array_keys( $replacements ), array_values( $replacements ), $item['ProgramName'] );
+			}
+		}
+	}
+
+	return $offers;
+}
+
+/**
+ * Remap a Nexus vehicle payload's `incentive_offers` (snake_case, from
+ * IncentiveOffersService::normalize()) back to the ProgramName/ProgramCash/
+ * IncentiveDesc/IncentiveId/StartsOn/EndsOn keys the theme's existing
+ * conditional-offers markup and conditionalOffersDetail-modal.php expect.
+ *
+ * @param array $offers Vehicle payload's incentive_offers array.
+ * @return array Offers array using the legacy key names.
+ */
+function intice_map_nexus_incentive_offers( array $offers ): array {
+	return array_map(
+		static function ( $offer ) {
+			return array(
+				'ProgramName'   => $offer['program_name'] ?? '',
+				'ProgramCash'   => $offer['program_cash'] ?? '',
+				'IncentiveDesc' => $offer['incentive_desc'] ?? '',
+				'IncentiveId'   => $offer['incentive_id'] ?? '',
+				'StartsOn'      => $offer['starts_on'] ?? '',
+				'EndsOn'        => $offer['ends_on'] ?? '',
+			);
+		},
+		$offers
+	);
+}
+
+/**
  * Check if the current user has access.
  *
  * This function determines whether the current user has access based on their roles.

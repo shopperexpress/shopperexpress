@@ -53,8 +53,9 @@
   }
 
   .search-bar-container {
-    @include animate(opacity, 0.3s);
+    @include animate(opacity visibility, 0.3s);
     opacity: 1;
+    visibility: visible;
 
     @include media('>=tablet') {
       padding: 0;
@@ -64,25 +65,28 @@
       transform: translateX(-50%);
       max-width: 580px;
       width: 100%;
+    }
 
-      @include media('>=1024px') {
-        bottom: auto;
-        top: 50%;
-        width: 38%;
-      }
+    @include media('>=1024px') {
+      bottom: auto;
+      top: 50%;
+      width: 38%;
+    }
 
-      @include media('>=widescreen') {
-        max-width: 628px;
-        min-width: 560px;
-        width: 38%;
-      }
+    @include media('>=widescreen') {
+      max-width: 628px;
+      min-width: 560px;
+      width: 38%;
     }
   }
 
   &.hide-search-widget {
     .search-bar-container {
-      opacity: 0;
-      pointer-events: none;
+      @include media('>=tablet') {
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+      }
     }
   }
 

@@ -551,21 +551,7 @@
   &--logo-right {
     .logo-slider {
       order: 1;
-      width: 130px;
       margin: 0;
-
-      @include media('>=tablet') {
-        width: 230px;
-        margin: -9px 0 -6px;
-      }
-
-      @include media('>=widescreen') {
-        width: 320px;
-      }
-
-      @include media('>=1640px') {
-        width: 400px;
-      }
 
       // Let the image scale by its real aspect ratio (via object-fit: contain
       // + height: 100%) instead of being stretched to fill the now much
@@ -576,16 +562,10 @@
     }
 
     .navbar-brand .brand-img {
-      width: 36px;
       margin-right: 10px;
 
-      @include media('>=tablet') {
-        width: 116px;
-        margin: -9px 20px -6px 0;
-      }
-
-      @include media('>=widescreen') {
-        width: auto;
+      @include media('<phone') {
+        width: 70px;
       }
     }
   }

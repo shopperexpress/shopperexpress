@@ -370,12 +370,16 @@ get_header();
 						)
 					);
 					if ( 'listings' === $post_type ) {
+						// Offers are pre-fetched by Nexus (My DealMaker enrichment) and read
+						// from the vehicle payload here — no live API call from the theme.
+						// See template-parts/api/incentive_offers.php. The legacy
+						// template-parts/conditional-offers.php (live wp_remote_get) is left
+						// untouched for non-API/ACF `listings` posts (single-listings.php).
 						get_template_part(
-							'template-parts/conditional',
-							'offers',
+							'template-parts/api/incentive_offers',
+							null,
 							array(
-								'make'       => $v['make'] ?? '',
-								'vin_number' => $vin_number,
+								'vehicle' => $v,
 							)
 						);
 					}
