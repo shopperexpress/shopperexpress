@@ -215,6 +215,13 @@ $alt = implode( ' ', array_filter( array( $year, $make, $model, $trim, $exterior
 					</ul>
 					<?php
 						get_template_part(
+							'template-parts/api/incentive_offers_srp',
+							null,
+							array(
+								'vehicle' => $vehicle,
+							)
+						);
+						get_template_part(
 							'template-parts/api/description',
 							null,
 							array(

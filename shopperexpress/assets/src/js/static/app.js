@@ -1282,6 +1282,34 @@ function initApiFavoriteButtons() {
 	});
 }
 
+// SRP incentive-offer badges share one modal (#conditionalOffersDetailModal-srp,
+// see template-parts/conditionalOffersDetail-modal-srp.php) instead of one per
+// card — fill it in from the clicked badge's data-* attributes just before
+// Bootstrap's own data-toggle="modal" handler opens it.
+function initIncentiveOfferSrpModal() {
+	jQuery(document).off('click.incentiveOfferSrp').on('click.incentiveOfferSrp', '.js-incentive-offer-info', function(e) {
+		e.preventDefault();
+
+		const $btn = jQuery(this);
+		const $modal = jQuery('#conditionalOffersDetailModal-srp');
+		if (!$modal.length) return;
+
+		$modal.find('.js-incentive-offer-modal-title').text($btn.data('programName') || '');
+		$modal.find('.js-incentive-offer-modal-desc').html($btn.data('incentiveDesc') || '');
+
+		const startsOn = $btn.data('startsOn') || '';
+		const endsOn = $btn.data('endsOn') || '';
+		$modal.find('.js-incentive-offer-modal-dates').text(
+			startsOn && endsOn ? `Valid from: ${startsOn} through ${endsOn}` : ''
+		);
+
+		const incentiveId = $btn.data('incentiveId') || '';
+		$modal.find('.js-incentive-offer-modal-id').text(incentiveId ? `Incentive Id: ${incentiveId}` : '');
+
+		$modal.modal('show');
+	});
+}
+
 // checked classes when element active
 function initFieldsSwitcher() {
 	const holder = jQuery('.form-offer');
@@ -12695,6 +12723,7 @@ jQuery(function() {
 	initCopyToClipboard();
 	initUpdateFavorite();
 	initApiFavoriteButtons();
+	initIncentiveOfferSrpModal();
 	initFavoriteButtonSync();
 	initUnlockSavings();
 	initTaxModal();

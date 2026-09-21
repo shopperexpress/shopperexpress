@@ -1894,6 +1894,15 @@ textarea.form-control {
       }
     }
   }
+
+  &--badge {
+    position: relative;
+    z-index: 999;
+
+    .conditional-offers__title {
+      font-size: 12px;
+    }
+  }
 }
 
 .info-block {

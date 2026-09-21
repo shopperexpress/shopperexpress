@@ -400,4 +400,15 @@ if ( $key && $value ) :
 		</div>
 	</div>
 </div>
-<?php get_footer(); ?>
+<?php
+if ( $api_mode && get_field( 'api_new_car_incentives', 'option' ) && get_field( 'api_new_car_incentives_srp_active', 'option' ) ) {
+	// Shared incentive-offer detail modal for the SRP badges (see
+	// template-parts/api/incentive_offers_srp.php). Rendered here — once, on
+	// the real page load — rather than via wp_footer from inside the card
+	// partial: cards themselves are rendered through the vehicles REST
+	// endpoint (class-intice-rest.php), a separate request where wp_footer()
+	// never fires.
+	get_template_part( 'template-parts/conditionalOffersDetail', 'modal-srp' );
+}
+get_footer();
+?>

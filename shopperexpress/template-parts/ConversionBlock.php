@@ -37,19 +37,6 @@ if ( $is_api ) {
 	$identifier  = $post_id;
 }
 
-// SRP-only compact incentive-offer badge — reads the already-loaded
-// api_vehicle payload (no extra API call per card). The VDP shows the full
-// widget with detail modals via template-parts/api/incentive_offers.php
-// instead, so this is skipped there ($location === 'single_' on VDP,
-// see template-parts/api/conversion_block.php) to avoid duplicate display.
-if ( $is_api && empty( $location ) && ! empty( $api_vehicle ) && in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
-	get_template_part(
-		'template-parts/api/incentive_offers_srp',
-		null,
-		array( 'vehicle' => $api_vehicle )
-	);
-}
-
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();
 	$primary_color = get_sub_field( 'primary_color' );

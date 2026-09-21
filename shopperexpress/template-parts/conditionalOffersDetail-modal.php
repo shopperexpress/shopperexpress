@@ -8,6 +8,11 @@
  */
 
 $json = ! empty( $args['json'] ) ? $args['json'] : '';
+// Explicit $args['id'] (single offer, e.g. the SRP badge — see
+// template-parts/api/incentive_offers_srp.php) wins over the index-based id
+// (VDP — one modal set per offer, indexes never collide since only one
+// vehicle's offers render on that page).
+$explicit_id = $args['id'] ?? '';
 if ( ! empty( $json ) ) :
 	foreach ( $json as $index => $item ) :
 		$StartsOn = $item['StartsOn'];
@@ -16,9 +21,10 @@ if ( ! empty( $json ) ) :
 		$EndsOn   = $item['EndsOn'];
 		$EndsOn   = strtotime( $EndsOn );
 		$EndsOn   = date( 'n/j/Y', $EndsOn );
+		$modal_id = $explicit_id ? $explicit_id : 'conditionalOffersDetail-' . $index;
 		?>
 		<!-- Conditions offers Modal -->
-		<div class="modal fade" id="conditionalOffersDetail-<?php echo esc_attr( $index ); ?>" tabindex="-1" aria-labelledby="conditionalOffersDetailLabel" aria-hidden="true">
+		<div class="modal fade" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-labelledby="conditionalOffersDetailLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
 				<div class="modal-content">
 					<div class="modal-header">

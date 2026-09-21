@@ -12690,6 +12690,27 @@
             "ui": 1
         },
         {
+            "key": "field_69fc70a1e5c22",
+            "label": "Active for SRP",
+            "name": "api_new_car_incentives_srp_active",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "When enabled, the incentive-offer list also renders on SRP vehicle cards (Pricing tab). VDP shows it whenever \"API - New Car Incentives\" above is enabled, regardless of this toggle.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
             "key": "field_69f86ee446084",
             "label": "Title",
             "name": "api_new_car_incentives_title",
@@ -13643,5 +13664,5 @@
             "json"
         ]
     },
-    "modified": 1788433555
+    "modified": 1789948800
 }
