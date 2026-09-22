@@ -184,10 +184,10 @@ if ( $place_id ) :
 										<strong class='review-item__name'>
 											{{#if googleMapsURI}}
 												<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
-													<span class='text'>{{authorAttribution.displayName}}</span>
+													<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 												</a>
 											{{else}}
-												<span class='text'>{{authorAttribution.displayName}}</span>
+												<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 											{{/if}}
 											<span data-toggle='tooltip' data-placement='top' title='Verified Customer'>
 												<img src='<?php echo esc_url( \App\asset_url( 'images/verified.svg' ) ); ?>' aria-hidden='true' alt='' />
@@ -220,10 +220,10 @@ if ( $place_id ) :
 									<strong class='review-item__name'>
 										{{#if googleMapsURI}}
 											<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
-												<span class='text'>{{authorAttribution.displayName}}</span>
+												<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 											</a>
 										{{else}}
-											<span class='text'>{{authorAttribution.displayName}}</span>
+											<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 										{{/if}}
 										<span data-toggle='tooltip' data-placement='top' title='Verified Customer'>
 											<img src='<?php echo esc_url( \App\asset_url( 'images/verified.svg' ) ); ?>' aria-hidden='true' alt='' />
@@ -263,10 +263,10 @@ if ( $place_id ) :
 									<strong class='review-item__name'>
 										{{#if googleMapsURI}}
 											<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
-												<span class='text'>{{authorAttribution.displayName}}</span>
+												<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 											</a>
 										{{else}}
-											<span class='text'>{{authorAttribution.displayName}}</span>
+											<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
 										{{/if}}
 										<span data-toggle='tooltip' data-placement='top' title='Verified Customer'>
 											<img src='<?php echo esc_url( \App\asset_url( 'images/verified.svg' ) ); ?>' aria-hidden='true' alt='' />

@@ -349,11 +349,14 @@
     align-items: center;
     text-align: left;
     gap: 5px;
+    min-width: 0;
 
     a {
       color: $dark-gray;
       display: block;
       max-width: calc(100% - 18px);
+      min-width: 0;
+      overflow: hidden;
     }
 
     .text {
@@ -365,6 +368,7 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       max-width: 100%;
+      min-width: 0;
       display: block;
     }
 
