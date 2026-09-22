@@ -10963,6 +10963,7 @@ class GoogleReviews {
 			style: holder?.dataset.googleReviewsStyle || 'list',
 			keywordFilter: holder?.dataset.googleReviewsKeywordFilter || '',
 			slidesPerView: parseInt(holder?.dataset.googleReviewsSlides, 10) || 6,
+			minCount: parseInt(holder?.dataset.googleReviewsMinCount, 10) || 0,
 			restUrl: window.ajax?.google_reviews_rest,
 			loadingClass: 'is-loading',
 			errorClass: 'has-error',
@@ -11035,6 +11036,9 @@ class GoogleReviews {
 		}
 		if (this.options.keywordFilter) {
 			params.set('keyword', this.options.keywordFilter);
+		}
+		if (!pageToken && this.options.minCount) {
+			params.set('min_count', this.options.minCount);
 		}
 
 		const response = await fetch(`${this.options.restUrl}?${params.toString()}`, {
@@ -11151,6 +11155,11 @@ class GoogleReviews {
 		}).format(date);
 	}
 
+	formatRating(rating) {
+		const num = Number(rating);
+		return Number.isFinite(num) ? num.toFixed(1) : '';
+	}
+
 	renderStars(rating = 0) {
 		const starsCount = 5;
 		const normalizedRating = Math.max(0, Math.min(starsCount, Number(rating) || 0));
@@ -11169,7 +11178,7 @@ class GoogleReviews {
 		this.reviews = (data.reviews ?? []).map((review) => this.normalizeReview(review));
 
 		if (this.ratingElement) {
-			this.ratingElement.textContent = data.average_rating ?? '';
+			this.ratingElement.textContent = this.formatRating(data.average_rating);
 		}
 
 		if (this.countElement) {
@@ -11210,7 +11219,7 @@ class GoogleReviews {
 		}
 
 		if (this.modalRatingElement) {
-			this.modalRatingElement.textContent = data.average_rating ?? '';
+			this.modalRatingElement.textContent = this.formatRating(data.average_rating);
 		}
 
 		if (this.modalCountElement) {

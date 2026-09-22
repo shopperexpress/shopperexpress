@@ -30,6 +30,7 @@ class Google_Business_Reviews implements Theme_Component {
 	const OPTION_ACCOUNT_ID    = 'google_reviews_account_id';
 	const OPTION_LOCATION_ID   = 'google_reviews_location_id';
 	const OPTION_PLACE_ID      = 'google_reviews_place_id';
+	const OPTION_PLACE_CID     = 'google_reviews_place_cid';
 	const OPTION_REFRESH_TOKEN = 'google_reviews_refresh_token';
 	const OPTION_PLACES_KEY    = 'google_places_api_key';
 	const OPTION_SALT          = 'google_reviews_key_salt';
@@ -42,6 +43,11 @@ class Google_Business_Reviews implements Theme_Component {
 	const PLACES_API_BASE    = 'https://places.googleapis.com/v1/places/';
 	const PLACES_FIELD_MASK  = 'id,rating,userRatingCount,reviews';
 	const PLACE_ID_REGEX     = '/^[A-Za-z0-9_-]{10,255}$/';
+
+	// Safety cap on how many extra Business Profile API pages get_reviews()
+	// will auto-fetch chasing a caller-supplied $min_count, so a huge/odd
+	// requested count can't turn one request into an unbounded fetch loop.
+	const MAX_AUTO_FETCH_PAGES = 5;
 
 	/**
 	 * @return void
@@ -103,6 +109,7 @@ class Google_Business_Reviews implements Theme_Component {
 
 		$place_id = $this->fetch_location_place_id( $location_id );
 		update_option( self::OPTION_PLACE_ID, is_wp_error( $place_id ) ? '' : $place_id );
+		delete_option( self::OPTION_PLACE_CID );
 
 		$this->flush_reviews_cache();
 	}
@@ -173,6 +180,7 @@ class Google_Business_Reviews implements Theme_Component {
 		delete_option( self::OPTION_ACCOUNT_ID );
 		delete_option( self::OPTION_LOCATION_ID );
 		delete_option( self::OPTION_PLACE_ID );
+		delete_option( self::OPTION_PLACE_CID );
 		delete_transient( self::TOKEN_TRANSIENT );
 		$this->flush_reviews_cache();
 	}
@@ -358,6 +366,7 @@ class Google_Business_Reviews implements Theme_Component {
 					'page_token' => array( 'required' => false ),
 					'lang'       => array( 'required' => false ),
 					'keyword'    => array( 'required' => false ),
+					'min_count'  => array( 'required' => false ),
 				),
 			)
 		);
@@ -406,15 +415,16 @@ class Google_Business_Reviews implements Theme_Component {
 		$page_token = sanitize_text_field( (string) $request->get_param( 'page_token' ) );
 		$lang       = sanitize_text_field( (string) $request->get_param( 'lang' ) );
 		$keyword    = sanitize_text_field( (string) $request->get_param( 'keyword' ) );
+		$min_count  = (int) $request->get_param( 'min_count' );
 
-		$cache_key = 'google_reviews_data_' . md5( $place_id . '|' . $page_token . '|' . $lang . '|' . $keyword );
+		$cache_key = 'google_reviews_data_' . md5( $place_id . '|' . $page_token . '|' . $lang . '|' . $keyword . '|' . $min_count );
 
 		$cached = get_transient( $cache_key );
 		if ( false !== $cached ) {
 			return rest_ensure_response( $cached );
 		}
 
-		$data = $this->get_reviews( $place_id, $page_token, $lang, $keyword );
+		$data = $this->get_reviews( $place_id, $page_token, $lang, $keyword, $min_count );
 
 		if ( is_wp_error( $data ) ) {
 			return new \WP_REST_Response( array( 'error' => $data->get_error_message() ), 502 );
@@ -537,26 +547,60 @@ class Google_Business_Reviews implements Theme_Component {
 	 * @param string $lang       BCP-47 language code for the Places API fallback. Defaults to the site locale.
 	 * @param string $keyword    Optional comma-separated keyword(s) — only reviews whose text
 	 *                            contains at least one of them (case-insensitive) are returned.
+	 * @param int    $min_count  Optional. Business Profile source only: keep auto-fetching
+	 *                            further pages (up to self::MAX_AUTO_FETCH_PAGES extra) until
+	 *                            at least this many filtered reviews are collected, or Google
+	 *                            runs out of pages. Each raw page can yield very few (or zero)
+	 *                            5-star/has-text reviews, so a single page is often not enough.
 	 * @return array{source: string, reviews: array, average_rating: float, total_review_count: int, next_page_token?: string}|\WP_Error
 	 */
-	public function get_reviews( string $place_id, string $page_token = '', string $lang = '', string $keyword = '' ) {
+	public function get_reviews( string $place_id, string $page_token = '', string $lang = '', string $keyword = '', int $min_count = 0 ) {
 		if ( ! preg_match( self::PLACE_ID_REGEX, $place_id ) ) {
 			return new \WP_Error( 'invalid_place_id', __( 'Invalid Google Place ID.', 'shopperexpress' ) );
 		}
 
-		if ( $this->is_connected() && get_option( self::OPTION_ACCOUNT_ID, '' ) && get_option( self::OPTION_LOCATION_ID, '' ) ) {
+		$use_business_profile = $this->is_connected() && get_option( self::OPTION_ACCOUNT_ID, '' ) && get_option( self::OPTION_LOCATION_ID, '' );
+
+		if ( $use_business_profile ) {
 			$data = $this->get_reviews_business_profile( $page_token );
 		} else {
 			$data = $this->get_reviews_places( $place_id, $lang );
 		}
 
-		if ( ! is_wp_error( $data ) ) {
-			// Only surface 5-star reviews that have written text — matches what
-			// gets rendered in the widget and what backs the Review JSON-LD.
-			// average_rating/total_review_count are left untouched: those are
-			// Google's real aggregate stats for the business, not a count of
-			// what's displayed in the list below.
-			$data['reviews'] = $this->filter_reviews( $data['reviews'], $keyword );
+		if ( is_wp_error( $data ) ) {
+			return $data;
+		}
+
+		// Only surface 5-star reviews that have written text — matches what
+		// gets rendered in the widget and what backs the Review JSON-LD.
+		// average_rating/total_review_count are left untouched: those are
+		// Google's real aggregate stats for the business, not a count of
+		// what's displayed in the list below.
+		$data['reviews'] = $this->filter_reviews( $data['reviews'], $keyword );
+
+		// Business Profile pages are 20 raw reviews each, most of which the
+		// filter above can drop (not 5-star, or no text) — a single page can
+		// legitimately filter down to just 1-2 results even when the location
+		// has plenty of qualifying reviews further back. Keep pulling pages
+		// until the caller's desired count is met instead of surfacing a
+		// near-empty first page and relying on "Load More" to fill it in.
+		$extra_pages = 0;
+		while (
+			$use_business_profile
+			&& $min_count > 0
+			&& count( $data['reviews'] ) < $min_count
+			&& ! empty( $data['next_page_token'] )
+			&& $extra_pages < self::MAX_AUTO_FETCH_PAGES
+		) {
+			$next = $this->get_reviews_business_profile( $data['next_page_token'] );
+			++$extra_pages;
+
+			if ( is_wp_error( $next ) ) {
+				break;
+			}
+
+			$data['reviews']         = array_merge( $data['reviews'], $this->filter_reviews( $next['reviews'], $keyword ) );
+			$data['next_page_token'] = $next['next_page_token'];
 		}
 
 		return $data;
@@ -666,14 +710,26 @@ class Google_Business_Reviews implements Theme_Component {
 			'FIVE'                    => 5,
 		);
 
+		$place_id = get_option( self::OPTION_PLACE_ID, '' );
+		$cid_hex  = '' !== $place_id ? $this->get_place_cid( $place_id ) : '';
+		if ( is_wp_error( $cid_hex ) ) {
+			$cid_hex = '';
+		}
+
 		$reviews = array();
 		foreach ( $body['reviews'] ?? array() as $review ) {
+			$review_id = $review['reviewId'] ?? '';
+			if ( '' === $review_id && ! empty( $review['name'] ) ) {
+				$name_parts = explode( '/', $review['name'] );
+				$review_id  = end( $name_parts );
+			}
+
 			$reviews[] = array(
 				'rating'                         => $stars_map[ $review['starRating'] ?? '' ] ?? 0,
 				'text'                           => $review['comment'] ?? '',
 				'relativePublishTimeDescription' => '',
 				'publishTime'                    => $review['createTime'] ?? '',
-				'googleMapsURI'                  => '',
+				'googleMapsURI'                  => ( '' !== $review_id && '' !== $cid_hex ) ? $this->build_review_permalink( $cid_hex, $review_id ) : '',
 				'authorAttribution'              => array(
 					'displayName' => $review['reviewer']['displayName'] ?? __( 'Google user', 'shopperexpress' ),
 					'photoURI'    => $review['reviewer']['profilePhotoUrl'] ?? '',
@@ -843,6 +899,152 @@ class Google_Business_Reviews implements Theme_Component {
 	private function get_places_api_key(): string {
 		$encrypted = get_option( self::OPTION_PLACES_KEY, '' );
 		return '' === $encrypted ? '' : $this->decrypt( $encrypted );
+	}
+
+	/**
+	 * Resolve (and cache) the numeric Google "CID" for a place, needed to build
+	 * per-review permalinks (the Business Profile API exposes no direct review
+	 * URL). Uses the legacy Place Details endpoint's `url` field, which returns
+	 * a `https://maps.google.com/?cid={decimal}` link.
+	 *
+	 * @param string $place_id Google Place ID.
+	 * @return string|\WP_Error Hex-encoded CID.
+	 */
+	private function get_place_cid( string $place_id ) {
+		$cached = get_option( self::OPTION_PLACE_CID, array() );
+		if ( is_array( $cached ) && ( $cached['place_id'] ?? '' ) === $place_id && ! empty( $cached['cid_hex'] ) ) {
+			return $cached['cid_hex'];
+		}
+
+		$api_key = $this->get_places_api_key();
+		if ( '' === $api_key ) {
+			return new \WP_Error( 'not_configured', __( 'A Places API key is required to resolve review permalinks.', 'shopperexpress' ) );
+		}
+
+		$url = add_query_arg(
+			array(
+				'place_id' => $place_id,
+				'fields'   => 'url',
+				'key'      => $api_key,
+			),
+			'https://maps.googleapis.com/maps/api/place/details/json'
+		);
+
+		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$body     = json_decode( wp_remote_retrieve_body( $response ), true );
+		$maps_url = $body['result']['url'] ?? '';
+
+		if ( ! preg_match( '/[?&]cid=(\d+)/', $maps_url, $matches ) ) {
+			return new \WP_Error( 'cid_not_found', __( 'Could not resolve the place CID for review permalinks.', 'shopperexpress' ) );
+		}
+
+		$cid_hex = $this->decimal_to_hex( $matches[1] );
+		update_option( self::OPTION_PLACE_CID, array( 'place_id' => $place_id, 'cid_hex' => $cid_hex ), false );
+
+		return $cid_hex;
+	}
+
+	/**
+	 * Convert an arbitrary-precision decimal string to lowercase hex, without
+	 * relying on bcmath/gmp (long division by 16, base-10 digit by digit).
+	 *
+	 * @param string $decimal Decimal digits only.
+	 * @return string
+	 */
+	private function decimal_to_hex( string $decimal ): string {
+		if ( ! ctype_digit( $decimal ) ) {
+			return '';
+		}
+
+		$hex = '';
+		while ( '0' !== $decimal ) {
+			$remainder = 0;
+			$quotient  = '';
+
+			for ( $i = 0, $len = strlen( $decimal ); $i < $len; $i++ ) {
+				$value     = $remainder * 10 + (int) $decimal[ $i ];
+				$digit     = intdiv( $value, 16 );
+				$remainder = $value % 16;
+
+				if ( '' !== $quotient || 0 !== $digit ) {
+					$quotient .= (string) $digit;
+				}
+			}
+
+			$hex     = dechex( $remainder ) . $hex;
+			$decimal = '' === $quotient ? '0' : $quotient;
+		}
+
+		return '' === $hex ? '0' : $hex;
+	}
+
+	/**
+	 * Build the (undocumented) Google Maps deep link that opens directly on a
+	 * single review, from the place's CID and the review's own ID. Reverse
+	 * engineered from real Maps URLs — two nested length-delimited protobuf
+	 * messages, base64-encoded (unpadded) into the `data=` route param.
+	 *
+	 * @param string $cid_hex   Hex-encoded place CID (see get_place_cid()).
+	 * @param string $review_id Review ID (Business Profile API `reviewId`, e.g. "rp_h:...").
+	 * @return string
+	 */
+	private function build_review_permalink( string $cid_hex, string $review_id ): string {
+		$level3 = $this->protobuf_string_field( 1, $review_id );
+		$level2 = $this->protobuf_varint_field( 1, 2 )
+			. $this->protobuf_varint_field( 2, 0 )
+			. $this->protobuf_string_field( 5, $level3 );
+		$level2_b64 = rtrim( base64_encode( $level2 ), '=' );
+
+		$level1     = $this->protobuf_string_field( 1, $level2_b64 )
+			. $this->protobuf_varint_field( 2, 1 );
+		$level1_b64 = rtrim( base64_encode( $level1 ), '=' );
+
+		return sprintf(
+			'https://www.google.com/maps/reviews/data=!4m8!14m7!1m6!2m5!1s%s!2m1!1s0x0:0x%s!3m1!1s2@1:%s||',
+			rawurlencode( $level1_b64 ),
+			$cid_hex,
+			rawurlencode( $level2_b64 )
+		);
+	}
+
+	/**
+	 * @param int    $field_number
+	 * @param string $value
+	 * @return string Raw protobuf bytes.
+	 */
+	private function protobuf_string_field( int $field_number, string $value ): string {
+		return chr( ( $field_number << 3 ) | 2 ) . $this->protobuf_varint( strlen( $value ) ) . $value;
+	}
+
+	/**
+	 * @param int $field_number
+	 * @param int $value
+	 * @return string Raw protobuf bytes.
+	 */
+	private function protobuf_varint_field( int $field_number, int $value ): string {
+		return chr( ( $field_number << 3 ) | 0 ) . $this->protobuf_varint( $value );
+	}
+
+	/**
+	 * @param int $value
+	 * @return string Raw protobuf varint bytes.
+	 */
+	private function protobuf_varint( int $value ): string {
+		$bytes = '';
+		do {
+			$byte  = $value & 0x7f;
+			$value >>= 7;
+			if ( $value ) {
+				$byte |= 0x80;
+			}
+			$bytes .= chr( $byte );
+		} while ( $value );
+
+		return $bytes;
 	}
 
 	/**

@@ -1853,6 +1853,7 @@ textarea.form-control {
   font-size: 12px;
   line-height: 1.4;
   margin: 12px 0;
+  text-transform: none;
 
   &__title {
     display: block;
@@ -1898,9 +1899,17 @@ textarea.form-control {
   &--badge {
     position: relative;
     z-index: 999;
+    font-size: 11px;
 
     .conditional-offers__title {
-      font-size: 12px;
+      font-size: 11px;
+    }
+
+    .conditional-offers__list {
+      a svg {
+        width: 14px;
+        height: 14px;
+      }
     }
   }
 }

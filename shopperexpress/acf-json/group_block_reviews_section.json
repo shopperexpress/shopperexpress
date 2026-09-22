@@ -119,6 +119,27 @@
             "append": ""
         },
         {
+            "key": "field_7a0b1c2d3f010",
+            "label": "Minimum Reviews to Show",
+            "name": "min_reviews_count",
+            "type": "number",
+            "instructions": "Auto-fetches additional pages from Google until at least this many qualifying (5-star, has text) reviews are loaded. Leave blank/0 to only load the first page.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 6,
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_7a0b1c2d3f007",
             "label": "Keyword Filter",
             "name": "keyword_filter",

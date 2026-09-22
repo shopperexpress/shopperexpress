@@ -10,6 +10,8 @@
  *   @type string $layout_style "list" (default) or "slider".
  *   @type bool   $hide_header  Slider only. Hides the logo/rating/count bar above the slider.
  *   @type int    $slides_per_view Slider only. Number of cards shown side by side on desktop.
+ *   @type int    $min_reviews_count Auto-fetch further Business Profile pages until at least
+ *                               this many qualifying (5-star, has text) reviews are loaded.
  *   @type string $place_id     Google Place ID — resolved server-side from the connected
  *                               Business Profile location (not an ACF field; see
  *                               App\Components\Base\Google_Business_Reviews::get_settings()).
@@ -36,24 +38,25 @@
  * the text inline.
  */
 
-$heading         = $args['heading'] ?? '';
-$description     = $args['description'] ?? '';
-$layout_style    = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
-$place_id        = $args['place_id'] ?? '';
-$keyword_filter  = $args['keyword_filter'] ?? '';
-$cta_text        = $args['cta_text'] ?? '';
-$cta_url         = $args['cta_url'] ?? '#';
-$anchor          = $args['anchor'] ?? '';
-$is_slider       = 'slider' === $layout_style;
-$hide_header     = $is_slider && ! empty( $args['hide_header'] );
-$slides_per_view = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
-$modal_id        = $is_slider ? wp_unique_id( 'reviews-modal-' ) : '';
+$heading           = $args['heading'] ?? '';
+$description       = $args['description'] ?? '';
+$layout_style      = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
+$place_id          = $args['place_id'] ?? '';
+$keyword_filter    = $args['keyword_filter'] ?? '';
+$cta_text          = $args['cta_text'] ?? '';
+$cta_url           = $args['cta_url'] ?? '#';
+$anchor            = $args['anchor'] ?? '';
+$is_slider         = 'slider' === $layout_style;
+$hide_header       = $is_slider && ! empty( $args['hide_header'] );
+$slides_per_view   = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
+$min_reviews_count = (int) ( $args['min_reviews_count'] ?? 0 );
+$modal_id          = $is_slider ? wp_unique_id( 'reviews-modal-' ) : '';
 
 if ( $place_id ) :
 	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
 	// + keyword filtered) data the widget displays, so search engines see it
 	// without needing to run the client-side Google Reviews JS module.
-	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id, '', '', $keyword_filter );
+	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id, '', '', $keyword_filter, $min_reviews_count );
 
 	if ( ! is_wp_error( $reviews_data ) && ! empty( $reviews_data['reviews'] ) ) :
 		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
@@ -114,6 +117,9 @@ if ( $place_id ) :
 		<?php endif; ?>
 		<?php if ( $slides_per_view > 0 ) : ?>
 		data-google-reviews-slides="<?php echo esc_attr( $slides_per_view ); ?>"
+		<?php endif; ?>
+		<?php if ( $min_reviews_count > 0 ) : ?>
+		data-google-reviews-min-count="<?php echo esc_attr( $min_reviews_count ); ?>"
 		<?php endif; ?>
 		<?php if ( $modal_id ) : ?>
 		data-google-reviews-modal="#<?php echo esc_attr( $modal_id ); ?>"
@@ -280,7 +286,7 @@ if ( $place_id ) :
 							<div class='review-item__body'>
 								{{{stars}}}
 								<p class='review-item__text'>{{text}}</p>
-								<button type='button' class='review-item__read-more' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
+								<button type='button' class='review-item__read-more btn btn-link' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
 							</div>
 						</div>
 					{{else}}
