@@ -322,10 +322,18 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
+      width: 100%;
 
       &-holder {
         align-items: center;
+        max-width: 100%;
+        width: 100%;
       }
+    }
+
+    #{$self}__name {
+      justify-content: center;
+      text-align: center;
     }
   }
 
@@ -350,6 +358,7 @@
     text-align: left;
     gap: 5px;
     min-width: 0;
+    width: 100%;
 
     a {
       color: $dark-gray;
@@ -372,9 +381,14 @@
       display: block;
     }
 
+    > span {
+      flex-shrink: 0;
+    }
+
     img {
       width: 13.5px;
       height: 13.5px;
+      flex-shrink: 0;
       cursor: pointer;
     }
   }
