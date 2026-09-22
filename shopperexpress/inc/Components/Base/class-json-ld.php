@@ -1163,6 +1163,63 @@ class JSON_LD implements Theme_Component {
 		return $seller;
 	}
 
+	/**
+	 * Build an AutoDealer seller object with NAP data for API-mode vehicles,
+	 * where there is no WP post to pull ACF fields from — address/phone come
+	 * from the Nexus API vehicle payload instead (same dealer_address,
+	 * dealer_city, dealer_state, dealer_zip, dealer_phone keys used by the
+	 * "Edit Vehicle" modal, see template-parts/modal-edit-api.php).
+	 *
+	 * @param array  $v    Nexus API vehicle row (with 'payload' sub-array).
+	 * @param string $name Dealer name (already resolved by the caller).
+	 * @param string $url  Dealer/VDP URL (already resolved by the caller), or empty.
+	 * @return array{'@type': string, name: string, url?: string, telephone?: string, address?: array}
+	 */
+	private static function build_seller_nap_api( array $v, string $name, string $url = '' ): array {
+		$payload = is_array( $v['payload'] ?? null ) ? $v['payload'] : array();
+		$field   = static function ( string $key ) use ( $v, $payload ): string {
+			return wp_strip_all_tags( (string) ( $v[ $key ] ?? $payload[ $key ] ?? '' ) );
+		};
+
+		$seller = array(
+			'@type' => 'AutoDealer',
+			'name'  => $name,
+		);
+
+		if ( $url ) {
+			$seller['url'] = esc_url( $url );
+		}
+
+		$phone = $field( 'dealer_phone' );
+		if ( $phone ) {
+			$seller['telephone'] = $phone;
+		}
+
+		$street = $field( 'dealer_address' );
+		$city   = $field( 'dealer_city' );
+		$state  = $field( 'dealer_state' );
+		$zip    = $field( 'dealer_zip' );
+
+		if ( $street || $city || $state || $zip ) {
+			$address = array( '@type' => 'PostalAddress' );
+			if ( $street ) {
+				$address['streetAddress'] = $street;
+			}
+			if ( $city ) {
+				$address['addressLocality'] = $city;
+			}
+			if ( $state ) {
+				$address['addressRegion'] = $state;
+			}
+			if ( $zip ) {
+				$address['postalCode'] = $zip;
+			}
+			$seller['address'] = $address;
+		}
+
+		return $seller;
+	}
+
 	// ── Features helper ───────────────────────────────────────────────────────
 
 	/**
@@ -1745,7 +1802,7 @@ class JSON_LD implements Theme_Component {
 				if ( $o_show_seller ) {
 					$dealer_name = $v[ $o_seller_api ] ?? ( $v['dealer_name'] ?? ( $v['payload']['dealer name'] ?? '' ) );
 					if ( $dealer_name ) {
-						$offer['seller'] = array( '@type' => 'AutoDealer', 'name' => wp_strip_all_tags( (string) $dealer_name ) );
+						$offer['seller'] = self::build_seller_nap_api( $v, wp_strip_all_tags( (string) $dealer_name ) );
 					}
 				}
 				$vehicle['offers'] = $offer;

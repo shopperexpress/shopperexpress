@@ -552,13 +552,6 @@
     .logo-slider {
       order: 1;
       margin: 0;
-
-      // Let the image scale by its real aspect ratio (via object-fit: contain
-      // + height: 100%) instead of being stretched to fill the now much
-      // wider trailing slot — width: 100% otherwise forces it edge-to-edge.
-      .slider-item img {
-        width: auto;
-      }
     }
 
     .navbar-brand .brand-img {
@@ -1315,55 +1308,69 @@
 }
 
 .logo-slider {
+  @include animate(width);
   position: relative;
-  width: 36px;
   height: 32px;
   margin-right: 10px;
 
+  @include media('<phone') {
+    max-width: 70px;
+  }
+
+  @include media('>=phone') {
+    max-width: 116px;
+  }
+
   @include media('>=tablet') {
-    width: 116px;
     margin: -9px 20px -6px 0;
   }
 
   @include media('>=widescreen') {
-    width: 160px;
+    max-width: 160px;
     height: 50px;
   }
 
   .slider-item {
-    @include transition(opacity);
-    transition: opacity 0.5s linear;
+    @include animate(opacity visibility);
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: max-content;
     height: 100%;
     opacity: 0;
-    // Stacked absolutely on top of each other — without this, whichever item
-    // is last in the DOM always intercepts clicks/hover regardless of which
-    // one is actually visible (opacity: 0 doesn't stop pointer events).
+    visibility: hidden;
     pointer-events: none;
 
     &.active {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
     }
 
     img {
       display: block;
-      width: 100%;
+      width: auto;
+      max-width: none;
       height: 100%;
       object-fit: contain;
+
+      @include media('<phone') {
+        max-width: 70px;
+      }
+
+      @include media('>=phone') {
+        max-width: 116px;
+      }
+
+      @include media('>=widescreen') {
+        max-width: 160px;
+      }
     }
   }
 }
 
 .priority-nav {
   white-space: nowrap;
-  /*
-	* Makes sure the menu's are inline-block so they don't take up
-	* the entire width of its parent. This will break the plugin.
-	*/
 
   ul {
     display: inline-block;
