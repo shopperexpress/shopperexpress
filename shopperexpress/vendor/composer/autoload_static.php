@@ -78,6 +78,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'App\\Components\\Base\\Chromedata_Client' => __DIR__ . '/../..' . '/inc/Components/Base/class-chromedata-client.php',
         'App\\Components\\Base\\Export' => __DIR__ . '/../..' . '/inc/Components/Base/class-export.php',
         'App\\Components\\Base\\Google_Business_Reviews' => __DIR__ . '/../..' . '/inc/Components/Base/class-google-business-reviews.php',
+        'App\\Components\\Base\\Google_Reviews_Cron' => __DIR__ . '/../..' . '/inc/Components/Base/class-google-reviews-cron.php',
         'App\\Components\\Base\\Import_Monitor' => __DIR__ . '/../..' . '/inc/Components/Base/class-import-monitor.php',
         'App\\Components\\Base\\Import_Monitor_ACF' => __DIR__ . '/../..' . '/inc/Components/Base/class-import-monitor-acf.php',
         'App\\Components\\Base\\Import_Monitor_Cron' => __DIR__ . '/../..' . '/inc/Components/Base/class-import-monitor-cron.php',

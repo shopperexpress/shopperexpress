@@ -49,6 +49,25 @@ class Google_Business_Reviews implements Theme_Component {
 	// requested count can't turn one request into an unbounded fetch loop.
 	const MAX_AUTO_FETCH_PAGES = 5;
 
+	// When a $keyword filter is set but the caller didn't request a specific
+	// $min_count, still auto-fetch pages (up to MAX_AUTO_FETCH_PAGES) until
+	// at least this many keyword matches are found — a single 20-review page
+	// often contains zero matches for a narrow phrase even when the location
+	// has plenty of them further back.
+	const MIN_KEYWORD_RESULTS = 5;
+
+	// Background full-history cache (see Google_Reviews_Cron / sync_all_reviews()).
+	// A specific phrase like "oil change" can legitimately not appear anywhere
+	// in the newest ~120 reviews (the live on-demand pagination cap below) even
+	// though the location has dozens of matches further back in its history —
+	// generic keywords like "service" happen to show up early just because
+	// they're common words, giving the false impression that filtering "works"
+	// for some keywords and not others. The cron keeps a full snapshot of every
+	// review so keyword filtering can search the whole history instead.
+	const FULL_CACHE_OPTION         = 'google_reviews_full_cache';
+	const FULL_CACHE_UPDATED_OPTION = 'google_reviews_full_cache_updated';
+	const FULL_SYNC_MAX_PAGES       = 100;
+
 	/**
 	 * @return void
 	 */
@@ -112,6 +131,13 @@ class Google_Business_Reviews implements Theme_Component {
 		delete_option( self::OPTION_PLACE_CID );
 
 		$this->flush_reviews_cache();
+
+		// Populate the full-history keyword-search cache right away instead of
+		// leaving keyword-filtered widgets empty until the next hourly cron run.
+		if ( ! wp_next_scheduled( Google_Reviews_Cron::HOOK ) ) {
+			wp_schedule_event( time(), 'hourly', Google_Reviews_Cron::HOOK );
+		}
+		wp_schedule_single_event( time() + 5, Google_Reviews_Cron::HOOK );
 	}
 
 	/**
@@ -201,6 +227,9 @@ class Google_Business_Reviews implements Theme_Component {
 				$wpdb->esc_like( '_transient_timeout_google_reviews_data_' ) . '%'
 			)
 		);
+
+		delete_option( self::FULL_CACHE_OPTION );
+		delete_option( self::FULL_CACHE_UPDATED_OPTION );
 
 		// The direct DELETE above only clears the DB row — on sites running a
 		// persistent object cache (Redis/Memcached), get_transient() would keep
@@ -578,17 +607,44 @@ class Google_Business_Reviews implements Theme_Component {
 		// what's displayed in the list below.
 		$data['reviews'] = $this->filter_reviews( $data['reviews'], $keyword );
 
+		// A keyword filter needs to search the *whole* review history, not
+		// just the handful of pages the live on-demand fetch below is willing
+		// to chase — that fetch is capped low to keep page loads fast, which
+		// is fine for the general "show me some 5-star reviews" case but too
+		// shallow for a narrow phrase like "oil change". When the background
+		// cron (see sync_all_reviews()) has already built a full snapshot,
+		// use it instead so the filter covers every review Google has.
+		if ( $use_business_profile && '' !== $keyword ) {
+			$full_cache = $this->get_full_cache();
+			if ( null !== $full_cache ) {
+				$data['reviews'] = $this->filter_reviews( $full_cache, $keyword );
+				return $data;
+			}
+		}
+
 		// Business Profile pages are 20 raw reviews each, most of which the
 		// filter above can drop (not 5-star, or no text) — a single page can
 		// legitimately filter down to just 1-2 results even when the location
 		// has plenty of qualifying reviews further back. Keep pulling pages
 		// until the caller's desired count is met instead of surfacing a
 		// near-empty first page and relying on "Load More" to fill it in.
+		//
+		// A keyword filter narrows things further still — a specific phrase
+		// like "oil change" may not appear in any of the 20 *most recent*
+		// reviews even though the location has plenty of matches further
+		// back, so a page's worth of matches can legitimately be zero. When
+		// no explicit $min_count was requested, still search a handful of
+		// pages for keyword matches instead of giving up after page one.
+		$effective_min_count = $min_count;
+		if ( '' !== $keyword && $effective_min_count < self::MIN_KEYWORD_RESULTS ) {
+			$effective_min_count = self::MIN_KEYWORD_RESULTS;
+		}
+
 		$extra_pages = 0;
 		while (
 			$use_business_profile
-			&& $min_count > 0
-			&& count( $data['reviews'] ) < $min_count
+			&& $effective_min_count > 0
+			&& count( $data['reviews'] ) < $effective_min_count
 			&& ! empty( $data['next_page_token'] )
 			&& $extra_pages < self::MAX_AUTO_FETCH_PAGES
 		) {
@@ -604,6 +660,51 @@ class Google_Business_Reviews implements Theme_Component {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Paginate through every Business Profile review page (up to
+	 * self::FULL_SYNC_MAX_PAGES as a hard safety cap) and cache the raw,
+	 * unfiltered result so keyword-filtered queries can search the whole
+	 * review history instead of just the newest ones. Meant to be called
+	 * from a WP Cron job (see Google_Reviews_Cron), not from a page load.
+	 *
+	 * @return array|\WP_Error The full unfiltered review list, or WP_Error on failure.
+	 */
+	public function sync_all_reviews() {
+		if ( ! $this->is_connected() || ! get_option( self::OPTION_ACCOUNT_ID, '' ) || ! get_option( self::OPTION_LOCATION_ID, '' ) ) {
+			return new \WP_Error( 'not_connected', __( 'Google Business Profile is not connected.', 'shopperexpress' ) );
+		}
+
+		$reviews    = array();
+		$page_token = '';
+		$pages      = 0;
+
+		do {
+			$page = $this->get_reviews_business_profile( $page_token );
+			if ( is_wp_error( $page ) ) {
+				// Keep whatever was already fetched rather than throwing away a
+				// partial-but-useful snapshot because a later page failed.
+				break;
+			}
+
+			$reviews    = array_merge( $reviews, $page['reviews'] );
+			$page_token = $page['next_page_token'];
+			++$pages;
+		} while ( '' !== $page_token && $pages < self::FULL_SYNC_MAX_PAGES );
+
+		update_option( self::FULL_CACHE_OPTION, $reviews, false );
+		update_option( self::FULL_CACHE_UPDATED_OPTION, time(), false );
+
+		return $reviews;
+	}
+
+	/**
+	 * @return array|null The cached full review list, or null if the cron hasn't populated it yet.
+	 */
+	private function get_full_cache(): ?array {
+		$cache = get_option( self::FULL_CACHE_OPTION, null );
+		return is_array( $cache ) && ! empty( $cache ) ? $cache : null;
 	}
 
 	/**

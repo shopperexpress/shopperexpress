@@ -70,6 +70,7 @@ class Theme {
 			\App\Components\Base\Required_Plugins::class,
 			\App\Components\Base\ADF_Cron::class,
 			\App\Components\Base\Google_Business_Reviews::class,
+			\App\Components\Base\Google_Reviews_Cron::class,
 			\App\Components\SOC\SOC::class,
 			...( \App\is_api_mode() ? array(
 				\App\Components\Api\Intice_Rest::class,

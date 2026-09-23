@@ -23,6 +23,7 @@ return array(
     'App\\Components\\Base\\Chromedata_Client' => $baseDir . '/inc/Components/Base/class-chromedata-client.php',
     'App\\Components\\Base\\Export' => $baseDir . '/inc/Components/Base/class-export.php',
     'App\\Components\\Base\\Google_Business_Reviews' => $baseDir . '/inc/Components/Base/class-google-business-reviews.php',
+    'App\\Components\\Base\\Google_Reviews_Cron' => $baseDir . '/inc/Components/Base/class-google-reviews-cron.php',
     'App\\Components\\Base\\Import_Monitor' => $baseDir . '/inc/Components/Base/class-import-monitor.php',
     'App\\Components\\Base\\Import_Monitor_ACF' => $baseDir . '/inc/Components/Base/class-import-monitor-acf.php',
     'App\\Components\\Base\\Import_Monitor_Cron' => $baseDir . '/inc/Components/Base/class-import-monitor-cron.php',
