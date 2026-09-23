@@ -78,6 +78,15 @@ class Google_Business_Reviews implements Theme_Component {
 	const SYNC_LOCK_TRANSIENT = 'google_reviews_sync_lock';
 	const SYNC_LOCK_TTL       = 15 * MINUTE_IN_SECONDS;
 
+	// Holds the reviews collected so far by the chunked, browser-driven sync
+	// (see start_manual_sync()/sync_step()) between AJAX round-trips. Unlike
+	// start_background_sync(), this path never depends on WP Cron's loopback
+	// request actually firing — some hosts block or never trigger it (WAF,
+	// staging Basic Auth, DISABLE_WP_CRON with no real system cron configured),
+	// which silently strands the "Sync Now" button forever even though the
+	// exact same flow works fine locally.
+	const SYNC_PROGRESS_OPTION = 'google_reviews_sync_progress';
+
 	// Minimum star rating a review must have to be surfaced by filter_reviews()
 	// — configurable from the SOC panel instead of the hardcoded "5 stars only"
 	// this started as. Clamped to 1-5.
@@ -786,6 +795,109 @@ class Google_Business_Reviews implements Theme_Component {
 		wp_schedule_single_event( time(), Google_Reviews_Cron::HOOK );
 
 		return true;
+	}
+
+	/**
+	 * Start a chunked, browser-driven full-history sync — one Business Profile
+	 * page per AJAX round-trip (see sync_step()) instead of a single WP Cron
+	 * event. The "Sync Now" button calls this once, then keeps calling
+	 * sync_step() with the returned next_page_token until done=true. This
+	 * never depends on WP Cron's loopback request actually firing, which is
+	 * unreliable on some hosts (see SYNC_PROGRESS_OPTION).
+	 *
+	 * @return array{done: bool, next_page_token?: string, pages_done?: int, reviews_so_far?: int, total?: int}|\WP_Error
+	 */
+	public function start_manual_sync() {
+		if ( ! $this->is_connected() || ! get_option( self::OPTION_ACCOUNT_ID, '' ) || ! get_option( self::OPTION_LOCATION_ID, '' ) ) {
+			return new \WP_Error( 'not_connected', __( 'Google Business Profile is not connected.', 'shopperexpress' ) );
+		}
+
+		if ( $this->is_sync_running() ) {
+			return new \WP_Error( 'sync_in_progress', __( 'A review sync is already running — check back in a few minutes.', 'shopperexpress' ) );
+		}
+
+		set_transient( self::SYNC_LOCK_TRANSIENT, time(), self::SYNC_LOCK_TTL );
+		delete_option( self::SYNC_PROGRESS_OPTION );
+
+		return $this->sync_step( '' );
+	}
+
+	/**
+	 * Fetch one Business Profile review page and fold it into the in-progress
+	 * snapshot, finalizing once Google runs out of pages (or the
+	 * FULL_SYNC_MAX_PAGES safety cap is hit). Meant to be called repeatedly by
+	 * the SOC "Sync Now" button's JS loop — each call is a normal, bounded
+	 * admin-ajax request, so there's nothing relying on a background process
+	 * surviving past the response.
+	 *
+	 * @param string $page_token Pagination token from the previous step's response ('' for the first page).
+	 * @return array{done: bool, next_page_token?: string, pages_done?: int, reviews_so_far?: int, total?: int}|\WP_Error
+	 */
+	public function sync_step( string $page_token ) {
+		if ( ! $this->is_sync_running() ) {
+			return new \WP_Error( 'sync_not_running', __( 'No sync is currently running — click "Sync Now" to start one.', 'shopperexpress' ) );
+		}
+
+		$progress = get_option( self::SYNC_PROGRESS_OPTION, array( 'reviews' => array(), 'pages' => 0 ) );
+
+		$page = $this->get_reviews_business_profile( $page_token );
+
+		if ( is_wp_error( $page ) ) {
+			// Keep whatever was already fetched rather than throwing away a
+			// partial-but-useful snapshot because a later page failed.
+			return $this->finish_manual_sync( $progress['reviews'] );
+		}
+
+		$progress['reviews'] = array_merge( $progress['reviews'], $page['reviews'] );
+		++$progress['pages'];
+
+		if ( '' === $page['next_page_token'] || $progress['pages'] >= self::FULL_SYNC_MAX_PAGES ) {
+			return $this->finish_manual_sync( $progress['reviews'] );
+		}
+
+		update_option( self::SYNC_PROGRESS_OPTION, $progress, false );
+
+		// Renew the lock on every step so a slow multi-page sync (dozens of
+		// steps, each a real HTTP round-trip) never has it self-clear mid-way.
+		set_transient( self::SYNC_LOCK_TRANSIENT, time(), self::SYNC_LOCK_TTL );
+
+		return array(
+			'done'            => false,
+			'next_page_token' => $page['next_page_token'],
+			'pages_done'      => $progress['pages'],
+			'reviews_so_far'  => count( $progress['reviews'] ),
+		);
+	}
+
+	/**
+	 * Cancel an in-progress chunked sync (see start_manual_sync()/sync_step()).
+	 * Whatever pages were already fetched are discarded — the previous
+	 * full-history cache (if any) is left untouched, so keyword filtering
+	 * keeps using the last completed snapshot instead of an empty one.
+	 *
+	 * @return array{stopped: bool}
+	 */
+	public function stop_manual_sync(): array {
+		delete_option( self::SYNC_PROGRESS_OPTION );
+		delete_transient( self::SYNC_LOCK_TRANSIENT );
+
+		return array( 'stopped' => true );
+	}
+
+	/**
+	 * @param array $reviews Every review collected across all steps.
+	 * @return array{done: bool, total: int}
+	 */
+	private function finish_manual_sync( array $reviews ): array {
+		update_option( self::FULL_CACHE_OPTION, $reviews, false );
+		update_option( self::FULL_CACHE_UPDATED_OPTION, time(), false );
+		delete_option( self::SYNC_PROGRESS_OPTION );
+		delete_transient( self::SYNC_LOCK_TRANSIENT );
+
+		return array(
+			'done'  => true,
+			'total' => count( $reviews ),
+		);
 	}
 
 	/**

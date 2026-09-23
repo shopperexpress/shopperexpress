@@ -151,13 +151,13 @@ $min_rating    = (int) ( $data['min_rating'] ?? 5 );
 	<div class="soc-section__title"><?php esc_html_e( 'Full Review History Cache (keyword filtering)', 'shopperexpress' ); ?></div>
 
 	<p class="soc-api-mode-card__desc">
-		<?php esc_html_e( 'Keyword-filtered review widgets (e.g. an Oil Change page) search this cached snapshot of every review instead of just the newest ones, so a narrow phrase living further back in the history still gets found. It refreshes automatically every hour.', 'shopperexpress' ); ?>
+		<?php esc_html_e( 'Keyword-filtered review widgets (e.g. an Oil Change page) search this cached snapshot of every review instead of just the newest ones, so a narrow phrase living further back in the history still gets found. It refreshes automatically every hour, and "Sync Now" below fetches it immediately, one page at a time, right in this browser tab.', 'shopperexpress' ); ?>
 	</p>
 
 	<p>
 		<?php if ( $sync_running ) : ?>
 			<span class="soc-badge soc-badge--warn"><?php esc_html_e( 'Syncing…', 'shopperexpress' ); ?></span>
-			<span class="description" style="margin-left:8px;"><?php esc_html_e( 'Running in the background — feel free to leave this page, it will keep going.', 'shopperexpress' ); ?></span>
+			<span class="description" style="margin-left:8px;"><?php esc_html_e( 'Keep this tab open until it finishes — it fetches one review page per request. Click "Stop" to cancel.', 'shopperexpress' ); ?></span>
 		<?php elseif ( null === $cache_count ) : ?>
 			<span class="soc-badge soc-badge--warn"><?php esc_html_e( 'Not built yet', 'shopperexpress' ); ?></span>
 			<span class="description" style="margin-left:8px;"><?php esc_html_e( 'Click "Sync Now" below or wait for the next hourly run.', 'shopperexpress' ); ?></span>
@@ -184,9 +184,19 @@ $min_rating    = (int) ( $data['min_rating'] ?? 5 );
 	</p>
 
 	<div class="soc-action-bar" style="margin-top:12px;">
-		<button type="button" id="soc-gr-sync-now" class="button" <?php disabled( $sync_running ); ?>>
-			<?php echo $sync_running ? esc_html__( 'Syncing…', 'shopperexpress' ) : esc_html__( 'Sync Now', 'shopperexpress' ); ?>
+		<button
+			type="button"
+			id="soc-gr-sync-now"
+			class="button"
+			style="<?php echo $sync_running ? 'display:none;' : ''; ?>"
+			data-prev-count="<?php echo (int) $cache_count; ?>"
+		>
+			<?php esc_html_e( 'Sync Now', 'shopperexpress' ); ?>
 		</button>
+		<button type="button" id="soc-gr-sync-stop" class="button" style="<?php echo $sync_running ? '' : 'display:none;'; ?>">
+			<?php esc_html_e( 'Stop', 'shopperexpress' ); ?>
+		</button>
+		<span id="soc-gr-sync-progress" style="margin-left:12px;font-size:13px;"></span>
 	</div>
 </div>
 <?php endif; ?>

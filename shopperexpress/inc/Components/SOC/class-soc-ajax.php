@@ -83,6 +83,8 @@ class SOC_Ajax {
 		'soc_google_reviews_save_account'    => 'handle_google_reviews_save_account',
 		'soc_google_reviews_test'            => 'handle_google_reviews_test',
 		'soc_google_reviews_sync_now'        => 'handle_google_reviews_sync_now',
+		'soc_google_reviews_sync_step'       => 'handle_google_reviews_sync_step',
+		'soc_google_reviews_sync_stop'       => 'handle_google_reviews_sync_stop',
 		'soc_google_reviews_save_min_rating' => 'handle_google_reviews_save_min_rating',
 	);
 
@@ -1380,9 +1382,11 @@ class SOC_Ajax {
 	}
 
 	/**
-	 * Kick off the full-history review sync (keyword filtering support) in the
-	 * background instead of waiting for the next hourly cron run. Rejects the
-	 * request if a sync is already running.
+	 * Start the chunked full-history review sync (keyword filtering support)
+	 * and run its first page. The caller's JS keeps calling
+	 * handle_google_reviews_sync_step() with the returned next_page_token
+	 * until the response comes back with done=true. Rejects the request if a
+	 * sync is already running.
 	 */
 	private function handle_google_reviews_sync_now(): void {
 		$module = $this->modules['google-reviews'] ?? null;
@@ -1397,9 +1401,55 @@ class SOC_Ajax {
 			SOC_Response::error( $result->get_error_message() );
 		}
 
-		SOC_Logger::write( 'general', 'Google Reviews full sync started in background.' );
+		if ( ! empty( $result['done'] ) ) {
+			SOC_Logger::write( 'general', 'Google Reviews full sync completed (' . $result['total'] . ' reviews).' );
+		}
 
-		SOC_Response::success( array( 'message' => 'Sync started in the background.' ) );
+		SOC_Response::success( $result );
+	}
+
+	/**
+	 * Fetch the next page of the in-progress full-history review sync
+	 * (see handle_google_reviews_sync_now()).
+	 */
+	private function handle_google_reviews_sync_step(): void {
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$page_token = sanitize_text_field( (string) ( $_POST['page_token'] ?? '' ) );
+
+		$result = $module->sync_step( $page_token );
+
+		if ( is_wp_error( $result ) ) {
+			SOC_Response::error( $result->get_error_message() );
+		}
+
+		if ( ! empty( $result['done'] ) ) {
+			SOC_Logger::write( 'general', 'Google Reviews full sync completed (' . $result['total'] . ' reviews).' );
+		}
+
+		SOC_Response::success( $result );
+	}
+
+	/**
+	 * Cancel an in-progress full-history review sync
+	 * (see handle_google_reviews_sync_now()).
+	 */
+	private function handle_google_reviews_sync_stop(): void {
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$result = $module->stop_sync();
+
+		SOC_Logger::write( 'general', 'Google Reviews full sync stopped by user.' );
+
+		SOC_Response::success( $result );
 	}
 
 	/**

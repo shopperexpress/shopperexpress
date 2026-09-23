@@ -3571,8 +3571,16 @@ var __webpack_exports__ = {};
   // Google Reviews module
   // ----------------------------------------------------------------
   SOC.bindGoogleReviews = function () {
+    // Namespaced so re-running this on every SOC.init() (e.g. after
+    // reloadPanel()) replaces the previous bindings instead of stacking a
+    // new set on top of them — without this, every click fires once per
+    // past panel reload (e.g. two "Sync Now" clicks → two overlapping
+    // syncs, the second always rejected by the server-side lock).
+    const ns = '.socGoogleReviews';
+    $(document).off(ns);
+
     // OAuth client
-    $(document).on('click', '#soc-gr-save', function () {
+    $(document).on('click' + ns, '#soc-gr-save', function () {
       const $btn = $(this);
       const client_id = $('#soc-gr-client-id').val().trim();
       const client_secret = $('#soc-gr-client-secret').val().trim();
@@ -3591,7 +3599,7 @@ var __webpack_exports__ = {};
     });
 
     // Disconnect
-    $(document).on('click', '#soc-gr-disconnect', function () {
+    $(document).on('click' + ns, '#soc-gr-disconnect', function () {
       if (!confirm('Disconnect from Google Business Profile?')) return;
       const $btn = $(this);
       $btn.prop('disabled', true);
@@ -3606,7 +3614,7 @@ var __webpack_exports__ = {};
     });
 
     // Discovery: accounts
-    $(document).on('click', '#soc-gr-load-accounts', function () {
+    $(document).on('click' + ns, '#soc-gr-load-accounts', function () {
       const $btn = $(this);
       const $select = $('#soc-gr-account-select');
       $btn.prop('disabled', true);
@@ -3628,7 +3636,7 @@ var __webpack_exports__ = {};
     });
 
     // Discovery: locations
-    $(document).on('click', '#soc-gr-load-locations', function () {
+    $(document).on('click' + ns, '#soc-gr-load-locations', function () {
       const $btn = $(this);
       const $select = $('#soc-gr-location-select');
       const accountId = $('#soc-gr-account-select').val();
@@ -3657,7 +3665,7 @@ var __webpack_exports__ = {};
     });
 
     // Save chosen account/location
-    $(document).on('click', '#soc-gr-save-account', function () {
+    $(document).on('click' + ns, '#soc-gr-save-account', function () {
       const $btn = $(this);
       const accountId = $('#soc-gr-account-select').val() || '';
       const locationId = $('#soc-gr-location-select').val() || '';
@@ -3676,12 +3684,12 @@ var __webpack_exports__ = {};
     });
 
     // Places API key (fallback)
-    $(document).on('click', '#soc-gr-places-key-edit', function () {
+    $(document).on('click' + ns, '#soc-gr-places-key-edit', function () {
       $(this).hide();
       $(this).closest('td').find('.soc-masked-key').hide();
       $('#soc-gr-places-api-key').show().trigger('focus');
     });
-    $(document).on('click', '#soc-gr-save-places-key', function () {
+    $(document).on('click' + ns, '#soc-gr-save-places-key', function () {
       const $btn = $(this);
       const api_key = $('#soc-gr-places-api-key').val().trim();
       $btn.prop('disabled', true);
@@ -3698,7 +3706,7 @@ var __webpack_exports__ = {};
     });
 
     // Test
-    $(document).on('click', '#soc-gr-test', function () {
+    $(document).on('click' + ns, '#soc-gr-test', function () {
       const $btn = $(this);
       const $result = $('#soc-gr-test-result');
       const place_id = $('#soc-gr-test-place-id').val().trim();
@@ -3718,14 +3726,97 @@ var __webpack_exports__ = {};
       });
     });
 
-    // Full review history sync (keyword filtering) — runs in the background
-    // via WP Cron, so the request just schedules it and returns immediately.
-    $(document).on('click', '#soc-gr-sync-now', function () {
+    // Full review history sync (keyword filtering) — chunked, one Business
+    // Profile page per AJAX round-trip, driven from here instead of WP
+    // Cron. WP Cron's background event depends on a loopback request that
+    // some hosts block or never trigger (WAF, staging Basic Auth,
+    // DISABLE_WP_CRON with no real system cron) — this loop only needs
+    // normal admin-ajax requests to keep succeeding, same as any other
+    // SOC action.
+    $(document).on('click' + ns, '#soc-gr-sync-now', function () {
+      const $btn = $(this);
+      const $stopBtn = $('#soc-gr-sync-stop');
+      // The top-of-panel notice (#soc-action-notice) scrolls out of
+      // view once the page is long enough that the user has to scroll
+      // down to reach these buttons — updating it alone made the sync
+      // look stuck with no visible progress. Mirror it here, right next
+      // to the buttons the user is actually looking at.
+      const $progress = $('#soc-gr-sync-progress');
+
+      // Business Profile pages are a fixed 20 reviews each (see
+      // get_reviews_business_profile()) — the previous sync's cached
+      // count is the only signal we have for how many pages this run
+      // will likely need, so use it as a rough ETA estimate. Nothing to
+      // go on for a first-ever sync, so no ETA is shown until page 2+
+      // (elapsed time / pages so far gives a live average instead).
+      const REVIEWS_PER_PAGE = 20;
+      const prevCount = parseInt($btn.data('prev-count'), 10) || 0;
+      const estimatedPages = prevCount > 0 ? Math.max(1, Math.ceil(prevCount / REVIEWS_PER_PAGE)) : 0;
+      const startedAt = Date.now();
+      SOC._grSyncActive = true;
+      $btn.hide();
+      $stopBtn.prop('disabled', false).show();
+      $progress.text('Starting…');
+      SOC.showLoading();
+      const formatSeconds = function (seconds) {
+        seconds = Math.max(0, Math.round(seconds));
+        if (seconds < 60) return seconds + 's';
+        return Math.floor(seconds / 60) + 'm ' + seconds % 60 + 's';
+      };
+      const progressMessage = function (result) {
+        const elapsedMs = Date.now() - startedAt;
+        const avgMsPerPage = elapsedMs / result.pages_done;
+        let suffix = '';
+        if (estimatedPages > result.pages_done) {
+          const remainingSec = avgMsPerPage * (estimatedPages - result.pages_done) / 1000;
+          suffix = ' — est. ' + formatSeconds(remainingSec) + ' remaining';
+        } else if (!estimatedPages) {
+          suffix = ' — ' + formatSeconds(elapsedMs / 1000) + ' elapsed';
+        }
+        return 'Syncing… page ' + result.pages_done + ' (' + result.reviews_so_far + ' reviews so far)' + suffix;
+      };
+      const onStep = function (result) {
+        if (!SOC._grSyncActive) {
+          return; // stopped by the user — ignore any in-flight response
+        }
+        if (result && result.done) {
+          SOC._grSyncActive = false;
+          $progress.text('');
+          SOC.showSuccess('Sync complete — ' + result.total + ' review(s) cached.');
+          SOC.reloadPanel('google-reviews');
+          return;
+        }
+        const message = progressMessage(result);
+        $progress.text(message);
+        SOC.showNotice('loading', message);
+        SOC.ajax('soc_google_reviews_sync_step', {
+          page_token: result.next_page_token
+        }, onStep, function (msg) {
+          SOC._grSyncActive = false;
+          $progress.text('');
+          SOC.showError(msg);
+          SOC.reloadPanel('google-reviews');
+        });
+      };
+      SOC.ajax('soc_google_reviews_sync_now', {}, onStep, function (msg) {
+        SOC._grSyncActive = false;
+        $progress.text('');
+        SOC.showError(msg);
+        $btn.show();
+        $stopBtn.hide();
+      });
+    });
+
+    // Stop button — cancels the client-side loop immediately and tells the
+    // server to drop the lock/in-progress pages so "Sync Now" is clickable
+    // again right away, whether the sync is running in this tab or another.
+    $(document).on('click' + ns, '#soc-gr-sync-stop', function () {
       const $btn = $(this);
       $btn.prop('disabled', true);
-      SOC.showLoading();
-      SOC.ajax('soc_google_reviews_sync_now', {}, function () {
-        SOC.showSuccess('Sync started in the background — feel free to leave this page.');
+      SOC._grSyncActive = false;
+      $('#soc-gr-sync-progress').text('Stopping…');
+      SOC.ajax('soc_google_reviews_sync_stop', {}, function () {
+        SOC.showSuccess('Sync stopped.');
         SOC.reloadPanel('google-reviews');
       }, function (msg) {
         SOC.showError(msg);
@@ -3734,7 +3825,7 @@ var __webpack_exports__ = {};
     });
 
     // Minimum star rating
-    $(document).on('click', '#soc-gr-save-min-rating', function () {
+    $(document).on('click' + ns, '#soc-gr-save-min-rating', function () {
       const $btn = $(this);
       const minRating = $('#soc-gr-min-rating').val();
       $btn.prop('disabled', true);

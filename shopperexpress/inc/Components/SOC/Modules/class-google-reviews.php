@@ -118,23 +118,58 @@ class Google_Reviews implements SOC_Module {
 	}
 
 	/**
-	 * Kick off the full-history review sync (keyword filtering support) in the
-	 * background instead of waiting for the next hourly cron run. Returns as
-	 * soon as the sync is scheduled — the caller doesn't need to wait for it
-	 * to finish, and a second call while one is already running is rejected.
+	 * Kick off the chunked, browser-driven full-history review sync (keyword
+	 * filtering support) and run its first page — the caller's JS keeps
+	 * calling sync_step() with the returned next_page_token until done=true.
+	 * A second call while one is already running is rejected.
 	 *
-	 * @return true|\WP_Error
+	 * @return array{done: bool, next_page_token?: string, pages_done?: int, reviews_so_far?: int, total?: int}|\WP_Error
 	 */
 	public function start_sync() {
-		$result = $this->client()->start_background_sync();
+		$result = $this->client()->start_manual_sync();
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 
+		// Forget the panel snapshot the moment a sync starts, not just once it
+		// finishes — collect() caches get_settings() (including
+		// sync_in_progress) for up to a minute, so without this a page reload
+		// during an in-progress sync can serve a snapshot taken *before* the
+		// click, showing "Sync Now" as available again. Clicking it then
+		// fails against the still-live server-side lock, and — since that
+		// same stale snapshot hides the "Stop" button too — leaves the user
+		// with no visible way to cancel the very sync that's blocking them.
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
-		return true;
+		return $result;
+	}
+
+	/**
+	 * @param string $page_token Pagination token from the previous step's response.
+	 * @return array{done: bool, next_page_token?: string, pages_done?: int, reviews_so_far?: int, total?: int}|\WP_Error
+	 */
+	public function sync_step( string $page_token ) {
+		$result = $this->client()->sync_step( $page_token );
+
+		if ( ! is_wp_error( $result ) && ! empty( $result['done'] ) ) {
+			SOC_Cache::forget( $this->get_slug(), 'data' );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Cancel an in-progress full-history review sync.
+	 *
+	 * @return array{stopped: bool}
+	 */
+	public function stop_sync(): array {
+		$result = $this->client()->stop_manual_sync();
+
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+
+		return $result;
 	}
 
 	/**
