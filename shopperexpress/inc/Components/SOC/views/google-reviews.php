@@ -19,6 +19,10 @@ $oauth_url     = $data['oauth_start_url'] ?? '';
 $redirect_uri  = $data['redirect_uri'] ?? '';
 $places_set    = ! empty( $data['places_key_set'] );
 $places_masked = $data['places_key_masked'] ?? '';
+$cache_count   = $data['full_cache_count'] ?? null;
+$cache_synced  = (int) ( $data['full_cache_synced'] ?? 0 );
+$sync_running  = ! empty( $data['sync_in_progress'] );
+$min_rating    = (int) ( $data['min_rating'] ?? 5 );
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -140,6 +144,86 @@ $places_masked = $data['places_key_masked'] ?? '';
 	<?php else : ?>
 		<p class="description"><?php esc_html_e( 'Save the Client ID and Client Secret above first.', 'shopperexpress' ); ?></p>
 	<?php endif; ?>
+</div>
+
+<?php if ( $is_connected ) : ?>
+<div class="soc-section">
+	<div class="soc-section__title"><?php esc_html_e( 'Full Review History Cache (keyword filtering)', 'shopperexpress' ); ?></div>
+
+	<p class="soc-api-mode-card__desc">
+		<?php esc_html_e( 'Keyword-filtered review widgets (e.g. an Oil Change page) search this cached snapshot of every review instead of just the newest ones, so a narrow phrase living further back in the history still gets found. It refreshes automatically every hour.', 'shopperexpress' ); ?>
+	</p>
+
+	<p>
+		<?php if ( $sync_running ) : ?>
+			<span class="soc-badge soc-badge--warn"><?php esc_html_e( 'Syncing…', 'shopperexpress' ); ?></span>
+			<span class="description" style="margin-left:8px;"><?php esc_html_e( 'Running in the background — feel free to leave this page, it will keep going.', 'shopperexpress' ); ?></span>
+		<?php elseif ( null === $cache_count ) : ?>
+			<span class="soc-badge soc-badge--warn"><?php esc_html_e( 'Not built yet', 'shopperexpress' ); ?></span>
+			<span class="description" style="margin-left:8px;"><?php esc_html_e( 'Click "Sync Now" below or wait for the next hourly run.', 'shopperexpress' ); ?></span>
+		<?php else : ?>
+			<span class="soc-badge soc-badge--ok">
+				<?php
+				printf(
+					/* translators: %d: number of cached reviews. */
+					esc_html__( '%d reviews cached', 'shopperexpress' ),
+					(int) $cache_count
+				);
+				?>
+			</span>
+			<span class="description" style="margin-left:8px;">
+				<?php
+				printf(
+					/* translators: %s: human-readable time since last sync. */
+					esc_html__( 'Last synced %s ago', 'shopperexpress' ),
+					esc_html( human_time_diff( $cache_synced ) )
+				);
+				?>
+			</span>
+		<?php endif; ?>
+	</p>
+
+	<div class="soc-action-bar" style="margin-top:12px;">
+		<button type="button" id="soc-gr-sync-now" class="button" <?php disabled( $sync_running ); ?>>
+			<?php echo $sync_running ? esc_html__( 'Syncing…', 'shopperexpress' ) : esc_html__( 'Sync Now', 'shopperexpress' ); ?>
+		</button>
+	</div>
+</div>
+<?php endif; ?>
+
+<div class="soc-section">
+	<div class="soc-section__title"><?php esc_html_e( 'Minimum Star Rating', 'shopperexpress' ); ?></div>
+
+	<p class="soc-api-mode-card__desc">
+		<?php esc_html_e( 'Only reviews with at least this many stars are shown in the widgets and included in the Review JSON-LD schema.', 'shopperexpress' ); ?>
+	</p>
+
+	<table class="soc-table" style="max-width:640px;">
+		<tr>
+			<td style="width:180px;"><strong><?php esc_html_e( 'Minimum Rating', 'shopperexpress' ); ?></strong></td>
+			<td>
+				<select id="soc-gr-min-rating" class="regular-text" style="max-width:120px;">
+					<?php for ( $i = 5; $i >= 1; $i-- ) : ?>
+						<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $min_rating, $i ); ?>>
+							<?php
+							printf(
+								/* translators: %d: star count. */
+								esc_html( _n( '%d star', '%d stars', $i, 'shopperexpress' ) ),
+								$i
+							);
+							?>
+						</option>
+					<?php endfor; ?>
+				</select>
+			</td>
+		</tr>
+	</table>
+
+	<div class="soc-action-bar" style="margin-top:12px;">
+		<button type="button" id="soc-gr-save-min-rating" class="button button-primary">
+			<?php esc_html_e( 'Save', 'shopperexpress' ); ?>
+		</button>
+	</div>
 </div>
 
 <div class="soc-section">

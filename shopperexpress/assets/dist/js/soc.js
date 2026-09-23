@@ -3717,6 +3717,38 @@ var __webpack_exports__ = {};
         $btn.prop('disabled', false);
       });
     });
+
+    // Full review history sync (keyword filtering) — runs in the background
+    // via WP Cron, so the request just schedules it and returns immediately.
+    $(document).on('click', '#soc-gr-sync-now', function () {
+      const $btn = $(this);
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax('soc_google_reviews_sync_now', {}, function () {
+        SOC.showSuccess('Sync started in the background — feel free to leave this page.');
+        SOC.reloadPanel('google-reviews');
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
+
+    // Minimum star rating
+    $(document).on('click', '#soc-gr-save-min-rating', function () {
+      const $btn = $(this);
+      const minRating = $('#soc-gr-min-rating').val();
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax('soc_google_reviews_save_min_rating', {
+        min_rating: minRating
+      }, function () {
+        SOC.showSuccess('Settings saved.');
+        SOC.reloadPanel('google-reviews');
+      }, function (msg) {
+        SOC.showError(msg);
+        $btn.prop('disabled', false);
+      });
+    });
   };
 
   // ----------------------------------------------------------------

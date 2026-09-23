@@ -68,6 +68,21 @@ class Google_Business_Reviews implements Theme_Component {
 	const FULL_CACHE_UPDATED_OPTION = 'google_reviews_full_cache_updated';
 	const FULL_SYNC_MAX_PAGES       = 100;
 
+	// Guards the "Sync Now" button (see start_background_sync()) against being
+	// fired twice while a sync is already running in the background — the sync
+	// itself can take a couple of minutes (up to 100 sequential Google API
+	// calls), and it runs via a scheduled WP Cron event so the admin is free to
+	// navigate away instead of waiting on the request. The TTL is a safety net
+	// that self-clears the lock if a sync ever dies without reaching the
+	// Google_Reviews_Cron::run() cleanup (e.g. a fatal error or a killed request).
+	const SYNC_LOCK_TRANSIENT = 'google_reviews_sync_lock';
+	const SYNC_LOCK_TTL       = 15 * MINUTE_IN_SECONDS;
+
+	// Minimum star rating a review must have to be surfaced by filter_reviews()
+	// — configurable from the SOC panel instead of the hardcoded "5 stars only"
+	// this started as. Clamped to 1-5.
+	const OPTION_MIN_RATING = 'google_reviews_min_rating';
+
 	/**
 	 * @return void
 	 */
@@ -97,7 +112,27 @@ class Google_Business_Reviews implements Theme_Component {
 			'redirect_uri'      => rest_url( 'v1/google-reviews/oauth/callback' ),
 			'places_key_set'    => '' !== $places_key,
 			'places_key_masked' => $this->mask_key( $places_key ),
+			'full_cache_count'  => is_array( get_option( self::FULL_CACHE_OPTION, null ) ) ? count( get_option( self::FULL_CACHE_OPTION, array() ) ) : null,
+			'full_cache_synced' => (int) get_option( self::FULL_CACHE_UPDATED_OPTION, 0 ),
+			'sync_in_progress'  => $this->is_sync_running(),
+			'min_rating'        => $this->get_min_rating(),
 		);
+	}
+
+	/**
+	 * @return int Minimum star rating (1-5) a review must have to be shown/schema'd.
+	 */
+	public function get_min_rating(): int {
+		return max( 1, min( 5, (int) get_option( self::OPTION_MIN_RATING, 5 ) ) );
+	}
+
+	/**
+	 * @param int $rating Minimum star rating (1-5) a review must have to be shown/schema'd.
+	 * @return void
+	 */
+	public function save_min_rating( int $rating ): void {
+		update_option( self::OPTION_MIN_RATING, max( 1, min( 5, $rating ) ) );
+		$this->flush_live_cache();
 	}
 
 	/**
@@ -132,12 +167,17 @@ class Google_Business_Reviews implements Theme_Component {
 
 		$this->flush_reviews_cache();
 
-		// Populate the full-history keyword-search cache right away instead of
-		// leaving keyword-filtered widgets empty until the next hourly cron run.
 		if ( ! wp_next_scheduled( Google_Reviews_Cron::HOOK ) ) {
 			wp_schedule_event( time(), 'hourly', Google_Reviews_Cron::HOOK );
 		}
-		wp_schedule_single_event( time() + 5, Google_Reviews_Cron::HOOK );
+
+		// Populate the full-history keyword-search cache right away instead of
+		// leaving keyword-filtered widgets empty until the next hourly cron run.
+		// flush_reviews_cache() just cleared any stale lock's cache, but not the
+		// lock transient itself — a manual sync could theoretically be running
+		// at this exact moment, so still go through the guarded entry point
+		// rather than scheduling a duplicate run directly.
+		$this->start_background_sync();
 	}
 
 	/**
@@ -212,13 +252,16 @@ class Google_Business_Reviews implements Theme_Component {
 	}
 
 	/**
-	 * Forget every cached reviews response so a source switch (Places <-> Business
-	 * Profile) or account/location change takes effect immediately instead of
-	 * waiting out the old cache's TTL (up to 24h).
+	 * Forget every live per-request reviews cache entry (REST proxy responses)
+	 * so a setting change (source switch, min rating, etc.) takes effect
+	 * immediately instead of waiting out the old cache's TTL (up to 24h).
+	 * Does NOT touch the full-history sync cache (see flush_reviews_cache()) —
+	 * that snapshot is expensive to rebuild (up to 100 Google API calls) and
+	 * stays valid across settings that only change how it's filtered.
 	 *
 	 * @return void
 	 */
-	private function flush_reviews_cache(): void {
+	private function flush_live_cache(): void {
 		global $wpdb;
 		$wpdb->query(
 			$wpdb->prepare(
@@ -228,14 +271,24 @@ class Google_Business_Reviews implements Theme_Component {
 			)
 		);
 
-		delete_option( self::FULL_CACHE_OPTION );
-		delete_option( self::FULL_CACHE_UPDATED_OPTION );
-
 		// The direct DELETE above only clears the DB row — on sites running a
 		// persistent object cache (Redis/Memcached), get_transient() would keep
 		// serving the stale value from cache until it naturally evicts. Flush
-		// so the source switch takes effect immediately.
+		// so the change takes effect immediately.
 		wp_cache_flush();
+	}
+
+	/**
+	 * Forget the live cache AND the full-history sync cache — used when the
+	 * data source itself changes (account/location, disconnect) since the
+	 * previous location's cached reviews are no longer relevant.
+	 *
+	 * @return void
+	 */
+	private function flush_reviews_cache(): void {
+		$this->flush_live_cache();
+		delete_option( self::FULL_CACHE_OPTION );
+		delete_option( self::FULL_CACHE_UPDATED_OPTION );
 	}
 
 	/**
@@ -708,8 +761,37 @@ class Google_Business_Reviews implements Theme_Component {
 	}
 
 	/**
-	 * Keep only reviews that are 5 stars, have non-empty text, and (when a
-	 * keyword filter is set) mention at least one of the given keywords.
+	 * @return bool Whether a background full-history sync is currently running.
+	 */
+	public function is_sync_running(): bool {
+		return false !== get_transient( self::SYNC_LOCK_TRANSIENT );
+	}
+
+	/**
+	 * Kick off sync_all_reviews() in the background via a scheduled WP Cron
+	 * event, instead of running it synchronously in the request that triggered
+	 * it — a full sync can take up to ~100 sequential Google API calls, far
+	 * too long to hold an admin-ajax request (or the admin's browser tab) open
+	 * for. Locked so a second click while one is already running is rejected
+	 * rather than starting a redundant, overlapping sync.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public function start_background_sync() {
+		if ( $this->is_sync_running() ) {
+			return new \WP_Error( 'sync_in_progress', __( 'A review sync is already running in the background — check back in a few minutes.', 'shopperexpress' ) );
+		}
+
+		set_transient( self::SYNC_LOCK_TRANSIENT, time(), self::SYNC_LOCK_TTL );
+		wp_schedule_single_event( time(), Google_Reviews_Cron::HOOK );
+
+		return true;
+	}
+
+	/**
+	 * Keep only reviews that meet the configured minimum star rating (see
+	 * get_min_rating()), have non-empty text, and (when a keyword filter is
+	 * set) mention at least one of the given keywords.
 	 *
 	 * @param array  $reviews Normalized review rows (see normalize_places_review()
 	 *                         / get_reviews_business_profile()).
@@ -717,18 +799,19 @@ class Google_Business_Reviews implements Theme_Component {
 	 * @return array
 	 */
 	private function filter_reviews( array $reviews, string $keyword = '' ): array {
-		$keywords = array_values(
+		$min_rating = $this->get_min_rating();
+		$keywords   = array_values(
 			array_filter( array_map( 'trim', explode( ',', $keyword ) ) )
 		);
 
 		return array_values(
 			array_filter(
 				$reviews,
-				static function ( $review ) use ( $keywords ) {
+				static function ( $review ) use ( $keywords, $min_rating ) {
 					$rating = (int) ( $review['rating'] ?? 0 );
 					$text   = trim( wp_strip_all_tags( (string) ( $review['text'] ?? '' ) ) );
 
-					if ( 5 !== $rating || '' === $text ) {
+					if ( $rating < $min_rating || '' === $text ) {
 						return false;
 					}
 

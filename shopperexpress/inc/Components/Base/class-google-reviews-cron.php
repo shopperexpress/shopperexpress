@@ -50,6 +50,8 @@ class Google_Reviews_Cron implements Theme_Component {
 	 * @return void
 	 */
 	public function run(): void {
-		( new Google_Business_Reviews() )->sync_all_reviews();
+		$client = new Google_Business_Reviews();
+		$client->sync_all_reviews();
+		delete_transient( Google_Business_Reviews::SYNC_LOCK_TRANSIENT );
 	}
 }

@@ -118,6 +118,35 @@ class Google_Reviews implements SOC_Module {
 	}
 
 	/**
+	 * Kick off the full-history review sync (keyword filtering support) in the
+	 * background instead of waiting for the next hourly cron run. Returns as
+	 * soon as the sync is scheduled — the caller doesn't need to wait for it
+	 * to finish, and a second call while one is already running is rejected.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public function start_sync() {
+		$result = $this->client()->start_background_sync();
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+
+		return true;
+	}
+
+	/**
+	 * @param int $rating Minimum star rating (1-5) a review must have to be shown/schema'd.
+	 * @return void
+	 */
+	public function save_min_rating( int $rating ): void {
+		$this->client()->save_min_rating( $rating );
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+	}
+
+	/**
 	 * @return array<int, array{id: string, name: string}>|\WP_Error
 	 */
 	public function list_accounts() {

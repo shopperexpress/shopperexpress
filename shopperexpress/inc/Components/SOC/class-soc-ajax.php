@@ -82,6 +82,8 @@ class SOC_Ajax {
 		'soc_google_reviews_list_locations'  => 'handle_google_reviews_list_locations',
 		'soc_google_reviews_save_account'    => 'handle_google_reviews_save_account',
 		'soc_google_reviews_test'            => 'handle_google_reviews_test',
+		'soc_google_reviews_sync_now'        => 'handle_google_reviews_sync_now',
+		'soc_google_reviews_save_min_rating' => 'handle_google_reviews_save_min_rating',
 	);
 
 	/**
@@ -1375,5 +1377,47 @@ class SOC_Ajax {
 		} else {
 			SOC_Response::error( $result['error'] ?? 'Connection failed.' );
 		}
+	}
+
+	/**
+	 * Kick off the full-history review sync (keyword filtering support) in the
+	 * background instead of waiting for the next hourly cron run. Rejects the
+	 * request if a sync is already running.
+	 */
+	private function handle_google_reviews_sync_now(): void {
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$result = $module->start_sync();
+
+		if ( is_wp_error( $result ) ) {
+			SOC_Response::error( $result->get_error_message() );
+		}
+
+		SOC_Logger::write( 'general', 'Google Reviews full sync started in background.' );
+
+		SOC_Response::success( array( 'message' => 'Sync started in the background.' ) );
+	}
+
+	/**
+	 * Save the minimum star rating a review must have to be shown/schema'd.
+	 */
+	private function handle_google_reviews_save_min_rating(): void {
+		$rating = (int) ( $_POST['min_rating'] ?? 5 );
+
+		$module = $this->modules['google-reviews'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Google Reviews module not available.' );
+		}
+
+		$module->save_min_rating( $rating );
+
+		SOC_Logger::write( 'general', 'Google Reviews minimum star rating set to ' . $rating . '.' );
+
+		SOC_Response::success( array( 'message' => 'Settings saved.' ) );
 	}
 }
