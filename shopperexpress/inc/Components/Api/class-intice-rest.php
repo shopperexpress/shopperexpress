@@ -343,8 +343,45 @@ class Intice_Rest implements Theme_Component {
 
 		return array(
 			'vehicles' => $vehicles,
-			'cards'    => array(),
+			'cards'    => $this->build_custom_cards( $post_type ),
 		);
+	}
+
+	/**
+	 * Build the "Custom Cards" list from the Options page repeater
+	 * (same source/markup as WP-mode Api::get_vehicles_data()) for
+	 * post types shown on this SRP.
+	 *
+	 * @param string $post_type
+	 * @return array
+	 */
+	private function build_custom_cards( string $post_type ): array {
+		$cards = array();
+
+		if ( ! have_rows( 'custom_cards', 'options' ) ) {
+			return $cards;
+		}
+
+		while ( have_rows( 'custom_cards', 'options' ) ) {
+			the_row();
+
+			$show_on = get_sub_field( 'show_on' );
+
+			if ( 'all' !== $show_on && $show_on !== $post_type ) {
+				continue;
+			}
+
+			ob_start();
+			get_template_part( 'template-parts/content-card' );
+			$html = ob_get_clean();
+
+			$cards[] = array(
+				'position' => get_sub_field( 'show_after' ),
+				'html'     => $html,
+			);
+		}
+
+		return $cards;
 	}
 
 	/**
