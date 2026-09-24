@@ -28,10 +28,6 @@
 				<div class="modal-body">
 					<div class="content-holder">
 						<div class="js-incentive-offer-modal-desc"></div>
-						<ul class="offers-detail-list list-unstyled">
-							<li class="js-incentive-offer-modal-dates"></li>
-							<li class="js-incentive-offer-modal-id"></li>
-						</ul>
 					</div>
 				</div>
 			</div>

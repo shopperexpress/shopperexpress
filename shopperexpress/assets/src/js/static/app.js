@@ -1342,16 +1342,25 @@ function initIncentiveOfferSrpModal() {
 		if (!$modal.length) return;
 
 		$modal.find('.js-incentive-offer-modal-title').text($btn.data('programName') || '');
-		$modal.find('.js-incentive-offer-modal-desc').html($btn.data('incentiveDesc') || '');
+
+		const $desc = $modal.find('.js-incentive-offer-modal-desc');
+		$desc.html($btn.data('incentiveDesc') || '');
 
 		const startsOn = $btn.data('startsOn') || '';
 		const endsOn = $btn.data('endsOn') || '';
-		$modal.find('.js-incentive-offer-modal-dates').text(
-			startsOn && endsOn ? `Valid from: ${startsOn} through ${endsOn}` : ''
-		);
+		const datesText = startsOn && endsOn ? `Valid from: ${startsOn} through ${endsOn}` : '';
 
 		const incentiveId = $btn.data('incentiveId') || '';
-		$modal.find('.js-incentive-offer-modal-id').text(incentiveId ? `Incentive Id: ${incentiveId}` : '');
+		const idText = incentiveId ? `Incentive Id: ${incentiveId}` : '';
+
+		if (datesText || idText) {
+			$desc.append(
+				jQuery('<ul>', { class: 'offers-detail-list list-unstyled' }).append(
+					jQuery('<li>', { class: 'js-incentive-offer-modal-dates', text: datesText }),
+					jQuery('<li>', { class: 'js-incentive-offer-modal-id', text: idText })
+				)
+			);
+		}
 
 		$modal.modal('show');
 	});
