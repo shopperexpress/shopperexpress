@@ -10,7 +10,7 @@ if ( empty( $_compare_post_type ) ) {
 	$_compare_post_type = is_post_type_archive() ? get_queried_object()->name : get_post_type( get_the_id() );
 }
 
-if ( ! in_array( $_compare_post_type, array( 'listings', 'used-listings', 'offers', 'lease-offers' ), true ) ) {
+if ( ! in_array( $_compare_post_type, array( 'listings', 'used-listings', 'offers', 'lease-offers', 'finance-offers', 'conditional-offers' ), true ) ) {
 	return;
 }
 ?>

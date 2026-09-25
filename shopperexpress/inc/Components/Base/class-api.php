@@ -649,14 +649,20 @@ class Api implements Theme_Component {
 					case 'lease-offers':
 						$vehicle_data['price']   = isset( $get_field['msrp'] ) ? $get_field['msrp'] : '';
 						$vehicle_data['payment'] = isset( $get_field['payment'] ) ? $get_field['payment'] : '';
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 
 					case 'finance-offers':
 						$vehicle_data['payment'] = isset( $get_field['apr'] ) ? $get_field['apr'] : '';
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 
 					case 'conditional-offers':
 						$vehicle_data['payment'] = isset( $get_field['conditional_cash'] ) ? (int) $get_field['conditional_cash'] : 0;
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 					case 'offers':
 						$gallery               = get_field( 'gallery', $post_id );
@@ -970,14 +976,20 @@ class Api implements Theme_Component {
 					case 'lease-offers':
 						$vehicle_data['price']   = get_field( 'msrp', $post_id );
 						$vehicle_data['payment'] = get_field( 'payment', $post_id );
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 
 					case 'finance-offers':
 						$vehicle_data['payment'] = get_field( 'apr', $post_id );
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 
 					case 'conditional-offers':
 						$vehicle_data['payment'] = (int) get_field( 'conditional_cash', $post_id );
+						$gallery                 = get_field( 'gallery', $post_id );
+						$vehicle_data['photo']   = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 					case 'offers':
 						$gallery               = get_field( 'gallery', $post_id );
