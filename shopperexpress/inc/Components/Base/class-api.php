@@ -658,6 +658,10 @@ class Api implements Theme_Component {
 					case 'conditional-offers':
 						$vehicle_data['payment'] = isset( $get_field['conditional_cash'] ) ? (int) $get_field['conditional_cash'] : 0;
 						break;
+					case 'offers':
+						$gallery               = get_field( 'gallery', $post_id );
+						$vehicle_data['photo'] = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
+						break;
 					case 'research':
 						$prices                = isset( $get_field['prices'] ) ? $get_field['prices'] : array();
 						$price                 = ( ! empty( $prices ) && ! empty( $prices[0]['price'] ) ) ? $prices[0]['price'] : 0;
@@ -974,6 +978,10 @@ class Api implements Theme_Component {
 
 					case 'conditional-offers':
 						$vehicle_data['payment'] = (int) get_field( 'conditional_cash', $post_id );
+						break;
+					case 'offers':
+						$gallery               = get_field( 'gallery', $post_id );
+						$vehicle_data['photo'] = ! empty( $gallery[0]['image_url'] ) ? $gallery[0]['image_url'] : '';
 						break;
 					case 'service-offers':
 						$vehicle_data['photo'] = ! empty( get_field( 'offerimage', $post_id ) ) ? get_field( 'offerimage', $post_id ) : '';

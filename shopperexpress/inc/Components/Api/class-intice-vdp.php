@@ -256,7 +256,7 @@ class Intice_VDP implements Theme_Component {
 		$make       = $vehicle['make'] ?? '';
 		$model      = $vehicle['model'] ?? '';
 		$body_style = $vehicle['body_style'] ?? '';
-		$trim       = $vehicle['trim'] ?? '';
+		$trim       = \App\resolve_vehicle_field( $vehicle, 'trim' );
 		$stock      = $vehicle['stock'] ?? '';
 
 		$parts = array_filter( array( $condition, $year, $make, $model, $body_style, $trim, strtolower( $vin ), $stock ) );

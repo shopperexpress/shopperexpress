@@ -100,6 +100,29 @@ function resolve_vehicle_gallery( array $vehicle ): array {
 }
 
 /**
+ * Resolve a scalar field from a raw Intice vehicle array, checking the
+ * top-level field first (and its underscore variant), then falling back
+ * to the dealer-mapped `payload` bag — some dealer feeds only map fields
+ * like trim/drivetrain into payload instead of Nexus's top-level fields.
+ *
+ * @param array  $vehicle Intice API vehicle object (list or single response).
+ * @param string $key     Field key to resolve.
+ * @return string
+ */
+function resolve_vehicle_field( array $vehicle, string $key ): string {
+	$payload        = $vehicle['payload'] ?? array();
+	$key_underscore = str_replace( '-', '_', $key );
+
+	$value = $vehicle[ $key ]
+		?? $vehicle[ $key_underscore ]
+		?? $payload[ $key ]
+		?? $payload[ $key_underscore ]
+		?? '';
+
+	return (string) $value;
+}
+
+/**
  * Resolve a status badge's display text (with optional emoji prefix) and inline
  * color style, based on the `badge_color_rules` repeater (ACF, Options: Listings).
  *

@@ -431,9 +431,9 @@ class Intice_Rest implements Theme_Component {
 				'year'       => $vehicle['year'] ?? '',
 				'make'       => $vehicle['make'] ?? '',
 				'model'      => $vehicle['model'] ?? '',
-				'trim'       => $vehicle['trim'] ?? '',
-				'drivetrain' => self::resolve_field( $vehicle, 'drivetrain' ),
-				'body_style' => self::resolve_field( $vehicle, 'body_style' ),
+				'trim'       => \App\resolve_vehicle_field( $vehicle, 'trim' ),
+				'drivetrain' => \App\resolve_vehicle_field( $vehicle, 'drivetrain' ),
+				'body_style' => \App\resolve_vehicle_field( $vehicle, 'body_style' ),
 				'price'      => (float) ( $this->get_sort_field_value( $vehicle, 'price' ) ?? 0 ),
 				'photo'      => \App\resolve_vehicle_gallery( $vehicle )[0]['url'] ?? ( $vehicle['thumb'] ?? ( $vehicle['image'] ?? '' ) ),
 				'link'       => $vin ? Intice_VDP::vdp_url( $vin, $post_type, $vehicle ) : '',
@@ -441,28 +441,6 @@ class Intice_Rest implements Theme_Component {
 		}
 
 		return array( 'vehicles' => $vehicles );
-	}
-
-	/**
-	 * Resolve a scalar field from a raw Intice vehicle array, checking the
-	 * top-level field first (and its underscore variant), then falling back
-	 * to the dealer-mapped `payload` bag — same pattern as build_terms().
-	 *
-	 * @param array  $vehicle Raw Intice vehicle array.
-	 * @param string $key     Field key to resolve.
-	 * @return string
-	 */
-	private static function resolve_field( array $vehicle, string $key ): string {
-		$payload        = $vehicle['payload'] ?? array();
-		$key_underscore = str_replace( '-', '_', $key );
-
-		$value = $vehicle[ $key ]
-			?? $vehicle[ $key_underscore ]
-			?? $payload[ $key ]
-			?? $payload[ $key_underscore ]
-			?? '';
-
-		return (string) $value;
 	}
 
 	/**
@@ -663,7 +641,25 @@ class Intice_Rest implements Theme_Component {
 		// value is a string rather than a real boolean.
 		$certified = $vehicle['certified'] ?? ( $payload['certified'] ?? null );
 		if ( $certified !== null ) {
-			$terms['certified'] = array( $payload['certified'] );
+			$terms['certified'] = array( (string) $certified );
+		}
+
+		// Safety net: strip any null/empty entries that slipped through above so the
+		// JS filter engine (which calls .toLowerCase() on every term value) never
+		// chokes on a null.
+		foreach ( $terms as $key => $values ) {
+			$terms[ $key ] = array_values(
+				array_filter(
+					$values,
+					static function ( $value ) {
+						return $value !== null && $value !== '';
+					}
+				)
+			);
+
+			if ( empty( $terms[ $key ] ) ) {
+				unset( $terms[ $key ] );
+			}
 		}
 
 		return $terms;
