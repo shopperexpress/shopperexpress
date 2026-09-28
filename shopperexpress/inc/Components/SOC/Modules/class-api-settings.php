@@ -498,11 +498,13 @@ class Api_Settings implements SOC_Module {
 	}
 
 	/**
-	 * Flush all Intice API transients and log the action.
+	 * Flush all Intice API transients, any downstream page-cache/object-cache/
+	 * OPcache layer, and log the action.
 	 *
-	 * @return int Number of deleted rows.
+	 * @return array{flushed: int, touched: string[]} Deleted transient rows,
+	 *               and labels of any downstream cache system also flushed.
 	 */
-	public function flush_api_cache(): int {
+	public function flush_api_cache(): array {
 		$client  = Intice_Api_Client::instance();
 		$flushed = $client->flush_cache();
 
@@ -512,7 +514,86 @@ class Api_Settings implements SOC_Module {
 		SOC_Logger::write( 'cache', 'Intice API cache flushed by: ' . $by );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
-		return $flushed;
+		$touched = self::flush_downstream_caches();
+		if ( ! empty( $touched ) ) {
+			SOC_Logger::write( 'cache', 'Downstream caches also flushed: ' . implode( ', ', $touched ) );
+		}
+
+		return array(
+			'flushed' => $flushed,
+			'touched' => $touched,
+		);
+	}
+
+	/**
+	 * Best-effort flush of page-cache plugins, the persistent object cache,
+	 * and OPcache, so "Flush All Intice Cache" clears every layer a stale
+	 * vehicle page could be served from — not just our own transients.
+	 *
+	 * Every call is guarded (class/function/constant exists) so this is a
+	 * no-op for anything not actually installed/active on this environment —
+	 * safe to run on a dev box with none of these present.
+	 *
+	 * @return string[] Labels of the systems actually flushed.
+	 */
+	private static function flush_downstream_caches(): array {
+		$touched = array();
+
+		// WP Rocket.
+		if ( function_exists( 'rocket_clean_domain' ) ) {
+			rocket_clean_domain();
+			$touched[] = 'WP Rocket';
+		}
+
+		// LiteSpeed Cache.
+		if ( class_exists( '\LiteSpeed\Purge' ) || has_action( 'litespeed_purge_all' ) ) {
+			do_action( 'litespeed_purge_all' );
+			$touched[] = 'LiteSpeed Cache';
+		}
+
+		// W3 Total Cache.
+		if ( function_exists( 'w3tc_flush_all' ) ) {
+			w3tc_flush_all();
+			$touched[] = 'W3 Total Cache';
+		}
+
+		// WP Super Cache.
+		if ( function_exists( 'wp_cache_clear_cache' ) ) {
+			wp_cache_clear_cache();
+			$touched[] = 'WP Super Cache';
+		}
+
+		// Cache Enabler.
+		if ( class_exists( '\Cache_Enabler' ) && method_exists( '\Cache_Enabler', 'clear_total_cache' ) ) {
+			\Cache_Enabler::clear_total_cache();
+			$touched[] = 'Cache Enabler';
+		}
+
+		// SiteGround Optimizer.
+		if ( function_exists( 'sg_cachepress_purge_cache' ) ) {
+			sg_cachepress_purge_cache();
+			$touched[] = 'SiteGround Optimizer';
+		}
+
+		// Generic hook other cache plugins listen on (WP core's own signal).
+		do_action( 'wp_cache_flush' );
+
+		// Persistent object cache (Redis/Memcached via an object-cache.php drop-in).
+		// Global — clears the whole object cache, not just Intice keys, since
+		// most object-cache backends have no per-plugin flush.
+		if ( wp_using_ext_object_cache() ) {
+			wp_cache_flush();
+			$touched[] = 'Object cache (' . ( class_exists( '\Redis' ) ? 'Redis/Memcached' : 'external' ) . ')';
+		}
+
+		// OPcache — clears compiled PHP bytecode, so a just-deployed code
+		// change (not just data) is picked up immediately.
+		if ( function_exists( 'opcache_reset' ) ) {
+			opcache_reset();
+			$touched[] = 'OPcache';
+		}
+
+		return $touched;
 	}
 
 	/**
@@ -678,6 +759,16 @@ class Api_Settings implements SOC_Module {
 					'label' => 'Information',
 					'slug'  => 'information',
 					'demo'  => 'Internal notes text.',
+				),
+				array(
+					'label' => 'Message',
+					'slug'  => 'message',
+					'demo'  => 'Call for availability.',
+				),
+				array(
+					'label' => 'Special Field 3',
+					'slug'  => 'special field 3',
+					'demo'  => 'Status',
 				),
 				array(
 					'label' => 'Comment1–5',
@@ -887,6 +978,11 @@ class Api_Settings implements SOC_Module {
 					'demo'  => 'This Camry SE features…',
 				),
 				array(
+					'label' => 'AI VDP Description',
+					'slug'  => 'ai_vdp_description',
+					'demo'  => 'AI-generated vehicle description text.',
+				),
+				array(
 					'label' => 'Photo_Timestamp',
 					'slug'  => 'photo_timestamp',
 					'demo'  => '1735689600',
@@ -935,6 +1031,75 @@ class Api_Settings implements SOC_Module {
 					'label' => 'Doors',
 					'slug'  => 'doors',
 					'demo'  => '4',
+				),
+			),
+			'Dealer'      => array(
+				array(
+					'label' => 'Dealer Name',
+					'slug'  => 'dealer_name',
+					'demo'  => 'Example Toyota',
+				),
+				array(
+					'label' => 'Dealer Address',
+					'slug'  => 'dealer_address',
+					'demo'  => '123 Main St',
+				),
+				array(
+					'label' => 'Dealer City',
+					'slug'  => 'dealer_city',
+					'demo'  => 'Springfield',
+				),
+				array(
+					'label' => 'Dealer State',
+					'slug'  => 'dealer_state',
+					'demo'  => 'IL',
+				),
+				array(
+					'label' => 'Dealer Zip',
+					'slug'  => 'dealer_zip',
+					'demo'  => '62704',
+				),
+				array(
+					'label' => 'Dealer Phone',
+					'slug'  => 'dealer_phone',
+					'demo'  => '(555) 123-4567',
+				),
+				array(
+					'label' => 'Dealer Contact',
+					'slug'  => 'dealer_contact',
+					'demo'  => 'John Smith',
+				),
+				array(
+					'label' => 'Dealer Email',
+					'slug'  => 'dealer_email',
+					'demo'  => 'sales@example.com',
+				),
+				array(
+					'label' => 'Dealer Fax',
+					'slug'  => 'dealer_fax',
+					'demo'  => '(555) 123-4568',
+				),
+				array(
+					'label' => 'Dealer Special',
+					'slug'  => 'dealer_special',
+					'demo'  => 'Special offer text.',
+				),
+			),
+			'SEO'         => array(
+				array(
+					'label' => 'SEO Title',
+					'slug'  => 'seo_title',
+					'demo'  => '2024 Toyota Camry SE for Sale',
+				),
+				array(
+					'label' => 'SEO Description',
+					'slug'  => 'seo_description',
+					'demo'  => 'Shop this 2024 Toyota Camry SE at Example Toyota.',
+				),
+				array(
+					'label' => 'SEO Image',
+					'slug'  => 'seo_image',
+					'demo'  => 'https://cdn.example.com/vehicles/abc123_seo.jpg',
 				),
 			),
 		);

@@ -3455,13 +3455,24 @@ var __webpack_exports__ = {};
       const $btn = $(this);
       $btn.prop('disabled', true);
       SOC.showLoading();
-      SOC.ajax('soc_flush_api_cache', {}, function () {
-        SOC.showSuccess('All Intice cache flushed.');
+      SOC.ajax('soc_flush_api_cache', {}, function (data) {
+        const touched = data && data.touched || [];
+        const msg = touched.length ? 'All Intice cache flushed. Also cleared: ' + touched.join(', ') + '.' : 'All Intice cache flushed.';
+        SOC.showSuccess(msg);
         SOC.reloadPanel('api-settings');
       }, function (msg) {
         SOC.showError(msg);
         $btn.prop('disabled', false);
       });
+    });
+
+    // Toggle the explanation row under a cache group's name
+    $(document).on('click', '.soc-cache-info-toggle', function () {
+      const $btn = $(this);
+      const $row = $btn.closest('tr').next('.soc-cache-info-row');
+      const open = $row.is(':visible');
+      $row.slideToggle(120);
+      $btn.attr('aria-expanded', open ? 'false' : 'true');
     });
 
     // Flush single cache group

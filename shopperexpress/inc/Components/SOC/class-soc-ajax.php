@@ -705,11 +705,16 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$module->flush_api_cache();
+		$result = $module->flush_api_cache();
 
 		SOC_Logger::write( 'cache', 'Intice API cache: full flush via SOC' );
 
-		SOC_Response::success( array( 'flushed' => true ) );
+		SOC_Response::success(
+			array(
+				'flushed' => true,
+				'touched' => $result['touched'] ?? array(),
+			)
+		);
 	}
 
 	/**

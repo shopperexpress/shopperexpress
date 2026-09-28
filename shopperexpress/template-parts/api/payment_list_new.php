@@ -36,7 +36,7 @@ $payload = $vehicle['payload'] ?? array();
 // select choices) don't match their Nexus payload key 1:1 — map each to the
 // candidate key(s) to actually look up, tried in order.
 $field_aliases = array(
-	'original_price' => array( 'msrp' ),
+	'original_price' => array( 'original_price', 'msrp' ),
 	'price'          => array( 'price' ),
 	'price_sort'     => array( 'price_sort' ),
 	'loan_payment'   => array( 'loan_payment', 'loan_payment_sort' ),

@@ -56,7 +56,7 @@ endif;
 // AI description from Intice payload (replaces _ai_vdp_description post meta).
 if ( 'vdp' === $type || 'single' === $type ) :
 	$payload  = $vehicle['payload'] ?? array();
-	$ai_desc  = $payload['ai_vdp_description'] ?? '';
+	$ai_desc  = $payload['ai_vdp_description'] ?? ( $payload['ai_description'] ?? '' );
 
 	if ( $ai_desc ) :
 		echo wp_kses_post( $ai_desc );

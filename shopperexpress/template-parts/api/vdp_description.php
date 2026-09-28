@@ -15,7 +15,7 @@ $vehicle = $args['vehicle'] ?? array();
 $payload = $vehicle['payload'] ?? array();
 
 $vdp_description = get_field( 'vdp_description', 'options' );
-$ai_description  = $payload['ai_description'] ?? '';
+$ai_description  = $payload['ai_vdp_description'] ?? ( $payload['ai_description'] ?? '' );
 
 if ( ! $vdp_description && ! $ai_description ) {
 	return;

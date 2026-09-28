@@ -166,6 +166,8 @@ class Intice_Api_Client {
 
 			$stale = get_transient( $stale_key );
 			if ( false !== $stale ) {
+				self::schedule_vdp_regen( $vin );
+
 				return $stale;
 			}
 		}
@@ -371,6 +373,39 @@ class Intice_Api_Client {
 		$this->get_vehicles( array( 'condition' => 'used' ) );
 
 		self::$regenerating = false;
+	}
+
+	/**
+	 * Regenerate a single VIN's cache entry (called by WP cron).
+	 * Uses $regenerating flag to bypass stale fallback and force a fresh API call.
+	 *
+	 * @param string $vin 17-character VIN.
+	 * @return void
+	 */
+	public function regen_vehicle_cache( string $vin ): void {
+		self::$regenerating = true;
+
+		$this->get_vehicle( $vin );
+
+		self::$regenerating = false;
+	}
+
+	/**
+	 * Schedule a one-off background regen for a single VIN so the next visitor
+	 * gets fresh data, mirroring the SRP stale-while-revalidate behavior instead
+	 * of serving the same stale VDP copy until the next live fetch happens to fire.
+	 *
+	 * @param string $vin 17-character VIN.
+	 * @return void
+	 */
+	private static function schedule_vdp_regen( string $vin ): void {
+		$args = array( $vin );
+
+		if ( ! wp_next_scheduled( 'intice_vdp_cache_regen', $args ) ) {
+			wp_schedule_single_event( time(), 'intice_vdp_cache_regen', $args );
+		}
+
+		spawn_cron();
 	}
 
 	// ─── Cache registry (backend-agnostic status/flush) ──────────────────────

@@ -309,7 +309,7 @@ add_filter(
 			case 'msrp':
 				if ( $api_vehicle ) {
 					$payload = $api_vehicle['payload'] ?? array();
-					$raw     = $payload['msrp'] ?? ( $api_vehicle['msrp'] ?? null );
+					$raw     = $payload['original_price'] ?? ( $payload['msrp'] ?? ( $api_vehicle['original_price'] ?? ( $api_vehicle['msrp'] ?? null ) ) );
 				} else {
 					$raw = get_field( 'price', $post_id );
 				}

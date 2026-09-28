@@ -161,6 +161,26 @@ $soc-radius: 4px;
 }
 
 // ============================================================
+// Cache group info toggle
+// ============================================================
+.soc-cache-info-toggle {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 4px;
+    font-size: 15px;
+    line-height: 1;
+    color: #787c82;
+    cursor: pointer;
+    vertical-align: middle;
+
+    &:hover,
+    &[aria-expanded="true"] {
+        color: $soc-primary;
+    }
+}
+
+// ============================================================
 // Tables
 // ============================================================
 .soc-table {

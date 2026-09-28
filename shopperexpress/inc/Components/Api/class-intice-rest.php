@@ -45,6 +45,7 @@ class Intice_Rest implements Theme_Component {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 		add_action( 'intice_cache_regen', array( $this, 'handle_cache_regen' ) );
 		add_action( 'intice_srp_cache_regen', array( $this, 'handle_srp_cache_regen' ), 10, 2 );
+		add_action( 'intice_vdp_cache_regen', array( $this, 'handle_vdp_cache_regen' ) );
 		add_action( 'acf/save_post', array( $this, 'maybe_flush_custom_sort_cache' ), 20 );
 	}
 
@@ -76,6 +77,16 @@ class Intice_Rest implements Theme_Component {
 	 */
 	public function handle_cache_regen(): void {
 		Intice_Api_Client::instance()->regen_cache();
+	}
+
+	/**
+	 * WP cron callback: regenerate a single VIN's cache entry (VDP stale-while-revalidate).
+	 *
+	 * @param string $vin 17-character VIN.
+	 * @return void
+	 */
+	public function handle_vdp_cache_regen( string $vin ): void {
+		Intice_Api_Client::instance()->regen_vehicle_cache( $vin );
 	}
 
 	/**
@@ -727,7 +738,32 @@ class Intice_Rest implements Theme_Component {
 			case 'original_price':
 				return self::first_usable(
 					array(
+						$vehicle['original_price'] ?? null,
+						$payload['original_price'] ?? null,
 						$payload['msrp'] ?? null,
+					)
+				);
+			case 'vehicle-status':
+				// Nexus exposes this as top-level 'status' (aliased from the
+				// 'vehicle_status' column) and, if a dealer template maps it,
+				// as payload['vehicle_status'] — 'vehicle-status' (hyphen) is
+				// only ever a legacy/manual payload key from older imports.
+				return self::first_usable(
+					array(
+						$vehicle['status'] ?? null,
+						$payload['vehicle_status'] ?? null,
+						$payload['vehicle-status'] ?? null,
+					)
+				);
+			case 'dateinstock':
+				// Nexus's real field is 'date_in_stock' (DB column + payload
+				// fallback key) — 'dateinstock' is only a CSV-import alias,
+				// never the field name data actually lives under.
+				return self::first_usable(
+					array(
+						$vehicle['date_in_stock'] ?? null,
+						$payload['date_in_stock'] ?? null,
+						$payload['dateinstock'] ?? null,
 					)
 				);
 			case 'loan_payment_sort':

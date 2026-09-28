@@ -586,7 +586,7 @@ class Ajax implements Theme_Component {
 
 		$v = $api_result['data'];
 
-		$msrp  = $this->vehicle_field( $v, array( 'msrp' ) );
+		$msrp  = $this->vehicle_field( $v, array( 'original_price', 'msrp' ) );
 		$price = $this->vehicle_field( $v, array( 'price' ) );
 
 		// price_sort is meant to be the "best" advertised price, but some feed rows
@@ -968,6 +968,7 @@ class Ajax implements Theme_Component {
 			'mileage',
 			'price',
 			'msrp',
+			'original_price',
 			'price_sort',
 			'stock',
 			'exterior_color',

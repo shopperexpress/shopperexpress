@@ -485,7 +485,7 @@ $tabs = array(
 			array(
 				'label' => 'MSRP',
 				'name'  => 'msrp',
-				'value' => $payload['msrp'] ?? '',
+				'value' => $payload['original_price'] ?? ( $payload['msrp'] ?? '' ),
 			),
 			array(
 				'label' => 'Invoice Amount',

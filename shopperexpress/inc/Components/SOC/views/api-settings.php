@@ -215,13 +215,37 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 
 			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
+			// Plain-language explanation of each row, shown when its info icon is clicked.
+			// Keyed by position — must stay in the same order as collect_api_cache()'s $groups.
+			$group_info = array(
+				__( 'Caches the raw Nexus API response for vehicle list requests (GET /vehicles) — the data other lookups build on. Filled whenever any page requests a list of vehicles.', 'shopperexpress' ),
+				__( 'Caches the raw Nexus API response for a single vehicle (GET /vehicles/{vin}). Filled when a visitor opens that vehicle\'s detail page (VDP).', 'shopperexpress' ),
+				__( 'Caches GET /meta — the filter reference data (makes, models, year/price ranges, conditions) used to render the SRP filter UI.', 'shopperexpress' ),
+				__( 'Caches the fully assembled New Vehicles (listings) results — after filters, trim/drivetrain/photo resolution and default sorting are applied. This is what the New Vehicles SRP actually renders.', 'shopperexpress' ),
+				__( 'Same as New Listings, but for Used Vehicles (used-listings).', 'shopperexpress' ),
+				__( 'Same as New Listings, but for the "Custom sort" mode (Theme Options → Custom sort) — kept separate because the sort order differs from the default.', 'shopperexpress' ),
+				__( 'Same as Used Listings, but for the "Custom sort" mode.', 'shopperexpress' ),
+				__( 'Caches the assembled "vehicles-feed" output — the full vehicle list with all term/field data, used by feed/sitemap-style integrations rather than the paginated SRP.', 'shopperexpress' ),
+			);
+
 			foreach ( $data['api_cache'] as $i => $row ) :
 				$st    = $row['status'] ?? 'missing';
 				$badge = $status_map[ $st ] ?? $status_map['missing'];
 				$group = $group_keys[ $i ] ?? '';
+				$info  = $group_info[ $i ] ?? '';
 				?>
 				<tr>
-					<td><strong><?php echo esc_html( $row['label'] ); ?></strong></td>
+					<td>
+						<strong><?php echo esc_html( $row['label'] ); ?></strong>
+						<?php if ( $info ) : ?>
+							<button
+								type="button"
+								class="soc-cache-info-toggle"
+								aria-expanded="false"
+								aria-label="<?php esc_attr_e( 'What does this cache group do?', 'shopperexpress' ); ?>"
+							>&#9432;</button>
+						<?php endif; ?>
+					</td>
 					<td>
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
@@ -251,6 +275,13 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 						</button>
 					</td>
 				</tr>
+				<?php if ( $info ) : ?>
+				<tr class="soc-cache-info-row" style="display:none;">
+					<td colspan="5" style="background:#f6f7f7;color:#3c434a;font-size:13px;padding:10px 14px;">
+						<?php echo esc_html( $info ); ?>
+					</td>
+				</tr>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
@@ -260,6 +291,9 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 			<?php esc_html_e( 'Flush All Intice Cache', 'shopperexpress' ); ?>
 		</button>
 	</div>
+	<p style="margin:8px 0 0;color:#666;font-size:12px;">
+		<?php esc_html_e( 'Also clears any active page-cache plugin (WP Rocket, LiteSpeed, W3 Total Cache, etc.) and OPcache. If a persistent object cache (Redis/Memcached) is active, this flushes it entirely — not just Intice data — since most backends have no way to clear a single plugin\'s keys.', 'shopperexpress' ); ?>
+	</p>
 	<?php endif; ?>
 </div>
 
