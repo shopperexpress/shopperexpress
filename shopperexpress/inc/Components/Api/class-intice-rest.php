@@ -646,13 +646,28 @@ class Intice_Rest implements Theme_Component {
 			$terms['condition'] = array( (string) $vehicle['condition'] );
 		}
 
-		// Fall back to payload.certified (raw import value, e.g. "True"/"False")
-		// when the top-level field is missing/stale — same pattern as the
-		// vehicle-or-payload lookup above, via filter_var() since payload's
-		// value is a string rather than a real boolean.
-		$certified = $vehicle['certified'] ?? ( $payload['certified'] ?? null );
+		// Prefer payload.certified (raw import value) over the top-level field —
+		// some dealer feeds map the source column's actual certification
+		// program name (e.g. "Honda Certified", "GM Certified Pre-Owned") into
+		// payload, while Nexus's top-level `certified` is always a plain
+		// boolean. The JS filter engine renders term values verbatim as the
+		// filter option label (see getAllFilters() in app.js), so casting a
+		// boolean straight to string produced "1"/"" as the visible label —
+		// use the real program name when the source gives us one, and only
+		// fall back to a generic "Certified" label when all we have is a
+		// true/false flag.
+		$certified = $payload['certified'] ?? ( $vehicle['certified'] ?? null );
 		if ( $certified !== null ) {
-			$terms['certified'] = array( (string) $certified );
+			$certified_string = trim( (string) $certified );
+			$is_flag_value    = in_array( strtolower( $certified_string ), array( '', '0', '1', 'true', 'false', 'yes', 'no' ), true );
+
+			if ( $is_flag_value ) {
+				if ( filter_var( $certified, FILTER_VALIDATE_BOOLEAN ) ) {
+					$terms['certified'] = array( 'Certified' );
+				}
+			} else {
+				$terms['certified'] = array( $certified_string );
+			}
 		}
 
 		// Safety net: strip any null/empty entries that slipped through above so the
