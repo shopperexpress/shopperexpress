@@ -22,6 +22,7 @@ $breakpoints: (
   'phone': 576px,
   'tablet': 768px,
   'desktop': 992px,
+  'desktop-c': 1024px,
   'widescreen': 1200px,
   'xxl': 1480px,
 );
@@ -72,9 +73,15 @@ $media-expressions: (
 @import 'components/widget-finance-popup';
 @import 'components/section-key-features';
 @import 'components/gallery-grid';
+@import 'components/section-awards';
+@import 'components/section-specials';
+@import 'components/section-find-us';
 @import 'components/page-description';
 @import 'components/full-width-slider';
+@import 'components/full-width-image';
+@import 'components/main-visual';
 @import 'components/contact-widget';
+@import 'components/contact-information';
 @import 'components/post';
 @import 'components/ai-chat';
 @import 'components/widget-buttons';

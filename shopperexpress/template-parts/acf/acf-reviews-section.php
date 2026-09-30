@@ -9,6 +9,7 @@ get_template_part(
 	'template-parts/acf-shared/reviews-section',
 	null,
 	array(
+		'subtitle'          => get_sub_field( 'subtitle' ),
 		'heading'           => get_sub_field( 'heading' ),
 		'description'       => get_sub_field( 'description' ),
 		'layout_style'      => get_sub_field( 'layout_style' ) ?: 'list',

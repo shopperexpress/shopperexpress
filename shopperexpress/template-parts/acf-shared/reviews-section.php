@@ -5,9 +5,11 @@
  * @package ShopperExpress
  *
  * @param array $args {
+ *   @type string $subtitle     "lp" layout style only — small label shown above the heading.
  *   @type string $heading      Section heading.
  *   @type string $description  Section intro text (allows inline markup/links).
- *   @type string $layout_style "list" (default) or "slider".
+ *   @type string $layout_style "list" (default), "slider", or "lp" (slider behavior, wrapped in the
+ *                               landing-page lp-section/lp-card-slider markup instead).
  *   @type bool   $hide_header  Slider only. Hides the logo/rating/count bar above the slider.
  *   @type int    $slides_per_view Slider only. Number of cards shown side by side on desktop.
  *   @type int    $min_reviews_count Auto-fetch further Business Profile pages until at least
@@ -38,6 +40,7 @@
  * the text inline.
  */
 
+$subtitle          = $args['subtitle'] ?? '';
 $heading           = $args['heading'] ?? '';
 $description       = $args['description'] ?? '';
 $layout_style      = ! empty( $args['layout_style'] ) ? $args['layout_style'] : 'list';
@@ -46,7 +49,8 @@ $keyword_filter    = $args['keyword_filter'] ?? '';
 $cta_text          = $args['cta_text'] ?? '';
 $cta_url           = $args['cta_url'] ?? '#';
 $anchor            = $args['anchor'] ?? '';
-$is_slider         = 'slider' === $layout_style;
+$is_lp             = 'lp' === $layout_style;
+$is_slider         = $is_lp || 'slider' === $layout_style;
 $hide_header       = $is_slider && ! empty( $args['hide_header'] );
 $slides_per_view   = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
 $min_reviews_count = (int) ( $args['min_reviews_count'] ?? 0 );
@@ -108,7 +112,8 @@ if ( $place_id ) :
 		<?php if ( $anchor ) : ?>
 		id="<?php echo esc_attr( $anchor ); ?>"
 		<?php endif; ?>
-		class="review-section<?php echo $is_slider ? ' review-section--slider' : ''; ?>"
+		<?php // "lp" style intentionally skips the review-section/review-section--slider classes — their base padding/max-width rules (_review-section.scss) conflict with the lp-section layout; JS only needs the [data-google-reviews] attribute, not the class. ?>
+		class="<?php echo $is_lp ? 'lp-section bg-gray' : 'review-section' . ( $is_slider ? ' review-section--slider' : '' ); ?>"
 		data-google-reviews
 		data-google-reviews-style="<?php echo esc_attr( $layout_style ); ?>"
 		data-google-reviews-place-id="<?php echo esc_attr( $place_id ); ?>"
@@ -125,6 +130,21 @@ if ( $place_id ) :
 		data-google-reviews-modal="#<?php echo esc_attr( $modal_id ); ?>"
 		<?php endif; ?>>
 		<div class="container">
+			<?php if ( $is_lp ) : ?>
+				<div class="lp-section__holder">
+			<?php endif; ?>
+			<?php if ( $is_lp && ( $subtitle || $heading ) ) : ?>
+				<div class="lp-section__head-row">
+					<div class="lp-section__head">
+						<?php if ( $subtitle ) : ?>
+							<span class="lp-subtitle"><?php echo esc_html( $subtitle ); ?></span>
+						<?php endif; ?>
+						<?php if ( $heading ) : ?>
+							<h2 class="lp-title"><?php echo esc_html( $heading ); ?></h2>
+						<?php endif; ?>
+					</div>
+				</div>
+			<?php endif; ?>
 			<?php if ( ! $is_slider && ( $heading || $description ) ) : ?>
 				<div class="review-section__heading">
 					<?php if ( $heading ) : ?>
@@ -135,7 +155,8 @@ if ( $place_id ) :
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
-			<?php if ( ! $hide_header ) : ?>
+			<?php // "lp" style renders the rating/stars/count bar as the slider's own first slide (see the handlebars template below) instead of this static block. ?>
+			<?php if ( ! $hide_header && ! $is_lp ) : ?>
 				<div class="widget-review__head">
 					<div class="widget-review__head-holder">
 						<div class="widget-review__head-row">
@@ -154,7 +175,8 @@ if ( $place_id ) :
 				</div>
 			<?php endif; ?>
 			<?php if ( $is_slider ) : ?>
-				<div class="reviews-slider" data-google-reviews-list></div>
+				<?php // "lp" style intentionally skips the "reviews-slider" class too — its rules (_review-section.scss) are sized/spaced for the old slider layout and conflict with .lp-card-slider. ?>
+				<div class="<?php echo $is_lp ? 'lp-card-slider slick-slider' : 'reviews-slider'; ?>" data-google-reviews-list></div>
 			<?php else : ?>
 				<div class="widget-review">
 					<div class="widget-review__list" data-google-reviews-list></div>
@@ -163,9 +185,37 @@ if ( $place_id ) :
 					</div>
 				</div>
 			<?php endif; ?>
+			<?php if ( $is_lp ) : ?>
+				</div><!-- .lp-section__holder -->
+			<?php endif; ?>
 			<?php if ( $is_slider ) : ?>
 				<script type="text/x-handlebars-template" data-google-reviews-template="reviews">
+					<?php if ( $is_lp ) : ?>
+						<div class='lp-slide'>
+							<div class='widget-review__head'>
+								<div class='widget-review__head-holder'>
+									<div class='widget-review__head-row'>
+										<strong class='rating' data-google-reviews-rating></strong>
+										<span class='google-reviews__stars' data-google-reviews-stars></span>
+										<span class='count' data-google-reviews-count></span>
+									</div>
+									<div class='widget-review__head-row'>
+										<img src='<?php echo esc_url( \App\asset_url( 'images/google-logo-full.svg' ) ); ?>' alt='Google' />
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php endif; ?>
 					{{#each reviews}}
+						<?php if ( $is_lp ) : ?>
+						<div class='lp-slide'>
+							<div class='review-item'>
+								<div class='review-item__body'>
+									{{{stars}}}
+									<p>{{text}}</p>
+								</div>
+								<div class='review-item__head'>
+						<?php else : ?>
 						<div class='slick-slide'>
 							<div class='review-item review-item--vertical'>
 								<div class='review-item__body'>
@@ -174,6 +224,7 @@ if ( $place_id ) :
 									<button type='button' class='review-item__read-more btn btn-link' data-toggle='modal' data-target='#<?php echo esc_attr( $modal_id ); ?>' hidden><?php esc_html_e( 'Read more', 'shopperexpress' ); ?></button>
 								</div>
 								<div class='review-item__head'>
+						<?php endif; ?>
 									<div class='review-item__avatar'>
 										<img src='{{authorAttribution.photoURI}}' alt='{{authorAttribution.displayName}} photo' referrerpolicy='no-referrer' />
 										<span class='review-item__source' data-toggle='tooltip' data-placement='top' title='Posted on Google'>
@@ -182,13 +233,17 @@ if ( $place_id ) :
 									</div>
 									<div class='review-item__head-holder'>
 										<strong class='review-item__name'>
-											{{#if googleMapsURI}}
-												<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
+											<?php if ( $is_lp ) : ?>
+												<a href='#' class='text' data-toggle='modal' data-target='#<?php echo esc_attr( $modal_id ); ?>' title='{{authorAttribution.displayName}}' tabindex='0'>{{authorAttribution.displayName}}</a>
+											<?php else : ?>
+												{{#if googleMapsURI}}
+													<a href='{{googleMapsURI}}' target='_blank' rel='noopener noreferrer'>
+														<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
+													</a>
+												{{else}}
 													<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
-												</a>
-											{{else}}
-												<span class='text' title='{{authorAttribution.displayName}}'>{{authorAttribution.displayName}}</span>
-											{{/if}}
+												{{/if}}
+											<?php endif; ?>
 											<span data-toggle='tooltip' data-placement='top' title='Verified Customer'>
 												<img src='<?php echo esc_url( \App\asset_url( 'images/verified.svg' ) ); ?>' aria-hidden='true' alt='' />
 											</span>
@@ -238,7 +293,7 @@ if ( $place_id ) :
 							</div>
 							<div class='review-item__body'>
 								{{{stars}}}
-								<p>{{text}}</p>
+								<p>{{fullText}}</p>
 							</div>
 						</div>
 					{{else}}

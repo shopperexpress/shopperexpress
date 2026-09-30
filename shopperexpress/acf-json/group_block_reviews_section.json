@@ -3,6 +3,25 @@
     "title": "Block: Reviews Section",
     "fields": [
         {
+            "key": "field_a2facfd1bc211",
+            "label": "Subtitle",
+            "name": "subtitle",
+            "type": "text",
+            "instructions": "\"LP\" layout style only — small label shown above the heading (e.g. \"reviews\").",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_7a0b1c2d3f001",
             "label": "Heading",
             "name": "heading",
@@ -55,7 +74,8 @@
             },
             "choices": {
                 "list": "List",
-                "slider": "Slider"
+                "slider": "Slider",
+                "lp": "LP (bg-gray card slider)"
             },
             "default_value": "list",
             "return_format": "value",
@@ -64,10 +84,10 @@
         },
         {
             "key": "field_7a0b1c2d3f010",
-            "label": "Minimum Reviews to Show",
+            "label": "Number of Reviews to Show",
             "name": "min_reviews_count",
             "type": "number",
-            "instructions": "Auto-fetches additional pages from Google until at least this many qualifying (5-star, has text) reviews are loaded. Leave blank/0 to only load the first page.",
+            "instructions": "Auto-fetches additional pages from Google until at least this many qualifying (5-star, has text) reviews are loaded, then trims the list down to exactly this count. Leave blank/0 to only load the first page (no trimming).",
             "required": 0,
             "conditional_logic": 0,
             "wrapper": {

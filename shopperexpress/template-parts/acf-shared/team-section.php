@@ -11,6 +11,7 @@
  *                                     `category` may contain multiple, comma-separated values (e.g. "Sales, Management")
  *                                     so a member can belong to more than one filter group.
  *                                     `bio` is optional WYSIWYG content — when present a "Learn More" button opens it in a modal.
+ *   @type string $columns             Cards per row on desktop: "3" (default), "4", or "5".
  *   @type string $footer_heading      "Join Our Team" style heading.
  *   @type string $footer_button_text  Footer CTA button label.
  *   @type array  $footer_button_url   ACF link array (url, title, target).
@@ -26,6 +27,11 @@ $footer_heading     = $args['footer_heading'] ?? '';
 $footer_button_text = $args['footer_button_text'] ?? '';
 $footer_button_url  = $args['footer_button_url'] ?? null;
 $anchor             = $args['anchor'] ?? '';
+$columns            = (string) ( $args['columns'] ?? '3' );
+
+if ( ! in_array( $columns, array( '3', '4', '5' ), true ) ) {
+	$columns = '3';
+}
 
 $categories = array();
 foreach ( $members as $member ) {
@@ -58,7 +64,7 @@ if ( ! empty( $members ) ) :
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
-			<div class="team-grid">
+			<div class="team-grid team-grid--cols-<?php echo esc_attr( $columns ); ?>">
 				<?php foreach ( $members as $member ) : ?>
 					<?php
 					$photo       = $member['photo'] ?? '';

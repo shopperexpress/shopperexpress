@@ -70,6 +70,8 @@ The theme has a dual mode controlled by `is_api_mode()` (WP option `api_mode`):
 - **Standard mode** — vehicle data from ACF fields on WP posts
 - **API mode** — vehicle data from Intice Nexus REST API (`inc/Components/Api/`)
 
+Vehicle availability status (`vehicle-status` — "In Stock", "In Transit", "On Order", "Sold", free text from the dealer feed) is available under the **same field key in both modes**: a real ACF `text` field on `listings`/`used-listings` in standard mode, and Nexus's `vehicle_status` column (exposed as top-level `status`) in API mode. The `[stock]` shortcode's `status`/`field` attributes filter on this transparently in either mode.
+
 ---
 
 ## Operation Center (SOC)
@@ -89,6 +91,11 @@ A unified WordPress admin dashboard at **WP Admin → Operation Center**.
 | **Lead Delivery** | ADFXML lead delivery settings, log, retry |
 | **VDR Requests** | Vehicle Detail Report API call log & statistics |
 | **JSON-LD Schema** | Visual builder for structured-data schema output (field toggle, source mapping, live preview) |
+| **Google Reviews** | Google Business Profile OAuth connection (paginated) + Places API fallback, keyword filtering, full-history sync |
+| **AI VDP Log** | AI VDP description generation attempts log & stats |
+| **Shortcodes** | Read-only reference: every theme shortcode (usage, parameters, example) + live list of admin-defined `[sc_*]` shortcodes |
+
+Panels are grouped under 4 top-level menu entries (System & Cache, API & Integrations, Leads & Vehicles, SEO & Content) rendered as tabs on one admin page — see `SOC::GROUPS` in `class-soc.php`.
 
 ---
 
@@ -228,12 +235,26 @@ The SOC panel also supports custom key/value properties, a live JSON preview (De
 
 ---
 
+## Additional Features
+
+| Feature | Location | Notes |
+|---|---|---|
+| Vehicle view tracking | `class-vehicle-views.php` | All-time VDP view counts per VIN in a custom table; works in both standard and API mode |
+| ASC dataLayer | `class-asc-datalayer.php` | Builds the Automotive Standards Council `dataLayer` object for analytics, detects page type across vehicle CPTs |
+| VIN Checker | `class-vin-admin.php` | VIN lookup/history/caching, surfaced in **Operation Center → Developer Tools** |
+| Template/shortcode export | `class-export.php` | Admin export/import for ACF Flexible Content page templates and custom shortcodes |
+| Custom shortcodes | `inc/theme-functions.php` (`init` hook) | Admin-defined `[sc_{name}]` shortcodes from a Theme Options repeater — see **Operation Center → Shortcodes** |
+
+---
+
 ## External Integrations
 
 | Service | Location | Notes |
 |---|---|---|
-| Twilio | `vendor/twilio/sdk` | SMS |
+| Twilio | `vendor/twilio/sdk` | SMS verification codes |
 | Chromedata / JD Power | `class-chromedata-client.php` | VIN decode + VDR PDF API |
 | OpenAI | `class-ai.php` + `class-ai-crawler.php` + `class-ai-vdp.php` | Embeddings, crawl pipeline, AI VDP descriptions |
+| OpenAI Ads | `class-openai-ads.php` + `class-openai-ads-client.php` | Ads measurement pixel + Conversions API (CAPI), key AES-256 encrypted |
+| Google Business Profile / Places API | `class-google-business-reviews.php` | Reviews sourcing for the Google Reviews SOC panel |
 | Intice Nexus | `inc/Components/Api/class-intice-api-client.php` | Vehicle inventory API |
 | Intice IO Leads | `inc/Components/Base/class-adf-api-client.php` | ADFXML lead delivery API |

@@ -1,0 +1,274 @@
+{
+    "key": "group_block_1539b6dd9ce9c",
+    "title": "Block: LP Icon Cards",
+    "fields": [
+        {
+            "key": "field_a245475c1fdd4",
+            "label": "Subtitle",
+            "name": "subtitle",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_31518e61c3d8b",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_9ab52fadff04f",
+            "label": "Text",
+            "name": "text",
+            "type": "textarea",
+            "instructions": "Optional paragraph shown under the heading (used by the \"Ready to get started?\" dark/contact variant in the mockup).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_59987258e5bb1",
+            "label": "Card Style",
+            "name": "style",
+            "type": "button_group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "": "Default",
+                "light": "Light",
+                "dark": "Dark"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 1,
+            "layout": "horizontal"
+        },
+        {
+            "key": "field_81fa5aabc4146",
+            "label": "Section Background",
+            "name": "background",
+            "type": "button_group",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "white": "White",
+                "gray": "Gray"
+            },
+            "default_value": "white",
+            "return_format": "value",
+            "allow_null": 0,
+            "layout": "horizontal"
+        },
+        {
+            "key": "field_84e390c7c3410",
+            "label": "Remove Top Padding",
+            "name": "pt_0",
+            "type": "true_false",
+            "instructions": "Adds the pt-0 modifier (e.g. when this block directly follows another lp-section with no gap needed).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_396bd4b8a7af0",
+            "label": "Anchor",
+            "name": "anchor",
+            "type": "text",
+            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_fd2ab371973fd",
+            "label": "Cards",
+            "name": "cards",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "block",
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_831f21e977ff6",
+            "button_label": "Add Card",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_39420fe6b0425",
+                    "label": "Icon SVG",
+                    "name": "icon_svg",
+                    "type": "textarea",
+                    "instructions": "Paste raw inline SVG markup.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "rows": 3,
+                    "new_lines": "",
+                    "acfe_textarea_code": 1,
+                    "parent_repeater": "field_fd2ab371973fd"
+                },
+                {
+                    "key": "field_831f21e977ff6",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_fd2ab371973fd"
+                },
+                {
+                    "key": "field_fd44931cb7f7d",
+                    "label": "Text",
+                    "name": "text",
+                    "type": "textarea",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "rows": 2,
+                    "new_lines": "",
+                    "parent_repeater": "field_fd2ab371973fd"
+                },
+                {
+                    "key": "field_f99ea61bebb28",
+                    "label": "Link",
+                    "name": "link",
+                    "type": "link",
+                    "instructions": "Optional — when set, the whole card becomes a link (card title/text stay as entered above; only the URL and target from this field are used).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "parent_repeater": "field_fd2ab371973fd"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/lp-icon-cards"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1779357741
+}

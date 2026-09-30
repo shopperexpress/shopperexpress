@@ -788,6 +788,17 @@ class Intice_Rest implements Theme_Component {
 						$payload['loan_payment'] ?? null,
 					)
 				);
+			case 'certified':
+				// Mirror build_terms()'s priority so a "certified" filter/sort rule
+				// matches the same value the SRP filter facet shows the user: the
+				// payload's certification program name (e.g. "Acura Certified")
+				// takes priority over the top-level field.
+				return self::first_usable(
+					array(
+						$payload['certified'] ?? null,
+						$vehicle['certified'] ?? null,
+					)
+				);
 			default:
 				return self::first_usable(
 					array(

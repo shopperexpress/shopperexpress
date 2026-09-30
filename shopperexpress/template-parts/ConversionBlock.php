@@ -37,6 +37,52 @@ if ( $is_api ) {
 	$identifier  = $post_id;
 }
 
+if ( ! function_exists( 'wps_conversion_api_shortcodes' ) ) {
+	/**
+	 * Resolve field shortcodes against API vehicle data (no WP post/ACF fields exist in API mode).
+	 *
+	 * Supports both the paired `[get_field field="price" id="post_id"]Price:[/get_field]` shortcode
+	 * (as registered in Shortcode::get_field()) and bare `[price]` tokens.
+	 *
+	 * @param string $text   Raw text containing shortcodes.
+	 * @param array  $sc_map Map of ACF field name => resolved API value.
+	 * @return string
+	 */
+	function wps_conversion_api_shortcodes( $text, array $sc_map ) {
+		$text = preg_replace_callback(
+			'/\[get_field\s+([^\]]+)\](.*?)\[\/get_field\]/s',
+			function ( $matches ) use ( $sc_map ) {
+				$atts  = shortcode_parse_atts( $matches[1] );
+				$field = is_array( $atts ) && ! empty( $atts['field'] ) ? $atts['field'] : '';
+				$value = $sc_map[ $field ] ?? '';
+
+				if ( '' === (string) $value ) {
+					return '';
+				}
+
+				$content = trim( $matches[2] );
+				$output  = ( '' !== $content ? $content . ' ' : '' ) . "<span class='js-is-empty'>" . esc_html( (string) $value ) . '</span>';
+
+				if ( ! empty( $atts['tag'] ) ) {
+					$output = sprintf( '<%1$s>%2$s</%1$s>', esc_attr( $atts['tag'] ), $output );
+				}
+
+				return $output;
+			},
+			$text
+		);
+
+		return preg_replace_callback(
+			'/\[(\w+)(?:\s[^\]]+)?\]/',
+			function ( $matches ) use ( $sc_map ) {
+				$value = $sc_map[ $matches[1] ] ?? '';
+				return "<span class='js-is-empty'>" . esc_html( (string) $value ) . '</span>';
+			},
+			$text
+		);
+	}
+}
+
 while ( have_rows( $location . 'colors', 'options' ) ) :
 	the_row();
 	$primary_color = get_sub_field( 'primary_color' );
@@ -323,29 +369,29 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								if ( $is_api && ! empty( $api_vehicle ) ) {
 									$_payload        = $api_vehicle['payload'] ?? array();
 									$_sc_map         = array(
-										'price'          => $api_vehicle['price'] ?? '',
-										'year'           => $api_vehicle['year'] ?? '',
-										'make'           => $api_vehicle['make'] ?? '',
-										'model'          => $api_vehicle['model'] ?? '',
-										'trim'           => $api_vehicle['trim'] ?? '',
-										'lease_payment'  => $api_vehicle['lease_payment'] ?? ( $_payload['lease_payment'] ?? ( $_payload['lease_payment_sort'] ?? '' ) ),
-										'loan_term'      => $_payload['loanterm'] ?? '',
-										'loan_apr'       => $_payload['loanapr'] ?? '',
-										'lease_term'     => $_payload['leaseterm'] ?? '',
-										'due_at_signing' => $_payload['down_payment'] ?? '',
-										'total_of_payments' => $_payload['totalofpmts'] ?? '',
+										'price'         => ( $api_vehicle['price'] ?? '' ) ?: ( $_payload['price'] ?? '' ),
+										'year'          => ( $api_vehicle['year'] ?? '' ) ?: ( $_payload['year'] ?? '' ),
+										'make'          => ( $api_vehicle['make'] ?? '' ) ?: ( $_payload['make'] ?? '' ),
+										'model'         => ( $api_vehicle['model'] ?? '' ) ?: ( $_payload['model'] ?? '' ),
+										'trim'          => ( $api_vehicle['trim'] ?? '' ) ?: ( $_payload['trim'] ?? '' ),
+										'lease_payment' => ( $api_vehicle['lease_payment'] ?? '' ) ?: ( ( $_payload['lease_payment'] ?? '' ) ?: ( $_payload['lease_payment_sort'] ?? '' ) ),
+										'loanterm'      => $_payload['loanterm'] ?? '',
+										'loanapr'       => $_payload['loanapr'] ?? '',
+										'leaseterm'     => $_payload['leaseterm'] ?? '',
+										'down_payment'  => $_payload['down_payment'] ?? '',
+										'totalofpmts'   => $_payload['totalofpmts'] ?? '',
 									);
-									$popup_text_body = preg_replace_callback(
-										'/\[(\w+)(?:\s[^\]]+)?\]/',
-										function ( $matches ) use ( $_sc_map ) {
-											$value = $_sc_map[ $matches[1] ] ?? '';
-											return "<span class='js-is-empty'>" . esc_html( (string) $value ) . '</span>';
-										},
-										$popup_text_body
-									);
+									$popup_text_body = wps_conversion_api_shortcodes( $popup_text_body, $_sc_map );
 									$popup_text      = wpautop( $popup_text_body );
 								} else {
 									$popup_text = wpautop( do_shortcode( $popup_text_body ) );
+								}
+
+								$disclosure_body = str_replace( 'post_id', $identifier, get_sub_field( 'disclosure', false, false ) );
+								if ( $is_api && ! empty( $api_vehicle ) ) {
+									$disclosure = wps_conversion_api_shortcodes( $disclosure_body, $_sc_map );
+								} else {
+									$disclosure = do_shortcode( $disclosure_body );
 								}
 
 								$show_banner_1 = $show_banner_2 = false;
@@ -403,8 +449,8 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 												<?php endif; ?>
 											</span>
 											<div class="widget--btn__text-holder">
-								<?php if ( $disclosure = get_sub_field( 'disclosure' ) ) : ?>
-							<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo esc_html( $disclosure ); ?></span>
+								<?php if ( $disclosure ) : ?>
+							<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo $disclosure; ?></span>
 						<?php endif; ?>
 						<span class="showWidget widget--popup__opener"><i class="fa fa-question-circle-o" aria-hidden="true" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
 						</div>

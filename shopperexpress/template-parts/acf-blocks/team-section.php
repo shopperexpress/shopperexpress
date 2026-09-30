@@ -42,6 +42,7 @@ get_template_part(
 	array(
 		'heading'            => get_field( 'heading' ),
 		'description'        => get_field( 'description' ),
+		'columns'            => get_field( 'columns' ),
 		'members'            => $members,
 		'footer_heading'     => get_field( 'footer_heading' ),
 		'footer_button_text' => get_field( 'footer_button_text' ),

@@ -1,0 +1,82 @@
+.section-awards {
+  padding: 20px 0;
+  margin-bottom: 37px;
+  background-color: #e4e4e4;
+
+  .row {
+    @include media('>=tablet') {
+      align-items: center;
+    }
+  }
+
+  .video-block {
+    @include media('>=widescreen') {
+      max-width: 776px;
+      margin: 0 28px 0 auto;
+    }
+  }
+
+  .card-about {
+    text-align: center;
+    margin: 0 auto 30px;
+    max-width: 506px;
+
+    @include media('>=tablet') {
+      margin-bottom: 0;
+    }
+
+    .card-logo {
+      display: block;
+      width: 97.4%;
+      margin: 0 auto 30px;
+
+      @include media('>=desktop') {
+        margin-bottom: 50px;
+      }
+    }
+
+    .card-holder {
+      background-color: $white;
+      padding: 15px 22px 22px;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.0714;
+      letter-spacing: -0.8px;
+
+      @include media('>=desktop') {
+        padding: 15px 30px 22px;
+      }
+    }
+
+    .card-title {
+      font-weight: 700;
+      font-size: 20px;
+      margin-bottom: 18px;
+      text-transform: capitalize;
+      letter-spacing: -0.2px;
+
+      @include media('>=desktop') {
+        font-size: 22px;
+      }
+    }
+
+    .card-link {
+      display: block;
+      width: 60%;
+      margin: 0 auto 25px;
+
+      @include media('>=desktop') {
+        margin-bottom: 44px;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+
+    p {
+      margin: 0 0 13px;
+    }
+  }
+}

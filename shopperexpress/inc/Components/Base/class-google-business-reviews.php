@@ -721,6 +721,17 @@ class Google_Business_Reviews implements Theme_Component {
 			$data['next_page_token'] = $next['next_page_token'];
 		}
 
+		// $min_count is the caller's explicit "how many reviews should this
+		// widget show" setting — the auto-fetch loop above only guarantees
+		// *at least* that many, so pages can overshoot it (e.g. a page yields
+		// 7 qualifying reviews when only 6 were needed). Trim back down to an
+		// exact count. Skip this when $min_count is 0 (no cap requested) or
+		// when it was only bumped internally for a keyword search with no
+		// explicit caller value.
+		if ( $min_count > 0 ) {
+			$data['reviews'] = array_slice( $data['reviews'], 0, $min_count );
+		}
+
 		return $data;
 	}
 

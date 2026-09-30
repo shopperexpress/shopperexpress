@@ -27,6 +27,7 @@ get_template_part(
 	array(
 		'heading'            => get_sub_field( 'heading' ),
 		'description'        => get_sub_field( 'description' ),
+		'columns'            => get_sub_field( 'columns' ),
 		'members'            => $members,
 		'footer_heading'     => get_sub_field( 'footer_heading' ),
 		'footer_button_text' => get_sub_field( 'footer_button_text' ),
