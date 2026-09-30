@@ -30,7 +30,7 @@ jobs:
 
 
             echo "== Pulling latest code =="
-            GIT_SSH_COMMAND="ssh -i /home/master/.ssh/id_ed25519 -o StrictHostKeyChecking=no" git -c safe.directory='*' pull origin main
+            GIT_SSH_COMMAND="ssh -i /home/master/.ssh/github_deploy -o StrictHostKeyChecking=no" git -c safe.directory='*' pull origin main
 
             echo "== Installing composer dependencies =="
             composer install --no-dev --optimize-autoloader --no-interaction
