@@ -3084,7 +3084,8 @@ class SpinPopup {
 
 		if (!this.vin.length) return;
 
-		const fullVin = this.vin.text().trim();
+		const dataVin = this.vin.data('vin');
+		const fullVin = dataVin ? String(dataVin).trim() : this.vin.text().trim();
 
 		switch (true) {
 			case this.btnSpin.hasClass('spin-impel'):

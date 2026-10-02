@@ -357,15 +357,11 @@
 
 .visual-slider {
   &.visual-slider-srp {
-    &:not(.slick-initialized) {
-      .slide {
-        &:first-child {
-          aspect-ratio: auto;
+    .slide {
+      aspect-ratio: auto;
 
-          @include media('>=desktop') {
-            aspect-ratio: auto;
-          }
-        }
+      @include media('>=desktop') {
+        aspect-ratio: auto;
       }
     }
 

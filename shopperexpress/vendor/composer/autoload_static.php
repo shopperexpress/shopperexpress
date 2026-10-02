@@ -121,6 +121,7 @@ class ComposerStaticInitc205ff2d5bff6eba865c7bb08d6026b5
         'App\\Components\\SOC\\Modules\\Performance' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-performance.php',
         'App\\Components\\SOC\\Modules\\Security_Snapshot' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-security-snapshot.php',
         'App\\Components\\SOC\\Modules\\Shortcodes_Reference' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-shortcodes-reference.php',
+        'App\\Components\\SOC\\Modules\\Spin_Checker' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-spin-checker.php',
         'App\\Components\\SOC\\Modules\\System_Status' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-system-status.php',
         'App\\Components\\SOC\\Modules\\VDR_Requests' => __DIR__ . '/../..' . '/inc/Components/SOC/Modules/class-vdr-requests.php',
         'App\\Components\\SOC\\SOC' => __DIR__ . '/../..' . '/inc/Components/SOC/class-soc.php',
