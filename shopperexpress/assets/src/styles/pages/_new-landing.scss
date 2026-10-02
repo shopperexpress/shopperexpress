@@ -308,8 +308,8 @@ a[href="https://boast.io"] {
     color: $white;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--primary) 88%, $black);
-      border-color: color-mix(in srgb, var(--primary) 88%, $black);
+      background-color: color-mix(in srgb, var(--primary) 88%, $white);
+      border-color: color-mix(in srgb, var(--primary) 88%, $white);
       color: $white;
     }
   }
@@ -317,11 +317,12 @@ a[href="https://boast.io"] {
   &.lp-btn-outline {
     background-color: $white;
     border-color: $lp-gray-300;
-    color: $lp-dark;
+    color: $lp-gray-950;
 
     &:hover {
-      border-color: $lp-dark;
-      color: $lp-dark;
+      border-color: color-mix(in srgb, var(--primary) 88%, $white);
+      color: $lp-gray-950;
+      background-color: color-mix(in srgb, var(--primary) 1%, $white);
     }
   }
 
@@ -491,7 +492,6 @@ a[href="https://boast.io"] {
 
   .lp-nav-list {
     @extend %listreset;
-    margin-top: auto;
     text-transform: uppercase;
     font-size: 12px;
     line-height: 1.4285;
@@ -522,8 +522,6 @@ a[href="https://boast.io"] {
     }
 
     @include media('>=widescreen') {
-      left: 78px;
-      right: 78px;
       letter-spacing: 0.026em;
     }
 
@@ -560,6 +558,7 @@ a[href="https://boast.io"] {
         vertical-align: top;
         gap: 6px;
         color: rgba($white, 0.8);
+        backdrop-filter: none;
         padding: 0;
         border: 0;
         background-color: transparent;
@@ -1088,26 +1087,32 @@ a[href="https://boast.io"] {
 
 .lp-card-slider {
   padding-bottom: 80px;
+  overflow: hidden;
 
   @include media('>=tablet') {
     padding-bottom: 0;
+    overflow: visible;
+  }
+
+  .slick-list {
+    margin-right: -22px;
   }
 
   .slick-track {
     display: flex;
   }
 
-  .slick-list {
-    overflow: visible;
-  }
+  // .slick-list {
+  //   overflow: visible;
+  // }
 
   .lp-slide {
-    width: 300px;
+    // width: 300px;
     margin-right: 24px;
     height: auto;
 
     @include media('>=desktop') {
-      width: 410px;
+      // width: 410px;
     }
   }
 
@@ -1169,7 +1174,6 @@ a[href="https://boast.io"] {
 
     &__name {
       color: $lp-gray-950;
-      flex-wrap: wrap;
 
       a {
         max-width: none;
@@ -1183,6 +1187,7 @@ a[href="https://boast.io"] {
         color: $lp-gray-950;
         font-size: 16px;
         line-height: 1.3333;
+        max-width: calc(100% - 32px);
 
         @include media('>=desktop') {
           font-size: 18px;
@@ -1214,13 +1219,17 @@ a[href="https://boast.io"] {
       height: 100%;
       justify-content: space-between;
       gap: 46px;
-      padding-top: 43px;
+      // padding-top: 43px;
     }
 
     &-row {
       flex-direction: column;
       justify-content: center;
       gap: 15px;
+
+      &:first-child {
+        flex-grow: 1;
+      }
     }
 
     .rating {
@@ -1233,6 +1242,7 @@ a[href="https://boast.io"] {
       font-size: 16px;
       line-height: 1.555;
       color: $lp-gray-950;
+      text-align: center;
 
       @include media('>=desktop') {
         font-size: 18px;
@@ -1248,7 +1258,7 @@ a[href="https://boast.io"] {
     }
 
     .google-reviews__stars-row {
-      margin-bottom: 0;
+      margin-bottom: 0 !important;
     }
   }
 }
@@ -1256,7 +1266,7 @@ a[href="https://boast.io"] {
 .lp-slick-control {
   &.slick-prev,
   &.slick-next {
-    @include animate(color border-color);
+    @include animate(color border-color background-color);
     position: absolute;
     top: auto;
     right: 50%;
@@ -1281,11 +1291,12 @@ a[href="https://boast.io"] {
 
     &:focus-visible,
     &:hover {
-      border-color: $lp-dark;
-      color: $lp-dark;
+      border-color: var(--primary);
+      background-color: var(--primary);
+      color: $white;
 
       svg {
-        fill: $lp-dark;
+        fill: currentColor;
       }
     }
 
@@ -1311,8 +1322,10 @@ a[href="https://boast.io"] {
     }
 
     svg {
+      @include animate(fill);
       width: 16px;
       height: 16px;
+      color: currentColor;
     }
   }
 }

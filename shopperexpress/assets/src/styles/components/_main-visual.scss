@@ -357,18 +357,15 @@
 
 .visual-slider {
   &.visual-slider-srp {
-    // The srp pencil-banner slides are real image-aspect banners (sized via
-    // the mobile-bg/desktop-bg padding-bottom tricks below), not the tall
-    // hero aspect-ratio the generic ".slide" rule further down enforces for
-    // the home "Intro Slider" — override it back to auto here so Slick
-    // initializing (which used to never happen on this slider, see the SRP
-    // archive-listings.php "visual--banner" class fix) doesn't suddenly
-    // force every slide to the taller 2.13/1 ratio.
-    .slide {
-      aspect-ratio: auto;
+    &:not(.slick-initialized) {
+      .slide {
+        &:first-child {
+          aspect-ratio: auto;
 
-      @include media('>=desktop') {
-        aspect-ratio: auto;
+          @include media('>=desktop') {
+            aspect-ratio: auto;
+          }
+        }
       }
     }
 
