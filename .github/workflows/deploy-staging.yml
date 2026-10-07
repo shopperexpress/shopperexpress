@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,14 +27,15 @@ jobs:
         run: |
           ssh -p ${{ secrets.CLOUDWAYS_PORT }} ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} '
             set -e
+
             cd ${{ secrets.CLOUDWAYS_PATH_STAGE }}
 
-
             echo "== Pulling latest code =="
-            GIT_SSH_COMMAND="ssh -i /home/master/.ssh/github_deploy -o StrictHostKeyChecking=no" git -c safe.directory='*' pull origin main
+            GIT_SSH_COMMAND="ssh -i /home/master/.ssh/github_deploy -o StrictHostKeyChecking=no" \
+              git -c safe.directory="*" pull --ff-only origin develop
 
             echo "== Installing composer dependencies =="
             composer install --no-dev --optimize-autoloader --no-interaction
-           
+
             echo "== Deploy finished =="
           '
