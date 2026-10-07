@@ -442,6 +442,10 @@
   color: $white;
 }
 
+.widget--btn__text.showWidget .js-is-empty {
+  display: inline;
+}
+
 .hideWidget {
   display: none !important;
 }

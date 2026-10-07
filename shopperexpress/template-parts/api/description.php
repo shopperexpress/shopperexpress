@@ -13,9 +13,9 @@
  * @package Shopperexpress
  */
 
-$vehicle   = $args['vehicle']   ?? array();
+$vehicle   = $args['vehicle'] ?? array();
 $post_type = $args['post_type'] ?? 'listings';
-$type      = $args['type']      ?? 'srp';
+$type      = $args['type'] ?? 'srp';
 
 // ACF options description block — identical logic to description-block.php.
 if ( have_rows( 'description_block', 'options' ) ) :
@@ -53,12 +53,3 @@ if ( have_rows( 'description_block', 'options' ) ) :
 	endwhile;
 endif;
 
-// AI description from Intice payload (replaces _ai_vdp_description post meta).
-if ( 'vdp' === $type || 'single' === $type ) :
-	$payload  = $vehicle['payload'] ?? array();
-	$ai_desc  = $payload['ai_vdp_description'] ?? ( $payload['ai_description'] ?? '' );
-
-	if ( $ai_desc ) :
-		echo wp_kses_post( $ai_desc );
-	endif;
-endif;

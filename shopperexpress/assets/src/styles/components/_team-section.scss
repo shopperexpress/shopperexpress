@@ -127,6 +127,18 @@
   @include media('>=desktop') {
     grid-template-columns: repeat(3, 1fr);
   }
+
+  &--cols-4 {
+    @include media('>=desktop') {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  &--cols-5 {
+    @include media('>=desktop') {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
 }
 
 .card-team {
@@ -220,6 +232,8 @@
 
     a {
       color: $white !important;
+      overflow-wrap: break-word;
+      word-break: break-word;
 
       &:hover {
         text-decoration: underline !important;

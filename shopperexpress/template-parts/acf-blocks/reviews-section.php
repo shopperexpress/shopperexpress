@@ -24,6 +24,7 @@ get_template_part(
 	'template-parts/acf-shared/reviews-section',
 	null,
 	array(
+		'subtitle'          => get_field( 'subtitle' ),
 		'heading'           => get_field( 'heading' ),
 		'description'       => get_field( 'description' ),
 		'layout_style'      => get_field( 'layout_style' ) ?: 'list',

@@ -718,14 +718,8 @@ add_action(
 	function ( $fields, $entry, $form_data, $entry_id ) {
 
 		if ( get_field( 'contact_savings_form', 'options' ) == $entry['id'] || get_field( 'unlock_savings_form', 'options' ) == $entry['id'] ) {
-			if ( ! session_id() && session_status() !== PHP_SESSION_ACTIVE ) {
-				// session_start();
-				if ( ! is_user_logged_in() ) {
-					wps_auth( 'setcookie' );
-				}
-			}
+			wps_auth( 'setcookie' );
 		}
-
 	},
 	10,
 	4
@@ -768,123 +762,43 @@ add_action(
 
 add_action( 'clear_auth_cookie', 'wps_clear_client_auth_cookie' );
 
-// Backfill for sessions that logged in before this cookie existed, so it's applied
-// on the next request that actually reaches PHP without waiting for a fresh login.
+// Backfill for real WP logins that happened before this cookie existed, so it's
+// applied on the next request that actually reaches PHP without waiting for a
+// fresh login. Only syncs — never auto-clears here: the cookie is also the
+// source of truth for anonymous "unlocked" visitors (see wps_auth()), who are
+// never is_user_logged_in(), so clearing on that check would wipe out a valid
+// unlock state.
 add_action(
 	'init',
 	function () {
-		$flag_present = ! empty( $_COOKIE['wps_logged_in'] );
-		$is_authed    = is_user_logged_in();
-
-		if ( $is_authed && ! $flag_present ) {
+		if ( is_user_logged_in() && empty( $_COOKIE['wps_logged_in'] ) ) {
 			wps_sync_client_auth_cookie();
-		} elseif ( ! $is_authed && $flag_present ) {
-			wps_clear_client_auth_cookie();
 		}
 	}
 );
 
+/**
+ * "Unlocked" state for gated content (pricing, offers, etc.). True for real
+ * logged-in WP users (staff/admins) as well as visitors who unlocked content
+ * via a form submission — tracked purely via the client-readable
+ * "wps_logged_in" cookie, no WP user account involved. See
+ * wps_sync_client_auth_cookie() / wps_clear_client_auth_cookie().
+ */
 function wps_auth( $action = '' ) {
 
-	$auth   = is_user_logged_in() ? true : false;
 	$action = ! empty( $_GET['action'] ) ? $_GET['action'] : $action;
 
 	switch ( $action ) {
 		case 'setcookie':
-			$auth = wps_login( 'test' );
-			break;
+			wps_sync_client_auth_cookie();
+			return true;
 
 		case 'logout':
-			$auth = false;
-			wp_logout();
-			break;
-	}
-
-	return $auth;
-}
-
-function check_user_exists_by_login( $login ) {
-	return username_exists( $login );
-}
-
-function generate_random_password( $length = 12 ) {
-	// Characters allowed in the password
-	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_';
-
-	// Generate random bytes
-	$bytes = random_bytes( $length );
-
-	// Convert random bytes to string
-	$password = '';
-	for ( $i = 0; $i < $length; $i++ ) {
-		// Get random index
-		$index = ord( $bytes[ $i ] ) % strlen( $chars );
-		// Append character at the random index to the password
-		$password .= $chars[ $index ];
-	}
-
-	return $password;
-}
-
-function add_user_if_not_exists( $login, $email, $password ) {
-	if ( ! username_exists( $login ) ) {
-		$user_id = wp_create_user( $login, $password, $email );
-		if ( ! is_wp_error( $user_id ) ) {
-			// User was created successfully
-			return $user_id;
-		} else {
-			// Error creating user
+			wps_clear_client_auth_cookie();
 			return false;
-		}
-	} else {
-		// User already exists
-		return false;
-	}
-}
-
-function wps_login( $username ) {
-	if ( is_user_logged_in() ) {
-		wp_logout();
 	}
 
-	if ( function_exists( 'allow_programmatic_login' ) ) {
-		add_filter( 'authenticate', 'allow_programmatic_login', 10, 3 );
-	}
-
-	$username = sanitize_user( $username, true );
-
-	if ( empty( $username ) || ! username_exists( $username ) ) {
-		if ( $user_id = add_user_if_not_exists( $username, 'example1@test.test', generate_random_password() ) ) {
-			$username = get_userdata( $user_id )->user_login;
-		} else {
-			return false;
-		}
-	}
-
-	$user = wp_signon( array( 'user_login' => $username ) );
-
-	if ( function_exists( 'allow_programmatic_login' ) ) {
-		remove_filter( 'authenticate', 'allow_programmatic_login', 10, 3 );
-	}
-
-	if ( is_wp_error( $user ) ) {
-		return false;
-	}
-
-	if ( is_a( $user, 'WP_User' ) ) {
-		wp_set_current_user( $user->ID, $user->user_login );
-
-		if ( is_user_logged_in() ) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-
-function allow_programmatic_login( $user, $username, $password ) {
-	return get_user_by( 'login', $username );
+	return is_user_logged_in() || ! empty( $_COOKIE['wps_logged_in'] );
 }
 
 add_filter( 'auto_update_plugin', '__return_true' );

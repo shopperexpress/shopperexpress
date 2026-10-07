@@ -4060,7 +4060,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m/d/Y",
+                                    "display_format": "m\/d\/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -4080,7 +4080,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "m/d/Y",
+                                    "display_format": "m\/d\/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "default_to_current_date": 0,
@@ -4252,7 +4252,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m/d/Y",
+                                            "display_format": "m\/d\/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -4271,7 +4271,7 @@
                                                 "class": "",
                                                 "id": ""
                                             },
-                                            "display_format": "m/d/Y",
+                                            "display_format": "m\/d\/Y",
                                             "return_format": "Ymd",
                                             "first_day": 1,
                                             "default_to_current_date": 0
@@ -4707,7 +4707,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "display_format": "m/d/Y",
+                            "display_format": "m\/d\/Y",
                             "return_format": "Y-m-d",
                             "first_day": 1
                         },
@@ -4725,7 +4725,7 @@
                                 "class": "",
                                 "id": ""
                             },
-                            "display_format": "m/d/Y",
+                            "display_format": "m\/d\/Y",
                             "return_format": "Y-m-d",
                             "first_day": 1
                         },
@@ -5180,7 +5180,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d/m/Y",
+                                    "display_format": "d\/m\/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -5201,7 +5201,7 @@
                                         "class": "",
                                         "id": ""
                                     },
-                                    "display_format": "d/m/Y",
+                                    "display_format": "d\/m\/Y",
                                     "return_format": "Ymd",
                                     "first_day": 1,
                                     "allow_in_bindings": 0,
@@ -5580,7 +5580,7 @@
                                             },
                                             "default_value": "",
                                             "placeholder": "",
-                                            "mode": "text/html",
+                                            "mode": "text\/html",
                                             "lines": 1,
                                             "indent_unit": 4,
                                             "maxlength": "",
@@ -6012,7 +6012,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6167,7 +6167,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -6981,7 +6981,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -7049,7 +7049,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -7221,7 +7221,7 @@
                                     },
                                     "default_value": "",
                                     "placeholder": "",
-                                    "mode": "text/html",
+                                    "mode": "text\/html",
                                     "lines": 1,
                                     "indent_unit": 4,
                                     "maxlength": "",
@@ -7591,7 +7591,7 @@
                                                             },
                                                             "default_value": "",
                                                             "placeholder": "",
-                                                            "mode": "text/html",
+                                                            "mode": "text\/html",
                                                             "lines": 1,
                                                             "indent_unit": 4,
                                                             "maxlength": "",
@@ -7846,6 +7846,33 @@
                             "placeholder": "",
                             "rows": 4,
                             "new_lines": ""
+                        },
+                        {
+                            "key": "field_9a1b2c3d4e014",
+                            "label": "Columns",
+                            "name": "columns",
+                            "aria_label": "",
+                            "type": "select",
+                            "instructions": "Number of team member cards per row on desktop.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "3": "3",
+                                "4": "4",
+                                "5": "5"
+                            },
+                            "default_value": "3",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": ""
                         },
                         {
                             "key": "field_9a1b2c3d4e003",
@@ -8126,6 +8153,26 @@
                             "append": ""
                         },
                         {
+                            "key": "field_e639834bf5652",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "\"LP\" layout style only — small label shown above the heading (e.g. \"reviews\").",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
                             "key": "field_9b0c1d2e3f001",
                             "label": "Heading",
                             "name": "heading",
@@ -8181,7 +8228,8 @@
                             },
                             "choices": {
                                 "list": "List",
-                                "slider": "Slider"
+                                "slider": "Slider",
+                                "lp": "LP (bg-gray card slider)"
                             },
                             "default_value": "list",
                             "return_format": "value",
@@ -8190,11 +8238,11 @@
                         },
                         {
                             "key": "field_9b0c1d2e3f009",
-                            "label": "Minimum Reviews to Show",
+                            "label": "Number of Reviews to Show",
                             "name": "min_reviews_count",
                             "aria_label": "",
                             "type": "number",
-                            "instructions": "Auto-fetches additional pages from Google until at least this many qualifying (5-star, has text) reviews are loaded. Leave blank/0 to only load the first page.",
+                            "instructions": "Auto-fetches additional pages from Google until at least this many qualifying (5-star, has text) reviews are loaded, then trims the list down to exactly this count. Leave blank\/0 to only load the first page (no trimming).",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -8216,7 +8264,7 @@
                             "name": "hide_header",
                             "aria_label": "",
                             "type": "true_false",
-                            "instructions": "Slider only. Hides the logo/rating/count bar above the slider.",
+                            "instructions": "Slider only. Hides the logo\/rating\/count bar above the slider.",
                             "required": 0,
                             "conditional_logic": [
                                 [
@@ -8274,7 +8322,7 @@
                             "name": "keyword_filter",
                             "aria_label": "",
                             "type": "text",
-                            "instructions": "Optional. Only show reviews whose text mentions one of these keywords/phrases (comma-separated, case-insensitive). Useful for department- or service-specific pages, e.g. \"oil change, service, technician\" on a Service page. Leave blank to show all reviews.",
+                            "instructions": "Optional. Only show reviews whose text mentions one of these keywords\/phrases (comma-separated, case-insensitive). Useful for department- or service-specific pages, e.g. \"oil change, service, technician\" on a Service page. Leave blank to show all reviews.",
                             "required": 0,
                             "conditional_logic": 0,
                             "wrapper": {
@@ -8326,6 +8374,1283 @@
                             "placeholder": ""
                         }
                     ]
+                },
+                "layout_1dbe351b87a42": {
+                    "key": "layout_1dbe351b87a42",
+                    "name": "lp-hero",
+                    "label": "LP Hero",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_7badadc95252d",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_fd001dee58d78",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "HTML allowed (e.g. <sup>\u00ae<\/sup>).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_fcfd1aa40a2eb",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_698510ff8ac68",
+                            "label": "Buttons",
+                            "name": "buttons",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_b5eb1be18488a",
+                            "button_label": "Add Button",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_b5eb1be18488a",
+                                    "label": "Link",
+                                    "name": "link",
+                                    "type": "link",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "80",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "parent_repeater": "field_698510ff8ac68"
+                                },
+                                {
+                                    "key": "field_c1ce29985ac54",
+                                    "label": "Style",
+                                    "name": "style",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "20",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "primary": "Primary",
+                                        "outline": "Outline"
+                                    },
+                                    "default_value": "primary",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "parent_repeater": "field_698510ff8ac68"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_7d18f977c2bb7",
+                            "label": "Background Image (Desktop)",
+                            "name": "bg_image_desktop",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "url",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "medium"
+                        },
+                        {
+                            "key": "field_9e1afe69eb6d8",
+                            "label": "Background Image (Mobile)",
+                            "name": "bg_image_mobile",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "url",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "medium"
+                        },
+                        {
+                            "key": "field_aba7301af44cc",
+                            "label": "Quick Nav Links",
+                            "name": "nav_links",
+                            "type": "repeater",
+                            "instructions": "Arrow-link row shown under the hero (e.g. Find new vehicles, Find used vehicles).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_02f22234349b5",
+                            "button_label": "Add Link",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_02f22234349b5",
+                                    "label": "Link",
+                                    "name": "link",
+                                    "type": "link",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "parent_repeater": "field_aba7301af44cc"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_984c0e5a2333d",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
+                },
+                "layout_29cd28dddfda3": {
+                    "key": "layout_29cd28dddfda3",
+                    "name": "lp-content-columns",
+                    "label": "LP Content Columns",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_101c19d601737",
+                            "label": "Style",
+                            "name": "style",
+                            "type": "button_group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "light": "Light",
+                                "dark": "Dark"
+                            },
+                            "default_value": "light",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "layout": "horizontal"
+                        },
+                        {
+                            "key": "field_1c84750e6de25",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ffbcc39146845",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_6e23a4a0e3271",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_a4fa6a213fc1b",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "70",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "basic",
+                            "media_upload": 0,
+                            "delay": 0
+                        },
+                        {
+                            "key": "field_7e68964d9edac",
+                            "label": "Image",
+                            "name": "image",
+                            "type": "image",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "30",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "url",
+                            "library": "all",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": "",
+                            "preview_size": "medium"
+                        },
+                        {
+                            "key": "field_08af6fa39b034",
+                            "label": "Buttons",
+                            "name": "buttons",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_ee88f35e10b8c",
+                            "button_label": "Add Button",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_ee88f35e10b8c",
+                                    "label": "Link",
+                                    "name": "link",
+                                    "type": "link",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "80",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "parent_repeater": "field_08af6fa39b034"
+                                },
+                                {
+                                    "key": "field_663379a59d863",
+                                    "label": "Style",
+                                    "name": "style",
+                                    "type": "select",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "20",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "choices": {
+                                        "primary": "Primary",
+                                        "outline": "Outline"
+                                    },
+                                    "default_value": "primary",
+                                    "return_format": "value",
+                                    "multiple": 0,
+                                    "allow_null": 0,
+                                    "ui": 0,
+                                    "ajax": 0,
+                                    "placeholder": "",
+                                    "parent_repeater": "field_08af6fa39b034"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_2bbeea66e2afb",
+                            "label": "Show Decor Corners",
+                            "name": "show_decor",
+                            "type": "true_false",
+                            "instructions": "Dark style only.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_101c19d601737",
+                                        "operator": "==",
+                                        "value": "dark"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui_on_text": "",
+                            "ui_off_text": "",
+                            "ui": 1
+                        }
+                    ]
+                },
+                "layout_28d95b4740bc3": {
+                    "key": "layout_28d95b4740bc3",
+                    "name": "lp-icon-cards",
+                    "label": "LP Icon Cards",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_f86ef344dd598",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_e93a22f7eedc6",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_13d113217d695",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "textarea",
+                            "instructions": "Optional paragraph shown under the heading (used by the \"Ready to get started?\" dark/contact variant in the mockup).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": 2,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_f5a468c1ff58e",
+                            "label": "Card Style",
+                            "name": "style",
+                            "type": "button_group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "": "Default",
+                                "light": "Light",
+                                "dark": "Dark"
+                            },
+                            "default_value": "",
+                            "return_format": "value",
+                            "allow_null": 1,
+                            "layout": "horizontal"
+                        },
+                        {
+                            "key": "field_a779075613c82",
+                            "label": "Section Background",
+                            "name": "background",
+                            "type": "button_group",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "white": "White",
+                                "gray": "Gray"
+                            },
+                            "default_value": "white",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "layout": "horizontal"
+                        },
+                        {
+                            "key": "field_0f41462a1f0c3",
+                            "label": "Remove Top Padding",
+                            "name": "pt_0",
+                            "type": "true_false",
+                            "instructions": "Adds the pt-0 modifier (e.g. when this block directly follows another lp-section with no gap needed).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "",
+                            "default_value": 0,
+                            "ui_on_text": "",
+                            "ui_off_text": "",
+                            "ui": 1
+                        },
+                        {
+                            "key": "field_ee84a6d05fd2d",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_916632f545711",
+                            "label": "Cards",
+                            "name": "cards",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_8260473132727",
+                            "button_label": "Add Card",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_a0a7dd79b49d7",
+                                    "label": "Icon SVG",
+                                    "name": "icon_svg",
+                                    "type": "textarea",
+                                    "instructions": "Paste raw inline SVG markup.",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "rows": 3,
+                                    "new_lines": "",
+                                    "acfe_textarea_code": 1,
+                                    "parent_repeater": "field_916632f545711"
+                                },
+                                {
+                                    "key": "field_8260473132727",
+                                    "label": "Title",
+                                    "name": "title",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_916632f545711"
+                                },
+                                {
+                                    "key": "field_5a6ed646f6b69",
+                                    "label": "Text",
+                                    "name": "text",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "rows": 2,
+                                    "new_lines": "",
+                                    "parent_repeater": "field_916632f545711"
+                                },
+                                {
+                                    "key": "field_d0c7d4ec03b5c",
+                                    "label": "Link",
+                                    "name": "link",
+                                    "type": "link",
+                                    "instructions": "Optional — when set, the whole card becomes a link (card title\/text stay as entered above; only the URL and target from this field are used).",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "parent_repeater": "field_916632f545711"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "layout_347864f96bfcd": {
+                    "key": "layout_347864f96bfcd",
+                    "name": "lp-steps",
+                    "label": "LP Steps",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_8d6e2f37ca013",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_548674c9e5cc0",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_ae5df91eb8f00",
+                            "label": "Text",
+                            "name": "text",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": 3,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_a3ec846fb36b9",
+                            "label": "Button Link",
+                            "name": "button_link",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array"
+                        },
+                        {
+                            "key": "field_9b94bff6386a2",
+                            "label": "Steps",
+                            "name": "steps",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_445a8a207fd57",
+                            "button_label": "Add Step",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_445a8a207fd57",
+                                    "label": "Title",
+                                    "name": "title",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9b94bff6386a2"
+                                },
+                                {
+                                    "key": "field_34853c157cad9",
+                                    "label": "Text",
+                                    "name": "text",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_9b94bff6386a2"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_ea35a5b467ebd",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
+                },
+                "layout_5c4293dd16b9e": {
+                    "key": "layout_5c4293dd16b9e",
+                    "name": "lp-service-slider",
+                    "label": "LP Service Slider",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_1390005a0e8d3",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_0a1e03fc6e128",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_2a0f32d384d67",
+                            "label": "Slides",
+                            "name": "slides",
+                            "type": "repeater",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_a5f1773b7653e",
+                            "button_label": "Add Slide",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_5e0eb67fc0a6e",
+                                    "label": "Image",
+                                    "name": "image",
+                                    "type": "image",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "url",
+                                    "library": "all",
+                                    "min_width": "",
+                                    "min_height": "",
+                                    "min_size": "",
+                                    "max_width": "",
+                                    "max_height": "",
+                                    "max_size": "",
+                                    "mime_types": "",
+                                    "preview_size": "medium",
+                                    "parent_repeater": "field_2a0f32d384d67"
+                                },
+                                {
+                                    "key": "field_a5f1773b7653e",
+                                    "label": "Title",
+                                    "name": "title",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_2a0f32d384d67"
+                                },
+                                {
+                                    "key": "field_1e0b32bb4cc82",
+                                    "label": "Text",
+                                    "name": "text",
+                                    "type": "textarea",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "rows": 2,
+                                    "new_lines": "",
+                                    "parent_repeater": "field_2a0f32d384d67"
+                                },
+                                {
+                                    "key": "field_535dc91919b64",
+                                    "label": "Button Link",
+                                    "name": "button_link",
+                                    "type": "link",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "array",
+                                    "parent_repeater": "field_2a0f32d384d67"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_007b20c037918",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
+                },
+                "layout_7534be15ea23c": {
+                    "key": "layout_7534be15ea23c",
+                    "name": "lp-comparison-table",
+                    "label": "LP Comparison Table",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_0c08225129511",
+                            "label": "Subtitle",
+                            "name": "subtitle",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_2d1c112f8cf38",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text",
+                            "instructions": "HTML allowed (e.g. <sup>&reg;</sup>).",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_49db7be562e8d",
+                            "label": "Columns",
+                            "name": "columns",
+                            "type": "repeater",
+                            "instructions": "One column per compared dealer\/option (e.g. \"Burns Honda\", \"Traditional dealership experience\", \"Online-only retailers\"). Add row values below in the same order.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "table",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_7a1203340c739",
+                            "button_label": "Add Column",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_7a1203340c739",
+                                    "label": "Label",
+                                    "name": "label",
+                                    "type": "text",
+                                    "instructions": "HTML allowed (e.g. <br> for a line break).",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "40",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_49db7be562e8d"
+                                },
+                                {
+                                    "key": "field_5b4045e2f4d88",
+                                    "label": "Logo",
+                                    "name": "logo",
+                                    "type": "image",
+                                    "instructions": "Optional.",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "30",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "return_format": "url",
+                                    "library": "all",
+                                    "min_width": "",
+                                    "min_height": "",
+                                    "min_size": "",
+                                    "max_width": "",
+                                    "max_height": "",
+                                    "max_size": "",
+                                    "mime_types": "",
+                                    "preview_size": "medium",
+                                    "parent_repeater": "field_49db7be562e8d"
+                                },
+                                {
+                                    "key": "field_f8db8a9cd6dc7",
+                                    "label": "Highlight",
+                                    "name": "highlight",
+                                    "type": "true_false",
+                                    "instructions": "Marks this as the primary\/highlighted column (e.g. your dealership).",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "30",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "message": "",
+                                    "default_value": 0,
+                                    "ui_on_text": "",
+                                    "ui_off_text": "",
+                                    "ui": 1,
+                                    "parent_repeater": "field_49db7be562e8d"
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_474cb222e7060",
+                            "label": "Rows",
+                            "name": "rows",
+                            "type": "repeater",
+                            "instructions": "Add row values in the same order as the columns above. For each value, enter \"yes\" for a green checkmark, \"no\" for a gray \"not available\" cross, or free text (e.g. \"Sometimes\", \"Limited\") to show it as-is.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "acfe_repeater_stylised_button": 0,
+                            "layout": "block",
+                            "min": 0,
+                            "max": 0,
+                            "collapsed": "field_420a3b92bd02a",
+                            "button_label": "Add Row",
+                            "rows_per_page": 20,
+                            "sub_fields": [
+                                {
+                                    "key": "field_420a3b92bd02a",
+                                    "label": "Label",
+                                    "name": "label",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "maxlength": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "parent_repeater": "field_474cb222e7060"
+                                },
+                                {
+                                    "key": "field_c967735e8e0a2",
+                                    "label": "Values",
+                                    "name": "values",
+                                    "type": "repeater",
+                                    "instructions": "One value per column, in the same order as the Columns list above.",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "acfe_repeater_stylised_button": 0,
+                                    "layout": "table",
+                                    "min": 0,
+                                    "max": 0,
+                                    "collapsed": "",
+                                    "button_label": "Add Value",
+                                    "rows_per_page": 20,
+                                    "parent_repeater": "field_474cb222e7060",
+                                    "sub_fields": [
+                                        {
+                                            "key": "field_0accfabce500f",
+                                            "label": "Value",
+                                            "name": "value",
+                                            "type": "text",
+                                            "instructions": "",
+                                            "required": 0,
+                                            "conditional_logic": 0,
+                                            "wrapper": {
+                                                "width": "",
+                                                "class": "",
+                                                "id": ""
+                                            },
+                                            "default_value": "",
+                                            "maxlength": "",
+                                            "placeholder": "yes \/ no \/ Sometimes",
+                                            "prepend": "",
+                                            "append": "",
+                                            "parent_repeater": "field_c967735e8e0a2"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "key": "field_206b0bd63d103",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
                 }
             },
             "min": "",
@@ -8368,7 +9693,7 @@
             {
                 "param": "page_template",
                 "operator": "==",
-                "value": "pages/template-flexible.php"
+                "value": "pages\/template-flexible.php"
             }
         ]
     ],
@@ -8393,5 +9718,5 @@
     "acfe_form": 0,
     "acfe_meta": "",
     "acfe_note": "",
-    "modified": 1789739037
+    "modified": 1779357741
 }

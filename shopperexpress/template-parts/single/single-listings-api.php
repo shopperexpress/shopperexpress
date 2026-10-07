@@ -743,6 +743,9 @@ get_template_part(
 	)
 );
 get_template_part( 'template-parts/detail', 'modal' );
+if ( 'evo' === get_field( 'spin_data_provider', 'options' ) ) {
+	get_template_part( 'template-parts/modal', 'evo' );
+}
 get_template_part(
 	'template-parts/modal-edit-api',
 	null,

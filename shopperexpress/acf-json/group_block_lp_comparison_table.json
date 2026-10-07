@@ -1,0 +1,266 @@
+{
+    "key": "group_block_c7366a58c3e2e",
+    "title": "Block: LP Comparison Table",
+    "fields": [
+        {
+            "key": "field_af469bc2bd7f7",
+            "label": "Subtitle",
+            "name": "subtitle",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_3624e6df6a2cb",
+            "label": "Title",
+            "name": "title",
+            "type": "text",
+            "instructions": "HTML allowed (e.g. <sup>&reg;</sup>).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_ccb9fb007e288",
+            "label": "Columns",
+            "name": "columns",
+            "type": "repeater",
+            "instructions": "One column per compared dealer/option (e.g. \"Burns Honda\", \"Traditional dealership experience\", \"Online-only retailers\"). Add row values below in the same order.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "table",
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_2dd2b7be9d512",
+            "button_label": "Add Column",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_2dd2b7be9d512",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "HTML allowed (e.g. <br> for a line break).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_ccb9fb007e288"
+                },
+                {
+                    "key": "field_71fbe1592fca6",
+                    "label": "Logo",
+                    "name": "logo",
+                    "type": "image",
+                    "instructions": "Optional.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "url",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "preview_size": "medium",
+                    "parent_repeater": "field_ccb9fb007e288"
+                },
+                {
+                    "key": "field_685089fe0c51a",
+                    "label": "Highlight",
+                    "name": "highlight",
+                    "type": "true_false",
+                    "instructions": "Marks this as the primary/highlighted column (e.g. your dealership).",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 0,
+                    "ui_on_text": "",
+                    "ui_off_text": "",
+                    "ui": 1,
+                    "parent_repeater": "field_ccb9fb007e288"
+                }
+            ]
+        },
+        {
+            "key": "field_a816a6eec70d9",
+            "label": "Rows",
+            "name": "rows",
+            "type": "repeater",
+            "instructions": "Add row values in the same order as the columns above. For each value, enter \"yes\" for a green checkmark, \"no\" for a gray \"not available\" cross, or free text (e.g. \"Sometimes\", \"Limited\") to show it as-is.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "acfe_repeater_stylised_button": 0,
+            "layout": "block",
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_589429d27e91b",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_589429d27e91b",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_a816a6eec70d9"
+                },
+                {
+                    "key": "field_434c760ea7c65",
+                    "label": "Values",
+                    "name": "values",
+                    "type": "repeater",
+                    "instructions": "One value per column, in the same order as the Columns list above.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "acfe_repeater_stylised_button": 0,
+                    "layout": "table",
+                    "min": 0,
+                    "max": 0,
+                    "collapsed": "",
+                    "button_label": "Add Value",
+                    "rows_per_page": 20,
+                    "parent_repeater": "field_a816a6eec70d9",
+                    "sub_fields": [
+                        {
+                            "key": "field_f481deae2feda",
+                            "label": "Value",
+                            "name": "value",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "yes / no / Sometimes",
+                            "prepend": "",
+                            "append": "",
+                            "parent_repeater": "field_434c760ea7c65"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "key": "field_68c1b81453597",
+            "label": "Anchor",
+            "name": "anchor",
+            "type": "text",
+            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "acf\/lp-comparison-table"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "display_title": "",
+    "allow_ai_access": false,
+    "ai_description": "",
+    "acfe_autosync": [
+        "json"
+    ],
+    "acfe_form": 0,
+    "acfe_meta": "",
+    "acfe_note": "",
+    "modified": 1779357741
+}

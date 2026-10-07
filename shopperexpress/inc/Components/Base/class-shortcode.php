@@ -102,12 +102,28 @@ class Shortcode implements Theme_Component {
 	/**
 	 * Stock count shortcode.
 	 *
+	 * Usage: [stock condition="new" status="In Transit"]
+	 *        [stock condition="used" field="body_style" value="SUV"]
+	 *
+	 * `status` is shorthand for filtering on the "vehicle-status" field (the
+	 * same field the SOC → API Settings → Filters UI calls "Vehicle Status";
+	 * Nexus feeds populate it with free-text values such as "In Stock",
+	 * "In Transit", "On Order", "Sold" — match is case-insensitive). For
+	 * anything else, use the generic `field`/`value` (optionally `operator`,
+	 * default "=") pair — any key Intice_Rest::get_sort_field_value() can
+	 * resolve (make, model, year, body_style, drivetrain, fuel_type, …) works.
+	 * `status` and `field`/`value` are mutually exclusive; `status` wins if both are set.
+	 *
 	 * @param array $atts Attributes.
 	 * @return string
 	 */
 	public function stock( $atts = array() ) {
 		$condition = ! empty( $atts['condition'] ) ? strtolower( $atts['condition'] ) : 'new';
 		$post_type = $condition == 'used' ? 'used-listings' : 'listings';
+
+		$field    = ! empty( $atts['status'] ) ? 'vehicle-status' : ( $atts['field'] ?? '' );
+		$value    = ! empty( $atts['status'] ) ? $atts['status'] : ( $atts['value'] ?? '' );
+		$operator = ! empty( $atts['operator'] ) ? $atts['operator'] : '=';
 
 		if ( \App\is_api_mode() ) {
 			// get_vehicles_count() only reads meta.total from the raw API response, so it
@@ -116,6 +132,20 @@ class Shortcode implements Theme_Component {
 			// get_listings_count() so this never shows a number the SRP grid doesn't back up.
 			$vehicles = \get_api_vehicles_by_condition( $condition );
 			$vehicles = Intice_Rest::apply_vehicle_filters( $vehicles, $post_type );
+
+			if ( '' !== $field && '' !== (string) $value ) {
+				$rule = array(
+					'field'      => $field,
+					'custom_key' => $field,
+					'operator'   => $operator,
+					'value'      => $value,
+				);
+
+				$vehicles = array_filter(
+					$vehicles,
+					fn( $vehicle ) => Intice_Rest::filter_row_matches( $vehicle, $rule )
+				);
+			}
 
 			return count( $vehicles );
 		}
@@ -127,6 +157,20 @@ class Shortcode implements Theme_Component {
 			'fields'         => 'ids',
 			'no_found_rows'  => true,
 		);
+
+		// "vehicle-status" is a real ACF field on both listings/used-listings
+		// (populated from the dealer feed, same free-text values as the API's
+		// vehicle-status field: "In Stock", "In Transit", "On Order", "Sold").
+		// Any other `field` name works the same way once a matching meta key exists.
+		if ( '' !== $field && '' !== (string) $value ) {
+			$args['meta_query'] = array(
+				array(
+					'key'     => $field,
+					'value'   => $value,
+					'compare' => in_array( $operator, array( '>=', '<=', '>', '<' ), true ) ? $operator : '=',
+				),
+			);
+		}
 
 		$query = new WP_Query( $args );
 

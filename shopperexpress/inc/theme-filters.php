@@ -32,7 +32,7 @@ add_filter(
 add_filter(
 	'body_class',
 	function ( $classes ) {
-		if ( is_user_logged_in() ) {
+		if ( wps_auth() ) {
 			$classes[] = 'logged-in';
 		}
 
@@ -254,8 +254,9 @@ add_filter(
 			'trim'               => array( 'trim', 'trim' ),
 			'vin'                => array( 'vin_number', 'vin', 'upper' ),
 			'vin_number'         => array( 'vin_number', 'vin', 'upper' ),
-			'stock'              => array( 'stock-number', 'stock' ),
-			'stock_number'       => array( 'stock-number', 'stock' ),
+			'stock'              => array( 'stock_number', 'stock' ),
+			'stock_number'       => array( 'stock_number', 'stock' ),
+			'stock-number'       => array( 'stock_number', 'stock' ),
 			'type'               => array( 'condition', 'condition' ),
 			// ACF-only fields.
 			'service_disclaimer' => array( 'offerdisclaimer' ),

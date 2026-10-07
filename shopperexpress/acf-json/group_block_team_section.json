@@ -41,6 +41,32 @@
             "new_lines": ""
         },
         {
+            "key": "field_7a0b1c2d3e014",
+            "label": "Columns",
+            "name": "columns",
+            "type": "select",
+            "instructions": "Number of team member cards per row on desktop.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "choices": {
+                "3": "3",
+                "4": "4",
+                "5": "5"
+            },
+            "default_value": "3",
+            "return_format": "value",
+            "multiple": 0,
+            "allow_null": 0,
+            "ui": 0,
+            "ajax": 0,
+            "placeholder": ""
+        },
+        {
             "key": "field_7a0b1c2d3e003",
             "label": "Members",
             "name": "members",

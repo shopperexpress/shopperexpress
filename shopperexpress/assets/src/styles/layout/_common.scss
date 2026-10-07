@@ -79,7 +79,7 @@ svg {
 #wrapper {
   @include animate(padding-left margin-left, 0.3s, linear);
 
-  overflow: hidden;
+  overflow: clip;
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -951,38 +951,6 @@ textarea.form-control {
     padding-left: 0;
     padding-bottom: 20px;
   }
-
-  // .filter-title {
-  // 	font-size: 14px;
-  // 	line-height: 1.2;
-  // 	color: #323232;
-  // 	font-weight: 700;
-  // 	margin: 0;
-  // 	max-width: 53%;
-  // 	text-transform: capitalize;
-  // 	white-space: nowrap;
-  // 	overflow: hidden;
-  // 	text-overflow: ellipsis;
-
-  // 	@include media('>=tablet') {
-  // 		font-size: 16px;
-  // 	}
-  // }
-
-  // .jcf-select {
-  // 	&.jcf-select-filter {
-  // 		margin-right: 15px;
-  // 		display: flex;
-  // 		flex-wrap: wrap;
-  // 		justify-content: flex-end;
-  // 	}
-
-  // 	.jcf-select-drop {
-  // 		left: auto;
-  // 		width: 223px !important;
-  // 		position: static !important;
-  // 	}
-  // }
 }
 
 .card-wrapp {
@@ -1173,70 +1141,6 @@ textarea.form-control {
 .jcf-select {
   cursor: pointer;
 
-  // &.jcf-select-filter {
-  // 	width: auto;
-  // 	min-width: 40px;
-  // 	border: none;
-  // 	max-width: calc(45% - 10px);
-  // 	height: auto;
-  // 	cursor: pointer;
-  // 	margin-bottom: 0;
-  // 	margin-top: 2px;
-
-  // 	.jcf-opener-holder {
-  // 		position: relative;
-  // 		max-width: 100%;
-  // 		text-overflow: ellipsis;
-  // 		white-space: nowrap;
-  // 		align-items: flex-start;
-  // 		display: flex;
-  // 		min-height: 14px;
-  // 	}
-
-  // 	&.jcf-drop-active {
-  // 		.jcf-select-opener {
-  // 			&::before {
-  // 				transform: translate(0, 0) rotate(180deg);
-  // 			}
-  // 		}
-  // 	}
-
-  // 	.jcf-select-text {
-  // 		font-size: 12px;
-  // 		line-height: 1;
-  // 		color: $gray-600;
-  // 		text-transform: uppercase;
-  // 		margin: 2px 18px 0 0;
-  // 		cursor: pointer;
-  // 	}
-
-  // 	.jcf-select-opener {
-  // 		width: 15px;
-  // 		height: 16px;
-  // 		bottom: auto;
-  // 		background-color: transparent;
-
-  // 		&::before {
-  // 			@include animate(transform);
-
-  // 			content: "";
-  // 			position: absolute;
-  // 			left: 0;
-  // 			top: 0;
-  // 			right: 0;
-  // 			bottom: 0;
-  // 			background-image: url("images/select-chevron.svg");
-  // 			background-size: 9px 9px;
-  // 			background-position: 50% 50%;
-  // 			background-repeat: no-repeat;
-  // 			border: none !important;
-  // 			width: auto !important;
-  // 			height: auto !important;
-  // 			transform: translate(0, 0);
-  // 		}
-  // 	}
-  // }
-
   .jcf-select-opener {
     background-color: transparent;
 
@@ -1264,61 +1168,22 @@ textarea.form-control {
 }
 
 .jcf-select-drop {
-  // &.jcf-select-filter {
-  // 	.jcf-select-drop-content {
-  // 		border: none;
-  // 		width: 223px;
-  // 		padding-top: 10px;
-  // 	}
+  &.jcf-select-locations-select {
+    .jcf-select-drop-content {
+      border-color: #cdd4dc;
+      border-radius: 4px;
+      overflow: hidden;
+    }
 
-  // 	.jcf-list {
-  // 		font-size: 14px;
-  // 		line-height: 1.4;
-  // 		font-weight: 500;
+    .jcf-list {
+      font-size: 16px;
+      line-height: 1.4;
 
-  // 		ul {
-  // 			font-size: 14px;
-  // 			line-height: 1.4;
-  // 			font-weight: 500;
-  // 		}
-
-  // 		.jcf-option {
-  // 			@include animate(color background-color);
-
-  // 			cursor: pointer;
-  // 			position: relative;
-  // 			text-transform: capitalize;
-  // 			padding: 5px 10px 5px 25px;
-
-  // 			&.jcf-selected {
-  // 				&::before {
-  // 					opacity: 1;
-  // 				}
-  // 			}
-
-  // 			&::before {
-  // 				@include size(12px, 7px);
-  // 				content: '';
-  // 				position: absolute;
-  // 				left: 6px;
-  // 				top: 10px;
-  // 				opacity: 0;
-  // 				border: solid $black;
-  // 				border-width: 0 0 3px 3px;
-  // 				transform: rotate(-45deg);
-  // 			}
-
-  // 			&.jcf-hover {
-  // 				background-color: $gray-200;
-  // 				color: $gray-900;
-  // 			}
-
-  // 			&.jcf-selected {
-  // 				color: $gray-900;
-  // 			}
-  // 		}
-  // 	}
-  // }
+      .jcf-option {
+        padding: 7px 13px;
+      }
+    }
+  }
 
   .jcf-scrollable-wrapper {
     &:hover {
@@ -2794,25 +2659,6 @@ textarea.form-control {
   }
 }
 
-// .scroller {
-// 	scrollbar-color: rgba($black, .5) $white;
-// 	scrollbar-width: thin;
-// }
-
-// .scroller::-webkit-scrollbar {
-// 	width: 15px;
-// 	height: 8px;
-// }
-
-// .scroller::-webkit-scrollbar-track-piece {
-// 	background-color: $white;
-// }
-
-// .scroller::-webkit-scrollbar-thumb:horizontal {
-// 	height: 10px;
-// 	background-color: rgba($black, .5);
-// }
-
 .detail-slider-holder {
   padding-bottom: 17px;
 
@@ -3235,324 +3081,6 @@ body {
     }
   }
 }
-
-// .modal {
-//   .scrollable {
-//     scrollbar-width: thin;
-//     scrollbar-color: #b3b3b3 $white;
-
-//     &::-webkit-scrollbar {
-//       width: 8px;
-//     }
-
-//     &::-webkit-scrollbar-track {
-//       background-color: $white;
-//     }
-
-//     &::-webkit-scrollbar-thumb {
-//       background-color: #b3b3b3;
-//     }
-
-//     &::-webkit-scrollbar-button:decrement,
-//     &::-webkit-scrollbar-button:increment {
-//       width: 0 !important;
-//       height: 0 !important;
-//       visibility: collapse !important;
-//       display: none !important;
-//       opacity: 0 !important;
-//     }
-//   }
-
-//   &.modal-login {
-//     .modal-header {
-//       min-height: 0;
-//     }
-
-//     .btn {
-//       min-width: 180px;
-//     }
-//   }
-
-//   &.modal-get-book {
-//     iframe {
-//       width: 100%;
-//       height: 100%;
-//     }
-
-//     .modal-dialog {
-//       width: 100%;
-//       max-width: 1020px;
-
-//       @include media('<tablet') {
-//         margin: 28px 0 0;
-//       }
-
-//       @include media('>=tablet') {
-//         width: calc(100% - 60px);
-//       }
-//     }
-
-//     .modal-content {
-//       border-radius: 0;
-//       height: calc(100vh - 28px);
-//       box-shadow: none;
-//       overflow: visible;
-
-//       @include media('>=tablet') {
-//         border-radius: 6px;
-//         height: calc(100vh - 3.5rem);
-//         box-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-//       }
-//     }
-
-//     .modal-header {
-//       min-height: 0;
-//       padding: 0;
-//     }
-
-//     .modal-body {
-//       padding: 0;
-//       overflow: hidden;
-
-//       @include media('>=tablet') {
-//         border-radius: 6px;
-//         overflow: hidden;
-//       }
-//     }
-
-//     .close {
-//       @include size(24px);
-
-//       z-index: 2;
-//       opacity: 1;
-//       margin: 0;
-//       position: absolute;
-//       top: -24px;
-//       right: 0;
-
-//       @include media('>=tablet') {
-//         top: 0;
-//         right: -24px;
-//       }
-
-//       &:hover {
-//         opacity: 1;
-//         background-color: transparent;
-//       }
-//     }
-//   }
-
-//   &.modal-offer {
-//     .modal-title {
-//       margin-bottom: 40px;
-//     }
-
-//     .lead {
-//       padding-bottom: 46px;
-//     }
-
-//     h4 {
-//       text-align: center;
-//       margin-bottom: 25px;
-//     }
-
-//     .btn-holder {
-//       padding-bottom: 20px;
-//     }
-//   }
-
-//   .form-check {
-//     font-size: 15px;
-//     font-weight: 500;
-//   }
-
-//   .modal-form {
-//     .modal-header {
-//       padding-top: 12px;
-//       min-height: 0;
-//       padding-bottom: 0;
-//     }
-
-//     .wpforms-page-indicator.progress {
-//       line-height: 1.2;
-//       display: block;
-//     }
-
-//     .wpforms-clear.wpforms-pagebreak-left {
-//       text-align: center;
-//     }
-
-//     .wpforms-page-button {
-//       background: var(--primary);
-//       border-radius: 0;
-//       min-width: 262px !important;
-//       height: auto;
-//       line-height: 1;
-//       text-transform: uppercase;
-//       font-weight: 600;
-//       padding: 15px 20px;
-//       font-size: 1.125rem;
-
-//       &:hover {
-//         background: var(--primary);
-//         opacity: 0.8;
-//       }
-
-//       &::after {
-//         display: none;
-//         margin: 0;
-//       }
-//     }
-
-//     .wpforms-field.sms-code {
-//       text-align: center;
-
-//       .wpforms-field-small {
-//         margin: 0 auto;
-//       }
-//     }
-
-//     .modal-body {
-//       @include media('>=tablet') {
-//         padding-bottom: 45px;
-//       }
-//     }
-
-//     .close {
-//       top: 24px;
-//       right: 24px;
-//     }
-
-//     .form-description {
-//       font-size: 11px;
-//       line-height: 1.2142;
-//       font-weight: 500;
-
-//       @include media ('>=tablet') {
-//         margin: 0 36px;
-//       }
-//     }
-//   }
-
-//   &-header {
-//     border: none;
-//     position: relative;
-//     min-height: 80px;
-//     padding-left: 40px;
-//     padding-right: 40px;
-
-//     @include media('>=tablet') {
-//       min-height: 100px;
-//     }
-
-//     .close {
-//       @include animate(background-color color);
-//       @include size(24px);
-
-//       position: absolute;
-//       right: 30px;
-//       top: 30px;
-//       opacity: 1 !important;
-//       padding: 0;
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//       color: $black;
-//       text-shadow: none;
-//       border-radius: 50%;
-//       outline: none;
-//       z-index: 5;
-
-//       &:hover {
-//         background-color: $black;
-//         color: $white;
-//       }
-
-//       svg {
-//         width: 24px;
-//         height: auto;
-//         fill: currentColor;
-//       }
-
-//       i {
-//         font-size: 18px;
-//       }
-//     }
-//   }
-
-//   &-footer {
-//     border: none;
-//   }
-
-//   .modal-content {
-//     border-radius: 16px;
-//     box-shadow: 0 0 7px rgba($black, 0.9);
-//   }
-
-//   .modal-title {
-//     font-size: 20px;
-//     line-height: 1.2;
-
-//     @include media('>=tablet') {
-//       font-size: 29px;
-//     }
-//   }
-
-//   .text-holder {
-//     font-weight: 500;
-//     font-size: 14px;
-//     line-height: 1.375;
-//     max-height: 290px;
-//     height: auto;
-//     overflow-y: auto;
-//     padding: 0 1rem;
-//     margin-bottom: 20px;
-
-//     @include media('>=tablet') {
-//       font-size: 16px;
-//       max-height: 460px;
-//       margin-bottom: 40px;
-//     }
-
-//     &.h-sm {
-//       max-height: 150px;
-//       font-size: 11px;
-//       padding: 0 1rem;
-//       margin-bottom: 0;
-
-//       @include media('>=tablet') {
-//         max-height: 150px;
-//         font-size: 11px;
-//       }
-//     }
-//   }
-
-//   .lead {
-//     font-size: 13px;
-//     line-height: 1.3;
-//     font-weight: 500;
-//     padding-bottom: 13px;
-
-//     @include media('>=tablet') {
-//       font-size: 17.5px;
-//       padding-bottom: 17px;
-//     }
-//   }
-
-//   .modal-content-list {
-//     margin: 0;
-//     list-style: none;
-//     padding-left: 2em;
-
-//     li {
-//       position: relative;
-//     }
-//   }
-// }
-
-// .modal-backdrop {
-//   background-color: rgba(0, 0, 0, 0.7);
-// }
 
 .wpforms-container-full.twilio-form {
   .wpforms-page-indicator.progress {
@@ -4780,90 +4308,6 @@ body {
     }
   }
 }
-
-// .modal {
-//   .wpforms-container {
-//     margin-top: 0 !important;
-//     margin-bottom: 20px !important;
-
-//     @include media ('>=tablet') {
-//       padding: 0 36px;
-//     }
-//   }
-
-//   .wpforms-form {
-//     .wpforms-field {
-//       padding: 0 0 18px;
-//     }
-
-//     .wpforms-field-container {
-
-//       input[type="email"],
-//       input[type="tel"],
-//       input[type="text"] {
-//         display: block;
-//         width: 100%;
-//         height: 50px;
-//         font-size: .9375rem;
-//         font-weight: 500;
-//         line-height: 1.5;
-//         color: $black;
-//         background-color: $white;
-//         border: 1px solid #999;
-//         border-radius: 0 !important;
-
-//         &:focus {
-//           border-color: $black;
-//           box-shadow: none;
-//         }
-//       }
-//     }
-
-//     .wpforms-submit-container {
-//       display: flex;
-//       align-items: center;
-//       justify-content: center;
-//       flex-direction: column;
-//       margin: 0 !important;
-//       padding: 0 !important;
-
-//       button[type="submit"] {
-//         @include animate(opacity);
-//         font-size: 1.125rem;
-//         line-height: 1;
-//         text-transform: uppercase;
-//         font-weight: 600;
-//         border-radius: 0;
-//         padding: 15px 20px;
-//         background-color: var(--primary);
-//         border-color: var(--primary);
-//         min-width: 262px;
-//         font-family: inherit;
-//         display: block;
-//         width: 100%;
-//         height: auto;
-//         box-shadow: none;
-//         color: $white;
-
-//         @include media ('>=tablet') {
-//           width: auto;
-//         }
-
-//         &:focus {
-//           outline: none;
-
-//           &::after {
-//             display: none;
-//           }
-//         }
-
-//         &:hover {
-//           opacity: 0.8;
-//         }
-//       }
-//     }
-//   }
-// }
 
 .location-logos {
   @extend %listreset;

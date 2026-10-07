@@ -1,3 +1,83 @@
+// Scroll Steps init
+function initScrollSteps() {
+	const activeClass = 'is-animate';
+	// trigger line position in the viewport (0.5 - center of the screen)
+	const triggerOffset = 0.3;
+	const lists = document.querySelectorAll('.lp-steps-list');
+
+	if (!lists.length) return;
+
+	const steps = [];
+
+	lists.forEach((list) => {
+		const progress = list.parentElement.querySelector('.step-progress .progress-bar');
+		const items = list.querySelectorAll(':scope > li');
+
+		if (!progress || !items.length) return;
+
+		steps.push({ list, progress, items });
+	});
+
+	if (!steps.length) return;
+
+	let ticking = false;
+	let syncFrame = null;
+
+	// toggle classes by the rendered (animated) height of the progress, not by the target one
+	function syncItems() {
+		let isAnimating = false;
+
+		steps.forEach((step) => {
+			const progressRect = step.progress.getBoundingClientRect();
+
+			step.items.forEach((item) => {
+				const itemOffset = item.getBoundingClientRect().top - progressRect.top;
+				item.classList.toggle(activeClass, progressRect.height > 0 && progressRect.height >= itemOffset);
+			});
+
+			if (Math.abs(progressRect.height - step.targetHeight) > 0.5) {
+				isAnimating = true;
+			}
+		});
+
+		syncFrame = isAnimating ? window.requestAnimationFrame(syncItems) : null;
+	}
+
+	function update() {
+		const triggerY = window.innerHeight * triggerOffset;
+
+		steps.forEach((step) => {
+			const { list, progress, items } = step;
+			const listRect = list.getBoundingClientRect();
+			const lastItemTop = items[items.length - 1].getBoundingClientRect().top;
+			// 0 - trigger line reached the top of the list, 1 - reached the last li
+			const distance = lastItemTop - listRect.top;
+			const ratio = distance > 0 ? Math.min(Math.max((triggerY - listRect.top) / distance, 0), 1) : 1;
+
+			step.targetHeight = ratio * listRect.height;
+			progress.style.height = `${step.targetHeight}px`;
+		});
+
+		ticking = false;
+
+		if (!syncFrame) {
+			syncFrame = window.requestAnimationFrame(syncItems);
+		}
+	}
+
+	function onScroll() {
+		if (ticking) return;
+
+		ticking = true;
+		window.requestAnimationFrame(update);
+	}
+
+	window.addEventListener('scroll', onScroll, { passive: true });
+	window.addEventListener('resize', onScroll);
+	window.addEventListener('load', update);
+	update();
+}
+
 // Google Reviews init
 function initGoogleReviews() {
 	document.querySelectorAll('[data-google-reviews]').forEach((holder) => {
@@ -2317,6 +2397,41 @@ function initSlickCarousel() {
 			}]
 		});
 	});
+
+	// Reviews' own .lp-card-slider (GoogleReviews class) is initialized after
+	// its AJAX data loads, not here on DOM-ready — skip it to avoid a double
+	// slick() init (empty-at-load here, then re-init with different options
+	// once reviews arrive) that was throwing the layout off.
+	jQuery('.lp-card-slider')
+		.not('[data-google-reviews-list]')
+		.each(function() {
+			const slider = jQuery(this);
+
+			initSlider();
+
+			function initSlider() {
+				slider.slick({
+					slidesToScroll: 1,
+					rows: 0,
+					slidesToShow: 3,
+					infinite: false,
+					// variableWidth: true,
+					prevArrow: '<button class="lp-slick-control slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="#000000"><path d="M5.48 14.926v-0.001c0-0.001 0.002-0.002 0.002-0.003s0.002-0.001 0.002-0.002v-0.001c0.018-0.018 0.033-0.034 0.051-0.052l9.334-9.333c0.623-0.623 1.638-0.624 2.263 0.001s0.624 1.638-0.001 2.263l-6.602 6.602h14.804c0.884 0 1.6 0.716 1.6 1.6s-0.716 1.6-1.6 1.6h-14.804l6.602 6.603c0.625 0.625 0.625 1.637 0.001 2.262-0.313 0.313-0.723 0.469-1.132 0.469s-0.819-0.156-1.131-0.469l-9.334-9.332c-0.018-0.018-0.033-0.034-0.051-0.052v-0.001c0-0.001-0.002-0.002-0.002-0.002s-0.002-0.002-0.002-0.003v-0.001c-0.258-0.282-0.414-0.657-0.414-1.068v-0.010c0-0.411 0.156-0.786 0.414-1.068z"/></svg></button>',
+					nextArrow: '<button class="lp-slick-control slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="#000000"><path d="M26.52 14.926v-0.001c0-0.001-0.002-0.002-0.002-0.003s-0.002-0.001-0.002-0.002v-0.001c-0.018-0.018-0.033-0.034-0.051-0.052l-9.334-9.333c-0.623-0.623-1.638-0.624-2.263 0.001s-0.624 1.638 0.001 2.263l6.602 6.602h-14.804c-0.884 0-1.6 0.716-1.6 1.6s0.716 1.6 1.6 1.6h14.804l-6.602 6.603c-0.625 0.625-0.625 1.637-0.001 2.262 0.313 0.313 0.723 0.469 1.132 0.469s0.819-0.156 1.131-0.469l9.334-9.332c0.018-0.018 0.033-0.034 0.051-0.052v-0.001c0-0.001 0.002-0.002 0.002-0.002s0.002-0.002 0.002-0.003v-0.001c0.258-0.282 0.414-0.657 0.414-1.068v-0.010c0-0.411-0.156-0.786-0.414-1.068z"/></svg></button>',
+					responsive: [{
+						breakpoint: 1024,
+						settings: {
+							slidesToShow: 2
+						}
+					}, {
+						breakpoint: 576,
+						settings: {
+							slidesToShow: 1
+						}
+					}]
+				});
+			}
+		});
 }
 
 function initVideo() {
@@ -2969,7 +3084,8 @@ class SpinPopup {
 
 		if (!this.vin.length) return;
 
-		const fullVin = this.vin.text().trim();
+		const dataVin = this.vin.data('vin');
+		const fullVin = dataVin ? String(dataVin).trim() : this.vin.text().trim();
 
 		switch (true) {
 			case this.btnSpin.hasClass('spin-impel'):
@@ -11179,10 +11295,19 @@ class GoogleReviews {
 	}
 
 	normalizeReview(review) {
+		const text = review.text ?? '';
+
 		return {
 			rating: review.rating ?? 0,
 			stars: this.renderStars(review.rating),
-			text: review.text ?? '',
+			// "lp" cards have no "Read more"/modal truncation UI, so cap the length
+			// here instead (e.g. "Buying a new 2027 CRV was hassle free and
+			// enjoyable, From dealing with Joey Nahama , Naji Abihabib and Fabio
+			// Martorell an exceptional expierence" is about the max length shown).
+			text: this.options.style === 'lp' ? this.truncateText(text, 150) : text,
+			// Modal's review list always shows the full text — only the lp card
+			// itself is capped (see the "text" field above).
+			fullText: text,
 			relativePublishTimeDescription: review.relativePublishTimeDescription ?? '',
 			publishTime: this.formatPublishTime(review.publishTime),
 			googleMapsURI: review.googleMapsURI ?? '',
@@ -11191,6 +11316,15 @@ class GoogleReviews {
 				photoURI: review.authorAttribution?.photoURI || 'images/review-avatar.png',
 			},
 		};
+	}
+
+	truncateText(text, maxLength) {
+		if (!text || text.length <= maxLength) return text;
+
+		const cut = text.slice(0, maxLength);
+		const lastSpace = cut.lastIndexOf(' ');
+
+		return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim()}…`;
 	}
 
 	formatPublishTime(publishTime) {
@@ -11272,6 +11406,34 @@ class GoogleReviews {
 
 		if (this.listElement) {
 			this.listElement.innerHTML = this.reviewsTemplate({ reviews: this.reviews });
+
+			// "lp" style's rating/stars/count markup lives inside the handlebars
+			// template itself (as the slider's first slide), so it doesn't exist
+			// yet when the constructor's querySelector ran — re-resolve and
+			// (re-)apply here now that the template has been injected.
+			const isLp = this.options.style === 'lp';
+			// lp only ever shows 5-star reviews, so its header always reads "5" rather than the real average.
+			const lpRating = 5;
+			if (!this.ratingElement || !this.holder.contains(this.ratingElement)) {
+				this.ratingElement = this.holder.querySelector('[data-google-reviews-rating]');
+				if (this.ratingElement) this.ratingElement.textContent = isLp ? lpRating : this.formatRating(data.average_rating);
+			}
+			if (!this.countElement || !this.holder.contains(this.countElement)) {
+				this.countElement = this.holder.querySelector('[data-google-reviews-count]');
+				if (this.countElement) {
+					if (isLp) {
+						this.countElement.innerHTML = data.total_review_count
+							? `Based on <strong>${data.total_review_count.toLocaleString()}</strong> reviews`
+							: '';
+					} else {
+						this.countElement.textContent = data.total_review_count ? `(${data.total_review_count.toLocaleString()})` : '';
+					}
+				}
+			}
+			if (!this.starsElement || !this.holder.contains(this.starsElement)) {
+				this.starsElement = this.holder.querySelector('[data-google-reviews-stars]');
+				if (this.starsElement) this.starsElement.innerHTML = this.renderStars(isLp ? lpRating : data.average_rating);
+			}
 		}
 
 		if (this.modalRatingElement) {
@@ -11323,7 +11485,8 @@ class GoogleReviews {
 	}
 
 	initSlider() {
-		if (this.options.style !== 'slider' || !this.listElement || !window.jQuery) return;
+		// "lp" reuses the same slider behavior as "slider", just with different wrapper markup/CSS.
+		if (!['slider', 'lp'].includes(this.options.style) || !this.listElement || !window.jQuery) return;
 
 		const $list = window.jQuery(this.listElement);
 
@@ -11334,35 +11497,70 @@ class GoogleReviews {
 		if (!this.reviews.length) return;
 
 		const slidesToShow = Math.max(1, this.options.slidesPerView || 6);
+		const isLp = this.options.style === 'lp';
 
-		$list.slick({
-			slidesToScroll: 1,
-			rows: 0,
-			slidesToShow,
-			prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z"/></svg></button>',
-			nextArrow: '<button class="slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>',
-			responsive: [{
-				breakpoint: 1570,
-				settings: {
-					slidesToShow: Math.min(slidesToShow, 5)
-				}
-			}, {
-				breakpoint: 1310,
-				settings: {
-					slidesToShow: Math.min(slidesToShow, 4)
-				}
-			}, {
-				breakpoint: 1050,
-				settings: {
-					slidesToShow: Math.min(slidesToShow, 3)
-				}
-			}, {
-				breakpoint: 576,
-				settings: {
-					slidesToShow: 1
-				}
-			}]
-		});
+		// "lp" style uses the landing-page arrow button skin (.lp-slick-control)
+		// with the same large arrow glyph as the other lp- blocks, instead of
+		// the default small round slick-prev/slick-next buttons.
+		const prevArrow = isLp
+			? '<button class="lp-slick-control slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="#000000"><path d="M5.48 14.926v-0.001c0-0.001 0.002-0.002 0.002-0.003s0.002-0.001 0.002-0.002v-0.001c0.018-0.018 0.033-0.034 0.051-0.052l9.334-9.333c0.623-0.623 1.638-0.624 2.263 0.001s0.624 1.638-0.001 2.263l-6.602 6.602h14.804c0.884 0 1.6 0.716 1.6 1.6s-0.716 1.6-1.6 1.6h-14.804l6.602 6.603c0.625 0.625 0.625 1.637 0.001 2.262-0.313 0.313-0.723 0.469-1.132 0.469s-0.819-0.156-1.131-0.469l-9.334-9.332c-0.018-0.018-0.033-0.034-0.051-0.052v-0.001c0-0.001-0.002-0.002-0.002-0.002s-0.002-0.002-0.002-0.003v-0.001c-0.258-0.282-0.414-0.657-0.414-1.068v-0.010c0-0.411 0.156-0.786 0.414-1.068z"></path></svg></button>'
+			: '<button class="slick-prev slick-arrow" aria-label="Previous"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z"/></svg></button>';
+		const nextArrow = isLp
+			? '<button class="lp-slick-control slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="#000000"><path d="M26.52 14.926v-0.001c0-0.001-0.002-0.002-0.002-0.003s-0.002-0.001-0.002-0.002v-0.001c-0.018-0.018-0.033-0.034-0.051-0.052l-9.334-9.333c-0.623-0.623-1.638-0.624-2.263 0.001s-0.624 1.638 0.001 2.263l6.602 6.602h-14.804c-0.884 0-1.6 0.716-1.6 1.6s0.716 1.6 1.6 1.6h14.804l-6.602 6.603c-0.625 0.625-0.625 1.637-0.001 2.262 0.313 0.313 0.723 0.469 1.132 0.469s0.819-0.156 1.131-0.469l9.334-9.332c0.018-0.018 0.033-0.034 0.051-0.052v-0.001c0-0.001 0.002-0.002 0.002-0.002s0.002-0.002 0.002-0.003v-0.001c0.258-0.282 0.414-0.657 0.414-1.068v-0.010c0-0.411-0.156-0.786-0.414-1.068z"></path></svg></button>'
+			: '<button class="slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>';
+
+		// "lp" uses the same options as the other .lp-card-slider blocks
+		// (DOM-ready init), so the reviews slider lays out identically.
+		$list.slick(
+			isLp
+				? {
+						slidesToScroll: 1,
+						rows: 0,
+						slidesToShow: 3,
+						infinite: false,
+						prevArrow,
+						nextArrow,
+						responsive: [{
+							breakpoint: 1024,
+							settings: {
+								slidesToShow: 2
+							}
+						}, {
+							breakpoint: 576,
+							settings: {
+								slidesToShow: 1
+							}
+						}],
+				  }
+				: {
+						slidesToScroll: 1,
+						rows: 0,
+						slidesToShow,
+						prevArrow,
+						nextArrow,
+						responsive: [{
+							breakpoint: 1570,
+							settings: {
+								slidesToShow: Math.min(slidesToShow, 5)
+							}
+						}, {
+							breakpoint: 1310,
+							settings: {
+								slidesToShow: Math.min(slidesToShow, 4)
+							}
+						}, {
+							breakpoint: 1050,
+							settings: {
+								slidesToShow: Math.min(slidesToShow, 3)
+							}
+						}, {
+							breakpoint: 576,
+							settings: {
+								slidesToShow: 1
+							}
+						}],
+				  }
+		);
 	}
 
 	makeCallback(callbackName, ...args) {
@@ -12804,6 +13002,7 @@ jQuery(function() {
 	initAddCssVariales();
 	initChat();
 	initHoverClass();
+	initScrollSteps();
 	jQuery('.payment-info .btn.btn-primary').on('click', function(e) {
 		e.preventDefault();
 	});

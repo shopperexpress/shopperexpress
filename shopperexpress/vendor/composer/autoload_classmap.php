@@ -65,6 +65,8 @@ return array(
     'App\\Components\\SOC\\Modules\\Maintenance' => $baseDir . '/inc/Components/SOC/Modules/class-maintenance.php',
     'App\\Components\\SOC\\Modules\\Performance' => $baseDir . '/inc/Components/SOC/Modules/class-performance.php',
     'App\\Components\\SOC\\Modules\\Security_Snapshot' => $baseDir . '/inc/Components/SOC/Modules/class-security-snapshot.php',
+    'App\\Components\\SOC\\Modules\\Shortcodes_Reference' => $baseDir . '/inc/Components/SOC/Modules/class-shortcodes-reference.php',
+    'App\\Components\\SOC\\Modules\\Spin_Checker' => $baseDir . '/inc/Components/SOC/Modules/class-spin-checker.php',
     'App\\Components\\SOC\\Modules\\System_Status' => $baseDir . '/inc/Components/SOC/Modules/class-system-status.php',
     'App\\Components\\SOC\\Modules\\VDR_Requests' => $baseDir . '/inc/Components/SOC/Modules/class-vdr-requests.php',
     'App\\Components\\SOC\\SOC' => $baseDir . '/inc/Components/SOC/class-soc.php',

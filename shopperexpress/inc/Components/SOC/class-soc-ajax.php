@@ -52,6 +52,7 @@ class SOC_Ajax {
 		'soc_vin_clear_history'  => 'handle_vin_clear_history',
 		'soc_vin_run_background' => 'handle_vin_run_background',
 		'soc_vin_poll'           => 'handle_vin_poll',
+		'soc_spin_check'         => 'handle_spin_check',
 		'soc_im_toggle'               => 'handle_im_toggle',
 		'soc_api_mode_toggle'         => 'handle_api_mode_toggle',
 		'soc_api_save_credentials'    => 'handle_api_save_credentials',
@@ -587,6 +588,33 @@ class SOC_Ajax {
 		}
 
 		SOC_Response::success( $module->vin_poll( $post_id ) );
+	}
+
+	/**
+	 * Check 360° spin availability for a VIN across all supported providers.
+	 */
+	private function handle_spin_check(): void {
+		$vin = strtoupper( trim( sanitize_text_field( wp_unslash( $_POST['vin'] ?? '' ) ) ) );
+
+		if ( empty( $vin ) ) {
+			SOC_Response::error( __( 'Please enter a VIN.', 'shopperexpress' ) );
+		}
+
+		if ( ! preg_match( '/^[A-HJ-NPR-Z0-9]{17}$/', $vin ) ) {
+			SOC_Response::error( __( 'VIN must be exactly 17 alphanumeric characters (I, O and Q are not valid).', 'shopperexpress' ) );
+		}
+
+		$module = $this->modules['spin-checker'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Spin Checker module not available.' );
+		}
+
+		$result = $module->check_vin( $vin );
+
+		SOC_Logger::write( 'api', 'Spin check for VIN ' . $vin );
+
+		SOC_Response::success( $result );
 	}
 
 	// ─── Import Monitor ───────────────────────────────────────────────────────

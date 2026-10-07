@@ -292,6 +292,20 @@ $soc-radius: 4px;
     }
 }
 
+.soc-plain-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        margin-bottom: 4px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
 // ============================================================
 // Log Output
 // ============================================================

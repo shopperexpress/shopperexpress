@@ -1,0 +1,79 @@
+.section-find-us {
+  margin-bottom: 15px;
+
+  .text-block {
+    background-color: $gray-200;
+    padding: 20px;
+    height: 100%;
+    border-radius: 10px;
+    color: $gray-900;
+    font-weight: 500;
+
+    @include media('>=desktop') {
+      padding: 33px 20px;
+    }
+
+    @include media('>=widescreen') {
+      padding: 33px 42px;
+    }
+  }
+
+  h2 {
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 20px;
+    letter-spacing: -1.5px;
+  }
+
+  address {
+    margin-bottom: 19px;
+  }
+
+  .map-holder {
+    height: 360px;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-top: 20px;
+
+    @include media('>=tablet') {
+      margin-top: 0;
+    }
+  }
+
+  .jcf-select {
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    border-color: #cdd4dc;
+    height: 50px;
+    margin-bottom: 17px;
+
+    &.jcf-drop-active {
+      .jcf-select-opener {
+        &::before {
+          transform: translateY(-50%) rotate(-180deg);
+        }
+      }
+    }
+
+    .jcf-select-text {
+      margin: 13px 35px 13px 13px;
+    }
+
+    .jcf-select-opener {
+      &::before {
+        @include triangle(11px, $black, down);
+        background-image: none;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
+  .btn.btn-pill {
+    padding: 15px 29px;
+    font-size: 15px;
+  }
+}

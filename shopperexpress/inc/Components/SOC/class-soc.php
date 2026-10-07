@@ -22,6 +22,8 @@ use App\Components\SOC\Modules\VDR_Requests;
 use App\Components\SOC\Modules\Json_Ld_Settings;
 use App\Components\SOC\Modules\Google_Reviews;
 use App\Components\SOC\Modules\AI_Vdp_Log;
+use App\Components\SOC\Modules\Shortcodes_Reference;
+use App\Components\SOC\Modules\Spin_Checker;
 
 /**
  * SOC Component
@@ -55,7 +57,7 @@ class SOC implements Theme_Component {
 		'integrations' => array(
 			'label'   => 'API & Integrations',
 			'icon'    => 'dashicons-rest-api',
-			'modules' => array( 'api-settings', 'developer-tools', 'api-health' ),
+			'modules' => array( 'api-settings', 'developer-tools', 'api-health', 'spin-checker' ),
 		),
 		'leads'        => array(
 			'label'   => 'Leads & Vehicles',
@@ -65,7 +67,7 @@ class SOC implements Theme_Component {
 		'content'      => array(
 			'label'   => 'SEO & Content',
 			'icon'    => 'dashicons-media-code',
-			'modules' => array( 'google-reviews', 'json-ld-settings' ),
+			'modules' => array( 'google-reviews', 'json-ld-settings', 'shortcodes-reference' ),
 		),
 	);
 
@@ -110,6 +112,8 @@ class SOC implements Theme_Component {
 			new Json_Ld_Settings(),
 			new Google_Reviews(),
 			new AI_Vdp_Log(),
+			new Shortcodes_Reference(),
+			new Spin_Checker(),
 		);
 
 		foreach ( $module_classes as $module ) {

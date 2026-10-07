@@ -4,39 +4,19 @@
 
 .full-width-image-slider {
   .slick-dots {
-    align-items: center;
-    bottom: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    left: 10px;
-    position: absolute;
-    right: 10px;
-    z-index: 2;
     pointer-events: none;
 
     > li {
       pointer-events: auto;
+      position: relative;
+      padding: 10px;
+      margin: -4px !important;
     }
 
     button {
-      @include animate(background-color);
-      @include size(14px);
-      text-indent: -9999px;
-      overflow: hidden;
-      display: block;
-      border-radius: 50rem;
+      position: relative;
+      z-index: 3;
       border: 1px solid var(--primary) !important;
-      background-color: transparent;
-      padding: 0;
-
-      &:hover {
-        background-color: var(--primary);
-      }
-    }
-
-    li.slick-active button {
-      background-color: var(--primary);
     }
   }
 
