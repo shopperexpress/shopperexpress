@@ -35,6 +35,7 @@ jobs:
               git -c safe.directory="*" pull --ff-only origin develop
 
             echo "== Installing composer dependencies =="
+            cd ${{ secrets.CLOUDWAYS_PATH }}/shopperexpress
             composer install --no-dev --optimize-autoloader --no-interaction
 
             echo "== Deploy finished =="
