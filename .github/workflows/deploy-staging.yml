@@ -28,7 +28,7 @@ jobs:
           ssh -p ${{ secrets.CLOUDWAYS_PORT }} ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} '
             set -e
 
-            cd ${{ secrets.CLOUDWAYS_PATH_STAGE }}
+            cd ${{ secrets.CLOUDWAYS_PATH }}
 
             echo "== Pulling latest code =="
             GIT_SSH_COMMAND="ssh -i /home/master/.ssh/github_deploy -o StrictHostKeyChecking=no" \
