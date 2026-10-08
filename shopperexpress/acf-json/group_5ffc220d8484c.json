@@ -10469,7 +10469,7 @@
                     "required": 0,
                     "conditional_logic": 0,
                     "wrapper": {
-                        "width": "",
+                        "width": "50",
                         "class": "",
                         "id": ""
                     },
@@ -10479,6 +10479,68 @@
                     "ui_on_text": "",
                     "ui_off_text": "",
                     "ui": 1,
+                    "parent_repeater": "field_69b18934ca86b"
+                },
+                {
+                    "key": "field_6a0cfc64e4301",
+                    "label": "Active",
+                    "name": "active",
+                    "aria-label": "",
+                    "type": "true_false",
+                    "instructions": "Turn this card off without deleting it.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "message": "",
+                    "default_value": 1,
+                    "allow_in_bindings": 0,
+                    "ui_on_text": "Active",
+                    "ui_off_text": "Inactive",
+                    "ui": 1,
+                    "parent_repeater": "field_69b18934ca86b"
+                },
+                {
+                    "key": "field_6a0cfc64e4302",
+                    "label": "Start date",
+                    "name": "start_date",
+                    "aria-label": "",
+                    "type": "date_picker",
+                    "instructions": "Optional. Card is hidden until this date.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "F j, Y",
+                    "return_format": "Ymd",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
+                    "parent_repeater": "field_69b18934ca86b"
+                },
+                {
+                    "key": "field_6a0cfc64e4303",
+                    "label": "End date",
+                    "name": "end_date",
+                    "aria-label": "",
+                    "type": "date_picker",
+                    "instructions": "Optional. Card is hidden after this date.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "50",
+                        "class": "",
+                        "id": ""
+                    },
+                    "display_format": "F j, Y",
+                    "return_format": "Ymd",
+                    "first_day": 1,
+                    "allow_in_bindings": 0,
                     "parent_repeater": "field_69b18934ca86b"
                 },
                 {

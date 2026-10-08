@@ -376,6 +376,18 @@ class Intice_Rest implements Theme_Component {
 		while ( have_rows( 'custom_cards', 'options' ) ) {
 			the_row();
 
+			if ( ! get_sub_field( 'active' ) ) {
+				continue;
+			}
+
+			$start_date = get_sub_field( 'start_date' );
+			$end_date   = get_sub_field( 'end_date' );
+			$today      = current_time( 'Ymd' );
+
+			if ( ( $start_date && $today < $start_date ) || ( $end_date && $today > $end_date ) ) {
+				continue;
+			}
+
 			$show_on = get_sub_field( 'show_on' );
 
 			if ( 'all' !== $show_on && $show_on !== $post_type ) {
