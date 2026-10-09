@@ -461,4 +461,27 @@ class Shortcode implements Theme_Component {
 	public function site_url( $atts = array() ) {
 		return get_template_directory_uri() . '/assets/dist/';
 	}
+
+	/**
+	 * Current Date.
+	 *
+	 * Usage: [current_date]
+	 *        [current_date format="F j, Y"]
+	 *        [current_date format="Y" offset="+1 year"]
+	 *
+	 * @param array $atts Attributes.
+	 * @return string
+	 */
+	public function current_date( $atts = array() ) {
+		$format = ! empty( $atts['format'] ) ? $atts['format'] : get_option( 'date_format' );
+		$offset = ! empty( $atts['offset'] ) ? $atts['offset'] : 'now';
+
+		$timestamp = strtotime( $offset, current_time( 'timestamp' ) );
+
+		if ( false === $timestamp ) {
+			$timestamp = current_time( 'timestamp' );
+		}
+
+		return esc_html( wp_date( $format, $timestamp ) );
+	}
 }
