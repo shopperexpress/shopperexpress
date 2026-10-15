@@ -18,7 +18,7 @@ if ( $_intice_vehicle_overview ) {
 } else {
 	$vehicle_overview = get_field( 'vehicle_overview' ) ? wp_kses_post( str_replace( array( '<div>', '</div>' ), '', get_field( 'vehicle_overview' ) ) ) : '';
 }
-$modals[]         = array(
+$modals[] = array(
 	'id'              => 'overviewModal',
 	'title'           => '<h5 class="modal-title">' . esc_html__( 'Overview', 'shopperexpress' ) . '</h5>',
 	'aria-labelledby' => 'overviewModalLabel',
@@ -356,7 +356,7 @@ foreach ( $modals as $modal ) :
 					<div class="modal-body-wrap">
 						<div class="modal-body">
 							<div class="content-holder">
-								<?php echo str_replace( array( '<div>', '</div>' ), '', do_shortcode( $content ) ); ?>
+								<?php echo do_shortcode( $content ); ?>
 							</div>
 						</div>
 					</div>

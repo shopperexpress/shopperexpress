@@ -925,7 +925,7 @@ add_action(
 				add_shortcode(
 					'sc_' . $shortcode_name,
 					function () use ( $shortcode_value ) {
-						return wp_kses_post( $shortcode_value );
+						return wp_kses_post( do_shortcode( $shortcode_value ) );
 					}
 				);
 			}

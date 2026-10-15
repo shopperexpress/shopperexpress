@@ -125,7 +125,7 @@ if ( $accordion ) :
 								aria-labelledby="heading<?php echo esc_attr( $row ); ?>"
 								data-parent="#accordionInfo">
 								<div itemprop="text" class="accordion-info-body">
-									<?php echo wp_kses_post( $get_text ); ?>
+									<?php echo wp_kses_post( do_shortcode( $get_text ) ); ?>
 								</div>
 							</div>
 						</li>

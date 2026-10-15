@@ -50,7 +50,7 @@ if ( ! empty( $accordion ) ) :
 						</div>
 						<div id="collapse-<?php echo esc_attr( $row ); ?>" class="collapse<?php echo 1 === $row ? ' show' : ''; ?>" aria-labelledby="heading-<?php echo esc_attr( $row ); ?>" data-parent="#accordionInfo-<?php echo esc_attr( $section_row ); ?>">
 							<div class="accordion-info-body">
-								<?php echo wp_kses_post( $text ); ?>
+								<?php echo wp_kses_post( do_shortcode( $text ) ); ?>
 							</div>
 						</div>
 					</li>
