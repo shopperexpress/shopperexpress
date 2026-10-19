@@ -4052,6 +4052,8 @@ function formatPhoneNumber(phone) {
 			btnFilter: '[type="submit"]',
 			searchField: '.search-panel [type="search"]',
 			sortSelect: '[name="sort"]',
+			perPageSelect: '[name="per_page"]',
+			pagination: '.pagination',
 			rangeFields: '.aside [type="range"]',
 			activeClass: 'active',
 			hiddenClass: 'hidden',
@@ -4096,6 +4098,8 @@ function formatPhoneNumber(phone) {
 			this.rangeFields = this.holder.find(this.options.rangeFields);
 			this.searchField = this.holder.find(this.options.searchField).val('');
 			this.sortSelect = this.holder.find(this.options.sortSelect);
+			this.perPageSelect = this.holder.find(this.options.perPageSelect);
+			this.pagination = this.holder.find(this.options.pagination);
 			this.selectedFiltersHolder = this.holder.find(this.options.selectedFiltersHolder);
 			this.pagingHolder = this.holder.find(this.options.pagingHolder).addClass(this.options.hiddenClass);
 			this.btnPrev = this.holder.find(this.options.btnPrev).addClass(this.options.disablesClass);
@@ -4123,6 +4127,7 @@ function formatPhoneNumber(phone) {
 			this.isItemsLoaded = false;
 			this.isSyncingFromUrl = false;
 			this.count = 0;
+			this.defaultItemsPerPage = this.options.itemsPerPage;
 			this.mileageKey = 'mileage';
 
 			// Get extra filter type and value from holder data attributes
@@ -4318,6 +4323,9 @@ function formatPhoneNumber(phone) {
 				jcf.refresh(this.sortSelect);
 			}
 
+			// apply items per page after page loaded
+			this.applyPerPage(getUrlAttr('per_page'));
+
 			let filterArr = [];
 
 			// set checked state for selected filters from URL
@@ -4369,8 +4377,6 @@ function formatPhoneNumber(phone) {
 				this.isSyncingFromUrl = false;
 
 				setTimeout(() => {
-					this.goToHistoryPage();
-
 					if (sessionStorage.getItem('fromProductPage') === 'true') {
 						const scrollPosition = sessionStorage.getItem('scrollPosition');
 
@@ -4385,7 +4391,7 @@ function formatPhoneNumber(phone) {
 					this.isGivenPage = false;
 				}, 100);
 			} else {
-				this.loadItems(this.activeItems.slice(0, this.options.itemsPerPage));
+				this.renderPage(1);
 			}
 		},
 		togglePaymentRangeVisibility: function() {
@@ -4435,6 +4441,21 @@ function formatPhoneNumber(phone) {
 				}
 
 				this.isGivenPage = false;
+			});
+
+			this.perPageSelect.on('change', (e) => {
+				if (this.ajaxBusy) {
+					// revert select to the actual value
+					this.perPageSelect.val(this.options.itemsPerPage);
+					jcf.refresh(this.perPageSelect);
+
+					return;
+				}
+
+				this.applyPerPage(this.perPageSelect.val());
+				this.currentPage = 1;
+				this.updateHistory($(e.target));
+				this.filter();
 			});
 
 			this.filterCheckboxes.on('change', (e) => {
@@ -4535,32 +4556,58 @@ function formatPhoneNumber(phone) {
 			});
 
 			this.win.on('goToPage', () => {
-				this.currentPage = getUrlAttr('page');
+				// restoring state from URL must not add new history entries
+				this.isSyncingFromUrl = true;
 
-				this.goToHistoryPage();
+				this.applyPerPage(getUrlAttr('per_page'));
+				this.renderPage(getUrlAttr('page'));
+
+				this.isSyncingFromUrl = false;
 			});
 		},
-		goToHistoryPage: function() {
-			if (this.currentPage < 1) {
-				this.currentPage = 1;
-			}
+		/**
+		 * Sets items per page from a value if it is one of the select options
+		 * (default otherwise) and syncs the select with the current value
+		 *
+		 * @param {string|number} value - Requested items per page
+		 */
+		applyPerPage: function(value) {
+			const perPage = parseInt(value, 10);
+			const isAllowed = this.perPageSelect.find('option').filter((i, option) => parseInt(option.value, 10) === perPage).length > 0;
 
-			if (this.currentPage >= this.totalPages) {
-				this.currentPage = this.totalPages;
-			}
+			this.hasPerPageParam = isAllowed;
+			this.options.itemsPerPage = isAllowed ? perPage : this.defaultItemsPerPage;
+			this.perPageSelect.val(this.options.itemsPerPage);
 
-			this.switchPage();
+			jcf.refresh(this.perPageSelect);
+		},
+		/**
+		 * Limits page number to the range of available pages
+		 *
+		 * @param {string|number} page - Requested page number
+		 * @returns {number}
+		 */
+		clampPage: function(page) {
+			return Math.min(Math.max(parseInt(page, 10) || 1, 1), Math.max(this.totalPages, 1));
+		},
+		/**
+		 * Recalculates total pages and renders the given page of active items
+		 *
+		 * @param {string|number} page - Requested page number
+		 */
+		renderPage: function(page) {
+			const perPage = this.options.itemsPerPage;
+
+			this.totalPages = Math.ceil(this.activeItems.length / perPage);
+			this.currentPage = this.clampPage(page);
+			this.count = (this.currentPage - 1) * perPage;
+
+			this.loadItems(this.activeItems.slice(this.count, this.count + perPage));
 		},
 		prevPage: function() {
 			if (this.ajaxBusy) return;
 
-			this.currentPage = this.currentPage - 1;
-
-			if (this.currentPage < 1) {
-				this.currentPage = 1;
-			}
-
-			this.switchPage();
+			this.renderPage(this.currentPage - 1);
 
 			this.page.animate({
 				scrollTop: this.holder.offset().top
@@ -4569,22 +4616,11 @@ function formatPhoneNumber(phone) {
 		nextPage: function() {
 			if (this.ajaxBusy) return;
 
-			this.currentPage = this.currentPage + 1;
-
-			if (this.currentPage >= this.totalPages) {
-				this.currentPage = this.totalPages;
-			}
-
-			this.switchPage();
+			this.renderPage(this.currentPage + 1);
 
 			this.page.animate({
 				scrollTop: this.holder.offset().top - this.header.outerHeight()
 			}, 500);
-		},
-		switchPage: function() {
-			this.count = (this.currentPage - 1) * this.options.itemsPerPage;
-
-			this.loadItems(this.activeItems.slice(this.count, this.count + this.options.itemsPerPage));
 		},
 		updatePagingButtonsState: function() {
 			if (this.currentPage === 1) {
@@ -4855,16 +4891,9 @@ function formatPhoneNumber(phone) {
 				});
 			});
 
-			this.count = 0;
-			this.totalPages = Math.ceil(this.activeItems.length / this.options.itemsPerPage);
-
-			if (!this.isGivenPage) {
-				this.currentPage = 1;
-			}
-
 			this.sortItems();
 			this.initSlider();
-			this.loadItems(this.activeItems.slice(0, this.options.itemsPerPage));
+			this.renderPage(this.isGivenPage ? this.currentPage : 1);
 		},
 		sortItems: function() {
 			const sortValue = this.sortSelect.val();
@@ -5260,14 +5289,17 @@ function formatPhoneNumber(phone) {
 			}
 		},
 		updateResultCounters: function() {
-			this.totalPages = Math.ceil(this.activeItems.length / this.options.itemsPerPage);
+			// show/hide pagination (holder stays visible while per page select is useful)
+			let isPagingNeeded = this.totalPages > 1;
 
-			// show/hide pagination
-			if (this.totalPages <= 1) {
-				this.pagingHolder.addClass(this.options.hiddenClass);
-			} else {
-				this.pagingHolder.removeClass(this.options.hiddenClass);
+			if (this.perPageSelect.length) {
+				const minPerPage = Math.min.apply(null, this.perPageSelect.find('option').map((i, option) => parseInt(option.value, 10)).get());
+
+				isPagingNeeded = isPagingNeeded || this.activeItems.length > minPerPage;
 			}
+
+			this.pagingHolder.toggleClass(this.options.hiddenClass, !isPagingNeeded);
+			this.pagination.toggleClass(this.options.hiddenClass, this.totalPages <= 1);
 
 			// total pages count
 			this.totalPageCountField.text(this.totalPages);
@@ -5276,9 +5308,9 @@ function formatPhoneNumber(phone) {
 			this.currPageCountField.text(this.currentPage);
 
 			if (this.currentPage > 1) {
-				window.StorageHistory.set('page', this.currentPage);
+				window.StorageHistory.set('page', this.currentPage, false, this.isSyncingFromUrl);
 			} else {
-				window.StorageHistory.remove('page');
+				window.StorageHistory.remove('page', undefined, this.isSyncingFromUrl);
 			}
 
 			// current showing results count
@@ -5345,8 +5377,6 @@ function formatPhoneNumber(phone) {
 			this.visualSliderItems.removeClass(this.options.hiddenClass);
 			this.initSlider();
 
-			this.currentPage = 1;
-			this.count = 0;
 			this.activeFilters = {};
 			this.modalActiveFilters = {};
 			this.modalBtnClear.attr('disabled', true);
@@ -5354,10 +5384,15 @@ function formatPhoneNumber(phone) {
 
 			this.activeItems = this.allProducts;
 
-			this.loadItems(this.activeItems.slice(0, this.options.itemsPerPage));
+			this.renderPage(1);
 
 			if (window.history && window.history.pushState) {
 				window.StorageHistory.reset();
+
+				// keep chosen amount of vehicles per page in URL
+				if (this.hasPerPageParam) {
+					window.StorageHistory.set('per_page', this.options.itemsPerPage, false, true);
+				}
 			}
 		},
 		trimText: function(text) {
@@ -11412,11 +11447,9 @@ class GoogleReviews {
 			// yet when the constructor's querySelector ran — re-resolve and
 			// (re-)apply here now that the template has been injected.
 			const isLp = this.options.style === 'lp';
-			// lp only ever shows 5-star reviews, so its header always reads "5" rather than the real average.
-			const lpRating = 5;
 			if (!this.ratingElement || !this.holder.contains(this.ratingElement)) {
 				this.ratingElement = this.holder.querySelector('[data-google-reviews-rating]');
-				if (this.ratingElement) this.ratingElement.textContent = isLp ? lpRating : this.formatRating(data.average_rating);
+				if (this.ratingElement) this.ratingElement.textContent = this.formatRating(data.average_rating);
 			}
 			if (!this.countElement || !this.holder.contains(this.countElement)) {
 				this.countElement = this.holder.querySelector('[data-google-reviews-count]');
@@ -11432,7 +11465,7 @@ class GoogleReviews {
 			}
 			if (!this.starsElement || !this.holder.contains(this.starsElement)) {
 				this.starsElement = this.holder.querySelector('[data-google-reviews-stars]');
-				if (this.starsElement) this.starsElement.innerHTML = this.renderStars(isLp ? lpRating : data.average_rating);
+				if (this.starsElement) this.starsElement.innerHTML = this.renderStars(data.average_rating);
 			}
 		}
 
