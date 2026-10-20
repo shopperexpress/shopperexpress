@@ -2487,7 +2487,8 @@
                 "FlickFusion": "FlickFusion",
                 "autoport": "autoport",
                 "evo": "evo",
-                "dealerimage": "dealerimage"
+                "dealerimage": "dealerimage",
+                "spinmaker": "Spinmaker"
             },
             "default_value": "impel",
             "return_format": "value",

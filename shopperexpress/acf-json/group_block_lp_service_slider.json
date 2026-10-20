@@ -141,6 +141,60 @@
                     },
                     "return_format": "array",
                     "parent_repeater": "field_9c076fe866670"
+                },
+                {
+                    "key": "field_b1c2k7button_click_type",
+                    "label": "Button Click Type",
+                    "name": "button_click_type",
+                    "type": "select",
+                    "instructions": "URL Link navigates to the Button Link URL above. Onclick Event instead fires raw JS (e.g. an Intice tool launcher) and ignores the URL.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "choices": {
+                        "link": "URL Link",
+                        "onclick": "Onclick Event"
+                    },
+                    "default_value": "link",
+                    "return_format": "value",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "ui": 0,
+                    "ajax": 0,
+                    "placeholder": "",
+                    "parent_repeater": "field_9c076fe866670"
+                },
+                {
+                    "key": "field_b1c2k7button_onclick",
+                    "label": "Onclick Event",
+                    "name": "button_onclick",
+                    "type": "text",
+                    "instructions": "Raw JS executed on click, e.g. inticeEvents.launchExpressCashOffer('519'); Only used when Button Click Type is Onclick Event.",
+                    "required": 0,
+                    "conditional_logic": [
+                        [
+                            {
+                                "field": "field_b1c2k7button_click_type",
+                                "operator": "==",
+                                "value": "onclick"
+                            }
+                        ]
+                    ],
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "inticeEvents.launchExpressCashOffer('519');",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_9c076fe866670"
                 }
             ]
         },

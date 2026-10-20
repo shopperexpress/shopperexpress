@@ -7,7 +7,8 @@
  * @param array $args {
  *   @type string $subtitle
  *   @type string $title
- *   @type array  $slides   Array of {image, title, text, button_link (ACF link array: url, title, target)}.
+ *   @type array  $slides   Array of {image, title, text, button_link (ACF link array: url, title, target),
+ *                          button_click_type (link|onclick), button_onclick (raw JS string)}.
  *   @type string $anchor
  * }
  */
@@ -58,12 +59,23 @@ if ( $subtitle || $title || ! empty( $slides ) ) :
 									<?php if ( ! empty( $slide['text'] ) ) : ?>
 										<p><?php echo esc_html( $slide['text'] ); ?></p>
 									<?php endif; ?>
-									<?php $button_link = $slide['button_link'] ?? null; ?>
+									<?php
+									$button_link       = $slide['button_link'] ?? null;
+									$button_click_type = $slide['button_click_type'] ?? 'link';
+									$button_onclick    = $slide['button_onclick'] ?? '';
+									?>
 									<?php if ( ! empty( $button_link['title'] ) ) : ?>
-										<a href="<?php echo esc_url( $button_link['url'] ?: '#' ); ?>" class="lp-btn lp-btn-outline"<?php echo ! empty( $button_link['target'] ) ? ' target="' . esc_attr( $button_link['target'] ) . '"' : ''; ?>>
-											<?php echo esc_html( $button_link['title'] ); ?>
-											<?php echo $arrow_svg; ?>
-										</a>
+										<?php if ( 'onclick' === $button_click_type && $button_onclick ) : ?>
+											<a href="javascript:void(0);" class="lp-btn lp-btn-outline" onclick="<?php echo esc_attr( $button_onclick ); ?>">
+												<?php echo esc_html( $button_link['title'] ); ?>
+												<?php echo $arrow_svg; ?>
+											</a>
+										<?php else : ?>
+											<a href="<?php echo esc_url( $button_link['url'] ?: '#' ); ?>" class="lp-btn lp-btn-outline"<?php echo ! empty( $button_link['target'] ) ? ' target="' . esc_attr( $button_link['target'] ) . '"' : ''; ?>>
+												<?php echo esc_html( $button_link['title'] ); ?>
+												<?php echo $arrow_svg; ?>
+											</a>
+										<?php endif; ?>
 									<?php endif; ?>
 								</div>
 							</div>

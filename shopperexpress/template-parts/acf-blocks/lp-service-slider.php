@@ -25,10 +25,12 @@ if ( have_rows( 'slides' ) ) {
 	while ( have_rows( 'slides' ) ) {
 		the_row();
 		$slides[] = array(
-			'image'       => get_sub_field( 'image' ),
-			'title'       => get_sub_field( 'title' ),
-			'text'        => get_sub_field( 'text' ),
-			'button_link' => get_sub_field( 'button_link' ),
+			'image'             => get_sub_field( 'image' ),
+			'title'             => get_sub_field( 'title' ),
+			'text'              => get_sub_field( 'text' ),
+			'button_link'       => get_sub_field( 'button_link' ),
+			'button_click_type' => get_sub_field( 'button_click_type' ),
+			'button_onclick'    => get_sub_field( 'button_onclick' ),
 		);
 	}
 }
