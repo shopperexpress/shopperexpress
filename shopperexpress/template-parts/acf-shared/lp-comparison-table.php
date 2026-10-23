@@ -7,7 +7,7 @@
  * @param array $args {
  *   @type string $subtitle
  *   @type string $title
- *   @type array  $columns  Array of {label, logo (image URL), highlight (bool)}, in display order.
+ *   @type array  $columns  Array of {label, logo (attachment ID), highlight (bool)}, in display order.
  *   @type array  $rows     Array of {label, values} — values is a flat array of strings, same order/count as $columns.
  *   @type string $anchor
  * }
@@ -62,7 +62,7 @@ if ( ! empty( $rows ) && ! empty( $columns ) ) :
 								<div>
 									<?php echo wp_kses_post( $column['label'] ?? '' ); ?>
 									<?php if ( ! empty( $column['logo'] ) ) : ?>
-										<img src="<?php echo esc_url( $column['logo'] ); ?>" alt="<?php echo esc_attr( wp_strip_all_tags( $column['label'] ?? '' ) ); ?>" />
+										<?php echo wp_get_attachment_image( $column['logo'], 'medium', false, array( 'alt' => wp_strip_all_tags( $column['label'] ?? '' ) ) ); ?>
 									<?php endif; ?>
 								</div>
 								<?php foreach ( $rows as $row ) : ?>

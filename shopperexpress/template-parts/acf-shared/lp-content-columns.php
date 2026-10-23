@@ -9,7 +9,7 @@
  *   @type string $title
  *   @type string $text        WYSIWYG HTML.
  *   @type array  $buttons     Array of {link (ACF link array: url, title, target), style}.
- *   @type string $image       Image URL.
+ *   @type int    $image       Attachment ID.
  *   @type string $style       "light" or "dark".
  *   @type bool   $show_decor  Show decorative corner spans (dark style only).
  *   @type string $anchor
@@ -20,7 +20,7 @@ $subtitle   = $args['subtitle'] ?? '';
 $title      = $args['title'] ?? '';
 $text       = $args['text'] ?? '';
 $buttons    = $args['buttons'] ?? array();
-$image      = $args['image'] ?? '';
+$image      = $args['image'] ?? 0;
 $style      = $args['style'] ?: 'light';
 $show_decor = ! empty( $args['show_decor'] ) && 'dark' === $style;
 $anchor     = $args['anchor'] ?? '';
@@ -60,7 +60,7 @@ if ( $subtitle || $title || $text || ! empty( $buttons ) || $image ) :
 				<?php if ( $image ) : ?>
 					<div class="media-col">
 						<div class="img-holder">
-							<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( $title ); ?>" />
+							<?php echo wp_get_attachment_image( $image, 'large', false, array( 'alt' => $title ) ); ?>
 						</div>
 					</div>
 				<?php endif; ?>

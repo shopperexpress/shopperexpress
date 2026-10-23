@@ -7,7 +7,7 @@
  * @param array $args {
  *   @type string $subtitle
  *   @type string $title
- *   @type array  $slides   Array of {image, title, text, button_link (ACF link array: url, title, target),
+ *   @type array  $slides   Array of {image (attachment ID), title, text, button_link (ACF link array: url, title, target),
  *                          button_click_type (link|onclick), button_onclick (raw JS string)}.
  *   @type string $anchor
  * }
@@ -50,7 +50,7 @@ if ( $subtitle || $title || ! empty( $slides ) ) :
 								<div class="lp-card-service">
 									<?php if ( ! empty( $slide['image'] ) ) : ?>
 										<div class="lp-card-service__image">
-											<img src="<?php echo esc_url( $slide['image'] ); ?>" alt="<?php echo esc_attr( $slide_title ); ?>" />
+											<?php echo wp_get_attachment_image( $slide['image'], 'large', false, array( 'alt' => $slide_title ) ); ?>
 										</div>
 									<?php endif; ?>
 									<?php if ( $slide_title ) : ?>
