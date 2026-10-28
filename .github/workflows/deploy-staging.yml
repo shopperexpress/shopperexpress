@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy theme via rsync
         run: |
-          rsync -az --delete \
+          rsync -rz --delete \
             --exclude='.git/' \
             --exclude='.github/' \
             -e "ssh -p ${{ secrets.CLOUDWAYS_PORT }}" \
