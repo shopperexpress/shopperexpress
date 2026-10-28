@@ -23,16 +23,14 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.CLOUDWAYS_PORT }} ${{ secrets.CLOUDWAYS_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via git pull on server
+      - name: Deploy theme via rsync
         run: |
-          ssh -p ${{ secrets.CLOUDWAYS_PORT }} ${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }} '
-            set -e
-
-            cd ${{ secrets.CLOUDWAYS_PATH }}
-
-            echo "== Pulling latest code =="
-            GIT_SSH_COMMAND="ssh -i /home/master/.ssh/github_deploy -o StrictHostKeyChecking=no" \
-              git -c safe.directory="*" pull --ff-only origin develop
+          rsync -az --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            -e "ssh -p ${{ secrets.CLOUDWAYS_PORT }}" \
+            ./ \
+            "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_PATH }}/"
 
             echo "== Installing composer dependencies =="
             cd ${{ secrets.CLOUDWAYS_PATH }}/shopperexpress
