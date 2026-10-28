@@ -36,4 +36,4 @@ jobs:
         run: |
           ssh -p ${{ secrets.CLOUDWAYS_PORT }} \
             "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}" \
-            "cd '${{ secrets.CLOUDWAYS_PATH }}' && composer install --no-dev --optimize-autoloader --no-interaction"
+            "cd '${{ secrets.CLOUDWAYS_PATH }}/shopperexpress' && composer install --no-dev --optimize-autoloader --no-interaction"
