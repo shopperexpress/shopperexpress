@@ -33,7 +33,7 @@ $title   = trim(
 				$vehicle['year'] ?? '',
 				$vehicle['make'] ?? '',
 				$vehicle['model'] ?? '',
-				$vehicle['trim'] ?? '',
+				$payload['trim'] ?? '',
 			)
 		)
 	)
@@ -143,7 +143,7 @@ $tabs = array(
 			array(
 				'label' => 'Trim',
 				'name'  => 'trim',
-				'value' => $vehicle['trim'] ?? '',
+				'value' => $vehicle['payload']['trim'] ?? '',
 			),
 			array(
 				'label'    => 'Condition',
@@ -154,46 +154,46 @@ $tabs = array(
 			array(
 				'label'    => 'Stock #',
 				'name'     => 'stock',
-				'value'    => $vehicle['stock'] ?? '',
+				'value'    => $payload['stock'] ?? ( $vehicle['stock'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
 				'label' => 'Mileage',
 				'name'  => 'mileage',
-				'value' => $vehicle['mileage'] ?? '',
+				'value' => $payload['mileage'] ?? ( $vehicle['mileage'] ?? '' ),
 			),
 			array(
 				'label' => 'Ext. Color',
 				'name'  => 'exterior_color',
-				'value' => $vehicle['exterior_color'] ?? '',
+				'value' => $payload['exterior_color'] ?? ( $vehicle['exterior_color'] ?? '' ),
 			),
 			array(
 				'label' => 'Int. Color',
 				'name'  => 'interior_color',
-				'value' => $vehicle['interior_color'] ?? '',
+				'value' => $payload['interior_color'] ?? ( $vehicle['interior_color'] ?? '' ),
 			),
 			array(
 				'label'    => 'Style',
 				'name'     => 'body_style',
-				'value'    => $vehicle['body_style'] ?? '',
+				'value'    => $payload['body_style'] ?? ( $vehicle['body_style'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Drivetrain',
 				'name'     => 'drivetrain_display',
-				'value'    => $vehicle['drivetrain'] ?? '',
+				'value'    => $payload['drivetrain'] ?? ( $vehicle['drivetrain'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Transmission',
 				'name'     => 'transmission',
-				'value'    => $vehicle['transmission'] ?? '',
+				'value'    => $payload['transmission'] ?? ( $vehicle['transmission'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Fuel Type',
 				'name'     => 'fuel_type_display',
-				'value'    => $vehicle['fuel_type'] ?? '',
+				'value'    => $payload['fuel_type'] ?? ( $vehicle['fuel_type'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
@@ -246,25 +246,25 @@ $tabs = array(
 			array(
 				'label'    => 'Status Code',
 				'name'     => 'status_code_display',
-				'value'    => $vehicle['status_code'] ?? '',
+				'value'    => $payload['status_code'] ?? ( $vehicle['status_code'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Vehicle Status',
 				'name'     => 'vehicle_status_display',
-				'value'    => $vehicle['status'] ?? '',
+				'value'    => $payload['vehicle_status'] ?? ( $payload['vehicle-status'] ?? ( $vehicle['status'] ?? '' ) ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'Date In Stock',
 				'name'     => 'dateinstock_display',
-				'value'    => $vehicle['date_in_stock'] ?? ( $payload['dateinstock'] ?? '' ),
+				'value'    => $payload['date_in_stock'] ?? ( $payload['dateinstock'] ?? ( $vehicle['date_in_stock'] ?? '' ) ),
 				'readonly' => true,
 			),
 			array(
 				'label'    => 'VDP URL',
 				'name'     => 'url_display',
-				'value'    => $vehicle['url'] ?? '',
+				'value'    => $payload['url'] ?? ( $vehicle['url'] ?? '' ),
 				'readonly' => true,
 			),
 			array(
@@ -370,7 +370,7 @@ $tabs = array(
 			array(
 				'label' => 'Fuel Type',
 				'name'  => 'fuel_type',
-				'value' => $vehicle['fuel_type'] ?? '',
+				'value' => $payload['fuel_type'] ?? ( $vehicle['fuel_type'] ?? '' ),
 			),
 		),
 	),
@@ -420,7 +420,7 @@ $tabs = array(
 			array(
 				'label' => 'Drivetrain',
 				'name'  => 'drivetrain',
-				'value' => $vehicle['drivetrain'] ?? '',
+				'value' => $payload['drivetrain'] ?? ( $vehicle['drivetrain'] ?? '' ),
 			),
 		),
 	),
@@ -535,7 +535,7 @@ $tabs = array(
 			array(
 				'label' => 'Price Sort',
 				'name'  => 'price_sort',
-				'value' => $vehicle['price_sort'] ?? '',
+				'value' => $payload['price_sort'] ?? ( $vehicle['price_sort'] ?? '' ),
 			),
 		),
 	),
@@ -698,14 +698,15 @@ $tabs = array(
 						<div class="card-body">
 							<h2 class="card-title">
 								<span><?php echo esc_html( ( $vehicle['year'] ?? '' ) . ' ' . ( $vehicle['make'] ?? '' ) ); ?></span>
-								<?php echo esc_html( ( $vehicle['model'] ?? '' ) . ' ' . ( $vehicle['trim'] ?? '' ) ); ?>
+								<?php echo esc_html( ( $vehicle['model'] ?? '' ) . ' ' . ( $payload['trim'] ?? '' ) ); ?>
 							</h2>
 							<dl class="detail-info">
 								<dt><?php esc_html_e( 'VIN', 'shopperexpress' ); ?>:</dt>
 								<dd class="vin"><?php echo esc_html( $vin ); ?></dd>
-								<?php if ( $vehicle['stock'] ?? '' ) : ?>
+								<?php $stock = $payload['stock'] ?? ( $vehicle['stock'] ?? '' ); ?>
+								<?php if ( $stock ) : ?>
 									<dt><?php esc_html_e( 'Stock', 'shopperexpress' ); ?>:</dt>
-									<dd><?php echo esc_html( $vehicle['stock'] ); ?></dd>
+									<dd><?php echo esc_html( $stock ); ?></dd>
 								<?php endif; ?>
 							</dl>
 						</div>

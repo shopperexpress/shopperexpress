@@ -171,12 +171,12 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 						$return_messages[] = array( 'error', $wp_get->get_error_message() );
 					}
 				} else {
-					$return_messages[] = array( 'error', __( 'Not a valid URL', 'listings' ) );
+					$return_messages[] = array( 'error', __( 'Not a valid URL', 'shopperexpress' ) );
 				}
 
 				// if uploaded file
 			} elseif ( $type == 'file' ) {
-				$empty_file_string = __( 'There was no file uploaded', 'listings' );
+				$empty_file_string = __( 'There was no file uploaded', 'shopperexpress' );
 
 				if ( empty( $file ) ) {
 					$return_messages[] = array( 'error', $empty_file_string );
@@ -193,17 +193,17 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 					case 1:
 						$return_messages[] = array(
 							'error',
-							__( 'Your file exceeded your servers maximum upload size', 'listings' ),
+							__( 'Your file exceeded your servers maximum upload size', 'shopperexpress' ),
 						);
 						break;
 					case 2:
 						$return_messages[] = array(
 							'error',
-							__( 'Your file exceeded the form maximum upload size', 'listings' ),
+							__( 'Your file exceeded the form maximum upload size', 'shopperexpress' ),
 						);
 						break;
 					case 3:
-						$return_messages[] = array( 'error', __( 'The file was only partially uploaded', 'listings' ) );
+						$return_messages[] = array( 'error', __( 'The file was only partially uploaded', 'shopperexpress' ) );
 						break;
 					case 4:
 						$return_messages[] = array( 'error', $empty_file_string );
@@ -211,19 +211,19 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 					case 6:
 						$return_messages[] = array(
 							'error',
-							__( 'Your server is missing a temporary folder', 'listings' ),
+							__( 'Your server is missing a temporary folder', 'shopperexpress' ),
 						);
 						break;
 					case 7:
 						$return_messages[] = array(
 							'error',
-							__( 'Your server cannot write the file to the disk', 'listings' ),
+							__( 'Your server cannot write the file to the disk', 'shopperexpress' ),
 						);
 						break;
 					case 8:
 						$return_messages[] = array(
 							'error',
-							__( 'A PHP extension installed on your server has stopped the upload', 'listings' ),
+							__( 'A PHP extension installed on your server has stopped the upload', 'shopperexpress' ),
 						);
 						break;
 				}
@@ -350,7 +350,7 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 				} else {
 					$return = array(
 						'error',
-						__( 'The file must not contain numbers as the column title', 'listings' ),
+						__( 'The file must not contain numbers as the column title', 'shopperexpress' ),
 					);
 				}
 			} elseif ( $file_type == 'xml' ) {
@@ -818,7 +818,7 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 					}
 
 					if ( empty( $value ) ) {
-						$value = __( 'None', 'listings' );
+						$value = __( 'None', 'shopperexpress' );
 					}
 
 					$value = apply_filters( 'automotive_import_meta', $value, $key, $row, $csv );
@@ -835,7 +835,7 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 				if ( ! empty( $value ) && $value != 'n-a' ) {
 					$post_meta[ $key ] = $value;
 
-					if ( $value != __( 'None', 'listings' ) ) {
+					if ( $value != __( 'None', 'shopperexpress' ) ) {
 						$dependancy_categories[ $key ] = array( $Automotive_Plugin->slugify( $value ) => $value );
 					}
 				}
@@ -1569,15 +1569,15 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 					$duplicates = ( isset( $imported_listings['duplicate'] ) && ! empty( $imported_listings['duplicate'] ) ? $imported_listings['duplicate'] : '' );
 					unset( $imported_listings['duplicate'] );
 
-					$no_title_available = __( 'No Title Available', 'listings' );
-					$edit_label         = __( 'Edit', 'listings' );
+					$no_title_available = __( 'No Title Available', 'shopperexpress' );
+					$edit_label         = __( 'Edit', 'shopperexpress' );
 
 					if ( ! empty( $imported_listings ) ) {
 
 						if ( ! empty( $output ) && $output == 'array' ) {
 							$return['import'] = $imported_listings;
 						} else {
-							$return .= __( 'Successfully imported these listings', 'listings' ) . ':<br>';
+							$return .= __( 'Successfully imported these listings', 'shopperexpress' ) . ':<br>';
 
 							$return .= '<ul>';
 							foreach ( $imported_listings as $key => $listing ) {
@@ -1594,9 +1594,9 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 							$return['duplicates'] = $duplicates;
 						} else {
 							if ( isset( $_POST['overwrite_existing'] ) && $_POST['overwrite_existing'] == 'on' ) {
-								$return .= __( 'These listings were updated with new information from the imported file', 'listings' ) . ':<br>';
+								$return .= __( 'These listings were updated with new information from the imported file', 'shopperexpress' ) . ':<br>';
 							} else {
-								$return .= __( "These listings weren't imported because a duplicate listing was detected", 'listings' ) . ':<br>';
+								$return .= __( "These listings weren't imported because a duplicate listing was detected", 'shopperexpress' ) . ':<br>';
 							}
 
 							$return .= '<ul>';
@@ -1643,7 +1643,7 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 							if ( ! empty( $output ) && $output == 'array' ) {
 								$return['deleted'] = $deleted_not_found;
 							} else {
-								$return .= __( 'These listings were deleted since they were not found in the import file', 'listings' ) . ':<br>';
+								$return .= __( 'These listings were deleted since they were not found in the import file', 'shopperexpress' ) . ':<br>';
 
 								$return .= '<ul>';
 								foreach ( $deleted_not_found as $key => $listing ) {
@@ -1655,7 +1655,7 @@ if ( ! class_exists( 'WP_Auto_Import' ) ) {
 					}
 
 					if ( empty( $output ) ) {
-						$return .= "<a href='" . admin_url( 'edit.php?post_type=listings&page=file-import' ) . "'><button class='button button-primary'>" . __( 'Import more listings', 'listings' ) . '</button></a>';
+						$return .= "<a href='" . admin_url( 'edit.php?post_type=listings&page=file-import' ) . "'><button class='button button-primary'>" . __( 'Import more listings', 'shopperexpress' ) . '</button></a>';
 					}
 
 					$Listing->generate_dependancy_option( true );

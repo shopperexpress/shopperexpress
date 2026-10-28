@@ -1,1 +1,17 @@
-vendor/
+/node_modules/
+yarn-error.log
+yarn.lock
+.idea
+.vscode
+.DS_Store
+*.log
+.env
+.env.local
+/.claude
+# Originals kept beside the images they were exported from; the build skips `_` folders.
+src/images/_originals/
+CLAUDE.md
+# PHP tooling, installed into the container by `npm run lint:php`. composer.json and
+# composer.lock are committed — without the lock, every install resolves fresh and the linters
+# drift between machines. The resolved tree is not part of the theme and never ships with it.
+/vendor/

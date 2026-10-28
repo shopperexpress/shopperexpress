@@ -1,0 +1,31 @@
+# Static analysis for the theme's PHP. PHPCS checks how the code is written; this checks whether
+# it can work — undefined functions, wrong argument types, conditions that are always false.
+#
+# Two extensions: WordPress core's own functions, and ACF's. ACF is a plugin rather than a
+# dependency, so get_field() and the rest exist only at runtime — the stubs are what let this
+# tell a real typo from a function that is simply not installed here.
+includes:
+  - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+  # Level 5 is the point where argument types are checked without demanding annotations on every
+  # array. Raise it as the theme grows; 9 on a fresh theme is mostly noise about mixed.
+  level: 5
+
+  paths:
+    - .
+
+  scanFiles:
+    - vendor/php-stubs/acf-pro-stubs/acf-pro-stubs.php
+
+  # `(?)` marks a path as optional: none of these exists in a freshly generated theme, and
+  # PHPStan treats a missing exclusion as a configuration error rather than ignoring it.
+  # The blocks' build/ folders hold the emitted .asset.php files and the manifest holds their
+  # metadata; both are build output, written to no standard.
+  excludePaths:
+    - assets (?)
+    - blocks/*/build (?)
+    - blocks/blocks-manifest.php (?)
+    - node_modules (?)
+    - src (?)
+    - vendor (?)

@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/lp-content-columns",
+    "title": "LP Content Columns",
+    "description": "Landing page two-column block — text/buttons on one side, image on the other. Light or dark style.",
+    "category": "custom-acf-blocks",
+    "icon": "align-pull-left",
+    "keywords": [
+        "landing two columns text image"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

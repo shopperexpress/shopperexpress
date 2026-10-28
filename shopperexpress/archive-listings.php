@@ -363,6 +363,15 @@ if ( $key && $value ) :
 				<div class="loader"><?php esc_html_e( 'Loading', 'shopperexpress' ); ?>...</div>
 			</div>
 			<div class="pagination-holder">
+				<div class="per-page">
+					<label for="per-page-select" class="per-page-label"><?php esc_html_e( 'Amount of vehicles per page', 'shopperexpress' ); ?></label>
+					<select id="per-page-select" class="per-page" name="per_page">
+						<option value="20" selected>20</option>
+						<option value="30">30</option>
+						<option value="40">40</option>
+						<option value="50">50</option>
+					</select>
+				</div>
 				<div class="pagination">
 					<a href="#" class="btn-prev">
 						<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
@@ -408,7 +417,7 @@ if ( $api_mode && get_field( 'api_new_car_incentives', 'option' ) && get_field( 
 	// partial: cards themselves are rendered through the vehicles REST
 	// endpoint (class-intice-rest.php), a separate request where wp_footer()
 	// never fires.
-	get_template_part( 'template-parts/conditionalOffersDetail', 'modal-srp' );
+	get_template_part( 'template-parts/conditional-offers-detail', 'modal-srp' );
 }
 get_footer();
 ?>

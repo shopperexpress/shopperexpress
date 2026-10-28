@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "appearanceTools": true,
+    "useRootPaddingAwareAlignments": true,
+    "layout": {
+      "contentSize": "1200px",
+      "wideSize": "1400px"
+    },
+    "color": {
+      "defaultPalette": false,
+      "defaultGradients": false,
+      "defaultDuotone": false,
+      "palette": [
+        { "slug": "base", "name": "Base", "color": "#ffffff" },
+        { "slug": "contrast", "name": "Contrast", "color": "#000000" },
+        { "slug": "accent", "name": "Accent", "color": "#0366d6" }
+      ]
+    },
+    "typography": {
+      "fluid": true,
+      "defaultFontSizes": false,
+      "fontFamilies": [
+        {
+          "slug": "base",
+          "name": "Base",
+          "fontFamily": "'Helvetica Neue', Arial, 'Noto Sans', sans-serif"
+        }
+      ],
+      "fontSizes": [
+        { "slug": "small", "name": "Small", "size": "0.875rem" },
+        { "slug": "medium", "name": "Medium", "size": "1rem" },
+        { "slug": "large", "name": "Large", "size": "1.5rem" },
+        { "slug": "x-large", "name": "Extra large", "size": "2.25rem" }
+      ]
+    },
+    "spacing": {
+      "units": ["px", "em", "rem", "%", "vw", "vh"],
+      "defaultSpacingSizes": false,
+      "spacingSizes": [
+        { "slug": "20", "name": "1", "size": "0.5rem" },
+        { "slug": "30", "name": "2", "size": "1rem" },
+        { "slug": "40", "name": "3", "size": "1.5rem" },
+        { "slug": "50", "name": "4", "size": "3rem" },
+        { "slug": "60", "name": "5", "size": "6rem" }
+      ]
+    }
+  },
+  "styles": {
+    "color": {
+      "background": "var(--wp--preset--color--base)",
+      "text": "var(--wp--preset--color--contrast)"
+    },
+    "typography": {
+      "fontFamily": "var(--wp--preset--font-family--base)",
+      "fontSize": "var(--wp--preset--font-size--medium)",
+      "lineHeight": "1.5"
+    },
+    "elements": {
+      "link": {
+        "color": { "text": "var(--wp--preset--color--accent)" },
+        ":hover": { "typography": { "textDecoration": "underline" } }
+      }
+    }
+  }
+}

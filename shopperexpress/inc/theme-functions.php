@@ -925,7 +925,7 @@ add_action(
 				add_shortcode(
 					'sc_' . $shortcode_name,
 					function () use ( $shortcode_value ) {
-						return wp_kses_post( do_shortcode( $shortcode_value ) );
+						return wp_kses_post( $shortcode_value );
 					}
 				);
 			}
@@ -1377,12 +1377,10 @@ add_action(
 );
 
 add_action(
-	'wp_parse_request',
-	function ( $query ) {
-		if ( isset( $query->query_vars['year'] ) ) {
-			$query->query_vars['year'] = null;
-			$query->is_year            = false;
-			$query->is_date            = false;
+	'parse_request',
+	function ( $wp ) {
+		if ( isset( $wp->query_vars['year'] ) ) {
+			unset( $wp->query_vars['year'] );
 		}
 	}
 );
@@ -1787,7 +1785,7 @@ function intice_normalize_incentive_offers( array $offers ): array {
  * Remap a Nexus vehicle payload's `incentive_offers` (snake_case, from
  * IncentiveOffersService::normalize()) back to the ProgramName/ProgramCash/
  * IncentiveDesc/IncentiveId/StartsOn/EndsOn keys the theme's existing
- * conditional-offers markup and conditionalOffersDetail-modal.php expect.
+ * conditional-offers markup and conditional-offers-detail-modal.php expect.
  *
  * @param array $offers Vehicle payload's incentive_offers array.
  * @return array Offers array using the legacy key names.
@@ -2081,6 +2079,7 @@ add_filter(
 );
 
 add_image_size( '454x255', 454, 255, true );
+add_image_size( '900x500', 900, 500, false );
 
 /**
  * Get font family from font styling.

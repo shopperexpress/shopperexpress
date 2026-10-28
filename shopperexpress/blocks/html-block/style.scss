@@ -1,0 +1,97 @@
+// -----------------------------------------------------------------------------
+// HTML Block block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.section-html {
+  padding: 50px 0;
+
+  @include media('>=tablet') {
+    padding: 67px 0 55px;
+  }
+
+  &.bg-gray {
+    background-color: #e7e8e8;
+  }
+
+  &.awards-info {
+    font-size: 15px;
+    line-height: 1.2;
+    font-weight: 500;
+
+    .container {
+      max-width: 1744px;
+
+      @include media('>=desktop') {
+        padding-left: 12px;
+      }
+    }
+
+    h4 {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 15px;
+      line-height: 1.2;
+      margin: 0;
+
+      &:first-of-type {
+        margin-bottom: 18px;
+      }
+    }
+
+    p {
+      margin: 0 0 18px;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  &.eco-banner {
+    @include media('>=tablet') {
+      padding: 18px 0 55px;
+    }
+
+    .container {
+      max-width: 1756px;
+    }
+  }
+}
+
+.section-html {
+  .for-mobile {
+    @include media('>=tablet') {
+      display: none !important;
+    }
+
+    .wprevpro_t4_outer_div {
+      width: 100% !important;
+    }
+  }
+
+  .for-tablet {
+    @include media('<tablet') {
+      display: none !important;
+    }
+
+    @include media('>=desktop') {
+      display: none !important;
+    }
+
+    .wprevpro_t4_outer_div {
+      width: 33.33% !important;
+    }
+  }
+
+  .for-desktop {
+    @include media('<desktop') {
+      display: none !important;
+    }
+
+    .wprevpro_t4_outer_div {
+      width: 20% !important;
+    }
+  }
+}

@@ -24,89 +24,13 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400;1,500&family=Roboto:wght@400;500&display=swap">
 	<?php
 	wp_head();
-	the_field( 'for_script_header', 'options' );
-	$font                        = '';
-	$theme_color                 = get_field( 'theme_color', 'options' );
-	$overlay_color               = get_field( 'overlay_color', 'options' );
-	$overlay_opacity             = get_field( 'overlay_opacity', 'options' );
-	$header_nav_drop_bg          = get_field( 'header_nav_drop_bg', 'options' ) ? get_field( 'header_nav_drop_bg', 'options' ) : 'rgba(248, 246, 246, 1)';
-	$header_nav_link_color       = get_field( 'header_nav_link_color', 'options' ) ? get_field( 'header_nav_link_color', 'options' ) : 'rgba(26, 26, 26, 1)';
-	$header_nav_link_hover_color = get_field( 'header_nav_link_hover_color', 'options' ) ? get_field( 'header_nav_link_hover_color', 'options' ) : 'rgba(0, 116, 179, 1)';
-	$theme_color                 = get_field( 'theme_color', 'options' );
-	$active_ai                   = get_field( 'active_ai', 'option' );
-
-	if ( $theme_color ) :
-		?>
-		<style type="text/css">
-			:root {
-				<?php
-				if ( $theme_color ) :
-					?>
-				--primary: <?php echo esc_attr( $theme_color ); ?> !important;
-				--primary-rgb: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
-				--primary-rgba: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
-					<?php
-				endif;
-				if ( $overlay_color ) :
-					?>
-				--overlay-color-rgb: <?php echo esc_attr( hexToRgb( $overlay_color ) ); ?> !important;
-					<?php
-				endif;
-				if ( $overlay_opacity ) :
-					?>
-				--overlay-opacity: <?php echo esc_attr( $overlay_opacity ); ?> !important;
-					<?php
-				endif;
-				if ( $header_nav_drop_bg ) :
-					?>
-				--header-nav-drop-bg: <?php echo esc_attr( $header_nav_drop_bg ); ?> !important;
-					<?php
-				endif;
-				if ( $header_nav_link_color ) :
-					?>
-				--header-nav-link-color: <?php echo esc_attr( $header_nav_link_color ); ?> !important;
-					<?php
-				endif;
-				if ( $header_nav_link_hover_color ) :
-					?>
-				--header-nav-link-hover-color: <?php echo esc_attr( $header_nav_link_hover_color ); ?> !important;
-					<?php
-				endif;
-				$font = get_field( 'font', 'options' );
-				switch ( $font ) {
-					case 1:
-						?>
-						--font-family-base: "Montserrat", "Helvetica Neue", Arial, sans-serif;
-						<?php
-						break;
-					case 3:
-						?>
-						--font-family-base: Inter, Arial, Helvetica Neue, sans-serif;
-
-						<?php
-						break;
-					default:
-						?>
-						--font-family-base: Arial Rounded MT Bold, Helvetica Rounded, Arial, sans-serif;
-						<?php
-						break;
-				}
-				?>
-			}
-		</style>
-		<?php
-	endif;
+	$active_ai = get_field( 'active_ai', 'option' );
 	?>
 
 </head>
 
 <body <?php body_class(); ?>>
 	<script>
-		// Cached markup can bake in a stale "logged-in" class. Correct it against the
-		// actual browser cookie so payment_list pricing doesn't get stuck on the
-		// auth state that was current when the page was cached. WordPress' own auth
-		// cookie is HttpOnly (unreadable from JS), so we read the non-HttpOnly
-		// "wps_logged_in" cookie that mirrors it — see wps_sync_client_auth_cookie().
 		(function () {
 			var authed = /(?:^|;\s*)wps_logged_in=1/.test( document.cookie );
 			document.body.classList.toggle( 'logged-in', authed );
@@ -142,16 +66,9 @@
 				</div>
 			<?php endif; ?>
 			<nav class="navbar navbar-light">
-				<?php
-				// Markup order never changes — the logo-slider always precedes the main
-				// logo in the DOM. Visual left/right placement (and swapping which one
-				// gets the "big trailing logo" vs. "small leading icon" sizing) is done
-				// purely via a single modifier class on .navbar-holder — see
-				// .navbar-holder--logo-right in _header.scss for all the overrides.
-				$logo_list_after = 'right' === ( get_field( 'logo_list_position', 'options' ) ?: 'left' );
-				?>
+				<?php $logo_list_after = 'right' === ( get_field( 'logo_list_position', 'options' ) ?: 'left' ); ?>
 				<div class="navbar-holder<?php echo $logo_list_after ? ' navbar-holder--logo-right' : ''; ?>">
-					<button type="button" class="nav-opener" aria-label="<?php _e( 'Left menu toggle', 'shopperexpress' ); ?>">
+					<button type="button" class="nav-opener" aria-label="<?php esc_html_e( 'Left menu toggle', 'shopperexpress' ); ?>">
 						<svg class="menu-close" xmlns="http://www.w3.org/2000/svg" height="24px" aria-hidden="true" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 							<path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path>
 						</svg>
@@ -167,11 +84,6 @@
 								$slider_url = get_sub_field( 'url' );
 								$hash_pos   = strpos( (string) $slider_url, '#' );
 
-								// A URL containing "#section" that points at THIS page (either a bare
-								// "#offers" href, or a full URL sharing the current page's path) is
-								// meant to jump to a spot on the same page — route it through the
-								// theme's smooth-scroll handler (a.btn-anchor) instead of letting the
-								// browser jump instantly.
 								$is_page_anchor = false;
 								if ( false !== $hash_pos ) {
 									$link_path      = untrailingslashit( (string) wp_parse_url( $slider_url, PHP_URL_PATH ) );

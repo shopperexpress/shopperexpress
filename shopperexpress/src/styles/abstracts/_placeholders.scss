@@ -1,0 +1,56 @@
+// list reset
+%listreset {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// clearfix
+%clearfix {
+  &::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+// Icon
+// %icon {
+//   font-family: 'Material Symbols Rounded';
+//   font-variation-settings: 'wght' 400, 'GRAD' 0, 'opsz' 24;
+//   font-style: normal;
+// }
+
+// Icon fill
+// %icon-fill {
+//   font-family: 'Material Symbols Rounded';
+//   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+//   font-style: normal;
+// }
+
+// transition
+%transition {
+  transition: all 0.3s ease-in-out;
+}
+
+// justify nav
+%justify {
+  text-align: justify;
+  font-size: 1px;
+  line-height: 0;
+
+  > * {
+    display: inline-block;
+    vertical-align: top;
+    text-align: left;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+  }
+
+  &::after {
+    content: '';
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+  }
+}

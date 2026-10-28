@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<ruleset name="Theme">
+	<description>WordPress coding standards for the theme's PHP.</description>
+
+	<!--
+		The theme itself. assets/, the blocks' build/ folders and their manifest are compiled
+		output — the build emits .asset.php files and the metadata array, neither written to
+		any standard — and src/ holds only SCSS and JS; vendor/ and node_modules/ are other
+		people's.
+	-->
+	<file>.</file>
+	<exclude-pattern>/assets/*</exclude-pattern>
+	<exclude-pattern>/blocks/*/build/*</exclude-pattern>
+	<exclude-pattern>/blocks/blocks-manifest.php</exclude-pattern>
+	<exclude-pattern>/src/*</exclude-pattern>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<!-- Version-aware sniffs — deprecated functions, classes, parameters — all read this. -->
+	<config name="minimum_wp_version" value="6.8"/>
+
+	<rule ref="WordPress">
+		<!--
+			The theme ships no translations of its own; a project that adds them turns this back
+			on together with its .pot file.
+		-->
+		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
+	</rule>
+
+	<!--
+		The prefix is internal to the theme's code rather than part of its WordPress-facing
+		identity, so generation leaves it alone and this rule can name it outright — which is
+		what keeps every generated theme lintable by the same ruleset.
+	-->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="p2h_theme"/>
+			</property>
+		</properties>
+	</rule>
+
+</ruleset>

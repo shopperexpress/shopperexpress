@@ -732,7 +732,7 @@ get_footer();
 
 // ── Modals ────────────────────────────────────────────────────────────────────
 get_template_part(
-	'template-parts/copyLinkModal',
+	'template-parts/copy-link-modal',
 	null,
 	array(
 		'post_id'      => 0,

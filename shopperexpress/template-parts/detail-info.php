@@ -51,9 +51,9 @@ if ( have_rows( $field, 'options' ) ) :
 								$field = 'mileage';
 							}
 
-							$value = $vehicle[ $field ] ?? null;
+							$value = $vehicle['payload'][ $field ] ?? null;
 							if ( $value === null || $value === '' ) {
-								$value = $vehicle['payload'][ $field ] ?? null;
+								$value = $vehicle[ $field ] ?? null;
 							}
 
 							return ( $value !== null && $value !== '' ) ? $value : '';
@@ -79,21 +79,11 @@ if ( have_rows( $field, 'options' ) ) :
 				?>
 					<dt><?php echo esc_html( $label ); ?></dt>
 				<?php endif; ?>
-				<?php
-				$is_vin_row = str_contains( strtolower( $label ), 'vin' );
-				$clean_vin  = '';
-
-				if ( $is_vin_row ) {
-					if ( $vehicle ) {
-						$clean_vin = $vehicle['vin'] ?? ( $vehicle['payload']['vin'] ?? '' );
-					} else {
-						$clean_vin = get_field( 'vin_number', $post_id );
-					}
-				}
-				?>
 				<dd
-					<?php if ( $is_vin_row ) : ?>
-					class="vin" data-vin="<?php echo esc_attr( $clean_vin ); ?>" <?php endif; ?>>
+					<?php
+					if ( str_contains( strtolower( $label ), 'vin' ) ) :
+						?>
+					class="vin" <?php endif; ?>>
 					<?php echo str_replace( '&nbsp;', ' ', esc_html( $result ) ); ?>
 				</dd>
 				<?php

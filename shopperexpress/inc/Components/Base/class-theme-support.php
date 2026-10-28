@@ -182,10 +182,10 @@ class Theme_Support implements Theme_Component {
 		$post    = get_post( $post ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$label   = esc_attr( 'pwbox-' . ( empty( $post->ID ) ? wp_rand() : $post->ID ) );
 		$output  = '<form action="' . esc_url( site_url( 'wp-login.php?action=postpass', 'login_post' ) ) . '" class="post-password-form" method="post">';
-		$output .= '<p>' . esc_html__( 'This content is password protected. To view it please enter your password below:', 'base' ) . '</p>';
-		$output .= '<p><label for="' . esc_attr( $label ) . '">' . esc_html__( 'Password:', 'base' ) . '</label>';
+		$output .= '<p>' . esc_html__( 'This content is password protected. To view it please enter your password below:', 'shopperexpress' ) . '</p>';
+		$output .= '<p><label for="' . esc_attr( $label ) . '">' . esc_html__( 'Password:', 'shopperexpress' ) . '</label>';
 		$output .= '<input name="post_password" id="' . esc_attr( $label ) . '" type="password" size="20" />';
-		$output .= '<input type="submit" name="Submit" value="' . esc_html__( 'Submit', 'base' ) . '" /></p></form>';
+		$output .= '<input type="submit" name="Submit" value="' . esc_html__( 'Submit', 'shopperexpress' ) . '" /></p></form>';
 
 		return $output;
 	}

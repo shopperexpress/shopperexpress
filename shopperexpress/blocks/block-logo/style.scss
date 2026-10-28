@@ -1,0 +1,20 @@
+// -----------------------------------------------------------------------------
+// Block Logo block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.block-logo {
+  padding: 37px 0 0;
+
+  .logo-lg {
+    display: block;
+    width: 100%;
+    max-width: 717px !important;
+    margin: 0 auto 50px;
+
+    @include media('>=tablet') {
+      margin-bottom: 62px;
+    }
+  }
+}

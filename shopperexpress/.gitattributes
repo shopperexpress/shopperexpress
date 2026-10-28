@@ -1,0 +1,18 @@
+# Normalize line endings to LF regardless of each developer's core.autocrlf, so Prettier/ESLint
+# (which expect LF by default) don't flag every line of every file as a line-ending error.
+* text=auto eol=lf
+
+# Binary assets — never touch line endings.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.zip binary
+*.gz binary

@@ -37,10 +37,87 @@ class Scripts implements Theme_Component {
 	 */
 	public function register(): void {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// After shopperexpress_enqueue_assets() (priority 10) registers the 'shopperexpress' bundle
+		// handle, which enqueue_scripts() localizes.
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_style' ) );
 		add_action( 'admin_head', array( $this, 'render_vars' ), 1 );
+		add_action( 'wp_head', array( $this, 'render_frontend_vars' ) );
+		add_action( 'wp_head', array( $this, 'render_header_script_field' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'load_admin_block_style' ) );
+	}
+
+	/**
+	 * Output the admin-defined "for_script_header" field (raw head scripts/meta from theme options).
+	 *
+	 * @return void
+	 */
+	public function render_header_script_field(): void {
+		the_field( 'for_script_header', 'options' );
+	}
+
+	/**
+	 * Render front-end CSS custom properties (theme color, overlay, nav colors, font) from theme options.
+	 *
+	 * @return void
+	 */
+	public function render_frontend_vars(): void {
+
+		$theme_color = get_field( 'theme_color', 'options' );
+		if ( ! $theme_color ) {
+			return;
+		}
+
+		$font                        = get_field( 'font', 'options' );
+		$overlay_color               = get_field( 'overlay_color', 'options' );
+		$overlay_opacity             = get_field( 'overlay_opacity', 'options' );
+		$header_nav_drop_bg          = get_field( 'header_nav_drop_bg', 'options' ) ? get_field( 'header_nav_drop_bg', 'options' ) : 'rgba(248, 246, 246, 1)';
+		$header_nav_link_color       = get_field( 'header_nav_link_color', 'options' ) ? get_field( 'header_nav_link_color', 'options' ) : 'rgba(26, 26, 26, 1)';
+		$header_nav_link_hover_color = get_field( 'header_nav_link_hover_color', 'options' ) ? get_field( 'header_nav_link_hover_color', 'options' ) : 'rgba(0, 116, 179, 1)';
+
+		?>
+		<style type="text/css">
+			:root {
+				--primary: <?php echo esc_attr( $theme_color ); ?> !important;
+				--primary-rgb: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
+				--primary-rgba: <?php echo esc_attr( hexToRgb( $theme_color ) ); ?> !important;
+				<?php if ( $overlay_color ) : ?>
+				--overlay-color-rgb: <?php echo esc_attr( hexToRgb( $overlay_color ) ); ?> !important;
+				<?php endif; ?>
+				<?php if ( $overlay_opacity ) : ?>
+				--overlay-opacity: <?php echo esc_attr( $overlay_opacity ); ?> !important;
+				<?php endif; ?>
+				<?php if ( $header_nav_drop_bg ) : ?>
+				--header-nav-drop-bg: <?php echo esc_attr( $header_nav_drop_bg ); ?> !important;
+				<?php endif; ?>
+				<?php if ( $header_nav_link_color ) : ?>
+				--header-nav-link-color: <?php echo esc_attr( $header_nav_link_color ); ?> !important;
+				<?php endif; ?>
+				<?php if ( $header_nav_link_hover_color ) : ?>
+				--header-nav-link-hover-color: <?php echo esc_attr( $header_nav_link_hover_color ); ?> !important;
+				<?php endif; ?>
+				<?php
+				switch ( $font ) {
+					case 1:
+						?>
+						--font-family-base: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+						<?php
+						break;
+					case 3:
+						?>
+						--font-family-base: Inter, Arial, Helvetica Neue, sans-serif;
+						<?php
+						break;
+					default:
+						?>
+						--font-family-base: Arial Rounded MT Bold, Helvetica Rounded, Arial, sans-serif;
+						<?php
+						break;
+				}
+				?>
+			}
+		</style>
+		<?php
 	}
 
 	/**
@@ -100,55 +177,26 @@ class Scripts implements Theme_Component {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-
-		$theme_version = $this->theme_version;
-
+		// The theme bundle itself (assets/css/style.css) is enqueued by inc/enqueue.php.
 		wp_enqueue_style(
 			'base/style',
 			get_stylesheet_uri(),
-			array(),
+			array( 'shopperexpress' ),
 			filemtime( get_stylesheet_directory() . '/style.css' )
-		);
-
-		wp_enqueue_style(
-			'shopperexpress/bootstrap_css',
-			\App\asset_url_old( 'css/bootstrap.css' ),
-			array(),
-			$theme_version
-		);
-		wp_enqueue_style(
-			'shopperexpress/main_css',
-			\App\asset_url_old( 'css/main.css' ),
-			array(),
-			$theme_version
-		);
-		wp_enqueue_style(
-			'shopperexpress/style',
-			\App\asset_url( 'style.css' ),
-			array(),
-			$theme_version
 		);
 	}
 
 	/**
-	 * Admin panel styles enqueue.
+	 * Block editor styles enqueue.
 	 *
 	 * @return void
 	 */
 	public function load_admin_block_style(): void {
-		$theme_version = $this->theme_version;
-
-		wp_enqueue_style(
-			'shopperexpress/main_css',
-			\App\asset_url_old( 'css/main.css' ),
-			array(),
-			$theme_version
-		);
 		wp_enqueue_style(
 			'shopperexpress/style',
-			\App\asset_url( 'style.css' ),
+			\App\asset_url( 'css/style.css' ),
 			array(),
-			$theme_version
+			shopperexpress_asset_version( 'assets/css/style.css' )
 		);
 	}
 
@@ -158,14 +206,11 @@ class Scripts implements Theme_Component {
 	 * @return void
 	 */
 	public function load_admin_style(): void {
-
-		$theme_version = $this->theme_version;
-
 		wp_enqueue_style(
-			'shopperexpress/main_css_admin',
-			\App\asset_url_old( 'css/main.css' ),
+			'shopperexpress/admin',
+			\App\asset_url( 'css/admin.css' ),
 			array(),
-			$theme_version
+			shopperexpress_asset_version( 'assets/css/admin.css' )
 		);
 	}
 
@@ -203,111 +248,22 @@ class Scripts implements Theme_Component {
 			false
 		);
 
-		wp_enqueue_script(
-			'shopperexpress/popper',
-			'https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js',
-			array( 'jquery' ),
-			$theme_version,
-			false
-		);
-		wp_enqueue_script(
-			'shopperexpress/bootstrap-js',
-			\App\asset_url_old( 'js/bootstrap.min.js' ),
-			array( 'jquery' ),
-			$theme_version,
-			false
-		);
-		wp_enqueue_script(
-			'shopperexpress/jquery',
-			\App\asset_url( 'js/app.js' ),
-			array( 'jquery' ),
-			$theme_version,
-			false
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-publish',
-			\App\asset_url_old( 'js/asc-publish.js' ),
-			array(),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-intice-tool-intake',
-			\App\asset_url_old( 'js/asc-intice-tool-intake.js' ),
-			array( 'shopperexpress/asc-publish' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-cta',
-			\App\asset_url_old( 'js/asc-cta.js' ),
-			array( 'shopperexpress/asc-publish' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-menu',
-			\App\asset_url_old( 'js/asc-menu.js' ),
-			array( 'shopperexpress/asc-publish' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-media',
-			\App\asset_url_old( 'js/asc-media.js' ),
-			array( 'shopperexpress/asc-publish', 'jquery' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-datalayer',
-			\App\asset_url_old( 'js/asc-datalayer.js' ),
-			array( 'shopperexpress/asc-publish', 'jquery' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
-			'shopperexpress/asc-openai-ads',
-			\App\asset_url_old( 'js/asc-openai-ads.js' ),
-			array( 'shopperexpress/asc-publish' ),
-			$theme_version,
-			true
-		);
-		wp_enqueue_script(
+		wp_register_script(
 			'shopperexpress/google-map',
-			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker,places&loading=async&callback=initCustomMap',
+			'https://maps.googleapis.com/maps/api/js?key=AIzaSyDejIT65GensQRQ4KepnS7xcFDM-gu5JUI&libraries=marker,places&loading=async',
 			array( 'jquery' ),
 			$theme_version,
-			false
+			true
 		);
+		// The theme bundle (assets/js/app.js) is enqueued by inc/enqueue.php as 'shopperexpress'.
 		wp_localize_script(
-			'shopperexpress/jquery',
+			'shopperexpress',
 			'ajax',
 			array(
 				'admin'               => admin_url( 'admin-ajax.php' ),
 				'request'             => ! empty( $_GET ) ? $_GET : '',
 				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
 				'adf_lead_nonce'      => wp_create_nonce( 'submit_adf_lead' ),
-				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
-				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
-				'vehicles_feed_rest'  => $this->vehicles_feed_url(),
-			)
-		);
-		wp_enqueue_script(
-			'shopperexpress/impl',
-			\App\asset_url_old( 'js/impl.js' ),
-			array( 'jquery' ),
-			$theme_version,
-			false
-		);
-		wp_localize_script(
-			'shopperexpress/impl',
-			'ajax',
-			array(
-				'admin'               => admin_url( 'admin-ajax.php' ),
-				'request'             => ! empty( $_GET ) ? $_GET : '',
-				'loged'               => is_user_logged_in(),
-				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
 				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
 				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
 				'vehicles_feed_rest'  => $this->vehicles_feed_url(),

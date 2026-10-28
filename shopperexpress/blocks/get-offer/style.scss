@@ -1,0 +1,68 @@
+// -----------------------------------------------------------------------------
+// Get Offer block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.section-get-offer {
+  position: relative;
+  padding: 50px 0;
+
+  @include media('>=tablet') {
+    padding: 90px 0 100px;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-color: rgba(var(--overlay-color-rgb), var(--overlay-opacity));
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .text-block {
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 500;
+
+    @include media('>=tablet') {
+      text-align: center;
+    }
+
+    @include media('>=desktop') {
+      font-size: 25px;
+    }
+  }
+
+  h2 {
+    font-size: 36px !important;
+    line-height: 1.2;
+    font-weight: 700;
+    margin-bottom: 20px !important;
+    color: $white !important;
+
+    @include media('>=desktop') {
+      font-size: 50px !important;
+      margin-bottom: 43px !important;
+    }
+
+    br {
+      @include media('>=tablet') {
+        display: none;
+      }
+    }
+  }
+
+  p {
+    font-weight: 500 !important;
+    margin-bottom: 16px !important;
+  }
+}

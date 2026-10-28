@@ -1,0 +1,11 @@
+// -----------------------------------------------------------------------------
+// Login page bundle: compiled to assets/css/login.css and loaded only on
+// wp-login.php (inc/Components/Base/class-login.php).
+// -----------------------------------------------------------------------------
+
+@import 'abstracts/config';
+@import 'vendors/include-media';
+@import 'abstracts/mixins';
+
+// Ported verbatim from assets-old/src/styles/pages/_login.scss.
+@import 'legacy/login';

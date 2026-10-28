@@ -38,7 +38,7 @@ class Admin implements Theme_Component {
 		}
 
 		// translators: %s reading options link.
-		$message = __( 'You are blocking access to robots. You must go to your <a href="%s">Reading</a> settings and uncheck the box for Search Engine Visibility.', 'base' );
+		$message = __( 'You are blocking access to robots. You must go to your <a href="%s">Reading</a> settings and uncheck the box for Search Engine Visibility.', 'shopperexpress' );
 
 		echo '<div class="error"><p>';
 		printf( wp_kses( $message, 'default' ), esc_url( admin_url( 'options-reading.php' ) ) );
@@ -67,7 +67,7 @@ class Admin implements Theme_Component {
 
 		$form  = '<form action="' . esc_url( home_url( '/' ) ) . '" method="get" id="adminbarsearch"><div>';
 		$form .= '<input class="adminbar-input" name="s" id="adminbar-search" tabindex="10" type="text" value="" maxlength="150" />';
-		$form .= '<input type="submit" class="adminbar-button" value="' . esc_html__( 'Search', 'base' ) . '"/>';
+		$form .= '<input type="submit" class="adminbar-button" value="' . esc_html__( 'Search', 'shopperexpress' ) . '"/>';
 		$form .= '</div></form>';
 
 		$wp_admin_bar->add_menu(

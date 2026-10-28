@@ -47,6 +47,7 @@ $anchor   = $args['anchor'] ?? '';
 				</div>
 			<?php endif; ?>
 			<?php if ( $ltd && $lng ) : ?>
+				<?php wp_enqueue_script( 'shopperexpress/google-map' ); ?>
 				<div class="col-md-6 col-lg-8">
 					<div class="map-holder" data-coordinates="<?php echo $ltd . ', ' . $lng; ?>" data-zoom="<?php echo $zoom; ?>"></div>
 				</div>

@@ -1,0 +1,261 @@
+// -----------------------------------------------------------------------------
+// LP Hero block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.lp-section-visual {
+  position: relative;
+  width: 100%;
+
+  .lp-bg-image {
+    position: absolute;
+    inset: 0;
+
+    &.mobile-bg {
+      @include media('>=desktop-c') {
+        display: none !important;
+      }
+    }
+
+    &.desktop-bg {
+      @include media('<desktop-c') {
+        display: none !important;
+      }
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 80.01%),
+                        linear-gradient(360deg, rgba(0, 0, 0, 0) 79.86%, rgba(0, 0, 0, 0.72) 100%);
+    }
+  }
+
+  &__holder {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    padding-block: 80px 40px;
+
+    @include media('>=tablet') {
+      padding: 80px 40px 150px;
+    }
+
+    @include media('>=desktop') {
+      aspect-ratio: 1/0.8;
+    }
+
+    @include media('>=desktop-c') {
+      padding-bottom: 120px;
+      aspect-ratio: 2.13/1.4;
+    }
+
+    @include media('>=widescreen') {
+      padding: 120px 64px;
+      aspect-ratio: 2.13/1.1;
+    }
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    max-width: 1640px;
+  }
+
+  &__content {
+    color: $white;
+    max-width: 430px;
+    line-height: 1.555;
+    font-weight: 500;
+
+    @include media('>=desktop') {
+      max-width: 490px;
+      font-size: 18px;
+    }
+
+    @include media('>=1400px') {
+      max-width: 580px;
+    }
+  }
+
+  &__title {
+    color: currentColor;
+    font-weight: 600;
+    margin-bottom: 16px;
+    line-height: 1.0625;
+    letter-spacing: -0.013em;
+
+    @include media('>=tablet') {
+      font-size: 48px;
+    }
+
+    @include media('>=desktop') {
+      font-size: 54px;
+      margin-bottom: 20px;
+    }
+
+    @include media('>=1400px') {
+      font-size: 64px;
+    }
+
+    sup {
+      font-size: 60%;
+      top: -0.55em;
+    }
+  }
+
+  &__subtitle {
+    margin-bottom: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background-color: rgba($white, 0.15);
+    border: 1px solid rgba($white, 0.1);
+    font-size: 11px;
+    line-height: 1;
+    backdrop-filter: blur(12px);
+    display: inline-block;
+    vertical-align: top;
+    letter-spacing: 0.03em;
+
+    @include media('>=tablet') {
+      font-size: 12px;
+    }
+
+    @include media('>=desktop-c') {
+      margin-bottom: 20px;
+    }
+  }
+
+  .btn-holder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 16px;
+
+    @include media('>=desktop') {
+      gap: 16px;
+    }
+  }
+
+  .lp-nav-holder {
+    border-bottom: 1px solid $lp-gray-300;
+
+    @include media('>=tablet') {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-bottom: 0;
+      padding-inline: 40px;
+    }
+
+    @include media('>=widescreen') {
+      padding-inline: 64px;
+    }
+  }
+
+  .lp-nav-list {
+    @extend %listreset;
+    margin-top: auto;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 1.4285;
+    font-weight: 600;
+    padding: 16px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    @include media('>=sm-phone') {
+      font-size: 14px;
+    }
+
+    @include media('>=tablet') {
+      border-top: 1px solid rgba($white, 0.2);
+      display: flex;
+      align-items: center;
+      flex: nowrap;
+      font-size: 12px;
+      padding-inline: 0;
+    }
+
+    @include media('>=desktop') {
+      font-size: 14px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+
+    @include media('>=widescreen') {
+      left: 78px;
+      right: 78px;
+      letter-spacing: 0.026em;
+    }
+
+    li {
+      width: calc(50% - 5px);
+
+      @include media('>=desktop') {
+        width: auto;
+      }
+    }
+
+    a {
+      @include animate(color background-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: 60px;
+      padding: 10px 16px;
+      background-color: var(--primary);
+      border-radius: 6px;
+      color: $white;
+      height: 100%;
+
+      @include media('>=tablet') {
+        border-radius: 8px;
+        background-color: rgba($white, 0.15);
+        border: 1px solid rgba($white, 0.1);
+        backdrop-filter: blur(12px);
+        min-height: 44px;
+      }
+
+      @include media('>=desktop') {
+        display: inline-flex;
+        vertical-align: top;
+        gap: 6px;
+        color: rgba($white, 0.8);
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+        min-height: 0;
+        border-radius: 0;
+      }
+
+      &:hover {
+        background-color: color-mix(in srgb, var(--primary) 88%, $black);
+
+        @include media('>=tablet') {
+          background-color: rgba($white, 0.5);
+        }
+
+        @include media('>=desktop') {
+          color: $white;
+          background-color: transparent;
+        }
+      }
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+  }
+}

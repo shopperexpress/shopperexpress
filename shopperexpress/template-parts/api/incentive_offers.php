@@ -59,6 +59,6 @@ $title = get_field( 'api_new_car_incentives_title', 'option' );
 add_action(
 	'wp_footer',
 	function () use ( $json ) {
-		get_template_part( 'template-parts/conditionalOffersDetail', 'modal', array( 'json' => $json ) );
+		get_template_part( 'template-parts/conditional-offers-detail', 'modal', array( 'json' => $json ) );
 	}
 );

@@ -1,0 +1,86 @@
+// -----------------------------------------------------------------------------
+// Buttons block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+#page-container {
+  /* info section styles */
+  .info-section {
+    padding: 31px 0 7px;
+    background: var(--primary);
+
+    @include media('>=tablet') {
+      padding: 7px 0 11px;
+    }
+  }
+
+  /* info list styles */
+  .info-list {
+    @extend %listreset;
+
+    @include media('>=tablet') {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -1px;
+    }
+
+    li {
+      padding-bottom: 32px;
+
+      @include media('>=tablet') {
+        width: 50%;
+        padding: 15px 32px;
+      }
+
+      @include media('>=desktop') {
+        padding: 23px 32px;
+      }
+    }
+
+    a {
+      @include animate(box-shadow background);
+      display: block;
+      background: $white;
+      color: $dark-gray;
+      padding: 12px 10px 22px;
+      text-align: center;
+      font-size: 27px;
+      font-weight: 500;
+      border-radius: 3px;
+
+      @include media('>=tablet') {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        height: 100%;
+        border-radius: 5px;
+        font-size: 29px;
+        padding: 16px 15px 34px;
+      }
+
+      @include media('>=desktop') {
+        font-size: 40px;
+      }
+
+      &:hover {
+        background: #e6e6e6;
+        box-shadow: 0 6px 15px rgba($black, 0.5);
+      }
+
+      strong {
+        display: block;
+        width: 100%;
+        font-weight: 500;
+      }
+
+      .mark {
+        display: block;
+        width: 100%;
+        font-size: 90%;
+        line-height: 1.3;
+      }
+    }
+  }
+}
