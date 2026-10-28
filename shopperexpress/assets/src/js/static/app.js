@@ -1967,12 +1967,30 @@ function initSlickCarousel() {
 		const autoplay = slider.data('autoplay') || false;
 		const autoplaySpeed = slider.data('autoplay-speed') || 3000;
 		const range = holder.find('.range-box input');
+		const navPrev = holder.find('.slider-nav-prev');
+		const navNext = holder.find('.slider-nav-next');
 		const sliderHolder = holder.find('.slider-nav-holder');
+		const hasNav = !range.length && (navPrev.length || navNext.length);
+		const arrowsClass = 'has-arrows';
+		let navChunkSize = 1;
 		let totalWidth = 0;
 		let thumbsWidth = 0;
 		let diffWidth = 0;
+		let navIndex = 0;
 
 		thumbs.eq(0).addClass(activeClass);
+
+		const counter = jQuery('<div class="detail-slider-counter" aria-live="polite"><span class="current"></span> / <span class="total"></span></div>');
+		const counterCurrent = counter.find('.current');
+		const counterTotal = counter.find('.total');
+
+		slider.after(counter);
+
+		slider.on('init reInit afterChange', function(event, slick) {
+			counterCurrent.text((slick.currentSlide || 0) + 1);
+			counterTotal.text(slick.slideCount);
+			counter.toggle(slick.slideCount > 1);
+		});
 
 		slider.slick({
 			slidesToScroll: 1,
@@ -1985,18 +2003,43 @@ function initSlickCarousel() {
 			focusOnSelect: true
 		});
 
+		// visible area is the holder's parent: .slider-nav-wrap or .detail-slider-nav without arrow paddings
+		function getVisibleWidth() {
+			return sliderHolder.parent().width() || thumbsSlider.outerWidth();
+		}
+
 		function resizeHandler() {
-			totalWidth = thumbs.length * thumbs.outerWidth(true);
-			thumbsWidth = thumbsSlider.outerWidth();
+			let thumbWidth = thumbs.outerWidth(true) || 0;
+
+			// thumbs width is in %, so visible count doesn't depend on arrow paddings
+			navChunkSize = thumbWidth ? Math.max(Math.round(getVisibleWidth() / thumbWidth), 1) : 1;
+
+			if (hasNav) {
+				thumbsSlider.toggleClass(arrowsClass, thumbs.length > navChunkSize);
+				thumbWidth = thumbs.outerWidth(true) || 0;
+			}
+
+			thumbsWidth = getVisibleWidth();
+			totalWidth = thumbs.length * thumbWidth;
 			diffWidth = totalWidth - thumbsWidth;
 		}
 
 		resizeHandler();
-		win.on('resize orientationchange', resizeHandler);
+		win.on('resize orientationchange', function() {
+			resizeHandler();
+
+			if (hasNav) {
+				goToChunk(Math.floor(navIndex / navChunkSize) * navChunkSize);
+			}
+		});
 
 		slider.on('beforeChange', function(event, slick, currentSlide, nextSlide) {
 			thumbs.removeClass(activeClass);
 			thumbs.eq(nextSlide).addClass(activeClass);
+
+			if (hasNav) {
+				goToChunk(Math.floor(nextSlide / navChunkSize) * navChunkSize);
+			}
 		});
 
 		thumbs.on('click', function(e) {
@@ -2010,7 +2053,19 @@ function initSlickCarousel() {
 			slider.slick('slickGoTo', index);
 		});
 
-		range.on('input', onChange);
+		if (range.length) {
+			range.on('input', onChange);
+		} else if (hasNav) {
+			goToChunk(0);
+
+			navPrev.on('click', function() {
+				goToChunk(navIndex - navChunkSize);
+			});
+
+			navNext.on('click', function() {
+				goToChunk(navIndex + navChunkSize);
+			});
+		}
 
 		function onChange() {
 			const value = parseFloat(range.data('jcfInstance').values[0]);
@@ -2019,6 +2074,24 @@ function initSlickCarousel() {
 				marginLeft: -(diffWidth / 100) * value,
 				marginRight: (diffWidth / 100) * value
 			});
+		}
+
+		function goToChunk(index) {
+			const maxIndex = Math.max(thumbs.length - 1, 0);
+			const maxOffset = Math.max(diffWidth, 0);
+			const thumbWidth = thumbs.outerWidth(true) || 0;
+
+			navIndex = Math.min(Math.max(index, 0), maxIndex);
+
+			const offset = Math.min(navIndex * thumbWidth, maxOffset);
+
+			sliderHolder.css({
+				marginLeft: -offset,
+				marginRight: offset
+			});
+
+			navPrev.prop('disabled', offset <= 0);
+			navNext.prop('disabled', offset >= maxOffset);
 		}
 	});
 

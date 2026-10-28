@@ -240,26 +240,7 @@ h6 {
 }
 
 .btn-spin {
-  @include animate(opacity);
-  width: 117px;
-  position: absolute;
-  z-index: 10;
   display: none;
-  bottom: 9px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 1;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    background-color: $white;
-    border-radius: 50rem;
-  }
 
   &.spin-lesa {
     .svg-360 {
@@ -2660,7 +2641,11 @@ textarea.form-control {
 }
 
 .detail-slider-holder {
-  padding-bottom: 17px;
+  position: relative;
+  padding: 4px;
+  border: 1px solid $gray-400;
+  border-radius: 4px;
+  margin-bottom: 17px;
 
   .range-box {
     input {
@@ -2717,27 +2702,123 @@ textarea.form-control {
   position: relative;
 }
 
+.detail-slider-counter {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 2px 8px;
+  border-radius: 50rem;
+  background-color: rgba($black, 0.5);
+  color: $white;
+  font-size: 12px;
+  line-height: 1.5;
+  pointer-events: none;
+  text-align: center;
+  min-width: 58px;
+
+  .current,
+  .total {
+    font-weight: $font-weight-bold;
+  }
+}
+
+.slider-nav-arrow {
+  @include animate(background-color);
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  z-index: 2;
+  border: 1px solid $gray-600;
+  border-radius: 4px;
+  background-color: $white;
+
+  svg {
+    width: 36px;
+    height: 36px;
+    fill: var(--primary);
+    flex-shrink: 0;
+  }
+
+  &.slider-nav-prev {
+    left: 0;
+  }
+
+  &.slider-nav-next {
+    right: 0;
+  }
+
+  &:disabled {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgba(var(--primary-rgb), 0.1);
+  }
+}
+
+.btn-explore-vehicle {
+  @include animate(opacity);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 16px;
+  background-color: var(--primary);
+  border-radius: 4px;
+  color: $white;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+
+  .svg-360 {
+    width: 46px;
+    height: auto;
+    fill: $white;
+  }
+
+  &:hover,
+  &:focus {
+    opacity: 0.85;
+    color: $white;
+  }
+}
+
 .detail-slider-nav {
-  margin: 0 -3px;
+  position: relative;
   overflow: hidden;
   height: auto !important;
-  width: calc(100% + 6px) !important;
+  display: flex;
+  width: 100%;
+
+  .slider-nav-wrap {
+    overflow: hidden;
+    flex-grow: 1;
+  }
 
   .slider-nav-holder {
+    @include animate(margin, 0.15s, linear);
     display: flex;
     align-items: flex-start;
   }
 
   .slide {
     @include animate(border-color);
-
     cursor: pointer;
-    padding-bottom: 6px;
     margin: 0 3px;
-    border-bottom: 4px solid transparent;
     width: calc(33.33% - 6px);
     min-width: calc(33.33% - 6px);
     position: relative;
+    border-radius: 4px;
+    overflow: hidden;
 
     @include media('>=tablet') {
       width: calc(25% - 6px);
@@ -2745,8 +2826,8 @@ textarea.form-control {
     }
 
     @include media('>=desktop') {
-      width: calc(14.28% - 6px);
-      min-width: calc(14.28% - 6px);
+      width: calc(20% - 6px);
+      min-width: calc(20% - 6px);
     }
 
     &::before {
@@ -2755,10 +2836,28 @@ textarea.form-control {
       display: block;
     }
 
+    &::after {
+      @include animate(opacity visibility);
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 2px solid var(--primary);
+      border-radius: 3px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+
     &.active,
     &.slick-current,
     &:hover {
       border-bottom-color: var(--primary);
+
+      &::after {
+        opacity: 1;
+        visibility: visible;
+      }
     }
 
     &.bg-cover {
@@ -2771,7 +2870,7 @@ textarea.form-control {
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% - 6px);
+      height: 100%;
       object-fit: contain;
     }
   }

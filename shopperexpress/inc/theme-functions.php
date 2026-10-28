@@ -2081,6 +2081,7 @@ add_filter(
 );
 
 add_image_size( '454x255', 454, 255, true );
+add_image_size( '900x500', 900, 500, false );
 
 /**
  * Get font family from font styling.

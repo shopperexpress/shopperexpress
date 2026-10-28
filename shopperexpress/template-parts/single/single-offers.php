@@ -131,17 +131,25 @@ while ( have_posts() ) :
 									</a>
 								</div>
 								<div class="detail-slider-nav">
-									<div class="slider-nav-holder">
-										<?php foreach ( $gallery as $value ) : ?>
-											<div class="slide bg-cover">
-												<img src="<?php echo $value['image_url']; ?>" srcset="<?php echo $value['image_url']; ?> 2x" alt="image">
-											</div>
-										<?php endforeach ?>
+									<button type="button" class="slider-nav-arrow slider-nav-prev" aria-label="<?php esc_attr_e( 'Previous thumbnails', 'shopperexpress' ); ?>">
+										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m432-480 156 156q11 11 11 28t-11 28q-11 11-28 11t-28-11L348-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 28-11t28 11q11 11 11 28t-11 28L432-480Z" /></svg>
+									</button>
+									<div class="slider-nav-wrap">
+										<div class="slider-nav-holder">
+											<?php foreach ( $gallery as $value ) : ?>
+												<div class="slide bg-cover">
+													<img src="<?php echo $value['image_url']; ?>" srcset="<?php echo $value['image_url']; ?> 2x" alt="image">
+												</div>
+											<?php endforeach ?>
+										</div>
 									</div>
+									<button type="button" class="slider-nav-arrow slider-nav-next" aria-label="<?php esc_attr_e( 'Next thumbnails', 'shopperexpress' ); ?>">
+										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z" /></svg>
+									</button>
 								</div>
-								<div class="range-box">
+								<!-- <div class="range-box">
 									<input aria-label="Carousel thumbnails slider" value="0" min="0" max="100" step="1" type="range">
-								</div>
+								</div> -->
 							<?php endif; ?>
 						</div>
 						<?php
