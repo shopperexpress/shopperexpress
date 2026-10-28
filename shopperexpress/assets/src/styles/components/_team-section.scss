@@ -28,8 +28,15 @@
   font-weight: 400;
   line-height: 1.5;
 
-  .container {
-    max-width: 1270px !important;
+  // #page-container .container sets max-width: 1034px !important (see
+  // _common-content.scss) with higher specificity (id + class) than a plain
+  // `.team-section .container`, so it wins even though this rule is also
+  // !important. Prefix with #page-container too to outrank it.
+  #page-container &,
+  & {
+    .container {
+      max-width: 1270px !important;
+    }
   }
 
   &__heading {
@@ -138,6 +145,14 @@
     @include media('>=desktop') {
       grid-template-columns: repeat(5, 1fr);
     }
+
+    .card-team__actions {
+      flex-direction: column;
+    }
+
+    .card-team__btn {
+      width: 100%;
+    }
   }
 }
 
@@ -159,7 +174,7 @@
 
     #{$self}__hover {
       opacity: 1;
-      max-height: 100px;
+      max-height: 160px;
     }
   }
 
@@ -239,6 +254,48 @@
         text-decoration: underline !important;
       }
     }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  &__btn {
+    @include animate(background-color border-color);
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid rgba($white, 0.45);
+    border-radius: 4px;
+    color: $white !important;
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+
+    &:hover,
+    &:focus-visible {
+      background-color: rgba($white, 0.08);
+      border-color: $white;
+      color: $white !important;
+      text-decoration: none !important;
+    }
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 
   .hidden {
