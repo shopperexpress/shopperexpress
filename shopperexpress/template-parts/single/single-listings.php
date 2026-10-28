@@ -282,6 +282,7 @@ while ( have_posts() ) :
 										data-type="iframe"
 										data-fancybox
 										class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+										style="display: none;"
 										<?php foreach ( $attrs as $key => $value ) : ?>
 											<?php echo esc_attr( $key ); ?>="<?php echo esc_attr( $value ); ?>"
 										<?php endforeach; ?>

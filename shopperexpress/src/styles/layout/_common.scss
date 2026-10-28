@@ -239,6 +239,8 @@ h6 {
 }
 
 .btn-spin {
+  display: none;
+
   &.spin-lesa {
     .svg-360 {
       display: none;
@@ -2780,10 +2782,6 @@ textarea.form-control {
   height: auto !important;
   display: flex;
   width: 100%;
-
-  &:not(.has-arrows) .slider-nav-arrow {
-    display: none;
-  }
 
   .slider-nav-wrap {
     overflow: hidden;

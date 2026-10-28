@@ -149,6 +149,7 @@ $alt_array = array( $year, $make, $model, $trim, $exterior_color, '- ' . get_blo
 				data-type="iframe"
 				data-fancybox
 				class="<?php echo esc_attr( implode( ' ', $spin_classes ) ); ?>"
+				style="display: none;"
 				<?php foreach ( $spin_attrs as $attr_key => $attr_value ) : ?>
 					<?php echo esc_attr( $attr_key ); ?>="<?php echo esc_attr( $attr_value ); ?>"
 				<?php endforeach; ?>
