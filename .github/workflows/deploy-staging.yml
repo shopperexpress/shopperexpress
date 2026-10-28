@@ -25,16 +25,15 @@ jobs:
 
       - name: Deploy theme via rsync
         run: |
-          rsync -rz --delete \
+          rsync -rz --delete --omit-dir-times \
             --exclude='.git/' \
             --exclude='.github/' \
             -e "ssh -p ${{ secrets.CLOUDWAYS_PORT }}" \
             ./ \
             "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}:${{ secrets.CLOUDWAYS_PATH }}/"
 
-            echo "== Installing composer dependencies =="
-            cd ${{ secrets.CLOUDWAYS_PATH }}/shopperexpress
-            composer install --no-dev --optimize-autoloader --no-interaction
-
-            echo "== Deploy finished =="
-          '
+      - name: Install Composer dependencies
+        run: |
+          ssh -p ${{ secrets.CLOUDWAYS_PORT }} \
+            "${{ secrets.CLOUDWAYS_USER }}@${{ secrets.CLOUDWAYS_HOST }}" \
+            "cd '${{ secrets.CLOUDWAYS_PATH }}' && composer install --no-dev --optimize-autoloader --no-interaction"
