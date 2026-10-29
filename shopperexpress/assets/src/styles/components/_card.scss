@@ -235,6 +235,9 @@
   .detail-slider-holder {
     margin-bottom: 10px;
     padding: 0;
+    border: 0;
+    border-radius: 0;
+    position: static;
 
     .detail-slider {
       margin: 0;
