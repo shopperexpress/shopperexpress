@@ -148,10 +148,20 @@
 				// gets the "big trailing logo" vs. "small leading icon" sizing) is done
 				// purely via a single modifier class on .navbar-holder — see
 				// .navbar-holder--logo-right in _header.scss for all the overrides.
-				$logo_list_after = 'right' === ( get_field( 'logo_list_position', 'options' ) ?: 'left' );
+				$logo_list_after        = 'right' === ( get_field( 'logo_list_position', 'options' ) ?: 'left' );
+				$nav_opener_hide_desktop = get_field( 'hide_nav_opener_desktop', 'options' );
+				$nav_opener_hide_mobile  = get_field( 'hide_nav_opener_mobile', 'options' );
+				$nav_opener_class        = 'nav-opener';
+				if ( $nav_opener_hide_desktop && $nav_opener_hide_mobile ) {
+					$nav_opener_class .= ' d-none';
+				} elseif ( $nav_opener_hide_desktop ) {
+					$nav_opener_class .= ' d-md-none';
+				} elseif ( $nav_opener_hide_mobile ) {
+					$nav_opener_class .= ' d-none d-md-block';
+				}
 				?>
 				<div class="navbar-holder<?php echo $logo_list_after ? ' navbar-holder--logo-right' : ''; ?>">
-					<button type="button" class="nav-opener" aria-label="<?php _e( 'Left menu toggle', 'shopperexpress' ); ?>">
+					<button type="button" class="<?php echo esc_attr( $nav_opener_class ); ?>" aria-label="<?php _e( 'Left menu toggle', 'shopperexpress' ); ?>">
 						<svg class="menu-close" xmlns="http://www.w3.org/2000/svg" height="24px" aria-hidden="true" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF">
 							<path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"></path>
 						</svg>
@@ -304,7 +314,19 @@
 				</button>
 				<div class="btn-toolbar">
 					<?php if ( has_nav_menu( 'drop-down' ) ) : ?>
-						<div class="btn-group">
+						<?php
+						$apps_dropdown_hide_desktop = get_field( 'hide_apps_dropdown_desktop', 'options' );
+						$apps_dropdown_hide_mobile  = get_field( 'hide_apps_dropdown_mobile', 'options' );
+						$apps_dropdown_class        = 'btn-group';
+						if ( $apps_dropdown_hide_desktop && $apps_dropdown_hide_mobile ) {
+							$apps_dropdown_class .= ' d-none';
+						} elseif ( $apps_dropdown_hide_desktop ) {
+							$apps_dropdown_class .= ' d-md-none';
+						} elseif ( $apps_dropdown_hide_mobile ) {
+							$apps_dropdown_class .= ' d-none d-md-block';
+						}
+						?>
+						<div class="<?php echo esc_attr( $apps_dropdown_class ); ?>">
 							<button type="button" class="btn header-btn btn-app dropdown-toggle" aria-label="<?php _e( 'Toggle Dropdown', 'shopperexpress' ); ?>" id="dropdownMenuApps" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF" aria-hidden="true">
 									<path d="M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z"></path>
