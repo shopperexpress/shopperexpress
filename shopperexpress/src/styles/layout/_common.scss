@@ -2631,6 +2631,11 @@ textarea.form-control {
   border-radius: 4px;
   margin-bottom: 17px;
 
+  img {
+    color: transparent;
+    font-size: 0;
+  }
+
   .range-box {
     input {
       opacity: 0;
