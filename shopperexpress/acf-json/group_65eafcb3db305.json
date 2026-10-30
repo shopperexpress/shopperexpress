@@ -516,6 +516,27 @@
             "append": ""
         },
         {
+            "key": "field_6ae49e46d530a",
+            "label": "Vehicle type",
+            "name": "vehicle_type",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_65eafcb3eac35",
             "label": "Stock",
             "name": "stock_number",
@@ -2380,11 +2401,10 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "acfe_autosync": [
-        "json"
-    ],
-    "acfe_form": 0,
-    "acfe_meta": "",
-    "acfe_note": "",
-    "modified": 1792668332
+    "acfe": {
+        "autosync": [
+            "json"
+        ]
+    },
+    "modified": 1793367673
 }

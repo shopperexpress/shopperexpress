@@ -138,7 +138,7 @@ if ( wps_check_current_usser() ) :
 									'model',
 									'make',
 									'year',
-									'condition',
+									'vehicle_type',
 									'stock_number',
 									'vin_number',
 									'url',
