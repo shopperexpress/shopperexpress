@@ -591,6 +591,27 @@
             "acfict_table_name": "listings"
         },
         {
+            "key": "field_6ae49e6bbe8e0",
+            "label": "Vehicle Type",
+            "name": "vehicle_type",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "maxlength": "",
+            "allow_in_bindings": 1,
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
             "key": "field_614072151d13d",
             "label": "Stock",
             "name": "stock_number",

@@ -606,7 +606,7 @@ class Ajax implements Theme_Component {
 		$_REQUEST['vehicle_miles']          = null !== $mileage ? $mileage : '';
 		$_REQUEST['vehicle_vin']            = strtoupper( $this->vehicle_field( $v, array( 'vin', 'vin_number' ) ) ?? $vin );
 		$_REQUEST['vehicle_stock']          = null !== $stock ? $stock : '';
-		$_REQUEST['vehicle_type']           = $this->vehicle_field( $v, array( 'condition' ) ) ?? '';
+		$_REQUEST['vehicle_type']           = $this->vehicle_field( $v, array( 'vehicle_type', 'condition' ) ) ?? '';
 		$_REQUEST['vehicle_msrp']           = is_numeric( $msrp ) ? number_format( (int) $msrp ) : '';
 		$_REQUEST['vehicle_best_price']     = is_numeric( $best_price ) ? number_format( (int) $best_price ) : '';
 		$_REQUEST['vehicle_internet_price'] = is_numeric( $internet_price ) ? number_format( (int) $internet_price ) : '';

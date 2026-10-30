@@ -683,6 +683,12 @@ textarea.form-control {
   }
 }
 
+@include media('<widescreen') {
+  .sticky-search .filter-opener {
+    display: flex;
+  }
+}
+
 .filter-opener {
   @include animate(color background-color left, 0.3s, linear);
   @include size(90px, 46px);
@@ -694,17 +700,13 @@ textarea.form-control {
   background-color: $white;
   border: 1px solid var(--primary);
   color: var(--primary);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   margin-left: -1px;
 
   @include media ('>=tablet') {
     top: 140px;
-  }
-
-  @include media('>=widescreen') {
-    display: none;
   }
 
   &:focus {
@@ -2646,6 +2648,11 @@ textarea.form-control {
   border: 1px solid $gray-400;
   border-radius: 4px;
   margin-bottom: 17px;
+
+  img {
+    color: transparent;
+    font-size: 0;
+  }
 
   .range-box {
     input {
