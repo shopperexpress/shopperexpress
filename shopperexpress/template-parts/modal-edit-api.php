@@ -33,7 +33,7 @@ $title   = trim(
 				$vehicle['year'] ?? '',
 				$vehicle['make'] ?? '',
 				$vehicle['model'] ?? '',
-				$vehicle['trim'] ?? '',
+				$payload['trim'] ?? '',
 			)
 		)
 	)
@@ -143,7 +143,7 @@ $tabs = array(
 			array(
 				'label' => 'Trim',
 				'name'  => 'trim',
-				'value' => $vehicle['trim'] ?? '',
+				'value' => $payload['trim'] ?? '',
 			),
 			array(
 				'label'    => 'Condition',
@@ -698,7 +698,7 @@ $tabs = array(
 						<div class="card-body">
 							<h2 class="card-title">
 								<span><?php echo esc_html( ( $vehicle['year'] ?? '' ) . ' ' . ( $vehicle['make'] ?? '' ) ); ?></span>
-								<?php echo esc_html( ( $vehicle['model'] ?? '' ) . ' ' . ( $vehicle['trim'] ?? '' ) ); ?>
+								<?php echo esc_html( ( $vehicle['model'] ?? '' ) . ' ' . ( $payload['trim'] ?? '' ) ); ?>
 							</h2>
 							<dl class="detail-info">
 								<dt><?php esc_html_e( 'VIN', 'shopperexpress' ); ?>:</dt>
