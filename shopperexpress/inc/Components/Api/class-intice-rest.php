@@ -309,7 +309,7 @@ class Intice_Rest implements Theme_Component {
 			$year      = $vehicle['year'] ?? '';
 			$make      = $vehicle['make'] ?? '';
 			$model     = $vehicle['model'] ?? '';
-			$trim      = $vehicle['trim'] ?? '';
+			$trim      = \App\resolve_vehicle_field( $vehicle, 'trim' );
 			$permalink = $vin_permalink_map[ $vin ] ?? '#';
 
 			// Build terms array for the JS filter engine.
