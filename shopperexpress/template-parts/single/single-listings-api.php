@@ -700,6 +700,7 @@ get_template_part(
 	array(
 		'post_type' => $post_type,
 		'type'      => 'random',
+		'model'     => $model,
 	)
 );
 

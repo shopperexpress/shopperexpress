@@ -10,6 +10,7 @@
 $page_id       = ! empty( $args['page_id'] ) ? $args['page_id'] : 'options';
 $get_post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : '';
 $get_type      = ! empty( $args['type'] ) ? $args['type'] : 'single';
+$get_model     = ! empty( $args['model'] ) ? $args['model'] : '';
 $accordion     = array();
 
 if ( 'random' === $get_type ) {
@@ -23,22 +24,40 @@ if ( 'random' === $get_type ) {
 		strtoupper( str_replace( '-', ' ', $get_post_type ) ),
 	);
 
-	$query = new WP_Query(
-		array(
-			'post_type'      => 'faq',
-			'posts_per_page' => 3,
-			'fields'         => 'ids',
-			'no_found_rows'  => true,
-			'orderby'        => 'rand',
-			'meta_query'     => array(
-				array(
-					'key'     => 'type',
-					'value'   => $possible_values,
-					'compare' => 'IN',
-				),
+	$model_slugs = array_filter( array_map( 'sanitize_title', (array) $get_model ) );
+
+	$query_args = array(
+		'post_type'      => 'faq',
+		'posts_per_page' => 3,
+		'fields'         => 'ids',
+		'no_found_rows'  => true,
+		'orderby'        => 'rand',
+		'meta_query'     => array(
+			array(
+				'key'     => 'type',
+				'value'   => $possible_values,
+				'compare' => 'IN',
 			),
-		)
+		),
 	);
+
+	if ( $model_slugs ) {
+		$query_args['tax_query'] = array(
+			'relation' => 'OR',
+			array(
+				'taxonomy' => 'faq_model',
+				'operator' => 'NOT EXISTS',
+			),
+			array(
+				'taxonomy' => 'faq_model',
+				'field'    => 'slug',
+				'terms'    => $model_slugs,
+				'operator' => 'IN',
+			),
+		);
+	}
+
+	$query = new WP_Query( $query_args );
 
 	if ( $query->posts ) {
 		foreach ( $query->posts as $item ) {

@@ -300,6 +300,7 @@ while ( have_posts() ) :
 		array(
 			'post_type' => $post_type,
 			'type'      => 'random',
+			'model'     => $model,
 		)
 	);
 
