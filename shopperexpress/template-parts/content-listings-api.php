@@ -23,7 +23,7 @@ if ( empty( $vehicle ) ) {
 $year           = $vehicle['year'] ?? '';
 $make           = $vehicle['make'] ?? '';
 $model          = $vehicle['model'] ?? '';
-$trim           = \App\resolve_vehicle_field( $vehicle, 'trim', true );
+$trim           = \App\resolve_vehicle_field( $vehicle, 'trim' );
 $drivetrain     = \App\resolve_vehicle_field( $vehicle, 'drivetrain' );
 $exterior_color = $vehicle['exterior_color'] ?? '';
 $mileage        = $vehicle['mileage'] ?? 0;

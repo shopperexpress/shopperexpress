@@ -101,25 +101,24 @@ function resolve_vehicle_gallery( array $vehicle ): array {
 
 /**
  * Resolve a scalar field from a raw Intice vehicle array, checking the
- * top-level field first (and its underscore variant), then falling back
- * to the dealer-mapped `payload` bag — some dealer feeds only map fields
- * like drivetrain into payload instead of Nexus's top-level fields.
+ * dealer-mapped `payload` bag first (and its underscore variant) — dealer
+ * edits/overrides are merged into `payload` server-side (see
+ * Intice_Api_Client::update_vehicle()) — then falling back to the raw
+ * top-level Nexus field for vehicles with no payload override.
  *
- * @param array  $vehicle       Intice API vehicle object (list or single response).
- * @param string $key           Field key to resolve.
- * @param bool   $payload_first When true, check `payload` before the top-level
- *                              field — e.g. `trim`, where the dealer-fed payload
- *                              value is always the authoritative one and Nexus's
- *                              top-level field should never be used instead.
+ * @param array  $vehicle Intice API vehicle object (list or single response).
+ * @param string $key     Field key to resolve.
  * @return string
  */
-function resolve_vehicle_field( array $vehicle, string $key, bool $payload_first = false ): string {
+function resolve_vehicle_field( array $vehicle, string $key ): string {
 	$payload        = $vehicle['payload'] ?? array();
 	$key_underscore = str_replace( '-', '_', $key );
 
-	$value = $payload_first
-		? ( $payload[ $key ] ?? $payload[ $key_underscore ] ?? $vehicle[ $key ] ?? $vehicle[ $key_underscore ] ?? '' )
-		: ( $vehicle[ $key ] ?? $vehicle[ $key_underscore ] ?? $payload[ $key ] ?? $payload[ $key_underscore ] ?? '' );
+	$value = $payload[ $key ]
+		?? $payload[ $key_underscore ]
+		?? $vehicle[ $key ]
+		?? $vehicle[ $key_underscore ]
+		?? '';
 
 	return (string) $value;
 }

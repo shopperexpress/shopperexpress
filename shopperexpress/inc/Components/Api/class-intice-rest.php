@@ -309,7 +309,7 @@ class Intice_Rest implements Theme_Component {
 			$year      = $vehicle['year'] ?? '';
 			$make      = $vehicle['make'] ?? '';
 			$model     = $vehicle['model'] ?? '';
-			$trim      = \App\resolve_vehicle_field( $vehicle, 'trim', true );
+			$trim      = \App\resolve_vehicle_field( $vehicle, 'trim' );
 			$permalink = $vin_permalink_map[ $vin ] ?? '#';
 
 			// Build terms array for the JS filter engine.
@@ -454,7 +454,7 @@ class Intice_Rest implements Theme_Component {
 				'year'       => $vehicle['year'] ?? '',
 				'make'       => $vehicle['make'] ?? '',
 				'model'      => $vehicle['model'] ?? '',
-				'trim'       => \App\resolve_vehicle_field( $vehicle, 'trim', true ),
+				'trim'       => \App\resolve_vehicle_field( $vehicle, 'trim' ),
 				'drivetrain' => \App\resolve_vehicle_field( $vehicle, 'drivetrain' ),
 				'body_style' => \App\resolve_vehicle_field( $vehicle, 'body_style' ),
 				'price'      => (float) ( $this->get_sort_field_value( $vehicle, 'price' ) ?? 0 ),
@@ -631,17 +631,15 @@ class Intice_Rest implements Theme_Component {
 			// Also try underscore variant (body_style vs body-style).
 			$base_underscore = str_replace( '-', '_', $base );
 
-			// Most site-configured filters map to top-level vehicle fields
-			// (make, model, drivetrain, ...), but many — engine, dealer_special,
-			// or anything a dealer's Import Template mapped as "payload" —
-			// only exist inside `payload`. Check both so a filter configured
-			// against a payload-only field isn't silently left with no options.
-			//
-			// `trim` is the one exception: the dealer-fed payload value is
-			// always authoritative, so it's checked before the top-level field.
-			$value = 'trim' === $base
-				? ( $payload[ $base ] ?? $payload[ $base_underscore ] ?? $vehicle[ $base ] ?? $vehicle[ $base_underscore ] ?? null )
-				: ( $vehicle[ $base ] ?? $vehicle[ $base_underscore ] ?? $payload[ $base ] ?? $payload[ $base_underscore ] ?? null );
+			// Check the dealer-mapped `payload` bag first — dealer edits/overrides
+			// are merged into `payload` server-side (see
+			// Intice_Api_Client::update_vehicle()), so it takes precedence over
+			// the raw top-level Nexus field (mirrors resolve_vehicle_field()).
+			$value = $payload[ $base ]
+				?? $payload[ $base_underscore ]
+				?? $vehicle[ $base ]
+				?? $vehicle[ $base_underscore ]
+				?? null;
 
 			// Cast before checking emptiness — a boolean `false` (e.g. certified)
 			// fails the strict `!== ''` check against the raw value (different
