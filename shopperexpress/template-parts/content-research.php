@@ -7,21 +7,21 @@
  * @package Shopperexpress
  */
 
-$post_id = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
-$make    = get_field( 'make', $post_id );
-$year    = get_field( 'year', $post_id );
-$model   = get_field( 'model', $post_id );
+$post_id    = ! empty( $args['post_id'] ) ? $args['post_id'] : get_the_id();
+$make       = get_field( 'make', $post_id );
+$year       = get_field( 'year', $post_id );
+$model      = get_field( 'model', $post_id );
+$aria_label = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $year ), esc_html( $make ), esc_html( $model ), 'page' );
 
 ?>
 <div class="col-sm-6 col-lg-4 col-xxl-3">
 	<div class="card">
 		<div class="card-body">
-			<a href="<?php echo esc_url( get_the_permalink( $post_id ) ); ?>">
-				<div class="card-head">
-					<span class="card-brand"><?php echo $year; ?> <?php echo $make; ?></span>
-					<strong class="card-model"><?php echo $model; ?></strong>
-				</div>
-			</a>
+			<a class="ghost-link" href="<?php echo esc_url( get_the_permalink( $post_id ) ); ?>" aria-label="<?php echo esc_attr( implode( ' ', $aria_label ) ); ?>"></a>
+			<div class="card-head">
+				<span class="card-brand"><?php echo $year; ?> <?php echo $make; ?></span>
+				<strong class="card-model"><?php echo $model; ?></strong>
+			</div>
 			<?php
 			get_template_part(
 				'template-parts/gallery',

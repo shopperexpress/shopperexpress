@@ -700,6 +700,7 @@ get_template_part(
 	array(
 		'post_type' => $post_type,
 		'type'      => 'random',
+		'model'     => $model,
 	)
 );
 
@@ -732,7 +733,7 @@ get_footer();
 
 // ── Modals ────────────────────────────────────────────────────────────────────
 get_template_part(
-	'template-parts/copy-link-modal',
+	'template-parts/copyLinkModal',
 	null,
 	array(
 		'post_id'      => 0,

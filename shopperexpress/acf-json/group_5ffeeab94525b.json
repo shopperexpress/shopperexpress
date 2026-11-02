@@ -261,6 +261,90 @@
             "ui": 1
         },
         {
+            "key": "field_6ae4a12bc1001",
+            "label": "Hide left menu toggle on desktop",
+            "name": "hide_nav_opener_desktop",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to hide the left menu toggle button on desktop.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
+            "ui": 1
+        },
+        {
+            "key": "field_6ae4a12bc1002",
+            "label": "Hide left menu toggle on mobile",
+            "name": "hide_nav_opener_mobile",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to hide the left menu toggle button on mobile.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
+            "ui": 1
+        },
+        {
+            "key": "field_6ae4a12bc1003",
+            "label": "Hide apps dropdown on desktop",
+            "name": "hide_apps_dropdown_desktop",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to hide the apps (grid) dropdown menu button on desktop.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
+            "ui": 1
+        },
+        {
+            "key": "field_6ae4a12bc1004",
+            "label": "Hide apps dropdown on mobile",
+            "name": "hide_apps_dropdown_mobile",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Enable to hide the apps (grid) dropdown menu button on mobile.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 0,
+            "allow_in_bindings": 1,
+            "ui_on_text": "Hidden",
+            "ui_off_text": "Visible",
+            "ui": 1
+        },
+        {
             "key": "field_66a8fc0e670ab",
             "label": "Contact list",
             "name": "",

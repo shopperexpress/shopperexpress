@@ -10,6 +10,7 @@
 $page_id       = ! empty( $args['page_id'] ) ? $args['page_id'] : 'options';
 $get_post_type = ! empty( $args['post_type'] ) ? $args['post_type'] : '';
 $get_type      = ! empty( $args['type'] ) ? $args['type'] : 'single';
+$get_model     = ! empty( $args['model'] ) ? $args['model'] : '';
 $accordion     = array();
 
 if ( 'random' === $get_type ) {
@@ -23,22 +24,40 @@ if ( 'random' === $get_type ) {
 		strtoupper( str_replace( '-', ' ', $get_post_type ) ),
 	);
 
-	$query = new WP_Query(
-		array(
-			'post_type'      => 'faq',
-			'posts_per_page' => 3,
-			'fields'         => 'ids',
-			'no_found_rows'  => true,
-			'orderby'        => 'rand',
-			'meta_query'     => array(
-				array(
-					'key'     => 'type',
-					'value'   => $possible_values,
-					'compare' => 'IN',
-				),
+	$model_slugs = array_filter( array_map( 'sanitize_title', (array) $get_model ) );
+
+	$query_args = array(
+		'post_type'      => 'faq',
+		'posts_per_page' => 3,
+		'fields'         => 'ids',
+		'no_found_rows'  => true,
+		'orderby'        => 'rand',
+		'meta_query'     => array(
+			array(
+				'key'     => 'type',
+				'value'   => $possible_values,
+				'compare' => 'IN',
 			),
-		)
+		),
 	);
+
+	if ( $model_slugs ) {
+		$query_args['tax_query'] = array(
+			'relation' => 'OR',
+			array(
+				'taxonomy' => 'faq_model',
+				'operator' => 'NOT EXISTS',
+			),
+			array(
+				'taxonomy' => 'faq_model',
+				'field'    => 'slug',
+				'terms'    => $model_slugs,
+				'operator' => 'IN',
+			),
+		);
+	}
+
+	$query = new WP_Query( $query_args );
 
 	if ( $query->posts ) {
 		foreach ( $query->posts as $item ) {
@@ -104,7 +123,7 @@ if ( $accordion ) :
 										?>
 											false<?php endif; ?>"
 										aria-controls="collapse<?php echo esc_attr( $row ); ?>">
-										<?php echo esc_html( $get_title ); ?>
+										<?php echo esc_html( do_shortcode( $get_title ) ); ?>
 										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000">
 											<path
 												d="m587-481.33-308-308q-12.33-12.34-12.17-30.17.17-17.83 12.5-30.83 13-13 30.84-13 17.83 0 30.83 13l321.67 322q10 10 14.66 22.33 4.67 12.33 4.67 24.67 0 12.33-4.67 24.66-4.66 12.34-14.66 22.34L340-111.67q-13 13-30.33 12.5-17.34-.5-30.34-13.5-12.33-13-12.66-30.5-.34-17.5 12.66-30.5L587-481.33Z" />
@@ -125,7 +144,7 @@ if ( $accordion ) :
 								aria-labelledby="heading<?php echo esc_attr( $row ); ?>"
 								data-parent="#accordionInfo">
 								<div itemprop="text" class="accordion-info-body">
-									<?php echo wp_kses_post( $get_text ); ?>
+									<?php echo wp_kses_post( do_shortcode( $get_text ) ); ?>
 								</div>
 							</div>
 						</li>

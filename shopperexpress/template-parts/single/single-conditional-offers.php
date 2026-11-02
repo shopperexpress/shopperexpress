@@ -629,6 +629,7 @@ while ( have_posts() ) :
 		array(
 			'post_type' => $post_type,
 			'type'      => 'random',
+			'model'     => $model,
 		)
 	);
 
@@ -656,7 +657,7 @@ endwhile;
 get_footer();
 
 get_template_part(
-	'template-parts/copy-link-modal',
+	'template-parts/copyLinkModal',
 	null,
 	array(
 		'image' => $firstImage,

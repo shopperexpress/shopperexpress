@@ -300,6 +300,7 @@ while ( have_posts() ) :
 		array(
 			'post_type' => $post_type,
 			'type'      => 'random',
+			'model'     => $model,
 		)
 	);
 
@@ -344,6 +345,6 @@ while ( have_posts() ) :
 endwhile;
 get_footer();
 
-get_template_part( 'template-parts/copy-link-modal', null, $args );
+get_template_part( 'template-parts/copyLinkModal', null, $args );
 get_template_part( 'template-parts/modal', 'evo' );
 ?>

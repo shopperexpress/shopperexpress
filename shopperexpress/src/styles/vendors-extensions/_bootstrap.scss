@@ -14,15 +14,14 @@ $lp-gray-25: #fbfdfd;
 $lp-gray-100: #f1f5f9;
 $lp-gray-200: #e2e8f0;
 $lp-gray-300: #cad5e2;
-$lp-gray-500: #62748E;
+$lp-gray-500: #62748e;
 $lp-gray-600: #45556c;
 $lp-gray-700: #314158;
 $lp-gray-800: #1d293d;
 $lp-gray-950: #020618;
 $lp-dark: #0b1233;
 
-$lp-gradient-dark: linear-gradient(0deg, #01213C, #01213C),
-linear-gradient(99.1deg, #01213C 7.38%, #024A70 100%);
+$lp-gradient-dark: linear-gradient(0deg, #01213c, #01213c), linear-gradient(99.1deg, #01213c 7.38%, #024a70 100%);
 
 $lp-radius-sm: 10px;
 $lp-radius: 16px;
@@ -39,8 +38,7 @@ $gray-800: #343a40;
 $gray-900: #212529;
 $black: #000;
 
-$grays: (
-);
+$grays: ();
 
 $blue: #007bff !default;
 $indigo: #6610f2 !default;
@@ -53,23 +51,26 @@ $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
-$colors: (
-);
+$colors: ();
 
-$colors: map.merge(("blue": $blue,
-      "indigo": $indigo,
-      "purple": $purple,
-      "pink": $pink,
-      "red": $red,
-      "orange": $orange,
-      "yellow": $yellow,
-      "green": $green,
-      "teal": $teal,
-      "cyan": $cyan,
-      "white": $white,
-      "gray": $gray-600,
-      "gray-dark": $gray-800 ),
-    $colors);
+$colors: map.merge(
+  (
+    'blue': $blue,
+    'indigo': $indigo,
+    'purple': $purple,
+    'pink': $pink,
+    'red': $red,
+    'orange': $orange,
+    'yellow': $yellow,
+    'green': $green,
+    'teal': $teal,
+    'cyan': $cyan,
+    'white': $white,
+    'gray': $gray-600,
+    'gray-dark': $gray-800,
+  ),
+  $colors
+);
 
 $primary: $red;
 $secondary: $gray-600 !default;
@@ -80,18 +81,21 @@ $danger: $red;
 $light: $gray-200;
 $dark: $gray-800 !default;
 
-$theme-colors: (
-);
+$theme-colors: ();
 
-$theme-colors: map.merge(("primary": $primary,
-      "secondary": $secondary,
-      "success": $success,
-      "info": $info,
-      "warning": $warning,
-      "danger": $danger,
-      "light": $light,
-      "dark": $dark ),
-    $theme-colors);
+$theme-colors: map.merge(
+  (
+    'primary': $primary,
+    'secondary': $secondary,
+    'success': $success,
+    'info': $info,
+    'warning': $warning,
+    'danger': $danger,
+    'light': $light,
+    'dark': $dark,
+  ),
+  $theme-colors
+);
 
 // Options
 
@@ -112,22 +116,31 @@ $enable-deprecation-messages: true !default;
 // Spacing
 
 $spacer: 1rem !default;
-$spacers: (
-  ) !default;
-$spacers: map.merge((0: 0,
-      1: ($spacer * .25),
-      2: ($spacer * .5),
-      3: $spacer,
-      4: ($spacer * 1.5),
-      5: ($spacer * 3)),
-    $spacers
+$spacers: () !default;
+$spacers: map.merge(
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25,
+    ),
+    2: (
+      $spacer * 0.5,
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5,
+    ),
+    5: (
+      $spacer * 3,
+    ),
+  ),
+  $spacers
 );
 
 $base-min-width: 360px;
 
 // This is the default html and body font-size for the base rem value.
 $rem-base: 16px;
-
 
 // Body
 
@@ -136,27 +149,27 @@ $body-color: $black;
 
 // Links
 
-$link-color: theme-color("primary");
+$link-color: theme-color('primary');
 $link-decoration: none;
 $link-hover-color: color.adjust($link-color, $lightness: -15%, $space: hsl);
 $link-hover-decoration: none;
 
 // Typography
 
-$font-family-sans-serif: "Montserrat", "Helvetica Neue", Arial, sans-serif;
-$font-family-roboto: "Roboto", "Helvetica Neue", Arial, sans-serif;
+$font-family-sans-serif: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+$font-family-roboto: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 $font-family-base: $font-family-sans-serif;
 
 $font-size-base: 1rem; // Assumes the browser default, typically `16px`
 $font-size-lg: $font-size-base * 1.125;
-$font-size-sm: $font-size-base * .8125;
+$font-size-sm: $font-size-base * 0.8125;
 
-$h1-font-size: $font-size-base * 2.25; // 36
+$h1-font-size: $font-size-base * 1.75; // 28
 $h2-font-size: $font-size-base * 1.5; // 24
 $h3-font-size: $font-size-base * 1.125; // 18
 $h4-font-size: $font-size-base * 1.0625; // 17
 $h5-font-size: $font-size-base; // 16
-$h6-font-size: $font-size-base * .875; // 14
+$h6-font-size: $font-size-base * 0.875; // 14
 
 $text-muted: #ccc;
 
@@ -168,7 +181,7 @@ $grid-breakpoints: (
   md: 768px,
   lg: 992px,
   xl: 1200px,
-  xxl: 1480px
+  xxl: 1480px,
 );
 
 $container-max-widths: (
@@ -176,7 +189,7 @@ $container-max-widths: (
   md: 720px,
   lg: 960px,
   xl: 1078px,
-  xxl: 1078px
+  xxl: 1078px,
 );
 
 // Cards
@@ -190,7 +203,7 @@ $card-color: #666;
 $modal-content-border-width: 0;
 $modal-content-border-radius: 1rem;
 
-$modal-backdrop-bg: rgba($black, .33);
+$modal-backdrop-bg: rgba($black, 0.33);
 $modal-backdrop-opacity: 1;
 $modal-header-border-width: 0;
 $modal-footer-border-width: $modal-header-border-width;
@@ -227,7 +240,6 @@ $input-plaintext-color: $gray-600;
 $input-height: 50px;
 $form-group-margin-bottom: 18px;
 
-
 // Tooltips
 
 $tooltip-opacity: 1;
@@ -235,4 +247,4 @@ $tooltip-opacity: 1;
 // Printing
 
 $print-page-size: a4;
-$print-body-min-width: map.get($grid-breakpoints, "lg");
+$print-body-min-width: map.get($grid-breakpoints, 'lg');
