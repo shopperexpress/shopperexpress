@@ -12,6 +12,7 @@ $dept           = get_field( 'department', $post_id );
 $type           = get_field( 'type', $post_id );
 $title          = get_field( 'title', $post_id );
 $expirationdate = get_field( 'expirationdate', $post_id );
+$aria_label     = array( esc_html__( 'Go to', 'shopperexpress' ), esc_html( $title ), 'page' );
 ?>
 <div class="col-sm-6 col-lg-4 col-xxl-3">
 	<div class="card">
