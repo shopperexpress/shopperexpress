@@ -51,9 +51,9 @@ if ( have_rows( $field, 'options' ) ) :
 								$field = 'mileage';
 							}
 
-							$value = $vehicle[ $field ] ?? null;
+							$value = $vehicle['payload'][ $field ] ?? null;
 							if ( $value === null || $value === '' ) {
-								$value = $vehicle['payload'][ $field ] ?? null;
+								$value = $vehicle[ $field ] ?? null;
 							}
 
 							return ( $value !== null && $value !== '' ) ? $value : '';
