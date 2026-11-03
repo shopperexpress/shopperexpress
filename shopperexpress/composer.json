@@ -1,12 +1,16 @@
 {
   "name": "p2h/shopperexpress",
-  "description": "Development tooling for the theme's PHP. Nothing here is shipped — the built theme has no Composer dependencies.",
+  "description": "Development tooling for the theme's PHP.",
   "license": "GPL-2.0-or-later",
   "type": "project",
   "autoload": {
     "classmap": [
       "inc/"
     ]
+  },
+  "require": {
+    "rdlowrey/auryn": "^1.4",
+    "twilio/sdk": "^8.11"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.13",
