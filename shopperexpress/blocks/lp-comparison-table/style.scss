@@ -1,0 +1,125 @@
+// -----------------------------------------------------------------------------
+// LP Comparison Table block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.lp-compare-wrap {
+  overflow-x: auto;
+  border-radius: $lp-radius-sm;
+  background-color: $lp-gray-25;
+  border: 1px solid $lp-gray-200;
+  scrollbar-width: thin;
+
+  @include media('>=desktop') {
+    border-radius: $lp-radius;
+  }
+}
+
+.lp-compare {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  background-color: $lp-gray-25;
+  color: $lp-gray-800;
+  font-size: 14px;
+  line-height: 1.5555;
+  min-width: 892px;
+
+  @include media('>=desktop') {
+    font-size: 18px;
+  }
+
+  &__column {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 60;
+
+    &:first-child {
+      > div {
+        align-items: flex-start;
+        line-height: 1.333;
+        font-weight: 600;
+        color: $lp-gray-950;
+        padding: 16px;
+      }
+    }
+
+    &.column-primary {
+      border-radius: $lp-radius-sm;
+      padding: 4px;
+      margin-bottom: 4px;
+      color: $white;
+      background-image: linear-gradient(180deg, #01213C 0%, #024A70 47.03%);
+
+      @include media('>=desktop') {
+        border-radius: $lp-radius;
+      }
+
+      > div {
+        background-color: $lp-sky;
+        border: solid $white;
+        border-width: 0 4px 1px;
+
+        &:first-child {
+          border-bottom: 0;
+          padding: 20px 10px 24px;
+          gap: 8px;
+          color: $white;
+          background-color: transparent;
+          border-width: 0;
+        }
+
+        &:nth-child(2) {
+          border-width: 4px 4px 1px;
+          border-radius: $lp-radius-sm $lp-radius-sm 0 0;
+          margin-top: -4px;
+
+          @include media('>=desktop') {
+            border-radius: $lp-radius $lp-radius 0 0;
+          }
+        }
+
+        &:last-child {
+          border-width: 0 4px 4px;
+          border-radius: 0 0 $lp-radius-sm $lp-radius-sm;
+          min-height: 60px;
+
+          @include media('>=desktop') {
+            border-radius: 0 0 $lp-radius $lp-radius;
+          }
+        }
+      }
+    }
+
+    &:not(.column-primary) {
+      > div {
+        &:last-child {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    > div {
+      min-height: 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid $lp-gray-200;
+      padding-inline: 10px;
+
+      &:first-child {
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.2;
+        font-weight: 600;
+        color: $lp-gray-950;
+        padding: 24px 16px 14px;
+
+        @include media('>=desktop') {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+}

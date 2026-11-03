@@ -1,0 +1,125 @@
+.pagination-holder {
+  padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  @include media('>=tablet') {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+
+  @include media('>=desktop') {
+    justify-content: flex-end;
+  }
+
+  &.hidden {
+    display: none;
+  }
+
+  .per-page {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    &-label {
+      margin: 0;
+      display: block;
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include media('>=tablet') {
+      justify-content: flex-end;
+    }
+  }
+
+  .btn-next,
+  .btn-prev {
+    @include transition(color background-color border-color);
+    @include size(40px);
+    border-radius: 50rem;
+    background-color: $white;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $gray-400;
+
+    &.disabled {
+      pointer-events: none;
+
+      svg {
+        opacity: 0.5;
+      }
+    }
+
+    svg {
+      width: 36px;
+      height: auto;
+      flex-shrink: 0;
+      fill: var(--primary);
+    }
+  }
+
+  .pagination-text {
+    padding: 0 10px;
+  }
+}
+
+.jcf-select.jcf-select-per-page {
+  margin: 0;
+  height: 32px;
+  min-width: 100px;
+  flex-shrink: 0;
+  border-color: $gray-600;
+  display: block !important;
+
+  &.jcf-drop-active {
+    .jcf-select-opener {
+      &::before {
+        transform: translate(-50%, -32%) rotate(-45deg);
+      }
+    }
+  }
+
+  .jcf-select-text {
+    margin-block: 4px;
+  }
+
+  .jcf-select-opener {
+    height: 32px;
+    width: 32px;
+
+    &::before {
+      width: 12px;
+      height: 12px;
+      border: solid $gray-800;
+      border-width: 2px 2px 0 0;
+      top: 50%;
+      left: 50%;
+      right: auto;
+      bottom: auto;
+      transform: translate(-50%, -78%) rotate(135deg);
+      background-image: none;
+    }
+  }
+}
+
+.jcf-select-drop.jcf-select-per-page {
+  .jcf-select-drop-content {
+    border-color: $gray-600;
+  }
+
+  .jcf-list {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}

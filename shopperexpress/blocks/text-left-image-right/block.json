@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/text-left-image-right",
+    "title": "Text Left & Image Right",
+    "description": "Two-column block with text on the left and image on the right.",
+    "category": "custom-acf-blocks",
+    "icon": "align-right",
+    "keywords": [
+        "text image columns"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

@@ -46,22 +46,20 @@ class SOC_Assets {
 	 * @return void
 	 */
 	public function enqueue(): void {
-		$version = $this->theme_version;
-
 		// Enqueue the SOC CSS file.
 		wp_enqueue_style(
 			'shopperexpress/soc',
-			get_template_directory_uri() . '/assets/dist/soc.css',
+			\App\asset_url( 'css/soc.css' ),
 			array(),
-			$version
+			shopperexpress_asset_version( 'assets/css/soc.css' )
 		);
 
 		// Enqueue the SOC JavaScript file, with jQuery as dependency, load in footer.
 		wp_enqueue_script(
 			'shopperexpress/soc',
-			get_template_directory_uri() . '/assets/dist/js/soc.js',
+			\App\asset_url( 'js/soc.js' ),
 			array( 'jquery' ),
-			$version,
+			shopperexpress_asset_version( 'assets/js/soc.js' ),
 			true
 		);
 

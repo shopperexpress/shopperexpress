@@ -25,23 +25,13 @@ function injector(): Injector {
 }
 
 /**
- * Helper function. returns asset url
+ * Helper function. Returns the URL of a build asset under assets/.
  *
- * @param  string $asset_path asset path.
+ * @param  string $asset_path asset path, relative to assets/.
  * @return string
  */
 function asset_url( string $asset_path ): string {
-	return get_template_directory_uri() . '/assets/dist/' . $asset_path;
-}
-
-/**
- * Helper function. returns asset url
- *
- * @param  string $asset_path asset path.
- * @return string
- */
-function asset_url_old( string $asset_path ): string {
-	return get_template_directory_uri() . '/assets/old/' . $asset_path;
+	return get_template_directory_uri() . '/assets/' . $asset_path;
 }
 
 

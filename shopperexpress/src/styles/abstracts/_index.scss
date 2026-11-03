@@ -1,0 +1,19 @@
+// -----------------------------------------------------------------------------
+// Shared Sass scope for block stylesheets: breakpoints, Bootstrap variables and
+// mixins, theme mixins, functions and placeholders. Emits no CSS by itself.
+//
+// Every blocks/<name>/style.scss starts with:
+//   @import '../../src/styles/abstracts';
+//
+// style.scss does not import this file: it loads the same partials in the
+// original order, so Bootstrap's own CSS compiles with Bootstrap's mixins
+// (clearfix, color-yiq) before the theme redefines them.
+// -----------------------------------------------------------------------------
+
+@import 'config';
+@import '../vendors/include-media';
+@import '../vendors/bootstrap-utilities';
+@import '../vendors-extensions/bootstrap';
+@import 'mixins';
+@import 'functions';
+@import 'placeholders';

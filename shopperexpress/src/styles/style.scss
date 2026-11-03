@@ -1,0 +1,69 @@
+// -----------------------------------------------------------------------------
+// Theme bundle: compiled to assets/css/style.css and loaded on every page.
+//
+// Styles that belong to a single block live in blocks/<name>/style.scss and are
+// compiled per block. Styles shared by two or more blocks are in
+// components/_blocks-common.scss below.
+// -----------------------------------------------------------------------------
+
+// 1. Settings and Bootstrap
+@import 'abstracts/config';
+@import 'vendors/include-media';
+@import 'vendors/bootstrap-utilities';
+@import 'vendors-extensions/bootstrap';
+@import 'vendors/bootstrap';
+
+// 2. Vendors
+@import 'vendors/fonts';
+@import 'vendors/jcf';
+@import 'vendors/fancybox';
+@import 'vendors/slick';
+
+// 3. Theme abstracts and base
+@import 'abstracts/mixins';
+@import 'base/helpers';
+@import 'abstracts/functions';
+@import 'base/wp-reset';
+
+// 4. Components
+@import 'components/buttons';
+@import 'components/card';
+@import 'components/pagination';
+@import 'components/modals';
+@import 'components/search-panel';
+@import 'components/search-bar';
+@import 'components/search-modal';
+@import 'components/shop-by-payment';
+@import 'components/modal-filters';
+@import 'components/modal-info';
+@import 'components/accordion-detail';
+@import 'components/accordion-content';
+@import 'components/evo-slider';
+@import 'components/alert-contact';
+@import 'components/drop-schedule';
+@import 'components/widget-finance-popup';
+@import 'components/section-key-features';
+@import 'components/page-description';
+@import 'components/main-visual';
+@import 'components/post';
+@import 'components/ai-chat';
+@import 'components/widget-buttons';
+@import 'components/review-section';
+@import 'components/compare-block';
+
+// 5. Pages
+@import 'pages/new-landing';
+@import 'pages/section-404';
+
+// 6. Layout
+@import 'layout/common';
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/common-content';
+
+// 7. Shared between blocks
+@import 'components/blocks-common';
+@import 'layout/print';
+
+// 8. Legacy, ported verbatim from assets-old/old/css/main.css
+@import 'legacy/se-eco-widget';

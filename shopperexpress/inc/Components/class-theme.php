@@ -80,7 +80,6 @@ class Theme {
 
 		$gutenberg_components = array(
 			\App\Components\Gutenberg\Custom_Blocks_Category::class,
-			\App\Components\Gutenberg\Register_Gutenberg_Blocks::class,
 			\App\Components\Gutenberg\Gutenberg_Color_Palette::class,
 		);
 
@@ -109,7 +108,7 @@ class Theme {
 						wp_kses_post(
 							sprintf(
 								// translators: %s: component name.
-								esc_html__( 'The %s theme component don`t implements the Theme_Component interface.', 'base' ),
+								esc_html__( 'The %s theme component don`t implements the Theme_Component interface.', 'shopperexpress' ),
 								$class
 							)
 						)

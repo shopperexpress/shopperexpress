@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/lp-icon-cards",
+    "title": "LP Icon Cards",
+    "description": "Landing page grid of icon + title + text cards. Optionally link each card, and toggle light/dark/gray style.",
+    "category": "custom-acf-blocks",
+    "icon": "grid-view",
+    "keywords": [
+        "landing icon cards grid features"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

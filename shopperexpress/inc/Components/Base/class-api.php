@@ -356,7 +356,6 @@ class Api implements Theme_Component {
 					if ( ( $start_date && $today < $start_date ) || ( $end_date && $today > $end_date ) ) :
 						continue;
 					endif;
-
 					$show_on = get_sub_field( 'show_on' );
 					if ( 'all' === $show_on || $show_on === $post_type ) :
 						ob_start();

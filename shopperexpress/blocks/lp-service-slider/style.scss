@@ -1,0 +1,48 @@
+// -----------------------------------------------------------------------------
+// LP Service Slider block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.lp-card-service {
+  color: $lp-gray-800;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  &__image {
+    aspect-ratio: 410 / 280;
+    overflow: hidden;
+    border-radius: $lp-radius-sm;
+    margin-bottom: 24px;
+    width: 100%;
+
+    @include media('>=desktop') {
+      border-radius: $lp-radius;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 600;
+    color: $lp-gray-950;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 20px;
+  }
+
+  .lp-btn {
+    margin-top: auto;
+  }
+}

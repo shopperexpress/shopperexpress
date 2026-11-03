@@ -1,0 +1,138 @@
+// -----------------------------------------------------------------------------
+// LP Icon Cards block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.lp-section-contact {
+  .lp-section__holder {
+    @include media('>=widescreen') {
+      padding-block: 96px;
+    }
+  }
+  .decor-left,
+  .decor-right {
+    width: 404px;
+    height: 774px;
+  }
+
+  .decor-left {
+    top: -360px;
+    left: -112px;
+
+    @include media('>=desktop') {
+      top: -208px;
+    }
+
+    @include media('>=widescreen') {
+      top: -208px;
+    }
+  }
+
+  .decor-right {
+    right: -106px;
+    bottom: -400px;
+
+    @include media('>=desktop') {
+      bottom: -307px;
+    }
+
+    @include media('>=widescreen') {
+      bottom: -307px;
+    }
+  }
+}
+
+.lp-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+
+  @include media('>=tablet') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media('>=desktop') {
+    gap: 24px;
+  }
+
+  @include media('>=widescreen') {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.lp-card {
+  $self: &;
+  border-radius: $lp-radius-sm;
+  padding: 24px;
+  background-color: $white;
+  border: 1px solid $lp-gray-200;
+  color: $lp-gray-800;
+  font-size: 16px;
+  line-height: 1.5;
+
+  @include media('>=desktop') {
+    border-radius: $lp-radius;
+  }
+
+  &.card-theme--light {
+    background-color: $lp-gray-25;
+  }
+
+  &.card-theme--dark {
+    @include animate(border-color);
+    background-color: $lp-sky-950;
+    border-color: rgba($white, 0.15);
+    color: $white;
+
+    &:hover {
+      border-color: rgba($white, 0.5);
+    }
+  }
+
+  &__icon {
+    border-radius: $lp-radius-sm;
+    margin-bottom: 32px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    background-color: var(--primary);
+
+    svg {
+      margin: auto;
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      fill: $white;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  p {
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__link {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+  }
+}

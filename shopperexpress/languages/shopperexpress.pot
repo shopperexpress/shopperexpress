@@ -2,238 +2,304 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: ShopperExpress 2.0.45\n"
+"Project-Id-Version: ShopperExpress 2.2.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/shopperexpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-29T14:50:33+03:00\n"
+"POT-Creation-Date: 2026-10-22T13:39:21+03:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: shopperexpress\n"
 
 #. Theme Name of the theme
 #. Author of the theme
-#: style.css
+#: style.css:3
+#: style.css:11
 msgid "ShopperExpress"
 msgstr ""
 
 #. Theme URI of the theme
-#: style.css
+#: style.css:5
 msgid "https://github.com/shopperexpress/shopperexpress"
 msgstr ""
 
 #. Description of the theme
-#: style.css
+#: style.css:15
 msgid "ShopperExpress theme for Wordpress"
 msgstr ""
 
 #. Template Name of the theme
+#: archive-listings.php:3
 msgid "Listings Template"
 msgstr ""
 
-#: archive-listings.php:39
+#: archive-listings.php:49
+#: inc/Components/SOC/views/lead-delivery.php:269
 msgid "Filter"
 msgstr ""
 
-#: archive-listings.php:58
+#: archive-listings.php:68
 msgid "Starting MSRP"
 msgstr ""
 
-#: archive-listings.php:58
+#: archive-listings.php:68
 msgid "Price"
 msgstr ""
 
-#: archive-listings.php:59
+#: archive-listings.php:69
 msgid "Lease Payment"
 msgstr ""
 
-#: archive-listings.php:59
+#: archive-listings.php:69
+#: template-parts/modal-edit-api.php:428
 msgid "Payment"
 msgstr ""
 
-#: archive-listings.php:64
+#: archive-listings.php:74
 msgid "Showing"
 msgstr ""
 
-#: archive-listings.php:64
+#: archive-listings.php:74
 msgid "of"
 msgstr ""
 
-#: archive-listings.php:64
+#: archive-listings.php:74
 msgid "found"
 msgstr ""
 
-#: archive-listings.php:65
+#: archive-listings.php:75
 msgid "show all vehicles"
 msgstr ""
 
-#: archive-listings.php:244
+#: archive-listings.php:269
 msgid "Search Year, Make, Model or Body Style"
 msgstr ""
 
-#: archive-listings.php:248
+#: archive-listings.php:273
 msgid "Search Year, Make, Model or Trims"
 msgstr ""
 
-#: archive-listings.php:252
+#: archive-listings.php:277
 msgid "Search Department, Type, Expiration or Title"
 msgstr ""
 
-#: archive-listings.php:257
+#: archive-listings.php:282
 msgid "Search By Make or Model"
 msgstr ""
 
-#: archive-listings.php:261
+#: archive-listings.php:286
 #: template-parts/search-form.php:18
 msgid "Search Makes, Models, Stock Number or VIN"
 msgstr ""
 
-#: archive-listings.php:272
+#: archive-listings.php:297
 msgid "Go to top"
 msgstr ""
 
-#: archive-listings.php:282
+#: archive-listings.php:307
 msgid "sort by"
 msgstr ""
 
-#: archive-listings.php:284
+#: archive-listings.php:309
 msgid "choose option"
 msgstr ""
 
-#: archive-listings.php:292
+#: archive-listings.php:317
 msgid "Highest Offer"
 msgstr ""
 
-#: archive-listings.php:293
+#: archive-listings.php:318
 msgid "Lowest Offer"
 msgstr ""
 
-#: archive-listings.php:294
-#: archive-listings.php:301
-#: archive-listings.php:308
+#: archive-listings.php:319
+#: archive-listings.php:326
+#: archive-listings.php:333
 msgid "Model Name"
 msgstr ""
 
-#: archive-listings.php:299
+#: archive-listings.php:324
 msgid "Highest APR"
 msgstr ""
 
-#: archive-listings.php:300
+#: archive-listings.php:325
 msgid "Lowest APR"
 msgstr ""
 
-#: archive-listings.php:306
-#: archive-listings.php:320
+#: archive-listings.php:331
+#: archive-listings.php:345
 msgid "Highest Payment"
 msgstr ""
 
-#: archive-listings.php:307
-#: archive-listings.php:321
+#: archive-listings.php:332
+#: archive-listings.php:346
 msgid "Lowest Payment"
 msgstr ""
 
-#: archive-listings.php:315
+#: archive-listings.php:340
 msgid "Highest Price"
 msgstr ""
 
-#: archive-listings.php:316
+#: archive-listings.php:341
 msgid "Lowest Price"
 msgstr ""
 
-#: archive-listings.php:318
+#: archive-listings.php:343
 msgid "Priority"
 msgstr ""
 
-#: archive-listings.php:322
+#: archive-listings.php:347
 msgid "Newest First"
 msgstr ""
 
-#: archive-listings.php:323
+#: archive-listings.php:348
 msgid "Oldest First"
 msgstr ""
 
-#: archive-listings.php:325
+#: archive-listings.php:350
 msgid "Show Unique Only"
 msgstr ""
 
-#: archive-listings.php:326
+#: archive-listings.php:351
 msgid "Newest in stock"
 msgstr ""
 
-#: archive-listings.php:327
+#: archive-listings.php:352
 msgid "Oldest in stock"
 msgstr ""
 
-#: archive-listings.php:328
+#: archive-listings.php:353
 msgid "Show All"
 msgstr ""
 
-#: archive-listings.php:338
+#: archive-listings.php:363
 msgid "Loading"
 msgstr ""
 
-#: archive-listings.php:347
+#: archive-listings.php:367
+msgid "Amount of vehicles per page"
+msgstr ""
+
+#: archive-listings.php:381
 #: template-parts/pager.php:10
 msgid "Previous page"
 msgstr ""
 
-#: archive-listings.php:348
+#: archive-listings.php:382
 msgid "Page"
 msgstr ""
 
-#: archive-listings.php:354
+#: archive-listings.php:388
 #: template-parts/pager.php:11
 msgid "Next page"
 msgstr ""
 
-#: footer.php:103
+#: blocks/contact-information/block.php:69
+#: template-parts/acf/acf-contact_information.php:54
+msgid "Closed"
+msgstr ""
+
+#: blocks/contact-information/block.php:76
+#: blocks/contact-information/block.php:81
+#: template-parts/acf/acf-contact_information.php:61
+#: template-parts/acf/acf-contact_information.php:66
+msgid "N/A"
+msgstr ""
+
+#: blocks/hero/block.php:32
+msgid "Hero"
+msgstr ""
+
+#: blocks/hero/block.php:33
+msgid "Add a heading and some text in the block sidebar."
+msgstr ""
+
+#: blocks/intro-slider/block.php:126
+#: template-parts/acf/acf-intro_slider.php:112
+msgid "Shop now"
+msgstr ""
+
+#: footer.php:29
 msgid "Version"
 msgstr ""
 
-#: header.php:135
+#: header.php:71
 msgid "Left menu toggle"
 msgstr ""
 
-#: header.php:204
-#: template-parts/acf-shared/tabs-slider.php:38
+#: header.php:149
+#: template-parts/acf-shared/tabs-slider.php:46
 #: template-parts/model-slider.php:27
 msgid "all vehicles"
 msgstr ""
 
-#: header.php:259
+#: header.php:204
+msgid "Search inventory"
+msgstr ""
+
+#: header.php:209
 msgid "Main navigation toggle"
 msgstr ""
 
-#: header.php:270
-#: header.php:326
+#: header.php:220
+#: header.php:276
 msgid "Toggle Dropdown"
 msgstr ""
 
-#: header.php:290
+#: header.php:240
 msgid "Saved New Listings"
 msgstr ""
 
-#: header.php:291
+#: header.php:241
 msgid "Saved Used Listings"
 msgstr ""
 
-#: header.php:292
+#: header.php:242
 msgid "Saved Conditional Offers"
 msgstr ""
 
-#: header.php:293
+#: header.php:243
 msgid "Saved Lease Offers"
 msgstr ""
 
-#: header.php:294
+#: header.php:244
 msgid "Saved Finance Offers"
 msgstr ""
 
-#: header.php:295
+#: header.php:245
 msgid "Saved Offers"
+msgstr ""
+
+#: header.php:439
+msgid "Search all inventory..."
+msgstr ""
+
+#: header.php:440
+msgid "GO"
+msgstr ""
+
+#: header.php:444
+msgid "No results found"
+msgstr ""
+
+#: header.php:449
+#: inc/Components/SOC/class-soc-assets.php:80
+msgid "Loading..."
+msgstr ""
+
+#: header.php:458
+msgid "View all results for"
+msgstr ""
+
+#: inc/blocks.php:184
+msgid "This theme's blocks are built with Advanced Custom Fields, which is not active. Install and activate ACF Pro for them to render."
+msgstr ""
+
+#: inc/blocks.php:203
+msgid "Theme blocks"
 msgstr ""
 
 #: inc/class-widget.php:220
@@ -258,6 +324,14 @@ msgstr ""
 msgid "See all latest news"
 msgstr ""
 
+#: inc/Components/Api/class-intice-api-client.php:529
+msgid "Intice API URL or key is not configured."
+msgstr ""
+
+#: inc/Components/Api/class-intice-api-client.php:571
+msgid "Invalid JSON response from Intice API."
+msgstr ""
+
 #: inc/Components/Base/class-ai-crawler.php:740
 msgid "Every 15 Minutes"
 msgstr ""
@@ -267,7 +341,7 @@ msgid "Every 2 Hours"
 msgstr ""
 
 #: inc/Components/Base/class-ai-crawler.php:871
-#: inc/Components/Base/class-import-monitor-dashboard.php:324
+#: inc/Components/Base/class-import-monitor-dashboard.php:330
 msgid "Insufficient permissions."
 msgstr ""
 
@@ -283,16 +357,26 @@ msgstr ""
 msgid "Contact me"
 msgstr ""
 
-#: inc/Components/Base/class-ajax.php:292
+#: inc/Components/Base/class-ajax.php:319
 msgid "All fields mandatory."
 msgstr ""
 
-#: inc/Components/Base/class-ajax.php:294
+#: inc/Components/Base/class-ajax.php:321
 msgid "Email already exists."
 msgstr ""
 
-#: inc/Components/Base/class-ajax.php:296
+#: inc/Components/Base/class-ajax.php:323
 msgid "Error Occured please fill up the sign up form carefully."
+msgstr ""
+
+#: inc/Components/Base/class-ajax.php:1023
+#: template-parts/modal-edit-api.php:680
+#: template-parts/modal-edit.php:57
+msgid "Data saved successfully!"
+msgstr ""
+
+#: inc/Components/Base/class-ajax.php:1060
+msgid "Vehicle trashed."
 msgstr ""
 
 #. translators: %s: post type name
@@ -395,40 +479,112 @@ msgstr ""
 msgid "Filter items list"
 msgstr ""
 
-#: inc/Components/Base/class-export.php:67
+#: inc/Components/Base/class-export.php:71
 msgid "Export to JSON"
 msgstr ""
 
-#: inc/Components/Base/class-export.php:70
+#: inc/Components/Base/class-export.php:74
+#: inc/Components/Base/class-export.php:140
 msgid "Import from JSON"
 msgstr ""
 
-#: inc/Components/Base/class-export.php:76
+#: inc/Components/Base/class-export.php:80
+#: inc/Components/Base/class-export.php:147
 msgid "Please select a JSON file to import."
 msgstr ""
 
-#: inc/Components/Base/class-export.php:105
+#: inc/Components/Base/class-export.php:109
+#: inc/Components/Base/class-export.php:174
 msgid "Import failed: "
 msgstr ""
 
-#: inc/Components/Base/class-export.php:212
-msgid "Invalid import request."
+#: inc/Components/Base/class-export.php:136
+msgid "Export shortcodes to JSON"
 msgstr ""
 
-#: inc/Components/Base/class-export.php:222
+#: inc/Components/Base/class-export.php:218
+#: inc/Components/Base/class-export.php:359
 msgid "Access denied."
 msgstr ""
 
-#: inc/Components/Base/class-export.php:228
+#: inc/Components/Base/class-export.php:223
+#: inc/Components/Base/class-export.php:365
 msgid "File upload error."
 msgstr ""
 
-#: inc/Components/Base/class-export.php:233
+#: inc/Components/Base/class-export.php:230
+msgid "Invalid shortcodes JSON file."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:349
+msgid "Invalid import request."
+msgstr ""
+
+#: inc/Components/Base/class-export.php:370
 msgid "Failed to read import file."
 msgstr ""
 
-#: inc/Components/Base/class-export.php:238
+#: inc/Components/Base/class-export.php:375
 msgid "Invalid JSON in import file."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:202
+msgid "Invalid Business Profile location ID."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:387
+msgid "Invalid Business Profile account ID."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:650
+msgid "Invalid Google Place ID."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:749
+#: inc/Components/Base/class-google-business-reviews.php:823
+msgid "Google Business Profile is not connected."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:802
+msgid "A review sync is already running in the background — check back in a few minutes."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:827
+msgid "A review sync is already running — check back in a few minutes."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:849
+msgid "No sync is currently running — click \"Sync Now\" to start one."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:969
+msgid "Invalid Business Profile account/location ID."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1041
+#: inc/Components/Base/class-google-business-reviews.php:1125
+#: template-parts/acf-shared/reviews-section.php:87
+msgid "Google user"
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1070
+msgid "Neither a Business Profile connection nor a Places API key is configured. Go to Operation Center → Google Reviews."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1144
+msgid "Google Business Profile is not connected. Go to Operation Center → Google Reviews."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1167
+msgid "Failed to refresh Google access token."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1228
+msgid "A Places API key is required to resolve review permalinks."
+msgstr ""
+
+#: inc/Components/Base/class-google-business-reviews.php:1249
+msgid "Could not resolve the place CID for review permalinks."
 msgstr ""
 
 #: inc/Components/Base/class-import-monitor-dashboard.php:41
@@ -476,113 +632,117 @@ msgid "Last Run Failed"
 msgstr ""
 
 #: inc/Components/Base/class-import-monitor-dashboard.php:197
-#: inc/Components/Base/class-import-monitor-dashboard.php:243
+#: inc/Components/Base/class-import-monitor-dashboard.php:249
 #: inc/Components/SOC/views/import-monitor.php:48
-#: inc/Components/SOC/views/import-monitor.php:96
+#: inc/Components/SOC/views/import-monitor.php:106
 msgid "Never Run"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:208
+#: inc/Components/Base/class-import-monitor-dashboard.php:214
 #: inc/Components/SOC/views/import-monitor.php:52
 msgid "Next Cron Check"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:214
-#: inc/Components/SOC/views/import-monitor.php:66
+#: inc/Components/Base/class-import-monitor-dashboard.php:220
+#: inc/Components/SOC/views/import-monitor.php:76
 msgid "No imports are configured yet."
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:215
-#: inc/Components/SOC/views/import-monitor.php:67
+#: inc/Components/Base/class-import-monitor-dashboard.php:221
+#: inc/Components/SOC/views/import-monitor.php:77
 msgid "Add monitored imports →"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:221
-#: inc/Components/SOC/views/import-monitor.php:73
+#: inc/Components/Base/class-import-monitor-dashboard.php:227
+#: inc/Components/SOC/views/import-monitor.php:83
 #: inc/Components/SOC/views/security-snapshot.php:106
 msgid "ID"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:222
+#: inc/Components/Base/class-import-monitor-dashboard.php:228
 #: inc/Components/SOC/views/api-health.php:19
-#: inc/Components/SOC/views/import-monitor.php:74
+#: inc/Components/SOC/views/import-monitor.php:84
+#: inc/Components/SOC/views/lead-delivery-table.php:39
 msgid "Name"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:223
-#: inc/Components/SOC/views/import-monitor.php:75
+#: inc/Components/Base/class-import-monitor-dashboard.php:229
+#: inc/Components/SOC/views/import-monitor.php:85
 msgid "Check Mode"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:224
-#: inc/Components/SOC/views/import-monitor.php:76
+#: inc/Components/Base/class-import-monitor-dashboard.php:230
+#: inc/Components/SOC/views/import-monitor.php:86
 msgid "Last Run"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:225
-#: inc/Components/SOC/views/import-monitor.php:77
+#: inc/Components/Base/class-import-monitor-dashboard.php:231
+#: inc/Components/SOC/views/import-monitor.php:87
 msgid "Records"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:226
+#: inc/Components/Base/class-import-monitor-dashboard.php:232
+#: inc/Components/SOC/views/ai-vdp-log-table.php:36
 #: inc/Components/SOC/views/api-health.php:21
 #: inc/Components/SOC/views/api-health.php:52
+#: inc/Components/SOC/views/api-settings.php:202
 #: inc/Components/SOC/views/cache-manager.php:104
 #: inc/Components/SOC/views/cron-manager.php:64
-#: inc/Components/SOC/views/import-monitor.php:78
+#: inc/Components/SOC/views/import-monitor.php:88
+#: inc/Components/SOC/views/lead-delivery-table.php:44
 #: inc/Components/SOC/views/system-status.php:34
 #: inc/Components/SOC/views/system-status.php:85
 #: inc/Components/SOC/views/system-status.php:134
-#: inc/Components/SOC/views/system-status.php:193
+#: inc/Components/SOC/views/system-status.php:198
 msgid "Status"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:227
-#: inc/Components/SOC/views/import-monitor.php:79
+#: inc/Components/Base/class-import-monitor-dashboard.php:233
+#: inc/Components/SOC/views/import-monitor.php:89
 msgid "Last Error"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:228
+#: inc/Components/Base/class-import-monitor-dashboard.php:234
 #: inc/Components/SOC/views/cache-manager.php:42
 #: inc/Components/SOC/views/cache-manager.php:65
 #: inc/Components/SOC/views/cron-manager.php:35
-#: inc/Components/SOC/views/import-monitor.php:80
+#: inc/Components/SOC/views/import-monitor.php:90
 #: inc/Components/SOC/views/security-snapshot.php:20
 msgid "Active"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:258
+#: inc/Components/Base/class-import-monitor-dashboard.php:264
 #: inc/Components/SOC/views/cache-manager.php:117
-#: inc/Components/SOC/views/import-monitor.php:106
+#: inc/Components/SOC/views/import-monitor.php:116
 msgid "ago"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:261
-#: inc/Components/Base/class-import-monitor-dashboard.php:286
+#: inc/Components/Base/class-import-monitor-dashboard.php:267
+#: inc/Components/Base/class-import-monitor-dashboard.php:292
 msgid "—"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:272
-#: inc/Components/Base/class-import-monitor-dashboard.php:279
-#: inc/Components/SOC/views/import-monitor.php:114
+#: inc/Components/Base/class-import-monitor-dashboard.php:278
+#: inc/Components/Base/class-import-monitor-dashboard.php:285
+#: inc/Components/SOC/views/import-monitor.php:124
 msgid "Created / Updated / Skipped"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:305
-#: inc/Components/SOC/views/import-monitor.php:148
+#: inc/Components/Base/class-import-monitor-dashboard.php:311
+#: inc/Components/SOC/views/import-monitor.php:158
 msgid "Last page load:"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:307
-#: inc/Components/SOC/views/import-monitor.php:150
+#: inc/Components/Base/class-import-monitor-dashboard.php:313
+#: inc/Components/SOC/views/import-monitor.php:160
 msgid "Edit settings →"
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:332
+#: inc/Components/Base/class-import-monitor-dashboard.php:338
 msgid "No imports found."
 msgstr ""
 
-#: inc/Components/Base/class-import-monitor-dashboard.php:346
+#: inc/Components/Base/class-import-monitor-dashboard.php:352
 #: inc/Components/SOC/Modules/class-soc-import-monitor.php:135
 msgid "Import not found."
 msgstr ""
@@ -623,42 +783,44 @@ msgstr ""
 msgid "Shopperexpress: Activation of required plugin \"%1$s\" failed: %2$s"
 msgstr ""
 
-#: inc/Components/Base/class-shortcode.php:288
-#: inc/Components/Base/class-shortcode.php:309
-#: inc/Components/Base/class-shortcode.php:327
-#: template-parts/acf-shared/text-video-slider.php:148
-#: template-parts/acf-shared/text-video-slider.php:187
-#: template-parts/content-offers.php:98
-#: template-parts/content-offers.php:137
-#: template-parts/single/single-conditional-offers.php:450
-#: template-parts/single/single-conditional-offers.php:489
-#: template-parts/single/single-listings.php:562
-#: template-parts/single/single-listings.php:571
-#: template-parts/single/single-offers.php:267
-#: template-parts/single/single-offers.php:306
+#: inc/Components/Base/class-shortcode.php:381
+#: inc/Components/Base/class-shortcode.php:401
+#: inc/Components/Base/class-shortcode.php:420
+#: template-parts/acf-shared/text-video-slider.php:164
+#: template-parts/acf-shared/text-video-slider.php:203
+#: template-parts/content-offers.php:111
+#: template-parts/content-offers.php:150
+#: template-parts/single/single-conditional-offers.php:458
+#: template-parts/single/single-conditional-offers.php:497
+#: template-parts/single/single-listings-api.php:463
+#: template-parts/single/single-listings-api.php:474
+#: template-parts/single/single-listings.php:620
+#: template-parts/single/single-listings.php:629
+#: template-parts/single/single-offers.php:275
+#: template-parts/single/single-offers.php:314
 #: template-parts/single/single-research.php:156
 #: template-parts/single/single-research.php:165
 msgid "DOWN"
 msgstr ""
 
-#: inc/Components/Base/class-shortcode.php:297
-#: inc/Components/Base/class-shortcode.php:309
-#: template-parts/acf-shared/text-video-slider.php:157
-#: template-parts/acf-shared/text-video-slider.php:169
-#: template-parts/content-offers.php:107
-#: template-parts/content-offers.php:119
-#: template-parts/single/single-conditional-offers.php:459
-#: template-parts/single/single-conditional-offers.php:471
-#: template-parts/single/single-offers.php:276
-#: template-parts/single/single-offers.php:288
+#: inc/Components/Base/class-shortcode.php:389
+#: inc/Components/Base/class-shortcode.php:401
+#: template-parts/acf-shared/text-video-slider.php:173
+#: template-parts/acf-shared/text-video-slider.php:185
+#: template-parts/content-offers.php:120
+#: template-parts/content-offers.php:132
+#: template-parts/single/single-conditional-offers.php:467
+#: template-parts/single/single-conditional-offers.php:479
+#: template-parts/single/single-offers.php:284
+#: template-parts/single/single-offers.php:296
 msgid "mos."
 msgstr ""
 
-#: inc/Components/Base/class-sidebars.php:43
+#: inc/Components/Base/class-sidebars.php:40
 msgid "Footer Sidebar"
 msgstr ""
 
-#: inc/Components/Base/class-sidebars.php:55
+#: inc/Components/Base/class-sidebars.php:52
 msgid "Post Sidebar"
 msgstr ""
 
@@ -722,13 +884,13 @@ msgid "API request failed. Please try again."
 msgstr ""
 
 #: inc/Components/Base/class-vin-admin.php:165
-#: inc/Components/SOC/class-soc-ajax.php:479
+#: inc/Components/SOC/class-soc-ajax.php:512
 #: inc/Components/SOC/views/developer-tools.php:118
 msgid "Please enter a VIN."
 msgstr ""
 
 #: inc/Components/Base/class-vin-admin.php:166
-#: inc/Components/SOC/class-soc-ajax.php:483
+#: inc/Components/SOC/class-soc-ajax.php:516
 #: inc/Components/SOC/views/developer-tools.php:119
 msgid "VIN must be exactly 17 alphanumeric characters (I, O and Q are not valid)."
 msgstr ""
@@ -767,36 +929,151 @@ msgstr ""
 msgid "Permission denied."
 msgstr ""
 
-#: inc/Components/SOC/class-soc-ajax.php:522
+#: inc/Components/SOC/class-soc-ajax.php:555
 msgid "Invalid VIN."
 msgstr ""
 
-#: inc/Components/SOC/class-soc-ajax.php:547
+#: inc/Components/SOC/class-soc-ajax.php:580
 msgid "Invalid post ID."
 msgstr ""
 
-#: inc/Components/SOC/class-soc-ajax.php:569
+#: inc/Components/SOC/class-soc-ajax.php:602
 msgid "Invalid import ID."
 msgstr ""
 
-#: inc/Components/SOC/class-soc-assets.php:81
+#: inc/Components/SOC/class-soc-ajax.php:649
+msgid "API URL is required."
+msgstr ""
+
+#: inc/Components/SOC/class-soc-assets.php:79
 msgid "Are you sure?"
 msgstr ""
 
-#: inc/Components/SOC/class-soc-assets.php:82
-msgid "Loading..."
-msgstr ""
-
-#: inc/Components/SOC/class-soc-assets.php:83
+#: inc/Components/SOC/class-soc-assets.php:81
 msgid "Done!"
 msgstr ""
 
-#: inc/Components/SOC/class-soc-assets.php:84
+#: inc/Components/SOC/class-soc-assets.php:82
 msgid "An error occurred."
 msgstr ""
 
 #: inc/Components/SOC/Modules/class-soc-import-monitor.php:120
 msgid "No imports configured."
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:25
+msgid "No AI VDP generation records found."
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:31
+#: inc/Components/SOC/views/lead-delivery-table.php:36
+#: inc/Components/SOC/views/vdr-requests-table.php:31
+msgid "Date"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:32
+msgid "Vehicle"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:33
+#: inc/Components/SOC/views/vdr-requests-table.php:32
+#: template-parts/api/specs.php:23
+#: template-parts/copyLinkModal.php:50
+#: template-parts/modal-edit-api.php:704
+#: template-parts/modal-edit.php:100
+msgid "VIN"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:34
+#: inc/Components/SOC/views/cache-manager.php:103
+#: inc/Components/SOC/views/cache-manager.php:195
+msgid "Post Type"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:35
+msgid "Trigger"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:37
+msgid "Reason"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:76
+#: inc/Components/SOC/views/lead-delivery-table.php:101
+#: inc/Components/SOC/views/vdr-requests-table.php:68
+msgid "Prev"
+msgstr ""
+
+#. translators: 1: current page, 2: total pages, 3: total rows
+#: inc/Components/SOC/views/ai-vdp-log-table.php:82
+#: inc/Components/SOC/views/lead-delivery-table.php:107
+#: inc/Components/SOC/views/vdr-requests-table.php:74
+#, php-format
+msgid "Page %1$d of %2$d (%3$d total)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log-table.php:93
+#: inc/Components/SOC/views/lead-delivery-table.php:118
+#: inc/Components/SOC/views/vdr-requests-table.php:85
+#: template-parts/cookie-modal.php:81
+msgid "Next"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:22
+#: inc/Components/SOC/views/vdr-requests.php:22
+msgid "Statistics"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:26
+#: inc/Components/SOC/views/vdr-requests.php:26
+msgid "Total (24h)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:31
+#: inc/Components/SOC/views/vdr-requests.php:31
+msgid "Success (24h)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:36
+#: inc/Components/SOC/views/vdr-requests.php:36
+msgid "Errors (24h)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:41
+#: inc/Components/SOC/views/vdr-requests.php:46
+msgid "Total (7d)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:46
+#: inc/Components/SOC/views/vdr-requests.php:51
+msgid "Errors (7d)"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:56
+msgid "Generation Log"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:60
+#: inc/Components/SOC/views/vdr-requests.php:65
+msgid "Filter:"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:62
+#: inc/Components/SOC/views/vdr-requests.php:67
+#: template-parts/intro.php:40
+msgid "All"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:63
+#: inc/Components/SOC/views/lead-delivery.php:264
+#: inc/Components/SOC/views/vdr-requests.php:68
+msgid "Success"
+msgstr ""
+
+#: inc/Components/SOC/views/ai-vdp-log.php:64
+#: inc/Components/SOC/views/lead-delivery.php:297
+#: inc/Components/SOC/views/vdr-requests.php:69
+msgid "Error"
 msgstr ""
 
 #: inc/Components/SOC/views/api-health.php:14
@@ -835,6 +1112,7 @@ msgid "Endpoint"
 msgstr ""
 
 #: inc/Components/SOC/views/api-health.php:75
+#: inc/Components/SOC/views/lead-delivery.php:69
 msgid "Not configured"
 msgstr ""
 
@@ -860,10 +1138,304 @@ msgstr ""
 
 #. translators: %s: collection timestamp
 #: inc/Components/SOC/views/api-health.php:125
+#: inc/Components/SOC/views/api-settings.php:313
 #: inc/Components/SOC/views/cache-manager.php:232
 #: inc/Components/SOC/views/log-viewer.php:87
 #, php-format
 msgid "Last collected: %s"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-fields.php:18
+#: inc/Components/SOC/views/api-settings.php:21
+msgid "ACF Fields Reference"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-fields.php:20
+msgid "Reference list of the ACF fields used on Listings / Used Listings, with their field slug and a demo value. Use this when wiring up Nexus API field mappings in code."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-fields.php:28
+msgid "Field Label"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-fields.php:29
+msgid "Slug"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-fields.php:30
+msgid "Demo Value"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:13
+msgid "New Vehicles"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:14
+msgid "Used Vehicles"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:28
+msgid "— none —"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:41
+msgid "payload key…"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:63
+msgid "Remove row"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:75
+msgid "Exclude vehicles from the search results grid that match these rules. All active rows are combined with AND — a vehicle must satisfy every row to be shown."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:85
+msgid "Field"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:86
+msgid "Custom key"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:87
+msgid "Operator"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:88
+#: inc/Components/SOC/views/system-status.php:33
+#: inc/Components/SOC/views/system-status.php:84
+#: inc/Components/SOC/views/system-status.php:133
+#: inc/Components/SOC/views/system-status.php:197
+msgid "Value"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:100
+msgid "+ Add Row"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings-filters.php:113
+msgid "Save Filters"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:18
+msgid "Connection & Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:24
+msgid "Filters"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:32
+msgid "Listings Data Source"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:38
+msgid "API Mode (Intice)"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:38
+msgid "WordPress Mode"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:41
+msgid "ACTIVE"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:41
+msgid "INACTIVE"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:47
+msgid "Listings, Used listings for SRP and VDP pages pull data from Intice Nexus. WordPress posts are used as stubs only."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:49
+msgid "Listings, Used listings for SRP and VDP pages use standard WordPress posts with ACF fields. Intice Nexus is not used for front-end rendering."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:53
+msgid "Toggle API mode"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:66
+msgid "Intice API Credentials"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:70
+#: inc/Components/SOC/views/api-settings.php:134
+msgid "API URL"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:82
+#: inc/Components/SOC/views/api-settings.php:145
+#: inc/Components/SOC/views/google-reviews.php:244
+msgid "API Key"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:87
+#: inc/Components/SOC/views/google-reviews.php:249
+msgid "Change"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:93
+#: inc/Components/SOC/views/google-reviews.php:255
+msgid "Enter new key…"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:101
+msgid "Paste API key…"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:110
+msgid "Save Credentials"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:113
+#: inc/Components/SOC/views/google-reviews.php:282
+#: inc/Components/SOC/views/google-reviews.php:302
+#: inc/Components/SOC/views/lead-delivery.php:204
+msgid "Test Connection"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:121
+msgid "Configuration Status"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:124
+msgid "API Mode"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:127
+#: inc/Components/SOC/views/cache-manager.php:79
+#: inc/Components/SOC/views/cron-manager.php:47
+#: inc/Components/SOC/views/security-snapshot.php:33
+msgid "Enabled"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:129
+#: inc/Components/SOC/views/cache-manager.php:80
+#: inc/Components/SOC/views/cron-manager.php:45
+#: inc/Components/SOC/views/security-snapshot.php:31
+msgid "Disabled"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:137
+#: inc/Components/SOC/views/api-settings.php:148
+#: inc/Components/SOC/views/security-snapshot.php:53
+msgid "Set"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:140
+#: inc/Components/SOC/views/api-settings.php:150
+msgid "Not set"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:161
+msgid "Intice Nexus Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:165
+msgid "A persistent object cache (Redis/Memcached) is active on this server. Cache reads/writes go through it instead of the database — status and flush below account for this automatically."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:174
+msgid "Cache Enabled"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:174
+msgid "Cache Disabled"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:177
+msgid "ON"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:177
+msgid "OFF"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:182
+msgid "API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:184
+msgid "Caching is disabled. Every request fetches data directly from the Intice Nexus API."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:187
+msgid "Toggle cache"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:201
+msgid "Cache Group"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:203
+msgid "Cleared By"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:204
+msgid "Cached At"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:205
+#: inc/Components/SOC/views/cache-manager.php:107
+#: inc/Components/SOC/views/cron-manager.php:66
+#: inc/Components/SOC/views/lead-delivery-table.php:46
+msgid "Actions"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:221
+msgid "Caches the raw Nexus API response for vehicle list requests (GET /vehicles) — the data other lookups build on. Filled whenever any page requests a list of vehicles."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:222
+msgid "Caches the raw Nexus API response for a single vehicle (GET /vehicles/{vin}). Filled when a visitor opens that vehicle's detail page (VDP)."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:223
+msgid "Caches GET /meta — the filter reference data (makes, models, year/price ranges, conditions) used to render the SRP filter UI."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:224
+msgid "Caches the fully assembled New Vehicles (listings) results — after filters, trim/drivetrain/photo resolution and default sorting are applied. This is what the New Vehicles SRP actually renders."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:225
+msgid "Same as New Listings, but for Used Vehicles (used-listings)."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:226
+msgid "Same as New Listings, but for the \"Custom sort\" mode (Theme Options → Custom sort) — kept separate because the sort order differs from the default."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:227
+msgid "Same as Used Listings, but for the \"Custom sort\" mode."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:228
+msgid "Caches the assembled \"vehicles-feed\" output — the full vehicle list with all term/field data, used by feed/sitemap-style integrations rather than the paginated SRP."
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:245
+msgid "What does this cache group do?"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:254
+msgid "regen pending…"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:274
+msgid "Flush"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:291
+msgid "Flush All Intice Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/api-settings.php:295
+msgid "Also clears any active page-cache plugin (WP Rocket, LiteSpeed, W3 Total Cache, etc.) and OPcache. If a persistent object cache (Redis/Memcached) is active, this flushes it entirely — not just Intice data — since most backends have no way to clear a single plugin's keys."
 msgstr ""
 
 #: inc/Components/SOC/views/cache-manager.php:35
@@ -893,18 +1465,6 @@ msgstr ""
 msgid "API Cache"
 msgstr ""
 
-#: inc/Components/SOC/views/cache-manager.php:79
-#: inc/Components/SOC/views/cron-manager.php:47
-#: inc/Components/SOC/views/security-snapshot.php:33
-msgid "Enabled"
-msgstr ""
-
-#: inc/Components/SOC/views/cache-manager.php:80
-#: inc/Components/SOC/views/cron-manager.php:45
-#: inc/Components/SOC/views/security-snapshot.php:31
-msgid "Disabled"
-msgstr ""
-
 #: inc/Components/SOC/views/cache-manager.php:85
 msgid "Last Purge"
 msgstr ""
@@ -917,22 +1477,12 @@ msgstr ""
 msgid "Post Type Cache Overview"
 msgstr ""
 
-#: inc/Components/SOC/views/cache-manager.php:103
-#: inc/Components/SOC/views/cache-manager.php:195
-msgid "Post Type"
-msgstr ""
-
 #: inc/Components/SOC/views/cache-manager.php:105
 msgid "Last Generated"
 msgstr ""
 
 #: inc/Components/SOC/views/cache-manager.php:106
 msgid "Generated By"
-msgstr ""
-
-#: inc/Components/SOC/views/cache-manager.php:107
-#: inc/Components/SOC/views/cron-manager.php:66
-msgid "Actions"
 msgstr ""
 
 #: inc/Components/SOC/views/cache-manager.php:144
@@ -1055,7 +1605,7 @@ msgstr ""
 msgid "Operation Center"
 msgstr ""
 
-#: inc/Components/SOC/views/dashboard.php:24
+#: inc/Components/SOC/views/dashboard.php:35
 msgid "Refresh"
 msgstr ""
 
@@ -1185,6 +1735,7 @@ msgid "Index (KB)"
 msgstr ""
 
 #: inc/Components/SOC/views/database-health.php:178
+#: template-parts/compare.php:105
 msgid "Engine"
 msgstr ""
 
@@ -1192,17 +1743,425 @@ msgstr ""
 msgid "No table data available."
 msgstr ""
 
+#: inc/Components/SOC/views/google-reviews.php:31
+msgid "Why this exists"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:33
+msgid "The Google Places API only returns up to 5 reviews with no pagination — that is a Google platform limit, not something this integration can work around. Connecting a Business Profile account below unlocks real pagination (up to 50 reviews per page) via the Business Profile API. Without a connection, the Places API key is used as a fallback (capped at 5 reviews per place)."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:38
+msgid "Business Profile — OAuth Client"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:42
+msgid "Client ID"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:46
+msgid "Client Secret"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:53
+msgid "Paste client secret…"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:61
+msgid "Save Client"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:67
+msgid "Business Profile — Connection"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:71
+msgid "Connected"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:76
+#: inc/Components/SOC/views/google-reviews.php:286
+msgid "Place ID"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:78
+msgid "Place ID could not be resolved; \"Review us on Google\" / \"Show More Reviews\" links will be missing."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:86
+msgid "Account"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:95
+msgid "Load Accounts"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:101
+msgid "Location"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:110
+msgid "Load Locations"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:119
+msgid "Save Account/Location"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:122
+msgid "Disconnect"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:127
+msgid "Click \"Load Accounts\" to fetch the Business Profile accounts reachable by this connection, pick one, then \"Load Locations\" to fetch that account's locations — no need to type IDs by hand."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:132
+msgid "Connect with Google"
+msgstr ""
+
+#. translators: %s: redirect URI to whitelist in Google Cloud Console.
+#: inc/Components/SOC/views/google-reviews.php:139
+#, php-format
+msgid "Before connecting, add this exact URL as an Authorized redirect URI on the OAuth client in Google Cloud Console: %s"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:145
+msgid "Save the Client ID and Client Secret above first."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:151
+msgid "Full Review History Cache (keyword filtering)"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:154
+msgid "Keyword-filtered review widgets (e.g. an Oil Change page) search this cached snapshot of every review instead of just the newest ones, so a narrow phrase living further back in the history still gets found. It refreshes automatically every hour, and \"Sync Now\" below fetches it immediately, one page at a time, right in this browser tab."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:159
+msgid "Syncing…"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:160
+msgid "Keep this tab open until it finishes — it fetches one review page per request. Click \"Stop\" to cancel."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:162
+msgid "Not built yet"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:163
+msgid "Click \"Sync Now\" below or wait for the next hourly run."
+msgstr ""
+
+#. translators: %d: number of cached reviews.
+#: inc/Components/SOC/views/google-reviews.php:169
+#, php-format
+msgid "%d reviews cached"
+msgstr ""
+
+#. translators: %s: human-readable time since last sync.
+#: inc/Components/SOC/views/google-reviews.php:178
+#, php-format
+msgid "Last synced %s ago"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:194
+msgid "Sync Now"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:197
+msgid "Stop"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:205
+msgid "Minimum Star Rating"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:208
+msgid "Only reviews with at least this many stars are shown in the widgets and included in the Review JSON-LD schema."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:213
+msgid "Minimum Rating"
+msgstr ""
+
+#. translators: %d: star count.
+#: inc/Components/SOC/views/google-reviews.php:221
+#, php-format
+msgid "%d star"
+msgid_plural "%d stars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/Components/SOC/views/google-reviews.php:234
+#: template-parts/modal-edit-api.php:672
+#: template-parts/modal-edit.php:47
+msgid "Save"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:240
+msgid "Places API Key (fallback)"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:263
+msgid "Paste Places API key…"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:271
+msgid "Used only when no Business Profile connection is configured above. Must have the \"Places API (New)\" restriction and be restricted to this server's IP — this call is server-side only."
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:276
+msgid "Save Key"
+msgstr ""
+
+#: inc/Components/SOC/views/google-reviews.php:295
+msgid "Leave as-is to test against the resolved location above, or override to test a different Place ID."
+msgstr ""
+
 #: inc/Components/SOC/views/import-monitor.php:33
-#: template-parts/modals.php:18
+#: template-parts/modals.php:23
 msgid "Overview"
 msgstr ""
 
-#: inc/Components/SOC/views/import-monitor.php:62
+#: inc/Components/SOC/views/import-monitor.php:72
 msgid "Monitored Imports"
 msgstr ""
 
-#: inc/Components/SOC/views/import-monitor.php:121
+#: inc/Components/SOC/views/import-monitor.php:131
 msgid "C / U / S"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:30
+msgid "No lead records found."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:37
+#: inc/Components/SOC/views/vdr-requests-table.php:34
+msgid "Site"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:38
+msgid "Form"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:40
+#: inc/Components/SOC/views/lead-delivery.php:49
+#: inc/Components/SOC/views/security-snapshot.php:108
+msgid "Email"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:41
+msgid "Phone"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:42
+msgid "Method"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:43
+msgid "Code"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:45
+msgid "Retries"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:71
+msgid "Retry"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery-table.php:85
+msgid "Details"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:39
+msgid "Delivery Settings"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:45
+msgid "Delivery Method"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:53
+msgid "API"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:57
+msgid "Both"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:64
+msgid "API Status"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:67
+msgid "Configured"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:81
+msgid "Site / Dealer Name"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:88
+msgid "Stored in every lead log row as the dealer/site identifier."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:94
+msgid "API Endpoint URL"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:104
+msgid "Dealer ID"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:111
+msgid "Included as dealer_id in every ADF-XML API payload."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:115
+msgid "API Key (X-API-Key)"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:118
+msgid "(not set)"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:123
+msgid "Enter new key to replace…"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:126
+msgid "Change Key"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:131
+msgid "Request Timeout (s)"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:138
+msgid "Fallback to Email on Failure"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:147
+msgid "WP Forms — ADF Form IDs"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:154
+msgid "Comma-separated WP Forms IDs and/or exact form names allowed to send leads via the API when Delivery Method is API or Both. Matches by form_id if the webhook sends one, otherwise by Form_Name (already sent by every existing webhook) — no webhook reconfiguration required. Leave empty to allow all forms (no restriction). Forms not listed here still deliver via email as before; their leads are simply never sent to the API endpoint."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:158
+msgid "Auto-Retry Max Attempts"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:162
+msgid "Set to 0 to disable automatic retry. Retries run every 15 minutes via WP Cron."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:168
+msgid "Notify Admin on Failure"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:177
+msgid "Notification Email"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:187
+msgid "Duplicate Prevention Window (min)"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:191
+msgid "Block re-submission of the same email+phone within this many minutes. 0 = disabled."
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:200
+msgid "Save Settings"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:215
+msgid "Delivery Stats"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:219
+msgid "Last 24h"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:224
+msgid "Success 24h"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:229
+msgid "Failed 24h"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:236
+msgid "Last 7 days"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:241
+msgid "Failed 7 days"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:255
+msgid "Lead Log"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:261
+msgid "Search email, name or phone…"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:263
+msgid "All statuses"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:265
+msgid "Failed"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:266
+msgid "Pending"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:287
+msgid "Lead Delivery Details"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:288
+#: template-parts/acf-shared/reviews-section.php:371
+#: template-parts/compare.php:21
+#: template-parts/compare.php:184
+#: template-parts/conditionalOffersDetail-modal-srp.php:20
+#: template-parts/conditionalOffersDetail-modal-srp.php:35
+#: template-parts/conditionalOffersDetail-modal.php:32
+#: template-parts/conditionalOffersDetail-modal.php:51
+#: template-parts/cookie-modal.php:90
+msgid "Close"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:293
+msgid "Lead"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:294
+msgid "Submitted"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:295
+msgid "Form ID"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:296
+msgid "HTTP Code"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:301
+msgid "ADF-XML Payload Sent"
+msgstr ""
+
+#: inc/Components/SOC/views/lead-delivery.php:305
+msgid "Raw API Response"
 msgstr ""
 
 #: inc/Components/SOC/views/log-viewer.php:31
@@ -1358,10 +2317,6 @@ msgstr ""
 msgid "Security Keys"
 msgstr ""
 
-#: inc/Components/SOC/views/security-snapshot.php:53
-msgid "Set"
-msgstr ""
-
 #: inc/Components/SOC/views/security-snapshot.php:55
 msgid "Not Set"
 msgstr ""
@@ -1405,10 +2360,6 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-#: inc/Components/SOC/views/security-snapshot.php:108
-msgid "Email"
-msgstr ""
-
 #: inc/Components/SOC/views/security-snapshot.php:109
 msgid "Registered"
 msgstr ""
@@ -1433,6 +2384,52 @@ msgstr ""
 msgid "No recent failed login attempts recorded."
 msgstr ""
 
+#: inc/Components/SOC/views/shortcodes-reference.php:11
+msgid "Theme Shortcodes"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:13
+msgid "Reference of every shortcode registered by the theme — usage, parameters, and a working example."
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:19
+#: inc/Components/SOC/views/shortcodes-reference.php:74
+msgid "Shortcode"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:20
+msgid "Parameters"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:21
+msgid "Example"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:22
+#: template-parts/modal-edit-api.php:547
+msgid "Description"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:31
+msgid "None"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:52
+msgid "Custom Shortcodes"
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:58
+msgid "Defined by editors under <strong>Theme Options &rarr; Shortcodes</strong> (a repeater of name/value pairs). Each row registers <code>[sc_{name}]</code>, which prints its configured HTML/text value as-is."
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:69
+msgid "No custom shortcodes configured yet."
+msgstr ""
+
+#: inc/Components/SOC/views/shortcodes-reference.php:75
+msgid "Current Value"
+msgstr ""
+
 #: inc/Components/SOC/views/system-status.php:28
 msgid "PHP Environment"
 msgstr ""
@@ -1440,15 +2437,8 @@ msgstr ""
 #: inc/Components/SOC/views/system-status.php:32
 #: inc/Components/SOC/views/system-status.php:83
 #: inc/Components/SOC/views/system-status.php:132
-#: inc/Components/SOC/views/system-status.php:191
+#: inc/Components/SOC/views/system-status.php:196
 msgid "Setting"
-msgstr ""
-
-#: inc/Components/SOC/views/system-status.php:33
-#: inc/Components/SOC/views/system-status.php:84
-#: inc/Components/SOC/views/system-status.php:133
-#: inc/Components/SOC/views/system-status.php:192
-msgid "Value"
 msgstr ""
 
 #: inc/Components/SOC/views/system-status.php:39
@@ -1515,65 +2505,127 @@ msgstr ""
 msgid "shell_exec"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:164
-msgid "Filesystem"
-msgstr ""
-
-#: inc/Components/SOC/views/system-status.php:168
-msgid "Path"
+#: inc/Components/SOC/views/system-status.php:159
+msgid "exec"
 msgstr ""
 
 #: inc/Components/SOC/views/system-status.php:169
-msgid "Writable"
+msgid "Filesystem"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:173
+msgid "Path"
 msgstr ""
 
 #: inc/Components/SOC/views/system-status.php:174
+msgid "Writable"
+msgstr ""
+
+#: inc/Components/SOC/views/system-status.php:179
 msgid "wp-content"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:178
+#: inc/Components/SOC/views/system-status.php:183
 msgid "uploads"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:187
+#: inc/Components/SOC/views/system-status.php:192
 msgid "OPcache"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:198
+#: inc/Components/SOC/views/system-status.php:203
 msgid "OPcache Enabled"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:203
+#: inc/Components/SOC/views/system-status.php:208
 msgid "Hit Rate"
 msgstr ""
 
 #. translators: %s: collection timestamp
-#: inc/Components/SOC/views/system-status.php:222
+#: inc/Components/SOC/views/system-status.php:227
 #, php-format
 msgid "Cached data — last collected: %s"
 msgstr ""
 
-#: inc/Components/SOC/views/system-status.php:226
+#: inc/Components/SOC/views/system-status.php:231
 msgid "Cache refreshes every 5 minutes."
 msgstr ""
 
-#: inc/theme-functions.php:716
+#: inc/Components/SOC/views/vdr-requests-table.php:25
+msgid "No VDR records found."
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:33
+#: template-parts/modal-edit-api.php:298
+msgid "Dealer"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:35
+msgid "Result"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:36
+msgid "HTTP"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:37
+msgid "Cache"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:51
+msgid "Cached"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests-table.php:53
+msgid "Fresh"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests.php:41
+msgid "From Cache (24h)"
+msgstr ""
+
+#: inc/Components/SOC/views/vdr-requests.php:61
+msgid "Request Log"
+msgstr ""
+
+#: inc/menus.php:19
+#: template-parts/modal-edit-api.php:768
+msgid "Primary"
+msgstr ""
+
+#: inc/menus.php:20
+msgid "Footer"
+msgstr ""
+
+#: inc/theme-functions.php:1130
 msgid "Image description"
 msgstr ""
 
+#: inc/widgets.php:16
+msgid "Sidebar"
+msgstr ""
+
+#: inc/widgets.php:18
+msgid "Widgets shown beside post and archive content."
+msgstr ""
+
 #. Template Name of the theme
+#: pages/template-flexible.php:3
 msgid "Flexible Page Template"
 msgstr ""
 
 #. Template Name of the theme
+#: pages/template-fullwidth.php:3
 msgid "Full-Width Page Template"
 msgstr ""
 
 #. Template Name of the theme
+#: pages/template-saved.php:3
 msgid "Saved Page Template"
 msgstr ""
 
 #. Template Name of the theme
+#: pages/template-srp.php:3
 msgid "SRP Template"
 msgstr ""
 
@@ -1591,6 +2643,7 @@ msgid "Search"
 msgstr ""
 
 #: template-parts/accordion-detail-info.php:58
+#: template-parts/single/single-listings-api.php:628
 msgid "Highlighted Features"
 msgstr ""
 
@@ -1598,56 +2651,128 @@ msgstr ""
 msgid "Frequently Asked Questions"
 msgstr ""
 
-#: template-parts/acf-blocks/contact-information.php:64
-#: template-parts/acf/acf-contact_information.php:54
-msgid "Closed"
-msgstr ""
-
-#: template-parts/acf-blocks/contact-information.php:71
-#: template-parts/acf-blocks/contact-information.php:76
-#: template-parts/acf/acf-contact_information.php:61
-#: template-parts/acf/acf-contact_information.php:66
-msgid "N/A"
-msgstr ""
-
-#: template-parts/acf-blocks/intro-slider.php:109
-#: template-parts/acf/acf-intro_slider.php:100
-msgid "Shop now"
-msgstr ""
-
-#: template-parts/acf-shared/contact-widget.php:64
+#: template-parts/acf-shared/contact-widget.php:67
 msgid "Copy"
 msgstr ""
 
-#: template-parts/acf-shared/intro-slider.php:54
+#: template-parts/acf-shared/intro-slider.php:57
 msgid "Play/pause"
 msgstr ""
 
-#: template-parts/acf-shared/logo-section.php:43
+#: template-parts/acf-shared/logo-section.php:46
 #, php-format
 msgid "Read more about %s"
 msgstr ""
 
-#: template-parts/acf-shared/tabs-slider.php:104
+#: template-parts/acf-shared/reviews-section.php:164
+#: template-parts/acf-shared/reviews-section.php:363
+msgid "Reviews"
+msgstr ""
+
+#: template-parts/acf-shared/reviews-section.php:184
+msgid "Show More Reviews"
+msgstr ""
+
+#: template-parts/acf-shared/reviews-section.php:224
+#: template-parts/acf-shared/reviews-section.php:344
+msgid "Read more"
+msgstr ""
+
+#: template-parts/acf-shared/tabs-slider.php:115
 #, php-format
 msgid "Select %1$s image description %2$s %3$s"
 msgstr ""
 
-#: template-parts/acf-shared/text-video-slider.php:219
-#: template-parts/single/single-conditional-offers.php:520
-#: template-parts/single/single-listings.php:597
-#: template-parts/single/single-offers.php:336
+#: template-parts/acf-shared/team-section.php:61
+msgid "all"
+msgstr ""
+
+#: template-parts/acf-shared/team-section.php:100
+msgid "See Info"
+msgstr ""
+
+#: template-parts/acf-shared/text-video-slider.php:235
+#: template-parts/single/single-conditional-offers.php:528
+#: template-parts/single/single-listings-api.php:504
+#: template-parts/single/single-listings.php:655
+#: template-parts/single/single-offers.php:344
 #: template-parts/single/single-research.php:192
 msgid "UNLOCK PAYMENT"
 msgstr ""
 
-#: template-parts/acf-shared/text-video-slider.php:268
-#: template-parts/acf-shared/text-video-slider.php:309
-#: template-parts/acf-shared/text-video-slider.php:350
-#: template-parts/modals.php:140
-#: template-parts/modals.php:171
-#: template-parts/modals.php:200
+#: template-parts/acf-shared/text-video-slider.php:284
+#: template-parts/acf-shared/text-video-slider.php:325
+#: template-parts/acf-shared/text-video-slider.php:366
+#: template-parts/modals.php:164
+#: template-parts/modals.php:195
+#: template-parts/modals.php:224
 msgid "Additional Information"
+msgstr ""
+
+#: template-parts/api/gallery.php:199
+#: template-parts/components/detail-slider.php:144
+#: template-parts/single/single-conditional-offers.php:333
+#: template-parts/single/single-listings.php:307
+#: template-parts/single/single-offers.php:134
+msgid "Previous thumbnails"
+msgstr ""
+
+#: template-parts/api/gallery.php:226
+#: template-parts/components/detail-slider.php:165
+#: template-parts/single/single-conditional-offers.php:351
+#: template-parts/single/single-listings.php:355
+#: template-parts/single/single-offers.php:146
+msgid "Next thumbnails"
+msgstr ""
+
+#: template-parts/api/gallery.php:235
+#: template-parts/single/single-listings.php:368
+msgid "Explore This Vehicle"
+msgstr ""
+
+#: template-parts/api/gallery.php:239
+msgid "Carousel thumbnails slider"
+msgstr ""
+
+#: template-parts/api/incentive_offers_srp.php:64
+msgid "More info about this offer"
+msgstr ""
+
+#: template-parts/api/specs.php:14
+msgid "Mileage"
+msgstr ""
+
+#: template-parts/api/specs.php:15
+msgid "Condition"
+msgstr ""
+
+#: template-parts/api/specs.php:16
+msgid "Drivetrain"
+msgstr ""
+
+#: template-parts/api/specs.php:17
+#: template-parts/compare.php:89
+msgid "Body Style"
+msgstr ""
+
+#: template-parts/api/specs.php:18
+msgid "Fuel Type"
+msgstr ""
+
+#: template-parts/api/specs.php:19
+msgid "Transmission"
+msgstr ""
+
+#: template-parts/api/specs.php:20
+msgid "Ext. Color"
+msgstr ""
+
+#: template-parts/api/specs.php:21
+msgid "Int. Color"
+msgstr ""
+
+#: template-parts/api/specs.php:22
+msgid "Stock #"
 msgstr ""
 
 #: template-parts/banner.php:27
@@ -1678,21 +2803,117 @@ msgstr ""
 msgid "Shop by Payment"
 msgstr ""
 
-#: template-parts/conditionalOffersDetail-modal.php:26
-#: template-parts/conditionalOffersDetail-modal.php:45
-#: template-parts/cookie-modal.php:89
-msgid "Close"
+#: template-parts/compare.php:20
+#: template-parts/compare.php:39
+#: template-parts/compare.php:183
+#: template-parts/content-lease-offers.php:122
+#: template-parts/content-listings-api.php:73
+#: template-parts/content-listings.php:39
+#: template-parts/content-offers.php:26
+msgid "Compare"
 msgstr ""
 
-#: template-parts/conditionalOffersDetail-modal.php:38
+#: template-parts/compare.php:20
+msgid "Add up to"
+msgstr ""
+
+#: template-parts/compare.php:20
+msgid "more vehicles"
+msgstr ""
+
+#: template-parts/compare.php:29
+msgid "Select 2 - 5 Vehicles to Compare"
+msgstr ""
+
+#: template-parts/compare.php:34
+msgid "Maximum of 5 Vehicles Compared."
+msgstr ""
+
+#: template-parts/compare.php:51
+#: template-parts/compare.php:123
+msgid "Delete item"
+msgstr ""
+
+#: template-parts/compare.php:66
+msgid "Featured Highlights"
+msgstr ""
+
+#: template-parts/compare.php:70
+msgid "VIN: "
+msgstr ""
+
+#: template-parts/compare.php:73
+msgid "Year"
+msgstr ""
+
+#: template-parts/compare.php:77
+msgid "Make"
+msgstr ""
+
+#: template-parts/compare.php:81
+msgid "Model"
+msgstr ""
+
+#: template-parts/compare.php:85
+#: template-parts/single/single-offers.php:60
+#: template-parts/single/single-research.php:34
+msgid "Trim"
+msgstr ""
+
+#: template-parts/compare.php:93
+msgid "Exterior Color"
+msgstr ""
+
+#: template-parts/compare.php:97
+msgid "Interior Color"
+msgstr ""
+
+#: template-parts/compare.php:101
+msgid "Drive Train"
+msgstr ""
+
+#: template-parts/compare.php:109
+#: template-parts/modal-edit-api.php:353
+msgid "Fuel"
+msgstr ""
+
+#: template-parts/compare.php:113
+msgid "Vehicle Status"
+msgstr ""
+
+#: template-parts/compare.php:149
+msgid "Add"
+msgstr ""
+
+#: template-parts/compare.php:149
+msgid "More Vehicles"
+msgstr ""
+
+#: template-parts/compare.php:150
+msgid "Continue Shopping"
+msgstr ""
+
+#: template-parts/compare.php:194
+msgid "Hide Similarities"
+msgstr ""
+
+#: template-parts/components/view-count-badge.php:38
+msgid "This is going to sell soon."
+msgstr ""
+
+#: template-parts/components/view-count-badge.php:41
+msgid "{count} people have recently viewed it."
+msgstr ""
+
+#: template-parts/conditionalOffersDetail-modal.php:44
 msgid "Valid from"
 msgstr ""
 
-#: template-parts/conditionalOffersDetail-modal.php:38
+#: template-parts/conditionalOffersDetail-modal.php:44
 msgid "through"
 msgstr ""
 
-#: template-parts/conditionalOffersDetail-modal.php:39
+#: template-parts/conditionalOffersDetail-modal.php:45
 msgid "Incentive Id"
 msgstr ""
 
@@ -1720,26 +2941,42 @@ msgid "Special Offer"
 msgstr ""
 
 #: template-parts/content-lease-offers.php:105
+#: template-parts/content-listings-api.php:52
 #: template-parts/content-listings.php:21
 #: template-parts/content-offers.php:17
 msgid "Go to"
 msgstr ""
 
-#: template-parts/content-lease-offers.php:174
-#: template-parts/content-offers.php:179
+#: template-parts/content-lease-offers.php:178
+#: template-parts/content-offers.php:194
 #: template-parts/detail-modal.php:14
-#: template-parts/modals.php:281
-#: template-parts/modals.php:291
-#: template-parts/modals.php:307
+#: template-parts/modals.php:305
+#: template-parts/modals.php:315
+#: template-parts/modals.php:331
 msgid "DETAILS"
 msgstr ""
 
-#: template-parts/content-listings.php:72
-#: template-parts/single/single-listings.php:443
+#: template-parts/content-listings-api.php:101
+#: template-parts/content-listings.php:69
+#: template-parts/single/single-listings-api.php:332
+#: template-parts/single/single-listings.php:493
 msgid "Disclosure"
 msgstr ""
 
-#: template-parts/content-offers.php:59
+#: template-parts/content-listings-api.php:105
+#: template-parts/content-listings.php:93
+#: template-parts/content-offers.php:56
+msgid "Detail"
+msgstr ""
+
+#: template-parts/content-listings-api.php:106
+#: template-parts/content-listings.php:94
+#: template-parts/content-offers.php:57
+#: template-parts/modal-edit-api.php:478
+msgid "Pricing"
+msgstr ""
+
+#: template-parts/content-offers.php:53
 msgid "Additional info"
 msgstr ""
 
@@ -1748,8 +2985,8 @@ msgid "Explore"
 msgstr ""
 
 #: template-parts/content-research.php:40
-#: template-parts/single/single-conditional-offers.php:426
-#: template-parts/single/single-offers.php:222
+#: template-parts/single/single-conditional-offers.php:434
+#: template-parts/single/single-offers.php:230
 #: template-parts/single/single-research.php:103
 msgid "Search Inventory"
 msgstr ""
@@ -1794,20 +3031,12 @@ msgstr ""
 msgid "<li>Tags: "
 msgstr ""
 
-#: template-parts/cookie-modal.php:80
-msgid "Next"
-msgstr ""
-
 #: template-parts/copyLinkModal.php:20
 msgid "Share Vehicle"
 msgstr ""
 
-#: template-parts/copyLinkModal.php:50
-#: template-parts/modal-edit.php:100
-msgid "VIN"
-msgstr ""
-
 #: template-parts/copyLinkModal.php:56
+#: template-parts/modal-edit-api.php:707
 #: template-parts/modal-edit.php:106
 msgid "Stock"
 msgstr ""
@@ -1823,10 +3052,6 @@ msgstr ""
 #: template-parts/gallery.php:12
 #: template-parts/modal-edit.php:84
 msgid "image description"
-msgstr ""
-
-#: template-parts/intro.php:40
-msgid "All"
 msgstr ""
 
 #: template-parts/intro.php:40
@@ -1854,28 +3079,99 @@ msgstr ""
 msgid "watch video"
 msgstr ""
 
+#: template-parts/modal-edit-api.php:55
+msgid "(read-only, set by import)"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:95
+msgid "No images in this list."
+msgstr ""
+
+#: template-parts/modal-edit-api.php:103
+msgid "BG"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:104
+msgid "Rev"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:124
+msgid "General info"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:378
+msgid "Mechanical"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:543
+msgid "Media"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:623
+msgid "SEO"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:656
 #: template-parts/modal-edit.php:26
 msgid "exit"
 msgstr ""
 
+#: template-parts/modal-edit-api.php:662
 #: template-parts/modal-edit.php:33
 msgid "trash"
 msgstr ""
 
+#: template-parts/modal-edit-api.php:668
 #: template-parts/modal-edit.php:40
 msgid "Clear Cache"
 msgstr ""
 
-#: template-parts/modal-edit.php:47
-msgid "Save"
-msgstr ""
-
+#: template-parts/modal-edit-api.php:676
 #: template-parts/modal-edit.php:51
 msgid "Please check the form - one or more fields are filled in incorrectly."
 msgstr ""
 
-#: template-parts/modal-edit.php:57
-msgid "Data saved successfully!"
+#: template-parts/modal-edit-api.php:743
+msgid "Primary Image URL"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:749
+msgid "Primary Thumb URL"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:763
+msgid "Active Image List"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:769
+msgid "Secondary (SRP)"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:773
+msgid "Chooses which image list below is shown on the site for this vehicle. HomeNet may set this automatically on import; saving here overrides it."
+msgstr ""
+
+#: template-parts/modal-edit-api.php:775
+msgid "Primary Image List"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:776
+msgid "Secondary Image List (SRP)"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:799
+#: template-parts/modal-edit.php:300
+msgid "Are you sure you want to delete the data?"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:802
+#: template-parts/modal-edit.php:303
+msgid "no"
+msgstr ""
+
+#: template-parts/modal-edit-api.php:803
+#: template-parts/modal-edit.php:304
+msgid "yes"
 msgstr ""
 
 #: template-parts/modal-edit.php:116
@@ -1906,18 +3202,6 @@ msgstr ""
 msgid "description"
 msgstr ""
 
-#: template-parts/modal-edit.php:300
-msgid "Are you sure you want to delete the data?"
-msgstr ""
-
-#: template-parts/modal-edit.php:303
-msgid "no"
-msgstr ""
-
-#: template-parts/modal-edit.php:304
-msgid "yes"
-msgstr ""
-
 #: template-parts/modal-evo.php:16
 msgid "360° Spin"
 msgstr ""
@@ -1934,8 +3218,9 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: template-parts/modals.php:47
-#: template-parts/single/single-listings.php:416
+#: template-parts/modals.php:71
+#: template-parts/single/single-listings-api.php:291
+#: template-parts/single/single-listings.php:466
 msgid "Features & Options"
 msgstr ""
 
@@ -1975,55 +3260,54 @@ msgid "Model: %s"
 msgstr ""
 
 #: template-parts/single/single-conditional-offers.php:226
-#: template-parts/single/single-conditional-offers.php:339
+#: template-parts/single/single-conditional-offers.php:343
 msgid "image"
 msgstr ""
 
-#: template-parts/single/single-conditional-offers.php:571
-#: template-parts/single/single-listings.php:642
-#: template-parts/single/single-offers.php:397
+#: template-parts/single/single-conditional-offers.php:579
+#: template-parts/single/single-listings-api.php:541
+#: template-parts/single/single-listings.php:700
+#: template-parts/single/single-offers.php:405
 #: template-parts/single/single-research.php:237
 msgid "Watch Video"
 msgstr ""
 
-#: template-parts/single/single-conditional-offers.php:603
-#: template-parts/single/single-offers.php:423
+#: template-parts/single/single-conditional-offers.php:611
+#: template-parts/single/single-offers.php:431
 msgid "CALL"
 msgstr ""
 
-#: template-parts/single/single-listings.php:45
-#: template-parts/single/single-listings.php:48
+#: template-parts/single/single-listings-api.php:194
+#: template-parts/single/single-listings.php:119
+msgid "Edit"
+msgstr ""
+
+#: template-parts/single/single-listings-api.php:288
+#: template-parts/single/single-listings.php:465
+#: template-parts/single/single-offers.php:166
+msgid "See Details"
+msgstr ""
+
+#: template-parts/single/single-listings-api.php:411
+#: template-parts/single/single-listings.php:561
+msgid "Shopping Tools"
+msgstr ""
+
+#: template-parts/single/single-listings.php:54
+#: template-parts/single/single-listings.php:57
 #: template-parts/single/single-offers.php:38
 #: template-parts/single/single-offers.php:41
 msgid "Market Value"
 msgstr ""
 
-#: template-parts/single/single-listings.php:51
+#: template-parts/single/single-listings.php:60
 #: template-parts/single/single-offers.php:44
 msgid "MSRP"
-msgstr ""
-
-#: template-parts/single/single-listings.php:109
-msgid "Edit"
-msgstr ""
-
-#: template-parts/single/single-listings.php:415
-#: template-parts/single/single-offers.php:158
-msgid "See Details"
-msgstr ""
-
-#: template-parts/single/single-listings.php:503
-msgid "Shopping Tools"
 msgstr ""
 
 #: template-parts/single/single-offers.php:58
 #: template-parts/single/single-research.php:32
 msgid "Year & Model"
-msgstr ""
-
-#: template-parts/single/single-offers.php:60
-#: template-parts/single/single-research.php:34
-msgid "Trim"
 msgstr ""
 
 #: template-parts/single/single-research.php:29
@@ -2040,4 +3324,696 @@ msgstr ""
 
 #: template-parts/single/single-service-offers.php:107
 msgid "Send to Email"
+msgstr ""
+
+#: blocks/block-logo/block.json
+msgctxt "block title"
+msgid "Block Logo"
+msgstr ""
+
+#: blocks/block-logo/block.json
+msgctxt "block description"
+msgid "Large logo image display block."
+msgstr ""
+
+#: blocks/block-logo/block.json
+msgctxt "block keyword"
+msgid "logo image brand"
+msgstr ""
+
+#: blocks/buttons/block.json
+msgctxt "block title"
+msgid "Buttons"
+msgstr ""
+
+#: blocks/buttons/block.json
+msgctxt "block description"
+msgid "Info section with a list of button codes."
+msgstr ""
+
+#: blocks/buttons/block.json
+msgctxt "block keyword"
+msgid "buttons info list"
+msgstr ""
+
+#: blocks/buy/block.json
+msgctxt "block title"
+msgid "Buy"
+msgstr ""
+
+#: blocks/buy/block.json
+msgctxt "block description"
+msgid "Feature columns with icons, heading, and slogan."
+msgstr ""
+
+#: blocks/buy/block.json
+msgctxt "block keyword"
+msgid "buy features icons columns"
+msgstr ""
+
+#: blocks/contact-information/block.json
+msgctxt "block title"
+msgid "Contact Information"
+msgstr ""
+
+#: blocks/contact-information/block.json
+msgctxt "block description"
+msgid "Contact details with phone, social, and weekly schedule."
+msgstr ""
+
+#: blocks/contact-information/block.json
+msgctxt "block keyword"
+msgid "contact phone social schedule hours"
+msgstr ""
+
+#: blocks/contact-widget/block.json
+msgctxt "block title"
+msgid "Contact Widget"
+msgstr ""
+
+#: blocks/contact-widget/block.json
+msgctxt "block description"
+msgid "Full contact widget with contacts, social links, and tabbed hours/info."
+msgstr ""
+
+#: blocks/contact-widget/block.json
+msgctxt "block keyword"
+msgid "contact widget social tabs hours"
+msgstr ""
+
+#: blocks/content-and-video/block.json
+msgctxt "block title"
+msgid "Content and Video"
+msgstr ""
+
+#: blocks/content-and-video/block.json
+msgctxt "block description"
+msgid "Side-by-side content card and Wistia video."
+msgstr ""
+
+#: blocks/content-and-video/block.json
+msgctxt "block keyword"
+msgid "content video wistia awards"
+msgstr ""
+
+#: blocks/content-block/block.json
+msgctxt "block title"
+msgid "Content Block"
+msgstr ""
+
+#: blocks/content-block/block.json
+msgctxt "block description"
+msgid "Cash-offer style content block with icon, text, and images."
+msgstr ""
+
+#: blocks/content-block/block.json
+msgctxt "block keyword"
+msgid "content block cash offer"
+msgstr ""
+
+#: blocks/content-header/block.json
+msgctxt "block title"
+msgid "Content Header"
+msgstr ""
+
+#: blocks/content-header/block.json
+msgctxt "block description"
+msgid "Logo, heading, and text block for page headers."
+msgstr ""
+
+#: blocks/content-header/block.json
+msgctxt "block keyword"
+msgid "header content logo title"
+msgstr ""
+
+#: blocks/form/block.json
+msgctxt "block title"
+msgid "Form"
+msgstr ""
+
+#: blocks/form/block.json
+msgctxt "block description"
+msgid "WPForms embed section with optional heading and text."
+msgstr ""
+
+#: blocks/form/block.json
+msgctxt "block keyword"
+msgid "form contact wpforms"
+msgstr ""
+
+#: blocks/full-width-image/block.json
+msgctxt "block title"
+msgid "Full Width Image"
+msgstr ""
+
+#: blocks/full-width-image/block.json
+msgctxt "block description"
+msgid "Responsive full-width image with optional link and mobile variant."
+msgstr ""
+
+#: blocks/full-width-image/block.json
+msgctxt "block keyword"
+msgid "image fullwidth banner"
+msgstr ""
+
+#: blocks/full-width-slider/block.json
+msgctxt "block title"
+msgid "Full Width Slider"
+msgstr ""
+
+#: blocks/full-width-slider/block.json
+msgctxt "block description"
+msgid "Date-gated full-width image slider with disclosure support."
+msgstr ""
+
+#: blocks/full-width-slider/block.json
+msgctxt "block keyword"
+msgid "slider fullwidth banner images"
+msgstr ""
+
+#: blocks/gallery/block.json
+msgctxt "block title"
+msgid "Gallery"
+msgstr ""
+
+#: blocks/gallery/block.json
+msgctxt "block description"
+msgid "Fancybox grid gallery with optional full-width layout."
+msgstr ""
+
+#: blocks/gallery/block.json
+msgctxt "block keyword"
+msgid "gallery grid fancybox images"
+msgstr ""
+
+#: blocks/get-offer/block.json
+msgctxt "block title"
+msgid "Get Offer"
+msgstr ""
+
+#: blocks/get-offer/block.json
+msgctxt "block description"
+msgid "Call-to-action section with background image and offer code."
+msgstr ""
+
+#: blocks/get-offer/block.json
+msgctxt "block keyword"
+msgid "offer cta background"
+msgstr ""
+
+#: blocks/hero/block.json
+msgctxt "block title"
+msgid "Hero"
+msgstr ""
+
+#: blocks/hero/block.json
+msgctxt "block description"
+msgid "Introductory banner with a heading, supporting text and a call to action."
+msgstr ""
+
+#: blocks/hero/block.json
+msgctxt "block keyword"
+msgid "banner"
+msgstr ""
+
+#: blocks/hero/block.json
+msgctxt "block keyword"
+msgid "intro"
+msgstr ""
+
+#: blocks/hero/block.json
+msgctxt "block keyword"
+msgid "cta"
+msgstr ""
+
+#: blocks/html-block/block.json
+msgctxt "block title"
+msgid "HTML Block"
+msgstr ""
+
+#: blocks/html-block/block.json
+msgctxt "block description"
+msgid "Custom HTML/embed section with optional container and background."
+msgstr ""
+
+#: blocks/html-block/block.json
+msgctxt "block keyword"
+msgid "html embed code custom"
+msgstr ""
+
+#: blocks/image-left-text-right/block.json
+msgctxt "block title"
+msgid "Image Left & Text Right"
+msgstr ""
+
+#: blocks/image-left-text-right/block.json
+msgctxt "block description"
+msgid "Two-column block with image on the left and text on the right."
+msgstr ""
+
+#: blocks/image-left-text-right/block.json
+msgctxt "block keyword"
+msgid "image text columns trade"
+msgstr ""
+
+#: blocks/images/block.json
+msgctxt "block title"
+msgid "Images"
+msgstr ""
+
+#: blocks/images/block.json
+msgctxt "block description"
+msgid "Simple image gallery section."
+msgstr ""
+
+#: blocks/images/block.json
+msgctxt "block keyword"
+msgid "images gallery media"
+msgstr ""
+
+#: blocks/info-accordion/block.json
+msgctxt "block title"
+msgid "Info Accordion"
+msgstr ""
+
+#: blocks/info-accordion/block.json
+msgctxt "block description"
+msgid "FAQ / info accordion with JSON-LD schema output."
+msgstr ""
+
+#: blocks/info-accordion/block.json
+msgctxt "block keyword"
+msgid "accordion faq info schema"
+msgstr ""
+
+#: blocks/info-images/block.json
+msgctxt "block title"
+msgid "Info Images"
+msgstr ""
+
+#: blocks/info-images/block.json
+msgctxt "block description"
+msgid "Titled image section."
+msgstr ""
+
+#: blocks/info-images/block.json
+msgctxt "block keyword"
+msgid "info images title media"
+msgstr ""
+
+#: blocks/intro-blocks/block.json
+msgctxt "block title"
+msgid "Intro Blocks"
+msgstr ""
+
+#: blocks/intro-blocks/block.json
+msgctxt "block description"
+msgid "Complex intro section with trade-sell columns and cash offer block."
+msgstr ""
+
+#: blocks/intro-blocks/block.json
+msgctxt "block keyword"
+msgid "intro blocks trade sell cash offer"
+msgstr ""
+
+#: blocks/intro-slider/block.json
+msgctxt "block title"
+msgid "Intro Slider"
+msgstr ""
+
+#: blocks/intro-slider/block.json
+msgctxt "block description"
+msgid "Hero slider pulling from offers CPT and/or manually added slides."
+msgstr ""
+
+#: blocks/intro-slider/block.json
+msgctxt "block keyword"
+msgid "hero slider intro offers"
+msgstr ""
+
+#: blocks/logo-section/block.json
+msgctxt "block title"
+msgid "Logo Section"
+msgstr ""
+
+#: blocks/logo-section/block.json
+msgctxt "block description"
+msgid "Logo grid with configurable columns and optional background colour."
+msgstr ""
+
+#: blocks/logo-section/block.json
+msgctxt "block keyword"
+msgid "logos brands partners grid"
+msgstr ""
+
+#: blocks/lp-comparison-table/block.json
+msgctxt "block title"
+msgid "LP Comparison Table"
+msgstr ""
+
+#: blocks/lp-comparison-table/block.json
+msgctxt "block description"
+msgid "Landing page comparison table (N columns), row values render as a checkmark, \"not available\" cross, or free text."
+msgstr ""
+
+#: blocks/lp-comparison-table/block.json
+msgctxt "block keyword"
+msgid "landing comparison table versus features"
+msgstr ""
+
+#: blocks/lp-content-columns/block.json
+msgctxt "block title"
+msgid "LP Content Columns"
+msgstr ""
+
+#: blocks/lp-content-columns/block.json
+msgctxt "block description"
+msgid "Landing page two-column block — text/buttons on one side, image on the other. Light or dark style."
+msgstr ""
+
+#: blocks/lp-content-columns/block.json
+msgctxt "block keyword"
+msgid "landing two columns text image"
+msgstr ""
+
+#: blocks/lp-hero/block.json
+msgctxt "block title"
+msgid "LP Hero"
+msgstr ""
+
+#: blocks/lp-hero/block.json
+msgctxt "block description"
+msgid "Landing page hero — background image, heading, buttons, and a quick-nav link row."
+msgstr ""
+
+#: blocks/lp-hero/block.json
+msgctxt "block keyword"
+msgid "landing hero visual banner"
+msgstr ""
+
+#: blocks/lp-icon-cards/block.json
+msgctxt "block title"
+msgid "LP Icon Cards"
+msgstr ""
+
+#: blocks/lp-icon-cards/block.json
+msgctxt "block description"
+msgid "Landing page grid of icon + title + text cards. Optionally link each card, and toggle light/dark/gray style."
+msgstr ""
+
+#: blocks/lp-icon-cards/block.json
+msgctxt "block keyword"
+msgid "landing icon cards grid features"
+msgstr ""
+
+#: blocks/lp-service-slider/block.json
+msgctxt "block title"
+msgid "LP Service Slider"
+msgstr ""
+
+#: blocks/lp-service-slider/block.json
+msgctxt "block description"
+msgid "Landing page slick carousel of service cards — image, title, text, and a CTA button."
+msgstr ""
+
+#: blocks/lp-service-slider/block.json
+msgctxt "block keyword"
+msgid "landing services slider carousel cards"
+msgstr ""
+
+#: blocks/lp-steps/block.json
+msgctxt "block title"
+msgid "LP Steps"
+msgstr ""
+
+#: blocks/lp-steps/block.json
+msgctxt "block description"
+msgid "Landing page text column paired with a numbered step-by-step list."
+msgstr ""
+
+#: blocks/lp-steps/block.json
+msgctxt "block keyword"
+msgid "landing steps process how it works"
+msgstr ""
+
+#: blocks/map-section/block.json
+msgctxt "block title"
+msgid "Map Section"
+msgstr ""
+
+#: blocks/map-section/block.json
+msgctxt "block description"
+msgid "Google Maps section with address and directions button."
+msgstr ""
+
+#: blocks/map-section/block.json
+msgctxt "block keyword"
+msgid "map location address directions"
+msgstr ""
+
+#: blocks/offer-cards/block.json
+msgctxt "block title"
+msgid "Offer Cards"
+msgstr ""
+
+#: blocks/offer-cards/block.json
+msgctxt "block description"
+msgid "Slick slider of offer/service-offer cards pulled from post types."
+msgstr ""
+
+#: blocks/offer-cards/block.json
+msgctxt "block keyword"
+msgid "offers cards slider"
+msgstr ""
+
+#: blocks/offers/block.json
+msgctxt "block title"
+msgid "Offers"
+msgstr ""
+
+#: blocks/offers/block.json
+msgctxt "block description"
+msgid "Two-column offer cards with image and description."
+msgstr ""
+
+#: blocks/offers/block.json
+msgctxt "block keyword"
+msgid "offers deals promotions"
+msgstr ""
+
+#: blocks/reviews-section/block.json
+msgctxt "block title"
+msgid "Reviews Section"
+msgstr ""
+
+#: blocks/reviews-section/block.json
+msgctxt "block description"
+msgid "Google Reviews widget with live rating, stars and review list."
+msgstr ""
+
+#: blocks/reviews-section/block.json
+msgctxt "block keyword"
+msgid "reviews google rating testimonials"
+msgstr ""
+
+#: blocks/single-video/block.json
+msgctxt "block title"
+msgid "Single Video"
+msgstr ""
+
+#: blocks/single-video/block.json
+msgctxt "block description"
+msgid "Embed video code section."
+msgstr ""
+
+#: blocks/single-video/block.json
+msgctxt "block keyword"
+msgid "video embed media"
+msgstr ""
+
+#: blocks/sub-footer/block.json
+msgctxt "block title"
+msgid "Sub Footer"
+msgstr ""
+
+#: blocks/sub-footer/block.json
+msgctxt "block description"
+msgid "Contact information block with addresses and schedule."
+msgstr ""
+
+#: blocks/sub-footer/block.json
+msgctxt "block keyword"
+msgid "footer contact address schedule"
+msgstr ""
+
+#: blocks/tabs-slider/block.json
+msgctxt "block title"
+msgid "Tabs Slider"
+msgstr ""
+
+#: blocks/tabs-slider/block.json
+msgctxt "block description"
+msgid "Vehicle type filter with model slider from options page."
+msgstr ""
+
+#: blocks/tabs-slider/block.json
+msgctxt "block keyword"
+msgid "slider tabs models vehicles filter"
+msgstr ""
+
+#: blocks/team-section/block.json
+msgctxt "block title"
+msgid "Team Section"
+msgstr ""
+
+#: blocks/team-section/block.json
+msgctxt "block description"
+msgid "Filterable team member grid with photo, position and contact info."
+msgstr ""
+
+#: blocks/team-section/block.json
+msgctxt "block keyword"
+msgid "team staff members grid filter"
+msgstr ""
+
+#: blocks/text-left-image-right/block.json
+msgctxt "block title"
+msgid "Text Left & Image Right"
+msgstr ""
+
+#: blocks/text-left-image-right/block.json
+msgctxt "block description"
+msgid "Two-column block with text on the left and image on the right."
+msgstr ""
+
+#: blocks/text-left-image-right/block.json
+msgctxt "block keyword"
+msgid "text image columns"
+msgstr ""
+
+#: blocks/text-video-slider/block.json
+msgctxt "block title"
+msgid "Text & Video Slider"
+msgstr ""
+
+#: blocks/text-video-slider/block.json
+msgctxt "block description"
+msgid "Specials slider with payment info and Wistia video per offer."
+msgstr ""
+
+#: blocks/text-video-slider/block.json
+msgctxt "block keyword"
+msgid "specials slider video offers payment"
+msgstr ""
+
+#: blocks/video-section/block.json
+msgctxt "block title"
+msgid "Video Section"
+msgstr ""
+
+#: blocks/video-section/block.json
+msgctxt "block description"
+msgid "Product/video section with preferred layout and nested video articles."
+msgstr ""
+
+#: blocks/video-section/block.json
+msgctxt "block keyword"
+msgid "video section products preferred"
+msgstr ""
+
+#: blocks/widget-banner/block.json
+msgctxt "block title"
+msgid "Widget banner"
+msgstr ""
+
+#: blocks/widget-banner/block.json
+msgctxt "block description"
+msgid "Widget banner"
+msgstr ""
+
+#: blocks/widget-banner/block.json
+#: blocks/widget-news/block.json
+msgctxt "block keyword"
+msgid "Keyword 1"
+msgstr ""
+
+#: blocks/widget-banner/block.json
+#: blocks/widget-news/block.json
+msgctxt "block keyword"
+msgid "Keyword 2"
+msgstr ""
+
+#: blocks/widget-news/block.json
+msgctxt "block title"
+msgid "Widget news"
+msgstr ""
+
+#: blocks/widget-news/block.json
+msgctxt "block description"
+msgid "Widget news"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Base"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Contrast"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Base"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "1"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "3"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "4"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "5"
 msgstr ""

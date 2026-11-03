@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/buttons",
+    "title": "Buttons",
+    "description": "Info section with a list of button codes.",
+    "category": "custom-acf-blocks",
+    "icon": "button",
+    "keywords": [
+        "buttons info list"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

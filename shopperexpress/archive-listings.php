@@ -417,7 +417,7 @@ if ( $api_mode && get_field( 'api_new_car_incentives', 'option' ) && get_field( 
 	// partial: cards themselves are rendered through the vehicles REST
 	// endpoint (class-intice-rest.php), a separate request where wp_footer()
 	// never fires.
-	get_template_part( 'template-parts/conditionalOffersDetail', 'modal-srp' );
+	get_template_part( 'template-parts/conditional-offers-detail', 'modal-srp' );
 }
 get_footer();
 ?>

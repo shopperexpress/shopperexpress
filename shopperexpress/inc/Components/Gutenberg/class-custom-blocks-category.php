@@ -39,7 +39,7 @@ class Custom_Blocks_Category implements Theme_Component {
 			array(
 				array(
 					'slug'  => 'custom-acf-blocks',
-					'title' => esc_html__( 'Custom ACF Blocks', 'base' ),
+					'title' => esc_html__( 'Custom ACF Blocks', 'shopperexpress' ),
 				),
 			)
 		);

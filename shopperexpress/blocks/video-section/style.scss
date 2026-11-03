@@ -1,0 +1,94 @@
+// -----------------------------------------------------------------------------
+// Video Section block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+#page-container {
+	/* product section sheet styles */
+	.video-holder {
+		padding-top: 30px;
+
+		@include media ('>=tablet') {
+			padding-top: 60px;
+		}
+
+		@include media ('>=desktop') {
+			padding-top: 115px;
+		}
+		.container {
+			max-width: 1140px !important;
+		}
+		.text-box {
+			padding-bottom: 30px;
+
+			@include media ('>=tablet') {
+				width: 48.5%;
+				padding: 0 10px;
+				float: left;
+			}
+		}
+		.video-box {
+			@include media ('>=tablet') {
+				margin-top: 82px;
+				float: right;
+				width: 51.5%;
+				padding: 0 10px;
+			}
+
+			@include media ('>=desktop') {
+				margin-top: 100px;
+			}
+		}
+	}
+
+	/* product article sheet styles */
+	.product-article {
+		@extend %clearfix;
+		font-size: 14px;
+		line-height: 1.214;
+		padding-top: 60px;
+
+		@include media ('>=tablet') {
+			margin: 0 -10px;
+		}
+		h2 {
+			font-size: 20px;
+			line-height: 1.2;
+			font-weight: 500;
+			margin-bottom: 12px;
+
+			@include media ('>=tablet') {
+				font-size: 28px;
+			}
+
+			@include media ('>=desktop') {
+				font-size: 36px;
+			}
+		}
+		.more {
+			font-weight: 500;
+		}
+		p {
+			margin-bottom: 17px;
+			strong {
+				font-weight: 600;
+			}
+		}
+		ul {
+			@extend %listreset;
+			margin: 0 0 17px 17px;
+			li {
+				position: relative;
+				padding-left: 13px;
+				&:before {
+					content: '◇';
+					position: absolute;
+					top: 1px;
+					left: 0;
+					font-size: 12px;
+				}
+			}
+		}
+	}
+}

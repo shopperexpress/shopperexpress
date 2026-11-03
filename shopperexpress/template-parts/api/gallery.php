@@ -17,7 +17,7 @@ $post_type = $args['post_type'] ?? 'listings';
 $year           = $vehicle['year'] ?? '';
 $make           = $vehicle['make'] ?? '';
 $model          = $vehicle['model'] ?? '';
-$trim           = $vehicle['payload']['trim'] ?? '';
+$trim           = \App\resolve_vehicle_field( $vehicle, 'trim' );
 $exterior_color = $vehicle['exterior_color'] ?? '';
 
 // Resolved directly from payload.use_images_list (images_primary/images_srp),

@@ -1,0 +1,140 @@
+// -----------------------------------------------------------------------------
+// Logo Section block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.section-location {
+  padding-top: rem-calc(45);
+
+  h2 {
+    font-size: rem-calc(25) !important;
+    margin-bottom: rem-calc(20) !important;
+
+    @include media('>=tablet') {
+      margin-bottom: rem-calc(30) !important;
+    }
+
+    @include media('>=desktop') {
+      font-size: rem-calc(40) !important;
+    }
+  }
+}
+
+.location-logos {
+  @extend %listreset;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: rem-calc(0 -10);
+
+  @include media('>=widescreen') {
+    margin: rem-calc(0 -90);
+  }
+
+  @include media('>=xxl') {
+    margin: rem-calc(0 -200);
+  }
+
+  @include media('>=1800px') {
+    margin: rem-calc(0 -380);
+  }
+
+  &.location-logos--columns-1 {
+    li {
+      @include media('>=phone') {
+        width: 100%;
+      }
+    }
+  }
+
+  &.location-logos--columns-2 {
+    li {
+      @include media('>=tablet') {
+        width: 50%;
+      }
+    }
+  }
+
+  &.location-logos--columns-3 {
+    li {
+      @include media('>=tablet') {
+        width: 33.33%;
+      }
+    }
+  }
+
+  &.location-logos--columns-4 {
+    li {
+      @include media('>=tablet') {
+        width: 25%;
+      }
+    }
+  }
+
+  &.location-logos--columns-5 {
+    li {
+      @include media('>=tablet') {
+        width: 20%;
+      }
+    }
+  }
+
+  li {
+    padding: rem-calc(10);
+    width: 80%;
+
+    @include media('>=phone') {
+      width: 50%;
+    }
+
+    @include media('>=desktop') {
+      padding: rem-calc(16);
+    }
+
+    @include media('>=xxl') {
+      padding: rem-calc(25);
+    }
+  }
+
+  a {
+    transition: box-shadow 0.3s ease !important;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background-color: $white;
+    padding: rem-calc(30 10);
+    border-radius: rem-calc(8);
+    box-shadow: 0 0 10px rgba($black, 0.2);
+
+    @include media('>=desktop') {
+      border-radius: rem-calc(12);
+      box-shadow: 0 0 16px rgba($black, 0.2);
+    }
+
+    @include media('>=widescreen') {
+      padding: rem-calc(35 10);
+    }
+
+    &:hover {
+      box-shadow: 0 0 5px rgba($black, 0.2);
+    }
+  }
+
+  img {
+    height: 90% !important;
+    width: 96% !important;
+    object-fit: contain;
+    flex-shrink: 0;
+
+    @include media('>=widescreen') {
+      margin-bottom: 18px;
+    }
+
+    @include media('>=xxl') {
+      height: 164px !important;
+    }
+  }
+}

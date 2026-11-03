@@ -1,0 +1,39 @@
+{
+  "src": "src",
+  "dest": "assets",
+  "minimizeCSS": true,
+  "minimizeJS": true,
+  "linters": {
+    "css": true,
+    "js": true
+  },
+  "styles": {
+    "bundle": "style",
+    "src": "styles",
+    "dest": "css",
+    "extension": "scss",
+    "extra": ["login", "soc", "admin"]
+  },
+  "scripts": {
+    "bundle": "app",
+    "src": "js",
+    "dest": "js",
+    "extension": "js",
+    "extra": ["soc", "legacy"]
+  },
+  "static": {
+    "fonts": {
+      "src": "fonts",
+      "dest": "fonts"
+    },
+    "images": {
+      "src": "images",
+      "dest": "images"
+    }
+  },
+  "devserver": {
+    "port": "auto",
+    "open": true,
+    "proxy": "https://shopperexpress.ddev.site"
+  }
+}

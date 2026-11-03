@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/html-block",
+    "title": "HTML Block",
+    "description": "Custom HTML/embed section with optional container and background.",
+    "category": "custom-acf-blocks",
+    "icon": "editor-code",
+    "keywords": [
+        "html embed code custom"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

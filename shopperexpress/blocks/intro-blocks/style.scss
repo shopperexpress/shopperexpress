@@ -1,0 +1,100 @@
+// -----------------------------------------------------------------------------
+// Intro Blocks block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+#page-container {
+	.trade-sell {
+		color: $black;
+		font-size: 30px;
+		text-align: center;
+		padding-top: 100px;
+
+		@include media ('>=tablet') {
+			font-size: 28px;
+			text-align: left;
+		}
+
+		@include media ('>=desktop') {
+			font-size: 35px;
+			padding-top: 170px;
+		}
+		.row {
+			margin-bottom: 40px;
+
+			@include media ('>=tablet') {
+				margin-bottom: 0;
+			}
+			p {
+				margin-bottom: 0;
+				font-weight: 500;
+			}
+			&:last-child {
+				@include media ('>=desktop') {
+					margin-top: -57px;
+				}
+				img {
+					@include media('>=tablet') {
+						max-width: 104%;
+						margin-right: -4%;
+					}
+
+					@include media ('>=desktop') {
+						position: relative;
+						margin-left: 8px;
+					}
+
+					@include media('>=widescreen') {
+						max-width: 109%;
+						margin-right: -9%;
+					}
+				}
+				.text-col {
+					margin-bottom: 30px;
+
+					@include media ('>=tablet') {
+						padding-left: 50px;
+						padding-top: 47px;
+						margin-bottom: 0;
+					}
+
+					@include media('>=desktop') {
+						padding-left: 50px;
+					}
+
+					@include media('>=widescreen') {
+						padding-left: 67px;
+					}
+				}
+			}
+			&:first-child {
+				.text-col {
+					margin-bottom: 30px;
+
+					@include media ('>=tablet') {
+						padding: 10px 70px 0 30px;
+						margin-bottom: 0;
+					}
+
+					@include media ('>=desktop') {
+						padding: 10px 163px 50px 60px;
+					}
+				}
+
+				.img-col {
+					@include media('>=desktop') {
+						padding-top: 16px;
+					}
+				}
+			}
+
+			img {
+				@include media ('<tablet') {
+					max-width: 450px;
+					width: 100%;
+				}
+			}
+		}
+	}
+}

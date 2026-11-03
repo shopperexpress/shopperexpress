@@ -24,7 +24,7 @@ if ( ! $vin || ! in_array( $post_type, array( 'listings', 'used-listings' ), tru
 // SRP only — no 'single_' location prefix.
 // Pass the already-fetched vehicle data to avoid a redundant API call per card.
 get_template_part(
-	'template-parts/ConversionBlock',
+	'template-parts/conversion-block',
 	null,
 	array(
 		'vin'         => $vin,

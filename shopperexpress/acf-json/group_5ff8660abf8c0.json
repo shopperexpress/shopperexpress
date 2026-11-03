@@ -2741,11 +2741,10 @@
     "display_title": "",
     "allow_ai_access": false,
     "ai_description": "",
-    "acfe_autosync": [
-        "json"
-    ],
-    "acfe_form": 0,
-    "acfe_meta": "",
-    "acfe_note": "",
-    "modified": 1779357741
+    "acfe": {
+        "autosync": [
+            "json"
+        ]
+    },
+    "modified": 1793367671
 }

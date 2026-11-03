@@ -33,7 +33,7 @@ class ConversionBlock {
 
 		ob_start();
 		get_template_part(
-			'template-parts/ConversionBlock',
+			'template-parts/conversion-block',
 			null,
 			array(
 				'vin'       => $this->vin,

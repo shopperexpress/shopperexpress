@@ -161,6 +161,25 @@ add_filter(
 	2
 );
 
+/**
+ * Yoast SEO's "Disable date archives" option (Search Appearance → Archives)
+ * 301-redirects away any `year`/`m`/`monthnum`/`day`/`hour`/`minute`/`second`
+ * query var on every front-end request — including our `year` vehicle filter
+ * on `/listings/`, which isn't a date archive at all
+ * (Yoast\WP\SEO\Integrations\Front_End\Redirects::disable_date_queries()).
+ * Disable that option just for requests carrying our `year` filter param.
+ */
+add_filter(
+	'option_wpseo_titles',
+	function ( $options ) {
+		if ( is_array( $options ) && isset( $_GET['year'] ) ) {
+			$options['disable-date'] = false;
+		}
+
+		return $options;
+	}
+);
+
 add_filter(
 	'wp_all_import_use_wp_set_object_terms',
 	function ( $use_wp_set_object_terms, $tx_name ) {

@@ -1,0 +1,49 @@
+// -----------------------------------------------------------------------------
+// This file contains all styles related to the new landing page
+// -----------------------------------------------------------------------------
+
+.new-landing {
+  #header {
+    &:not(.fixed-position) {
+      background-color: transparent;
+    }
+  }
+
+  #main {
+    padding-top: 35px;
+
+    @include media('>=tablet') {
+      padding-top: 32px;
+    }
+
+    @include media('>=desktop') {
+      padding-top: 36px;
+    }
+  }
+
+  .container {
+    max-width: 1768px;
+  }
+
+  .section-location {
+    padding-top: 0;
+  }
+
+  .location-logos {
+    @include media('>=desktop') {
+      margin: 0 -5px;
+    }
+
+    @include media('>=xxl') {
+      margin: 0 -12px !important;
+    }
+  }
+}
+
+.cSjPMS {
+  color: #8e8e8e !important;
+}
+
+a[href='https://boast.io'] {
+  color: #8e8e8e !important;
+}

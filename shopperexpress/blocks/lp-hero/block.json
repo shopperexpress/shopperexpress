@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 2,
+    "name": "acf/lp-hero",
+    "title": "LP Hero",
+    "description": "Landing page hero — background image, heading, buttons, and a quick-nav link row.",
+    "category": "custom-acf-blocks",
+    "icon": "cover-image",
+    "keywords": [
+        "landing hero visual banner"
+    ],
+    "style": "file:./build/style.css",
+    "viewScript": "file:./build/view.js",
+    "acf": {
+        "blockVersion": 3,
+        "mode": "edit",
+        "renderTemplate": "block.php"
+    },
+    "supports": {
+        "align": false,
+        "mode": true,
+        "anchor": true
+    },
+    "example": {
+        "attributes": {
+            "mode": "preview",
+            "data": {
+                "preview_image_help": true
+            }
+        }
+    }
+}

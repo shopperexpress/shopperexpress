@@ -36,42 +36,42 @@ class Gutenberg_Color_Palette implements Theme_Component {
 			'editor-color-palette',
 			array(
 				array(
-					'name'  => esc_html__( 'Primary', 'base' ),
+					'name'  => esc_html__( 'Primary', 'shopperexpress' ),
 					'slug'  => 'primary',
 					'color' => '#0090ff',
 				),
 				array(
-					'name'  => esc_html__( 'Black', 'base' ),
+					'name'  => esc_html__( 'Black', 'shopperexpress' ),
 					'slug'  => 'black',
 					'color' => '#000',
 				),
 				array(
-					'name'  => esc_html__( 'Grey', 'base' ),
+					'name'  => esc_html__( 'Grey', 'shopperexpress' ),
 					'slug'  => 'grey',
 					'color' => '#8f8f8f',
 				),
 				array(
-					'name'  => esc_html__( 'White', 'base' ),
+					'name'  => esc_html__( 'White', 'shopperexpress' ),
 					'slug'  => 'white',
 					'color' => '#fff',
 				),
 				array(
-					'name'  => esc_html__( 'Blue', 'base' ),
+					'name'  => esc_html__( 'Blue', 'shopperexpress' ),
 					'slug'  => 'blue',
 					'color' => '#59BACC',
 				),
 				array(
-					'name'  => esc_html__( 'Green', 'base' ),
+					'name'  => esc_html__( 'Green', 'shopperexpress' ),
 					'slug'  => 'green',
 					'color' => '#58AD69',
 				),
 				array(
-					'name'  => esc_html__( 'Orange', 'base' ),
+					'name'  => esc_html__( 'Orange', 'shopperexpress' ),
 					'slug'  => 'orange',
 					'color' => '#FFBC49',
 				),
 				array(
-					'name'  => esc_html__( 'Red', 'base' ),
+					'name'  => esc_html__( 'Red', 'shopperexpress' ),
 					'slug'  => 'red',
 					'color' => '#E2574C',
 				),

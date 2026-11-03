@@ -1,0 +1,20 @@
+// -----------------------------------------------------------------------------
+// Widget banner block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.widget-banner {
+  margin-bottom: 30px;
+
+  a {
+    display: block;
+    width: 100%;
+    border: 2px solid $black;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}

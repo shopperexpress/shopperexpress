@@ -1,0 +1,44 @@
+// -----------------------------------------------------------------------------
+// Single Video block. Compiled to build/style.css beside block.json.
+// -----------------------------------------------------------------------------
+
+@import '../../src/styles/abstracts';
+
+.video-section {
+  padding: 25px 0 45px;
+  background: $gray-300;
+
+  @include media('>=tablet') {
+    padding: 60px 0 55px;
+    margin-bottom: 100px;
+  }
+
+  @include media('>=desktop') {
+    margin-bottom: 136px;
+  }
+}
+
+#page-container {
+	/* video section styles */
+	.video-section {
+		padding: 25px 0 45px;
+
+		.theme-inner & {
+			background: $gray-300;
+			padding: 30px 0 50px;
+
+			@include media ('>=tablet') {
+				padding: 50px 0 70px;
+			}
+		}
+
+		@include media ('>=tablet') {
+			padding: 60px 0 55px;
+			margin-bottom: 100px;
+		}
+
+		@include media ('>=desktop') {
+			margin-bottom: 136px;
+		}
+	}
+}

@@ -27,7 +27,7 @@ if ( version_compare( phpversion(), '7.2.5', '<' ) ) {
 			<p>
 				<?php
 				echo wp_kses(
-					__( 'The minimum version of PHP is <strong>7.2</strong>. Please update the PHP version on your server and try again.', 'base' ),
+					__( 'The minimum version of PHP is <strong>7.2</strong>. Please update the PHP version on your server and try again.', 'shopperexpress' ),
 					array(
 						'strong' => array(),
 					)
@@ -56,7 +56,7 @@ if ( version_compare( phpversion(), '7.2.5', '<' ) ) {
 $composer = get_template_directory() . '/vendor/autoload.php';
 
 if ( ! file_exists( $composer ) ) {
-	wp_die( wp_kses_post( __( 'Error. Composer autoloader required. Please run <code>composer install</code>.', 'base' ) ) );
+	wp_die( wp_kses_post( __( 'Error. Composer autoloader required. Please run <code>composer install</code>.', 'shopperexpress' ) ) );
 }
 
 require $composer;
@@ -70,6 +70,12 @@ if ( ! class_exists( 'ACF' ) && ! is_admin() ) {
 
 /**
  * Loop throught theme required files.
+ *
+ * `class-conversion-block`, `class-walker-nav`, `class-widget`, `class-evox` and `class-twilio`
+ * predate the `App\Components\Theme` DI registry below and were never migrated into it — they
+ * stay plain `require`s, not namespaced, and don't implement `Theme_Component`. Everything else
+ * added to the theme should go through the registry instead; these five are the known exception,
+ * not a pattern to copy.
  */
 array_map(
 	function ( $file ) {
@@ -80,7 +86,7 @@ array_map(
 				wp_kses_post(
 					sprintf(
 					// translators: %s file name.
-						__( 'Error locating <code>%s</code> file.', 'base' ),
+						__( 'Error locating <code>%s</code> file.', 'shopperexpress' ),
 						$file
 					)
 				),
@@ -88,7 +94,7 @@ array_map(
 			);
 		}
 	},
-	array( 'helpers', 'theme-functions', 'class-conversion-block', 'class-walker-nav', 'class-widget', 'class-evox', 'class-twilio', 'theme-filters' )
+	array( 'helpers', 'enqueue', 'theme-functions', 'class-conversion-block', 'class-walker-nav', 'class-widget', 'class-evox', 'class-twilio', 'theme-filters', 'blocks' )
 );
 
 /**
@@ -102,7 +108,7 @@ if ( class_exists( 'App\\Components\\Theme' ) ) {
 		echo esc_html(
 			sprintf(
 				// translators: %s exception message.
-				__( 'Exception caught: %s', 'base' ),
+				__( 'Exception caught: %s', 'shopperexpress' ),
 				$e->getMessage()
 			)
 		);

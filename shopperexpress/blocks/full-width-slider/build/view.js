@@ -1,0 +1,1 @@
+(()=>{document.addEventListener("DOMContentLoaded",()=>{!function(){jQuery(".full-width-image-slider").each(function(){const e=jQuery(this),s=e.data("speed")||300,o=e.data("autoplay-speed")||5e3;e.slick({rows:0,slidesToScroll:1,slidesToShow:1,arrows:!1,dots:!0,dotsClass:"slick-dots",autoplay:!0,pauseOnHover:!0,speed:s,autoplaySpeed:o})})}()})})();

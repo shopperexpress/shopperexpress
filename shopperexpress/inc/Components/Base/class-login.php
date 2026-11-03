@@ -53,9 +53,9 @@ class Login implements Theme_Component {
 	public function enqueue_assets(): void {
 		wp_enqueue_style(
 			'shopperexpress/login',
-			get_template_directory_uri() . '/assets/dist/login.css',
+			\App\asset_url( 'css/login.css' ),
 			array(),
-			$this->theme_version
+			shopperexpress_asset_version( 'assets/css/login.css' )
 		);
 
 		$this->output_inline_vars();
