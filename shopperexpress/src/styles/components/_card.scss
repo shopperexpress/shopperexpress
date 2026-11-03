@@ -538,6 +538,8 @@
     }
 
     &.btn-custom {
+      position: relative;
+      z-index: 1;
       border-radius: 4px;
       font-size: 14px;
       padding: 14px 16px;
