@@ -165,6 +165,11 @@ class Intice_Rest implements Theme_Component {
 
 		self::clear_cache( 'vehicles-feed', false );
 
+		// Also flush get_listings_count()'s model-slider/drop-menu count badges
+		// (12h TTL, no stale-while-revalidate fallback) so a fresh Nexus import
+		// shows up in menu/slider counts immediately instead of hours later.
+		\wps_clear_listings_count_cache();
+
 		Api_Settings::mark_cache_cleared( Api_Settings::ALL_CACHE_GROUP_KEYS, Api_Settings::CLEARED_BY_IMPORT );
 		SOC_Logger::write( 'cache', 'Intice cache auto-refreshed after Nexus import.' );
 

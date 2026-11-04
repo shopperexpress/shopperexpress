@@ -510,7 +510,7 @@ endwhile;
 get_footer();
 
 get_template_part(
-	'template-parts/copyLinkModal',
+	'template-parts/copy-link-modal',
 	null,
 	array(
 		'image'        => $firstImage,

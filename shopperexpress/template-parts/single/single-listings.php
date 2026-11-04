@@ -741,7 +741,7 @@ get_footer();
 
 $title = array( $year, $make, $model, $trim );
 get_template_part(
-	'template-parts/copyLinkModal',
+	'template-parts/copy-link-modal',
 	null,
 	array(
 		'post_id'      => $post_id,

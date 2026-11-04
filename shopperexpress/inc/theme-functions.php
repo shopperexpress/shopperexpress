@@ -1255,8 +1255,59 @@ function get_api_vehicles_by_condition( $condition ) {
 	return $cache[ $key ];
 }
 
+const WPS_LISTINGS_COUNT_REGISTRY_OPTION = 'wps_listings_count_cache_keys';
+
+/**
+ * Remember a get_listings_count() transient key so wps_clear_listings_count_cache()
+ * can flush all of them in one pass — e.g. right after a Nexus import, where the
+ * normal 12h TTL would otherwise leave menu/slider count badges stale for hours.
+ *
+ * @param string $cache_key
+ * @return void
+ */
+function wps_track_listings_count_cache_key( string $cache_key ): void {
+	$keys = get_option( WPS_LISTINGS_COUNT_REGISTRY_OPTION, array() );
+
+	if ( ! is_array( $keys ) ) {
+		$keys = array();
+	}
+
+	if ( ! in_array( $cache_key, $keys, true ) ) {
+		$keys[] = $cache_key;
+		update_option( WPS_LISTINGS_COUNT_REGISTRY_OPTION, $keys, false );
+	}
+}
+
+/**
+ * Flush every get_listings_count() transient tracked via wps_track_listings_count_cache_key().
+ * Hooked into Intice_Rest::handle_cache_refresh() so a fresh Nexus import invalidates the
+ * menu/slider count badges immediately instead of waiting out their 12h TTL.
+ *
+ * @return int Number of transients flushed.
+ */
+function wps_clear_listings_count_cache(): int {
+	$keys = get_option( WPS_LISTINGS_COUNT_REGISTRY_OPTION, array() );
+
+	if ( ! is_array( $keys ) ) {
+		$keys = array();
+	}
+
+	foreach ( $keys as $key ) {
+		delete_transient( $key );
+	}
+
+	delete_option( WPS_LISTINGS_COUNT_REGISTRY_OPTION );
+
+	return count( $keys );
+}
+
 function get_listings_count( $year, $make, $model, $condition, $trim, $index, $row ) {
-	$count = get_transient( 'acf-count-' . $index . $row );
+	// Keyed off the actual filter values (not row position) so editing a slide's
+	// fields invalidates the cache immediately instead of serving a stale count
+	// for up to 12h, and so two callers (drop-menu.php, tabs-slider.php) sharing
+	// the same options-page repeater never collide on the same row index.
+	$cache_key = 'acf-count-' . md5( wp_json_encode( array( $year, $make, $model, $condition, $trim ) ) );
+	$count     = get_transient( $cache_key );
 	if ( ! empty( $_REQUEST['clear'] ) ) {
 		$count = false;
 	}
@@ -1265,7 +1316,7 @@ function get_listings_count( $year, $make, $model, $condition, $trim, $index, $r
 			// Slides don't carry a post_type — infer it the same way the SRP endpoints
 			// split new vs. used, so the right "API Settings → Filters" exclusion rules apply.
 			$condition_norm = $condition ? strtolower( (string) $condition ) : '';
-			$post_type      = in_array( $condition_norm, array( 'used', 'certified' ), true ) ? 'used-listings' : 'listings';
+			$post_type      = 'used' === $condition_norm ? 'used-listings' : 'listings';
 
 			// Reuses the exact same client call (and transient cache key) the SRP grid
 			// warms on page load — one shared fetch per condition instead of a fresh
@@ -1277,7 +1328,6 @@ function get_listings_count( $year, $make, $model, $condition, $trim, $index, $r
 					$year  ? array( 'field' => 'year', 'custom_key' => '', 'operator' => '=', 'value' => $year ) : null,
 					$make  ? array( 'field' => 'make', 'custom_key' => '', 'operator' => '=', 'value' => $make ) : null,
 					$model ? array( 'field' => 'model', 'custom_key' => '', 'operator' => '=', 'value' => $model ) : null,
-					$trim  ? array( 'field' => 'trim', 'custom_key' => '', 'operator' => '=', 'value' => $trim ) : null,
 				)
 			);
 
@@ -1287,19 +1337,30 @@ function get_listings_count( $year, $make, $model, $condition, $trim, $index, $r
 
 			$matching = array_filter(
 				$vehicles,
-				function ( $vehicle ) use ( $rows ) {
+				function ( $vehicle ) use ( $rows, $trim ) {
 					foreach ( $rows as $rule ) {
 						if ( ! \App\Components\Api\Intice_Rest::filter_row_matches( $vehicle, $rule ) ) {
 							return false;
 						}
 					}
+
+					// Trim lives only in the dealer-mapped payload bag for some feeds,
+					// never at the top level — resolve_vehicle_field() is the same
+					// resolution the SRP grid/VDP use for display, so the badge count
+					// matches what the grid actually shows instead of drifting out of
+					// sync with filter_row_matches()'s generic (payload-naive) lookup.
+					if ( $trim && 0 !== strcasecmp( \App\resolve_vehicle_field( $vehicle, 'trim' ), $trim ) ) {
+						return false;
+					}
+
 					return true;
 				}
 			);
 
 			$count = count( $matching );
 
-			set_transient( 'acf-count-' . $index . $row, $count, 12 * HOUR_IN_SECONDS );
+			set_transient( $cache_key, $count, 12 * HOUR_IN_SECONDS );
+			wps_track_listings_count_cache_key( $cache_key );
 
 			return $count;
 		}
@@ -1357,7 +1418,7 @@ function get_listings_count( $year, $make, $model, $condition, $trim, $index, $r
 		$query = new WP_Query( $args );
 		$count = $query->found_posts;
 
-		set_transient( 'acf-count-' . $index . $row, $count, 12 * HOUR_IN_SECONDS );
+		set_transient( $cache_key, $count, 12 * HOUR_IN_SECONDS );
 
 		wp_reset_postdata();
 	}
@@ -1462,10 +1523,23 @@ function CallAPI( $url, $data, $post_id ) {
 	$post_type = get_post_type( $post_id );
 	$type      = in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers' ) ) ? $post_type . '_' : null;
 
-	if ( ! have_rows( $type . 'features_items', $post_id ) ) {
-		if ( function_exists( 'run_callapi_in_background' ) ) {
-			run_callapi_in_background( $url, $data, $post_id );
-		}
+	if ( have_rows( $type . 'features_items', $post_id ) ) {
+		return;
+	}
+
+	// Without this lock, every page view of a post whose features_items is still
+	// empty re-triggers a new background job — on a popular listing that can mean
+	// dozens of duplicate `wp callapi run` processes queued for the same VIN,
+	// starving the background runner's global concurrency cap for every other
+	// vehicle waiting on it.
+	$lock_key = 'callapi_lock_' . $post_id;
+	if ( get_transient( $lock_key ) ) {
+		return;
+	}
+
+	if ( function_exists( 'run_callapi_in_background' ) ) {
+		set_transient( $lock_key, 1, 5 * MINUTE_IN_SECONDS );
+		run_callapi_in_background( $url, $data, $post_id );
 	}
 }
 

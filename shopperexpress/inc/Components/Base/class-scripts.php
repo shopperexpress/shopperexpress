@@ -42,7 +42,9 @@ class Scripts implements Theme_Component {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'load_admin_style' ) );
 		add_action( 'admin_head', array( $this, 'render_vars' ), 1 );
-		add_action( 'wp_head', array( $this, 'render_frontend_vars' ) );
+		// Priority 0 so this prints before wp_enqueue_scripts() itself (hooked to
+		// wp_head at priority 1) — i.e. before any enqueued <link>/<script> tag.
+		add_action( 'wp_head', array( $this, 'render_frontend_vars' ), 0 );
 		add_action( 'wp_head', array( $this, 'render_header_script_field' ) );
 		add_action( 'enqueue_block_editor_assets', array( $this, 'load_admin_block_style' ) );
 	}
