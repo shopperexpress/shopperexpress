@@ -383,15 +383,7 @@ get_header();
 							)
 						);
 					}
-					get_template_part(
-						'template-parts/api/description',
-						null,
-						array(
-							'vehicle'   => $v,
-							'post_type' => $post_type,
-							'type'      => 'vdp',
-						)
-					);
+
 					get_template_part(
 						'template-parts/api/unlock',
 						null,

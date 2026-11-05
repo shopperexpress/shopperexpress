@@ -21,6 +21,7 @@ import initFilteringModal from './components/filteringModal';
 import initHideInfoButton from './components/hideInfoButton';
 import initIncentiveOfferSrpModal from './components/incentiveOfferSrpModal';
 import initInputMask from './components/inputMask';
+import initInticeToolGuard from './components/inticeToolGuard';
 import initMobileNav from './components/mobileNav';
 import initOfferForm from './components/offerForm';
 import initOpenClose from './components/openClose';
@@ -53,6 +54,7 @@ window.bootstrap = bootstrap;
 window.Handlebars = Handlebars;
 
 document.addEventListener('DOMContentLoaded', function () {
+  initInticeToolGuard();
   initSwitchLogos();
   initOpenPdfInNewTab();
   initProductsFiltration();

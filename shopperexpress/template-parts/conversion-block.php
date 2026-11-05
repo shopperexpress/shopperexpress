@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Template for displaying vehicle offer card.
  *
@@ -31,7 +32,6 @@ if ( $is_api ) {
 
 	// Use VIN as the page-unique identifier for data-post attributes and popup IDs.
 	$identifier = $vin ?: $post_id;
-
 } else {
 	$api_vehicle = null;
 	$identifier  = $post_id;
@@ -139,9 +139,9 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								if ( ( $mobile_button_text_1 || $url_1 || $onclick ) && $active_1 ) :
 									?>
 									<a
-									<?php if ( $button_type == 'form' ) : ?>
+										<?php if ( $button_type == 'form' ) : ?>
 										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
-									<?php endif; ?>
+										<?php endif; ?>
 										<?php
 										echo $url_1;
 										if ( ! empty( $onclick ) ) :
@@ -167,9 +167,9 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								if ( ( $mobile_button_text_2 || $url_2 || $onclick ) && $active_2 ) :
 									?>
 									<a
-									<?php if ( $button_type == 'form' ) : ?>
+										<?php if ( $button_type == 'form' ) : ?>
 										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
-									<?php endif; ?>
+										<?php endif; ?>
 										<?php
 										echo $url_2;
 										if ( ! empty( $onclick ) ) :
@@ -194,15 +194,15 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 									<a
 										<?php if ( $button_type == 'form' ) : ?>
 										data-target="#buttonModal" data-post="<?php echo $identifier; ?>" data-toggle="modal" data-form="<?php echo $form_id; ?>"
-									<?php endif; ?>
-									<?php
+										<?php endif; ?>
+										<?php
 										echo $url;
-									if ( ! empty( $onclick ) ) :
-										?>
+										if ( ! empty( $onclick ) ) :
+											?>
 										onclick="<?php echo implode( ' ', $onclick ); ?>" <?php endif; ?><?php echo esc_attr( $asc_type_attr ); ?> class="desktop-button" style="color: <?php echo $primary_color; ?>;border: 2px solid <?php echo $primary_color; ?>;"><?php echo esc_html( $desktop_button_text ); ?></a>
 									<?php
-							endif;
-							?>
+								endif;
+								?>
 							</div>
 							<?php
 						endif;
@@ -332,7 +332,7 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 								$show_finance = get_sub_field( 'show_finance' );
 								$show_lease   = get_sub_field( 'show_lease' );
 
-								if ( $is_api ) {
+								if ( $is_api && ! in_array( $post_type, array( 'finance-offers', 'lease-offers', 'conditional-offers', 'offers' ) ) ) {
 									$api_payload   = $api_vehicle['payload'] ?? array();
 									$lease_payment = $api_vehicle['lease_payment'] ?? ( $api_payload['lease_payment'] ?? ( $api_payload['lease_payment_sort'] ?? '' ) );
 									$loan_payment  = $api_vehicle['loan_payment'] ?? ( $api_payload['loan_payment'] ?? ( $api_payload['loan_payment_sort'] ?? '' ) );
@@ -396,11 +396,11 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 
 								$show_banner_1 = $show_banner_2 = false;
 
-								$onclick = ( ( $show_finance && $loan_payment ) || $show_lease && $lease_payment ) ? '' : ' onclick="' . implode( ' ', $onclick ) . '"';
-
+								$onclick    = ( ( $show_finance && $loan_payment ) || $show_lease && $lease_payment ) ? '' : ' onclick="' . implode( ' ', $onclick ) . '"';
+								$show_popup = get_sub_field( 'show_popup' );
 								?>
 								<div style="position: relative;width: 100%;margin-bottom: 6px;" class="showWidget <?php echo $hide_on_mobile; ?>">
-									<?php if ( get_sub_field( 'show_popup' ) && $popup_text ) : ?>
+									<?php if ( $show_popup && $popup_text ) : ?>
 										<div id="block-<?php echo $identifier; ?>" class="block_popup block-<?php echo $identifier; ?>">
 											<span class="widget--popup__close" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'none';"><i class="fa fa-times-circle" aria-hidden="true"></i></span>
 											<div class="widgetbox__popup-text">
@@ -449,11 +449,13 @@ if ( have_rows( $location . 'buttons_conversion', 'options' ) ) :
 												<?php endif; ?>
 											</span>
 											<div class="widget--btn__text-holder">
-								<?php if ( $disclosure ) : ?>
-							<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo $disclosure; ?></span>
-						<?php endif; ?>
-						<span class="showWidget widget--popup__opener"><i class="fa fa-question-circle-o" aria-hidden="true" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
-						</div>
+												<?php if ( $disclosure ) : ?>
+													<span class="widget--btn__text showWidget" style="font-size: 11px;"><?php echo $disclosure; ?></span>
+												<?php endif; ?>
+												<?php if ( $show_popup ) : ?>
+													<span class="showWidget widget--popup__opener"><i class="fa fa-question-circle-o" aria-hidden="true" onclick="document.getElementById('block-<?php echo $identifier; ?>').style.display = 'block';"></i></span>
+												<?php endif; ?>
+											</div>
 										</span>
 										<?php
 										$primary_button_text = get_sub_field( 'primary_button_text' );
