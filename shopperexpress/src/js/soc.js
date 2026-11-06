@@ -10,6 +10,29 @@
 
   const SOC = {};
 
+  // Quiet background poll after "Flush All" — no progress UI, just detects when
+  // the atomic rebuild job (running in WP-Cron) has finished so we can show a
+  // single "done" toast instead of leaving the admin guessing whether anything
+  // happened (the table itself looks identical the whole time by design — every
+  // group only flips once ALL of them are ready).
+  function pollRebuildCompletion() {
+    SOC.ajax('soc_cache_rebuild_status', {}, function (state) {
+      if (!state || 'running' === state.status) return;
+
+      clearInterval(SOC._rebuildPoller);
+      SOC._rebuildPoller = null;
+
+      if ('success' === state.status) {
+        const when = state.finished_at_formatted ? ' at ' + state.finished_at_formatted : '';
+        SOC.showSuccess('Intice cache rebuild finished — ' + (state.steps_total || 0) + ' groups updated' + when + '.');
+      } else if ('failed' === state.status) {
+        SOC.showError('Intice cache rebuild failed at "' + (state.failed_step || '?') + '": ' + (state.error || 'unknown error') + '. Nothing changed.');
+      }
+
+      SOC.reloadPanel('api-settings');
+    });
+  }
+
   // ----------------------------------------------------------------
   // Init
   // ----------------------------------------------------------------
@@ -23,6 +46,7 @@
     SOC.bindDbCleanup();
     SOC.bindApiSettings();
     SOC.bindApiFilters();
+
     SOC.bindLeadDelivery();
     SOC.bindGoogleReviews();
   };
@@ -478,8 +502,15 @@
   // API Settings
   // ----------------------------------------------------------------
   SOC.bindApiSettings = function () {
+    // Namespaced so reloadPanel()'s repeated SOC.init() calls replace the previous
+    // bindings instead of stacking duplicates — without this, each panel reload
+    // (e.g. after a Flush/Build click) adds another identical handler, so the next
+    // click fires the AJAX call once per accumulated binding.
+    const ns = '.socApiSettings';
+    $(document).off(ns);
+
     // Sub-tab navigation (Connection & Cache / ACF Fields Reference).
-    $(document).on('click', '[data-subtab-btn]', function () {
+    $(document).on('click' + ns, '[data-subtab-btn]', function () {
       var tab = $(this).data('subtab-btn');
       $('[data-subtab-btn]').removeClass('soc-subtabs__btn--active');
       $(this).addClass('soc-subtabs__btn--active');
@@ -488,7 +519,7 @@
     });
 
     // Mode toggle
-    $(document).on('change', '#soc-api-mode-toggle', function () {
+    $(document).on('change' + ns, '#soc-api-mode-toggle', function () {
       const enabled = $(this).is(':checked') ? 1 : 0;
       const $card = $(this).closest('.soc-api-mode-card');
       const $label = $('#soc-api-mode-label');
@@ -510,14 +541,14 @@
     });
 
     // Show key input on "Change" click
-    $(document).on('click', '#soc-api-key-edit', function () {
+    $(document).on('click' + ns, '#soc-api-key-edit', function () {
       $(this).hide();
       $(this).closest('td').find('.soc-masked-key').hide();
       $('#soc-intice-api-key').show().trigger('focus');
     });
 
     // Save credentials
-    $(document).on('click', '#soc-save-api-credentials', function () {
+    $(document).on('click' + ns, '#soc-save-api-credentials', function () {
       const $btn = $(this);
       const url = $('#soc-intice-api-url').val().trim();
       const key = $('#soc-intice-api-key').val().trim();
@@ -549,7 +580,7 @@
     });
 
     // Cache enable / disable toggle
-    $(document).on('change', '#soc-intice-cache-toggle', function () {
+    $(document).on('change' + ns, '#soc-intice-cache-toggle', function () {
       const enabled = $(this).is(':checked') ? 1 : 0;
       const $card = $(this).closest('.soc-api-mode-card');
       const $label = $('#soc-cache-label');
@@ -579,9 +610,10 @@
       );
     });
 
-    // Flush all Intice cache
-    $(document).on('click', '#soc-flush-all-api-cache', function () {
-      if (!confirm('Flush all Intice Nexus cache? Next page loads will re-fetch from the API.')) return;
+    // Queue an atomic rebuild of every Intice cache group
+    $(document).on('click' + ns, '#soc-flush-all-api-cache', function () {
+      if (!confirm('Rebuild all Intice Nexus cache now? Starts immediately even if a previous rebuild is still running. Visitors keep seeing current data until it finishes.'))
+        return;
       const $btn = $(this);
       $btn.prop('disabled', true);
       SOC.showLoading();
@@ -590,8 +622,16 @@
         {},
         function (data) {
           const touched = (data && data.touched) || [];
-          const msg = touched.length ? 'All Intice cache flushed. Also cleared: ' + touched.join(', ') + '.' : 'All Intice cache flushed.';
+          const base = 'Cache rebuild queued.';
+          const msg = touched.length ? base + ' Also cleared: ' + touched.join(', ') + '.' : base;
           SOC.showSuccess(msg);
+
+          clearInterval(SOC._rebuildPoller);
+          SOC._rebuildPoller = setInterval(pollRebuildCompletion, 3000);
+
+          // Re-render now so every managed group shows "Pending" immediately —
+          // collect_api_cache() reports that cosmetic status for as long as the
+          // rebuild is running, even though nothing is actually touched yet.
           SOC.reloadPanel('api-settings');
         },
         function (msg) {
@@ -602,7 +642,7 @@
     });
 
     // Toggle the explanation row under a cache group's name
-    $(document).on('click', '.soc-cache-info-toggle', function () {
+    $(document).on('click' + ns, '.soc-cache-info-toggle', function () {
       const $btn = $(this);
       const $row = $btn.closest('tr').next('.soc-cache-info-row');
       const open = $row.is(':visible');
@@ -611,7 +651,7 @@
     });
 
     // Flush single cache group
-    $(document).on('click', '.soc-flush-api-cache-group', function () {
+    $(document).on('click' + ns, '.soc-flush-api-cache-group', function () {
       const $btn = $(this);
       const group = $btn.data('group');
       $btn.prop('disabled', true);
@@ -630,8 +670,28 @@
       );
     });
 
+    // Build (warm) an empty cache group
+    $(document).on('click' + ns, '.soc-warm-api-cache-group', function () {
+      const $btn = $(this);
+      const group = $btn.data('group');
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax(
+        'soc_warm_api_cache_group',
+        { group: group },
+        function () {
+          SOC.showSuccess('Cache group "' + group + '" built.');
+          SOC.reloadPanel('api-settings');
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+
     // Test connection
-    $(document).on('click', '#soc-test-intice-api', function () {
+    $(document).on('click' + ns, '#soc-test-intice-api', function () {
       const $btn = $(this);
       const $result = $('#soc-connection-result');
 

@@ -58,6 +58,8 @@ class SOC_Ajax {
 		'soc_api_test_connection'     => 'handle_api_test_connection',
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
+		'soc_warm_api_cache_group'    => 'handle_warm_api_cache_group',
+		'soc_cache_rebuild_status'    => 'handle_cache_rebuild_status',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
 		'soc_api_save_filters'        => 'handle_api_save_filters',
 		// Lead Delivery.
@@ -769,6 +771,50 @@ class SOC_Ajax {
 		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] flushed via SOC" );
 
 		SOC_Response::success( array( 'group' => $group, 'deleted' => $deleted ) );
+	}
+
+	/**
+	 * Build (warm) an empty Intice API cache group on demand instead of waiting
+	 * for the first real visitor to trigger the fetch.
+	 */
+	private function handle_warm_api_cache_group(): void {
+		$group  = sanitize_key( $_POST['group'] ?? '' );
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$valid_groups = array( 'vehicles', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+
+		if ( ! in_array( $group, $valid_groups, true ) ) {
+			SOC_Response::error( 'Invalid cache group.' );
+		}
+
+		$result = $module->warm_api_cache_group( $group );
+
+		if ( is_wp_error( $result ) ) {
+			SOC_Response::error( $result->get_error_message() );
+		}
+
+		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] built via SOC" );
+
+		SOC_Response::success( array( 'group' => $group ) );
+	}
+
+	/**
+	 * Cheap status poll used only to detect when a "Flush All" rebuild has
+	 * finished — no progress UI reads this, it just tells the quiet background
+	 * poller in soc.js when to stop and show a single "done" toast.
+	 */
+	private function handle_cache_rebuild_status(): void {
+		$state = \App\Components\Api\Intice_Rest::get_rebuild_state();
+
+		$state['finished_at_formatted'] = ! empty( $state['finished_at'] )
+			? wp_date( 'M j, Y g:i A', $state['finished_at'] )
+			: null;
+
+		SOC_Response::success( $state );
 	}
 
 	// =========================================================================

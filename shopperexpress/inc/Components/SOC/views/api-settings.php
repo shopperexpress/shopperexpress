@@ -234,7 +234,7 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				$group = $group_keys[ $i ] ?? '';
 				$info  = $group_info[ $i ] ?? '';
 				?>
-				<tr>
+				<tr<?php echo 'vehicle' === $group ? ' style="display:none;"' : ''; ?>>
 					<td>
 						<strong><?php echo esc_html( $row['label'] ); ?></strong>
 						<?php if ( $info ) : ?>
@@ -250,9 +250,6 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
-						<?php if ( $st === 'pending' ) : ?>
-							<small style="margin-left:4px;color:#856404;"><?php esc_html_e( 'regen pending…', 'shopperexpress' ); ?></small>
-						<?php endif; ?>
 					</td>
 					<td>
 						<?php if ( ! empty( $row['cleared_by'] ) ) : ?>
@@ -266,13 +263,22 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 					</td>
 					<td><?php echo $row['cached_at'] ? esc_html( $row['cached_at'] ) : '—'; ?></td>
 					<td>
-						<button
-							class="button button-small soc-flush-api-cache-group"
-							data-group="<?php echo esc_attr( $group ); ?>"
-							<?php echo $st === 'missing' ? 'disabled' : ''; ?>
-						>
-							<?php esc_html_e( 'Flush', 'shopperexpress' ); ?>
-						</button>
+						<?php if ( $st === 'missing' && 'vehicle' !== $group ) : ?>
+							<button
+								class="button button-small button-primary soc-warm-api-cache-group"
+								data-group="<?php echo esc_attr( $group ); ?>"
+							>
+								<?php esc_html_e( 'Build Cache', 'shopperexpress' ); ?>
+							</button>
+						<?php else : ?>
+							<button
+								class="button button-small soc-flush-api-cache-group"
+								data-group="<?php echo esc_attr( $group ); ?>"
+								<?php echo $st === 'missing' ? 'disabled' : ''; ?>
+							>
+								<?php esc_html_e( 'Flush', 'shopperexpress' ); ?>
+							</button>
+						<?php endif; ?>
 					</td>
 				</tr>
 				<?php if ( $info ) : ?>
