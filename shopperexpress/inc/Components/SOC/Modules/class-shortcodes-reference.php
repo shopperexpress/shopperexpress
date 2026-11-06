@@ -228,6 +228,16 @@ class Shortcodes_Reference implements SOC_Module {
 				'description' => 'Prints the matching disclosure ACF field (disclosure_lease / disclosure_finance / disclosure_cash) for the current Offer post. Plain text only (tags stripped).',
 			),
 			array(
+				'name'        => 'current_date',
+				'source'      => 'class-shortcode.php::current_date()',
+				'params'      => array(
+					array( 'name' => 'format', 'description' => 'PHP date() format string. Defaults to the site\'s "Date Format" setting (Settings → General).' ),
+					array( 'name' => 'offset', 'description' => 'Optional strtotime()-compatible offset relative to today, e.g. "+1 day", "-1 week", "+1 year". Defaults to "now".' ),
+				),
+				'example'     => '[current_date format="F j, Y"]',
+				'description' => 'Outputs the current date (site timezone/locale aware via wp_date()). Equivalent to the "Shortcode for Current Date" plugin, built in.',
+			),
+			array(
 				'name'        => 'site_url',
 				'source'      => 'class-shortcode.php::site_url()',
 				'params'      => array(),
