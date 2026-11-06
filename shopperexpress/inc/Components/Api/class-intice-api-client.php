@@ -29,6 +29,20 @@ class Intice_Api_Client {
 	const STALE_TTL          = 2 * HOUR_IN_SECONDS;
 
 	/**
+	 * Request timeout (seconds) for a live visitor request — kept short so a slow
+	 * Nexus response doesn't hold up a page load.
+	 */
+	const TIMEOUT_LIVE = 15;
+
+	/**
+	 * Request timeout (seconds) for background/admin-initiated requests (WP-Cron
+	 * regen, SOC "Build"/"Flush All") — nobody's page load is waiting on these, so
+	 * it's safe to give Nexus more room. A large "new"-condition full export was
+	 * measured taking ~22s on Nexus's side; 45s leaves headroom as inventory grows.
+	 */
+	const TIMEOUT_BACKGROUND = 45;
+
+	/**
 	 * Option storing a registry of known cache keys (key => [group, expires_at]).
 	 *
 	 * Reading cache status via raw SQL against wp_options is blind whenever a
@@ -110,7 +124,7 @@ class Intice_Api_Client {
 
 		if ( ! self::$regenerating ) {
 			if ( ! $this->is_cache_enabled() ) {
-				return $this->request( 'GET', '/api/v1/vehicles', $filters );
+				return $this->request( 'GET', '/api/v1/vehicles', $filters, array(), self::TIMEOUT_LIVE );
 			}
 
 			$cached = get_transient( $live_key );
@@ -125,7 +139,7 @@ class Intice_Api_Client {
 			}
 		}
 
-		$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
+		$response = $this->request( 'GET', '/api/v1/vehicles', $filters, array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
 
 		if ( is_wp_error( $response ) ) {
 			$stale = get_transient( $stale_key );
@@ -134,10 +148,7 @@ class Intice_Api_Client {
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
-			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLES );
-			set_transient( $stale_key, $response, self::STALE_TTL );
-			self::track_key( $live_key, 'vehicles', self::CACHE_TTL_VEHICLES );
-			self::track_key( $stale_key, 'vehicles', self::STALE_TTL );
+			$this->store( $live_key, $stale_key, 'vehicles', self::CACHE_TTL_VEHICLES, $response );
 		}
 
 		return $response;
@@ -156,7 +167,7 @@ class Intice_Api_Client {
 
 		if ( ! self::$regenerating ) {
 			if ( ! $this->is_cache_enabled() ) {
-				return $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ) );
+				return $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), array(), self::TIMEOUT_LIVE );
 			}
 
 			$cached = get_transient( $live_key );
@@ -172,19 +183,30 @@ class Intice_Api_Client {
 			}
 		}
 
-		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ) );
+		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
 
 		if ( is_wp_error( $response ) ) {
+			// A 404 is Nexus authoritatively confirming the vehicle is gone — keep
+			// serving the stale copy forever would turn a deleted vehicle into a
+			// ghost VDP page until the stale entry's own ~2h TTL happens to lapse.
+			// Any other error (timeout, 5xx, network) is treated as transient, so
+			// still falls back to stale rather than taking down a working page.
+			if ( 404 === (int) ( $response->get_error_data()['status'] ?? 0 ) ) {
+				delete_transient( $live_key );
+				delete_transient( $stale_key );
+				self::untrack_key( $live_key );
+				self::untrack_key( $stale_key );
+
+				return $response;
+			}
+
 			$stale = get_transient( $stale_key );
 
 			return false !== $stale ? $stale : $response;
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
-			set_transient( $live_key, $response, self::CACHE_TTL_VEHICLE );
-			set_transient( $stale_key, $response, self::STALE_TTL );
-			self::track_key( $live_key, 'vehicle', self::CACHE_TTL_VEHICLE );
-			self::track_key( $stale_key, 'vehicle', self::STALE_TTL );
+			$this->store( $live_key, $stale_key, 'vehicle', self::CACHE_TTL_VEHICLE, $response );
 		}
 
 		return $response;
@@ -201,7 +223,7 @@ class Intice_Api_Client {
 
 		if ( ! self::$regenerating ) {
 			if ( ! $this->is_cache_enabled() ) {
-				return $this->request( 'GET', '/api/v1/meta' );
+				return $this->request( 'GET', '/api/v1/meta', array(), array(), self::TIMEOUT_LIVE );
 			}
 
 			$cached = get_transient( $live_key );
@@ -215,7 +237,7 @@ class Intice_Api_Client {
 			}
 		}
 
-		$response = $this->request( 'GET', '/api/v1/meta' );
+		$response = $this->request( 'GET', '/api/v1/meta', array(), array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
 
 		if ( is_wp_error( $response ) ) {
 			$stale = get_transient( $stale_key );
@@ -224,10 +246,7 @@ class Intice_Api_Client {
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
-			set_transient( $live_key, $response, self::CACHE_TTL_META );
-			set_transient( $stale_key, $response, self::STALE_TTL );
-			self::track_key( $live_key, 'meta', self::CACHE_TTL_META );
-			self::track_key( $stale_key, 'meta', self::STALE_TTL );
+			$this->store( $live_key, $stale_key, 'meta', self::CACHE_TTL_META, $response );
 		}
 
 		return $response;
@@ -253,7 +272,7 @@ class Intice_Api_Client {
 
 		if ( ! self::$regenerating ) {
 			if ( ! $this->is_cache_enabled() ) {
-				$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
+				$response = $this->request( 'GET', '/api/v1/vehicles', $filters, array(), self::TIMEOUT_LIVE );
 
 				return is_wp_error( $response ) ? $response : (int) ( $response['meta']['total'] ?? 0 );
 			}
@@ -269,7 +288,7 @@ class Intice_Api_Client {
 			}
 		}
 
-		$response = $this->request( 'GET', '/api/v1/vehicles', $filters );
+		$response = $this->request( 'GET', '/api/v1/vehicles', $filters, array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
 
 		if ( is_wp_error( $response ) ) {
 			$stale = get_transient( $stale_key );
@@ -280,10 +299,7 @@ class Intice_Api_Client {
 		$count = (int) ( $response['meta']['total'] ?? 0 );
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
-			set_transient( $live_key, $count, self::CACHE_TTL_VEHICLES );
-			set_transient( $stale_key, $count, self::STALE_TTL );
-			self::track_key( $live_key, 'vehicles', self::CACHE_TTL_VEHICLES );
-			self::track_key( $stale_key, 'vehicles', self::STALE_TTL );
+			$this->store( $live_key, $stale_key, 'vehicles', self::CACHE_TTL_VEHICLES, $count );
 		}
 
 		return $count;
@@ -310,6 +326,37 @@ class Intice_Api_Client {
 	 */
 	public function flush_group( string $group ): int {
 		return $this->flush_matching( array( $group ) );
+	}
+
+	/**
+	 * Hard-delete every live AND stale cache entry for a group — unlike
+	 * flush_group()/flush_cache(), nothing is preserved as a stale fallback.
+	 *
+	 * Used for the 'vehicle' (VDP) group specifically: it's keyed per-VIN, so
+	 * there's no way to "rebuild" it in bulk the way the other groups can — the
+	 * only correct response to "something may have changed/been deleted in
+	 * Nexus" is to force every VDP page to re-fetch on its next visit, rather
+	 * than keep serving a stale copy of a vehicle that might no longer exist
+	 * (see Intice_Rest::handle_rebuild_all()).
+	 *
+	 * @param string $group
+	 * @return int Number of entries deleted (live + stale combined).
+	 */
+	public static function purge_group( string $group ): int {
+		$registry = self::get_registry();
+		$deleted  = 0;
+
+		foreach ( $registry as $key => $meta ) {
+			if ( ( $meta['group'] ?? '' ) !== $group ) {
+				continue;
+			}
+
+			delete_transient( $key );
+			self::untrack_key( $key );
+			++$deleted;
+		}
+
+		return $deleted;
 	}
 
 	/**
@@ -388,6 +435,100 @@ class Intice_Api_Client {
 		$this->get_vehicle( $vin );
 
 		self::$regenerating = false;
+	}
+
+	/**
+	 * Run $callback with the $regenerating bypass active, so any get_vehicles()/
+	 * get_vehicle()/get_meta() calls it makes ignore a still-valid stale copy and
+	 * force a real Nexus request instead. For callers (e.g. Intice_Rest's background
+	 * SRP regen) that build a payload from this client but aren't themselves a method
+	 * on this class, so can't toggle the private $regenerating flag directly.
+	 *
+	 * @param callable $callback Callback that calls into this client.
+	 * @return mixed Whatever $callback returns.
+	 */
+	public static function force_fresh( callable $callback ) {
+		self::$regenerating = true;
+
+		try {
+			return $callback();
+		} finally {
+			self::$regenerating = false;
+		}
+	}
+
+	/**
+	 * Write both the live and stale-fallback transients for a cache entry, and
+	 * register both in the key registry. Shared by every get_*() method above
+	 * and by the batch-rebuild commit methods below, so all writers agree on
+	 * exactly one way a cache entry gets persisted.
+	 *
+	 * @param string $live_key
+	 * @param string $stale_key
+	 * @param string $group
+	 * @param int    $ttl
+	 * @param mixed  $value
+	 * @return void
+	 */
+	private function store( string $live_key, string $stale_key, string $group, int $ttl, $value ): void {
+		set_transient( $live_key, $value, $ttl );
+		set_transient( $stale_key, $value, self::STALE_TTL );
+		self::track_key( $live_key, $group, $ttl );
+		self::track_key( $stale_key, $group, self::STALE_TTL );
+	}
+
+	/**
+	 * Fetch fresh vehicle list data straight from Nexus, bypassing the cache
+	 * entirely (no read, no write) — used by the batch cache rebuilder, which
+	 * must hold every group's fresh data in memory and only commit it to the
+	 * cache once ALL groups have fetched successfully (see Intice_Rest::handle_rebuild_all()).
+	 *
+	 * @param array $filters Same filters as get_vehicles().
+	 * @return array|\WP_Error
+	 */
+	public function fetch_vehicles_raw( array $filters ) {
+		$filters['mode'] = 'full';
+
+		return $this->request( 'GET', '/api/v1/vehicles', $filters, array(), self::TIMEOUT_BACKGROUND );
+	}
+
+	/**
+	 * Fetch fresh filter metadata straight from Nexus, bypassing the cache
+	 * entirely — see fetch_vehicles_raw().
+	 *
+	 * @return array|\WP_Error
+	 */
+	public function fetch_meta_raw() {
+		return $this->request( 'GET', '/api/v1/meta', array(), array(), self::TIMEOUT_BACKGROUND );
+	}
+
+	/**
+	 * Commit a vehicle list response fetched via fetch_vehicles_raw() to the cache,
+	 * using the exact same key derivation as get_vehicles() so a later normal
+	 * request for the same filters hits this freshly-committed entry.
+	 *
+	 * @param array $filters Same filters passed to fetch_vehicles_raw().
+	 * @param array $data    Response from fetch_vehicles_raw().
+	 * @return void
+	 */
+	public function commit_vehicles( array $filters, array $data ): void {
+		$filters['mode'] = 'full';
+
+		$live_key  = self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) );
+		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_' . md5( serialize( $filters ) );
+
+		$this->store( $live_key, $stale_key, 'vehicles', self::CACHE_TTL_VEHICLES, $data );
+	}
+
+	/**
+	 * Commit a metadata response fetched via fetch_meta_raw() to the cache —
+	 * see commit_vehicles().
+	 *
+	 * @param array $data Response from fetch_meta_raw().
+	 * @return void
+	 */
+	public function commit_meta( array $data ): void {
+		$this->store( self::CACHE_PREFIX . 'meta', self::CACHE_PREFIX_STALE . 'meta', 'meta', self::CACHE_TTL_META, $data );
 	}
 
 	/**
@@ -522,7 +663,7 @@ class Intice_Api_Client {
 
 	// ─── HTTP layer ───────────────────────────────────────────────────────────
 
-	private function request( string $method, string $path, array $params = array(), array $body = array() ) {
+	private function request( string $method, string $path, array $params = array(), array $body = array(), ?int $timeout = null ) {
 		if ( empty( $this->base_url ) || empty( $this->api_key ) ) {
 			return new \WP_Error(
 				'intice_not_configured',
@@ -538,7 +679,7 @@ class Intice_Api_Client {
 
 		$request_args = array(
 			'method'    => $method,
-			'timeout'   => 15,
+			'timeout'   => $timeout ?? self::TIMEOUT_LIVE,
 			'sslverify' => false,
 			'headers'   => array(
 				'X-API-KEY'    => $this->api_key,

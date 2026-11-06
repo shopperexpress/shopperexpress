@@ -423,6 +423,16 @@ class Api_Settings implements SOC_Module {
 		$cleared_by_all = get_option( self::OPTION_CACHE_CLEARED_BY, array() );
 		$rows           = array();
 
+		// While an atomic "rebuild all" is in flight, nothing is actually written
+		// to live/stale cache yet — the real status below would still read
+		// "valid" for every group until the single end-of-run commit. Show
+		// "pending" instead as a purely cosmetic signal that a rebuild is under
+		// way; the underlying cache (and what visitors see) is untouched either
+		// way until the run finishes. 'vehicle' (VDP) is excluded — it's
+		// hard-purged up front (see Intice_Rest::handle_rebuild_all()), so its
+		// real status already reflects the rebuild correctly.
+		$rebuild_running = 'running' === ( Intice_Rest::get_rebuild_state()['status'] ?? '' );
+
 		foreach ( $groups as $group ) {
 			$live_entries  = array();
 			$stale_entries = array();
@@ -455,6 +465,10 @@ class Api_Settings implements SOC_Module {
 			} elseif ( ! empty( $stale_entries ) ) {
 				// Live copy is gone but a stale-while-revalidate copy is still being
 				// served while a background cron rebuilds it — same "pending" state.
+				$status = 'pending';
+			}
+
+			if ( $rebuild_running && 'vehicle' !== $group['key'] ) {
 				$status = 'pending';
 			}
 
@@ -498,20 +512,25 @@ class Api_Settings implements SOC_Module {
 	}
 
 	/**
-	 * Flush all Intice API transients, any downstream page-cache/object-cache/
-	 * OPcache layer, and log the action.
+	 * Queue an atomic rebuild of every Intice cache group (see
+	 * Intice_Rest::queue_rebuild_all()) and immediately flush any downstream
+	 * page-cache/object-cache/OPcache layer. Unlike the old per-group flush,
+	 * this never deletes the current live cache — visitors keep seeing today's
+	 * data until the rebuild has fetched and assembled everything successfully,
+	 * then every group flips to new data together. Always queues a fresh run
+	 * (bypasses the "already running" guard) — an admin explicitly clicking
+	 * this button wants a redo now, not to be told to wait.
 	 *
-	 * @return array{flushed: int, touched: string[]} Deleted transient rows,
-	 *               and labels of any downstream cache system also flushed.
+	 * @return array{queued: true, touched: string[]} Labels of any downstream
+	 *               cache system also flushed.
 	 */
 	public function flush_api_cache(): array {
-		$client  = Intice_Api_Client::instance();
-		$flushed = $client->flush_cache();
-
 		$user = wp_get_current_user();
 		$by   = $user->user_email ?: 'unknown';
-		self::mark_cache_cleared( self::ALL_CACHE_GROUP_KEYS, $by );
-		SOC_Logger::write( 'cache', 'Intice API cache flushed by: ' . $by );
+		( new Intice_Rest() )->queue_rebuild_all( $by, true );
+
+		SOC_Logger::write( 'cache', 'Intice cache rebuild queued by: ' . $by );
+
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
 		$touched = self::flush_downstream_caches();
@@ -520,7 +539,7 @@ class Api_Settings implements SOC_Module {
 		}
 
 		return array(
-			'flushed' => $flushed,
+			'queued'  => true,
 			'touched' => $touched,
 		);
 	}
@@ -640,6 +659,54 @@ class Api_Settings implements SOC_Module {
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 
 		return $deleted;
+	}
+
+	/**
+	 * Build (warm) a cache group that's currently empty, so the admin doesn't have
+	 * to wait for a real visitor to trigger the first fetch. Mirrors the group
+	 * mapping in flush_api_cache_group().
+	 *
+	 * @param string $group 'vehicles', 'meta', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
+	 * @return true|\WP_Error
+	 */
+	public function warm_api_cache_group( string $group ) {
+		$srp_map = array(
+			'new'         => array( 'listings', false ),
+			'used'        => array( 'used-listings', false ),
+			'new-custom'  => array( 'listings', true ),
+			'used-custom' => array( 'used-listings', true ),
+			'feed'        => array( 'vehicles-feed', false ),
+		);
+
+		if ( 'vehicles' === $group ) {
+			// force_fresh() both guarantees a true bypass fetch (nothing to bypass
+			// here since the cache is empty, but keeps this consistent with every
+			// other regen path) and gets the longer TIMEOUT_BACKGROUND instead of
+			// the live-visitor TIMEOUT_LIVE — this is an admin explicitly waiting
+			// on a "Build Cache" click, not a page load.
+			$result = Intice_Api_Client::force_fresh(
+				fn() => Intice_Api_Client::instance()->get_vehicles( array() )
+			);
+		} elseif ( 'meta' === $group ) {
+			$result = Intice_Api_Client::force_fresh(
+				fn() => Intice_Api_Client::instance()->get_meta()
+			);
+		} elseif ( isset( $srp_map[ $group ] ) ) {
+			[ $post_type, $custom_sort ] = $srp_map[ $group ];
+			$result = ( new Intice_Rest() )->handle_srp_cache_regen( $post_type, $custom_sort );
+		} else {
+			// 'vehicle' (single VDP) is keyed by VIN — there's no single cache entry
+			// to warm without picking a vehicle, so it's not offered from this button.
+			return new \WP_Error( 'unsupported', __( 'This cache group cannot be built directly.', 'shopperexpress' ) );
+		}
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+
+		return true;
 	}
 
 	// ─── Private helpers ──────────────────────────────────────────────────────

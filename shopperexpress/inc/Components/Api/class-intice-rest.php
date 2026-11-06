@@ -39,6 +39,19 @@ class Intice_Rest implements Theme_Component {
 	const CACHE_PREFIX_STALE = 'intice_srp_stale_';
 
 	/**
+	 * Option storing the state of the last/current atomic "rebuild all" run —
+	 * see queue_rebuild_all()/handle_rebuild_all().
+	 */
+	const OPTION_REBUILD_STATE = 'intice_cache_rebuild_state';
+
+	/**
+	 * A 'running' state older than this is treated as dead (e.g. a PHP fatal
+	 * mid-run left it stuck) so a new rebuild can be queued instead of wedging
+	 * forever on a run that will never update its own state again.
+	 */
+	const REBUILD_STALE_AFTER = 10 * MINUTE_IN_SECONDS;
+
+	/**
 	 * @return void
 	 */
 	public function register(): void {
@@ -46,6 +59,7 @@ class Intice_Rest implements Theme_Component {
 		add_action( 'intice_cache_regen', array( $this, 'handle_cache_regen' ) );
 		add_action( 'intice_srp_cache_regen', array( $this, 'handle_srp_cache_regen' ), 10, 2 );
 		add_action( 'intice_vdp_cache_regen', array( $this, 'handle_vdp_cache_regen' ) );
+		add_action( 'intice_cache_rebuild_all', array( $this, 'handle_rebuild_all' ) );
 		add_action( 'acf/save_post', array( $this, 'maybe_flush_custom_sort_cache' ), 20 );
 	}
 
@@ -142,38 +156,246 @@ class Intice_Rest implements Theme_Component {
 	/**
 	 * POST /wp-json/v1/intice/cache/refresh
 	 *
-	 * Called by Nexus right after an import run finishes for this site, so the
-	 * cache is proactively rebuilt instead of waiting for the next visitor to
-	 * hit a stale/expired entry. Two layers sit between a visitor and Nexus —
-	 * both must be flushed or the SRP HTML would just rebuild from a still-stale
-	 * raw API response and nothing would actually change:
-	 *   1. Intice_Api_Client's raw /api/v1/vehicles response cache (10 min TTL).
-	 *   2. Intice_Rest's assembled SRP HTML cache (15 min TTL), built from (1).
-	 * Both flushes are stale-while-revalidate — current data keeps serving from
-	 * a 2h stale copy while a background cron rebuilds each entry.
+	 * Called by Nexus right after an import run finishes for this site. Queues
+	 * the atomic "rebuild all" job (see queue_rebuild_all()/handle_rebuild_all())
+	 * instead of flushing anything here — visitors keep seeing exactly what
+	 * they were seeing until every group has been fetched and rebuilt
+	 * successfully, at which point the whole set flips to new data in one pass.
 	 *
 	 * @return \WP_REST_Response
 	 */
 	public function handle_cache_refresh(): \WP_REST_Response {
-		Intice_Api_Client::instance()->flush_cache();
+		$queued = $this->queue_rebuild_all();
 
-		foreach ( array( 'listings', 'used-listings' ) as $post_type ) {
-			foreach ( array( false, true ) as $custom_sort ) {
-				self::clear_cache( $post_type, $custom_sort );
-			}
+		SOC_Logger::write(
+			'cache',
+			$queued
+				? 'Intice cache rebuild queued after Nexus import.'
+				: 'Intice cache rebuild already in progress — Nexus import notification ignored.'
+		);
+
+		return rest_ensure_response( array( 'queued' => $queued ) );
+	}
+
+	/**
+	 * Queue the atomic "rebuild all" job.
+	 *
+	 * By default, guarded against double-queueing while one is already running —
+	 * this is what the Nexus webhook uses, so rapid-fire import notifications
+	 * don't pile up overlapping runs. The SOC "Flush All Intice Cache" button
+	 * passes $force = true: an admin explicitly clicking it wants a fresh run
+	 * started regardless of whatever's in flight, not to be told to wait. A
+	 * forced queue can't truly kill an already-running PHP process, but since
+	 * both runs fetch independently and the newer one commits last, the net
+	 * effect is a fresh rebuild either way — at worst some duplicated Nexus
+	 * requests from the overlap.
+	 *
+	 * @param string $by    Attribution for the "Cleared By" column once this run
+	 *                      succeeds — a user's email for a manual trigger, or
+	 *                      Api_Settings::CLEARED_BY_IMPORT for the Nexus webhook.
+	 * @param bool   $force Bypass the already-running guard.
+	 * @return bool True if a rebuild was queued, false if one was already running
+	 *              and $force was not set.
+	 */
+	public function queue_rebuild_all( string $by = Api_Settings::CLEARED_BY_IMPORT, bool $force = false ): bool {
+		$state = self::get_rebuild_state();
+		$stale = ( $state['started_at'] ?? 0 ) < time() - self::REBUILD_STALE_AFTER;
+
+		if ( ! $force && 'running' === ( $state['status'] ?? '' ) && ! $stale ) {
+			return false;
 		}
 
-		self::clear_cache( 'vehicles-feed', false );
+		update_option( self::OPTION_REBUILD_STATE . '_queued_by', $by, false );
 
-		// Also flush get_listings_count()'s model-slider/drop-menu count badges
-		// (12h TTL, no stale-while-revalidate fallback) so a fresh Nexus import
-		// shows up in menu/slider counts immediately instead of hours later.
+		if ( ! wp_next_scheduled( 'intice_cache_rebuild_all' ) ) {
+			wp_schedule_single_event( time(), 'intice_cache_rebuild_all' );
+		}
+
+		spawn_cron();
+
+		return true;
+	}
+
+	/**
+	 * WP-Cron callback: fetch fresh data for every cache group into memory first,
+	 * and only commit it to the cache if every single fetch/build step succeeds —
+	 * so a visitor either keeps seeing the complete pre-rebuild data set, or sees
+	 * the complete post-rebuild one, never a mix of the two. On any failure,
+	 * nothing is written and the failure is recorded for SOC to display.
+	 *
+	 * @return void
+	 */
+	public function handle_rebuild_all(): void {
+		$client = Intice_Api_Client::instance();
+		// No unfiltered ('vehicles', no condition) fetch here — nothing in the live
+		// site reads that variant (SRP/feed always filter by condition=new|used),
+		// it's only ever warmed by the old regen_cache()/single-group "Build Cache"
+		// path. Combining new+used into one request made it heavier than either
+		// condition alone and an unnecessary single point of failure for the
+		// whole atomic rebuild.
+		$steps = array(
+			array( 'meta', false, null ),
+			array( 'vehicles', 'new', array( 'condition' => 'new' ) ),
+			array( 'vehicles', 'used', array( 'condition' => 'used' ) ),
+		);
+
+		self::set_rebuild_state(
+			array(
+				'status'      => 'running',
+				'started_at'  => time(),
+				'finished_at' => null,
+				// 3 raw fetches (meta, vehicles new/used) + 4 SRP builds
+				// (new/used x default/custom-sort) + 1 feed build = 8 bump points below.
+				'steps_total' => 8,
+				'steps_done'  => 0,
+				'failed_step' => null,
+				'error'       => null,
+			)
+		);
+
+		// Hard-purge the per-VIN VDP cache up front, unconditionally — not gated
+		// behind the other 8 steps succeeding. There's no bulk way to know which
+		// VINs changed/were deleted in Nexus, so the only correct response to "an
+		// admin asked us to refresh everything" is to force every VDP page to
+		// re-fetch on its next visit instead of keep serving a vehicle that may no
+		// longer exist (Intice_Api_Client::get_vehicle() already turns a genuine
+		// 404 from Nexus into an immediate cache purge — this just stops waiting
+		// for that to happen naturally on the next visit/regen cycle).
+		Intice_Api_Client::purge_group( 'vehicle' );
+
+		$raw = array();
+
+		foreach ( $steps as [ $kind, $key, $filters ] ) {
+			$result = 'meta' === $kind ? $client->fetch_meta_raw() : $client->fetch_vehicles_raw( $filters );
+
+			if ( is_wp_error( $result ) ) {
+				$this->fail_rebuild( $kind . ( false === $key ? '' : ":{$key}" ), $result->get_error_message() );
+				return;
+			}
+
+			$raw[ $kind . '_' . $key ] = $result;
+			$this->bump_rebuild_progress();
+		}
+
+		$new_vehicles = $raw['vehicles_new']['data'] ?? array();
+		$used_vehicles = $raw['vehicles_used']['data'] ?? array();
+
+		$srp_groups = array(
+			array( 'listings', false, $new_vehicles ),
+			array( 'used-listings', false, $used_vehicles ),
+			array( 'listings', true, $new_vehicles ),
+			array( 'used-listings', true, $used_vehicles ),
+		);
+
+		$assembled = array();
+
+		foreach ( $srp_groups as [ $post_type, $custom_sort, $vehicles ] ) {
+			$output = $this->assemble_srp_payload( $vehicles, $post_type, $custom_sort, '' );
+
+			if ( is_wp_error( $output ) ) {
+				$this->fail_rebuild( self::cache_key( $post_type, $custom_sort ), $output->get_error_message() );
+				return;
+			}
+
+			$assembled[] = array( $post_type, $custom_sort, $output );
+			$this->bump_rebuild_progress();
+		}
+
+		$feed_output = $this->assemble_feed_payload( $new_vehicles, $used_vehicles );
+
+		if ( is_wp_error( $feed_output ) ) {
+			$this->fail_rebuild( 'vehicles-feed', $feed_output->get_error_message() );
+			return;
+		}
+
+		$this->bump_rebuild_progress();
+
+		// Every fetch/build above succeeded — commit everything. No network I/O
+		// happens in this loop, so no visitor can observe a half-committed state.
+		$client->commit_meta( $raw['meta_'] );
+		$client->commit_vehicles( array( 'condition' => 'new' ), $raw['vehicles_new'] );
+		$client->commit_vehicles( array( 'condition' => 'used' ), $raw['vehicles_used'] );
+
+		foreach ( $assembled as [ $post_type, $custom_sort, $output ] ) {
+			$this->commit_srp( $post_type, $custom_sort, $output );
+		}
+
+		$this->commit_srp( 'vehicles-feed', false, $feed_output );
+
 		\wps_clear_listings_count_cache();
 
-		Api_Settings::mark_cache_cleared( Api_Settings::ALL_CACHE_GROUP_KEYS, Api_Settings::CLEARED_BY_IMPORT );
-		SOC_Logger::write( 'cache', 'Intice cache auto-refreshed after Nexus import.' );
+		$by = get_option( self::OPTION_REBUILD_STATE . '_queued_by', Api_Settings::CLEARED_BY_IMPORT );
+		Api_Settings::mark_cache_cleared( Api_Settings::ALL_CACHE_GROUP_KEYS, $by );
 
-		return rest_ensure_response( array( 'refreshed' => true ) );
+		self::set_rebuild_state(
+			array_merge(
+				self::get_rebuild_state(),
+				array(
+					'status'      => 'success',
+					'finished_at' => time(),
+				)
+			)
+		);
+
+		SOC_Logger::write( 'cache', 'Intice cache rebuild completed — all groups updated together.' );
+	}
+
+	/**
+	 * Record a failed rebuild step — no cache was touched, so old data keeps serving.
+	 *
+	 * @param string $step
+	 * @param string $error
+	 * @return void
+	 */
+	private function fail_rebuild( string $step, string $error ): void {
+		self::set_rebuild_state(
+			array_merge(
+				self::get_rebuild_state(),
+				array(
+					'status'      => 'failed',
+					'finished_at' => time(),
+					'failed_step' => $step,
+					'error'       => $error,
+				)
+			)
+		);
+
+		SOC_Logger::write( 'cache', "Intice cache rebuild failed at [{$step}]: {$error} — no data was changed." );
+	}
+
+	/**
+	 * @return void
+	 */
+	private function bump_rebuild_progress(): void {
+		$state                 = self::get_rebuild_state();
+		$state['steps_done'] = ( $state['steps_done'] ?? 0 ) + 1;
+		self::set_rebuild_state( $state );
+	}
+
+	/**
+	 * @return array{status:string,started_at:?int,finished_at:?int,steps_total:int,steps_done:int,failed_step:?string,error:?string}
+	 */
+	public static function get_rebuild_state(): array {
+		return get_option(
+			self::OPTION_REBUILD_STATE,
+			array(
+				'status'      => '',
+				'started_at'  => null,
+				'finished_at' => null,
+				'steps_total' => 0,
+				'steps_done'  => 0,
+				'failed_step' => null,
+				'error'       => null,
+			)
+		);
+	}
+
+	/**
+	 * @param array $state
+	 * @return void
+	 */
+	private static function set_rebuild_state( array $state ): void {
+		update_option( self::OPTION_REBUILD_STATE, $state, false );
 	}
 
 	// ─── Handlers ─────────────────────────────────────────────────────────────
@@ -241,29 +463,44 @@ class Intice_Rest implements Theme_Component {
 	}
 
 	/**
-	 * WP cron callback: rebuild one SRP cache entry (post_type/sort combo) in the
-	 * background after a stale-serving request or an explicit flush.
+	 * Rebuild one SRP cache entry (post_type/sort combo) — used both as the
+	 * WP-Cron background-regen callback and as the "Build Cache" on-demand
+	 * handler (see Api_Settings::warm_api_cache_group()), so an upstream
+	 * failure is reported back to whichever caller needs to know instead of
+	 * being swallowed silently.
 	 *
 	 * @param string $post_type
 	 * @param bool   $custom_sort
-	 * @return void
+	 * @return true|\WP_Error
 	 */
-	public function handle_srp_cache_regen( string $post_type, bool $custom_sort ): void {
-		$output = 'vehicles-feed' === $post_type
-			? $this->build_feed_payload()
-			: $this->build_srp_payload( $post_type, $custom_sort, '' );
+	public function handle_srp_cache_regen( string $post_type, bool $custom_sort ) {
+		// Force the underlying Intice_Api_Client calls to bypass their own still-valid
+		// stale copy and hit Nexus for real — otherwise this "regen" can just re-read
+		// the same stale vehicle list and re-cache it under a fresh SRP TTL.
+		$output = Intice_Api_Client::force_fresh(
+			function () use ( $post_type, $custom_sort ) {
+				return 'vehicles-feed' === $post_type
+					? $this->build_feed_payload()
+					: $this->build_srp_payload( $post_type, $custom_sort, '' );
+			}
+		);
 
 		if ( is_wp_error( $output ) ) {
-			return;
+			return $output;
 		}
 
 		$this->store_srp_cache( $post_type, $custom_sort, $output );
+
+		return true;
 	}
 
 	/**
-	 * Fetch, sort, and render vehicles for a post type/sort combo into the
-	 * SRP JS response shape. Shared by the live request path and the
-	 * background regen cron callback.
+	 * Fetch (via the cached client), then assemble, vehicles for a post type/sort
+	 * combo into the SRP JS response shape. Used by the live request path and the
+	 * single-group background regen cron callback — both want the client's own
+	 * cache-or-fetch behavior. The batch rebuilder (handle_rebuild_all()) instead
+	 * calls assemble_srp_payload() directly with data it already fetched raw,
+	 * since it must hold every group in memory before committing any of them.
 	 *
 	 * @param string $post_type
 	 * @param bool   $custom_sort
@@ -279,18 +516,28 @@ class Intice_Rest implements Theme_Component {
 
 		$condition = isset( $conditions[ $post_type ] ) ? $conditions[ $post_type ] : '';
 
-		$api_data = $client->get_vehicles(
-			array(
-				// 'mode'      => 'full',
-				'condition' => $condition,
-			)
-		);
+		$api_data = $client->get_vehicles( array( 'condition' => $condition ) );
 
 		if ( is_wp_error( $api_data ) ) {
 			return $api_data;
 		}
 
-		$raw_vehicles = $api_data['data'] ?? array();
+		return $this->assemble_srp_payload( $api_data['data'] ?? array(), $post_type, $custom_sort, $loged );
+	}
+
+	/**
+	 * Filter, sort, and render an already-fetched raw vehicle list for a post
+	 * type/sort combo into the SRP JS response shape. Pure — does not touch the
+	 * cache or Nexus itself, so it's safe to call speculatively before deciding
+	 * whether to commit anything (see handle_rebuild_all()).
+	 *
+	 * @param array  $raw_vehicles Raw Intice vehicle arrays (e.g. $api_data['data']).
+	 * @param string $post_type
+	 * @param bool   $custom_sort
+	 * @param string $loged
+	 * @return array|\WP_Error
+	 */
+	private function assemble_srp_payload( array $raw_vehicles, string $post_type, bool $custom_sort, string $loged ) {
 		$raw_vehicles = self::apply_vehicle_filters( $raw_vehicles, $post_type );
 
 		if ( $custom_sort ) {
@@ -448,6 +695,27 @@ class Intice_Rest implements Theme_Component {
 			return $last_error;
 		}
 
+		return $this->assemble_feed_payload_from( $raw_vehicles );
+	}
+
+	/**
+	 * Build the flat feed shape from already-fetched new+used vehicle arrays —
+	 * pure, no cache/Nexus access, used by handle_rebuild_all() to assemble the
+	 * feed from data it already holds in memory.
+	 *
+	 * @param array $new_vehicles  Raw Intice vehicle arrays, condition=new.
+	 * @param array $used_vehicles Raw Intice vehicle arrays, condition=used.
+	 * @return array|\WP_Error
+	 */
+	private function assemble_feed_payload( array $new_vehicles, array $used_vehicles ) {
+		return $this->assemble_feed_payload_from( array_merge( $new_vehicles, $used_vehicles ) );
+	}
+
+	/**
+	 * @param array $raw_vehicles
+	 * @return array|\WP_Error
+	 */
+	private function assemble_feed_payload_from( array $raw_vehicles ) {
 		$vehicles = array();
 
 		foreach ( $raw_vehicles as $vehicle ) {
@@ -488,6 +756,19 @@ class Intice_Rest implements Theme_Component {
 		set_transient( $stale_key, $output, Intice_Api_Client::STALE_TTL );
 		Intice_Api_Client::track_key( $cache_key, $group, self::CACHE_TTL );
 		Intice_Api_Client::track_key( $stale_key, $group, Intice_Api_Client::STALE_TTL );
+	}
+
+	/**
+	 * Public entry to store_srp_cache() for callers outside this class
+	 * (handle_rebuild_all()'s commit phase).
+	 *
+	 * @param string $post_type
+	 * @param bool   $custom_sort
+	 * @param array  $output
+	 * @return void
+	 */
+	public function commit_srp( string $post_type, bool $custom_sort, array $output ): void {
+		$this->store_srp_cache( $post_type, $custom_sort, $output );
 	}
 
 	/**
