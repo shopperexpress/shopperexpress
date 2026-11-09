@@ -132,21 +132,23 @@ add_action( 'wp_enqueue_scripts', 'shopperexpress_enqueue_model_slider_assets' )
 /**
  * Enqueues a block's assets for the flexible content layout that renders it.
  *
- * The flexible page template (pages/template-flexible.php) renders each "content_blocks" row
- * through a plain template part, never through render_block() — so WordPress never sees the
- * block in post content and never auto-enqueues the style and view script register_block_type()
- * registered for it from block.json. This reaches the same handles that auto-enqueue would have
- * used, by name, for every layout actually present on the page.
+ * The flexible page template (pages/template-flexible.php) and 404.php both render flexible
+ * content rows through a plain template part, never through render_block() — so WordPress never
+ * sees the block in post content and never auto-enqueues the style and view script
+ * register_block_type() registered for it from block.json. This reaches the same handles that
+ * auto-enqueue would have used, by name, for every layout actually present on the page.
  *
  * Runs on wp_enqueue_scripts, before get_header() prints the <head>, so a style enqueued here
  * still lands before wp_head() rather than after the loop below it has already run.
  */
 function shopperexpress_enqueue_flexible_block_assets() {
-	if ( ! is_page_template( 'pages/template-flexible.php' ) ) {
+	if ( is_404() ) {
+		$rows = get_field( 'content_blocks_content_blocks', 'option' );
+	} elseif ( is_page_template( 'pages/template-flexible.php' ) ) {
+		$rows = get_field( 'content_blocks' );
+	} else {
 		return;
 	}
-
-	$rows = get_field( 'content_blocks' );
 
 	if ( ! $rows ) {
 		return;
