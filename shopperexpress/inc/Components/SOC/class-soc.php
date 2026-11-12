@@ -70,6 +70,7 @@ class SOC implements Theme_Component {
 		),
 	);
 
+
 	/**
 	 * Register the component.
 	 *
@@ -182,14 +183,53 @@ class SOC implements Theme_Component {
 		$module = $this->modules[ $active_slug ] ?? reset( $this->modules );
 		$data   = $module->collect();
 
-		$group_tabs = array_map(
-			fn( $slug ) => $this->modules[ $slug ],
-			array_filter( self::GROUPS[ $active_group ]['modules'], fn( $slug ) => isset( $this->modules[ $slug ] ) )
-		);
-
-		$modules = $this->modules;
-		// $active_slug, $active_group, $group_tabs, $module, $data, $modules are all available in the view scope.
+		$nav_groups = $this->build_nav_groups( $active_slug );
+		$modules    = $this->modules;
+		// $active_slug, $active_group, $nav_groups, $module, $data, $modules are all available in the view scope.
 		require get_template_directory() . '/inc/Components/SOC/views/dashboard.php';
+	}
+
+	/**
+	 * Build the full sidebar nav tree (every group + every registered module,
+	 * with real admin URLs) for the in-page sidebar. Pure display data —
+	 * doesn't change menu registration or routing, every link is a real
+	 * `?page=soc-{slug}` URL.
+	 *
+	 * @param string $active_slug Currently active module slug.
+	 * @return array{groups: array}
+	 */
+	private function build_nav_groups( string $active_slug ): array {
+		$groups = array();
+
+		foreach ( self::GROUPS as $group_key => $group ) {
+			$items = array();
+
+			foreach ( $group['modules'] as $module_slug ) {
+				if ( ! isset( $this->modules[ $module_slug ] ) ) {
+					continue;
+				}
+
+				$items[] = array(
+					'slug'   => $module_slug,
+					'label'  => $this->modules[ $module_slug ]->get_label(),
+					'icon'   => $this->modules[ $module_slug ]->get_icon(),
+					'url'    => admin_url( 'admin.php?page=soc-' . $module_slug ),
+					'active' => $module_slug === $active_slug,
+				);
+			}
+
+			$groups[] = array(
+				'key'    => $group_key,
+				'label'  => $group['label'],
+				'icon'   => $group['icon'],
+				'active' => in_array( $active_slug, $group['modules'], true ),
+				'items'  => $items,
+			);
+		}
+
+		return array(
+			'groups' => $groups,
+		);
 	}
 
 	/**
@@ -212,46 +252,33 @@ class SOC implements Theme_Component {
 	}
 
 	/**
-	 * Inject dashicon spans into the (visible) group submenu items, and hide
-	 * the non-primary module items from the sidebar — both purely visual, via
-	 * a small inline script. The underlying pages stay fully registered (see
-	 * register_menu()) so direct links to a non-primary module keep working;
-	 * only their `<li>` is hidden here.
+	 * Hide every SOC submenu `<li>` from the WP admin sidebar — purely
+	 * visual, via a small inline script. All module navigation now lives in
+	 * the in-page sidebar (see build_nav_groups() / views/dashboard.php), so
+	 * the native WP submenu flyout would just duplicate it. The underlying
+	 * pages stay fully registered (see register_menu()) so direct/deep links
+	 * to any module keep working and WP's access checks keep passing — only
+	 * the `<li>` is hidden here, leaving "Operation Center" as a single
+	 * top-level item with no visible flyout.
 	 *
 	 * @return void
 	 */
 	public function inject_submenu_icons(): void {
-		$icon_map    = array();
-		$hidden_slugs = array();
+		$hidden_slugs   = array();
+		$top_level_slug = 'soc-' . self::GROUPS['core']['modules'][0];
 
 		foreach ( self::GROUPS as $group ) {
-			foreach ( $group['modules'] as $i => $module_slug ) {
-				if ( 0 === $i ) {
-					$icon_map[ 'soc-' . $module_slug ] = $group['icon'];
-				} else {
-					$hidden_slugs[] = 'soc-' . $module_slug;
-				}
+			foreach ( $group['modules'] as $module_slug ) {
+				$hidden_slugs[] = 'soc-' . $module_slug;
 			}
 		}
 		?>
 		<script>
 		(function () {
-			var iconMap     = <?php echo wp_json_encode( $icon_map ); ?>;
-			var hiddenSlugs = <?php echo wp_json_encode( $hidden_slugs ); ?>;
+			var hiddenSlugs  = <?php echo wp_json_encode( $hidden_slugs ); ?>;
+			var topLevelSlug = <?php echo wp_json_encode( $top_level_slug ); ?>;
 
 			document.addEventListener('DOMContentLoaded', function () {
-				Object.keys(iconMap).forEach(function (page) {
-					var links = document.querySelectorAll(
-						'#adminmenu .wp-submenu a[href*="page=' + page + '"]'
-					);
-					links.forEach(function (link) {
-						var icon = document.createElement('span');
-						icon.className = 'dashicons ' + iconMap[page];
-						icon.style.cssText = 'font-size:16px;width:16px;height:16px;margin-right:6px;vertical-align:middle;line-height:1;';
-						link.insertBefore(icon, link.firstChild);
-					});
-				});
-
 				hiddenSlugs.forEach(function (page) {
 					var links = document.querySelectorAll(
 						'#adminmenu .wp-submenu a[href*="page=' + page + '"]'
@@ -263,6 +290,19 @@ class SOC implements Theme_Component {
 						}
 					});
 				});
+
+				// Every submenu <li> is now hidden, but the flyout container
+				// itself (.wp-submenu / .wp-submenu-wrap) still exists and WP
+				// would show it as an empty box on hover — hide it outright.
+				var topLink = document.querySelector(
+					'#adminmenu > li > a[href*="page=' + topLevelSlug + '"]'
+				);
+				var topItem = topLink && topLink.closest('li');
+				if (topItem) {
+					topItem.querySelectorAll('.wp-submenu, .wp-submenu-wrap').forEach(function (el) {
+						el.style.display = 'none';
+					});
+				}
 			});
 		}());
 		</script>

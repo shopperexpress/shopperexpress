@@ -37,6 +37,7 @@
   // Init
   // ----------------------------------------------------------------
   SOC.init = function () {
+    SOC.bindNav();
     SOC.bindRefresh();
     SOC.bindCronActions();
     SOC.bindCacheActions();
@@ -49,6 +50,26 @@
 
     SOC.bindLeadDelivery();
     SOC.bindGoogleReviews();
+  };
+
+  // ----------------------------------------------------------------
+  // Sidebar nav: collapsible groups.
+  // Pure UI — every item is still a real <a href>, no routing happens here.
+  // ----------------------------------------------------------------
+  SOC.bindNav = function () {
+    // Namespaced so reloadPanel()'s repeated SOC.init() calls replace the
+    // previous binding instead of stacking duplicates — without this, each
+    // panel reload (e.g. Refresh) adds another identical handler, so a click
+    // toggles the class twice and the accordion looks stuck.
+    const ns = '.socNav';
+    $(document).off(ns);
+
+    $(document).on('click' + ns, '[data-soc-nav-group] > .soc-nav__group-toggle', function () {
+      const $group = $(this).closest('[data-soc-nav-group]');
+      const isOpen = $group.hasClass('is-open');
+      $group.toggleClass('is-open', !isOpen);
+      $(this).attr('aria-expanded', isOpen ? 'false' : 'true');
+    });
   };
 
   // ----------------------------------------------------------------
