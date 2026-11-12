@@ -175,6 +175,32 @@ class JSON_LD implements Theme_Component {
 			'datePublished' => array( 'enabled' => true,  'acf_key' => '',               'static_value' => '' ),
 			'image'         => array( 'enabled' => true,  'acf_key' => 'featured_image', 'static_value' => '' ),
 		),
+		// Site-wide blocks — output in <head> on every page (not tied to a post type).
+		'organization_enabled'   => false,
+		'organization'           => array(
+			'name'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'url'       => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'logo'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'telephone' => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'street'    => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'city'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'state'     => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'zip'       => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'country'   => array( 'enabled' => true,  'acf_key' => '', 'static_value' => 'US' ),
+			'sameAs'    => array( 'enabled' => false, 'acf_key' => '', 'static_value' => '' ),
+		),
+		'local_business_enabled' => false,
+		'local_business'         => array(
+			'name'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'url'       => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'image'     => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'telephone' => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'street'    => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'city'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'state'     => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'zip'       => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),
+			'country'   => array( 'enabled' => true,  'acf_key' => '', 'static_value' => 'US' ),
+		),
 	);
 
 	/**
@@ -225,6 +251,7 @@ class JSON_LD implements Theme_Component {
 	 */
 	public function register(): void {
 		add_action( 'wp_head', array( $this, 'render_json' ) );
+		add_action( 'wp_head', array( $this, 'render_site_schemas' ), 4 );
 	}
 
 	// ── Config ────────────────────────────────────────────────────────────────
@@ -376,6 +403,208 @@ class JSON_LD implements Theme_Component {
 		}
 		// phpcs:ignore
 		echo $this->get_json();
+	}
+
+	/**
+	 * Render site-wide Organization / LocalBusiness JSON-LD, independent of
+	 * render_json()'s post-type gating — these are dealer-level blocks meant
+	 * to appear on every page, not just VDPs/offers/archives. Builder-mode
+	 * only; each type has its own enable switch since there is no post to
+	 * gate on.
+	 *
+	 * @return void
+	 */
+	public function render_site_schemas(): void {
+		if ( ! self::is_builder_mode() ) {
+			return;
+		}
+
+		$config = self::get_config();
+
+		if ( ! empty( $config['organization_enabled'] ) ) {
+			// phpcs:ignore
+			echo $this->build_organization_json( $config['organization'] ?? array() );
+		}
+
+		if ( ! empty( $config['local_business_enabled'] ) ) {
+			// phpcs:ignore
+			echo $this->build_local_business_json( $config['local_business'] ?? array() );
+		}
+	}
+
+	/**
+	 * Read a site-wide (dealer-level) builder field: static_value first, then
+	 * an ACF Options-page field at acf_key, falling back to $default.
+	 *
+	 * @param array  $p       Normalised prop config from prop_cfg().
+	 * @param string $default Fallback value when neither static_value nor acf_key resolve.
+	 * @return string
+	 */
+	private static function read_site_prop( array $p, string $default = '' ): string {
+		if ( '' !== $p['static_value'] ) {
+			return wp_strip_all_tags( $p['static_value'] );
+		}
+		if ( '' !== $p['acf_key'] && function_exists( 'get_field' ) ) {
+			$val = get_field( $p['acf_key'], 'option' );
+			if ( $val ) {
+				return wp_strip_all_tags( (string) $val );
+			}
+		}
+		return $default;
+	}
+
+	/**
+	 * Build a PostalAddress fragment shared by Organization / LocalBusiness.
+	 *
+	 * @param array $cfg Organization or local_business sub-config.
+	 * @return array Empty array when no address fields resolve.
+	 */
+	private static function build_site_address( array $cfg ): array {
+		$street  = self::read_site_prop( self::prop_cfg( $cfg, 'street' ) );
+		$city    = self::read_site_prop( self::prop_cfg( $cfg, 'city' ) );
+		$state   = self::read_site_prop( self::prop_cfg( $cfg, 'state' ) );
+		$zip     = self::read_site_prop( self::prop_cfg( $cfg, 'zip' ) );
+		$country = self::read_site_prop( self::prop_cfg( $cfg, 'country' ) );
+
+		if ( ! $street && ! $city && ! $state && ! $zip && ! $country ) {
+			return array();
+		}
+
+		$address = array( '@type' => 'PostalAddress' );
+		if ( $street ) {
+			$address['streetAddress'] = $street;
+		}
+		if ( $city ) {
+			$address['addressLocality'] = $city;
+		}
+		if ( $state ) {
+			$address['addressRegion'] = $state;
+		}
+		if ( $zip ) {
+			$address['postalCode'] = $zip;
+		}
+		if ( $country ) {
+			$address['addressCountry'] = $country;
+		}
+		return $address;
+	}
+
+	/**
+	 * Build the site-wide Organization JSON-LD block.
+	 *
+	 * @param array $ocfg 'organization' sub-config from get_config().
+	 * @return string
+	 */
+	private function build_organization_json( array $ocfg ): string {
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@type'    => 'Organization',
+			'@id'      => home_url( '/' ) . '#organization',
+		);
+
+		$p = self::prop_cfg( $ocfg, 'name' );
+		if ( $p['enabled'] ) {
+			$name = self::read_site_prop( $p, get_bloginfo( 'name' ) );
+			if ( $name ) {
+				$schema['name'] = $name;
+			}
+		}
+
+		$p = self::prop_cfg( $ocfg, 'url' );
+		if ( $p['enabled'] ) {
+			$url = self::read_site_prop( $p, home_url( '/' ) );
+			if ( $url ) {
+				$schema['url'] = esc_url( $url );
+			}
+		}
+
+		$p = self::prop_cfg( $ocfg, 'logo' );
+		if ( $p['enabled'] ) {
+			$logo = self::read_site_prop( $p );
+			if ( $logo ) {
+				$schema['logo'] = esc_url( $logo );
+			}
+		}
+
+		$p = self::prop_cfg( $ocfg, 'telephone' );
+		if ( $p['enabled'] ) {
+			$phone = self::read_site_prop( $p );
+			if ( $phone ) {
+				$schema['telephone'] = $phone;
+			}
+		}
+
+		$address = self::build_site_address( $ocfg );
+		if ( ! empty( $address ) ) {
+			$schema['address'] = $address;
+		}
+
+		$p = self::prop_cfg( $ocfg, 'sameAs' );
+		if ( $p['enabled'] ) {
+			$same_as = self::read_site_prop( $p );
+			if ( $same_as ) {
+				$schema['sameAs'] = array_values( array_filter( array_map( 'trim', explode( ',', $same_as ) ) ) );
+			}
+		}
+
+		$json = wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
+
+		return '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>' . "\n";
+	}
+
+	/**
+	 * Build the site-wide LocalBusiness JSON-LD block.
+	 *
+	 * @param array $lcfg 'local_business' sub-config from get_config().
+	 * @return string
+	 */
+	private function build_local_business_json( array $lcfg ): string {
+		$schema = array(
+			'@context' => 'https://schema.org',
+			'@type'    => 'LocalBusiness',
+			'@id'      => home_url( '/' ) . '#localbusiness',
+		);
+
+		$p = self::prop_cfg( $lcfg, 'name' );
+		if ( $p['enabled'] ) {
+			$name = self::read_site_prop( $p, get_bloginfo( 'name' ) );
+			if ( $name ) {
+				$schema['name'] = $name;
+			}
+		}
+
+		$p = self::prop_cfg( $lcfg, 'url' );
+		if ( $p['enabled'] ) {
+			$url = self::read_site_prop( $p, home_url( '/' ) );
+			if ( $url ) {
+				$schema['url'] = esc_url( $url );
+			}
+		}
+
+		$p = self::prop_cfg( $lcfg, 'image' );
+		if ( $p['enabled'] ) {
+			$image = self::read_site_prop( $p );
+			if ( $image ) {
+				$schema['image'] = esc_url( $image );
+			}
+		}
+
+		$p = self::prop_cfg( $lcfg, 'telephone' );
+		if ( $p['enabled'] ) {
+			$phone = self::read_site_prop( $p );
+			if ( $phone ) {
+				$schema['telephone'] = $phone;
+			}
+		}
+
+		$address = self::build_site_address( $lcfg );
+		if ( ! empty( $address ) ) {
+			$schema['address'] = $address;
+		}
+
+		$json = wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT );
+
+		return '<script type="application/ld+json">' . "\n" . $json . "\n" . '</script>' . "\n";
 	}
 
 	/**
@@ -878,11 +1107,18 @@ class JSON_LD implements Theme_Component {
 		if ( $p['enabled'] ) {
 			if ( '' !== $p['static_value'] ) {
 				$img = $p['static_value'];
-			} else {
-				$img = $v[ $p['acf_key'] ?: 'images' ][0] ?? ( $v['image'] ?? '' );
+			} elseif ( '' !== $p['acf_key'] ) {
+				$img = $v[ $p['acf_key'] ] ?? '';
 				if ( is_array( $img ) ) {
-					$img = $img['url'] ?? '';
+					$img = $img[0]['url'] ?? ( $img['url'] ?? '' );
 				}
+			} else {
+				// $v['images'] is Nexus's own raw active_image_list, which is not
+				// reliably populated — resolve through the same gallery helper the
+				// VDP template and OG/Twitter image use (payload.use_images_list →
+				// images_primary/images_srp, falling back to images/image/thumb).
+				$gallery = \App\resolve_vehicle_gallery( $v );
+				$img     = $gallery[0]['url'] ?? '';
 			}
 			if ( $img ) {
 				$schema['image'] = esc_url( $img );
@@ -1782,7 +2018,8 @@ class JSON_LD implements Theme_Component {
 			if ( $prop_on( 'vehicleIdentificationNumber' ) && $vin ) {
 				$vehicle['vehicleIdentificationNumber'] = $item_sv( 'vehicleIdentificationNumber', $vin );
 			}
-			$photo = $v['thumb'] ?? $v['image'] ?? '';
+			$gallery = \App\resolve_vehicle_gallery( $v );
+			$photo   = $v['thumb'] ?? ( $gallery[0]['url'] ?? '' );
 			if ( $prop_on( 'image' ) && $photo ) {
 				$vehicle['image'] = esc_url( $item_sv( 'image', $photo ) );
 			}

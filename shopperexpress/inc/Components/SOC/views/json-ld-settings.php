@@ -13,6 +13,8 @@ $post_types    = $data['post_types'] ?? array();
 $archive_limit = (int) ( $data['archive_limit'] ?? 24 );
 $vcfg          = $data['vehicle_listings'] ?? $data['vehicle'] ?? array();
 $vcfg_used     = $data['vehicle_used_listings'] ?? $data['vehicle'] ?? array();
+$org_enabled   = ! empty( $data['organization_enabled'] );
+$lb_enabled    = ! empty( $data['local_business_enabled'] );
 
 $all_post_types = array(
 	'listings'           => 'listings (New)',
@@ -1376,6 +1378,34 @@ select.jl-osub-field { cursor: pointer; }
 			</div>
 
 			<div class="jl-sb-divider"></div>
+			<div class="jl-sb-section">Site-wide Schema</div>
+			<div class="jl-sb-hint">Dealer-level blocks output on every page, independent of post type</div>
+
+			<div class="jl-sb-item" data-schema="organization">
+				<div class="jl-sb-icon">🏢</div>
+				<div class="jl-sb-info">
+					<div class="jl-sb-name">Organization</div>
+					<div class="jl-sb-type">schema.org/Organization</div>
+				</div>
+			</div>
+			<label class="jl-global-row" style="padding-left:34px;">
+				<input type="checkbox" id="jl-org-enabled" <?php checked( $org_enabled ); ?>>
+				Output Organization schema site-wide
+			</label>
+
+			<div class="jl-sb-item" data-schema="local-business">
+				<div class="jl-sb-icon">📍</div>
+				<div class="jl-sb-info">
+					<div class="jl-sb-name">Local Business</div>
+					<div class="jl-sb-type">schema.org/LocalBusiness</div>
+				</div>
+			</div>
+			<label class="jl-global-row" style="padding-left:34px;">
+				<input type="checkbox" id="jl-lb-enabled" <?php checked( $lb_enabled ); ?>>
+				Output LocalBusiness schema site-wide
+			</label>
+
+			<div class="jl-sb-divider"></div>
 			<div class="jl-sb-section">Global Output</div>
 			<div class="jl-sb-hint">Which post types get JSON-LD injected in <code>&lt;head&gt;</code></div>
 
@@ -2003,6 +2033,148 @@ select.jl-osub-field { cursor: pointer; }
 							'schema'      => 'image',
 							'type'        => 'URL',
 							'source'      => 'ACF: featured_image',
+							'recommended' => true,
+						),
+					),
+				),
+				'organization'              => array(
+					'label'       => 'Organization',
+					'icon'        => '🏢',
+					'schema_type' => 'Organization',
+					'cfg_key'     => 'organization',
+					'desc'        => 'Site-wide Organization JSON-LD, output in <head> on every page via the "Output Organization schema site-wide" toggle in the sidebar.',
+					'props'       => array(
+						array(
+							'key'      => 'name',
+							'schema'   => 'name',
+							'type'     => 'String',
+							'source'   => 'Auto: site name',
+							'required' => true,
+						),
+						array(
+							'key'         => 'url',
+							'schema'      => 'url',
+							'type'        => 'URL',
+							'source'      => 'Auto: home URL',
+							'recommended' => true,
+						),
+						array(
+							'key'         => 'logo',
+							'schema'      => 'logo',
+							'type'        => 'URL',
+							'source'      => 'Static: logo URL',
+							'recommended' => true,
+						),
+						array(
+							'key'         => 'telephone',
+							'schema'      => 'telephone',
+							'type'        => 'String',
+							'source'      => 'Static text',
+							'recommended' => true,
+						),
+						array(
+							'key'    => 'street',
+							'schema' => 'address → streetAddress',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'city',
+							'schema' => 'address → addressLocality',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'state',
+							'schema' => 'address → addressRegion',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'zip',
+							'schema' => 'address → postalCode',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'         => 'country',
+							'schema'      => 'address → addressCountry',
+							'type'        => 'String',
+							'source'      => 'Static: US',
+							'recommended' => true,
+						),
+						array(
+							'key'    => 'sameAs',
+							'schema' => 'sameAs',
+							'type'   => 'String',
+							'source' => 'Static: comma-separated social/profile URLs',
+						),
+					),
+				),
+				'local-business'            => array(
+					'label'       => 'Local Business',
+					'icon'        => '📍',
+					'schema_type' => 'LocalBusiness',
+					'cfg_key'     => 'local_business',
+					'desc'        => 'Site-wide LocalBusiness JSON-LD, output in <head> on every page via the "Output LocalBusiness schema site-wide" toggle in the sidebar.',
+					'props'       => array(
+						array(
+							'key'      => 'name',
+							'schema'   => 'name',
+							'type'     => 'String',
+							'source'   => 'Auto: site name',
+							'required' => true,
+						),
+						array(
+							'key'         => 'url',
+							'schema'      => 'url',
+							'type'        => 'URL',
+							'source'      => 'Auto: home URL',
+							'recommended' => true,
+						),
+						array(
+							'key'         => 'image',
+							'schema'      => 'image',
+							'type'        => 'URL',
+							'source'      => 'Static: image URL',
+							'recommended' => true,
+						),
+						array(
+							'key'         => 'telephone',
+							'schema'      => 'telephone',
+							'type'        => 'String',
+							'source'      => 'Static text',
+							'recommended' => true,
+						),
+						array(
+							'key'    => 'street',
+							'schema' => 'address → streetAddress',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'city',
+							'schema' => 'address → addressLocality',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'state',
+							'schema' => 'address → addressRegion',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'    => 'zip',
+							'schema' => 'address → postalCode',
+							'type'   => 'String',
+							'source' => 'Static text',
+						),
+						array(
+							'key'         => 'country',
+							'schema'      => 'address → addressCountry',
+							'type'        => 'String',
+							'source'      => 'Static: US',
 							'recommended' => true,
 						),
 					),
@@ -2771,7 +2943,8 @@ select.jl-osub-field { cursor: pointer; }
 			'research-srp':'research_srp',
 			'archive-srp-listings':'archive_srp_listings','archive-srp-used-listings':'archive_srp_used_listings',
 			'srp-item-listings':'srp_item_listings','srp-item-used-listings':'srp_item_used_listings',
-			'research':'research'
+			'research':'research',
+			'organization':'organization','local-business':'local_business'
 		};
 		const nonVehicle = {};
 		Object.entries(slugToKey).forEach(([slug, key]) => {
@@ -2790,10 +2963,14 @@ select.jl-osub-field { cursor: pointer; }
 			else srp_item_offers_sub_used_listings[k] = v;
 		});
 
+		const organization_enabled   = document.getElementById('jl-org-enabled')?.checked || false;
+		const local_business_enabled = document.getElementById('jl-lb-enabled')?.checked || false;
+
 		return { mode, post_types: postTypes, archive_limit: archiveLimit,
 			vehicle: vehicle_listings, /* backward compat */
 			vehicle_listings, vehicle_used_listings,
 			custom_properties, srp_item_offers_sub_listings, srp_item_offers_sub_used_listings,
+			organization_enabled, local_business_enabled,
 			...nonVehicle };
 	}
 
@@ -3187,6 +3364,32 @@ select.jl-osub-field { cursor: pointer; }
 			if (isOn(props.datePublished)) s.datePublished = rv(props.datePublished,  '2024-01-15');
 			if (isOn(props.image))         s.image         = rv(props.image,          SITE + '/media/camry.webp');
 			s.publisher = { '@type':'Organization', 'name': DLRNAME, 'url': SITE + '/' };
+			return s;
+		}
+
+		/* ── Organization / LocalBusiness (site-wide) ── */
+		if (schemaType === 'organization' || schemaType === 'local-business') {
+			const isLB = schemaType === 'local-business';
+			const s = { '@context':'https://schema.org', '@type': isLB ? 'LocalBusiness' : 'Organization' };
+			if (isOn(props.name))      s.name      = rv(props.name,      DLRNAME);
+			if (isOn(props.url))       s.url       = rv(props.url,       SITE + '/');
+			if (isLB) {
+				if (isOn(props.image)) s.image = rv(props.image, SITE + '/media/storefront.webp');
+			} else {
+				if (isOn(props.logo))  s.logo  = rv(props.logo,  SITE + '/media/logo.webp');
+			}
+			if (isOn(props.telephone)) s.telephone = rv(props.telephone, '(555) 555-0100');
+			const addr = {};
+			if (isOn(props.street))  addr.streetAddress   = rv(props.street,  '123 Main St');
+			if (isOn(props.city))    addr.addressLocality = rv(props.city,    'Springfield');
+			if (isOn(props.state))   addr.addressRegion   = rv(props.state,   'IL');
+			if (isOn(props.zip))     addr.postalCode      = rv(props.zip,     '62701');
+			if (isOn(props.country)) addr.addressCountry  = rv(props.country, 'US');
+			if (Object.keys(addr).length) s.address = { '@type':'PostalAddress', ...addr };
+			if (!isLB && isOn(props.sameAs)) {
+				const raw = rv(props.sameAs, '');
+				if (raw) s.sameAs = raw.split(',').map(v => v.trim()).filter(Boolean);
+			}
 			return s;
 		}
 

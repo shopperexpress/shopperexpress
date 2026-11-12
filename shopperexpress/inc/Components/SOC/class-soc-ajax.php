@@ -1046,6 +1046,10 @@ class SOC_Ajax {
 		// Sanitize archive limit.
 		$archive_limit = max( 1, min( 100, (int) ( $input['archive_limit'] ?? 24 ) ) );
 
+		// Sanitize site-wide schema enable switches.
+		$organization_enabled   = ! empty( $input['organization_enabled'] );
+		$local_business_enabled = ! empty( $input['local_business_enabled'] );
+
 		// Sanitize vehicle prop config (each prop can be bool or {enabled,acf_key,static_value}).
 		$allowed_props = array(
 			'name', 'description', 'image', 'brand', 'model', 'vehicleConfiguration',
@@ -1111,6 +1115,7 @@ class SOC_Ajax {
 			'archive_srp_listings', 'archive_srp_used_listings',
 			'lease_offer_srp', 'finance_offer_srp', 'conditional_offer_srp', 'service_offer_srp',
 			'research_srp',
+			'organization', 'local_business',
 		);
 		$non_vehicle_cfg = array();
 		foreach ( $non_vehicle_types as $type_key ) {
@@ -1183,11 +1188,13 @@ class SOC_Ajax {
 
 		$config = array_merge(
 			array(
-				'mode'              => $mode,
-				'post_types'        => $post_types,
-				'archive_limit'     => $archive_limit,
-				'vehicle'           => $vehicle,
-				'custom_properties' => $custom_properties,
+				'mode'                    => $mode,
+				'post_types'              => $post_types,
+				'archive_limit'           => $archive_limit,
+				'vehicle'                 => $vehicle,
+				'custom_properties'       => $custom_properties,
+				'organization_enabled'    => $organization_enabled,
+				'local_business_enabled'  => $local_business_enabled,
 			),
 			$non_vehicle_cfg,
 			$type_specific_vehicle,
