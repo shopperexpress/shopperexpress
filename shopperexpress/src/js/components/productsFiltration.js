@@ -66,6 +66,17 @@ export default function initProductsFiltration() {
             '<button class="slick-control slick-next slick-arrow" aria-label="Next"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M504-480 348-636q-11-11-11-28t11-28q11-11 28-11t28 11l184 184q6 6 8.5 13t2.5 15q0 8-2.5 15t-8.5 13L404-268q-11 11-28 11t-28-11q-11-11-11-28t11-28l156-156Z"/></svg></button>',
           focusOnSelect: true,
         });
+
+        // Grid/subgrid card layouts can resize the holder after images load (slick only
+        // recalculates on window resize otherwise), leaving slides mis-sized until the
+        // user manually resizes the browser.
+        if (typeof ResizeObserver !== 'undefined') {
+          const sliderResizeObserver = new ResizeObserver(function () {
+            slider.slick('setPosition');
+          });
+
+          sliderResizeObserver.observe(holder[0]);
+        }
       }
     });
   }

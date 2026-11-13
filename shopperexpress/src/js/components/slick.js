@@ -63,6 +63,17 @@ export default function initSlickCarousel() {
       focusOnSelect: true,
     });
 
+    // Grid/subgrid card layouts can resize the holder after images load (slick only
+    // recalculates on window resize otherwise), leaving slides mis-sized until the
+    // user manually resizes the browser.
+    if (typeof ResizeObserver !== 'undefined') {
+      const sliderResizeObserver = new ResizeObserver(function () {
+        slider.slick('setPosition');
+      });
+
+      sliderResizeObserver.observe(holder[0]);
+    }
+
     // visible area is the holder's parent: .slider-nav-wrap or .detail-slider-nav without arrow paddings
     function getVisibleWidth() {
       return sliderHolder.parent().width() || thumbsSlider.outerWidth();
