@@ -63,18 +63,12 @@ if ( $place_id ) :
 	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id, '', '', $keyword_filter, $min_reviews_count );
 
 	if ( ! is_wp_error( $reviews_data ) && ! empty( $reviews_data['reviews'] ) ) :
-		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
-		$dealer_name = wp_strip_all_tags( get_field( 'dealer_name', 'options' ) ?: get_bloginfo( 'name' ) );
-		$dealer_url  = esc_url( get_field( 'dealer_url', 'options' ) ?: home_url( '/' ) );
+		// The AutoDealer node itself is provided by the "Rich Snippet Auto Dealer" Code
+		// Snippets entry, which shares this same @id — only the Review nodes are emitted
+		// here to avoid a duplicate, redundant AutoDealer definition in the page's JSON-LD.
+		$dealer_id = esc_url( home_url( '/' ) ) . '#dealer';
 
-		$graph = array(
-			array(
-				'@type' => 'AutoDealer',
-				'@id'   => $dealer_id,
-				'name'  => $dealer_name,
-				'url'   => $dealer_url,
-			),
-		);
+		$graph = array();
 
 		foreach ( $reviews_data['reviews'] as $_i => $_review ) {
 			$_published = $_review['publishTime'] ?? '';
