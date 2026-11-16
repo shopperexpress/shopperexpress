@@ -4904,6 +4904,30 @@
                             "preview_size": "medium"
                         },
                         {
+                            "key": "field_7c1e2a9b4d501",
+                            "label": "Banner Engagement",
+                            "name": "banner_engagement",
+                            "aria-label": "",
+                            "type": "button_group",
+                            "instructions": "Choose what happens when the banner is clicked. Existing banners with a URL keep working as \"URL\".",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "none": "None",
+                                "url": "URL",
+                                "call": "Click to Call"
+                            },
+                            "default_value": "",
+                            "return_format": "value",
+                            "allow_null": 0,
+                            "layout": "horizontal"
+                        },
+                        {
                             "key": "field_6711332eb8721",
                             "label": "Url",
                             "name": "url",
@@ -4911,7 +4935,15 @@
                             "type": "url",
                             "instructions": "",
                             "required": 0,
-                            "conditional_logic": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_7c1e2a9b4d501",
+                                        "operator": "==",
+                                        "value": "url"
+                                    }
+                                ]
+                            ],
                             "wrapper": {
                                 "width": "70",
                                 "class": "",
@@ -4928,7 +4960,15 @@
                             "type": "true_false",
                             "instructions": "",
                             "required": 0,
-                            "conditional_logic": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_7c1e2a9b4d501",
+                                        "operator": "==",
+                                        "value": "url"
+                                    }
+                                ]
+                            ],
                             "wrapper": {
                                 "width": "30",
                                 "class": "",
@@ -4939,6 +4979,34 @@
                             "ui_on_text": "",
                             "ui_off_text": "",
                             "ui": 1
+                        },
+                        {
+                            "key": "field_7c1e2a9b4d502",
+                            "label": "Phone Number",
+                            "name": "banner_phone",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Shown nowhere on the banner; opens the phone dialer on tap, e.g. (555) 123-4567 or +15551234567.",
+                            "required": 0,
+                            "conditional_logic": [
+                                [
+                                    {
+                                        "field": "field_7c1e2a9b4d501",
+                                        "operator": "==",
+                                        "value": "call"
+                                    }
+                                ]
+                            ],
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "(555) 123-4567",
+                            "prepend": "",
+                            "append": ""
                         },
                         {
                             "key": "field_1a4df59c36b6d",

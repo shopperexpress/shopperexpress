@@ -32,6 +32,8 @@ get_template_part(
 		'remove_paddings' => get_field( 'remove_paddings' ),
 		'url'             => get_field( 'url' ),
 		'open_in_new_tab' => get_field( 'open_in_new_tab' ),
+		'engagement'      => get_field( 'banner_engagement' ),
+		'phone'           => get_field( 'banner_phone' ),
 		'anchor'          => $block['anchor'] ?? '',
 	)
 );

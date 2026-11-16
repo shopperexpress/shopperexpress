@@ -17,6 +17,8 @@ get_template_part(
 		'remove_paddings' => get_sub_field( 'remove_paddings' ),
 		'url'             => get_sub_field( 'url' ),
 		'open_in_new_tab' => get_sub_field( 'open_in_new_tab' ),
+		'engagement'      => get_sub_field( 'banner_engagement' ),
+		'phone'           => get_sub_field( 'banner_phone' ),
 		'anchor'          => get_sub_field( 'anchor' ),
 	)
 );
