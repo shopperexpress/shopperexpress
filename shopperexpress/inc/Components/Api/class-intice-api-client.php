@@ -24,6 +24,7 @@ class Intice_Api_Client {
 	const CACHE_TTL_VEHICLES = 10 * MINUTE_IN_SECONDS;
 	const CACHE_TTL_VEHICLE  = 15 * MINUTE_IN_SECONDS;
 	const CACHE_TTL_META     = 30 * MINUTE_IN_SECONDS;
+	const CACHE_TTL_TEAM     = 30 * MINUTE_IN_SECONDS;
 	const CACHE_PREFIX       = 'intice_api_';
 	const CACHE_PREFIX_STALE = 'intice_stale_';
 	const STALE_TTL          = 2 * HOUR_IN_SECONDS;
@@ -253,6 +254,46 @@ class Intice_Api_Client {
 	}
 
 	/**
+	 * Get the site's team members (and category list) from Nexus.
+	 *
+	 * @return array|\WP_Error Decoded response array or WP_Error on failure.
+	 */
+	public function get_team_members() {
+		$live_key  = self::CACHE_PREFIX . 'team';
+		$stale_key = self::CACHE_PREFIX_STALE . 'team';
+
+		if ( ! self::$regenerating ) {
+			if ( ! $this->is_cache_enabled() ) {
+				return $this->request( 'GET', '/api/v1/team-members', array(), array(), self::TIMEOUT_LIVE );
+			}
+
+			$cached = get_transient( $live_key );
+			if ( false !== $cached ) {
+				return $cached;
+			}
+
+			$stale = get_transient( $stale_key );
+			if ( false !== $stale ) {
+				return $stale;
+			}
+		}
+
+		$response = $this->request( 'GET', '/api/v1/team-members', array(), array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
+
+		if ( is_wp_error( $response ) ) {
+			$stale = get_transient( $stale_key );
+
+			return false !== $stale ? $stale : $response;
+		}
+
+		if ( self::$regenerating || $this->is_cache_enabled() ) {
+			$this->store( $live_key, $stale_key, 'team', self::CACHE_TTL_TEAM, $response );
+		}
+
+		return $response;
+	}
+
+	/**
 	 * Get a matching-vehicle count only, without fetching full vehicle payloads.
 	 *
 	 * Same filters as get_vehicles() (make, model, trim, condition, year_from,
@@ -357,6 +398,50 @@ class Intice_Api_Client {
 		}
 
 		return $deleted;
+	}
+
+	/**
+	 * Hard-delete every live AND stale Team Members cache entry — unlike
+	 * flush_group(), nothing is kept as a stale fallback, so a mismatched
+	 * snapshot (e.g. a stale copy fetched under a since-changed API key,
+	 * pointing at the wrong Nexus site) can never keep being served after an
+	 * explicit flush. purge_group() matches by registry group regardless of
+	 * key prefix — a prefix-restricted filter here previously skipped
+	 * already-stale entries, so "Flush" silently no-op'd on exactly the case
+	 * it needed to fix.
+	 *
+	 * Schedules its OWN dedicated regen cron (intice_team_cache_regen)
+	 * instead of the generic intice_cache_regen one — that generic cron also
+	 * force-refetches vehicles/meta, which would make every Team Members
+	 * flush silently hit the vehicles endpoint too.
+	 *
+	 * @return int Number of entries deleted (live + stale combined).
+	 */
+	public function flush_team_cache(): int {
+		$deleted = self::purge_group( 'team' );
+
+		if ( ! wp_next_scheduled( 'intice_team_cache_regen' ) ) {
+			wp_schedule_single_event( time(), 'intice_team_cache_regen' );
+		}
+
+		spawn_cron();
+
+		return $deleted;
+	}
+
+	/**
+	 * Regenerate the Team Members cache entry (called by WP cron after
+	 * flush_team_cache()). Uses $regenerating to bypass stale fallback and
+	 * force a fresh API call.
+	 *
+	 * @return void
+	 */
+	public function regen_team_cache(): void {
+		self::$regenerating = true;
+
+		$this->get_team_members();
+
+		self::$regenerating = false;
 	}
 
 	/**

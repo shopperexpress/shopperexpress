@@ -59,6 +59,7 @@ class Intice_Rest implements Theme_Component {
 		add_action( 'intice_cache_regen', array( $this, 'handle_cache_regen' ) );
 		add_action( 'intice_srp_cache_regen', array( $this, 'handle_srp_cache_regen' ), 10, 2 );
 		add_action( 'intice_vdp_cache_regen', array( $this, 'handle_vdp_cache_regen' ) );
+		add_action( 'intice_team_cache_regen', array( $this, 'handle_team_cache_regen' ) );
 		add_action( 'intice_cache_rebuild_all', array( $this, 'handle_rebuild_all' ) );
 		add_action( 'acf/save_post', array( $this, 'maybe_flush_custom_sort_cache' ), 20 );
 	}
@@ -101,6 +102,15 @@ class Intice_Rest implements Theme_Component {
 	 */
 	public function handle_vdp_cache_regen( string $vin ): void {
 		Intice_Api_Client::instance()->regen_vehicle_cache( $vin );
+	}
+
+	/**
+	 * WP cron callback: regenerate the Team Members cache entry.
+	 *
+	 * @return void
+	 */
+	public function handle_team_cache_regen(): void {
+		Intice_Api_Client::instance()->regen_team_cache();
 	}
 
 	/**
@@ -156,15 +166,29 @@ class Intice_Rest implements Theme_Component {
 	/**
 	 * POST /wp-json/v1/intice/cache/refresh
 	 *
-	 * Called by Nexus right after an import run finishes for this site. Queues
-	 * the atomic "rebuild all" job (see queue_rebuild_all()/handle_rebuild_all())
-	 * instead of flushing anything here — visitors keep seeing exactly what
-	 * they were seeing until every group has been fetched and rebuilt
-	 * successfully, at which point the whole set flips to new data in one pass.
+	 * Called by Nexus right after an import run finishes for this site (and,
+	 * separately, after a Team Members/Categories change — see
+	 * App\Filament\Pages\TeamMembers::notifyTeamCacheRefresh() on the Nexus
+	 * side). With no body (or scope != 'team') this queues the atomic
+	 * "rebuild all" job (see queue_rebuild_all()/handle_rebuild_all()) —
+	 * visitors keep seeing exactly what they were seeing until every group
+	 * has been fetched and rebuilt successfully. With {"scope":"team"} it
+	 * flushes ONLY the Team Members cache group, leaving vehicle/SRP caches
+	 * untouched — a team edit must never trigger a full vehicle refetch.
 	 *
+	 * @param \WP_REST_Request $request
 	 * @return \WP_REST_Response
 	 */
-	public function handle_cache_refresh(): \WP_REST_Response {
+	public function handle_cache_refresh( \WP_REST_Request $request ): \WP_REST_Response {
+		if ( 'team' === $request->get_param( 'scope' ) ) {
+			$deleted = Intice_Api_Client::instance()->flush_team_cache();
+
+			Api_Settings::mark_cache_cleared( array( 'team' ), Api_Settings::CLEARED_BY_IMPORT );
+			SOC_Logger::write( 'cache', 'Intice Team Members cache flushed after Nexus update.' );
+
+			return rest_ensure_response( array( 'queued' => true, 'deleted' => $deleted ) );
+		}
+
 		$queued = $this->queue_rebuild_all();
 
 		SOC_Logger::write(

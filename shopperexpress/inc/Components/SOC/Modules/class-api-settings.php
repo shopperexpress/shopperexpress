@@ -26,6 +26,7 @@ class Api_Settings implements SOC_Module {
 	const OPTION_CACHE_ENABLED    = 'shopperexpress_intice_cache_enabled';
 	const OPTION_VEHICLE_FILTERS  = 'shopperexpress_vehicle_filters';
 	const OPTION_CACHE_CLEARED_BY = 'shopperexpress_intice_cache_cleared_by';
+	const OPTION_TEAM_MODE        = 'shopperexpress_team_mode_enabled';
 
 	/**
 	 * Label recorded as the "cleared by" value when Nexus proactively refreshes
@@ -43,6 +44,7 @@ class Api_Settings implements SOC_Module {
 		'vehicles',
 		'vehicle',
 		'meta',
+		'team',
 		'srp_listings',
 		'srp_used-listings',
 		'srp_listings_custom',
@@ -146,16 +148,18 @@ class Api_Settings implements SOC_Module {
 		$api_key = get_option( self::OPTION_API_KEY, '' );
 
 		$api_mode      = (bool) get_option( self::OPTION_API_MODE, false );
+		$team_mode     = (bool) get_option( self::OPTION_TEAM_MODE, false );
 		$cache_enabled = (bool) get_option( self::OPTION_CACHE_ENABLED, true );
 
 		$data = array(
-			'api_mode_enabled' => $api_mode,
+			'api_mode_enabled'  => $api_mode,
+			'team_mode_enabled' => $team_mode,
 			'cache_enabled'    => $cache_enabled,
 			'api_url'          => $api_url,
 			'api_key_set'      => ! empty( $api_key ),
 			'api_key_masked'   => $this->mask_key( $api_key ),
 			'connection_test'  => null,
-			'api_cache'        => $api_mode ? $this->collect_api_cache() : null,
+			'api_cache'        => ( $api_mode || $team_mode ) ? $this->collect_api_cache() : null,
 			'listings_fields'  => $this->get_listings_fields_reference(),
 			'filters'          => array(
 				'listings'      => $this->get_filters( 'listings' ),
@@ -189,6 +193,29 @@ class Api_Settings implements SOC_Module {
 		update_option( self::OPTION_API_MODE, $enabled ? '1' : '0', false );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 		return $enabled;
+	}
+
+	/**
+	 * Toggle the "Team Members (Intice)" block feed on/off — independent of
+	 * OPTION_API_MODE, since a site can keep WordPress-driven listings while
+	 * still sourcing its team section from Nexus, or vice versa.
+	 *
+	 * @param bool $enabled
+	 * @return bool New state.
+	 */
+	public function set_team_mode( bool $enabled ): bool {
+		update_option( self::OPTION_TEAM_MODE, $enabled ? '1' : '0', false );
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+		return $enabled;
+	}
+
+	/**
+	 * Whether the "Team Section (Intice)" block is allowed to fetch/render.
+	 *
+	 * @return bool
+	 */
+	public static function is_team_mode_enabled(): bool {
+		return (bool) get_option( self::OPTION_TEAM_MODE, false );
 	}
 
 	/**
@@ -386,6 +413,12 @@ class Api_Settings implements SOC_Module {
 				'key'       => 'meta',
 				'label'     => 'Filters Meta',
 				'ttl'       => Intice_Api_Client::CACHE_TTL_META,
+				'api_group' => true,
+			),
+			array(
+				'key'       => 'team',
+				'label'     => 'Team Members',
+				'ttl'       => Intice_Api_Client::CACHE_TTL_TEAM,
 				'api_group' => true,
 			),
 			array(
@@ -618,7 +651,7 @@ class Api_Settings implements SOC_Module {
 	/**
 	 * Flush a specific cache group.
 	 *
-	 * @param string $group  'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
+	 * @param string $group  'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
 	 * @return int Deleted rows.
 	 */
 	public function flush_api_cache_group( string $group ): int {
@@ -646,6 +679,19 @@ class Api_Settings implements SOC_Module {
 			return $deleted;
 		}
 
+		if ( 'team' === $group ) {
+			// Dedicated flush — unlike flush_group(), this never schedules the
+			// generic intice_cache_regen cron (which also refetches vehicles/meta),
+			// so clearing Team Members never touches unrelated cache groups.
+			$deleted = Intice_Api_Client::instance()->flush_team_cache();
+
+			self::mark_cache_cleared( array( 'team' ), $by );
+			SOC_Logger::write( 'cache', "Intice API cache flushed [team] by: {$by}" );
+			SOC_Cache::forget( $this->get_slug(), 'data' );
+
+			return $deleted;
+		}
+
 		if ( ! in_array( $group, array( 'vehicles', 'vehicle', 'meta' ), true ) ) {
 			return 0;
 		}
@@ -666,7 +712,7 @@ class Api_Settings implements SOC_Module {
 	 * to wait for a real visitor to trigger the first fetch. Mirrors the group
 	 * mapping in flush_api_cache_group().
 	 *
-	 * @param string $group 'vehicles', 'meta', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
+	 * @param string $group 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
 	 * @return true|\WP_Error
 	 */
 	public function warm_api_cache_group( string $group ) {
@@ -690,6 +736,10 @@ class Api_Settings implements SOC_Module {
 		} elseif ( 'meta' === $group ) {
 			$result = Intice_Api_Client::force_fresh(
 				fn() => Intice_Api_Client::instance()->get_meta()
+			);
+		} elseif ( 'team' === $group ) {
+			$result = Intice_Api_Client::force_fresh(
+				fn() => Intice_Api_Client::instance()->get_team_members()
 			);
 		} elseif ( isset( $srp_map[ $group ] ) ) {
 			[ $post_type, $custom_sort ] = $srp_map[ $group ];

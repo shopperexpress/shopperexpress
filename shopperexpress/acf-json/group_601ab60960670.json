@@ -8194,6 +8194,175 @@
                         }
                     ]
                 },
+                "layout_9c2d3e4f5a000": {
+                    "key": "layout_9c2d3e4f5a000",
+                    "name": "team-section-intice",
+                    "label": "Team Section (Intice)",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_9c2d3e4f5a0001",
+                            "label": "Heading",
+                            "name": "heading",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Meet Our Team",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a0002",
+                            "label": "Description",
+                            "name": "description",
+                            "aria_label": "",
+                            "type": "textarea",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "rows": 4,
+                            "new_lines": ""
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a0014",
+                            "label": "Columns",
+                            "name": "columns",
+                            "aria_label": "",
+                            "type": "select",
+                            "instructions": "Number of team member cards per row on desktop.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "choices": {
+                                "3": "3",
+                                "4": "4",
+                                "5": "5"
+                            },
+                            "default_value": "3",
+                            "return_format": "value",
+                            "multiple": 0,
+                            "allow_null": 0,
+                            "ui": 0,
+                            "ajax": 0,
+                            "placeholder": ""
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a003",
+                            "label": "Members Source",
+                            "name": "members_source_note",
+                            "aria_label": "",
+                            "type": "message",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "message": "Members are pulled live from Intice Nexus (Content → Team Members) — nothing to configure here.",
+                            "new_lines": "wpautop",
+                            "esc_html": 0
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a0010",
+                            "label": "Footer Heading",
+                            "name": "footer_heading",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "Join Our Team",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a0011",
+                            "label": "Footer Button Text",
+                            "name": "footer_button_text",
+                            "aria_label": "",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "50",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "See Job Openings",
+                            "maxlength": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": ""
+                        },
+                        {
+                            "key": "field_9c2d3e4f5a0012",
+                            "label": "Footer Button URL",
+                            "name": "footer_button_url",
+                            "aria_label": "",
+                            "type": "link",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array"
+                        },
+                        {
+                            "key": "field_39cf96cd1ffe4",
+                            "label": "Anchor",
+                            "name": "anchor",
+                            "aria-label": "",
+                            "type": "text",
+                            "instructions": "Optional HTML id for this section (no #), so other links on the page can scroll directly to it.",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "maxlength": "",
+                            "placeholder": "e.g. team-section",
+                            "prepend": "",
+                            "append": ""
+                        }
+                    ]
+                },
                 "layout_9b0c1d2e3f000": {
                     "key": "layout_9b0c1d2e3f000",
                     "name": "reviews-section",

@@ -54,6 +54,7 @@ class SOC_Ajax {
 		'soc_vin_poll'           => 'handle_vin_poll',
 		'soc_im_toggle'               => 'handle_im_toggle',
 		'soc_api_mode_toggle'         => 'handle_api_mode_toggle',
+		'soc_team_mode_toggle'        => 'handle_team_mode_toggle',
 		'soc_api_save_credentials'    => 'handle_api_save_credentials',
 		'soc_api_test_connection'     => 'handle_api_test_connection',
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
@@ -641,6 +642,26 @@ class SOC_Ajax {
 	}
 
 	/**
+	 * Toggle the "Team Members (Intice)" block feed — independent of the
+	 * Listings API mode toggle above.
+	 */
+	private function handle_team_mode_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 0 );
+
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$new_state = $module->set_team_mode( $enabled );
+
+		SOC_Logger::write( 'general', 'Team Members mode toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
 	 * Save Intice API credentials (URL + key).
 	 */
 	private function handle_api_save_credentials(): void {
@@ -760,7 +781,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
@@ -785,7 +806,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'meta', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );

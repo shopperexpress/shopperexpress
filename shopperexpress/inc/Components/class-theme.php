@@ -72,8 +72,14 @@ class Theme {
 			\App\Components\Base\Google_Business_Reviews::class,
 			\App\Components\Base\Google_Reviews_Cron::class,
 			\App\Components\SOC\SOC::class,
-			...( \App\is_api_mode() ? array(
+			// Intice_Rest hosts the /wp-json/v1/intice/cache/refresh webhook route and the
+			// Team Members cache cron handlers — needed whenever Team Mode is on, even if
+			// Listings API Mode is off (the two toggles are independent). Intice_VDP is
+			// listings-only (VDP page rendering), so it stays gated on API Mode alone.
+			...( \App\is_api_mode() || \App\Components\SOC\Modules\Api_Settings::is_team_mode_enabled() ? array(
 				\App\Components\Api\Intice_Rest::class,
+			) : array() ),
+			...( \App\is_api_mode() ? array(
 				\App\Components\Api\Intice_VDP::class,
 			) : array() ),
 		);

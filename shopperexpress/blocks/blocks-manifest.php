@@ -1094,6 +1094,38 @@ return array(
 			),
 		),
 	),
+	'team-intice' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 2,
+		'name' => 'acf/team-section-intice',
+		'title' => 'Team Section (Intice)',
+		'description' => 'Team member grid sourced live from Intice Nexus (SOC → API Settings → Team Members) instead of ACF rows.',
+		'category' => 'custom-acf-blocks',
+		'icon' => 'groups',
+		'keywords' => array(
+			'team staff members intice nexus',
+		),
+		'style' => 'file:../team-section/build/style.css',
+		'viewScript' => 'file:../team-section/build/view.js',
+		'acf' => array(
+			'blockVersion' => 3,
+			'mode' => 'edit',
+			'renderTemplate' => 'block.php',
+		),
+		'supports' => array(
+			'align' => false,
+			'mode' => true,
+			'anchor' => true,
+		),
+		'example' => array(
+			'attributes' => array(
+				'mode' => 'preview',
+				'data' => array(
+					'preview_image_help' => true,
+				),
+			),
+		),
+	),
 	'team-section' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 2,

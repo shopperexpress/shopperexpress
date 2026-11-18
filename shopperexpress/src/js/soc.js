@@ -70,6 +70,25 @@
       $group.toggleClass('is-open', !isOpen);
       $(this).attr('aria-expanded', isOpen ? 'false' : 'true');
     });
+
+    // Mobile: sidebar collapses into a dropdown off the topbar, toggled by
+    // .soc-nav-toggle. Desktop ignores .is-open (CSS only applies it under
+    // the mobile breakpoint), so this is safe to leave bound at all widths.
+    $(document).on('click' + ns, '.soc-nav-toggle', function () {
+      const $toggle = $(this);
+      const $nav = $('#soc-nav');
+      const isOpen = $nav.hasClass('is-open');
+      $nav.toggleClass('is-open', !isOpen);
+      $toggle.attr('aria-expanded', isOpen ? 'false' : 'true');
+    });
+
+    $(document).on('click' + ns, function (e) {
+      const $nav = $('#soc-nav');
+      if (!$nav.hasClass('is-open')) return;
+      if ($(e.target).closest('#soc-nav, .soc-nav-toggle').length) return;
+      $nav.removeClass('is-open');
+      $('.soc-nav-toggle').attr('aria-expanded', 'false');
+    });
   };
 
   // ----------------------------------------------------------------
@@ -558,6 +577,29 @@
         $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
 
         SOC.showSuccess('Mode ' + (on ? 'enabled' : 'disabled') + '.');
+      });
+    });
+
+    // Team Members mode toggle (independent of the Listings API mode above)
+    $(document).on('change' + ns, '#soc-team-mode-toggle', function () {
+      const enabled = $(this).is(':checked') ? 1 : 0;
+      const $card = $(this).closest('.soc-api-mode-card');
+      const $label = $('#soc-team-mode-label');
+      const $badge = $('#soc-team-mode-badge');
+      const $dot = $('#soc-team-mode-indicator');
+
+      SOC.showLoading();
+
+      SOC.ajax('soc_team_mode_toggle', { enabled: enabled }, function (data) {
+        const on = data && data.enabled;
+
+        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+        $label.text(on ? 'Team Members (Intice)' : 'Team Members (ACF)');
+        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+
+        SOC.showSuccess('Team Members mode ' + (on ? 'enabled' : 'disabled') + '.');
+        SOC.reloadPanel('api-settings');
       });
     });
 

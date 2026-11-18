@@ -109,6 +109,27 @@ $soc-radius: 4px;
   }
 }
 
+// Hamburger that reveals the sidebar nav as a dropdown on mobile — hidden on
+// desktop where the sidebar is always visible as a column.
+.soc-nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid $soc-border;
+  border-radius: $soc-radius;
+  background: $soc-white;
+  color: $soc-dark;
+  font-size: 13px;
+  cursor: pointer;
+
+  .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
 .soc-body {
   display: flex;
   flex-wrap: wrap;
@@ -116,6 +137,32 @@ $soc-radius: 4px;
   border: 1px solid $soc-border-light;
   border-radius: 0 0 $soc-radius $soc-radius;
   overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 782px) {
+  .soc-nav-toggle {
+    display: inline-flex;
+  }
+
+  .soc-nav {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    max-width: none;
+    max-height: calc(100vh - 160px);
+    overflow-y: auto;
+    border-right: 0;
+    border-bottom: 1px solid $soc-border-light;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+
+    &.is-open {
+      display: flex;
+    }
+  }
 }
 
 // Sidebar: grouped module nav, collapsible.
@@ -729,6 +776,27 @@ $soc-radius: 4px;
 // ============================================================
 // API Mode Card
 // ============================================================
+
+// Two mode cards (e.g. Listings Data Source + Team Members) sit side by side
+// at 50% width each on wide screens, reflowing to full-width stacked once
+// there's no room left for two half-width cards plus their gap.
+.soc-mode-cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  .soc-api-mode-card {
+    flex: 1 1 320px;
+    max-width: calc(50% - 8px);
+  }
+
+  @media (max-width: 782px) {
+    .soc-api-mode-card {
+      max-width: 100%;
+    }
+  }
+}
+
 .soc-api-mode-card {
   display: flex;
   align-items: center;

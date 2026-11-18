@@ -31,6 +31,11 @@ defined( 'ABSPATH' ) || exit; ?>
 					<?php echo \App\is_api_mode() ? esc_html__( 'API', 'shopperexpress' ) : esc_html__( 'CPT', 'shopperexpress' ); ?>
 				</span>
 			</div>
+
+			<button type="button" class="soc-nav-toggle" aria-expanded="false" aria-controls="soc-nav">
+				<span class="dashicons dashicons-menu-alt" aria-hidden="true"></span>
+				<?php esc_html_e( 'Menu', 'shopperexpress' ); ?>
+			</button>
 		</header>
 
 		<div class="soc-body">

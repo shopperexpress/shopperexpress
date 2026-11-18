@@ -1,0 +1,224 @@
+<?php
+/**
+ * Shared: Team Section (Intice)
+ *
+ * Same markup/behavior as acf-shared/team-section.php, adapted for data
+ * coming from the Intice Nexus API instead of ACF rows: `photo_url` is a
+ * plain image URL (not an attachment ID) and `category` is a single name
+ * (not a comma-separated list), since Nexus team members belong to exactly
+ * one category.
+ *
+ * @package ShopperExpress
+ *
+ * @param array $args {
+ *   @type string $heading             Section heading.
+ *   @type string $description        Section intro text.
+ *   @type array  $members             Array of items, each with keys: photo_url, name, position, phone, email, category, bio.
+ *   @type array  $category_order      Category names in Nexus's own order (Content → Team Members →
+ *                                      Categories, drag-to-reorder) — filter pills follow this order
+ *                                      instead of the order categories happen to appear among members.
+ *   @type string $columns             Cards per row on desktop: "3" (default), "4", or "5".
+ *   @type string $footer_heading      "Join Our Team" style heading.
+ *   @type string $footer_button_text  Footer CTA button label.
+ *   @type array  $footer_button_url   ACF link array (url, title, target).
+ *   @type string $anchor              Optional HTML id.
+ * }
+ */
+
+$heading            = $args['heading'] ?? '';
+$description        = $args['description'] ?? '';
+$members            = $args['members'] ?? array();
+$footer_heading     = $args['footer_heading'] ?? '';
+$footer_button_text = $args['footer_button_text'] ?? '';
+$footer_button_url  = $args['footer_button_url'] ?? null;
+$anchor             = $args['anchor'] ?? '';
+$columns            = (string) ( $args['columns'] ?? '3' );
+
+if ( ! in_array( $columns, array( '3', '4', '5' ), true ) ) {
+	$columns = '3';
+}
+
+$category_order = $args['category_order'] ?? array();
+
+$member_categories = array();
+foreach ( $members as $member ) {
+	$category = trim( (string) ( $member['category'] ?? '' ) );
+	if ( '' !== $category && ! in_array( $category, $member_categories, true ) ) {
+		$member_categories[] = $category;
+	}
+}
+
+if ( ! empty( $category_order ) ) {
+	// Nexus's order, filtered to categories that actually have a member here —
+	// an empty category shouldn't get its own (always-empty) filter pill. Any
+	// member category Nexus didn't report (edge case: stale cache) still
+	// shows, just appended at the end rather than silently dropped.
+	$categories = array_values( array_intersect( $category_order, $member_categories ) );
+	$categories = array_merge( $categories, array_values( array_diff( $member_categories, $categories ) ) );
+} else {
+	$categories = $member_categories;
+}
+
+if ( ! empty( $members ) ) :
+	?>
+	<section<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="team-section">
+		<div class="container">
+			<?php if ( $heading || $description ) : ?>
+				<div class="team-section__heading">
+					<?php if ( $heading ) : ?>
+						<h1><?php echo esc_html( $heading ); ?></h1>
+					<?php endif; ?>
+					<?php if ( $description ) : ?>
+						<p><?php echo wp_kses_post( $description ); ?></p>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+			<?php if ( ! empty( $categories ) ) : ?>
+				<ul class="team-filters" data-filter-group="team-filter">
+					<li class="active"><button type="button" data-filter="all"><?php esc_html_e( 'all', 'shopperexpress' ); ?></button></li>
+					<?php foreach ( $categories as $category ) : ?>
+						<li><button type="button" data-filter="<?php echo esc_attr( $category ); ?>"><?php echo esc_html( $category ); ?></button></li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+			<div class="team-grid team-grid--cols-<?php echo esc_attr( $columns ); ?>">
+				<?php foreach ( $members as $member ) : ?>
+					<?php
+					$photo_url = $member['photo_url'] ?? '';
+					$name      = $member['name'] ?? '';
+					$position  = $member['position'] ?? '';
+					$phone     = $member['phone'] ?? '';
+					$email     = $member['email'] ?? '';
+					$bio       = $member['bio'] ?? '';
+					$category  = trim( (string) ( $member['category'] ?? '' ) );
+					$modal_id  = 'teamModal-' . uniqid();
+					?>
+					<div class="card-team">
+						<?php if ( $photo_url ) : ?>
+							<img src="<?php echo esc_url( $photo_url ); ?>" alt="<?php echo esc_attr( $name ); ?>" loading="lazy" />
+						<?php endif; ?>
+						<div class="card-team__body">
+							<?php if ( $name ) : ?>
+								<h3 class="card-team__name"><?php echo esc_html( $name ); ?></h3>
+							<?php endif; ?>
+							<?php if ( $position ) : ?>
+								<span class="card-team__position"><?php echo esc_html( $position ); ?></span>
+							<?php endif; ?>
+							<?php if ( $phone || $email ) : ?>
+								<div class="card-team__hover">
+									<div class="card-team__actions">
+										<?php if ( $phone ) : ?>
+											<a class="card-team__btn" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>">
+												<svg class="card-team__icon" viewBox="0 0 24 24" aria-hidden="true">
+													<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+												</svg>
+												<span><?php echo esc_html( $phone ); ?></span>
+											</a>
+										<?php endif; ?>
+										<?php if ( $email ) : ?>
+											<a class="card-team__btn" href="mailto:<?php echo esc_attr( $email ); ?>">
+												<svg class="card-team__icon" viewBox="0 0 24 24" aria-hidden="true">
+													<rect x="2" y="4" width="20" height="16" rx="2" />
+													<path d="m22 7-10 6L2 7" />
+												</svg>
+												<span>
+													<?php
+													if ( '5' === $columns ) :
+														esc_html_e( 'Email', 'shopperexpress' );
+													else :
+														/* translators: %s: team member first name. */
+														printf( esc_html__( 'Email %s', 'shopperexpress' ), esc_html( strtok( $name, ' ' ) ) );
+													endif;
+													?>
+												</span>
+											</a>
+										<?php endif; ?>
+									</div>
+									<?php if ( $bio ) : ?>
+										<button type="button" class="card-team__more" data-toggle="modal" data-target="#<?php echo esc_attr( $modal_id ); ?>">
+											<?php esc_html_e( 'See Info', 'shopperexpress' ); ?>
+											<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+												<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+											</svg>
+										</button>
+									<?php endif; ?>
+								</div>
+							<?php elseif ( $bio ) : ?>
+								<div class="card-team__hover">
+									<button type="button" class="card-team__more" data-toggle="modal" data-target="#<?php echo esc_attr( $modal_id ); ?>">
+										<?php esc_html_e( 'See Info', 'shopperexpress' ); ?>
+										<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor">
+											<path d="M647-440H160v-80h487L423-744l57-56 320 320-320 320-57-56 224-224Z" />
+										</svg>
+									</button>
+								</div>
+							<?php endif; ?>
+							<?php if ( $category ) : ?>
+								<span class="team-filter hidden"><?php echo esc_html( $category ); ?></span>
+							<?php endif; ?>
+						</div>
+					</div>
+					<?php if ( $bio ) : ?>
+						<?php
+						add_action(
+							'wp_footer',
+							function () use ( $modal_id, $photo_url, $name, $position, $phone, $email, $bio ) {
+								?>
+							<div class="modal fade team-modal" id="<?php echo esc_attr( $modal_id ); ?>" tabindex="-1" aria-labelledby="<?php echo esc_attr( $modal_id ); ?>-label" aria-hidden="true">
+								<div class="modal-dialog modal-lg modal-dialog-centered">
+									<div class="modal-content">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+												<path
+													d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+											</svg>
+										</button>
+										<?php if ( $photo_url ) : ?>
+											<div class="team-modal__media">
+												<img src="<?php echo esc_url( $photo_url ); ?>" alt="<?php echo esc_attr( $name ); ?>" />
+											</div>
+										<?php endif; ?>
+										<div class="team-modal__body">
+											<div class="team-modal__scroll">
+												<?php if ( $name ) : ?>
+													<h3 id="<?php echo esc_attr( $modal_id ); ?>-label" class="team-modal__name"><?php echo esc_html( $name ); ?></h3>
+												<?php endif; ?>
+												<?php if ( $position ) : ?>
+													<span class="team-modal__position"><?php echo esc_html( $position ); ?></span>
+												<?php endif; ?>
+												<?php if ( $phone || $email ) : ?>
+													<div class="team-modal__contact">
+														<?php if ( $phone ) : ?>
+															<p><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>"><?php echo esc_html( $phone ); ?></a></p>
+														<?php endif; ?>
+														<?php if ( $email ) : ?>
+															<p><a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a></p>
+														<?php endif; ?>
+													</div>
+												<?php endif; ?>
+												<div class="team-modal__bio"><?php echo wp_kses_post( $bio ); ?></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+								<?php
+							}
+						);
+						?>
+					<?php endif; ?>
+				<?php endforeach; ?>
+			</div>
+			<?php if ( $footer_heading || $footer_button_text ) : ?>
+				<div class="team-section__footer">
+					<?php if ( $footer_heading ) : ?>
+						<h3 class="h2"><?php echo esc_html( $footer_heading ); ?></h3>
+					<?php endif; ?>
+					<?php if ( $footer_button_text ) : ?>
+						<a class="btn btn-primary btn-lg" href="<?php echo esc_url( $footer_button_url['url'] ?? '#' ); ?>" <?php echo ! empty( $footer_button_url['target'] ) ? 'target="' . esc_attr( $footer_button_url['target'] ) . '"' : ''; ?>><?php echo esc_html( $footer_button_text ); ?></a>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
+		</div>
+	</section>
+<?php endif; ?>
