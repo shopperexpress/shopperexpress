@@ -165,10 +165,15 @@ class Intice_Api_Client {
 		$vin       = strtoupper( trim( $vin ) );
 		$live_key  = self::CACHE_PREFIX . 'vehicle_' . $vin;
 		$stale_key = self::CACHE_PREFIX_STALE . 'vehicle_' . $vin;
+		// mode=full is required for Nexus to return images_primary/images_srp —
+		// without it this endpoint omits those fields, which previously made
+		// the Merchant Listing image unreliable on VDPs (get_vehicles() already
+		// forces this for the SRP list endpoint).
+		$filters = array( 'mode' => 'full' );
 
 		if ( ! self::$regenerating ) {
 			if ( ! $this->is_cache_enabled() ) {
-				return $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), array(), self::TIMEOUT_LIVE );
+				return $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), $filters, array(), self::TIMEOUT_LIVE );
 			}
 
 			$cached = get_transient( $live_key );
@@ -184,7 +189,7 @@ class Intice_Api_Client {
 			}
 		}
 
-		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), array(), array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
+		$response = $this->request( 'GET', '/api/v1/vehicles/' . rawurlencode( $vin ), $filters, array(), self::$regenerating ? self::TIMEOUT_BACKGROUND : self::TIMEOUT_LIVE );
 
 		if ( is_wp_error( $response ) ) {
 			// A 404 is Nexus authoritatively confirming the vehicle is gone — keep
