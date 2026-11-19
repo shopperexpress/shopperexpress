@@ -112,7 +112,6 @@ function openPopup() {
   closeBtn.className = 'intice-guard-popup__close';
   closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.textContent = '×';
-  closeBtn.addEventListener('click', dismissPopup);
 
   const message = document.createElement('p');
   message.className = 'intice-guard-popup__message';
@@ -130,27 +129,15 @@ function openPopup() {
     link.type = 'button';
     link.className = 'intice-guard-popup__settings-link';
     link.textContent = 'Privacy settings';
-    link.addEventListener('click', (event) => {
-      event.stopPropagation();
-      dismissPopup();
-      window[openerName]();
-    });
 
     popup.appendChild(link);
   }
 
   overlay.appendChild(popup);
 
-  overlay.addEventListener('click', (event) => {
-    if (event.target === overlay) {
-      dismissPopup();
-    }
-  });
-
   document.body.appendChild(overlay);
   document.body.classList.add(POPUP_OPEN_CLASS);
   document.addEventListener('keydown', onPopupKeydown, true);
-
   closeBtn.focus();
 }
 
@@ -222,10 +209,59 @@ function waitAndLaunch(el, fnName, code, token) {
   poll();
 }
 
+// Handles dismissal for clicks that land on the popup's close button, its
+// backdrop, or the consent-settings link. Lives on the same document-level
+// capture listener as the rest of the guard (rather than as per-element
+// listeners on the popup's own nodes) because some third-party script on
+// this site installs its own document-level click listener and calls
+// stopPropagation() on it — that stops the event from ever reaching the
+// popup's descendants, so a listener attached directly to the close button
+// never fires. A listener on `document` itself still runs regardless, since
+// stopPropagation() only stops the event from reaching other *nodes*, not
+// other listeners already registered on the same node, and event.target is
+// fixed at dispatch time, so closest() below still resolves correctly even
+// when the event's further propagation has been cut short upstream.
+function handlePopupDismissClick(event) {
+  if (!document.body.classList.contains(POPUP_OPEN_CLASS)) {
+    return false;
+  }
+
+  const target = event.target;
+  const settingsLink = target.closest('.intice-guard-popup__settings-link');
+
+  if (settingsLink) {
+    dismissPopup();
+
+    const openerName = findConsentSettingsOpener();
+
+    if (openerName) {
+      window[openerName]();
+    }
+
+    return true;
+  }
+
+  if (target.closest('.intice-guard-popup__close')) {
+    dismissPopup();
+    return true;
+  }
+
+  if (target.classList && target.classList.contains('intice-guard-popup__overlay')) {
+    dismissPopup();
+    return true;
+  }
+
+  return false;
+}
+
 export default function initInticeToolGuard() {
   document.addEventListener(
     'click',
     (event) => {
+      if (handlePopupDismissClick(event)) {
+        return;
+      }
+
       const el = event.target.closest(SELECTOR);
 
       if (!el) {

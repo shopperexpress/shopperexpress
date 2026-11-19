@@ -541,7 +541,9 @@ import 'jquery';
 	 * Remove function
 	 */
 	Element.prototype.remove = function() {
-		// this.parentElement.removeChild(this);
+		if (this.parentElement) {
+			this.parentElement.removeChild(this);
+		}
 	};
 
 	/*global HTMLCollection */
