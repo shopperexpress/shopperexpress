@@ -580,6 +580,16 @@
       });
     });
 
+    $(document).on('change' + ns, '#soc-video-provider-select', function () {
+      const provider = $(this).val();
+
+      SOC.showLoading();
+
+      SOC.ajax('soc_video_provider_save', { provider: provider }, function (data) {
+        SOC.showSuccess('Video provider switched to ' + (data && data.provider === 'vista' ? 'VISTA' : 'Wistia — Legacy') + '.');
+      });
+    });
+
     // Team Members mode toggle (independent of the Listings API mode above)
     $(document).on('change' + ns, '#soc-team-mode-toggle', function () {
       const enabled = $(this).is(':checked') ? 1 : 0;

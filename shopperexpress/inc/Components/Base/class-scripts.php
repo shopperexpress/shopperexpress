@@ -242,13 +242,18 @@ class Scripts implements Theme_Component {
 		wp_deregister_style( 'listing_mobile' );
 		wp_deregister_style( 'bootstrap' );
 
-		wp_enqueue_script(
-			'shopperexpress/external',
-			'https://fast.wistia.com/assets/external/E-v1.js',
-			array( 'jquery' ),
-			$theme_version,
-			false
-		);
+		// Only enqueue Wistia's own global popover script while this site still
+		// uses Wistia — videos switched to VISTA no longer need (or should load)
+		// it, and the data-video/videoPlugin.js path never relies on it either.
+		if ( 'wistia' === \App\get_video_provider() ) {
+			wp_enqueue_script(
+				'shopperexpress/external',
+				'https://fast.wistia.com/assets/external/E-v1.js',
+				array( 'jquery' ),
+				$theme_version,
+				false
+			);
+		}
 
 		wp_register_script(
 			'shopperexpress/google-map',

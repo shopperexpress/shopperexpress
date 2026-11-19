@@ -57,6 +57,43 @@ function is_api_mode(): bool {
 }
 
 /**
+ * Returns the site's active video provider: 'wistia' (default/legacy) or 'vista'.
+ *
+ * Always falls back to 'wistia' — a missing/unset option, or any value other
+ * than 'vista', resolves to legacy Wistia behaviour so deploying this never
+ * changes a site's embeds until its setting is explicitly changed.
+ *
+ * @return string 'wistia'|'vista'.
+ */
+function get_video_provider(): string {
+	static $provider;
+
+	if ( null === $provider ) {
+		$stored   = get_option( \App\Components\SOC\Modules\Video_Provider::OPTION_VIDEO_PROVIDER, 'wistia' );
+		$provider = 'vista' === $stored ? 'vista' : 'wistia';
+	}
+
+	return $provider;
+}
+
+/**
+ * Build the iframe-embed URL for a stored Wistia/VISTA media ID, honoring the
+ * site's active video provider. Media IDs are shared between both platforms
+ * (VISTA preserves Wistia's original IDs on migrated videos), so the same
+ * `$video_id` value works for either provider's URL shape.
+ *
+ * @param string $video_id Wistia media ID / VISTA video ID.
+ * @return string
+ */
+function get_video_embed_url( string $video_id ): string {
+	if ( 'vista' === get_video_provider() ) {
+		return \App\Components\SOC\Modules\Video_Provider::VISTA_BASE_URL . '/embed/iframe/' . $video_id;
+	}
+
+	return '//fast.wistia.net/embed/iframe/' . $video_id;
+}
+
+/**
  * Resolve a vehicle's active image gallery straight from payload.use_images_list,
  * independent of Nexus's own (sometimes stale) active_image_list resolution.
  *

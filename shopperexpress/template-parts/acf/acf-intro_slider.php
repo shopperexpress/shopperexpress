@@ -174,6 +174,12 @@ if ( $show_slider != 1 ) {
 			$intro_slider_overlay_sm  = get_sub_field( 'intro_slider_overlay_sm' );
 			$alt_text                 = get_sub_field( 'alt_text' );
 			$video_type               = get_sub_field( 'video_type' );
+			if ( 'wistia' === $video_type ) {
+				// Content authors pick "Wistia" explicitly; the site-wide Video
+				// Provider setting decides whether that actually renders as
+				// Wistia or VISTA, same stored media ID either way.
+				$video_type = \App\get_video_provider();
+			}
 			if ( $video_type == 'html5' ) {
 				$video = get_sub_field( 'video_url' );
 			} else {

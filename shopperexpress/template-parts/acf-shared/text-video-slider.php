@@ -265,7 +265,7 @@ if ( ! $hide_block && $query->posts ) :
 							?>
 							<?php if ( $wistia_id ) : ?>
 								<div class="video-block">
-									<div data-video='{"type": "wistia", "video": "<?php echo $wistia_id; ?>","title": "<?php echo esc_html( trim( $title ) ); ?>", "autoplay": false, "fluidWidth": true, "lazyLoad": true}'></div>
+									<div data-video='{"type": "<?php echo esc_attr( \App\get_video_provider() ); ?>", "video": "<?php echo $wistia_id; ?>","title": "<?php echo esc_html( trim( $title ) ); ?>", "autoplay": false, "fluidWidth": true, "lazyLoad": true}'></div>
 								</div>
 							<?php endif; ?>
 						</div>

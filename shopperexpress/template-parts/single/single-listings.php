@@ -621,14 +621,22 @@ while ( have_posts() ) :
 											endif;
 											the_sub_field( 'description' );
 											if ( $video_id = get_sub_field( 'video_id' ) ) :
-												?>
-												<p><span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverContent=link" style="display: inline; position: relative; "><a class="btn-get-started " href="#video-<?php echo get_row_index(); ?>"><?php esc_html_e( 'Watch Video', 'shopperexpress' ); ?></a></span></p>
-												<div style="display: none;" id="video-<?php echo get_row_index(); ?>">
-													<script src="https://fast.wistia.com/embed/medias/<?php echo $video_id; ?>.jsonp" async></script>
-													<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
-														<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverAnimateThumbnail=true videoFoam=true" style="display:inline-block;height:100%;position:relative;width:100%">&nbsp;</span></div>
+												if ( 'vista' === \App\get_video_provider() ) :
+													?>
+													<p>
+														<a class="btn-get-started" data-width="1600" data-height="900" data-fancybox data-type="iframe" href="<?php echo esc_url( \App\get_video_embed_url( $video_id ) ); ?>">
+															<?php esc_html_e( 'Watch Video', 'shopperexpress' ); ?>
+														</a>
+													</p>
+												<?php else : ?>
+													<p><span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverContent=link" style="display: inline; position: relative; "><a class="btn-get-started " href="#video-<?php echo get_row_index(); ?>"><?php esc_html_e( 'Watch Video', 'shopperexpress' ); ?></a></span></p>
+													<div style="display: none;" id="video-<?php echo get_row_index(); ?>">
+														<script src="https://fast.wistia.com/embed/medias/<?php echo $video_id; ?>.jsonp" async></script>
+														<div class="wistia_responsive_padding" style="padding:56.25% 0 0 0;position:relative;">
+															<div class="wistia_responsive_wrapper" style="height:100%;left:0;position:absolute;top:0;width:100%;"><span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverAnimateThumbnail=true videoFoam=true" style="display:inline-block;height:100%;position:relative;width:100%">&nbsp;</span></div>
+														</div>
 													</div>
-												</div>
+												<?php endif; ?>
 											<?php endif; ?>
 										</li>
 									<?php endwhile; ?>

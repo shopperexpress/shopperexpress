@@ -23,6 +23,7 @@ use App\Components\SOC\Modules\Json_Ld_Settings;
 use App\Components\SOC\Modules\Google_Reviews;
 use App\Components\SOC\Modules\AI_Vdp_Log;
 use App\Components\SOC\Modules\Shortcodes_Reference;
+use App\Components\SOC\Modules\Video_Provider;
 
 /**
  * SOC Component
@@ -56,7 +57,7 @@ class SOC implements Theme_Component {
 		'integrations' => array(
 			'label'   => 'API & Integrations',
 			'icon'    => 'dashicons-rest-api',
-			'modules' => array( 'api-settings', 'developer-tools', 'api-health' ),
+			'modules' => array( 'api-settings', 'developer-tools', 'api-health', 'video-provider' ),
 		),
 		'leads'        => array(
 			'label'   => 'Leads & Vehicles',
@@ -113,6 +114,7 @@ class SOC implements Theme_Component {
 			new Google_Reviews(),
 			new AI_Vdp_Log(),
 			new Shortcodes_Reference(),
+			new Video_Provider(),
 		);
 
 		foreach ( $module_classes as $module ) {

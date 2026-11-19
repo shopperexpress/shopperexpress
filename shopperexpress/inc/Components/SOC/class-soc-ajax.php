@@ -89,6 +89,8 @@ class SOC_Ajax {
 		'soc_google_reviews_sync_step'       => 'handle_google_reviews_sync_step',
 		'soc_google_reviews_sync_stop'       => 'handle_google_reviews_sync_stop',
 		'soc_google_reviews_save_min_rating' => 'handle_google_reviews_save_min_rating',
+		// Video Provider.
+		'soc_video_provider_save'            => 'handle_video_provider_save',
 	);
 
 	/**
@@ -639,6 +641,25 @@ class SOC_Ajax {
 		SOC_Logger::write( 'general', 'API mode toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
 
 		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Save the site-wide Video Provider setting (Wistia vs VISTA).
+	 */
+	private function handle_video_provider_save(): void {
+		$provider = sanitize_key( wp_unslash( $_POST['provider'] ?? '' ) );
+
+		$module = $this->modules['video-provider'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Video Provider module not available.' );
+		}
+
+		$new_provider = $module->set_provider( $provider );
+
+		SOC_Logger::write( 'general', 'Video provider switched to: ' . $new_provider );
+
+		SOC_Response::success( array( 'provider' => $new_provider ) );
 	}
 
 	/**

@@ -376,6 +376,7 @@
                         "youtube": "Youtube",
                         "vimeo": "Vimeo",
                         "wistia": "Wistia",
+                        "vista": "VISTA",
                         "html5": "HTML"
                     },
                     "default_value": "youtube",

@@ -588,7 +588,7 @@ class Api_Settings implements SOC_Module {
 	 *
 	 * @return string[] Labels of the systems actually flushed.
 	 */
-	private static function flush_downstream_caches(): array {
+	public static function flush_downstream_caches(): array {
 		$touched = array();
 
 		// WP Rocket.

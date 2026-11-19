@@ -20,6 +20,7 @@ import $ from 'jquery';
         vimeoAPI: '//player.vimeo.com/api/player.js',
         wistiaAPI: '//fast.wistia.com/assets/external/E-v1.js',
         youtubeAPI: '//www.youtube.com/iframe_api',
+        vistaBaseUrl: 'https://vista.intice.com',
       },
       options
     );
@@ -99,6 +100,9 @@ import $ from 'jquery';
           break;
         case 'wistia':
           this.initWistia();
+          break;
+        case 'vista':
+          this.initVista();
           break;
         case 'html5':
           this.initHTML5();
@@ -386,6 +390,41 @@ import $ from 'jquery';
       } else {
         loadPlayer();
       }
+    },
+    initVista: function () {
+      const self = this;
+      const blockId = this.getRandomId();
+
+      // VISTA's embed is a plain iframe (https://vista.intice.com/embed/iframe/{id}) with
+      // no documented query-string playback params or postMessage control API yet (unlike
+      // Wistia's `_wq`/onReady callbacks). No external script to load either — the whole
+      // point of switching a dealer to VISTA is to stop pulling in Wistia's player.js/E-v1.js
+      // for embeds it no longer serves. play()/pause() below are best-effort no-ops kept only
+      // so callers that expect a `self.player` facade (pauseAllVideos(), playVideo()/hidePopup())
+      // don't throw; replace them with real postMessage calls once VISTA documents one.
+      self.videoContainer = $(`<iframe
+          id="${blockId}"
+          frameborder="0"
+          scrolling="no"
+          class="vista_embed"
+          name="vista_embed"
+          title="Video of ${self.videoData.title || 'video'}"
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowfullscreen
+          loading="${self.lazyLoad ? 'lazy' : 'eager'}"
+        />`)
+        .addClass(self.options.containerClass)
+        .appendTo(self.holder)
+        .attr('src', self.options.vistaBaseUrl + '/embed/iframe/' + self.videoData.video);
+
+      self.player = {
+        play: function () {},
+        pause: function () {},
+        mute: function () {},
+        unmute: function () {},
+      };
+
+      self.holder.trigger('loaded.video');
     },
     initHTML5: function () {
       const self = this;

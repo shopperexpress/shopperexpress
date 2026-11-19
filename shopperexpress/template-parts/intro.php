@@ -126,10 +126,14 @@ if ( $hide_header ) { ?>
 								break;
 						}
 						if ( $video_id = get_field( 'video_id', 'options' ) ) :
-							?>
-							<span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverContent=link" style="display: inline; position: relative;">
-								<a class="btn btn-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php _e( 'watch video', 'shopperexpress' ); ?></a>
-							</span>
+							if ( 'vista' === \App\get_video_provider() ) :
+								?>
+								<a class="btn btn-link" data-width="1600" data-height="900" data-fancybox data-type="iframe" href="<?php echo esc_url( \App\get_video_embed_url( $video_id ) ); ?>"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php esc_html_e( 'watch video', 'shopperexpress' ); ?></a>
+							<?php else : ?>
+								<span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverContent=link" style="display: inline; position: relative;">
+									<a class="btn btn-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php _e( 'watch video', 'shopperexpress' ); ?></a>
+								</span>
+							<?php endif; ?>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -161,10 +165,14 @@ endif;
 						if ( $link = get_field( 'link_header', 'options' ) ) {
 							echo $link; }
 						if ( $video_id = get_field( 'video_id', 'options' ) ) :
-							?>
-							<span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverAnimateThumbnail=true videoFoam=true popoverContent=link" style="display: inline; position: relative;">
-								<a class="btn btn-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php _e( 'watch video', 'shopperexpress' ); ?></a>
-							</span>
+							if ( 'vista' === \App\get_video_provider() ) :
+								?>
+								<a class="btn btn-link" data-width="1600" data-height="900" data-fancybox data-type="iframe" href="<?php echo esc_url( \App\get_video_embed_url( $video_id ) ); ?>"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php esc_html_e( 'watch video', 'shopperexpress' ); ?></a>
+							<?php else : ?>
+								<span class="wistia_embed wistia_async_<?php echo $video_id; ?> popover=true popoverAnimateThumbnail=true videoFoam=true popoverContent=link" style="display: inline; position: relative;">
+									<a class="btn btn-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#FFFFFF"><path d="m426-330 195-125q14-9 14-25t-14-25L426-630q-15-10-30.5-1.5T380-605v250q0 18 15.5 26.5T426-330Zm54 250q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Z"/></svg><?php _e( 'watch video', 'shopperexpress' ); ?></a>
+								</span>
+							<?php endif; ?>
 						<?php endif; ?>
 					</div>
 				</div>
