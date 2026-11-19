@@ -120,12 +120,6 @@ class Intice_Api_Client {
 		// Ensure mode=full is always present (overwriting if needed)
 		$filters['mode'] = 'full';
 
-		// Nexus defaults to is_live=true-only (new HomeNet vehicles start
-		// not-live until Chrome enrichment finishes). WP always wants the
-		// full inventory regardless of that enrichment state, so request
-		// is_live=0 unless a caller explicitly asked for a specific value.
-		$filters['is_live'] = $filters['is_live'] ?? '0';
-
 		$live_key  = self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) );
 		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_' . md5( serialize( $filters ) );
 
@@ -317,8 +311,7 @@ class Intice_Api_Client {
 	 */
 	public function get_vehicles_count( array $filters = array() ) {
 		unset( $filters['mode'] );
-		$filters['per_page']  = 1;
-		$filters['is_live']   = $filters['is_live'] ?? '0';
+		$filters['per_page'] = 1;
 
 		$live_key  = self::CACHE_PREFIX . 'vehicles_count_' . md5( serialize( $filters ) );
 		$stale_key = self::CACHE_PREFIX_STALE . 'vehicles_count_' . md5( serialize( $filters ) );
