@@ -57,14 +57,66 @@ $min_reviews_count = (int) ( $args['min_reviews_count'] ?? 0 );
 $modal_id          = $is_slider ? wp_unique_id( 'reviews-modal-' ) : '';
 
 if ( $place_id ) :
-	// No Review/AggregateRating JSON-LD here on purpose: Google treats reviews
-	// of a business on that business's own site as self-serving and won't
-	// show review-star rich results for them, and the previous markup here
-	// pointed itemReviewed at a dealer @id defined by a separate, unversioned
-	// per-site "Rich Snippet Auto Dealer" Code Snippets entry — a mismatch or
-	// missing entry (as on multiple dealer sites) left itemReviewed dangling,
-	// which Search Console reports as "Invalid object type for field
-	// itemReviewed". The visible widget below is unaffected.
+	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
+	// + keyword filtered) data the widget displays, so search engines see it
+	// without needing to run the client-side Google Reviews JS module.
+	//
+	// Note: Google does not grant review-star rich results for reviews of a
+	// business on that business's own site (self-serving reviews) — this
+	// markup fixes the structured-data validity error reported by Search
+	// Console, it does not make the stars appear in search results.
+	$reviews_data = ( new \App\Components\Base\Google_Business_Reviews() )->get_reviews( $place_id, '', '', $keyword_filter, $min_reviews_count );
+
+	if ( ! is_wp_error( $reviews_data ) && ! empty( $reviews_data['reviews'] ) ) :
+		// itemReviewed carries its own @type + name inline rather than just a
+		// bare @id — a per-site "Rich Snippet Auto Dealer" Code Snippets entry
+		// used to be relied on to define a same-@id AutoDealer node elsewhere
+		// on the page, but that entry was missing or used a different @id on
+		// several dealer sites, leaving itemReviewed pointing at an untyped
+		// entity ("Invalid object type for field itemReviewed" in Search
+		// Console). Typing the reference here makes it self-contained and
+		// independent of that external snippet, with no separate top-level
+		// AutoDealer node to risk duplicating.
+		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
+		$dealer_name = wp_strip_all_tags( get_bloginfo( 'name' ) );
+
+		$graph = array();
+
+		foreach ( $reviews_data['reviews'] as $_i => $_review ) {
+			$_published = $_review['publishTime'] ?? '';
+			$graph[]    = array(
+				'@type'         => 'Review',
+				'@id'           => esc_url( home_url( '/' ) ) . '#review-' . ( $_i + 1 ),
+				'itemReviewed'  => array(
+					'@type' => 'AutoDealer',
+					'@id'   => $dealer_id,
+					'name'  => $dealer_name,
+				),
+				'author'        => array(
+					'@type' => 'Person',
+					'name'  => wp_strip_all_tags( $_review['authorAttribution']['displayName'] ?? __( 'Google user', 'shopperexpress' ) ),
+				),
+				'datePublished' => $_published ? gmdate( 'Y-m-d', strtotime( $_published ) ) : gmdate( 'Y-m-d' ),
+				'reviewBody'    => wp_strip_all_tags( $_review['text'] ?? '' ),
+				'reviewRating'  => array(
+					'@type'       => 'Rating',
+					'ratingValue' => (int) ( $_review['rating'] ?? 5 ),
+					'bestRating'  => 5,
+					'worstRating' => 1,
+				),
+			);
+		}
+
+		$review_schema = array(
+			'@context' => 'https://schema.org',
+			'@graph'   => $graph,
+		);
+		?>
+		<script type="application/ld+json">
+			<?php echo wp_json_encode( $review_schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?>
+		</script>
+		<?php
+	endif;
 	?>
 	<section
 		<?php if ( $anchor ) : ?>
