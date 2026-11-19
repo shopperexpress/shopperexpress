@@ -42,6 +42,16 @@ const POPUP_OPEN_CLASS = 'intice-guard-popup-open';
 // with ComplyAuto/the client, not a guess we rely on for correctness.
 const CONSENT_SETTINGS_GLOBALS = ['openComplyAutoSettings', 'displayComplyAutoPreferences', 'CCPA'];
 
+// Every click that starts a new wait (or dispatches immediately) bumps this,
+// superseding whatever was already in flight. Each waitAndLaunch() poll loop
+// captures the token current at its own start and checks it on every tick —
+// a mismatch means a different button was clicked since, so it quietly backs
+// off instead of popping up later. Without this, clicking several buttons
+// while the first is still waiting left multiple independent 6s timers
+// running, each one eventually opening its own popup — closing one just
+// let the next appear a moment later, feeling like it "wouldn't close".
+let activeToken = 0;
+
 /**
  * Pull the function name and the exact call expression out of a raw
  * `onclick="javascript:inticeAllEvents.launchTM('848','VIN');"` attribute.
@@ -65,19 +75,23 @@ function findConsentSettingsOpener() {
 }
 
 function closePopup() {
-  const existing = document.querySelector('.intice-guard-popup__overlay');
-
-  if (existing) {
-    existing.remove();
-  }
+  document.querySelectorAll('.intice-guard-popup__overlay').forEach((overlay) => overlay.remove());
 
   document.removeEventListener('keydown', onPopupKeydown, true);
   document.body.classList.remove(POPUP_OPEN_CLASS);
 }
 
+// Used for user-initiated dismissal (close button, backdrop, Escape) — unlike
+// closePopup() alone, this also invalidates any other button's in-flight
+// wait so it can't surface a popup of its own right after this one closes.
+function dismissPopup() {
+  activeToken++;
+  closePopup();
+}
+
 function onPopupKeydown(event) {
   if (event.key === 'Escape') {
-    closePopup();
+    dismissPopup();
   }
 }
 
@@ -98,7 +112,7 @@ function openPopup() {
   closeBtn.className = 'intice-guard-popup__close';
   closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.textContent = '×';
-  closeBtn.addEventListener('click', closePopup);
+  closeBtn.addEventListener('click', dismissPopup);
 
   const message = document.createElement('p');
   message.className = 'intice-guard-popup__message';
@@ -118,7 +132,7 @@ function openPopup() {
     link.textContent = 'Privacy settings';
     link.addEventListener('click', (event) => {
       event.stopPropagation();
-      closePopup();
+      dismissPopup();
       window[openerName]();
     });
 
@@ -129,7 +143,7 @@ function openPopup() {
 
   overlay.addEventListener('click', (event) => {
     if (event.target === overlay) {
-      closePopup();
+      dismissPopup();
     }
   });
 
@@ -142,17 +156,15 @@ function openPopup() {
 
 function clearState(el) {
   el.classList.remove(LOADING_CLASS, UNAVAILABLE_CLASS);
+  el.setAttribute('aria-busy', 'false');
+  el.removeAttribute(BUSY_ATTR);
 }
 
-function setLoading(el, isLoading) {
-  el.classList.toggle(LOADING_CLASS, isLoading);
-  el.setAttribute('aria-busy', isLoading ? 'true' : 'false');
-
-  if (isLoading) {
-    el.setAttribute(BUSY_ATTR, '1');
-  } else {
-    el.removeAttribute(BUSY_ATTR);
-  }
+function setLoading(el) {
+  el.classList.add(LOADING_CLASS);
+  el.classList.remove(UNAVAILABLE_CLASS);
+  el.setAttribute('aria-busy', 'true');
+  el.setAttribute(BUSY_ATTR, '1');
 }
 
 function showUnavailable(el) {
@@ -180,16 +192,20 @@ function dispatch(el, code) {
   }
 }
 
-function waitAndLaunch(el, fnName, code) {
-  if (el.hasAttribute(BUSY_ATTR)) {
-    return;
-  }
-
-  setLoading(el, true);
+function waitAndLaunch(el, fnName, code, token) {
+  setLoading(el);
 
   const startedAt = Date.now();
 
   const poll = () => {
+    // A different button was clicked since this poll started — back off
+    // quietly instead of launching or popping up a message for a click the
+    // user has already moved on from.
+    if (token !== activeToken) {
+      clearState(el);
+      return;
+    }
+
     if (isReady(fnName)) {
       dispatch(el, code);
       return;
@@ -232,9 +248,16 @@ export default function initInticeToolGuard() {
       }
 
       if (isReady(fnName)) {
+        activeToken++;
+        closePopup();
         dispatch(el, code);
       } else {
-        waitAndLaunch(el, fnName, code);
+        // Supersede whatever was already in flight (a different button's
+        // wait, or its popup) — only the latest click should ever be able
+        // to show a popup.
+        const token = ++activeToken;
+        closePopup();
+        waitAndLaunch(el, fnName, code, token);
       }
     },
     true
