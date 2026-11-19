@@ -35,6 +35,7 @@ const POLL_INTERVAL_MS = 150;
 const LOADING_CLASS = 'intice-guard--loading';
 const UNAVAILABLE_CLASS = 'intice-guard--unavailable';
 const BUSY_ATTR = 'data-intice-guard-busy';
+const POPUP_OPEN_CLASS = 'intice-guard-popup-open';
 
 // Candidate global function names a consent platform might expose to reopen
 // its preferences UI. Unconfirmed — intended as a starting point to verify
@@ -63,14 +64,84 @@ function findConsentSettingsOpener() {
   return CONSENT_SETTINGS_GLOBALS.find((name) => typeof window[name] === 'function') || null;
 }
 
+function closePopup() {
+  const existing = document.querySelector('.intice-guard-popup__overlay');
+
+  if (existing) {
+    existing.remove();
+  }
+
+  document.removeEventListener('keydown', onPopupKeydown, true);
+  document.body.classList.remove(POPUP_OPEN_CLASS);
+}
+
+function onPopupKeydown(event) {
+  if (event.key === 'Escape') {
+    closePopup();
+  }
+}
+
+function openPopup() {
+  closePopup();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'intice-guard-popup__overlay';
+  overlay.setAttribute('role', 'presentation');
+
+  const popup = document.createElement('div');
+  popup.className = 'intice-guard-popup';
+  popup.setAttribute('role', 'alertdialog');
+  popup.setAttribute('aria-modal', 'true');
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'intice-guard-popup__close';
+  closeBtn.setAttribute('aria-label', 'Close');
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', closePopup);
+
+  const message = document.createElement('p');
+  message.className = 'intice-guard-popup__message';
+  message.setAttribute('role', 'status');
+  message.textContent = 'This tool is temporarily unavailable. Please try again.';
+
+  popup.appendChild(closeBtn);
+  popup.appendChild(message);
+
+  const openerName = findConsentSettingsOpener();
+
+  if (openerName) {
+    const link = document.createElement('button');
+
+    link.type = 'button';
+    link.className = 'intice-guard-popup__settings-link';
+    link.textContent = 'Privacy settings';
+    link.addEventListener('click', (event) => {
+      event.stopPropagation();
+      closePopup();
+      window[openerName]();
+    });
+
+    popup.appendChild(link);
+  }
+
+  overlay.appendChild(popup);
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closePopup();
+    }
+  });
+
+  document.body.appendChild(overlay);
+  document.body.classList.add(POPUP_OPEN_CLASS);
+  document.addEventListener('keydown', onPopupKeydown, true);
+
+  closeBtn.focus();
+}
+
 function clearState(el) {
   el.classList.remove(LOADING_CLASS, UNAVAILABLE_CLASS);
-
-  const message = el.querySelector('.intice-guard__message');
-
-  if (message) {
-    message.remove();
-  }
 }
 
 function setLoading(el, isLoading) {
@@ -90,33 +161,7 @@ function showUnavailable(el) {
   el.setAttribute('aria-busy', 'false');
   el.removeAttribute(BUSY_ATTR);
 
-  let message = el.querySelector('.intice-guard__message');
-
-  if (!message) {
-    message = document.createElement('span');
-    message.className = 'intice-guard__message';
-    message.setAttribute('role', 'status');
-    el.appendChild(message);
-  }
-
-  message.textContent = '';
-  message.appendChild(document.createTextNode('This tool is temporarily unavailable. Please try again.'));
-
-  const openerName = findConsentSettingsOpener();
-
-  if (openerName) {
-    const link = document.createElement('button');
-
-    link.type = 'button';
-    link.className = 'intice-guard__settings-link';
-    link.textContent = 'Privacy settings';
-    link.addEventListener('click', (event) => {
-      event.stopPropagation();
-      window[openerName]();
-    });
-
-    message.appendChild(link);
-  }
+  openPopup();
 }
 
 function dispatch(el, code) {
