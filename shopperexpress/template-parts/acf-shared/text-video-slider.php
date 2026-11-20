@@ -90,7 +90,7 @@ if ( ! $hide_block && $query->posts ) :
 				$custom_content = wp_kses_post( get_field( 'custom_content', $post_id ) );
 				$mainTitle      = array( $year, $make, $model, $trim );
 				?>
-				<div>
+				<div class="slide">
 					<section class="slider-card">
 						<h2><?php echo implode( ' ', $mainTitle ); ?></h2>
 						<div class="card-row">

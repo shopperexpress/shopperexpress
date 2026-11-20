@@ -1443,6 +1443,14 @@ textarea.form-control {
     padding: 0 80px 0 55px;
   }
 
+  &:not(.slick-initialized) {
+    .slide {
+      &:not(:first-child) {
+        display: none;
+      }
+    }
+  }
+
   .slick-slide {
     @include media('>=tablet') {
       padding: 0 15px;

@@ -48,6 +48,36 @@ function initVisualSlider() {
     const btnPrev = buttonsHolder.find('.slick-prev');
     const btnNext = buttonsHolder.find('.slick-next');
 
+    initSlidesInert();
+
+    function initSlidesInert() {
+      const sliderEl = slider.get(0);
+
+      if (!sliderEl) {
+        return;
+      }
+
+      const syncInert = (slideEl) => {
+        slideEl.inert = slideEl.getAttribute('aria-hidden') === 'true';
+      };
+
+      slider.find('.slick-slide').each(function () {
+        syncInert(this);
+      });
+
+      new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.target.classList.contains('slick-slide')) {
+            syncInert(mutation.target);
+          }
+        });
+      }).observe(sliderEl, {
+        attributes: true,
+        attributeFilter: ['aria-hidden'],
+        subtree: true,
+      });
+    }
+
     toggleSearchWidget(slider.find('.slide').eq(slider.slick('slickCurrentSlide')));
 
     slider

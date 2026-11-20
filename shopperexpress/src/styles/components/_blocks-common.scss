@@ -23,6 +23,14 @@
 
 // Used by blocks: offer-cards, text-video-slider
 .offers-slider.slick-item {
+  &:not(.slick-initialized) {
+    .slide {
+      &:not(:first-child) {
+        display: none;
+      }
+    }
+  }
+
   .slide {
     padding: 0 10px;
 
