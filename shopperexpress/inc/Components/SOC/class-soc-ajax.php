@@ -64,6 +64,7 @@ class SOC_Ajax {
 		'soc_warm_api_cache_group'    => 'handle_warm_api_cache_group',
 		'soc_cache_rebuild_status'    => 'handle_cache_rebuild_status',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
+		'soc_intice_guard_toggle'     => 'handle_intice_guard_toggle',
 		'soc_api_save_filters'        => 'handle_api_save_filters',
 		// Lead Delivery.
 		'soc_lead_settings_save'      => 'handle_lead_settings_save',
@@ -776,6 +777,24 @@ class SOC_Ajax {
 		$new_state = $module->set_cache_enabled( $enabled );
 
 		SOC_Logger::write( 'cache', 'Intice cache ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Toggle the front-end intice tool-guard ("temporarily unavailable" popup) on/off.
+	 */
+	private function handle_intice_guard_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 1 );
+		$module  = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		$new_state = $module->set_guard_enabled( $enabled );
+
+		SOC_Logger::write( 'general', 'Intice tool guard ' . ( $new_state ? 'enabled' : 'disabled' ) );
 
 		SOC_Response::success( array( 'enabled' => $new_state ) );
 	}

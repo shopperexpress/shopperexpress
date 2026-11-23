@@ -697,10 +697,47 @@ class Ajax implements Theme_Component {
 		}
 	}
 
+	/**
+	 * Render a WPForms form for an AJAX/HTML-fragment response together with
+	 * every asset WPForms would normally print in wp_footer for it: its CSS,
+	 * the core + Pro + addon scripts (page navigation, smart phone, user
+	 * journey, …) and the `wpforms_settings` object (honeypot data, nonce).
+	 *
+	 * Without this the fragment only carried wpforms.min.js, so forms using
+	 * features whose scripts weren't already on the page (e.g. page breaks)
+	 * stayed half-initialized. The client (unlockSavings.js) drops any
+	 * <script>/<link>/<style> whose id is already present on the page, so
+	 * shared dependencies like jQuery are never re-executed.
+	 *
+	 * @param int|string $form_id WPForms form ID.
+	 * @return void
+	 */
+	private function render_wpforms_with_assets( $form_id ): void {
+		$form_id = absint( $form_id );
+
+		if ( ! $form_id ) {
+			return;
+		}
+
+		echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+
+		$frontend = function_exists( 'wpforms' ) ? wpforms()->obj( 'frontend' ) : null;
+
+		if ( ! $frontend ) {
+			return;
+		}
+
+		// Same sequence WPForms runs on wp_footer: enqueue assets for the forms
+		// rendered above (fires wpforms_wp_footer for addons), print them, then
+		// output wpforms_settings.
+		$frontend->assets_footer();
+		wp_print_styles();
+		wp_print_scripts();
+		$frontend->footer_end();
+	}
+
 	public function unlock_form() {
 		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'unlock_form' ) {
-
-			echo '<script src="' . home_url( '/wp-content/plugins/wpforms/assets/js/frontend/wpforms.min.js' ) . '"></script>';
 
 			$raw_post_id = $_REQUEST['post_id'] ?? '';
 			$form_id     = ! empty( $_REQUEST['form_id'] ) ? $_REQUEST['form_id'] : '';
@@ -716,7 +753,7 @@ class Ajax implements Theme_Component {
 			// VIN (non-numeric) — API mode: no WP post context needed.
 			if ( ! is_numeric( $raw_post_id ) ) {
 				if ( $form_id ) {
-					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+					$this->render_wpforms_with_assets( $form_id );
 				}
 				exit;
 			} else {
@@ -732,12 +769,12 @@ class Ajax implements Theme_Component {
 					while ( $query->have_posts() ) {
 						$query->the_post();
 						if ( $form_id ) {
-							echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+							$this->render_wpforms_with_assets( $form_id );
 						}
 					}
 					wp_reset_query();
 				} elseif ( $form_id ) {
-					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+					$this->render_wpforms_with_assets( $form_id );
 				}
 			}
 
@@ -765,8 +802,6 @@ class Ajax implements Theme_Component {
 
 	public function offers_form() {
 		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'offers_form' ) {
-
-			echo '<script src="' . home_url( '/wp-content/plugins/wpforms/assets/js/frontend/wpforms.min.js' ) . '"></script>';
 
 			$query   = new WP_Query(
 				array(
@@ -797,12 +832,12 @@ class Ajax implements Theme_Component {
 				while ( $query->have_posts() ) {
 					$query->the_post();
 					if ( $form_id ) {
-						echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+						$this->render_wpforms_with_assets( $form_id );
 					}
 				}
 				wp_reset_query();
 			} elseif ( $form_id ) {
-					echo do_shortcode( '[wpforms id="' . $form_id . '" title="false"]' );
+					$this->render_wpforms_with_assets( $form_id );
 			}
 
 			exit;

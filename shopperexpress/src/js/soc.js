@@ -736,6 +736,37 @@
       );
     });
 
+    // Intice tool guard ("temporarily unavailable" popup) enable / disable toggle
+    $(document).on('change' + ns, '#soc-intice-guard-toggle', function () {
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
+      const $card = $checkbox.closest('.soc-api-mode-card');
+      const $label = $('#soc-guard-label');
+      const $badge = $('#soc-guard-badge');
+      const $dot = $('#soc-guard-indicator');
+
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_intice_guard_toggle',
+        { enabled: enabled },
+        function (data) {
+          const on = data && data.enabled;
+
+          $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+          $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+          $label.text(on ? 'Guard Enabled' : 'Guard Disabled');
+          $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+
+          SOC.showSuccess('Intice tool guard ' + (on ? 'enabled' : 'disabled') + '.');
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $checkbox.prop('checked', !enabled);
+        }
+      );
+    });
+
     // Queue an atomic rebuild of every Intice cache group
     $(document).on('click' + ns, '#soc-flush-all-api-cache', function () {
       if (!confirm('Rebuild all Intice Nexus cache now? Starts immediately even if a previous rebuild is still running. Visitors keep seeing current data until it finishes.'))
