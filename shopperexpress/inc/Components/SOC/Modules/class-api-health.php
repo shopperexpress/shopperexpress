@@ -324,6 +324,54 @@ class Api_Health implements SOC_Module {
 		);
 	}
 
+	// ─── Twilio ad-hoc test SMS ───────────────────────────────────────────────
+
+	/**
+	 * Send a real test SMS via Twilio to confirm the configured account/number
+	 * can actually deliver a message — the credential probe in check_twilio()
+	 * only confirms the SID/token are valid, not that sending works.
+	 *
+	 * @param string $phone Destination phone number, e.g. +15551234567.
+	 * @return array{ok: bool, error?: string, sid?: string} Result of the send attempt.
+	 */
+	public function send_test_sms( string $phone ): array {
+		$account_sid   = get_field( 'twilio_account_sid', 'options' );
+		$auth_token    = get_field( 'twilio_auth_token', 'options' );
+		$twilio_number = get_field( 'twilio_number', 'options' );
+
+		if ( empty( $account_sid ) || empty( $auth_token ) || empty( $twilio_number ) ) {
+			return array(
+				'ok'    => false,
+				'error' => 'Twilio is not configured (missing SID, auth token, or sender number).',
+			);
+		}
+
+		try {
+			$twilio  = new \Twilio\Rest\Client( $account_sid, $auth_token );
+			$message = $twilio->messages->create(
+				$phone,
+				array(
+					'from' => $twilio_number,
+					'body' => 'ShopperExpress SOC test SMS — Twilio connection is working.',
+				)
+			);
+
+			SOC_Logger::write( 'api', 'Twilio test SMS sent to ' . $phone . ' (sid: ' . $message->sid . ')' );
+
+			return array(
+				'ok'  => true,
+				'sid' => $message->sid,
+			);
+		} catch ( \Exception $e ) {
+			SOC_Logger::write( 'api', 'Twilio test SMS failed to ' . $phone . ': ' . $e->getMessage() );
+
+			return array(
+				'ok'    => false,
+				'error' => $e->getMessage(),
+			);
+		}
+	}
+
 	// ─── Ad-hoc ping (AJAX test tool) ────────────────────────────────────────
 
 	/**

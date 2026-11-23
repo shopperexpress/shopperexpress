@@ -47,6 +47,7 @@ class SOC_Ajax {
 		'soc_view_pt_keys'       => 'handle_view_pt_keys',
 		'soc_pt_cache_status'    => 'handle_pt_cache_status',
 		'soc_test_api'           => 'handle_test_api',
+		'soc_twilio_test_sms'    => 'handle_twilio_test_sms',
 		'soc_dismiss_notice'     => 'handle_dismiss_notice',
 		'soc_vin_lookup'         => 'handle_vin_lookup',
 		'soc_vin_clear_history'  => 'handle_vin_clear_history',
@@ -55,6 +56,7 @@ class SOC_Ajax {
 		'soc_im_toggle'               => 'handle_im_toggle',
 		'soc_api_mode_toggle'         => 'handle_api_mode_toggle',
 		'soc_team_mode_toggle'        => 'handle_team_mode_toggle',
+		'soc_llm_inventory_toggle'    => 'handle_llm_inventory_toggle',
 		'soc_api_save_credentials'    => 'handle_api_save_credentials',
 		'soc_api_test_connection'     => 'handle_api_test_connection',
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
@@ -492,6 +494,32 @@ class SOC_Ajax {
 	}
 
 	/**
+	 * Sends a real test SMS via Twilio to confirm the configured credentials
+	 * and sender number can actually deliver a message.
+	 */
+	private function handle_twilio_test_sms(): void {
+		$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+
+		if ( empty( $phone ) ) {
+			SOC_Response::error( 'Phone number required.' );
+		}
+
+		$module = $this->modules['api-health'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Health module not available.' );
+		}
+
+		$result = $module->send_test_sms( $phone );
+
+		if ( ! $result['ok'] ) {
+			SOC_Response::error( $result['error'] ?? 'Twilio test SMS failed.' );
+		}
+
+		SOC_Response::success( $result );
+	}
+
+	/**
 	 * Dismisses a specific admin notice until changed in the DB/options.
 	 */
 	private function handle_dismiss_notice(): void {
@@ -678,6 +706,19 @@ class SOC_Ajax {
 		$new_state = $module->set_team_mode( $enabled );
 
 		SOC_Logger::write( 'general', 'Team Members mode toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Toggle the /llm/inventory/ AI-readable inventory page on/off (staged rollout).
+	 */
+	private function handle_llm_inventory_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 0 );
+
+		$new_state = \App\Components\Base\Llm_Inventory::set_enabled( $enabled );
+
+		SOC_Logger::write( 'general', 'AI inventory page (/llm/inventory/) toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
 
 		SOC_Response::success( array( 'enabled' => $new_state ) );
 	}

@@ -44,6 +44,7 @@
     SOC.bindCachePtActions();
     SOC.bindLogPagination();
     SOC.bindApiTest();
+    SOC.bindTwilioTestSms();
     SOC.bindDbCleanup();
     SOC.bindApiSettings();
     SOC.bindApiFilters();
@@ -447,6 +448,37 @@
   };
 
   // ----------------------------------------------------------------
+  // Twilio test SMS
+  // ----------------------------------------------------------------
+  SOC.bindTwilioTestSms = function () {
+    $(document).on('click', '#soc-twilio-test-sms-btn', function () {
+      const $btn = $(this);
+      const phone = $('#soc-twilio-test-phone').val().trim();
+      if (!phone) return;
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax(
+        'soc_twilio_test_sms',
+        { phone: phone },
+        function (data) {
+          $('#soc-twilio-test-result')
+            .html('<span style="color:#00a32a;">&#10003; Sent</span> &mdash; SID: ' + ((data && data.sid) || 'n/a'))
+            .show();
+          SOC.showSuccess('Test SMS sent.');
+          $btn.prop('disabled', false);
+        },
+        function (msg) {
+          $('#soc-twilio-test-result')
+            .html('<span style="color:#d63638;">&#10007; ' + msg + '</span>')
+            .show();
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+  };
+
+  // ----------------------------------------------------------------
   // DB cleanup
   // ----------------------------------------------------------------
   SOC.bindDbCleanup = function () {
@@ -609,6 +641,27 @@
         $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
 
         SOC.showSuccess('Team Members mode ' + (on ? 'enabled' : 'disabled') + '.');
+        SOC.reloadPanel('api-settings');
+      });
+    });
+
+    // AI Inventory Page toggle (/llm/inventory/)
+    $(document).on('change' + ns, '#soc-llm-inventory-toggle', function () {
+      const enabled = $(this).is(':checked') ? 1 : 0;
+      const $card = $(this).closest('.soc-api-mode-card');
+      const $badge = $('#soc-llm-inventory-badge');
+      const $dot = $('#soc-llm-inventory-indicator');
+
+      SOC.showLoading();
+
+      SOC.ajax('soc_llm_inventory_toggle', { enabled: enabled }, function (data) {
+        const on = data && data.enabled;
+
+        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
+        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+
+        SOC.showSuccess('AI inventory page ' + (on ? 'enabled' : 'disabled') + '.');
         SOC.reloadPanel('api-settings');
       });
     });
