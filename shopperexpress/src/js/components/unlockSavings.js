@@ -143,42 +143,134 @@ export default function initUnlockSavings() {
     delete prefetchCache[key];
 
     promise.done(function (response) {
-      const tempDiv = jQuery('<div>').html(response);
       const form = jQuery(formSelector);
+      const container = form.get(0);
+
+      if (!container) return;
+
+      // Parse into an inert <template> so nothing executes yet. Scripts are
+      // pulled out and run by runScripts() below rather than by jQuery's
+      // .html(): jQuery evaluates inline scripts via a temporary <head> node it
+      // removes afterwards, which throws ("parentNode is null") on WPForms'
+      // self-removing honeypot snippet (document.currentScript.remove()) and
+      // aborted everything after the insert — leaving Next disabled.
+      const template = document.createElement('template');
+      template.innerHTML = response;
+
+      const scripts = Array.from(template.content.querySelectorAll('script'));
+      scripts.forEach((script) => script.remove());
+
+      // The response carries every asset WPForms needs for the form (see
+      // Ajax::render_wpforms_with_assets()). Skip the ones the page already
+      // has, matched by WP's handle id: re-running jQuery would wipe its
+      // plugins (Bootstrap modals, jcf, …) and re-running wpforms.min.js would
+      // bind its document-level handlers a second time.
+      const isOnPage = (el) => el.id && document.getElementById(el.id);
+
+      template.content.querySelectorAll('link[id], style[id]').forEach((el) => {
+        if (isOnPage(el)) el.remove();
+      });
+
+      // When wpforms.min.js was already on the page it won't init the new form
+      // on its own; when it arrives with this response, its own init does.
+      const wpformsAlreadyLoaded = !!(window.wpforms && typeof window.wpforms.ready === 'function');
 
       jQuery('.post-id input').val(post_id);
 
       // Replace the form with the new one
-      form.html(tempDiv.children());
+      form.empty();
+      container.appendChild(template.content);
 
-      // Write the user journey to the input from the local storage
-      updateJourneyField();
-      updateFullCircleFields();
+      runScripts(
+        scripts.filter((script) => !isOnPage(script)),
+        container
+      ).then(() => {
+        if (wpformsAlreadyLoaded) {
+          window.wpforms.ready();
+        }
 
-      // Handle the form pages
-      initFormPagesHandler(form);
+        if (window.WPForms && window.WPForms.FrontendModern && typeof window.WPForms.FrontendModern.initPageBreakButtons === 'function') {
+          window.WPForms.FrontendModern.initPageBreakButtons();
+        }
 
-      form.find('select').each(function () {
-        jcf.replace(jQuery(this));
+        // Write the user journey to the input from the local storage
+        updateJourneyField();
+        updateFullCircleFields();
+
+        // Handle the form pages
+        initFormPagesHandler(form);
+
+        form.find('select').each(function () {
+          jcf.replace(jQuery(this));
+        });
       });
     });
   }
 }
 
+/**
+ * Execute <script> elements taken from an HTML fragment, in document order.
+ * Each one is recreated as a real element (scripts inserted via innerHTML
+ * never run) and appended to `target`; external ones are awaited before the
+ * next runs so dependency order (jquery-validate → wpforms → …) is kept.
+ * A failing script is logged by the browser and does not stop the chain.
+ *
+ * @param {HTMLScriptElement[]} scripts
+ * @param {HTMLElement} target
+ * @return {Promise<void>}
+ */
+function runScripts(scripts, target) {
+  return scripts.reduce(
+    (chain, source) =>
+      chain.then(
+        () =>
+          new Promise((resolve) => {
+            const script = document.createElement('script');
+
+            Array.from(source.attributes).forEach((attr) => script.setAttribute(attr.name, attr.value));
+
+            if (source.src) {
+              script.async = false;
+              script.onload = resolve;
+              script.onerror = resolve;
+              target.appendChild(script);
+            } else {
+              script.textContent = source.textContent;
+              target.appendChild(script);
+              resolve();
+            }
+          })
+      ),
+    Promise.resolve()
+  );
+}
+
 /* Form pages handler */
 function initFormPagesHandler(form) {
-  const btnSubmit = document.querySelector('.wpforms-page-button');
-  const lastPage = document.querySelector('.wpforms-page.last');
+  // Scope everything to the AJAX-injected form: the same form may also be
+  // rendered elsewhere on the page (e.g. #contactModal), so a document-wide
+  // lookup can hit the wrong copy and leave this one's Next button disabled.
+  const pageButtons = form.find('.wpforms-page-button');
+  const lastPage = form.find('.wpforms-page.last');
 
-  if (!btnSubmit) return;
+  if (!pageButtons.length) return;
 
-  btnSubmit.classList.remove('wpforms-disabled');
-  btnSubmit.removeAttribute('aria-disabled');
+  // WPForms renders page buttons as disabled and only enables them once, on
+  // page load (wpforms-modern.js initPageBreakButtons), which never runs for
+  // forms injected later. Enable them now and again after the re-injected
+  // wpforms.min.js finishes its own (async) init.
+  const enablePageButtons = () => {
+    pageButtons.removeClass('wpforms-disabled').attr('aria-disabled', 'false').attr('aria-describedby', '');
+  };
 
-  btnSubmit.addEventListener('click', () => {
+  enablePageButtons();
+  jQuery(document).one('wpformsReady', enablePageButtons);
+  setTimeout(enablePageButtons, 0);
+
+  form.find('.wpforms-page-next').on('click', () => {
     // Wait for the last page to be shown
     setTimeout(() => {
-      if (lastPage && lastPage.offsetParent !== null) {
+      if (lastPage.length && lastPage.is(':visible')) {
         initTwillioAPI(form);
       }
     }, 100);
