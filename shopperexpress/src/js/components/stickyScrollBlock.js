@@ -21,6 +21,8 @@ export default function initStickyScrollBlock() {
     setBoxHeight: true,
     activeClass: 'fixed-position',
     positionType: 'fixed',
+    alwaysOnMobile: true,
+    mobileBreakpoint: 768,
     extraTop: function () {
       let totalHeight = 0;
 
