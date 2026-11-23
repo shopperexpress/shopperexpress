@@ -71,6 +71,7 @@ class Theme {
 			\App\Components\Base\ADF_Cron::class,
 			\App\Components\Base\Google_Business_Reviews::class,
 			\App\Components\Base\Google_Reviews_Cron::class,
+			\App\Components\Base\Llm_Inventory::class,
 			\App\Components\SOC\SOC::class,
 			// Intice_Rest hosts the /wp-json/v1/intice/cache/refresh webhook route and the
 			// Team Members cache cron handlers — needed whenever Team Mode is on, even if

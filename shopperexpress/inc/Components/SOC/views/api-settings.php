@@ -7,10 +7,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$mode_enabled  = ! empty( $data['api_mode_enabled'] );
-$team_enabled  = ! empty( $data['team_mode_enabled'] );
-$cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
-$guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled'] : true;
+$mode_enabled         = ! empty( $data['api_mode_enabled'] );
+$team_enabled         = ! empty( $data['team_mode_enabled'] );
+$cache_enabled        = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
+$llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
+$guard_enabled        = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled'] : true;
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -87,6 +88,31 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 					type="checkbox"
 					id="soc-team-mode-toggle"
 					<?php checked( $team_enabled ); ?>
+				/>
+				<span class="soc-toggle__slider"></span>
+			</label>
+		</div>
+
+		<div class="soc-api-mode-card <?php echo $llm_inventory_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
+			<div class="soc-api-mode-card__status">
+				<span class="soc-api-mode-indicator <?php echo $llm_inventory_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-llm-inventory-indicator"></span>
+				<strong id="soc-llm-inventory-label">
+					<?php esc_html_e( 'AI Inventory Page', 'shopperexpress' ); ?>
+				</strong>
+				<span class="soc-badge <?php echo $llm_inventory_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-llm-inventory-badge">
+					<?php echo $llm_inventory_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
+				</span>
+			</div>
+
+			<p class="soc-api-mode-card__desc">
+				<?php esc_html_e( 'Serves a server-rendered, JS-free /llm/inventory/ page listing current new/used/certified inventory for AI assistants and search crawlers (incl. OAI-SearchBot), plus /llms.txt and a child sitemap referenced from the main Yoast sitemap.', 'shopperexpress' ); ?>
+			</p>
+
+			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle AI inventory page', 'shopperexpress' ); ?>">
+				<input
+					type="checkbox"
+					id="soc-llm-inventory-toggle"
+					<?php checked( $llm_inventory_enabled ); ?>
 				/>
 				<span class="soc-toggle__slider"></span>
 			</label>
