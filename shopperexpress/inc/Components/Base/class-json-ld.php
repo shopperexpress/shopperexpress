@@ -180,6 +180,11 @@ class JSON_LD implements Theme_Component {
 		'review'                 => array(
 			// Name used for the itemReviewed→AutoDealer node; empty acf_key/static_value = site name.
 			'itemReviewedName' => array( 'enabled' => true, 'acf_key' => '', 'static_value' => '' ),
+			// @id used for the itemReviewed→AutoDealer node; empty = home_url() . '#dealer'
+			// (the previous hardcoded value). Override only to match the @id already used
+			// by the Organization/LocalBusiness schema below when either is enabled, so a
+			// page's JSON-LD graph doesn't end up with two disconnected dealer entities.
+			'itemReviewedId'   => array( 'enabled' => true, 'acf_key' => '', 'static_value' => '' ),
 		),
 		'organization_enabled'   => false,
 		'organization'           => array(

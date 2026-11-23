@@ -2206,8 +2206,15 @@ select.jl-osub-field { cursor: pointer; }
 					'icon'        => '⭐',
 					'schema_type' => 'Review',
 					'cfg_key'     => 'review',
-					'desc'        => 'Site-wide Review/AggregateRating JSON-LD on pages that render the reviews section, output via the "Output Review schema site-wide" toggle in the sidebar. Self-serving reviews (your own business reviewing itself) do not get star rich results in Google Search — this only keeps the structured data valid.',
+					'desc'        => 'Site-wide Review/AggregateRating JSON-LD on pages that render the reviews section, output via the "Output Review schema site-wide" toggle in the sidebar. Self-serving reviews (your own business reviewing itself) do not get star rich results in Google Search — this only keeps the structured data valid. Override itemReviewedId only if it needs to match the Organization/LocalBusiness @id already used on this site — leave blank to keep the default #dealer reference.',
 					'props'       => array(
+						array(
+							'key'         => 'itemReviewedId',
+							'schema'      => 'itemReviewed → AutoDealer → @id',
+							'type'        => 'URL',
+							'source'      => "Auto: home URL + '#dealer'",
+							'recommended' => true,
+						),
 						array(
 							'key'         => 'itemReviewedName',
 							'schema'      => 'itemReviewed → AutoDealer → name',
@@ -3428,7 +3435,8 @@ select.jl-osub-field { cursor: pointer; }
 		/* ── Reviews (site-wide, sample graph) ── */
 		if (schemaType === 'reviews') {
 			const itemReviewedName = isOn(props.itemReviewedName) ? rv(props.itemReviewedName, DLRNAME) : DLRNAME;
-			const itemReviewed = { '@type':'AutoDealer', '@id': SITE + '/#dealer', 'name': itemReviewedName };
+			const itemReviewedId   = isOn(props.itemReviewedId) ? rv(props.itemReviewedId, SITE + '/#dealer') : SITE + '/#dealer';
+			const itemReviewed = { '@type':'AutoDealer', '@id': itemReviewedId, 'name': itemReviewedName };
 			return { '@context':'https://schema.org', '@graph': [
 				{
 					'@type':'Review', '@id': SITE + '/#review-1', itemReviewed,
