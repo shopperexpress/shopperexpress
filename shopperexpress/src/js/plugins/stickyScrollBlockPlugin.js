@@ -217,9 +217,12 @@ import $ from 'jquery';
       scrollHandler: function () {
         this.winScrollTop = $win.scrollTop();
 
+        this.forcedOnMobile = !!(this.options.alwaysOnMobile && window.innerWidth < this.options.mobileBreakpoint);
+
         const isActiveSticky =
+          this.forcedOnMobile ||
           this.winScrollTop - (this.options.showAfterScrolled ? this.extraTop : 0) - (this.options.showAfterScrolled ? this.data.boxHeight + this.extraTop : 0) >
-          this.data.boxOffsetTop - this.extraTop;
+            this.data.boxOffsetTop - this.extraTop;
 
         if (isActiveSticky) {
           this.isStickyEnabled && this.stickyOn();
@@ -238,7 +241,9 @@ import $ from 'jquery';
             position: this.options.positionType,
           });
 
-          if (this.isWrap) {
+          // Forced-mobile mode floats the box over the content instead of
+          // pushing it down — skip reserving its height in the wrap.
+          if (this.isWrap && !this.forcedOnMobile) {
             this.$stickyBoxWrap.css({
               height: this.data.boxFullHeight,
             });
@@ -384,6 +389,8 @@ import $ from 'jquery';
         extraBottom: 0,
         animDelay: 0.1,
         animSpeed: 0.2,
+        alwaysOnMobile: false,
+        mobileBreakpoint: 768,
       },
       opt
     );
