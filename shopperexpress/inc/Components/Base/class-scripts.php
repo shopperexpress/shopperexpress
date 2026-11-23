@@ -272,7 +272,8 @@ class Scripts implements Theme_Component {
 				'nonce'               => wp_create_nonce( 'shopperexpress_nonce' ),
 				'adf_lead_nonce'      => wp_create_nonce( 'submit_adf_lead' ),
 				'api_mode'            => (bool) get_option( 'shopperexpress_api_mode_enabled' ),
-				'intice_guard_enabled' => (bool) get_option( 'shopperexpress_intice_guard_enabled', true ),
+				// Explicit '1'/'0': wp_localize_script() casts scalars to string, so false would become ''.
+				'intice_guard_enabled' => get_option( 'shopperexpress_intice_guard_enabled', true ) ? '1' : '0',
 				'google_reviews_rest' => rest_url( 'v1/google-reviews' ),
 				'vehicles_feed_rest'  => $this->vehicles_feed_url(),
 			)

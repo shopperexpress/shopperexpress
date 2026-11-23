@@ -54,7 +54,8 @@ window.bootstrap = bootstrap;
 window.Handlebars = Handlebars;
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (!window.ajax || window.ajax.intice_guard_enabled !== false) {
+  // wp_localize_script() stringifies scalars, so the flag arrives as '1'/'0'.
+  if (!window.ajax || String(window.ajax.intice_guard_enabled) !== '0') {
     initInticeToolGuard();
   }
   initSwitchLogos();
