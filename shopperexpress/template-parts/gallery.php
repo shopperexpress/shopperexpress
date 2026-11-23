@@ -68,7 +68,7 @@ if ( $images_count === 1 || get_field( 'use_primary_image_url', 'option' ) ) {
 		}
 		endwhile;
 } else {
-	$gallery = 'alternative' === $use_images_list ? get_field( 'gallery_srp', $post_id ) : get_field( 'gallery', $post_id );
+	$gallery = \App\resolve_cpt_vehicle_gallery( $post_id, $use_images_list );
 }
 
 $vin_number = get_field( 'vin_number', $post_id );

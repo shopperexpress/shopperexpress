@@ -15,6 +15,7 @@ $vcfg          = $data['vehicle_listings'] ?? $data['vehicle'] ?? array();
 $vcfg_used     = $data['vehicle_used_listings'] ?? $data['vehicle'] ?? array();
 $org_enabled   = ! empty( $data['organization_enabled'] );
 $lb_enabled    = ! empty( $data['local_business_enabled'] );
+$reviews_enabled = $data['reviews_schema_enabled'] ?? true;
 
 $all_post_types = array(
 	'listings'           => 'listings (New)',
@@ -1405,6 +1406,18 @@ select.jl-osub-field { cursor: pointer; }
 				Output LocalBusiness schema site-wide
 			</label>
 
+			<div class="jl-sb-item" data-schema="reviews">
+				<div class="jl-sb-icon">⭐</div>
+				<div class="jl-sb-info">
+					<div class="jl-sb-name">Reviews</div>
+					<div class="jl-sb-type">schema.org/Review</div>
+				</div>
+			</div>
+			<label class="jl-global-row" style="padding-left:34px;">
+				<input type="checkbox" id="jl-reviews-enabled" <?php checked( $reviews_enabled ); ?>>
+				Output Review schema site-wide
+			</label>
+
 			<div class="jl-sb-divider"></div>
 			<div class="jl-sb-section">Global Output</div>
 			<div class="jl-sb-hint">Which post types get JSON-LD injected in <code>&lt;head&gt;</code></div>
@@ -2188,7 +2201,24 @@ select.jl-osub-field { cursor: pointer; }
 			 * @param array  $type_cfg   Saved config for this type.
 			 * @param string $stype      Schema type slug e.g. "lease-offer".
 			 */
-			/* Item properties for the Archive / SRP Vehicle entries */
+			$other_schema_type_defs['reviews'] = array(
+					'label'       => 'Reviews',
+					'icon'        => '⭐',
+					'schema_type' => 'Review',
+					'cfg_key'     => 'review',
+					'desc'        => 'Site-wide Review/AggregateRating JSON-LD on pages that render the reviews section, output via the "Output Review schema site-wide" toggle in the sidebar. Self-serving reviews (your own business reviewing itself) do not get star rich results in Google Search — this only keeps the structured data valid.',
+					'props'       => array(
+						array(
+							'key'         => 'itemReviewedName',
+							'schema'      => 'itemReviewed → AutoDealer → name',
+							'type'        => 'String',
+							'source'      => 'Auto: site name',
+							'recommended' => true,
+						),
+					),
+				);
+
+				/* Item properties for the Archive / SRP Vehicle entries */
 			$srp_item_props = array(
 				array(
 					'key'         => 'brand',
@@ -2944,7 +2974,8 @@ select.jl-osub-field { cursor: pointer; }
 			'archive-srp-listings':'archive_srp_listings','archive-srp-used-listings':'archive_srp_used_listings',
 			'srp-item-listings':'srp_item_listings','srp-item-used-listings':'srp_item_used_listings',
 			'research':'research',
-			'organization':'organization','local-business':'local_business'
+			'organization':'organization','local-business':'local_business',
+			'reviews':'review'
 		};
 		const nonVehicle = {};
 		Object.entries(slugToKey).forEach(([slug, key]) => {
@@ -2965,12 +2996,13 @@ select.jl-osub-field { cursor: pointer; }
 
 		const organization_enabled   = document.getElementById('jl-org-enabled')?.checked || false;
 		const local_business_enabled = document.getElementById('jl-lb-enabled')?.checked || false;
+		const reviews_schema_enabled = document.getElementById('jl-reviews-enabled')?.checked || false;
 
 		return { mode, post_types: postTypes, archive_limit: archiveLimit,
 			vehicle: vehicle_listings, /* backward compat */
 			vehicle_listings, vehicle_used_listings,
 			custom_properties, srp_item_offers_sub_listings, srp_item_offers_sub_used_listings,
-			organization_enabled, local_business_enabled,
+			organization_enabled, local_business_enabled, reviews_schema_enabled,
 			...nonVehicle };
 	}
 
@@ -3391,6 +3423,21 @@ select.jl-osub-field { cursor: pointer; }
 				if (raw) s.sameAs = raw.split(',').map(v => v.trim()).filter(Boolean);
 			}
 			return s;
+		}
+
+		/* ── Reviews (site-wide, sample graph) ── */
+		if (schemaType === 'reviews') {
+			const itemReviewedName = isOn(props.itemReviewedName) ? rv(props.itemReviewedName, DLRNAME) : DLRNAME;
+			const itemReviewed = { '@type':'AutoDealer', '@id': SITE + '/#dealer', 'name': itemReviewedName };
+			return { '@context':'https://schema.org', '@graph': [
+				{
+					'@type':'Review', '@id': SITE + '/#review-1', itemReviewed,
+					'author': { '@type':'Person', 'name':'Jane Doe' },
+					'datePublished':'2024-11-01',
+					'reviewBody':'Great experience from start to finish.',
+					'reviewRating': { '@type':'Rating', 'bestRating':5, 'worstRating':1, 'ratingValue':5 },
+				},
+			] };
 		}
 
 		return { '@context':'https://schema.org', '@type':'Thing', 'name': schemaType };

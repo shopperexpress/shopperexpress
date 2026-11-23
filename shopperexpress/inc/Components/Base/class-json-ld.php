@@ -176,6 +176,11 @@ class JSON_LD implements Theme_Component {
 			'image'         => array( 'enabled' => true,  'acf_key' => 'featured_image', 'static_value' => '' ),
 		),
 		// Site-wide blocks — output in <head> on every page (not tied to a post type).
+		'reviews_schema_enabled' => true,
+		'review'                 => array(
+			// Name used for the itemReviewed→AutoDealer node; empty acf_key/static_value = site name.
+			'itemReviewedName' => array( 'enabled' => true, 'acf_key' => '', 'static_value' => '' ),
+		),
 		'organization_enabled'   => false,
 		'organization'           => array(
 			'name'      => array( 'enabled' => true,  'acf_key' => '', 'static_value' => '' ),

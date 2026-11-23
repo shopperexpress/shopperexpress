@@ -1091,6 +1091,7 @@ class SOC_Ajax {
 		// Sanitize site-wide schema enable switches.
 		$organization_enabled   = ! empty( $input['organization_enabled'] );
 		$local_business_enabled = ! empty( $input['local_business_enabled'] );
+		$reviews_schema_enabled = ! empty( $input['reviews_schema_enabled'] );
 
 		// Sanitize vehicle prop config (each prop can be bool or {enabled,acf_key,static_value}).
 		$allowed_props = array(
@@ -1157,7 +1158,7 @@ class SOC_Ajax {
 			'archive_srp_listings', 'archive_srp_used_listings',
 			'lease_offer_srp', 'finance_offer_srp', 'conditional_offer_srp', 'service_offer_srp',
 			'research_srp',
-			'organization', 'local_business',
+			'organization', 'local_business', 'review',
 		);
 		$non_vehicle_cfg = array();
 		foreach ( $non_vehicle_types as $type_key ) {
@@ -1237,6 +1238,7 @@ class SOC_Ajax {
 				'custom_properties'       => $custom_properties,
 				'organization_enabled'    => $organization_enabled,
 				'local_business_enabled'  => $local_business_enabled,
+				'reviews_schema_enabled'  => $reviews_schema_enabled,
 			),
 			$non_vehicle_cfg,
 			$type_specific_vehicle,

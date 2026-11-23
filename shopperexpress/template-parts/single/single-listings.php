@@ -29,7 +29,7 @@ while ( have_posts() ) :
 	$get_post_type   = '-' . $post_type;
 	$use_images_list = get_field( 'use_images_list' );
 	$post_id         = get_the_id();
-	$gallery         = 'alternative' === $use_images_list ? get_field( 'gallery_srp' ) : get_field( 'gallery' );
+	$gallery         = \App\resolve_cpt_vehicle_gallery( $post_id, $use_images_list );
 	$vin_number      = get_field( 'vin_number' );
 	$location        = get_field( 'location' );
 	$year            = get_field( 'year' );

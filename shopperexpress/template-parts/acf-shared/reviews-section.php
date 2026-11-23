@@ -56,7 +56,12 @@ $slides_per_view   = $is_slider ? (int) ( $args['slides_per_view'] ?? 0 ) : 0;
 $min_reviews_count = (int) ( $args['min_reviews_count'] ?? 0 );
 $modal_id          = $is_slider ? wp_unique_id( 'reviews-modal-' ) : '';
 
-if ( $place_id ) :
+// Manageable from SOC → JSON-LD Schema → Reviews (sidebar toggle "Output Review
+// schema site-wide"); on by default to match the previous unconditional behaviour.
+$reviews_schema_config  = \App\Components\Base\JSON_LD::get_config();
+$reviews_schema_enabled = $reviews_schema_config['reviews_schema_enabled'] ?? true;
+
+if ( $place_id && $reviews_schema_enabled ) :
 	// Review JSON-LD — server-rendered from the same (already 5-star + has-text
 	// + keyword filtered) data the widget displays, so search engines see it
 	// without needing to run the client-side Google Reviews JS module.
@@ -77,8 +82,14 @@ if ( $place_id ) :
 		// Console). Typing the reference here makes it self-contained and
 		// independent of that external snippet, with no separate top-level
 		// AutoDealer node to risk duplicating.
-		$dealer_id   = esc_url( home_url( '/' ) ) . '#dealer';
-		$dealer_name = wp_strip_all_tags( get_bloginfo( 'name' ) );
+		$dealer_id        = esc_url( home_url( '/' ) ) . '#dealer';
+		$dealer_name_prop = \App\Components\Base\JSON_LD::prop_cfg( $reviews_schema_config['review'] ?? array(), 'itemReviewedName' );
+		$dealer_name      = '' !== $dealer_name_prop['static_value']
+			? wp_strip_all_tags( $dealer_name_prop['static_value'] )
+			: wp_strip_all_tags( (string) get_field( $dealer_name_prop['acf_key'] ?: 'dealer_name', get_the_ID() ) );
+		if ( '' === $dealer_name ) {
+			$dealer_name = wp_strip_all_tags( get_bloginfo( 'name' ) );
+		}
 
 		$graph = array();
 

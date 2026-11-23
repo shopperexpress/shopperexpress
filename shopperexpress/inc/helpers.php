@@ -127,6 +127,34 @@ function resolve_vehicle_gallery( array $vehicle ): array {
 }
 
 /**
+ * Resolve a CPT/ACF vehicle's active image gallery, mirroring resolve_vehicle_gallery()'s
+ * fallback chain for API mode: try the list picked by `use_images_list`, and if it's empty
+ * (e.g. only one of the two repeaters was ever synced by the feed import), fall back to the
+ * other one instead of rendering no images at all.
+ *
+ * @param int         $post_id         Vehicle post ID.
+ * @param string|null $use_images_list Raw `use_images_list` field value ('primary'|'alternative').
+ * @return array List of ACF `gallery`/`gallery_srp` repeater rows ({image_url, image_background, image_reverse}).
+ */
+function resolve_cpt_vehicle_gallery( int $post_id, ?string $use_images_list = null ): array {
+	$primary   = get_field( 'gallery', $post_id );
+	$alternate = get_field( 'gallery_srp', $post_id );
+
+	$primary   = is_array( $primary ) ? $primary : array();
+	$alternate = is_array( $alternate ) ? $alternate : array();
+
+	$list = 'alternative' === $use_images_list ? $alternate : $primary;
+
+	if ( ! empty( $list ) ) {
+		return $list;
+	}
+
+	$other = 'alternative' === $use_images_list ? $primary : $alternate;
+
+	return ! empty( $other ) ? $other : array();
+}
+
+/**
  * Resolve a scalar field from a raw Intice vehicle array, checking the
  * dealer-mapped `payload` bag first (and its underscore variant) — dealer
  * edits/overrides are merged into `payload` server-side (see
