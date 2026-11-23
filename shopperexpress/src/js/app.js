@@ -54,7 +54,9 @@ window.bootstrap = bootstrap;
 window.Handlebars = Handlebars;
 
 document.addEventListener('DOMContentLoaded', function () {
-  initInticeToolGuard();
+  if (!window.ajax || window.ajax.intice_guard_enabled !== false) {
+    initInticeToolGuard();
+  }
   initSwitchLogos();
   initOpenPdfInNewTab();
   initProductsFiltration();

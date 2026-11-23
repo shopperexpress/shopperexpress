@@ -10,6 +10,7 @@ defined( 'ABSPATH' ) || exit;
 $mode_enabled  = ! empty( $data['api_mode_enabled'] );
 $team_enabled  = ! empty( $data['team_mode_enabled'] );
 $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
+$guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled'] : true;
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -90,6 +91,40 @@ $cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled']
 				<span class="soc-toggle__slider"></span>
 			</label>
 		</div>
+	</div>
+</div>
+
+<!-- 1b. Intice tool guard -->
+<div class="soc-section">
+	<div class="soc-section__title"><?php esc_html_e( 'Intice Tool Guard', 'shopperexpress' ); ?></div>
+
+	<div class="soc-api-mode-card <?php echo $guard_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
+		<div class="soc-api-mode-card__status">
+			<span class="soc-api-mode-indicator <?php echo $guard_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-guard-indicator"></span>
+			<strong id="soc-guard-label">
+				<?php echo $guard_enabled ? esc_html__( 'Guard Enabled', 'shopperexpress' ) : esc_html__( 'Guard Disabled', 'shopperexpress' ); ?>
+			</strong>
+			<span class="soc-badge <?php echo $guard_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-guard-badge">
+				<?php echo $guard_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
+			</span>
+		</div>
+
+		<p class="soc-api-mode-card__desc">
+			<?php if ( $guard_enabled ) : ?>
+				<?php esc_html_e( 'Intice shopping-tool buttons (Leadmaker, Trademaker, Dealmaker, Loanmaker, …) wait for inticeAllEvents to load and show a "This tool is temporarily unavailable" popup instead of a silent dead button if it never does.', 'shopperexpress' ); ?>
+			<?php else : ?>
+				<?php esc_html_e( 'Intice shopping-tool buttons run their raw inline onclick handler directly, with no wait and no "temporarily unavailable" popup. If inticeAllEvents has not loaded yet (e.g. blocked by a consent tool), the button will fail silently.', 'shopperexpress' ); ?>
+			<?php endif; ?>
+		</p>
+
+		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle Intice tool guard', 'shopperexpress' ); ?>">
+			<input
+				type="checkbox"
+				id="soc-intice-guard-toggle"
+				<?php checked( $guard_enabled ); ?>
+			/>
+			<span class="soc-toggle__slider"></span>
+		</label>
 	</div>
 </div>
 
