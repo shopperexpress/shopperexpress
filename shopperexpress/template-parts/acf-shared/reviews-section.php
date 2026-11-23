@@ -82,7 +82,20 @@ if ( $place_id && $reviews_schema_enabled ) :
 		// Console). Typing the reference here makes it self-contained and
 		// independent of that external snippet, with no separate top-level
 		// AutoDealer node to risk duplicating.
-		$dealer_id        = esc_url( home_url( '/' ) ) . '#dealer';
+		$dealer_id_prop = \App\Components\Base\JSON_LD::prop_cfg( $reviews_schema_config['review'] ?? array(), 'itemReviewedId' );
+		// Override only when explicitly set — e.g. to match the Organization/
+		// LocalBusiness @id when either is enabled, so the page graph doesn't
+		// end up with two disconnected dealer entities. Blank keeps the
+		// original hardcoded '#dealer' reference every live site already uses.
+		$dealer_id = '' !== $dealer_id_prop['static_value']
+			? esc_url( $dealer_id_prop['static_value'] )
+			: ( $dealer_id_prop['acf_key']
+				? esc_url( (string) get_field( $dealer_id_prop['acf_key'], get_the_ID() ) )
+				: '' );
+		if ( '' === $dealer_id ) {
+			$dealer_id = esc_url( home_url( '/' ) ) . '#dealer';
+		}
+
 		$dealer_name_prop = \App\Components\Base\JSON_LD::prop_cfg( $reviews_schema_config['review'] ?? array(), 'itemReviewedName' );
 		$dealer_name      = '' !== $dealer_name_prop['static_value']
 			? wp_strip_all_tags( $dealer_name_prop['static_value'] )
