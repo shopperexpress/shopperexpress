@@ -132,7 +132,7 @@ $time_tag    = $updated_attr
 		.pager span.off{color:#8c959f}
 		.pager a[aria-current="page"]{background:#1f2328;border-color:#1f2328;color:#fff;font-weight:600}
 		.vehicle{display:flex;flex-wrap:wrap;gap:20px;padding:16px;border:1px solid #d1d9e0;border-radius:10px;background:#fff}
-		.vehicle img{flex:0 0 300px;max-width:100%;height:250px;object-fit:cover;border-radius:6px;background:#e6e9ed}
+		.vehicle img{flex:0 0 300px;max-width:100%;height:250px;object-fit:contain;border-radius:6px;background:#e6e9ed}
 		.body{flex:999 1 320px;min-width:0;display:flex;flex-direction:column;gap:12px}
 		.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 24px}
 		h2{margin:0;font-size:19px;line-height:1.3}

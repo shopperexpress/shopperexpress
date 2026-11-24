@@ -427,14 +427,14 @@ function map_llm_inventory_vehicle_api( array $vehicle, string $post_type ): arr
 		'make'           => $vehicle['make'] ?? null,
 		'model'          => $vehicle['model'] ?? null,
 		'trim'           => '' !== $trim ? $trim : null,
-		'stock'          => $vehicle['stock'] ?? null,
-		'mileage'        => $vehicle['mileage'] ?? null,
-		'body_style'     => $vehicle['body_style'] ?? null,
-		'drivetrain'     => $vehicle['drivetrain'] ?? null,
-		'transmission'   => $vehicle['transmission'] ?? null,
-		'fuel_type'      => $vehicle['fuel_type'] ?? null,
-		'exterior_color' => $vehicle['exterior_color'] ?? null,
-		'interior_color' => $vehicle['interior_color'] ?? null,
+		'stock'          => resolve_vehicle_field( $vehicle, 'stock' ),
+		'mileage'        => resolve_vehicle_field( $vehicle, 'mileage' ),
+		'body_style'     => resolve_vehicle_field( $vehicle, 'body_style' ),
+		'drivetrain'     => resolve_vehicle_field( $vehicle, 'drivetrain' ),
+		'transmission'   => resolve_vehicle_field( $vehicle, 'transmission' ),
+		'fuel_type'      => resolve_vehicle_field( $vehicle, 'fuel_type' ),
+		'exterior_color' => resolve_vehicle_field( $vehicle, 'exterior_color' ),
+		'interior_color' => resolve_vehicle_field( $vehicle, 'interior_color' ),
 	);
 
 	foreach ( $fields as $key => $value ) {
