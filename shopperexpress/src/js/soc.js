@@ -779,34 +779,6 @@
       );
     });
 
-    // Intice background runner: WP-Cron <-> Supervisor worker
-    $(document).on('change' + ns, '#soc-intice-runner-toggle', function () {
-      const $checkbox = $(this);
-      const enabled = $checkbox.is(':checked') ? 1 : 0;
-
-      SOC.showLoading();
-
-      SOC.ajax(
-        'soc_intice_runner_toggle',
-        { enabled: enabled },
-        function (data) {
-          if (!enabled) {
-            SOC.showSuccess('Background runner set to WP-Cron.');
-          } else if (data && data.alive) {
-            SOC.showSuccess('Background runner set to Supervisor.');
-          } else {
-            SOC.showError('Supervisor selected, but the worker is not running — jobs keep using WP-Cron until it starts.');
-          }
-
-          SOC.reloadPanel('api-settings');
-        },
-        function (msg) {
-          SOC.showError(msg);
-          $checkbox.prop('checked', !enabled);
-        }
-      );
-    });
-
     // Intice tool guard ("temporarily unavailable" popup) enable / disable toggle
     $(document).on('change' + ns, '#soc-intice-guard-toggle', function () {
       const $checkbox = $(this);

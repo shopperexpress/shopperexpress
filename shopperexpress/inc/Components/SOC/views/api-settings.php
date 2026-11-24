@@ -176,40 +176,6 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 	</p>
 	<?php endif; ?>
 
-	<?php
-	$runner_status   = \App\Components\Api\Intice_Jobs::get_status();
-	$runner_selected = \App\Components\Api\Intice_Jobs::RUNNER_SUPERVISOR === $runner_status['runner'];
-	$runner_seen     = $runner_status['heartbeat'] ? human_time_diff( $runner_status['heartbeat'] ) : '';
-	$runner_wp_cli   = '/usr/local/bin/wp';
-	$runner_conf     = "[program:intice-worker-" . sanitize_key( wp_parse_url( home_url(), PHP_URL_HOST ) ) . "]
-"
-		. 'command=php ' . $runner_wp_cli . ' intice worker --max-time=600 --path=' . untrailingslashit( ABSPATH ) . "
-"
-		. "user=www-data
-autostart=true
-autorestart=true
-startsecs=5
-stopwaitsecs=120
-"
-		. "stdout_logfile=/var/log/supervisor/intice-worker.log
-redirect_stderr=true";
-	?>
-	<?php
-	if ( ! $runner_selected ) {
-		$runner_pill = array( 'off', __( 'WP-Cron', 'shopperexpress' ) );
-		$runner_note = __( 'Jobs run via WP-Cron', 'shopperexpress' );
-	} elseif ( $runner_status['alive'] ) {
-		$runner_pill = array( 'ok', __( 'Running', 'shopperexpress' ) );
-		/* translators: 1: human-readable time difference, 2: number of queued jobs. */
-		$runner_note = sprintf( __( 'Worker seen %1$s ago · %2$d queued', 'shopperexpress' ), $runner_seen, $runner_status['queued'] );
-	} else {
-		$runner_pill = array( 'warn', __( 'Worker down', 'shopperexpress' ) );
-		$runner_note = $runner_seen
-			/* translators: %s: human-readable time difference. */
-			? sprintf( __( 'Last seen %s ago — jobs use WP-Cron', 'shopperexpress' ), $runner_seen )
-			: __( 'Worker never ran — jobs use WP-Cron', 'shopperexpress' );
-	}
-	?>
 	<div class="soc-toggle-list" style="margin-bottom:16px;">
 		<?php
 		$soc_row = array(
@@ -222,28 +188,8 @@ redirect_stderr=true";
 			'desc_off' => __( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ),
 		);
 		require __DIR__ . '/partials/toggle-row.php';
-
-		$soc_row = array(
-			'id'       => 'soc-intice-runner-toggle',
-			'title'    => __( 'Supervisor Worker', 'shopperexpress' ),
-			'on'       => $runner_selected,
-			'tone'     => $runner_pill[0],
-			'status'   => $runner_pill[1],
-			'note'     => $runner_note,
-			'desc_on'  => __( 'Cache rebuilds/regens go to a queue that the Supervisor-managed "wp intice worker" process runs within a second — no WP-Cron loopback, no HTTP timeouts, no waiting for traffic. While the worker is not running, jobs automatically fall back to WP-Cron.', 'shopperexpress' ),
-			'desc_off' => __( 'Cache rebuilds/regens run through WP-Cron (scheduled event + loopback request to wp-cron.php). Switch on once the Supervisor worker (see setup below) is running on the server.', 'shopperexpress' ),
-		);
-		require __DIR__ . '/partials/toggle-row.php';
 		?>
 	</div>
-
-	<details style="margin:0 0 16px;">
-		<summary><?php esc_html_e( 'Supervisor setup', 'shopperexpress' ); ?></summary>
-		<p class="description">
-			<?php esc_html_e( 'Add this program to Supervisor (e.g. /etc/supervisor/conf.d/intice-worker.conf), adjust the wp path and user, then run: supervisorctl reread && supervisorctl update. The worker restarts itself every 10 minutes to pick up setting/code changes.', 'shopperexpress' ); ?>
-		</p>
-		<pre style="background:#f6f7f7;padding:10px;overflow:auto;"><?php echo esc_html( $runner_conf ); ?></pre>
-	</details>
 
 	<?php if ( ! empty( $data['api_cache'] ) ) : ?>
 	<table class="soc-table">
