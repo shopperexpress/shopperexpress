@@ -259,7 +259,7 @@ function resolve_badge_style( string $text, string $context = '', string $post_t
  *
  * @param int $page     1-based page number.
  * @param int $per_page Vehicles per page.
- * @return array{vehicles: array[], total: int, total_pages: int, page: int, per_page: int, last_updated: ?string, stale: bool}
+ * @return array{vehicles: array[], total: int, total_pages: int, page: int, per_page: int, last_updated: ?string, last_updated_ts: ?int, stale: bool}
  */
 function get_llm_inventory_page( int $page, int $per_page ): array {
 	$page     = max( 1, $page );
@@ -282,8 +282,10 @@ function get_llm_inventory_page( int $page, int $per_page ): array {
  * @return array
  */
 function get_llm_inventory_page_api( int $page, int $per_page ): array {
-	$client   = \App\Components\Api\Intice_Api_Client::instance();
-	$vehicles = array();
+	$client     = \App\Components\Api\Intice_Api_Client::instance();
+	$vehicles   = array();
+	$failed     = false;
+	$fetched_at = array();
 
 	foreach ( array(
 		'listings'      => 'new',
@@ -292,8 +294,12 @@ function get_llm_inventory_page_api( int $page, int $per_page ): array {
 		$response = $client->get_vehicles( array( 'condition' => $condition ) );
 
 		if ( is_wp_error( $response ) ) {
+			// Nexus failed and there's no cached copy — this condition is missing.
+			$failed = true;
 			continue;
 		}
+
+		$fetched_at[] = \App\Components\Api\Intice_Api_Client::get_vehicles_fetched_at( array( 'condition' => $condition ) );
 
 		$raw = \App\Components\Api\Intice_Rest::apply_vehicle_filters( $response['data'] ?? array(), $post_type );
 
@@ -307,23 +313,28 @@ function get_llm_inventory_page_api( int $page, int $per_page ): array {
 	$page        = min( $page, $total_pages );
 	$slice       = array_slice( $vehicles, ( $page - 1 ) * $per_page, $per_page );
 
-	$cache_status = null;
+	// Age of the older of the two lists — the page is only as fresh as that.
+	$updated = in_array( null, $fetched_at, true ) || ! $fetched_at ? null : min( $fetched_at );
 
-	foreach ( ( new \App\Components\SOC\Modules\Api_Settings() )->collect_api_cache() as $row ) {
-		if ( 'vehicles' === ( $row['key'] ?? '' ) ) {
-			$cache_status = $row;
-			break;
-		}
-	}
+	// Stale = the feed is actually failing, not just "the 10-minute cache
+	// expired": a condition couldn't be loaded at all, the data is older than
+	// Llm_Inventory::STALE_AFTER (normal traffic/imports keep it well under
+	// that), or the last post-import rebuild failed after this data was fetched.
+	$rebuild = \App\Components\Api\Intice_Rest::get_rebuild_state();
+	$stale   = $failed
+		|| null === $updated
+		|| $updated < time() - \App\Components\Base\Llm_Inventory::STALE_AFTER
+		|| ( 'failed' === ( $rebuild['status'] ?? '' ) && (int) ( $rebuild['finished_at'] ?? 0 ) > $updated );
 
 	return array(
-		'vehicles'     => $slice,
-		'total'        => $total,
-		'total_pages'  => $total_pages,
-		'page'         => $page,
-		'per_page'     => $per_page,
-		'last_updated' => $cache_status['cached_at'] ?? null,
-		'stale'        => isset( $cache_status['status'] ) && 'valid' !== $cache_status['status'],
+		'vehicles'        => $slice,
+		'total'           => $total,
+		'total_pages'     => $total_pages,
+		'page'            => $page,
+		'per_page'        => $per_page,
+		'last_updated'    => $updated ? wp_date( 'M j, Y g:i A', $updated ) : null,
+		'last_updated_ts' => $updated,
+		'stale'           => $stale,
 	);
 }
 
@@ -354,8 +365,9 @@ function get_llm_inventory_page_cpt( int $page, int $per_page ): array {
 		$vehicles[] = map_llm_inventory_vehicle_post( $post->ID, $post->post_type );
 	}
 
-	$last_updated   = null;
-	$latest_post_id = get_posts(
+	$last_updated    = null;
+	$last_updated_ts = null;
+	$latest_post_id  = get_posts(
 		array(
 			'post_type'      => array( 'listings', 'used-listings' ),
 			'post_status'    => 'publish',
@@ -367,18 +379,20 @@ function get_llm_inventory_page_cpt( int $page, int $per_page ): array {
 	);
 
 	if ( ! empty( $latest_post_id ) ) {
-		$last_updated = get_the_modified_date( 'M j, Y g:i A', $latest_post_id[0] );
+		$last_updated    = get_the_modified_date( 'M j, Y g:i A', $latest_post_id[0] );
+		$last_updated_ts = (int) get_post_modified_time( 'U', true, $latest_post_id[0] );
 	}
 
 	return array(
-		'vehicles'     => $vehicles,
-		'total'        => (int) $query->found_posts,
-		'total_pages'  => max( 1, (int) $query->max_num_pages ),
-		'page'         => $page,
-		'per_page'     => $per_page,
-		'last_updated' => $last_updated,
+		'vehicles'        => $vehicles,
+		'total'           => (int) $query->found_posts,
+		'total_pages'     => max( 1, (int) $query->max_num_pages ),
+		'page'            => $page,
+		'per_page'        => $per_page,
+		'last_updated'    => $last_updated,
+		'last_updated_ts' => $last_updated_ts,
 		// CPT mode reads straight from the DB on every request — no cache layer to go stale.
-		'stale'        => false,
+		'stale'           => false,
 	);
 }
 
@@ -434,7 +448,7 @@ function map_llm_inventory_vehicle_api( array $vehicle, string $post_type ): arr
 		$out['price'] = (float) $price;
 	}
 
-	$status = $payload['vehicle_status'] ?? null;
+	$status              = $payload['vehicle_status'] ?? null;
 	$out['availability'] = $status ? sanitize_text_field( (string) $status ) : 'available';
 
 	if ( $vin ) {

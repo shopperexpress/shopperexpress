@@ -477,7 +477,7 @@ class Intice_Api_Client {
 			if ( false !== $value ) {
 				$stale_key = str_replace( self::CACHE_PREFIX, self::CACHE_PREFIX_STALE, $key );
 				set_transient( $stale_key, $value, self::STALE_TTL );
-				self::track_key( $stale_key, $meta['group'] ?? '', self::STALE_TTL );
+				self::track_key( $stale_key, $meta['group'] ?? '', self::STALE_TTL, $meta['fetched_at'] ?? null );
 			}
 
 			delete_transient( $key );
@@ -563,8 +563,10 @@ class Intice_Api_Client {
 	private function store( string $live_key, string $stale_key, string $group, int $ttl, $value ): void {
 		set_transient( $live_key, $value, $ttl );
 		set_transient( $stale_key, $value, self::STALE_TTL );
-		self::track_key( $live_key, $group, $ttl );
-		self::track_key( $stale_key, $group, self::STALE_TTL );
+		$fetched_at = time();
+
+		self::track_key( $live_key, $group, $ttl, $fetched_at );
+		self::track_key( $stale_key, $group, self::STALE_TTL, $fetched_at );
 	}
 
 	/**
@@ -645,12 +647,14 @@ class Intice_Api_Client {
 	 * Record a cache key so status/flush works regardless of storage backend
 	 * (DB transients vs. persistent object cache).
 	 *
-	 * @param string $key   Transient key.
-	 * @param string $group 'vehicles', 'vehicle', or 'meta'.
-	 * @param int    $ttl   Seconds until expiry, from now.
+	 * @param string   $key        Transient key.
+	 * @param string   $group      'vehicles', 'vehicle', or 'meta'.
+	 * @param int      $ttl        Seconds until expiry, from now.
+	 * @param int|null $fetched_at When the cached data was fetched from Nexus
+	 *                             (kept when a live copy is re-saved as stale).
 	 * @return void
 	 */
-	public static function track_key( string $key, string $group, int $ttl ): void {
+	public static function track_key( string $key, string $group, int $ttl, ?int $fetched_at = null ): void {
 		$registry = get_option( self::REGISTRY_OPTION, array() );
 
 		// Prune long-expired entries so the registry doesn't grow unbounded — unlike DB
@@ -667,7 +671,41 @@ class Intice_Api_Client {
 			'group'      => $group,
 			'expires_at' => $now + $ttl,
 		);
+
+		if ( null !== $fetched_at ) {
+			$registry[ $key ]['fetched_at'] = $fetched_at;
+		}
+
 		update_option( self::REGISTRY_OPTION, $registry, false );
+	}
+
+	/**
+	 * When the vehicle list for these filters was last successfully fetched from
+	 * Nexus — from whichever of its live/stale cache copies is still tracked.
+	 *
+	 * @param array $filters Same filters as get_vehicles().
+	 * @return int|null Unix time, or null when nothing is cached.
+	 */
+	public static function get_vehicles_fetched_at( array $filters ): ?int {
+		$filters['mode'] = 'full';
+
+		$hash     = md5( serialize( $filters ) );
+		$registry = self::get_registry();
+		$times    = array();
+
+		foreach ( array(
+			self::CACHE_PREFIX . 'vehicles_' . $hash       => self::CACHE_TTL_VEHICLES,
+			self::CACHE_PREFIX_STALE . 'vehicles_' . $hash => self::STALE_TTL,
+		) as $key => $ttl ) {
+			if ( empty( $registry[ $key ] ) ) {
+				continue;
+			}
+
+			// Entries written before fetched_at existed: expires_at - ttl is the write time.
+			$times[] = (int) ( $registry[ $key ]['fetched_at'] ?? ( $registry[ $key ]['expires_at'] - $ttl ) );
+		}
+
+		return $times ? max( $times ) : null;
 	}
 
 	/**

@@ -30,6 +30,32 @@ class Llm_Inventory implements Theme_Component {
 	const PER_PAGE = 50;
 
 	/**
+	 * Inventory data older than this is flagged as possibly out of date. Normal
+	 * operation keeps it far fresher: the vehicles cache is refetched after every
+	 * Nexus import and whenever its 10-minute live / 2-hour stale copies lapse,
+	 * so being past this means fetches from Nexus have been failing.
+	 */
+	const STALE_AFTER = 3 * HOUR_IN_SECONDS;
+
+	/**
+	 * Yoast SEO's option holding the md5 of the llms.txt it last wrote — Yoast
+	 * only keeps regenerating the file while its content still matches.
+	 */
+	const YOAST_LLMS_HASH_OPTION = 'wpseo_llms_txt_content_hash';
+
+	/**
+	 * Heading of the section we add to Yoast's llms.txt (also used to find and replace it).
+	 */
+	const LLMS_SECTION_HEADING = '## Vehicle Inventory';
+
+	/**
+	 * Re-entrancy guard for sync_yoast_llms_txt() (it updates the hash option it listens to).
+	 *
+	 * @var bool
+	 */
+	private static bool $syncing_llms = false;
+
+	/**
 	 * Bump whenever the rewrite rule patterns below change, to force a one-time flush.
 	 */
 	const RULES_VERSION = 'v1';
@@ -48,6 +74,15 @@ class Llm_Inventory implements Theme_Component {
 
 		// Append our own child sitemap to Yoast's sitemap index (no-op if Yoast isn't active).
 		add_filter( 'wpseo_sitemap_index', array( $this, 'add_to_sitemap_index' ) );
+
+		// Yoast's own `*-sitemap.xml` rewrite catches llm-inventory-sitemap.xml before
+		// ours does, so with Yoast active the sitemap has to be served through it.
+		add_action( 'init', array( $this, 'register_yoast_sitemap' ) );
+
+		// Yoast writes llms.txt as a physical file (so our /llms.txt route never runs)
+		// and has no filter for its content — add our section right after it writes.
+		add_action( 'add_option_' . self::YOAST_LLMS_HASH_OPTION, array( __CLASS__, 'sync_yoast_llms_txt' ) );
+		add_action( 'update_option_' . self::YOAST_LLMS_HASH_OPTION, array( __CLASS__, 'sync_yoast_llms_txt' ) );
 	}
 
 	/**
@@ -124,7 +159,11 @@ class Llm_Inventory implements Theme_Component {
 		$page = max( 1, (int) ( $wp->query_vars[ self::QUERY_VAR_PAGE ] ?? 1 ) );
 		$data = \App\get_llm_inventory_page( $page, self::PER_PAGE );
 
-		status_header( 200 );
+		// A page number past the end (e.g. after inventory shrank) is a real 404,
+		// not a silent copy of the last page.
+		$data['not_found'] = $page > $data['total_pages'];
+
+		status_header( $data['not_found'] ? 404 : 200 );
 		header( 'Content-Type: text/html; charset=utf-8' );
 
 		include get_template_directory() . '/template-parts/llm/inventory.php';
@@ -165,27 +204,121 @@ class Llm_Inventory implements Theme_Component {
 			return;
 		}
 
-		$data      = \App\get_llm_inventory_page( 1, self::PER_PAGE );
-		$lastmod   = gmdate( 'c' );
-		$urls      = array( home_url( '/llm/inventory/' ) );
-
-		for ( $i = 2; $i <= $data['total_pages']; $i++ ) {
-			$urls[] = home_url( '/llm/inventory/page/' . $i . '/' );
-		}
-
 		status_header( 200 );
 		header( 'Content-Type: application/xml; charset=utf-8' );
 
 		echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-		echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-
-		foreach ( $urls as $url ) {
-			echo "\t<url><loc>" . esc_url( $url ) . '</loc><lastmod>' . esc_html( $lastmod ) . "</lastmod></url>\n";
-		}
-
-		echo '</urlset>';
+		echo $this->get_sitemap_urlset(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped while built.
 
 		exit;
+	}
+
+	/**
+	 * <urlset> listing every /llm/inventory/ page, lastmod = when the inventory
+	 * data was last refreshed.
+	 *
+	 * @return string
+	 */
+	private function get_sitemap_urlset(): string {
+		$data    = \App\get_llm_inventory_page( 1, self::PER_PAGE );
+		$lastmod = gmdate( 'c', ! empty( $data['last_updated_ts'] ) ? (int) $data['last_updated_ts'] : time() );
+		$xml     = '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+
+		for ( $i = 1; $i <= $data['total_pages']; $i++ ) {
+			$url  = 1 === $i ? home_url( '/llm/inventory/' ) : home_url( '/llm/inventory/page/' . $i . '/' );
+			$xml .= "\t<url><loc>" . esc_url( $url ) . '</loc><lastmod>' . esc_html( $lastmod ) . "</lastmod></url>\n";
+		}
+
+		return $xml . '</urlset>';
+	}
+
+	/**
+	 * Register llm-inventory-sitemap.xml with Yoast's sitemap router.
+	 *
+	 * @return void
+	 */
+	public function register_yoast_sitemap(): void {
+		if ( isset( $GLOBALS['wpseo_sitemaps'] ) && method_exists( $GLOBALS['wpseo_sitemaps'], 'register_sitemap' ) ) {
+			$GLOBALS['wpseo_sitemaps']->register_sitemap( 'llm-inventory', array( $this, 'build_yoast_sitemap' ) );
+		}
+	}
+
+	/**
+	 * Yoast `wpseo_do_sitemap_llm-inventory` callback.
+	 *
+	 * @return void
+	 */
+	public function build_yoast_sitemap(): void {
+		$sitemaps = $GLOBALS['wpseo_sitemaps'];
+
+		if ( ! self::is_enabled() ) {
+			$sitemaps->set_bad_sitemap( true );
+			return;
+		}
+
+		$sitemaps->set_sitemap( $this->get_sitemap_urlset() );
+	}
+
+	/**
+	 * Add (or, when the page is disabled, remove) our section in the llms.txt
+	 * Yoast SEO generates. Only touches a file Yoast still owns (stored hash
+	 * matches), and re-stores the hash afterwards so Yoast keeps managing and
+	 * regenerating it — each regeneration triggers this again via the hash
+	 * option hooks. A hand-made llms.txt is left alone.
+	 *
+	 * @return void
+	 */
+	public static function sync_yoast_llms_txt(): void {
+		if ( self::$syncing_llms ) {
+			return;
+		}
+
+		$stored_hash = (string) get_option( self::YOAST_LLMS_HASH_OPTION, '' );
+
+		if ( '' === $stored_hash ) {
+			return;
+		}
+
+		global $wp_filesystem;
+
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
+		if ( ! WP_Filesystem() || ! $wp_filesystem ) {
+			return;
+		}
+
+		// Same path resolution as Yoast's WordPress_File_System_Adapter.
+		$dir = get_home_path();
+		if ( ! wp_is_writable( $dir ) && ! empty( $_SERVER['DOCUMENT_ROOT'] ) ) {
+			$dir = sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) );
+		}
+		$file = trailingslashit( apply_filters( 'wpseo_llmstxt_filesystem_path', $dir ) ) . 'llms.txt'; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Yoast's own filter.
+
+		if ( ! $wp_filesystem->exists( $file ) ) {
+			return;
+		}
+
+		$content = (string) $wp_filesystem->get_contents( $file );
+
+		if ( md5( $content ) !== $stored_hash ) {
+			return;
+		}
+
+		$heading = preg_quote( self::LLMS_SECTION_HEADING, '/' );
+		$updated = rtrim( (string) preg_replace( '/\R*' . $heading . '\R.*?(?=\R## |\z)/s', '', $content ) ) . "\n";
+
+		if ( self::is_enabled() ) {
+			$updated .= "\n" . self::LLMS_SECTION_HEADING . "\n"
+				. '- [Vehicle inventory](' . esc_url_raw( home_url( '/llm/inventory/' ) ) . '): Current new, used and certified vehicle inventory — server-rendered HTML, paginated, no JavaScript required.' . "\n";
+		}
+
+		if ( $updated === $content || ! $wp_filesystem->put_contents( $file, $updated, FS_CHMOD_FILE ) ) {
+			return;
+		}
+
+		self::$syncing_llms = true;
+		update_option( self::YOAST_LLMS_HASH_OPTION, md5( $updated ) );
+		self::$syncing_llms = false;
 	}
 
 	/**
@@ -220,6 +353,7 @@ class Llm_Inventory implements Theme_Component {
 	 */
 	public static function set_enabled( bool $enabled ): bool {
 		update_option( self::OPTION_ENABLED, $enabled ? '1' : '0', false );
+		self::sync_yoast_llms_txt();
 
 		return $enabled;
 	}
