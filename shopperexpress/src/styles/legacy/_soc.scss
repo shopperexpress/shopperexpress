@@ -774,72 +774,184 @@ $soc-radius: 4px;
 }
 
 // ============================================================
-// API Mode Card
+// Toggle list (views/partials/toggle-row.php)
+// Compact rows: title + ⓘ tooltip, short note, status pill, switch.
 // ============================================================
 
-// Two mode cards (e.g. Listings Data Source + Team Members) sit side by side
-// at 50% width each on wide screens, reflowing to full-width stacked once
-// there's no room left for two half-width cards plus their gap.
-.soc-mode-cards-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+.soc-toggle-list {
+  max-width: 720px;
+  background: $soc-white;
+  border: 1px solid $soc-border-light;
+  border-radius: 8px;
+}
 
-  .soc-api-mode-card {
-    flex: 1 1 320px;
-    max-width: calc(50% - 8px);
+.soc-toggle-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 12px 10px 20px;
+
+  & + & {
+    border-top: 1px solid $soc-border-light;
   }
 
-  @media (max-width: 782px) {
-    .soc-api-mode-card {
-      max-width: 100%;
+  &--tip-open {
+    z-index: 2;
+  }
+
+  &__body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: $soc-dark;
+  }
+
+  &__info {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: -8px 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #646970;
+    cursor: help;
+
+    &[aria-expanded='true'],
+    &:focus-visible {
+      color: $soc-primary;
+    }
+  }
+
+  &__note {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #646970;
+  }
+
+  &__pill {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: $soc-bg;
+    color: $soc-muted;
+
+    &--ok {
+      background: #edfaef;
+      color: #00661a;
+    }
+
+    &--warn {
+      background: #fcf9e8;
+      color: #8a6100;
+    }
+  }
+
+  // 44x24 switch inside a 52x44 hit area.
+  &__switch {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 44px;
+    cursor: pointer;
+
+    input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
+
+  &__track {
+    position: relative;
+    display: block;
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: $soc-gray;
+    transition: background 0.15s;
+    pointer-events: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: $soc-white;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+      transition: left 0.15s;
+    }
+  }
+
+  &__switch input:checked + &__track {
+    background: $soc-success;
+
+    &::before {
+      left: 23px;
+    }
+  }
+
+  &__switch input:focus-visible + &__track {
+    box-shadow:
+      0 0 0 2px $soc-white,
+      0 0 0 4px $soc-primary;
+  }
+
+  &__tip {
+    position: absolute;
+    top: 40px;
+    left: 12px;
+    width: 360px;
+    max-width: calc(100% - 24px);
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border-radius: 6px;
+    background: $soc-dark;
+    color: $soc-white;
+    font-size: 13px;
+    line-height: 1.55;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+
+    &[hidden] {
+      display: none;
     }
   }
 }
 
-.soc-api-mode-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  border: 2px solid $soc-border;
-  border-radius: $soc-radius;
-  background: $soc-bg;
-  max-width: 680px;
-
-  &--api {
-    border-color: $soc-success;
-    background: color.adjust($soc-success, $lightness: 60%, $space: hsl);
-  }
-
-  &__status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-    flex-wrap: wrap;
-  }
-
-  &__desc {
-    font-size: 12px;
-    color: $soc-gray;
-    margin: 0;
-    flex-basis: 100%;
-  }
-}
-
-.soc-api-mode-indicator {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: $soc-border;
-  flex-shrink: 0;
-
-  &--on {
-    background: $soc-success;
-    box-shadow: 0 0 0 3px color.adjust($soc-success, $lightness: 50%, $space: hsl);
-  }
+// Plain helper-text paragraph (also used outside toggle rows, e.g. Google Reviews).
+.soc-api-mode-card__desc {
+  font-size: 12px;
+  color: $soc-gray;
+  margin: 0;
 }
 
 .soc-masked-key {

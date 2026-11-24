@@ -11,7 +11,6 @@ $mode_enabled         = ! empty( $data['api_mode_enabled'] );
 $team_enabled         = ! empty( $data['team_mode_enabled'] );
 $cache_enabled        = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
 $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
-$guard_enabled        = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled'] : true;
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -34,123 +33,41 @@ $guard_enabled        = isset( $data['guard_enabled'] ) ? (bool) $data['guard_en
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Listings Data Source', 'shopperexpress' ); ?></div>
 
-	<div class="soc-mode-cards-row">
-		<div class="soc-api-mode-card <?php echo $mode_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-			<div class="soc-api-mode-card__status">
-				<span class="soc-api-mode-indicator <?php echo $mode_enabled ? 'soc-api-mode-indicator--on' : ''; ?>"></span>
-				<strong id="soc-api-mode-label">
-					<?php echo $mode_enabled ? esc_html__( 'API Mode (Intice)', 'shopperexpress' ) : esc_html__( 'WordPress Mode', 'shopperexpress' ); ?>
-				</strong>
-				<span class="soc-badge <?php echo $mode_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-api-mode-badge">
-					<?php echo $mode_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
-				</span>
-			</div>
+	<div class="soc-toggle-list">
+		<?php
+		$soc_row = array(
+			'id'       => 'soc-api-mode-toggle',
+			'title'    => __( 'API Mode', 'shopperexpress' ),
+			'on'       => $mode_enabled,
+			'note_on'  => __( 'Source: Intice Nexus', 'shopperexpress' ),
+			'note_off' => __( 'Source: WordPress posts', 'shopperexpress' ),
+			'desc_on'  => __( 'Listings, Used listings for SRP and VDP pages pull data from Intice Nexus. WordPress posts are used as stubs only.', 'shopperexpress' ),
+			'desc_off' => __( 'Listings, Used listings for SRP and VDP pages use standard WordPress posts with ACF fields. Intice Nexus is not used for front-end rendering.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
 
-			<p class="soc-api-mode-card__desc">
-				<?php if ( $mode_enabled ) : ?>
-					<?php esc_html_e( 'Listings, Used listings for SRP and VDP pages pull data from Intice Nexus. WordPress posts are used as stubs only.', 'shopperexpress' ); ?>
-				<?php else : ?>
-					<?php esc_html_e( 'Listings, Used listings for SRP and VDP pages use standard WordPress posts with ACF fields. Intice Nexus is not used for front-end rendering.', 'shopperexpress' ); ?>
-				<?php endif; ?>
-			</p>
+		$soc_row = array(
+			'id'       => 'soc-team-mode-toggle',
+			'title'    => __( 'Team Members', 'shopperexpress' ),
+			'on'       => $team_enabled,
+			'note_on'  => __( 'Source: Intice', 'shopperexpress' ),
+			'note_off' => __( 'Source: ACF block', 'shopperexpress' ),
+			'desc_on'  => __( 'The "Team Section (Intice)" block pulls its members live from Intice Nexus (Content → Team Members). Independent of the API Mode toggle.', 'shopperexpress' ),
+			'desc_off' => __( 'The "Team Section (Intice)" block is inactive and renders nothing. Use the regular "Team Section" ACF block for manually-entered members instead.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
 
-			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle API mode', 'shopperexpress' ); ?>">
-				<input
-					type="checkbox"
-					id="soc-api-mode-toggle"
-					<?php checked( $mode_enabled ); ?>
-				/>
-				<span class="soc-toggle__slider"></span>
-			</label>
-		</div>
-
-		<div class="soc-api-mode-card <?php echo $team_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-			<div class="soc-api-mode-card__status">
-				<span class="soc-api-mode-indicator <?php echo $team_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-team-mode-indicator"></span>
-				<strong id="soc-team-mode-label">
-					<?php echo $team_enabled ? esc_html__( 'Team Members (Intice)', 'shopperexpress' ) : esc_html__( 'Team Members (ACF)', 'shopperexpress' ); ?>
-				</strong>
-				<span class="soc-badge <?php echo $team_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-team-mode-badge">
-					<?php echo $team_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
-				</span>
-			</div>
-
-			<p class="soc-api-mode-card__desc">
-				<?php if ( $team_enabled ) : ?>
-					<?php esc_html_e( 'The "Team Section (Intice)" block pulls its members live from Intice Nexus (Content → Team Members). Independent of the Listings Data Source toggle above.', 'shopperexpress' ); ?>
-				<?php else : ?>
-					<?php esc_html_e( 'The "Team Section (Intice)" block is inactive and renders nothing. Use the regular "Team Section" ACF block for manually-entered members instead.', 'shopperexpress' ); ?>
-				<?php endif; ?>
-			</p>
-
-			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle Team Members mode', 'shopperexpress' ); ?>">
-				<input
-					type="checkbox"
-					id="soc-team-mode-toggle"
-					<?php checked( $team_enabled ); ?>
-				/>
-				<span class="soc-toggle__slider"></span>
-			</label>
-		</div>
-
-		<div class="soc-api-mode-card <?php echo $llm_inventory_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-			<div class="soc-api-mode-card__status">
-				<span class="soc-api-mode-indicator <?php echo $llm_inventory_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-llm-inventory-indicator"></span>
-				<strong id="soc-llm-inventory-label">
-					<?php esc_html_e( 'AI Inventory Page', 'shopperexpress' ); ?>
-				</strong>
-				<span class="soc-badge <?php echo $llm_inventory_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-llm-inventory-badge">
-					<?php echo $llm_inventory_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
-				</span>
-			</div>
-
-			<p class="soc-api-mode-card__desc">
-				<?php esc_html_e( 'Serves a server-rendered, JS-free /llm/inventory/ page listing current new/used/certified inventory for AI assistants and search crawlers (incl. OAI-SearchBot), plus /llms.txt and a child sitemap referenced from the main Yoast sitemap.', 'shopperexpress' ); ?>
-			</p>
-
-			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle AI inventory page', 'shopperexpress' ); ?>">
-				<input
-					type="checkbox"
-					id="soc-llm-inventory-toggle"
-					<?php checked( $llm_inventory_enabled ); ?>
-				/>
-				<span class="soc-toggle__slider"></span>
-			</label>
-		</div>
-	</div>
-</div>
-
-<!-- 1b. Intice tool guard -->
-<div class="soc-section">
-	<div class="soc-section__title"><?php esc_html_e( 'Intice Tool Guard', 'shopperexpress' ); ?></div>
-
-	<div class="soc-api-mode-card <?php echo $guard_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-		<div class="soc-api-mode-card__status">
-			<span class="soc-api-mode-indicator <?php echo $guard_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-guard-indicator"></span>
-			<strong id="soc-guard-label">
-				<?php echo $guard_enabled ? esc_html__( 'Guard Enabled', 'shopperexpress' ) : esc_html__( 'Guard Disabled', 'shopperexpress' ); ?>
-			</strong>
-			<span class="soc-badge <?php echo $guard_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-guard-badge">
-				<?php echo $guard_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
-			</span>
-		</div>
-
-		<p class="soc-api-mode-card__desc">
-			<?php if ( $guard_enabled ) : ?>
-				<?php esc_html_e( 'Intice shopping-tool buttons (Leadmaker, Trademaker, Dealmaker, Loanmaker, …) wait for inticeAllEvents to load and show a "This tool is temporarily unavailable" popup instead of a silent dead button if it never does.', 'shopperexpress' ); ?>
-			<?php else : ?>
-				<?php esc_html_e( 'Intice shopping-tool buttons run their raw inline onclick handler directly, with no wait and no "temporarily unavailable" popup. If inticeAllEvents has not loaded yet (e.g. blocked by a consent tool), the button will fail silently.', 'shopperexpress' ); ?>
-			<?php endif; ?>
-		</p>
-
-		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle Intice tool guard', 'shopperexpress' ); ?>">
-			<input
-				type="checkbox"
-				id="soc-intice-guard-toggle"
-				<?php checked( $guard_enabled ); ?>
-			/>
-			<span class="soc-toggle__slider"></span>
-		</label>
+		$soc_row = array(
+			'id'       => 'soc-llm-inventory-toggle',
+			'title'    => __( 'AI Inventory Page', 'shopperexpress' ),
+			'on'       => $llm_inventory_enabled,
+			'note_on'  => __( '/llm/inventory/ is live', 'shopperexpress' ),
+			'note_off' => __( 'Page disabled', 'shopperexpress' ),
+			'desc_on'  => __( 'Serves a server-rendered, JS-free /llm/inventory/ page listing current new/used/certified inventory for AI assistants and search crawlers (incl. OAI-SearchBot), plus /llms.txt and a child sitemap referenced from the main Yoast sitemap.', 'shopperexpress' ),
+		);
+		$soc_row['desc_off'] = $soc_row['desc_on'];
+		require __DIR__ . '/partials/toggle-row.php';
+		?>
 	</div>
 </div>
 
@@ -259,33 +176,74 @@ $guard_enabled        = isset( $data['guard_enabled'] ) ? (bool) $data['guard_en
 	</p>
 	<?php endif; ?>
 
-	<!-- Cache enable / disable toggle -->
-	<div class="soc-api-mode-card <?php echo $cache_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>" style="margin-bottom:16px;">
-		<div class="soc-api-mode-card__status">
-			<span class="soc-api-mode-indicator <?php echo $cache_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-cache-indicator"></span>
-			<strong id="soc-cache-label">
-				<?php echo $cache_enabled ? esc_html__( 'Cache Enabled', 'shopperexpress' ) : esc_html__( 'Cache Disabled', 'shopperexpress' ); ?>
-			</strong>
-			<span class="soc-badge <?php echo $cache_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-cache-badge">
-				<?php echo $cache_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
-			</span>
-		</div>
-		<p class="soc-api-mode-card__desc">
-			<?php if ( $cache_enabled ) : ?>
-				<?php esc_html_e( 'API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated.', 'shopperexpress' ); ?>
-			<?php else : ?>
-				<?php esc_html_e( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ); ?>
-			<?php endif; ?>
-		</p>
-		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle cache', 'shopperexpress' ); ?>">
-			<input
-				type="checkbox"
-				id="soc-intice-cache-toggle"
-				<?php checked( $cache_enabled ); ?>
-			/>
-			<span class="soc-toggle__slider"></span>
-		</label>
+	<?php
+	$runner_status   = \App\Components\Api\Intice_Jobs::get_status();
+	$runner_selected = \App\Components\Api\Intice_Jobs::RUNNER_SUPERVISOR === $runner_status['runner'];
+	$runner_seen     = $runner_status['heartbeat'] ? human_time_diff( $runner_status['heartbeat'] ) : '';
+	$runner_wp_cli   = '/usr/local/bin/wp';
+	$runner_conf     = "[program:intice-worker-" . sanitize_key( wp_parse_url( home_url(), PHP_URL_HOST ) ) . "]
+"
+		. 'command=php ' . $runner_wp_cli . ' intice worker --max-time=600 --path=' . untrailingslashit( ABSPATH ) . "
+"
+		. "user=www-data
+autostart=true
+autorestart=true
+startsecs=5
+stopwaitsecs=120
+"
+		. "stdout_logfile=/var/log/supervisor/intice-worker.log
+redirect_stderr=true";
+	?>
+	<?php
+	if ( ! $runner_selected ) {
+		$runner_pill = array( 'off', __( 'WP-Cron', 'shopperexpress' ) );
+		$runner_note = __( 'Jobs run via WP-Cron', 'shopperexpress' );
+	} elseif ( $runner_status['alive'] ) {
+		$runner_pill = array( 'ok', __( 'Running', 'shopperexpress' ) );
+		/* translators: 1: human-readable time difference, 2: number of queued jobs. */
+		$runner_note = sprintf( __( 'Worker seen %1$s ago · %2$d queued', 'shopperexpress' ), $runner_seen, $runner_status['queued'] );
+	} else {
+		$runner_pill = array( 'warn', __( 'Worker down', 'shopperexpress' ) );
+		$runner_note = $runner_seen
+			/* translators: %s: human-readable time difference. */
+			? sprintf( __( 'Last seen %s ago — jobs use WP-Cron', 'shopperexpress' ), $runner_seen )
+			: __( 'Worker never ran — jobs use WP-Cron', 'shopperexpress' );
+	}
+	?>
+	<div class="soc-toggle-list" style="margin-bottom:16px;">
+		<?php
+		$soc_row = array(
+			'id'       => 'soc-intice-cache-toggle',
+			'title'    => __( 'Response Cache', 'shopperexpress' ),
+			'on'       => $cache_enabled,
+			'note_on'  => __( 'Transients, stale copy served while rebuilding', 'shopperexpress' ),
+			'note_off' => __( 'Every request hits Intice Nexus', 'shopperexpress' ),
+			'desc_on'  => __( 'API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated.', 'shopperexpress' ),
+			'desc_off' => __( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
+
+		$soc_row = array(
+			'id'       => 'soc-intice-runner-toggle',
+			'title'    => __( 'Supervisor Worker', 'shopperexpress' ),
+			'on'       => $runner_selected,
+			'tone'     => $runner_pill[0],
+			'status'   => $runner_pill[1],
+			'note'     => $runner_note,
+			'desc_on'  => __( 'Cache rebuilds/regens go to a queue that the Supervisor-managed "wp intice worker" process runs within a second — no WP-Cron loopback, no HTTP timeouts, no waiting for traffic. While the worker is not running, jobs automatically fall back to WP-Cron.', 'shopperexpress' ),
+			'desc_off' => __( 'Cache rebuilds/regens run through WP-Cron (scheduled event + loopback request to wp-cron.php). Switch on once the Supervisor worker (see setup below) is running on the server.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
+		?>
 	</div>
+
+	<details style="margin:0 0 16px;">
+		<summary><?php esc_html_e( 'Supervisor setup', 'shopperexpress' ); ?></summary>
+		<p class="description">
+			<?php esc_html_e( 'Add this program to Supervisor (e.g. /etc/supervisor/conf.d/intice-worker.conf), adjust the wp path and user, then run: supervisorctl reread && supervisorctl update. The worker restarts itself every 10 minutes to pick up setting/code changes.', 'shopperexpress' ); ?>
+		</p>
+		<pre style="background:#f6f7f7;padding:10px;overflow:auto;"><?php echo esc_html( $runner_conf ); ?></pre>
+	</details>
 
 	<?php if ( ! empty( $data['api_cache'] ) ) : ?>
 	<table class="soc-table">

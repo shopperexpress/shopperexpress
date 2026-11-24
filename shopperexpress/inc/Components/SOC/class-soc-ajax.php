@@ -65,6 +65,7 @@ class SOC_Ajax {
 		'soc_cache_rebuild_status'    => 'handle_cache_rebuild_status',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
 		'soc_intice_guard_toggle'     => 'handle_intice_guard_toggle',
+		'soc_intice_runner_toggle'    => 'handle_intice_runner_toggle',
 		'soc_api_save_filters'        => 'handle_api_save_filters',
 		// Lead Delivery.
 		'soc_lead_settings_save'      => 'handle_lead_settings_save',
@@ -786,10 +787,10 @@ class SOC_Ajax {
 	 */
 	private function handle_intice_guard_toggle(): void {
 		$enabled = (bool) absint( $_POST['enabled'] ?? 1 );
-		$module  = $this->modules['api-settings'] ?? null;
+		$module  = $this->modules['general-settings'] ?? null;
 
 		if ( ! $module ) {
-			SOC_Response::error( 'API Settings module not available.' );
+			SOC_Response::error( 'General Settings module not available.' );
 		}
 
 		$new_state = $module->set_guard_enabled( $enabled );
@@ -797,6 +798,21 @@ class SOC_Ajax {
 		SOC_Logger::write( 'general', 'Intice tool guard ' . ( $new_state ? 'enabled' : 'disabled' ) );
 
 		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Switch Intice background jobs between WP-Cron and the Supervisor worker.
+	 */
+	private function handle_intice_runner_toggle(): void {
+		$runner = \App\Components\Api\Intice_Jobs::set_runner(
+			absint( $_POST['enabled'] ?? 0 )
+				? \App\Components\Api\Intice_Jobs::RUNNER_SUPERVISOR
+				: \App\Components\Api\Intice_Jobs::RUNNER_CRON
+		);
+
+		SOC_Logger::write( 'cache', 'Intice background runner set to: ' . $runner );
+
+		SOC_Response::success( \App\Components\Api\Intice_Jobs::get_status() );
 	}
 
 	/**

@@ -27,7 +27,6 @@ class Api_Settings implements SOC_Module {
 	const OPTION_VEHICLE_FILTERS  = 'shopperexpress_vehicle_filters';
 	const OPTION_CACHE_CLEARED_BY = 'shopperexpress_intice_cache_cleared_by';
 	const OPTION_TEAM_MODE        = 'shopperexpress_team_mode_enabled';
-	const OPTION_INTICE_GUARD     = 'shopperexpress_intice_guard_enabled';
 
 	/**
 	 * Label recorded as the "cleared by" value when Nexus proactively refreshes
@@ -151,13 +150,11 @@ class Api_Settings implements SOC_Module {
 		$api_mode      = (bool) get_option( self::OPTION_API_MODE, false );
 		$team_mode     = (bool) get_option( self::OPTION_TEAM_MODE, false );
 		$cache_enabled = (bool) get_option( self::OPTION_CACHE_ENABLED, true );
-		$guard_enabled = (bool) get_option( self::OPTION_INTICE_GUARD, true );
 
 		$data = array(
 			'api_mode_enabled'  => $api_mode,
 			'team_mode_enabled' => $team_mode,
 			'cache_enabled'    => $cache_enabled,
-			'guard_enabled'    => $guard_enabled,
 			'api_url'          => $api_url,
 			'api_key_set'      => ! empty( $api_key ),
 			'api_key_masked'   => $this->mask_key( $api_key ),
@@ -225,30 +222,6 @@ class Api_Settings implements SOC_Module {
 	 */
 	public static function is_team_mode_enabled(): bool {
 		return (bool) get_option( self::OPTION_TEAM_MODE, false );
-	}
-
-	/**
-	 * Toggle the front-end "Intice tool unavailable" guard on/off — when
-	 * disabled, intice-tool buttons (Leadmaker, Trademaker, Dealmaker,
-	 * Loanmaker, …) fall back to their raw inline onclick handlers with no
-	 * loading state or "temporarily unavailable" popup.
-	 *
-	 * @param bool $enabled
-	 * @return bool New state.
-	 */
-	public function set_guard_enabled( bool $enabled ): bool {
-		update_option( self::OPTION_INTICE_GUARD, $enabled ? '1' : '0', false );
-		SOC_Cache::forget( $this->get_slug(), 'data' );
-		return $enabled;
-	}
-
-	/**
-	 * Whether the front-end intice tool-guard (loading/unavailable popup) is active.
-	 *
-	 * @return bool
-	 */
-	public static function is_guard_enabled(): bool {
-		return (bool) get_option( self::OPTION_INTICE_GUARD, true );
 	}
 
 	/**

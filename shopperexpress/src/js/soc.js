@@ -51,6 +51,71 @@
 
     SOC.bindLeadDelivery();
     SOC.bindGoogleReviews();
+    SOC.bindToggleRows();
+  };
+
+  // ----------------------------------------------------------------
+  // Toggle rows (views/partials/toggle-row.php)
+  // ----------------------------------------------------------------
+
+  /**
+   * Flip a toggle row to on/off after its AJAX save — pill, note and tooltip
+   * text come from the row's data-* attributes.
+   *
+   * @param {jQuery}  $input Row checkbox.
+   * @param {boolean} on     New state.
+   */
+  SOC.setToggleRow = function ($input, on) {
+    const $row = $input.closest('.soc-toggle-row');
+    const state = on ? 'on' : 'off';
+
+    $input.prop('checked', !!on);
+    $row.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+    $row
+      .find('.soc-toggle-row__pill')
+      .attr('class', 'soc-toggle-row__pill soc-toggle-row__pill--' + (on ? 'ok' : 'off'))
+      .text($row.data('status-' + state));
+    $row.find('.soc-toggle-row__note').text($row.data('note-' + state));
+    $row.find('.soc-toggle-row__tip').text($row.data('desc-' + state));
+  };
+
+  // ⓘ tooltips: shown on hover/focus, pinned open by click, closed by Esc.
+  SOC.bindToggleRows = function () {
+    const ns = '.socToggleRows';
+    $(document).off(ns);
+
+    function setTip($btn, open) {
+      const $row = $btn.closest('.soc-toggle-row');
+
+      $btn.attr('aria-expanded', open ? 'true' : 'false');
+      $row.toggleClass('soc-toggle-row--tip-open', open);
+      $row.find('.soc-toggle-row__tip').prop('hidden', !open);
+    }
+
+    $(document)
+      .on('mouseenter' + ns + ' focus' + ns, '.soc-toggle-row__info', function () {
+        setTip($(this), true);
+      })
+      .on('mouseleave' + ns + ' blur' + ns, '.soc-toggle-row__info', function () {
+        if (!$(this).data('pinned')) {
+          setTip($(this), false);
+        }
+      })
+      .on('click' + ns, '.soc-toggle-row__info', function () {
+        const $btn = $(this);
+        const pinned = !$btn.data('pinned');
+
+        $btn.data('pinned', pinned);
+        setTip($btn, pinned);
+      })
+      .on('keydown' + ns, function (e) {
+        if ('Escape' === e.key) {
+          $('.soc-toggle-row__info').each(function () {
+            $(this).data('pinned', false);
+            setTip($(this), false);
+          });
+        }
+      });
   };
 
   // ----------------------------------------------------------------
@@ -592,21 +657,15 @@
 
     // Mode toggle
     $(document).on('change' + ns, '#soc-api-mode-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-api-mode-label');
-      const $badge = $('#soc-api-mode-badge');
-      const $dot = $card.find('.soc-api-mode-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
       SOC.ajax('soc_api_mode_toggle', { enabled: enabled }, function (data) {
         const on = data && data.enabled;
 
-        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-        $label.text(on ? 'API Mode (Intice)' : 'WordPress Mode');
-        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('Mode ' + (on ? 'enabled' : 'disabled') + '.');
       });
@@ -624,21 +683,15 @@
 
     // Team Members mode toggle (independent of the Listings API mode above)
     $(document).on('change' + ns, '#soc-team-mode-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-team-mode-label');
-      const $badge = $('#soc-team-mode-badge');
-      const $dot = $('#soc-team-mode-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
       SOC.ajax('soc_team_mode_toggle', { enabled: enabled }, function (data) {
         const on = data && data.enabled;
 
-        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-        $label.text(on ? 'Team Members (Intice)' : 'Team Members (ACF)');
-        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('Team Members mode ' + (on ? 'enabled' : 'disabled') + '.');
         SOC.reloadPanel('api-settings');
@@ -647,19 +700,15 @@
 
     // AI Inventory Page toggle (/llm/inventory/)
     $(document).on('change' + ns, '#soc-llm-inventory-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $badge = $('#soc-llm-inventory-badge');
-      const $dot = $('#soc-llm-inventory-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
       SOC.ajax('soc_llm_inventory_toggle', { enabled: enabled }, function (data) {
         const on = data && data.enabled;
 
-        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('AI inventory page ' + (on ? 'enabled' : 'disabled') + '.');
         SOC.reloadPanel('api-settings');
@@ -707,11 +756,8 @@
 
     // Cache enable / disable toggle
     $(document).on('change' + ns, '#soc-intice-cache-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-cache-label');
-      const $badge = $('#soc-cache-badge');
-      const $dot = $('#soc-cache-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
@@ -721,17 +767,42 @@
         function (data) {
           const on = data && data.enabled;
 
-          $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-          $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-          $label.text(on ? 'Cache Enabled' : 'Cache Disabled');
-          $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+          SOC.setToggleRow($checkbox, on);
 
           SOC.showSuccess('Intice cache ' + (on ? 'enabled' : 'disabled') + '.');
         },
         function (msg) {
           SOC.showError(msg);
           // Revert toggle on error
-          $(this).prop('checked', !enabled);
+          $checkbox.prop('checked', !enabled);
+        }
+      );
+    });
+
+    // Intice background runner: WP-Cron <-> Supervisor worker
+    $(document).on('change' + ns, '#soc-intice-runner-toggle', function () {
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
+
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_intice_runner_toggle',
+        { enabled: enabled },
+        function (data) {
+          if (!enabled) {
+            SOC.showSuccess('Background runner set to WP-Cron.');
+          } else if (data && data.alive) {
+            SOC.showSuccess('Background runner set to Supervisor.');
+          } else {
+            SOC.showError('Supervisor selected, but the worker is not running — jobs keep using WP-Cron until it starts.');
+          }
+
+          SOC.reloadPanel('api-settings');
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $checkbox.prop('checked', !enabled);
         }
       );
     });
@@ -740,10 +811,6 @@
     $(document).on('change' + ns, '#soc-intice-guard-toggle', function () {
       const $checkbox = $(this);
       const enabled = $checkbox.is(':checked') ? 1 : 0;
-      const $card = $checkbox.closest('.soc-api-mode-card');
-      const $label = $('#soc-guard-label');
-      const $badge = $('#soc-guard-badge');
-      const $dot = $('#soc-guard-indicator');
 
       SOC.showLoading();
 
@@ -753,10 +820,7 @@
         function (data) {
           const on = data && data.enabled;
 
-          $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-          $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-          $label.text(on ? 'Guard Enabled' : 'Guard Disabled');
-          $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+          SOC.setToggleRow($checkbox, on);
 
           SOC.showSuccess('Intice tool guard ' + (on ? 'enabled' : 'disabled') + '.');
         },
