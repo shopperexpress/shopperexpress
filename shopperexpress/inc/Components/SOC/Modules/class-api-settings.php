@@ -194,6 +194,12 @@ class Api_Settings implements SOC_Module {
 	 */
 	public function set_api_mode( bool $enabled ): bool {
 		update_option( self::OPTION_API_MODE, $enabled ? '1' : '0', false );
+
+		// The VDP rewrite rules exist only in API mode (Intice_VDP) and would shadow
+		// the CPT single-post rules in WordPress mode. Drop the stored rules so the
+		// next request rebuilds them with the components of the new mode.
+		delete_option( 'rewrite_rules' );
+
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 		return $enabled;
 	}

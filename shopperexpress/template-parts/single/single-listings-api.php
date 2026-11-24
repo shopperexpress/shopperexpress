@@ -102,7 +102,9 @@ if ( ! empty( $payload['seo_description'] ) ) {
 $_seo_image = ! empty( $payload['seo_image'] )
 	? $payload['seo_image']
 	: ( ! empty( $v['images'][0]['url'] ) ? $v['images'][0]['url'] : ( $v['image'] ?? '' ) );
-$_seo_url   = \App\Components\Api\Intice_VDP::vdp_url( $vin, $post_type );
+// Pass the vehicle so this is the same SEO-slug URL the SRP, JSON-LD and
+// /llm/inventory/ link to — without it vdp_url() falls back to /{post_type}/{VIN}/.
+$_seo_url = \App\Components\Api\Intice_VDP::vdp_url( $vin, $post_type, $v );
 
 add_filter( 'wpseo_title', fn() => $_seo_title, 20 );
 add_filter( 'wpseo_metadesc', fn() => $_seo_desc, 20 );
