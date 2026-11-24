@@ -928,6 +928,8 @@ textarea.form-control {
 .card-wrapp {
   flex-grow: 1;
   padding: 10px 15px 35px;
+  // --sticky-offset: height of the search panel pinned over it on mobile (set by stickyScrollBlock)
+  padding-top: calc(10px + var(--sticky-offset, 0px));
 
   @include media('>=tablet') {
     padding: 10px 30px 72px;

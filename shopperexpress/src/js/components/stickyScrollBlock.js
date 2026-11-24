@@ -23,6 +23,7 @@ export default function initStickyScrollBlock() {
     positionType: 'fixed',
     alwaysOnMobile: true,
     mobileBreakpoint: 768,
+    mobileOffsetTarget: '.card-wrapp',
     extraTop: function () {
       let totalHeight = 0;
 
