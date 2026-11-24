@@ -231,11 +231,7 @@ class Intice_Rest implements Theme_Component {
 
 		update_option( self::OPTION_REBUILD_STATE . '_queued_by', $by, false );
 
-		if ( ! wp_next_scheduled( 'intice_cache_rebuild_all' ) ) {
-			wp_schedule_single_event( time(), 'intice_cache_rebuild_all' );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_cache_rebuild_all' );
 
 		return true;
 	}
@@ -803,13 +799,7 @@ class Intice_Rest implements Theme_Component {
 	 * @return void
 	 */
 	private function schedule_srp_regen( string $post_type, bool $custom_sort ): void {
-		$args = array( $post_type, $custom_sort );
-
-		if ( ! wp_next_scheduled( 'intice_srp_cache_regen', $args ) ) {
-			wp_schedule_single_event( time(), 'intice_srp_cache_regen', $args );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_srp_cache_regen', array( $post_type, $custom_sort ) );
 	}
 
 	/**
@@ -1345,13 +1335,7 @@ class Intice_Rest implements Theme_Component {
 		$deleted = delete_transient( $cache_key ) ? 1 : 0;
 		Intice_Api_Client::untrack_key( $cache_key );
 
-		$args = array( $post_type, $custom_sort );
-
-		if ( ! wp_next_scheduled( 'intice_srp_cache_regen', $args ) ) {
-			wp_schedule_single_event( time(), 'intice_srp_cache_regen', $args );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_srp_cache_regen', array( $post_type, $custom_sort ) );
 
 		return $deleted;
 	}

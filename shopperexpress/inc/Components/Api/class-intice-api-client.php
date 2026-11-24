@@ -425,11 +425,7 @@ class Intice_Api_Client {
 	public function flush_team_cache(): int {
 		$deleted = self::purge_group( 'team' );
 
-		if ( ! wp_next_scheduled( 'intice_team_cache_regen' ) ) {
-			wp_schedule_single_event( time(), 'intice_team_cache_regen' );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_team_cache_regen' );
 
 		return $deleted;
 	}
@@ -486,11 +482,7 @@ class Intice_Api_Client {
 		}
 
 		// Schedule immediate background regeneration.
-		if ( ! wp_next_scheduled( 'intice_cache_regen' ) ) {
-			wp_schedule_single_event( time(), 'intice_cache_regen' );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_cache_regen' );
 
 		return $flushed;
 	}
@@ -632,13 +624,7 @@ class Intice_Api_Client {
 	 * @return void
 	 */
 	private static function schedule_vdp_regen( string $vin ): void {
-		$args = array( $vin );
-
-		if ( ! wp_next_scheduled( 'intice_vdp_cache_regen', $args ) ) {
-			wp_schedule_single_event( time(), 'intice_vdp_cache_regen', $args );
-		}
-
-		spawn_cron();
+		Intice_Jobs::dispatch( 'intice_vdp_cache_regen', array( $vin ) );
 	}
 
 	// ─── Cache registry (backend-agnostic status/flush) ──────────────────────

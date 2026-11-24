@@ -73,6 +73,9 @@ class Theme {
 			\App\Components\Base\Google_Reviews_Cron::class,
 			\App\Components\Base\Llm_Inventory::class,
 			\App\Components\SOC\SOC::class,
+			// Always registered: provides the `wp intice worker` command Supervisor
+			// runs, which must exist (and idle) even while API/Team mode is off.
+			\App\Components\Api\Intice_Jobs::class,
 			// Intice_Rest hosts the /wp-json/v1/intice/cache/refresh webhook route and the
 			// Team Members cache cron handlers — needed whenever Team Mode is on, even if
 			// Listings API Mode is off (the two toggles are independent). Intice_VDP is
