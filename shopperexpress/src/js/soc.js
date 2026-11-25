@@ -171,8 +171,25 @@
           else SOC.showError(msg);
         }
       })
-      .fail(function () {
-        const msg = socData.strings.error;
+      .fail(function (xhr) {
+        // SOC_Response::error() answers with an HTTP 4xx plus {data:{message}} —
+        // show that message instead of the generic one.
+        let msg = socData.strings.error;
+
+        if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+          msg = xhr.responseJSON.data.message;
+        } else if (xhr && 'timeout' === xhr.statusText) {
+          msg = 'The request timed out — try again.';
+        } else if (xhr && 0 === xhr.status) {
+          msg = 'Could not reach the server — check your connection.';
+        } else if (xhr && (-1 === xhr.responseText || '0' === xhr.responseText)) {
+          msg = 'This page is out of date — reload it (Ctrl+F5) and try again.';
+        } else if (xhr && xhr.status >= 500) {
+          msg = 'Server error (HTTP ' + xhr.status + ') — see the PHP error log.';
+        } else if (xhr && 403 === xhr.status) {
+          msg = 'Session expired or access denied — reload the page.';
+        }
+
         if (typeof errorCb === 'function') errorCb(msg);
         else SOC.showError(msg);
       });
@@ -210,7 +227,14 @@
   SOC.showSuccess = function (msg) {
     SOC.showNotice('success', msg || socData.strings.success);
   };
+  // The API Settings panel stays quiet: no "Loading…" / "Refreshed." notices
+  // (its cache table re-renders often, e.g. while a VDP build is polled).
+  SOC.isQuietPanel = function (module) {
+    return 'api-settings' === (module || $('#soc-panel').data('module'));
+  };
+
   SOC.showLoading = function () {
+    if (SOC.isQuietPanel()) return;
     SOC.showNotice('loading', socData.strings.loading);
   };
 
@@ -220,12 +244,29 @@
   // Re-runs SOC.init() so all event bindings work in the new markup.
   // ----------------------------------------------------------------
   SOC.reloadPanel = function (module, cb) {
+    const quiet = SOC.isQuietPanel(module);
+
     SOC.showLoading();
     SOC.ajax('soc_load_panel', { module: module }, function (data) {
       if (data && data.html) {
+        // The notice lives inside the panel body — keep an action's own toast
+        // (e.g. "Cache group flushed") alive across a quiet re-render.
+        const $notice = quiet ? $('#soc-action-notice').detach() : null;
+        const scrollY = quiet ? window.scrollY : 0;
+
         $('#soc-panel-body').html(data.html);
         SOC.init(); // re-bind all handlers to new DOM
-        SOC.showSuccess('Refreshed.');
+
+        if (quiet) window.scrollTo(0, scrollY);
+
+        if (quiet) {
+          if ($notice && $notice.length && !$notice.hasClass('soc-notice--loading')) {
+            $('#soc-panel-body').prepend($notice);
+          }
+        } else {
+          SOC.showSuccess('Refreshed.');
+        }
+
         if (typeof cb === 'function') cb();
       }
     });
@@ -830,6 +871,25 @@
         function (msg) {
           SOC.showError(msg);
           $btn.prop('disabled', false);
+        }
+      );
+    });
+
+    // VDP cache lifetime
+    $(document).on('change' + ns, '#soc-vdp-ttl', function () {
+      const $select = $(this);
+      $select.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax(
+        'soc_intice_vdp_ttl_save',
+        { ttl: $select.val() },
+        function () {
+          SOC.showSuccess('VDP cache lifetime saved.');
+          $select.prop('disabled', false);
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $select.prop('disabled', false);
         }
       );
     });

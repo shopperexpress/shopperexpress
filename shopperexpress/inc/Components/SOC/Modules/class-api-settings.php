@@ -27,6 +27,7 @@ class Api_Settings implements SOC_Module {
 	const OPTION_VEHICLE_FILTERS  = 'shopperexpress_vehicle_filters';
 	const OPTION_CACHE_CLEARED_BY = 'shopperexpress_intice_cache_cleared_by';
 	const OPTION_TEAM_MODE        = 'shopperexpress_team_mode_enabled';
+	const OPTION_VDP_TTL          = 'shopperexpress_intice_vdp_ttl';
 
 	/**
 	 * Label recorded as the "cleared by" value when Nexus proactively refreshes
@@ -42,7 +43,8 @@ class Api_Settings implements SOC_Module {
 	 */
 	const ALL_CACHE_GROUP_KEYS = array(
 		'vehicles',
-		'vehicle',
+		'vehicle_new',
+		'vehicle_used',
 		'meta',
 		'team',
 		'srp_listings',
@@ -155,6 +157,7 @@ class Api_Settings implements SOC_Module {
 			'api_mode_enabled'  => $api_mode,
 			'team_mode_enabled' => $team_mode,
 			'cache_enabled'    => $cache_enabled,
+			'vdp_ttl'          => Intice_Api_Client::get_vdp_ttl(),
 			'api_url'          => $api_url,
 			'api_key_set'      => ! empty( $api_key ),
 			'api_key_masked'   => $this->mask_key( $api_key ),
@@ -234,6 +237,37 @@ class Api_Settings implements SOC_Module {
 		update_option( self::OPTION_CACHE_ENABLED, $enabled ? '1' : '0', false );
 		SOC_Cache::forget( $this->get_slug(), 'data' );
 		return $enabled;
+	}
+
+	/**
+	 * Selectable live TTLs for per-VIN VDP cache entries (seconds => label).
+	 *
+	 * @return array<int,string>
+	 */
+	public static function get_vdp_ttl_options(): array {
+		return array(
+			15 * MINUTE_IN_SECONDS => __( '15 minutes (default)', 'shopperexpress' ),
+			HOUR_IN_SECONDS        => __( '1 hour', 'shopperexpress' ),
+			6 * HOUR_IN_SECONDS    => __( '6 hours', 'shopperexpress' ),
+			DAY_IN_SECONDS         => __( '24 hours', 'shopperexpress' ),
+		);
+	}
+
+	/**
+	 * Save the VDP cache TTL.
+	 *
+	 * @param int $seconds One of get_vdp_ttl_options()'s keys.
+	 * @return bool False when the value isn't an allowed option.
+	 */
+	public function set_vdp_ttl( int $seconds ): bool {
+		if ( ! array_key_exists( $seconds, self::get_vdp_ttl_options() ) ) {
+			return false;
+		}
+
+		update_option( self::OPTION_VDP_TTL, $seconds, false );
+		SOC_Cache::forget( $this->get_slug(), 'data' );
+
+		return true;
 	}
 
 	/**
@@ -410,10 +444,20 @@ class Api_Settings implements SOC_Module {
 				'api_group' => true,
 			),
 			array(
-				'key'       => 'vehicle',
-				'label'     => 'Single Vehicle (VDP)',
-				'ttl'       => Intice_Api_Client::CACHE_TTL_VEHICLE,
-				'api_group' => true,
+				'key'            => 'vehicle_new',
+				'label'          => 'New Vehicle Pages (VDP)',
+				'ttl'            => Intice_Api_Client::get_vdp_ttl(),
+				'api_group'      => true,
+				'registry_group' => 'vehicle',
+				'vdp_condition'  => 'new',
+			),
+			array(
+				'key'            => 'vehicle_used',
+				'label'          => 'Used Vehicle Pages (VDP)',
+				'ttl'            => Intice_Api_Client::get_vdp_ttl(),
+				'api_group'      => true,
+				'registry_group' => 'vehicle',
+				'vdp_condition'  => 'used',
 			),
 			array(
 				'key'       => 'meta',
@@ -467,17 +511,23 @@ class Api_Settings implements SOC_Module {
 		// "valid" for every group until the single end-of-run commit. Show
 		// "pending" instead as a purely cosmetic signal that a rebuild is under
 		// way; the underlying cache (and what visitors see) is untouched either
-		// way until the run finishes. 'vehicle' (VDP) is excluded — it's
-		// hard-purged up front (see Intice_Rest::handle_rebuild_all()), so its
-		// real status already reflects the rebuild correctly.
+		// way until the run finishes. VDP rows are rewritten in the same final
+		// commit (see Intice_Rest::handle_rebuild_all()), so they follow suit.
 		$rebuild_running = 'running' === ( Intice_Rest::get_rebuild_state()['status'] ?? '' );
 
 		foreach ( $groups as $group ) {
-			$live_entries  = array();
-			$stale_entries = array();
+			$live_entries   = array();
+			$stale_entries  = array();
+			$registry_group = $group['registry_group'] ?? $group['key'];
+			$vdp_condition  = $group['vdp_condition'] ?? null;
 
 			foreach ( $registry as $cache_key => $meta ) {
-				if ( ( $meta['group'] ?? '' ) !== $group['key'] ) {
+				if ( ( $meta['group'] ?? '' ) !== $registry_group ) {
+					continue;
+				}
+
+				// VDP entries are one registry group split into New/Used rows.
+				if ( null !== $vdp_condition && ( $meta['condition'] ?? null ) !== $vdp_condition ) {
 					continue;
 				}
 
@@ -501,13 +551,31 @@ class Api_Settings implements SOC_Module {
 				// time is recoverable without storing it separately.
 				$cached_at = $earliest - $group['ttl'];
 				$status    = $earliest > $now ? 'valid' : 'pending';
+
+				// VDP entries carry their real fetch time (the TTL is configurable,
+				// so expires_at - ttl would be wrong after a TTL change).
+				if ( null !== $vdp_condition ) {
+					$fetched   = array_filter( array_column( $live_entries, 'fetched_at' ) );
+					$cached_at = $fetched ? min( $fetched ) : $cached_at;
+				}
 			} elseif ( ! empty( $stale_entries ) ) {
 				// Live copy is gone but a stale-while-revalidate copy is still being
 				// served while a background cron rebuilds it — same "pending" state.
 				$status = 'pending';
 			}
 
-			if ( $rebuild_running && 'vehicle' !== $group['key'] ) {
+			$vdp_detail = null;
+			$vdp_gap    = false;
+
+			if ( null !== $vdp_condition ) {
+				$total      = count( Intice_Api_Client::get_cached_vins( $vdp_condition ) );
+				$vdp_gap    = $total > $count;
+				$vdp_detail = $total > 0
+					? sprintf( /* translators: 1: cached VDP count, 2: total vehicles. */ __( '%1$d of %2$d vehicles cached', 'shopperexpress' ), min( $count, $total ), $total )
+					: sprintf( /* translators: %d: cached VDP count. */ __( '%d vehicles cached', 'shopperexpress' ), $count );
+			}
+
+			if ( $rebuild_running ) {
 				$status = 'pending';
 			}
 
@@ -520,6 +588,9 @@ class Api_Settings implements SOC_Module {
 				'cached_at'  => $cached_at ? wp_date( 'M j, Y g:i A', $cached_at ) : null,
 				'cleared_by' => $cleared['by'] ?? null,
 				'cleared_at' => ! empty( $cleared['at'] ) ? wp_date( 'M j, Y g:i A', $cleared['at'] ) : null,
+				'vdp'        => $vdp_condition,
+				'vdp_detail' => $vdp_detail,
+				'vdp_gap'    => $vdp_gap,
 			);
 		}
 
@@ -657,7 +728,7 @@ class Api_Settings implements SOC_Module {
 	/**
 	 * Flush a specific cache group.
 	 *
-	 * @param string $group  'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
+	 * @param string $group  'vehicles', 'vehicle', 'vehicle-new', 'vehicle-used', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
 	 * @return int Deleted rows.
 	 */
 	public function flush_api_cache_group( string $group ): int {
@@ -698,6 +769,22 @@ class Api_Settings implements SOC_Module {
 			return $deleted;
 		}
 
+		if ( in_array( $group, array( 'vehicle-new', 'vehicle-used' ), true ) ) {
+			$condition = 'vehicle-used' === $group ? 'used' : 'new';
+			$deleted   = Intice_Api_Client::purge_vdp_live( $condition );
+
+			// Live copies are gone (stale ones keep pages rendering); refill them
+			// right away from one fresh list request. A failed refill is fine — the
+			// stale copies and lazy per-VIN fetches still cover visitors.
+			( new Intice_Rest() )->build_vdp_cache( $condition, $by );
+
+			self::mark_cache_cleared( array( 'vehicle_' . $condition ), $by );
+			SOC_Logger::write( 'cache', "Intice VDP cache flushed [{$group}] by: {$by}" );
+			SOC_Cache::forget( $this->get_slug(), 'data' );
+
+			return $deleted;
+		}
+
 		if ( ! in_array( $group, array( 'vehicles', 'vehicle', 'meta' ), true ) ) {
 			return 0;
 		}
@@ -718,7 +805,7 @@ class Api_Settings implements SOC_Module {
 	 * to wait for a real visitor to trigger the first fetch. Mirrors the group
 	 * mapping in flush_api_cache_group().
 	 *
-	 * @param string $group 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', or 'feed'.
+	 * @param string $group 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed', 'vehicle-new' or 'vehicle-used'.
 	 * @return true|\WP_Error
 	 */
 	public function warm_api_cache_group( string $group ) {
@@ -750,9 +837,11 @@ class Api_Settings implements SOC_Module {
 		} elseif ( isset( $srp_map[ $group ] ) ) {
 			[ $post_type, $custom_sort ] = $srp_map[ $group ];
 			$result = ( new Intice_Rest() )->handle_srp_cache_regen( $post_type, $custom_sort );
+		} elseif ( in_array( $group, array( 'vehicle-new', 'vehicle-used' ), true ) ) {
+			// VDP entries are keyed by VIN — filled from one fresh vehicle-list request.
+			$user   = wp_get_current_user();
+			$result = ( new Intice_Rest() )->build_vdp_cache( 'vehicle-used' === $group ? 'used' : 'new', $user->user_email ?: 'unknown' );
 		} else {
-			// 'vehicle' (single VDP) is keyed by VIN — there's no single cache entry
-			// to warm without picking a vehicle, so it's not offered from this button.
 			return new \WP_Error( 'unsupported', __( 'This cache group cannot be built directly.', 'shopperexpress' ) );
 		}
 

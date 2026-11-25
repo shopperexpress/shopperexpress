@@ -620,39 +620,109 @@ $soc-radius: 4px;
 // ============================================================
 // Notices
 // ============================================================
+// Floating toast: stays visible while the panel is scrolled.
 .soc-notice {
-  padding: 10px 14px;
-  border-radius: $soc-radius;
-  margin-bottom: 12px;
+  --soc-notice-accent: #{$soc-gray};
+
+  position: fixed;
+  top: 48px; // clears the WP admin bar (32px) with breathing room
+  right: 24px;
+  z-index: 100000;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: min(420px, calc(100vw - 48px));
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgb(0 0 0 / 8%);
+  border-left: 4px solid var(--soc-notice-accent);
+  background: #fff;
+  color: #1d2327;
   font-size: 13px;
-  display: none;
+  line-height: 1.45;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%), 0 2px 6px rgb(0 0 0 / 8%);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(24px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+
+  &::before {
+    content: '';
+    flex: 0 0 auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--soc-notice-accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+  }
 
   &.is-visible {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+    transition-delay: 0s;
   }
 
   &--success {
-    background: #d7f5dc;
-    color: color.adjust(#00a32a, $lightness: -10%, $space: hsl);
-    border-left: 4px solid $soc-success;
+    --soc-notice-accent: #{$soc-success};
+
+    &::before {
+      content: '\2713';
+    }
   }
 
   &--error {
-    background: #fce8e8;
-    color: color.adjust(#d63638, $lightness: -10%, $space: hsl);
-    border-left: 4px solid $soc-danger;
-  }
+    --soc-notice-accent: #{$soc-danger};
 
-  &--loading {
-    background: #f0f0f1;
-    color: $soc-gray;
-    border-left: 4px solid $soc-gray;
+    &::before {
+      content: '!';
+    }
   }
 
   &--warn {
-    background: #fcf0d0;
-    color: color.adjust(#dba617, $lightness: -15%, $space: hsl);
-    border-left: 4px solid $soc-warning;
+    --soc-notice-accent: #{$soc-warning};
+
+    &::before {
+      content: '!';
+    }
+  }
+
+  &--loading {
+    --soc-notice-accent: #{$soc-gray};
+
+    &::before {
+      content: '';
+      box-sizing: border-box;
+      background: none;
+      border: 2px solid rgb(0 0 0 / 12%);
+      border-top-color: var(--soc-notice-accent);
+      animation: soc-notice-spin 0.7s linear infinite;
+    }
+  }
+}
+
+@keyframes soc-notice-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 782px) {
+  .soc-notice {
+    top: 56px; // taller admin bar on mobile
+    right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .soc-notice {
+    transition: none;
   }
 }
 

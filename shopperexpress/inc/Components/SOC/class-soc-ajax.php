@@ -63,6 +63,7 @@ class SOC_Ajax {
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
 		'soc_warm_api_cache_group'    => 'handle_warm_api_cache_group',
 		'soc_cache_rebuild_status'    => 'handle_cache_rebuild_status',
+		'soc_intice_vdp_ttl_save'     => 'handle_intice_vdp_ttl_save',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
 		'soc_intice_guard_toggle'     => 'handle_intice_guard_toggle',
 		'soc_api_save_filters'        => 'handle_api_save_filters',
@@ -862,7 +863,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'vehicle', 'vehicle-new', 'vehicle-used', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
@@ -887,7 +888,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed', 'vehicle-new', 'vehicle-used' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
@@ -902,6 +903,27 @@ class SOC_Ajax {
 		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] built via SOC" );
 
 		SOC_Response::success( array( 'group' => $group ) );
+	}
+
+	/**
+	 * Save the VDP cache TTL.
+	 *
+	 * Expected POST: ttl (seconds, one of Api_Settings::get_vdp_ttl_options()).
+	 */
+	private function handle_intice_vdp_ttl_save(): void {
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		if ( ! $module->set_vdp_ttl( absint( $_POST['ttl'] ?? 0 ) ) ) {
+			SOC_Response::error( 'Invalid TTL.' );
+		}
+
+		SOC_Logger::write( 'cache', 'Intice VDP cache TTL set to ' . absint( $_POST['ttl'] ) . 's' );
+
+		SOC_Response::success( array( 'message' => 'VDP cache TTL saved.' ) );
 	}
 
 	/**

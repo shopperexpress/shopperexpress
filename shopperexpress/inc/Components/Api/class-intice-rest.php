@@ -15,6 +15,7 @@
 namespace App\Components\Api;
 
 use App\Components\SOC\Modules\Api_Settings;
+use App\Components\SOC\Support\SOC_Cache;
 use App\Components\SOC\Support\SOC_Logger;
 use App\Components\Theme_Component;
 
@@ -50,6 +51,11 @@ class Intice_Rest implements Theme_Component {
 	 * forever on a run that will never update its own state again.
 	 */
 	const REBUILD_STALE_AFTER = 10 * MINUTE_IN_SECONDS;
+
+	/**
+	 * Cap on VINs accepted per {"scope":"vehicle"} webhook call.
+	 */
+	const VDP_REFRESH_MAX_VINS = 200;
 
 	/**
 	 * @return void
@@ -189,6 +195,10 @@ class Intice_Rest implements Theme_Component {
 			return rest_ensure_response( array( 'queued' => true, 'deleted' => $deleted ) );
 		}
 
+		if ( 'vehicle' === $request->get_param( 'scope' ) ) {
+			return rest_ensure_response( $this->refresh_vehicles( $request ) );
+		}
+
 		$queued = $this->queue_rebuild_all();
 
 		SOC_Logger::write(
@@ -199,6 +209,246 @@ class Intice_Rest implements Theme_Component {
 		);
 
 		return rest_ensure_response( array( 'queued' => $queued ) );
+	}
+
+	/**
+	 * {"scope":"vehicle","vins":["..."]} (or "vin": "...") — targeted refresh of
+	 * individual VDP cache entries after Nexus edits specific vehicles, without
+	 * the full rebuild. Each VIN's live copy is dropped and re-fetched in the
+	 * background; the stale copy keeps serving meanwhile.
+	 *
+	 * @param \WP_REST_Request $request
+	 * @return array{queued: bool, refreshed: int}
+	 */
+	private function refresh_vehicles( \WP_REST_Request $request ): array {
+		$raw = $request->get_param( 'vins' );
+		$raw = is_array( $raw ) ? $raw : array( $request->get_param( 'vin' ) );
+
+		$vins = array();
+		foreach ( $raw as $vin ) {
+			$vin = strtoupper( trim( sanitize_text_field( (string) $vin ) ) );
+
+			if ( preg_match( '/^[A-Z0-9]{11,17}$/', $vin ) ) {
+				$vins[ $vin ] = $vin;
+			}
+		}
+
+		$vins   = array_slice( array_values( $vins ), 0, self::VDP_REFRESH_MAX_VINS );
+		$client = Intice_Api_Client::instance();
+
+		foreach ( $vins as $vin ) {
+			$client->refresh_vehicle( $vin );
+		}
+
+		if ( $vins ) {
+			SOC_Cache::forget( 'api-settings', 'data' );
+			SOC_Logger::write( 'cache', 'Intice VDP cache refreshed after Nexus update: ' . count( $vins ) . ' VIN(s).' );
+		}
+
+		return array(
+			'queued'    => (bool) $vins,
+			'refreshed' => count( $vins ),
+		);
+	}
+
+	// ─── VDP cache build ─────────────────────────────────────────────────────
+
+	/**
+	 * Build the per-VIN VDP cache for a condition from ONE fresh vehicle-list
+	 * request — a list item (mode=full) is the same object GET /vehicles/{vin}
+	 * returns, so no per-VIN requests are needed. (Per-VIN fetching is not an
+	 * option for a whole inventory: Nexus rate-limits with 429 after a few
+	 * hundred requests.) VINs no longer in Nexus are dropped from the cache.
+	 *
+	 * The list is always fetched now, never taken from cache: a cached copy can be
+	 * hours old or belong to a previously connected Nexus site.
+	 *
+	 * @param string $condition 'new'|'used'.
+	 * @param string $by        Attribution for the "Cleared By" column.
+	 * @return int|\WP_Error Number of vehicles cached.
+	 */
+	public function build_vdp_cache( string $condition, string $by ) {
+		$condition = 'used' === $condition ? 'used' : 'new';
+		$client    = Intice_Api_Client::instance();
+
+		$list = Intice_Api_Client::force_fresh(
+			fn() => $client->get_vehicles( array( 'condition' => $condition ) )
+		);
+
+		if ( is_wp_error( $list ) ) {
+			return new \WP_Error( $list->get_error_code(), self::describe_nexus_error( $list, $condition ), $list->get_error_data() );
+		}
+
+		// A successful response is authoritative even when empty: clear stale entries.
+		$written = $client->commit_vdp_from_lists( array( $condition => $list ), true );
+
+		if ( 0 === $written ) {
+			return new \WP_Error(
+				'empty',
+				sprintf(
+					/* translators: %s: new|used. */
+					__( 'Nexus has no %s vehicles right now (0 returned), so there is nothing to cache. Check that this inventory is imported in Nexus. Any old cached %s pages were cleared.', 'shopperexpress' ),
+					$condition,
+					$condition
+				)
+			);
+		}
+
+		Api_Settings::mark_cache_cleared( array( 'vehicle_' . $condition ), $by );
+		SOC_Cache::forget( 'api-settings', 'data' );
+		SOC_Logger::write( 'cache', sprintf( 'Intice VDP cache built [%s]: %d vehicles, by %s', $condition, $written, $by ) );
+
+		return $written;
+	}
+
+	/**
+	 * Refresh every cache layer that holds a condition's vehicles — the raw list,
+	 * the per-VIN VDP entries, the assembled SRP payloads (default + custom sort)
+	 * and the feed — from ONE fresh Nexus list request. Used after an edit in the
+	 * VDP modal and by its "Clear Cache" button: all-or-nothing like the full
+	 * rebuild, so a failure anywhere leaves the existing cache untouched.
+	 *
+	 * @param string     $condition 'new'|'used'.
+	 * @param string     $by        Attribution for the SOC "Cleared By" column.
+	 * @param array|null $changed   A just-edited vehicle (fresh from Nexus). When the
+	 *                              condition's list is still validly cached, it is
+	 *                              swapped into that list instead of re-downloading the
+	 *                              whole inventory — saves several seconds per edit.
+	 * @return true|\WP_Error
+	 */
+	public function refresh_condition_cache( string $condition, string $by, ?array $changed = null ) {
+		$condition = 'used' === $condition ? 'used' : 'new';
+		$other     = 'used' === $condition ? 'new' : 'used';
+		$post_type = 'used' === $condition ? 'used-listings' : 'listings';
+		$client    = Intice_Api_Client::instance();
+
+		$list    = null;
+		$patched = false;
+
+		if ( $changed && ! empty( $changed['vin'] ) ) {
+			$cached = Intice_Api_Client::get_live_cached_list( $condition );
+			$vin    = strtoupper( (string) $changed['vin'] );
+
+			foreach ( (array) ( $cached['data'] ?? array() ) as $i => $item ) {
+				if ( strtoupper( (string) ( $item['vin'] ?? '' ) ) === $vin ) {
+					$cached['data'][ $i ] = $changed;
+					$list                 = $cached;
+					$patched              = true;
+					break;
+				}
+			}
+		}
+
+		if ( null === $list ) {
+			$list = $client->fetch_vehicles_raw( array( 'condition' => $condition ) );
+		}
+
+		if ( is_wp_error( $list ) ) {
+			return new \WP_Error( $list->get_error_code(), self::describe_nexus_error( $list, $condition ), $list->get_error_data() );
+		}
+
+		// Single-vehicle edit: update the list + per-VIN VDP entries now (cheap, and
+		// the edited page must be correct on its next load), and hand the heavy part
+		// — re-rendering ~400 SRP cards and the feed — to the background
+		// stale-while-revalidate regen so the Save button doesn't wait on it.
+		if ( $patched ) {
+			$client->commit_vehicles( array( 'condition' => $condition ), $list );
+			$client->commit_vdp_from_lists( array( $condition => $list ), true );
+
+			foreach ( array( $post_type, 'vehicles-feed' ) as $type ) {
+				self::clear_cache( $type, false );
+			}
+			self::clear_cache( $post_type, true );
+
+			Api_Settings::mark_cache_cleared( array( 'vehicle_' . $condition ), $by );
+			SOC_Cache::forget( 'api-settings', 'data' );
+			SOC_Logger::write( 'cache', "Intice {$condition} VDP cache refreshed after a vehicle edit; SRP/feed rebuild queued, by: {$by}" );
+
+			return true;
+		}
+
+		$vehicles  = $list['data'] ?? array();
+		$assembled = array();
+
+		foreach ( array( false, true ) as $custom_sort ) {
+			$output = $this->assemble_srp_payload( $vehicles, $post_type, $custom_sort, '' );
+
+			if ( is_wp_error( $output ) ) {
+				return $output;
+			}
+
+			$assembled[] = array( $custom_sort, $output );
+		}
+
+		// The feed mixes both conditions; the other one comes from the client cache.
+		$other_list = $client->get_vehicles( array( 'condition' => $other ) );
+		$feed       = null;
+
+		if ( ! is_wp_error( $other_list ) ) {
+			$feed = 'new' === $condition
+				? $this->assemble_feed_payload( $vehicles, $other_list['data'] ?? array() )
+				: $this->assemble_feed_payload( $other_list['data'] ?? array(), $vehicles );
+
+			if ( is_wp_error( $feed ) ) {
+				return $feed;
+			}
+		}
+
+		// Everything built — commit together.
+		$client->commit_vehicles( array( 'condition' => $condition ), $list );
+		$client->commit_vdp_from_lists( array( $condition => $list ), true );
+
+		foreach ( $assembled as [ $custom_sort, $output ] ) {
+			$this->commit_srp( $post_type, $custom_sort, $output );
+		}
+
+		if ( $feed ) {
+			$this->commit_srp( 'vehicles-feed', false, $feed );
+		}
+
+		\wps_clear_listings_count_cache();
+
+		Api_Settings::mark_cache_cleared(
+			array( 'vehicle_' . $condition, 'srp_' . $post_type, 'srp_' . $post_type . '_custom', 'srp_vehicles-feed' ),
+			$by
+		);
+		SOC_Cache::forget( 'api-settings', 'data' );
+		SOC_Logger::write( 'cache', "Intice {$condition} cache refreshed (VDP + SRP + feed) by: {$by}" );
+
+		return true;
+	}
+
+	/**
+	 * Turn a Nexus request failure into a message an admin can act on.
+	 *
+	 * @param \WP_Error $error     From Intice_Api_Client.
+	 * @param string    $condition 'new'|'used' (for the wording).
+	 * @return string
+	 */
+	private static function describe_nexus_error( \WP_Error $error, string $condition ): string {
+		$status = (int) ( $error->get_error_data()['status'] ?? 0 );
+		$detail = $error->get_error_message();
+		$what   = sprintf( /* translators: %s: new|used. */ __( 'Could not load the %s vehicle list from Nexus', 'shopperexpress' ), $condition );
+
+		if ( 'intice_not_configured' === $error->get_error_code() ) {
+			return $detail . ' ' . __( 'Set them in Connection settings above.', 'shopperexpress' );
+		}
+
+		switch ( true ) {
+			case 429 === $status:
+				return $what . ': ' . __( 'Nexus is rate-limiting requests (HTTP 429 "Too Many Attempts"). Wait a minute and try again.', 'shopperexpress' );
+			case 401 === $status || 403 === $status:
+				return $what . ': ' . sprintf( /* translators: %d: HTTP status. */ __( 'Nexus rejected the API key (HTTP %d). Check the API key in Connection settings.', 'shopperexpress' ), $status );
+			case 404 === $status:
+				return $what . ': ' . __( 'the API endpoint was not found (HTTP 404). Check the API URL in Connection settings.', 'shopperexpress' );
+			case $status >= 500:
+				return $what . ': ' . sprintf( /* translators: 1: HTTP status, 2: message. */ __( 'Nexus returned a server error (HTTP %1$d: %2$s). Try again later.', 'shopperexpress' ), $status, $detail );
+			case $status > 0:
+				return $what . ': ' . sprintf( /* translators: 1: HTTP status, 2: message. */ __( 'HTTP %1$d — %2$s.', 'shopperexpress' ), $status, $detail );
+			default:
+				// No HTTP status: DNS, refused connection, TLS or timeout.
+				return $what . ': ' . sprintf( /* translators: %s: transport error. */ __( 'could not reach Nexus (%s). Check the API URL and that Nexus is running.', 'shopperexpress' ), $detail );
+		}
 	}
 
 	/**
@@ -277,16 +527,6 @@ class Intice_Rest implements Theme_Component {
 			)
 		);
 
-		// Hard-purge the per-VIN VDP cache up front, unconditionally — not gated
-		// behind the other 8 steps succeeding. There's no bulk way to know which
-		// VINs changed/were deleted in Nexus, so the only correct response to "an
-		// admin asked us to refresh everything" is to force every VDP page to
-		// re-fetch on its next visit instead of keep serving a vehicle that may no
-		// longer exist (Intice_Api_Client::get_vehicle() already turns a genuine
-		// 404 from Nexus into an immediate cache purge — this just stops waiting
-		// for that to happen naturally on the next visit/regen cycle).
-		Intice_Api_Client::purge_group( 'vehicle' );
-
 		$raw = array();
 
 		foreach ( $steps as [ $kind, $key, $filters ] ) {
@@ -346,6 +586,19 @@ class Intice_Rest implements Theme_Component {
 
 		$this->commit_srp( 'vehicles-feed', false, $feed_output );
 
+		// Per-VIN VDP cache, written from the lists just fetched — no extra Nexus
+		// requests, so every VDP is warm the moment the rebuild lands. This also
+		// replaces the old "purge every VDP" step: any VIN missing from the fresh
+		// lists (sold/deleted in Nexus) is dropped here, so a removed vehicle can't
+		// linger as a ghost page, and nothing is touched unless the whole rebuild
+		// succeeded.
+		$vdp_written = $client->commit_vdp_from_lists(
+			array(
+				'new'  => $raw['vehicles_new'],
+				'used' => $raw['vehicles_used'],
+			)
+		);
+
 		\wps_clear_listings_count_cache();
 
 		$by = get_option( self::OPTION_REBUILD_STATE . '_queued_by', Api_Settings::CLEARED_BY_IMPORT );
@@ -361,7 +614,7 @@ class Intice_Rest implements Theme_Component {
 			)
 		);
 
-		SOC_Logger::write( 'cache', 'Intice cache rebuild completed — all groups updated together.' );
+		SOC_Logger::write( 'cache', "Intice cache rebuild completed — all groups updated together ({$vdp_written} VDP entries warmed)." );
 	}
 
 	/**

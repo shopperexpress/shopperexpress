@@ -191,6 +191,16 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 		?>
 	</div>
 
+	<p style="margin:0 0 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+		<label for="soc-vdp-ttl"><strong><?php esc_html_e( 'Vehicle page (VDP) cache lifetime', 'shopperexpress' ); ?></strong></label>
+		<select id="soc-vdp-ttl">
+			<?php foreach ( \App\Components\SOC\Modules\Api_Settings::get_vdp_ttl_options() as $soc_ttl => $soc_ttl_label ) : ?>
+				<option value="<?php echo esc_attr( $soc_ttl ); ?>" <?php selected( (int) ( $data['vdp_ttl'] ?? 900 ), $soc_ttl ); ?>><?php echo esc_html( $soc_ttl_label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<span style="color:#666;font-size:12px;"><?php esc_html_e( 'How long a vehicle page is served from cache before it is re-fetched. Applies to entries written from now on; rebuilds and the Nexus refresh webhook keep it current regardless.', 'shopperexpress' ); ?></span>
+	</p>
+
 	<?php if ( ! empty( $data['api_cache'] ) ) : ?>
 	<table class="soc-table">
 		<thead>
@@ -210,13 +220,14 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
 
-			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+			$group_keys = array( 'vehicles', 'vehicle-new', 'vehicle-used', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 			// Plain-language explanation of each row, shown when its info icon is clicked.
 			// Keyed by position — must stay in the same order as collect_api_cache()'s $groups.
 			$group_info = array(
 				__( 'Caches the raw Nexus API response for vehicle list requests (GET /vehicles) — the data other lookups build on. Filled whenever any page requests a list of vehicles.', 'shopperexpress' ),
-				__( 'Caches the raw Nexus API response for a single vehicle (GET /vehicles/{vin}). Filled when a visitor opens that vehicle\'s detail page (VDP).', 'shopperexpress' ),
+				__( 'Caches the raw Nexus response for each NEW vehicle\'s detail page (GET /vehicles/{vin}), one entry per VIN. Filled automatically by every cache rebuild and by the Nexus per-VIN refresh webhook. "Build Cache" fills every VIN from one fresh vehicle-list request; "Flush" drops the live copies (old ones keep serving) and refills them the same way.', 'shopperexpress' ),
+				__( 'Same as New Vehicle Pages, but for USED vehicles.', 'shopperexpress' ),
 				__( 'Caches GET /meta — the filter reference data (makes, models, year/price ranges, conditions) used to render the SRP filter UI.', 'shopperexpress' ),
 				__( 'Caches GET /team-members — the Team Section (Intice) block\'s member list and categories. Nexus pings this site to flush just this group the moment a member or category is saved/reordered — vehicle/SRP caches are never touched by a team change.', 'shopperexpress' ),
 				__( 'Caches the fully assembled New Vehicles (listings) results — after filters, trim/drivetrain/photo resolution and default sorting are applied. This is what the New Vehicles SRP actually renders.', 'shopperexpress' ),
@@ -232,7 +243,7 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 				$group = $group_keys[ $i ] ?? '';
 				$info  = $group_info[ $i ] ?? '';
 				?>
-				<tr<?php echo 'vehicle' === $group ? ' style="display:none;"' : ''; ?>>
+				<tr>
 					<td>
 						<strong><?php echo esc_html( $row['label'] ); ?></strong>
 						<?php if ( $info ) : ?>
@@ -248,6 +259,9 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
+						<?php if ( ! empty( $row['vdp_detail'] ) ) : ?>
+							<br /><small class="soc-vdp-detail" style="color:#666;"><?php echo esc_html( $row['vdp_detail'] ); ?></small>
+						<?php endif; ?>
 					</td>
 					<td>
 						<?php if ( ! empty( $row['cleared_by'] ) ) : ?>
@@ -261,7 +275,24 @@ $llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 					</td>
 					<td><?php echo $row['cached_at'] ? esc_html( $row['cached_at'] ) : '—'; ?></td>
 					<td>
-						<?php if ( $st === 'missing' && 'vehicle' !== $group ) : ?>
+						<?php if ( ! empty( $row['vdp'] ) ) : ?>
+							<?php // VDP rows: Build fills the missing VINs, Flush drops live copies and refills. ?>
+							<?php if ( 'missing' === $st || ! empty( $row['vdp_gap'] ) ) : ?>
+								<button
+									class="button button-small button-primary soc-warm-api-cache-group"
+									data-group="<?php echo esc_attr( $group ); ?>"
+								>
+									<?php esc_html_e( 'Build Cache', 'shopperexpress' ); ?>
+								</button>
+							<?php endif; ?>
+							<button
+								class="button button-small soc-flush-api-cache-group"
+								data-group="<?php echo esc_attr( $group ); ?>"
+								<?php echo 'missing' === $st ? 'disabled' : ''; ?>
+							>
+								<?php esc_html_e( 'Flush', 'shopperexpress' ); ?>
+							</button>
+						<?php elseif ( $st === 'missing' ) : ?>
 							<button
 								class="button button-small button-primary soc-warm-api-cache-group"
 								data-group="<?php echo esc_attr( $group ); ?>"
