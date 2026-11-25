@@ -39,6 +39,24 @@ class Shortcode implements Theme_Component {
 				}
 			}
 		);
+
+		/*
+		 * WordPress does not re-parse shortcodes that appear in the output of another
+		 * shortcode. Wrappers defined outside the theme (e.g. a Code Snippets
+		 * [sc_pricing_expiration_disclaimer]) return text containing [current_date],
+		 * which would otherwise be printed literally.
+		 */
+		add_filter(
+			'do_shortcode_tag',
+			function ( $output, $tag ) {
+				if ( 'current_date' !== $tag && is_string( $output ) && false !== strpos( $output, '[current_date' ) ) {
+					return do_shortcode( $output );
+				}
+				return $output;
+			},
+			10,
+			2
+		);
 	}
 
 	/**
