@@ -238,6 +238,18 @@ class Shortcodes_Reference implements SOC_Module {
 				'description' => 'Outputs the current date (site timezone/locale aware via wp_date()). Equivalent to the "Shortcode for Current Date" plugin, built in.',
 			),
 			array(
+				'name'        => 'countdown',
+				'source'      => 'class-countdown.php::shortcode()',
+				'params'      => array(
+					array( 'name' => 'id', 'description' => 'Timer slug, as shown in Operation Center → Countdown Timers.' ),
+					array( 'name' => 'label', 'description' => 'Optional. Overrides the label text.' ),
+					array( 'name' => 'style', 'description' => 'Optional. "tiles", "inline" (03 : 14 : 27) or "minimal" (3d 14h 27m).' ),
+					array( 'name' => 'align', 'description' => 'Optional. "left", "center" or "right".' ),
+				),
+				'example'     => '[countdown id="black-friday"]',
+				'description' => 'Renders a countdown timer defined in Operation Center → SEO & Content → Countdown Timers.',
+			),
+			array(
 				'name'        => 'site_url',
 				'source'      => 'class-shortcode.php::site_url()',
 				'params'      => array(),

@@ -136,7 +136,7 @@ $soc-radius: 4px;
   align-items: flex-start;
   border: 1px solid $soc-border-light;
   border-radius: 0 0 $soc-radius $soc-radius;
-  overflow: hidden;
+  overflow: clip;
   position: relative;
 }
 
@@ -1282,4 +1282,98 @@ $soc-radius: 4px;
 
 body.soc-modal-open {
   overflow: hidden;
+}
+
+// ============================================================
+// Choice cards (radio group, e.g. Video Provider)
+// ============================================================
+.soc-choice-desc {
+  max-width: 720px;
+  margin: 0 0 12px;
+}
+
+.soc-choice-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  max-width: 720px;
+}
+
+.soc-choice {
+  display: block;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+    padding: 14px 16px;
+    background: $soc-white;
+    border: 1px solid $soc-border-light;
+    border-radius: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  &:hover &__card {
+    border-color: $soc-border;
+  }
+
+  input:focus-visible + &__card {
+    outline: 2px solid $soc-primary;
+    outline-offset: 2px;
+  }
+
+  input:checked + &__card {
+    border-color: $soc-primary;
+    box-shadow: 0 0 0 1px $soc-primary;
+  }
+
+  &__title {
+    font-size: 14px;
+    color: $soc-dark;
+  }
+
+  &__badge {
+    align-self: flex-start;
+    padding: 1px 8px;
+    border-radius: 20px;
+    background: $soc-bg;
+    color: $soc-muted;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  &__text {
+    margin-top: 4px;
+    font-size: 12px;
+    color: $soc-muted;
+  }
+
+  &__check {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: $soc-primary;
+    color: $soc-white;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  input:checked + &__card &__check {
+    opacity: 1;
+  }
 }

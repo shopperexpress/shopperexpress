@@ -1,0 +1,163 @@
+// Countdown timer ([countdown] shortcode, Cookie Modal)
+.countdown-timer {
+  --cd-color: #{$black};
+  --cd-bg: #f1f1f1;
+  margin: 0 0 20px;
+  color: var(--cd-color);
+
+  &[hidden],
+  [hidden] {
+    display: none !important;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &--left {
+    text-align: left;
+
+    .countdown-timer__items {
+      justify-content: flex-start;
+    }
+  }
+
+  &--center {
+    text-align: center;
+
+    .countdown-timer__items {
+      justify-content: center;
+    }
+  }
+
+  &--right {
+    text-align: right;
+
+    .countdown-timer__items {
+      justify-content: flex-end;
+    }
+  }
+
+  &__label,
+  &__expired {
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+
+  &__expired {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  &__items {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 64px;
+    padding: 10px 8px;
+    border-radius: 6px;
+    background-color: var(--cd-bg, color-mix(in srgb, currentcolor 8%, transparent));
+  }
+
+  &__value {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+
+    @include media('>=tablet') {
+      font-size: 36px;
+    }
+  }
+
+  &__unit {
+    margin-top: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  // Single line: 03 : 14 : 27 : 09
+  &--inline {
+    .countdown-timer__items {
+      gap: 0;
+    }
+
+    .countdown-timer__item {
+      flex-direction: row;
+      min-width: 0;
+      padding: 0;
+      background: none;
+
+      &:not(:last-child)::after {
+        content: ':';
+        margin: 0 6px;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1;
+      }
+    }
+
+    .countdown-timer__value {
+      font-size: 24px;
+    }
+
+    .countdown-timer__unit {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
+  // Plain text: 3d 14h 27m
+  &--minimal {
+    .countdown-timer__items {
+      gap: 8px;
+    }
+
+    .countdown-timer__item {
+      flex-direction: row;
+      min-width: 0;
+      padding: 0;
+      background: none;
+    }
+
+    .countdown-timer__value {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .countdown-timer__unit {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    [data-unit='days'] .countdown-timer__value::after {
+      content: 'd';
+    }
+
+    [data-unit='hours'] .countdown-timer__value::after {
+      content: 'h';
+    }
+
+    [data-unit='minutes'] .countdown-timer__value::after {
+      content: 'm';
+    }
+
+    [data-unit='seconds'] .countdown-timer__value::after {
+      content: 's';
+    }
+  }
+}

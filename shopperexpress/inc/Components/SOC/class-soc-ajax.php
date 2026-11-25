@@ -95,6 +95,9 @@ class SOC_Ajax {
 		'soc_google_reviews_save_min_rating' => 'handle_google_reviews_save_min_rating',
 		// Video Provider.
 		'soc_video_provider_save'            => 'handle_video_provider_save',
+		// Countdown Timers.
+		'soc_countdown_save'                 => 'handle_countdown_save',
+		'soc_countdown_delete'               => 'handle_countdown_delete',
 	);
 
 	/**
@@ -690,6 +693,51 @@ class SOC_Ajax {
 		SOC_Logger::write( 'general', 'Video provider switched to: ' . $new_provider );
 
 		SOC_Response::success( array( 'provider' => $new_provider ) );
+	}
+
+	/**
+	 * Create or update a countdown timer.
+	 */
+	private function handle_countdown_save(): void {
+		$module = $this->modules['countdown-timers'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Countdown Timers module not available.' );
+		}
+
+		$slug = sanitize_key( wp_unslash( $_POST['slug'] ?? '' ) );
+		$raw  = isset( $_POST['timer'] ) && is_array( $_POST['timer'] ) ? wp_unslash( $_POST['timer'] ) : array();
+
+		$result = $module->save_timer( $slug, $raw );
+
+		if ( is_wp_error( $result ) ) {
+			SOC_Response::error( $result->get_error_message() );
+		}
+
+		SOC_Logger::write( 'general', 'Countdown timer saved: ' . $result );
+
+		SOC_Response::success( array( 'slug' => $result ) );
+	}
+
+	/**
+	 * Delete a countdown timer.
+	 */
+	private function handle_countdown_delete(): void {
+		$module = $this->modules['countdown-timers'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Countdown Timers module not available.' );
+		}
+
+		$slug = sanitize_key( wp_unslash( $_POST['slug'] ?? '' ) );
+
+		if ( ! $module->delete_timer( $slug ) ) {
+			SOC_Response::error( 'Timer not found.' );
+		}
+
+		SOC_Logger::write( 'general', 'Countdown timer deleted: ' . $slug );
+
+		SOC_Response::success( array( 'slug' => $slug ) );
 	}
 
 	/**

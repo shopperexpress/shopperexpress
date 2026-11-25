@@ -22,9 +22,11 @@ use App\Components\SOC\Modules\VDR_Requests;
 use App\Components\SOC\Modules\Json_Ld_Settings;
 use App\Components\SOC\Modules\Google_Reviews;
 use App\Components\SOC\Modules\AI_Vdp_Log;
+use App\Components\SOC\Modules\Countdown_Timers;
 use App\Components\SOC\Modules\Shortcodes_Reference;
 use App\Components\SOC\Modules\Video_Provider;
 use App\Components\SOC\Modules\General_Settings;
+use App\Components\SOC\Modules\Overview;
 
 /**
  * SOC Component
@@ -54,9 +56,9 @@ class SOC implements Theme_Component {
 	 */
 	private const GROUPS = array(
 		'general'      => array(
-			'label'   => 'General Settings',
+			'label'   => 'General',
 			'icon'    => 'dashicons-admin-generic',
-			'modules' => array( 'general-settings' ),
+			'modules' => array( 'overview', 'general-settings' ),
 		),
 		'core'         => array(
 			'label'   => 'System & Cache',
@@ -66,7 +68,7 @@ class SOC implements Theme_Component {
 		'integrations' => array(
 			'label'   => 'API & Integrations',
 			'icon'    => 'dashicons-rest-api',
-			'modules' => array( 'api-settings', 'developer-tools', 'api-health', 'video-provider' ),
+			'modules' => array( 'api-settings', 'developer-tools', 'api-health' ),
 		),
 		'leads'        => array(
 			'label'   => 'Leads & Vehicles',
@@ -76,7 +78,7 @@ class SOC implements Theme_Component {
 		'content'      => array(
 			'label'   => 'SEO & Content',
 			'icon'    => 'dashicons-media-code',
-			'modules' => array( 'google-reviews', 'json-ld-settings', 'shortcodes-reference' ),
+			'modules' => array( 'google-reviews', 'json-ld-settings', 'countdown-timers', 'shortcodes-reference' ),
 		),
 	);
 
@@ -122,9 +124,11 @@ class SOC implements Theme_Component {
 			new Json_Ld_Settings(),
 			new Google_Reviews(),
 			new AI_Vdp_Log(),
+			new Countdown_Timers(),
 			new Shortcodes_Reference(),
 			new Video_Provider(),
 			new General_Settings(),
+			new Overview(),
 		);
 
 		foreach ( $module_classes as $module ) {

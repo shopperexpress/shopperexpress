@@ -51,6 +51,7 @@
 
     SOC.bindLeadDelivery();
     SOC.bindGoogleReviews();
+    SOC.bindCountdownTimers();
     SOC.bindToggleRows();
   };
 
@@ -712,7 +713,7 @@
       });
     });
 
-    $(document).on('change' + ns, '#soc-video-provider-select', function () {
+    $(document).on('change' + ns, 'input[name="soc-video-provider"]', function () {
       const provider = $(this).val();
 
       SOC.showLoading();
@@ -735,7 +736,7 @@
         SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('Team Members mode ' + (on ? 'enabled' : 'disabled') + '.');
-        SOC.reloadPanel('api-settings');
+        if ('api-settings' === $('#soc-panel').data('module')) SOC.reloadPanel('api-settings');
       });
     });
 
@@ -1043,6 +1044,372 @@
         function () {
           SOC.showSuccess('Filters saved.');
           $btn.prop('disabled', false);
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+  };
+
+  // ----------------------------------------------------------------
+  // Countdown Timers module
+  // ----------------------------------------------------------------
+  SOC.bindCountdownTimers = function () {
+    const ns = '.socCountdown';
+    $(document).off(ns);
+
+    const $form = function () {
+      return $('#soc-cd-form');
+    };
+
+    const radio = function (name) {
+      return $('input[name="' + name + '"]:checked').val();
+    };
+
+    const esc = function (str) {
+      return $('<div>').text(str).html();
+    };
+
+    let syncingColor = false;
+
+    // Highlight the active swatch and mirror a custom value into the WP color picker.
+    function syncColor(key) {
+      const value = $('#soc-cd-' + key + '-value').val();
+      const $group = $('[data-cd-color="' + key + '"]');
+      const $picker = $group.find('.soc-cd-colorpicker');
+      let preset = false;
+
+      $group.find('.soc-cd__sw').each(function () {
+        const on = ($(this).data('value') || '') === value;
+        $(this).toggleClass('is-active', on);
+        preset = preset || on;
+      });
+
+      syncingColor = true;
+      if (value && !preset) {
+        $picker.wpColorPicker('color', value);
+      } else {
+        $picker.val('').closest('.wp-picker-container').find('.wp-color-result').css('background-color', '');
+      }
+      syncingColor = false;
+    }
+
+    function initPickers() {
+      $('.soc-cd-colorpicker').each(function () {
+        const $input = $(this);
+
+        if ($input.data('cd-init')) return;
+        $input.data('cd-init', true).wpColorPicker({
+          defaultColor: false,
+          change: function (e, ui) {
+            if (syncingColor) return;
+            $('#soc-cd-' + $input.data('key') + '-value').val(ui.color.toString());
+            syncVisibility();
+          },
+          clear: function () {
+            if (syncingColor) return;
+            $('#soc-cd-' + $input.data('key') + '-value').val('');
+            syncVisibility();
+          },
+        });
+      });
+    }
+
+    function renderPreview() {
+      const style = radio('soc-cd-style') || 'tiles';
+      const align = $('#soc-cd-align').val() || 'center';
+      const label = $('#soc-cd-label').val().trim();
+      const text = $('#soc-cd-text-value').val();
+      const bg = $('#soc-cd-bg-value').val();
+      const sample = {
+        days: ['03', 'Days', 'd'],
+        hours: ['14', 'Hours', 'h'],
+        minutes: ['27', 'Min', 'm'],
+        seconds: ['09', 'Sec', 's'],
+      };
+      const units = $('.soc-cd-unit:checked')
+        .map(function () {
+          return $(this).val();
+        })
+        .get();
+      const vars = (text ? '--cd-text:' + text + ';' : '') + (bg ? '--cd-bg:' + bg + ';' : '');
+      let items = '';
+
+      units.forEach(function (unit, i) {
+        const s = sample[unit];
+
+        if (style === 'tiles') {
+          items += '<div class="soc-cd-pv__item"><span class="soc-cd-pv__num">' + s[0] + '</span><span class="soc-cd-pv__unit">' + s[1] + '</span></div>';
+        } else if (style === 'inline') {
+          items += (i ? '<span class="soc-cd-pv__sep">:</span>' : '') + '<span>' + s[0] + '</span>';
+        } else {
+          items += '<span>' + s[0] + s[2] + '</span>';
+        }
+      });
+
+      $('#soc-cd-preview').html(
+        '<div class="soc-cd-pv soc-cd-pv--' +
+          style +
+          ' soc-cd-pv--' +
+          align +
+          '" style="' +
+          vars +
+          '">' +
+          (label ? '<p class="soc-cd-pv__label">' + esc(label) + '</p>' : '') +
+          '<div class="soc-cd-pv__items">' +
+          items +
+          '</div></div>'
+      );
+    }
+
+    // Show only the fields relevant for the selected type / expired action, refresh the preview.
+    function syncVisibility() {
+      const type = radio('soc-cd-type');
+      const action = radio('soc-cd-expired-action');
+
+      $('[data-cd-show]').each(function () {
+        $(this).toggle($(this).data('cd-show') === type);
+      });
+      $('[data-cd-show-action]').each(function () {
+        $(this).toggle($(this).data('cd-show-action') === action);
+      });
+      $('.soc-cd-align').each(function () {
+        $(this).toggleClass('is-active', $(this).data('align') === $('#soc-cd-align').val());
+      });
+      syncColor('text');
+      syncColor('bg');
+      renderPreview();
+    }
+
+    function setStage(theme) {
+      $('#soc-cd-stage').attr('data-theme', theme);
+      $('#soc-cd-stage-toggle button').each(function () {
+        $(this).toggleClass('is-active', $(this).data('theme') === theme);
+      });
+    }
+
+    // "2026-11-25 18:30:00" -> "2026-11-25T18:30" for <input type="datetime-local">.
+    function toLocalInput(value) {
+      return value ? String(value).slice(0, 16).replace(' ', 'T') : '';
+    }
+
+    function openForm(slug, timer, title) {
+      const d = Object.assign({}, $form().data('defaults'), timer || {});
+
+      $('#soc-cd-form-title').text(title);
+      $('#soc-cd-form-state').text(slug ? 'Editing' : 'Unsaved');
+      $('#soc-cd-slug').val(slug);
+      $('#soc-cd-name').val(d.name);
+      $('input[name="soc-cd-type"][value="' + d.type + '"]').prop('checked', true);
+      $('#soc-cd-end').val(toLocalInput(d.end));
+      $('#soc-cd-duration').val(d.duration);
+      $('#soc-cd-duration-unit').val(d.duration_unit);
+      $('#soc-cd-label').val(d.label);
+      $('.soc-cd-unit').each(function () {
+        $(this).prop('checked', (d.units || []).indexOf($(this).val()) !== -1);
+      });
+      $('input[name="soc-cd-style"][value="' + (d.style === 'compact' ? 'inline' : d.style) + '"]').prop('checked', true);
+      $('#soc-cd-align').val(d.align);
+      $('input[name="soc-cd-expired-action"][value="' + (d.expired_action === 'close' ? 'hide' : d.expired_action) + '"]').prop('checked', true);
+      $('#soc-cd-expired-text').val(d.expired_text);
+      $('#soc-cd-text-value').val(d.text_color || '');
+      $('#soc-cd-bg-value').val(d.bg_color || '');
+
+      const $code = $('#soc-cd-shortcode');
+      $code.text(slug ? '[countdown id="' + slug + '"]' : $code.data('empty'));
+
+      initPickers();
+      setStage($('#soc-cd-stage').attr('data-theme') || 'dark');
+      syncVisibility();
+      $form().show()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function rowTimer($btn) {
+      const $row = $btn.closest('tr');
+
+      return { slug: $row.data('cd-slug'), timer: $row.data('cd-timer') };
+    }
+
+    $(document).on('change input' + ns, '#soc-cd-form input, #soc-cd-form select', function (e) {
+      if ($(e.target).hasClass('soc-cd-colorpicker') || $(e.target).closest('.wp-picker-container').length) return;
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '.soc-cd-align', function () {
+      $('#soc-cd-align').val($(this).data('align'));
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '.soc-cd__sw', function () {
+      $('#soc-cd-' + $(this).closest('[data-cd-color]').data('cd-color') + '-value').val($(this).data('value') || '');
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '#soc-cd-stage-toggle button', function () {
+      setStage($(this).data('theme'));
+    });
+
+    // List filter tabs + search.
+    function filterRows() {
+      const status = $('#soc-cd-tabs .is-active').data('filter') || 'all';
+      const q = ($('#soc-cd-search').val() || '').trim().toLowerCase();
+      let visible = 0;
+
+      $('.soc-cd__tb tbody tr[data-cd-slug]').each(function () {
+        const show = (status === 'all' || $(this).data('cd-status') === status) && (!q || String($(this).data('cd-search')).indexOf(q) !== -1);
+
+        $(this).toggle(show);
+        visible += show ? 1 : 0;
+      });
+      $('.soc-cd__none').prop('hidden', visible > 0);
+    }
+
+    $(document).on('click' + ns, '#soc-cd-tabs button', function () {
+      $('#soc-cd-tabs button').removeClass('is-active');
+      $(this).addClass('is-active');
+      filterRows();
+    });
+
+    $(document).on('input' + ns, '#soc-cd-search', filterRows);
+
+    $(document).on('click' + ns, '#soc-cd-add', function () {
+      openForm('', null, 'New timer');
+    });
+
+    $(document).on('click' + ns, '.soc-cd-edit', function (e) {
+      e.preventDefault();
+      const row = rowTimer($(this));
+
+      openForm(row.slug, row.timer, 'Edit timer');
+    });
+
+    $(document).on('click' + ns, '.soc-cd-duplicate', function () {
+      const row = rowTimer($(this));
+      const timer = Object.assign({}, row.timer, { name: (row.timer.name || row.slug) + ' (copy)' });
+
+      openForm('', timer, 'New timer (copy)');
+    });
+
+    $(document).on('click' + ns, '#soc-cd-cancel', function () {
+      $form().hide();
+    });
+
+    // Clipboard API needs a secure context; fall back to execCommand on plain http / local hosts.
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function (resolve, reject) {
+        const $tmp = $('<textarea readonly>').val(text).css({ position: 'fixed', top: 0, left: 0, opacity: 0 }).appendTo('body');
+
+        $tmp[0].select();
+
+        try {
+          document.execCommand('copy') ? resolve() : reject(new Error('copy failed'));
+        } catch (err) {
+          reject(err);
+        } finally {
+          $tmp.remove();
+        }
+      });
+    }
+
+    $(document).on('click' + ns, '.soc-cd-copy', function () {
+      const $btn = $(this);
+
+      copyText($btn.data('shortcode')).then(
+        function () {
+          SOC.showSuccess('Shortcode copied: ' + $btn.data('shortcode'));
+        },
+        function () {
+          SOC.showError('Could not copy the shortcode. Please copy it manually.');
+        }
+      );
+    });
+
+    // Delete confirmation dialog.
+    let deleteSlug = '';
+    let $deleteFocus = null;
+
+    function closeDeleteDialog() {
+      $('#soc-cd-delete-dialog').prop('hidden', true);
+      deleteSlug = '';
+      if ($deleteFocus) $deleteFocus.trigger('focus');
+    }
+
+    $(document).on('click' + ns, '.soc-cd-delete', function () {
+      const row = rowTimer($(this));
+
+      deleteSlug = row.slug;
+      $deleteFocus = $(this);
+      $('#soc-cd-dialog-name').text(row.timer.name || row.slug);
+      $('#soc-cd-delete-dialog').prop('hidden', false);
+      $('#soc-cd-delete-confirm').trigger('focus');
+    });
+
+    $(document).on('click' + ns, '[data-cd-dialog-close]', closeDeleteDialog);
+
+    $(document).on('keydown' + ns, function (e) {
+      if (e.key === 'Escape' && !$('#soc-cd-delete-dialog').prop('hidden')) closeDeleteDialog();
+    });
+
+    $(document).on('click' + ns, '#soc-cd-delete-confirm', function () {
+      const slug = deleteSlug;
+      const $btn = $(this).prop('disabled', true);
+
+      $('#soc-cd-delete-dialog').prop('hidden', true);
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_countdown_delete',
+        { slug: slug },
+        function () {
+          SOC.showSuccess('Timer deleted.');
+          SOC.reloadPanel('countdown-timers');
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+
+    $(document).on('click' + ns, '#soc-cd-save', function () {
+      const $btn = $(this);
+      const units = $('.soc-cd-unit:checked')
+        .map(function () {
+          return $(this).val();
+        })
+        .get();
+
+      const timer = {
+        name: $('#soc-cd-name').val().trim(),
+        type: radio('soc-cd-type'),
+        end: $('#soc-cd-end').val(),
+        duration: $('#soc-cd-duration').val(),
+        duration_unit: $('#soc-cd-duration-unit').val(),
+        label: $('#soc-cd-label').val().trim(),
+        units: units,
+        style: radio('soc-cd-style'),
+        align: $('#soc-cd-align').val(),
+        expired_action: radio('soc-cd-expired-action'),
+        expired_text: $('#soc-cd-expired-text').val().trim(),
+        text_color: $('#soc-cd-text-value').val(),
+        bg_color: $('#soc-cd-bg-value').val(),
+      };
+
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_countdown_save',
+        { slug: $('#soc-cd-slug').val(), timer: timer },
+        function () {
+          SOC.showSuccess('Timer saved.');
+          SOC.reloadPanel('countdown-timers');
         },
         function (msg) {
           SOC.showError(msg);

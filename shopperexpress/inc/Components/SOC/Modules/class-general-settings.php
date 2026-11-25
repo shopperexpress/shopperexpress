@@ -46,22 +46,12 @@ class General_Settings implements SOC_Module {
 	 * @return array
 	 */
 	public function collect( bool $force_refresh = false ): array {
-		if ( $force_refresh ) {
-			SOC_Cache::forget( $this->get_slug(), 'data' );
-		}
-
-		$cached = SOC_Cache::get( $this->get_slug(), 'data' );
-		if ( false !== $cached ) {
-			return $cached;
-		}
-
-		$data = array(
-			'guard_enabled' => self::is_guard_enabled(),
+		// Plain option reads — cheap, and kept uncached so toggles owned by other
+		// modules (team mode, video provider) never show a stale value here.
+		return array(
+			'guard_enabled'     => self::is_guard_enabled(),
+			'video_provider'    => ( new Video_Provider() )->get_provider(),
 		);
-
-		SOC_Cache::set( $this->get_slug(), 'data', $data, 1 * MINUTE_IN_SECONDS );
-
-		return $data;
 	}
 
 	/**
