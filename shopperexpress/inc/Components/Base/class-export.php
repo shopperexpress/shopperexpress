@@ -22,6 +22,7 @@ class Export implements Theme_Component {
 		add_action( 'add_meta_boxes_page', array( $this, 'register_meta_box' ) );
 		add_action( 'admin_post_export_acf_flexible_page', array( $this, 'handle_export' ) );
 		add_action( 'admin_post_import_acf_flexible_page', array( $this, 'handle_import' ) );
+		add_action( 'admin_post_flatten_page_shortcodes', array( $this, 'handle_flatten_shortcodes' ) );
 
 		add_action( 'acf/render_field/key=field_660eebbf15403', array( $this, 'render_shortcodes_export_import' ) );
 		add_action( 'admin_post_export_theme_shortcodes', array( $this, 'handle_shortcodes_export' ) );
@@ -57,63 +58,148 @@ class Export implements Theme_Component {
 	 * @param \WP_Post $post The current post.
 	 */
 	public function render_meta_box( $post ): void {
+		$id = (int) $post->ID;
+
 		$export_url = add_query_arg(
 			array(
 				'action'   => 'export_acf_flexible_page',
-				'post_id'  => (int) $post->ID,
-				'_wpnonce' => wp_create_nonce( 'export_acf_flexible_page_' . $post->ID ),
+				'post_id'  => $id,
+				'_wpnonce' => wp_create_nonce( 'export_acf_flexible_page_' . $id ),
 			),
 			admin_url( 'admin-post.php' )
 		);
 
-		?>
-		<a href="<?php echo esc_url( $export_url ); ?>" class="button button-secondary" style="margin-bottom:8px;">
-			<?php esc_html_e( 'Export to JSON', 'shopperexpress' ); ?>
-		</a>
-		<input type="file" id="import_json_<?php echo (int) $post->ID; ?>" accept=".json,application/json" style="margin-top:8px;">
-		<button type="button" class="button button-secondary" style="margin-top:8px;" onclick="shopperImportACFFlexible_<?php echo (int) $post->ID; ?>()"> <?php esc_html_e( 'Import from JSON', 'shopperexpress' ); ?> </button>
-		<script>
-			function shopperImportACFFlexible_<?php echo (int) $post->ID; ?>() {
+		$flatten_url = add_query_arg(
+			array(
+				'action'   => 'flatten_page_shortcodes',
+				'post_id'  => $id,
+				'_wpnonce' => wp_create_nonce( 'flatten_page_shortcodes_' . $id ),
+			),
+			admin_url( 'admin-post.php' )
+		);
 
-				const fileInput = document.getElementById('import_json_<?php echo (int) $post->ID; ?>');
-				if (!fileInput.files.length) {
-					alert('<?php echo esc_js( __( 'Please select a JSON file to import.', 'shopperexpress' ) ); ?>');
-					return;
+		$confirm = __( 'Replace shortcodes in the page title, excerpt and SEO title/description with their rendered text and reload the page? Unsaved changes in the editor will be lost. This cannot be undone.', 'shopperexpress' );
+		?>
+		<style>
+			#acf_flexible_export .inside { margin: 0; padding: 0; }
+			.se-xi-section { padding: 14px 12px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #f0f0f1; }
+			.se-xi-section:last-child { border-bottom: 0; }
+			.se-xi-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #50575e; }
+			.se-xi-section p { margin: 0; color: #50575e; line-height: 1.5; }
+			.se-xi-section p.se-xi-note { font-size: 12px; }
+			.se-xi-section .button { display: flex; align-items: center; justify-content: center; gap: 8px; height: 36px; margin: 0; text-align: center; }
+			.se-xi-section .button { line-height: 1; padding-top: 0; padding-bottom: 0; }
+			.se-xi-section .button .dashicons { display: block; flex: none; margin: 0; font-size: 16px; width: 16px; height: 16px; line-height: 16px; vertical-align: top; }
+			.se-xi-section .button .dashicons::before { display: block; line-height: 16px; }
+			.se-xi-drop { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 18px 12px; border: 1px dashed #8c8f94; border-radius: 3px; background: #f6f7f7; text-align: center; cursor: pointer; position: relative; }
+			.se-xi-drop.is-over, .se-xi-drop:focus-within { border-color: #2271b1; background: #f0f6fc; }
+			.se-xi-drop .dashicons { color: #2271b1; font-size: 22px; width: 22px; height: 22px; }
+			.se-xi-drop input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
+			.se-xi-drop u { color: #2271b1; }
+			.se-xi-file { word-break: break-all; font-weight: 600; }
+		</style>
+
+		<div class="se-xi-section">
+			<div class="se-xi-label"><?php esc_html_e( 'Export', 'shopperexpress' ); ?></div>
+			<p><?php esc_html_e( 'Download title, SEO fields and all blocks of this page as a JSON file.', 'shopperexpress' ); ?></p>
+			<a href="<?php echo esc_url( $export_url ); ?>" class="button button-primary">
+				<span class="dashicons dashicons-download" aria-hidden="true"></span>
+				<?php esc_html_e( 'Export to JSON', 'shopperexpress' ); ?>
+			</a>
+		</div>
+
+		<div class="se-xi-section">
+			<div class="se-xi-label"><?php esc_html_e( 'Import', 'shopperexpress' ); ?></div>
+			<label class="se-xi-drop" id="se-xi-drop-<?php echo $id; ?>">
+				<span class="dashicons dashicons-upload" aria-hidden="true"></span>
+				<span class="se-xi-text"><?php esc_html_e( 'Drop .json file here', 'shopperexpress' ); ?></span>
+				<span class="se-xi-sub" style="font-size:12px;color:#50575e;">
+					<?php esc_html_e( 'or', 'shopperexpress' ); ?> <u><?php esc_html_e( 'choose file', 'shopperexpress' ); ?></u>
+				</span>
+				<input type="file" id="import_json_<?php echo $id; ?>" accept=".json,application/json">
+			</label>
+			<button type="button" class="button" id="se-xi-import-<?php echo $id; ?>" disabled><?php esc_html_e( 'Import from JSON', 'shopperexpress' ); ?></button>
+			<p class="se-xi-note"><?php esc_html_e( 'Import replaces the current title, SEO fields and content.', 'shopperexpress' ); ?></p>
+		</div>
+
+		<div class="se-xi-section">
+			<div class="se-xi-label"><?php esc_html_e( 'Tools', 'shopperexpress' ); ?></div>
+			<a href="<?php echo esc_url( $flatten_url ); ?>" class="button" onclick="return confirm(<?php echo esc_attr( wp_json_encode( $confirm ) ); ?>);">
+				<?php esc_html_e( 'Convert title/SEO shortcodes to text', 'shopperexpress' ); ?>
+			</a>
+			<p class="se-xi-note"><?php esc_html_e( 'Replaces shortcodes in the title and SEO fields with their current values.', 'shopperexpress' ); ?></p>
+		</div>
+
+		<script>
+			(function () {
+				const input = document.getElementById('import_json_<?php echo $id; ?>');
+				const drop = document.getElementById('se-xi-drop-<?php echo $id; ?>');
+				const btn = document.getElementById('se-xi-import-<?php echo $id; ?>');
+				const text = drop.querySelector('.se-xi-text');
+				const sub = drop.querySelector('.se-xi-sub');
+
+				function sync() {
+					const has = input.files.length > 0;
+					btn.disabled = !has;
+					btn.classList.toggle('button-primary', has);
+					if (has) {
+						text.textContent = input.files[0].name;
+						text.classList.add('se-xi-file');
+						sub.style.display = 'none';
+					}
 				}
 
-				const file = fileInput.files[0];
-				const formData = new FormData();
-				formData.append('import_json', file);
-				formData.append('action', 'import_acf_flexible_page');
-				formData.append('post_id', '<?php echo (int) $post->ID; ?>');
-				formData.append('_wpnonce', '<?php echo esc_js( wp_create_nonce( 'import_acf_flexible_page_' . $post->ID ) ); ?>');
-				formData.append('redirect_to', '<?php echo esc_url( get_edit_post_link( $post->ID, '' ) ); ?>');
+				input.addEventListener('change', sync);
+				['dragenter', 'dragover'].forEach(function (e) {
+					drop.addEventListener(e, function (ev) { ev.preventDefault(); drop.classList.add('is-over'); });
+				});
+				['dragleave', 'drop'].forEach(function (e) {
+					drop.addEventListener(e, function (ev) { ev.preventDefault(); drop.classList.remove('is-over'); });
+				});
+				drop.addEventListener('drop', function (ev) {
+					if (ev.dataTransfer && ev.dataTransfer.files.length) {
+						input.files = ev.dataTransfer.files;
+						sync();
+					}
+				});
 
-				const btn = event.target;
-				btn.disabled = true;
+				btn.addEventListener('click', function () {
+					if (!input.files.length) {
+						alert(<?php echo wp_json_encode( __( 'Please select a JSON file to import.', 'shopperexpress' ) ); ?>);
+						return;
+					}
 
-				fetch('<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>', {
+					const formData = new FormData();
+					formData.append('import_json', input.files[0]);
+					formData.append('action', 'import_acf_flexible_page');
+					formData.append('post_id', '<?php echo $id; ?>');
+					formData.append('_wpnonce', <?php echo wp_json_encode( wp_create_nonce( 'import_acf_flexible_page_' . $id ) ); ?>);
+					formData.append('redirect_to', <?php echo wp_json_encode( get_edit_post_link( $id, '' ) ); ?>);
+
+					btn.disabled = true;
+
+					fetch(<?php echo wp_json_encode( admin_url( 'admin-post.php' ) ); ?>, {
 						method: 'POST',
 						credentials: 'same-origin',
 						body: formData,
 					})
-					.then(response => response.json())
-					.then(data => {
-						if (data.success && data.data.redirect) {
-							window.location = data.data.redirect;
-						} else {
-							throw new Error('No redirect URL returned');
-						}
-					})
-					.catch(err => {
-						alert(<?php echo json_encode( __( 'Import failed: ', 'shopperexpress' ) ); ?> + err.message);
-						btn.disabled = false;
-					});
-			}
+						.then(function (response) { return response.json(); })
+						.then(function (data) {
+							if (data.success && data.data.redirect) {
+								window.location = data.data.redirect;
+							} else {
+								throw new Error('No redirect URL returned');
+							}
+						})
+						.catch(function (err) {
+							alert(<?php echo wp_json_encode( __( 'Import failed: ', 'shopperexpress' ) ); ?> + err.message);
+							btn.disabled = false;
+						});
+				});
+			})();
 		</script>
 		<?php
 	}
-
 
 	/**
 	 * Render Export/Import buttons below the Shortcodes repeater on the Theme Options page.
@@ -337,6 +423,60 @@ class Export implements Theme_Component {
 		header( 'Content-Disposition: attachment; filename=page-' . $post_id . '-export.json' );
 
 		echo wp_json_encode( $data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES );
+		exit;
+	}
+
+	/**
+	 * Replace shortcodes with their rendered text in the post title, excerpt and
+	 * Yoast SEO title / meta description (+ social variants), then return to the editor.
+	 * The post content is left untouched.
+	 */
+	public function handle_flatten_shortcodes(): void {
+		$post_id = isset( $_GET['post_id'] ) ? absint( $_GET['post_id'] ) : 0;
+
+		if (
+			! $post_id ||
+			! current_user_can( 'manage_options' ) ||
+			! isset( $_GET['_wpnonce'] ) ||
+			! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'flatten_page_shortcodes_' . $post_id )
+		) {
+			wp_die( esc_html__( 'Access denied.', 'shopperexpress' ) );
+		}
+
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			wp_die( esc_html__( 'Post not found.', 'shopperexpress' ) );
+		}
+
+		// Shortcodes such as [year] / [make] read the current post.
+		$GLOBALS['post'] = $post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		setup_postdata( $post );
+
+		$postarr = array( 'ID' => $post_id );
+		foreach ( array( 'post_title', 'post_excerpt' ) as $field ) {
+			if ( false !== strpos( $post->$field, '[' ) ) {
+				$postarr[ $field ] = trim( wp_strip_all_tags( do_shortcode( $post->$field ) ) );
+			}
+		}
+		if ( count( $postarr ) > 1 ) {
+			wp_update_post( wp_slash( $postarr ) );
+		}
+
+		foreach ( array(
+			'_yoast_wpseo_title',
+			'_yoast_wpseo_metadesc',
+			'_yoast_wpseo_opengraph-title',
+			'_yoast_wpseo_opengraph-description',
+			'_yoast_wpseo_twitter-title',
+			'_yoast_wpseo_twitter-description',
+		) as $key ) {
+			$value = (string) get_post_meta( $post_id, $key, true );
+			if ( false !== strpos( $value, '[' ) ) {
+				update_post_meta( $post_id, $key, trim( wp_strip_all_tags( do_shortcode( $value ) ) ) );
+			}
+		}
+
+		wp_safe_redirect( get_edit_post_link( $post_id, 'raw' ) );
 		exit;
 	}
 

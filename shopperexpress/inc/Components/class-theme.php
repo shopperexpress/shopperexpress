@@ -62,6 +62,7 @@ class Theme {
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
 			\App\Components\Base\Countdown::class,
+			\App\Components\Base\Yoast_Admin_Shortcodes::class,
 			\App\Components\Base\AI::class,
 			\App\Components\Base\AI_Crawler::class,
 			\App\Components\Base\AI_VDP::class,
