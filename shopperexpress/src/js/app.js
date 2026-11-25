@@ -10,6 +10,7 @@ import initChat from './components/chat';
 import initCheckedClasses from './components/checkedClasses';
 import initConfirmDeleteModal from './components/confirmDeleteModal';
 import initCookieModal from './components/cookieModal';
+import initCountdowns from './components/countdown';
 import initCopyToClipboard from './components/copyToClipboard';
 import initCustomForms from './components/customForms';
 import initEditModal from './components/editModal';
@@ -108,6 +109,7 @@ window.addEventListener('load', function () {
   setTimeout(() => jcf.refreshAll(jQuery('.jcf-scrollable')), 500);
 
   initCookieModal();
+  initCountdowns();
   updateJourneyField();
   initStickySummary();
 });

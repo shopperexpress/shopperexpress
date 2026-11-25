@@ -58,13 +58,19 @@ class Intice_VDP implements Theme_Component {
 	}
 
 	/**
-	 * Flush rewrite rules once when the rule pattern version changes.
+	 * Flush rewrite rules once when the rule pattern version changes, or when
+	 * the stored rules lack ours — they're only added while API mode is on, so
+	 * any flush that ran with API mode off (permalinks saved, a plugin
+	 * activated, …) drops them and every VDP link would 301 to the archive.
 	 * Bump RULES_VERSION constant above whenever rewrite patterns are updated.
 	 *
 	 * @return void
 	 */
 	public function maybe_flush_rewrite_rules(): void {
-		if ( get_option( 'intice_vdp_rules_version' ) !== self::RULES_VERSION ) {
+		$stored = get_option( 'rewrite_rules' );
+		$ours   = is_array( $stored ) && isset( $stored['listings/([^/]+)/?$'] );
+
+		if ( ! $ours || get_option( 'intice_vdp_rules_version' ) !== self::RULES_VERSION ) {
 			flush_rewrite_rules();
 			update_option( 'intice_vdp_rules_version', self::RULES_VERSION );
 		}

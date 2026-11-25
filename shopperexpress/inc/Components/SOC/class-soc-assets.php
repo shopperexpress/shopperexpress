@@ -50,7 +50,7 @@ class SOC_Assets {
 		wp_enqueue_style(
 			'shopperexpress/soc',
 			\App\asset_url( 'css/soc.css' ),
-			array(),
+			array( 'wp-color-picker' ),
 			shopperexpress_asset_version( 'assets/css/soc.css' )
 		);
 
@@ -58,7 +58,7 @@ class SOC_Assets {
 		wp_enqueue_script(
 			'shopperexpress/soc',
 			\App\asset_url( 'js/soc.js' ),
-			array( 'jquery' ),
+			array( 'jquery', 'wp-color-picker' ),
 			shopperexpress_asset_version( 'assets/js/soc.js' ),
 			true
 		);

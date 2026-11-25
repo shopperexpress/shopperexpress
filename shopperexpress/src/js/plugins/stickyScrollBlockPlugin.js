@@ -131,6 +131,11 @@ import $ from 'jquery';
       if (this.moveInContainer) {
         this.$container.removeClass(this.options.activeClass);
       }
+
+      if (this.options.mobileOffsetTarget) {
+        this.mobileOffset = null;
+        $(this.options.mobileOffsetTarget).css('--sticky-offset', '');
+      }
     },
 
     recalculateOffsets: function () {
@@ -241,8 +246,9 @@ import $ from 'jquery';
             position: this.options.positionType,
           });
 
-          // Forced-mobile mode floats the box over the content instead of
-          // pushing it down — skip reserving its height in the wrap.
+          // Forced-mobile mode pins the box under the header from page load,
+          // so its natural spot is irrelevant — don't reserve height there;
+          // the space is reserved at the top of mobileOffsetTarget instead.
           if (this.isWrap && !this.forcedOnMobile) {
             this.$stickyBoxWrap.css({
               height: this.data.boxFullHeight,
@@ -268,6 +274,21 @@ import $ from 'jquery';
           top: this.getTopPosition(),
           left: this.data.boxOffsetLeft - $win.scrollLeft(),
         });
+
+        this.updateMobileOffset();
+      },
+
+      // Exposes the pinned box's height as --sticky-offset on the target so
+      // the content below the header can be pushed down and not hidden.
+      updateMobileOffset: function () {
+        if (!this.forcedOnMobile || !this.options.mobileOffsetTarget) return;
+
+        const height = this.$stickyBox.outerHeight();
+
+        if (height !== this.mobileOffset) {
+          this.mobileOffset = height;
+          $(this.options.mobileOffsetTarget).css('--sticky-offset', height + 'px');
+        }
       },
 
       getTopPosition: function () {
@@ -391,6 +412,7 @@ import $ from 'jquery';
         animSpeed: 0.2,
         alwaysOnMobile: false,
         mobileBreakpoint: 768,
+        mobileOffsetTarget: null,
       },
       opt
     );

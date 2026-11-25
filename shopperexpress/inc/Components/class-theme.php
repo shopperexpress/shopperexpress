@@ -61,6 +61,7 @@ class Theme {
 			\App\Components\Base\OpenAI_Ads::class,
 			\App\Components\Base\Export::class,
 			\App\Components\Base\PopupResolver::class,
+			\App\Components\Base\Countdown::class,
 			\App\Components\Base\AI::class,
 			\App\Components\Base\AI_Crawler::class,
 			\App\Components\Base\AI_VDP::class,
@@ -71,6 +72,7 @@ class Theme {
 			\App\Components\Base\ADF_Cron::class,
 			\App\Components\Base\Google_Business_Reviews::class,
 			\App\Components\Base\Google_Reviews_Cron::class,
+			\App\Components\Base\Llm_Inventory::class,
 			\App\Components\SOC\SOC::class,
 			// Intice_Rest hosts the /wp-json/v1/intice/cache/refresh webhook route and the
 			// Team Members cache cron handlers — needed whenever Team Mode is on, even if

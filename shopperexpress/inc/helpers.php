@@ -252,6 +252,289 @@ function resolve_badge_style( string $text, string $context = '', string $post_t
 }
 
 /**
+ * Build the normalized vehicle list + pagination data for the /llm/inventory/
+ * page, reusing the same data source and eligibility rules as the SRP so the
+ * two never disagree (see Intice_Rest::apply_vehicle_filters() / WP post_status
+ * for CPT mode).
+ *
+ * @param int $page     1-based page number.
+ * @param int $per_page Vehicles per page.
+ * @return array{vehicles: array[], total: int, total_pages: int, page: int, per_page: int, last_updated: ?string, last_updated_ts: ?int, stale: bool}
+ */
+function get_llm_inventory_page( int $page, int $per_page ): array {
+	$page     = max( 1, $page );
+	$per_page = max( 1, $per_page );
+
+	if ( is_api_mode() ) {
+		return get_llm_inventory_page_api( $page, $per_page );
+	}
+
+	return get_llm_inventory_page_cpt( $page, $per_page );
+}
+
+/**
+ * API-mode data source — fetches the same filtered vehicle lists the SRP uses
+ * (per post type, via Intice_Api_Client + Intice_Rest::apply_vehicle_filters()),
+ * then paginates in PHP since Nexus's own condition fetch returns a full list.
+ *
+ * @param int $page
+ * @param int $per_page
+ * @return array
+ */
+function get_llm_inventory_page_api( int $page, int $per_page ): array {
+	$client     = \App\Components\Api\Intice_Api_Client::instance();
+	$vehicles   = array();
+	$failed     = false;
+	$fetched_at = array();
+
+	foreach ( array(
+		'listings'      => 'new',
+		'used-listings' => 'used',
+	) as $post_type => $condition ) {
+		$response = $client->get_vehicles( array( 'condition' => $condition ) );
+
+		if ( is_wp_error( $response ) ) {
+			// Nexus failed and there's no cached copy — this condition is missing.
+			$failed = true;
+			continue;
+		}
+
+		$fetched_at[] = \App\Components\Api\Intice_Api_Client::get_vehicles_fetched_at( array( 'condition' => $condition ) );
+
+		$raw = \App\Components\Api\Intice_Rest::apply_vehicle_filters( $response['data'] ?? array(), $post_type );
+
+		foreach ( $raw as $vehicle ) {
+			$vehicles[] = map_llm_inventory_vehicle_api( $vehicle, $post_type );
+		}
+	}
+
+	$total       = count( $vehicles );
+	$total_pages = max( 1, (int) ceil( $total / $per_page ) );
+	$page        = min( $page, $total_pages );
+	$slice       = array_slice( $vehicles, ( $page - 1 ) * $per_page, $per_page );
+
+	// Age of the older of the two lists — the page is only as fresh as that.
+	$updated = in_array( null, $fetched_at, true ) || ! $fetched_at ? null : min( $fetched_at );
+
+	// Stale = the feed is actually failing, not just "the 10-minute cache
+	// expired": a condition couldn't be loaded at all, the data is older than
+	// Llm_Inventory::STALE_AFTER (normal traffic/imports keep it well under
+	// that), or the last post-import rebuild failed after this data was fetched.
+	$rebuild = \App\Components\Api\Intice_Rest::get_rebuild_state();
+	$stale   = $failed
+		|| null === $updated
+		|| $updated < time() - \App\Components\Base\Llm_Inventory::STALE_AFTER
+		|| ( 'failed' === ( $rebuild['status'] ?? '' ) && (int) ( $rebuild['finished_at'] ?? 0 ) > $updated );
+
+	return array(
+		'vehicles'        => $slice,
+		'total'           => $total,
+		'total_pages'     => $total_pages,
+		'page'            => $page,
+		'per_page'        => $per_page,
+		'last_updated'    => $updated ? wp_date( 'M j, Y g:i A', $updated ) : null,
+		'last_updated_ts' => $updated,
+		'stale'           => $stale,
+	);
+}
+
+/**
+ * CPT-mode data source — plain WP_Query across both vehicle post types,
+ * published only (the only eligibility signal that exists for these CPTs —
+ * see inc/Components/Base/class-api.php, no "sold"/hidden meta applies here).
+ *
+ * @param int $page
+ * @param int $per_page
+ * @return array
+ */
+function get_llm_inventory_page_cpt( int $page, int $per_page ): array {
+	$query = new \WP_Query(
+		array(
+			'post_type'      => array( 'listings', 'used-listings' ),
+			'post_status'    => 'publish',
+			'posts_per_page' => $per_page,
+			'paged'          => $page,
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+		)
+	);
+
+	$vehicles = array();
+
+	foreach ( $query->posts as $post ) {
+		$vehicles[] = map_llm_inventory_vehicle_post( $post->ID, $post->post_type );
+	}
+
+	$last_updated    = null;
+	$last_updated_ts = null;
+	$latest_post_id  = get_posts(
+		array(
+			'post_type'      => array( 'listings', 'used-listings' ),
+			'post_status'    => 'publish',
+			'posts_per_page' => 1,
+			'orderby'        => 'modified',
+			'order'          => 'DESC',
+			'fields'         => 'ids',
+		)
+	);
+
+	if ( ! empty( $latest_post_id ) ) {
+		$last_updated    = get_the_modified_date( 'M j, Y g:i A', $latest_post_id[0] );
+		$last_updated_ts = (int) get_post_modified_time( 'U', true, $latest_post_id[0] );
+	}
+
+	return array(
+		'vehicles'        => $vehicles,
+		'total'           => (int) $query->found_posts,
+		'total_pages'     => max( 1, (int) $query->max_num_pages ),
+		'page'            => $page,
+		'per_page'        => $per_page,
+		'last_updated'    => $last_updated,
+		'last_updated_ts' => $last_updated_ts,
+		// CPT mode reads straight from the DB on every request — no cache layer to go stale.
+		'stale'           => false,
+	);
+}
+
+/**
+ * Normalize one Intice API vehicle array into the flat shape the
+ * /llm/inventory/ template renders. Missing fields are omitted, not invented.
+ *
+ * @param array  $vehicle   Raw Intice vehicle array.
+ * @param string $post_type 'listings' or 'used-listings'.
+ * @return array
+ */
+function map_llm_inventory_vehicle_api( array $vehicle, string $post_type ): array {
+	$payload   = $vehicle['payload'] ?? array();
+	$condition = 'used-listings' === $post_type ? 'used' : 'new';
+	$certified = $payload['certified'] ?? ( $vehicle['certified'] ?? null );
+
+	if ( null !== $certified && filter_var( $certified, FILTER_VALIDATE_BOOLEAN ) ) {
+		$condition = 'certified';
+	}
+
+	$out = array( 'condition' => $condition );
+
+	$vin = strtoupper( (string) ( $vehicle['vin'] ?? '' ) );
+	if ( $vin ) {
+		$out['vin'] = $vin;
+	}
+
+	$trim = resolve_vehicle_field( $vehicle, 'trim' );
+
+	$fields = array(
+		'year'           => $vehicle['year'] ?? null,
+		'make'           => $vehicle['make'] ?? null,
+		'model'          => $vehicle['model'] ?? null,
+		'trim'           => '' !== $trim ? $trim : null,
+		'stock'          => resolve_vehicle_field( $vehicle, 'stock' ),
+		'mileage'        => resolve_vehicle_field( $vehicle, 'mileage' ),
+		'body_style'     => resolve_vehicle_field( $vehicle, 'body_style' ),
+		'drivetrain'     => resolve_vehicle_field( $vehicle, 'drivetrain' ),
+		'transmission'   => resolve_vehicle_field( $vehicle, 'transmission' ),
+		'fuel_type'      => resolve_vehicle_field( $vehicle, 'fuel_type' ),
+		'exterior_color' => resolve_vehicle_field( $vehicle, 'exterior_color' ),
+		'interior_color' => resolve_vehicle_field( $vehicle, 'interior_color' ),
+	);
+
+	foreach ( $fields as $key => $value ) {
+		if ( null !== $value && '' !== $value ) {
+			$out[ $key ] = $value;
+		}
+	}
+
+	$price = $vehicle['price'] ?? ( $payload['price'] ?? null );
+	if ( is_numeric( $price ) && (float) $price > 0 ) {
+		$out['price'] = (float) $price;
+	}
+
+	$status              = $payload['vehicle_status'] ?? null;
+	$out['availability'] = $status ? sanitize_text_field( (string) $status ) : 'available';
+
+	if ( $vin ) {
+		$out['vdp_url'] = \App\Components\Api\Intice_VDP::vdp_url( $vin, $post_type, $vehicle );
+	}
+
+	$images = array_values(
+		array_filter(
+			array_map(
+				static function ( $image ) {
+					return $image['url'] ?? '';
+				},
+				resolve_vehicle_gallery( $vehicle )
+			)
+		)
+	);
+
+	if ( ! empty( $images ) ) {
+		$out['images'] = $images;
+	}
+
+	return $out;
+}
+
+/**
+ * Normalize one `listings`/`used-listings` WP post into the same flat shape
+ * as map_llm_inventory_vehicle_api(). Missing fields are omitted, not invented.
+ *
+ * @param int    $post_id
+ * @param string $post_type 'listings' or 'used-listings'.
+ * @return array
+ */
+function map_llm_inventory_vehicle_post( int $post_id, string $post_type ): array {
+	$condition = 'used-listings' === $post_type ? 'used' : 'new';
+
+	if ( get_field( 'certified', $post_id ) ) {
+		$condition = 'certified';
+	}
+
+	$out = array(
+		'condition'    => $condition,
+		'availability' => 'available',
+		'vdp_url'      => get_permalink( $post_id ),
+	);
+
+	$vin = get_field( 'vin_number', $post_id );
+	if ( $vin ) {
+		$out['vin'] = strtoupper( (string) $vin );
+	}
+
+	$acf_fields = array(
+		'year'           => 'year',
+		'make'           => 'make',
+		'model'          => 'model',
+		'trim'           => 'trim',
+		'stock'          => 'stock_number',
+		'mileage'        => 'mileage',
+		'body_style'     => 'body_style',
+		'drivetrain'     => 'drivetrain',
+		'transmission'   => 'transmission',
+		'fuel_type'      => 'fuel_type',
+		'exterior_color' => 'exterior_color',
+		'interior_color' => 'interior_color',
+	);
+
+	foreach ( $acf_fields as $out_key => $acf_key ) {
+		$value = get_field( $acf_key, $post_id );
+		if ( null !== $value && '' !== $value && false !== $value ) {
+			$out[ $out_key ] = $value;
+		}
+	}
+
+	$price = get_field( 'price', $post_id );
+	if ( is_numeric( $price ) && (float) $price > 0 ) {
+		$out['price'] = (float) $price;
+	}
+
+	$primary_image = get_field( 'primaryimageurl', $post_id );
+	if ( $primary_image ) {
+		$out['images'] = array( $primary_image );
+	}
+
+	return $out;
+}
+
+/**
  * Acf button helper.
  *
  * @param array  $button acf button array.

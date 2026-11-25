@@ -22,8 +22,11 @@ use App\Components\SOC\Modules\VDR_Requests;
 use App\Components\SOC\Modules\Json_Ld_Settings;
 use App\Components\SOC\Modules\Google_Reviews;
 use App\Components\SOC\Modules\AI_Vdp_Log;
+use App\Components\SOC\Modules\Countdown_Timers;
 use App\Components\SOC\Modules\Shortcodes_Reference;
 use App\Components\SOC\Modules\Video_Provider;
+use App\Components\SOC\Modules\General_Settings;
+use App\Components\SOC\Modules\Overview;
 
 /**
  * SOC Component
@@ -46,9 +49,17 @@ class SOC implements Theme_Component {
 	 * stable so existing hardcoded deep links (e.g. `page=soc-lead-delivery`
 	 * in email notifications) keep resolving to the right group + tab.
 	 *
+	 * The first group's primary module is the Operation Center landing page
+	 * (see top_level_slug()).
+	 *
 	 * @var array<string, array{label: string, icon: string, modules: string[]}>
 	 */
 	private const GROUPS = array(
+		'general'      => array(
+			'label'   => 'General',
+			'icon'    => 'dashicons-admin-generic',
+			'modules' => array( 'overview', 'general-settings' ),
+		),
 		'core'         => array(
 			'label'   => 'System & Cache',
 			'icon'    => 'dashicons-admin-tools',
@@ -57,7 +68,7 @@ class SOC implements Theme_Component {
 		'integrations' => array(
 			'label'   => 'API & Integrations',
 			'icon'    => 'dashicons-rest-api',
-			'modules' => array( 'api-settings', 'developer-tools', 'api-health', 'video-provider' ),
+			'modules' => array( 'api-settings', 'developer-tools', 'api-health' ),
 		),
 		'leads'        => array(
 			'label'   => 'Leads & Vehicles',
@@ -67,7 +78,7 @@ class SOC implements Theme_Component {
 		'content'      => array(
 			'label'   => 'SEO & Content',
 			'icon'    => 'dashicons-media-code',
-			'modules' => array( 'google-reviews', 'json-ld-settings', 'shortcodes-reference' ),
+			'modules' => array( 'google-reviews', 'json-ld-settings', 'countdown-timers', 'shortcodes-reference' ),
 		),
 	);
 
@@ -113,8 +124,11 @@ class SOC implements Theme_Component {
 			new Json_Ld_Settings(),
 			new Google_Reviews(),
 			new AI_Vdp_Log(),
+			new Countdown_Timers(),
 			new Shortcodes_Reference(),
 			new Video_Provider(),
+			new General_Settings(),
+			new Overview(),
 		);
 
 		foreach ( $module_classes as $module ) {
@@ -141,7 +155,7 @@ class SOC implements Theme_Component {
 	 * @return void
 	 */
 	public function register_menu(): void {
-		$top_level_slug = 'soc-' . self::GROUPS['core']['modules'][0];
+		$top_level_slug = $this->top_level_slug();
 
 		add_menu_page(
 			'Operation Center',
@@ -168,6 +182,16 @@ class SOC implements Theme_Component {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Page slug of the top-level "Operation Center" menu item — the first
+	 * group's primary module.
+	 *
+	 * @return string
+	 */
+	private function top_level_slug(): string {
+		return 'soc-' . self::GROUPS[ array_key_first( self::GROUPS ) ]['modules'][0];
 	}
 
 	/**
@@ -267,7 +291,7 @@ class SOC implements Theme_Component {
 	 */
 	public function inject_submenu_icons(): void {
 		$hidden_slugs   = array();
-		$top_level_slug = 'soc-' . self::GROUPS['core']['modules'][0];
+		$top_level_slug = $this->top_level_slug();
 
 		foreach ( self::GROUPS as $group ) {
 			foreach ( $group['modules'] as $module_slug ) {
@@ -378,7 +402,7 @@ class SOC implements Theme_Component {
 			return $parent_file;
 		}
 
-		return 'soc-' . self::GROUPS['core']['modules'][0];
+		return $this->top_level_slug();
 	}
 
 	/**

@@ -173,10 +173,9 @@ $tabs = array(
 				'value' => $payload['interior_color'] ?? ( $vehicle['interior_color'] ?? '' ),
 			),
 			array(
-				'label'    => 'Style',
-				'name'     => 'body_style',
-				'value'    => $payload['body_style'] ?? ( $vehicle['body_style'] ?? '' ),
-				'readonly' => true,
+				'label' => 'Style',
+				'name'  => 'body_style',
+				'value' => $payload['body_style'] ?? ( $vehicle['body_style'] ?? '' ),
 			),
 			array(
 				'label'    => 'Drivetrain',
@@ -185,16 +184,14 @@ $tabs = array(
 				'readonly' => true,
 			),
 			array(
-				'label'    => 'Transmission',
-				'name'     => 'transmission',
-				'value'    => $payload['transmission'] ?? ( $vehicle['transmission'] ?? '' ),
-				'readonly' => true,
+				'label' => 'Transmission',
+				'name'  => 'transmission',
+				'value' => $payload['transmission'] ?? ( $vehicle['transmission'] ?? '' ),
 			),
 			array(
-				'label'    => 'Fuel Type',
-				'name'     => 'fuel_type_display',
-				'value'    => $payload['fuel_type'] ?? ( $vehicle['fuel_type'] ?? '' ),
-				'readonly' => true,
+				'label' => 'Fuel Type',
+				'name'  => 'fuel_type',
+				'value' => $payload['fuel_type'] ?? ( $vehicle['fuel_type'] ?? '' ),
 			),
 			array(
 				'label' => 'Certified',
@@ -366,11 +363,6 @@ $tabs = array(
 				'label' => 'EPA Class',
 				'name'  => 'epaclassification',
 				'value' => $payload['epaclassification'] ?? '',
-			),
-			array(
-				'label' => 'Fuel Type',
-				'name'  => 'fuel_type',
-				'value' => $payload['fuel_type'] ?? ( $vehicle['fuel_type'] ?? '' ),
 			),
 		),
 	),

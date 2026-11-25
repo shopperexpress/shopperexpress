@@ -44,12 +44,79 @@
     SOC.bindCachePtActions();
     SOC.bindLogPagination();
     SOC.bindApiTest();
+    SOC.bindTwilioTestSms();
     SOC.bindDbCleanup();
     SOC.bindApiSettings();
     SOC.bindApiFilters();
 
     SOC.bindLeadDelivery();
     SOC.bindGoogleReviews();
+    SOC.bindCountdownTimers();
+    SOC.bindToggleRows();
+  };
+
+  // ----------------------------------------------------------------
+  // Toggle rows (views/partials/toggle-row.php)
+  // ----------------------------------------------------------------
+
+  /**
+   * Flip a toggle row to on/off after its AJAX save — pill, note and tooltip
+   * text come from the row's data-* attributes.
+   *
+   * @param {jQuery}  $input Row checkbox.
+   * @param {boolean} on     New state.
+   */
+  SOC.setToggleRow = function ($input, on) {
+    const $row = $input.closest('.soc-toggle-row');
+    const state = on ? 'on' : 'off';
+
+    $input.prop('checked', !!on);
+    $row.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
+    $row
+      .find('.soc-toggle-row__pill')
+      .attr('class', 'soc-toggle-row__pill soc-toggle-row__pill--' + (on ? 'ok' : 'off'))
+      .text($row.data('status-' + state));
+    $row.find('.soc-toggle-row__note').text($row.data('note-' + state));
+    $row.find('.soc-toggle-row__tip').text($row.data('desc-' + state));
+  };
+
+  // ⓘ tooltips: shown on hover/focus, pinned open by click, closed by Esc.
+  SOC.bindToggleRows = function () {
+    const ns = '.socToggleRows';
+    $(document).off(ns);
+
+    function setTip($btn, open) {
+      const $row = $btn.closest('.soc-toggle-row');
+
+      $btn.attr('aria-expanded', open ? 'true' : 'false');
+      $row.toggleClass('soc-toggle-row--tip-open', open);
+      $row.find('.soc-toggle-row__tip').prop('hidden', !open);
+    }
+
+    $(document)
+      .on('mouseenter' + ns + ' focus' + ns, '.soc-toggle-row__info', function () {
+        setTip($(this), true);
+      })
+      .on('mouseleave' + ns + ' blur' + ns, '.soc-toggle-row__info', function () {
+        if (!$(this).data('pinned')) {
+          setTip($(this), false);
+        }
+      })
+      .on('click' + ns, '.soc-toggle-row__info', function () {
+        const $btn = $(this);
+        const pinned = !$btn.data('pinned');
+
+        $btn.data('pinned', pinned);
+        setTip($btn, pinned);
+      })
+      .on('keydown' + ns, function (e) {
+        if ('Escape' === e.key) {
+          $('.soc-toggle-row__info').each(function () {
+            $(this).data('pinned', false);
+            setTip($(this), false);
+          });
+        }
+      });
   };
 
   // ----------------------------------------------------------------
@@ -105,8 +172,25 @@
           else SOC.showError(msg);
         }
       })
-      .fail(function () {
-        const msg = socData.strings.error;
+      .fail(function (xhr) {
+        // SOC_Response::error() answers with an HTTP 4xx plus {data:{message}} —
+        // show that message instead of the generic one.
+        let msg = socData.strings.error;
+
+        if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+          msg = xhr.responseJSON.data.message;
+        } else if (xhr && 'timeout' === xhr.statusText) {
+          msg = 'The request timed out — try again.';
+        } else if (xhr && 0 === xhr.status) {
+          msg = 'Could not reach the server — check your connection.';
+        } else if (xhr && (-1 === xhr.responseText || '0' === xhr.responseText)) {
+          msg = 'This page is out of date — reload it (Ctrl+F5) and try again.';
+        } else if (xhr && xhr.status >= 500) {
+          msg = 'Server error (HTTP ' + xhr.status + ') — see the PHP error log.';
+        } else if (xhr && 403 === xhr.status) {
+          msg = 'Session expired or access denied — reload the page.';
+        }
+
         if (typeof errorCb === 'function') errorCb(msg);
         else SOC.showError(msg);
       });
@@ -144,7 +228,14 @@
   SOC.showSuccess = function (msg) {
     SOC.showNotice('success', msg || socData.strings.success);
   };
+  // The API Settings panel stays quiet: no "Loading…" / "Refreshed." notices
+  // (its cache table re-renders often, e.g. while a VDP build is polled).
+  SOC.isQuietPanel = function (module) {
+    return 'api-settings' === (module || $('#soc-panel').data('module'));
+  };
+
   SOC.showLoading = function () {
+    if (SOC.isQuietPanel()) return;
     SOC.showNotice('loading', socData.strings.loading);
   };
 
@@ -154,12 +245,29 @@
   // Re-runs SOC.init() so all event bindings work in the new markup.
   // ----------------------------------------------------------------
   SOC.reloadPanel = function (module, cb) {
+    const quiet = SOC.isQuietPanel(module);
+
     SOC.showLoading();
     SOC.ajax('soc_load_panel', { module: module }, function (data) {
       if (data && data.html) {
+        // The notice lives inside the panel body — keep an action's own toast
+        // (e.g. "Cache group flushed") alive across a quiet re-render.
+        const $notice = quiet ? $('#soc-action-notice').detach() : null;
+        const scrollY = quiet ? window.scrollY : 0;
+
         $('#soc-panel-body').html(data.html);
         SOC.init(); // re-bind all handlers to new DOM
-        SOC.showSuccess('Refreshed.');
+
+        if (quiet) window.scrollTo(0, scrollY);
+
+        if (quiet) {
+          if ($notice && $notice.length && !$notice.hasClass('soc-notice--loading')) {
+            $('#soc-panel-body').prepend($notice);
+          }
+        } else {
+          SOC.showSuccess('Refreshed.');
+        }
+
         if (typeof cb === 'function') cb();
       }
     });
@@ -447,6 +555,37 @@
   };
 
   // ----------------------------------------------------------------
+  // Twilio test SMS
+  // ----------------------------------------------------------------
+  SOC.bindTwilioTestSms = function () {
+    $(document).on('click', '#soc-twilio-test-sms-btn', function () {
+      const $btn = $(this);
+      const phone = $('#soc-twilio-test-phone').val().trim();
+      if (!phone) return;
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax(
+        'soc_twilio_test_sms',
+        { phone: phone },
+        function (data) {
+          $('#soc-twilio-test-result')
+            .html('<span style="color:#00a32a;">&#10003; Sent</span> &mdash; SID: ' + ((data && data.sid) || 'n/a'))
+            .show();
+          SOC.showSuccess('Test SMS sent.');
+          $btn.prop('disabled', false);
+        },
+        function (msg) {
+          $('#soc-twilio-test-result')
+            .html('<span style="color:#d63638;">&#10007; ' + msg + '</span>')
+            .show();
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+  };
+
+  // ----------------------------------------------------------------
   // DB cleanup
   // ----------------------------------------------------------------
   SOC.bindDbCleanup = function () {
@@ -560,27 +699,21 @@
 
     // Mode toggle
     $(document).on('change' + ns, '#soc-api-mode-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-api-mode-label');
-      const $badge = $('#soc-api-mode-badge');
-      const $dot = $card.find('.soc-api-mode-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
       SOC.ajax('soc_api_mode_toggle', { enabled: enabled }, function (data) {
         const on = data && data.enabled;
 
-        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-        $label.text(on ? 'API Mode (Intice)' : 'WordPress Mode');
-        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('Mode ' + (on ? 'enabled' : 'disabled') + '.');
       });
     });
 
-    $(document).on('change' + ns, '#soc-video-provider-select', function () {
+    $(document).on('change' + ns, 'input[name="soc-video-provider"]', function () {
       const provider = $(this).val();
 
       SOC.showLoading();
@@ -592,23 +725,34 @@
 
     // Team Members mode toggle (independent of the Listings API mode above)
     $(document).on('change' + ns, '#soc-team-mode-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-team-mode-label');
-      const $badge = $('#soc-team-mode-badge');
-      const $dot = $('#soc-team-mode-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
       SOC.ajax('soc_team_mode_toggle', { enabled: enabled }, function (data) {
         const on = data && data.enabled;
 
-        $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-        $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-        $label.text(on ? 'Team Members (Intice)' : 'Team Members (ACF)');
-        $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ACTIVE' : 'INACTIVE');
+        SOC.setToggleRow($checkbox, on);
 
         SOC.showSuccess('Team Members mode ' + (on ? 'enabled' : 'disabled') + '.');
+        if ('api-settings' === $('#soc-panel').data('module')) SOC.reloadPanel('api-settings');
+      });
+    });
+
+    // AI Inventory Page toggle (/llm/inventory/)
+    $(document).on('change' + ns, '#soc-llm-inventory-toggle', function () {
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
+
+      SOC.showLoading();
+
+      SOC.ajax('soc_llm_inventory_toggle', { enabled: enabled }, function (data) {
+        const on = data && data.enabled;
+
+        SOC.setToggleRow($checkbox, on);
+
+        SOC.showSuccess('AI inventory page ' + (on ? 'enabled' : 'disabled') + '.');
         SOC.reloadPanel('api-settings');
       });
     });
@@ -654,11 +798,8 @@
 
     // Cache enable / disable toggle
     $(document).on('change' + ns, '#soc-intice-cache-toggle', function () {
-      const enabled = $(this).is(':checked') ? 1 : 0;
-      const $card = $(this).closest('.soc-api-mode-card');
-      const $label = $('#soc-cache-label');
-      const $badge = $('#soc-cache-badge');
-      const $dot = $('#soc-cache-indicator');
+      const $checkbox = $(this);
+      const enabled = $checkbox.is(':checked') ? 1 : 0;
 
       SOC.showLoading();
 
@@ -668,17 +809,14 @@
         function (data) {
           const on = data && data.enabled;
 
-          $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-          $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-          $label.text(on ? 'Cache Enabled' : 'Cache Disabled');
-          $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+          SOC.setToggleRow($checkbox, on);
 
           SOC.showSuccess('Intice cache ' + (on ? 'enabled' : 'disabled') + '.');
         },
         function (msg) {
           SOC.showError(msg);
           // Revert toggle on error
-          $(this).prop('checked', !enabled);
+          $checkbox.prop('checked', !enabled);
         }
       );
     });
@@ -687,10 +825,6 @@
     $(document).on('change' + ns, '#soc-intice-guard-toggle', function () {
       const $checkbox = $(this);
       const enabled = $checkbox.is(':checked') ? 1 : 0;
-      const $card = $checkbox.closest('.soc-api-mode-card');
-      const $label = $('#soc-guard-label');
-      const $badge = $('#soc-guard-badge');
-      const $dot = $('#soc-guard-indicator');
 
       SOC.showLoading();
 
@@ -700,10 +834,7 @@
         function (data) {
           const on = data && data.enabled;
 
-          $card.toggleClass('soc-api-mode-card--api', !!on).toggleClass('soc-api-mode-card--wp', !on);
-          $dot.toggleClass('soc-api-mode-indicator--on', !!on);
-          $label.text(on ? 'Guard Enabled' : 'Guard Disabled');
-          $badge.attr('class', 'soc-badge ' + (on ? 'soc-badge--ok' : 'soc-badge--neutral')).text(on ? 'ON' : 'OFF');
+          SOC.setToggleRow($checkbox, on);
 
           SOC.showSuccess('Intice tool guard ' + (on ? 'enabled' : 'disabled') + '.');
         },
@@ -741,6 +872,25 @@
         function (msg) {
           SOC.showError(msg);
           $btn.prop('disabled', false);
+        }
+      );
+    });
+
+    // VDP cache lifetime
+    $(document).on('change' + ns, '#soc-vdp-ttl', function () {
+      const $select = $(this);
+      $select.prop('disabled', true);
+      SOC.showLoading();
+      SOC.ajax(
+        'soc_intice_vdp_ttl_save',
+        { ttl: $select.val() },
+        function () {
+          SOC.showSuccess('VDP cache lifetime saved.');
+          $select.prop('disabled', false);
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $select.prop('disabled', false);
         }
       );
     });
@@ -894,6 +1044,372 @@
         function () {
           SOC.showSuccess('Filters saved.');
           $btn.prop('disabled', false);
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+  };
+
+  // ----------------------------------------------------------------
+  // Countdown Timers module
+  // ----------------------------------------------------------------
+  SOC.bindCountdownTimers = function () {
+    const ns = '.socCountdown';
+    $(document).off(ns);
+
+    const $form = function () {
+      return $('#soc-cd-form');
+    };
+
+    const radio = function (name) {
+      return $('input[name="' + name + '"]:checked').val();
+    };
+
+    const esc = function (str) {
+      return $('<div>').text(str).html();
+    };
+
+    let syncingColor = false;
+
+    // Highlight the active swatch and mirror a custom value into the WP color picker.
+    function syncColor(key) {
+      const value = $('#soc-cd-' + key + '-value').val();
+      const $group = $('[data-cd-color="' + key + '"]');
+      const $picker = $group.find('.soc-cd-colorpicker');
+      let preset = false;
+
+      $group.find('.soc-cd__sw').each(function () {
+        const on = ($(this).data('value') || '') === value;
+        $(this).toggleClass('is-active', on);
+        preset = preset || on;
+      });
+
+      syncingColor = true;
+      if (value && !preset) {
+        $picker.wpColorPicker('color', value);
+      } else {
+        $picker.val('').closest('.wp-picker-container').find('.wp-color-result').css('background-color', '');
+      }
+      syncingColor = false;
+    }
+
+    function initPickers() {
+      $('.soc-cd-colorpicker').each(function () {
+        const $input = $(this);
+
+        if ($input.data('cd-init')) return;
+        $input.data('cd-init', true).wpColorPicker({
+          defaultColor: false,
+          change: function (e, ui) {
+            if (syncingColor) return;
+            $('#soc-cd-' + $input.data('key') + '-value').val(ui.color.toString());
+            syncVisibility();
+          },
+          clear: function () {
+            if (syncingColor) return;
+            $('#soc-cd-' + $input.data('key') + '-value').val('');
+            syncVisibility();
+          },
+        });
+      });
+    }
+
+    function renderPreview() {
+      const style = radio('soc-cd-style') || 'tiles';
+      const align = $('#soc-cd-align').val() || 'center';
+      const label = $('#soc-cd-label').val().trim();
+      const text = $('#soc-cd-text-value').val();
+      const bg = $('#soc-cd-bg-value').val();
+      const sample = {
+        days: ['03', 'Days', 'd'],
+        hours: ['14', 'Hours', 'h'],
+        minutes: ['27', 'Min', 'm'],
+        seconds: ['09', 'Sec', 's'],
+      };
+      const units = $('.soc-cd-unit:checked')
+        .map(function () {
+          return $(this).val();
+        })
+        .get();
+      const vars = (text ? '--cd-text:' + text + ';' : '') + (bg ? '--cd-bg:' + bg + ';' : '');
+      let items = '';
+
+      units.forEach(function (unit, i) {
+        const s = sample[unit];
+
+        if (style === 'tiles') {
+          items += '<div class="soc-cd-pv__item"><span class="soc-cd-pv__num">' + s[0] + '</span><span class="soc-cd-pv__unit">' + s[1] + '</span></div>';
+        } else if (style === 'inline') {
+          items += (i ? '<span class="soc-cd-pv__sep">:</span>' : '') + '<span>' + s[0] + '</span>';
+        } else {
+          items += '<span>' + s[0] + s[2] + '</span>';
+        }
+      });
+
+      $('#soc-cd-preview').html(
+        '<div class="soc-cd-pv soc-cd-pv--' +
+          style +
+          ' soc-cd-pv--' +
+          align +
+          '" style="' +
+          vars +
+          '">' +
+          (label ? '<p class="soc-cd-pv__label">' + esc(label) + '</p>' : '') +
+          '<div class="soc-cd-pv__items">' +
+          items +
+          '</div></div>'
+      );
+    }
+
+    // Show only the fields relevant for the selected type / expired action, refresh the preview.
+    function syncVisibility() {
+      const type = radio('soc-cd-type');
+      const action = radio('soc-cd-expired-action');
+
+      $('[data-cd-show]').each(function () {
+        $(this).toggle($(this).data('cd-show') === type);
+      });
+      $('[data-cd-show-action]').each(function () {
+        $(this).toggle($(this).data('cd-show-action') === action);
+      });
+      $('.soc-cd-align').each(function () {
+        $(this).toggleClass('is-active', $(this).data('align') === $('#soc-cd-align').val());
+      });
+      syncColor('text');
+      syncColor('bg');
+      renderPreview();
+    }
+
+    function setStage(theme) {
+      $('#soc-cd-stage').attr('data-theme', theme);
+      $('#soc-cd-stage-toggle button').each(function () {
+        $(this).toggleClass('is-active', $(this).data('theme') === theme);
+      });
+    }
+
+    // "2026-11-25 18:30:00" -> "2026-11-25T18:30" for <input type="datetime-local">.
+    function toLocalInput(value) {
+      return value ? String(value).slice(0, 16).replace(' ', 'T') : '';
+    }
+
+    function openForm(slug, timer, title) {
+      const d = Object.assign({}, $form().data('defaults'), timer || {});
+
+      $('#soc-cd-form-title').text(title);
+      $('#soc-cd-form-state').text(slug ? 'Editing' : 'Unsaved');
+      $('#soc-cd-slug').val(slug);
+      $('#soc-cd-name').val(d.name);
+      $('input[name="soc-cd-type"][value="' + d.type + '"]').prop('checked', true);
+      $('#soc-cd-end').val(toLocalInput(d.end));
+      $('#soc-cd-duration').val(d.duration);
+      $('#soc-cd-duration-unit').val(d.duration_unit);
+      $('#soc-cd-label').val(d.label);
+      $('.soc-cd-unit').each(function () {
+        $(this).prop('checked', (d.units || []).indexOf($(this).val()) !== -1);
+      });
+      $('input[name="soc-cd-style"][value="' + (d.style === 'compact' ? 'inline' : d.style) + '"]').prop('checked', true);
+      $('#soc-cd-align').val(d.align);
+      $('input[name="soc-cd-expired-action"][value="' + (d.expired_action === 'close' ? 'hide' : d.expired_action) + '"]').prop('checked', true);
+      $('#soc-cd-expired-text').val(d.expired_text);
+      $('#soc-cd-text-value').val(d.text_color || '');
+      $('#soc-cd-bg-value').val(d.bg_color || '');
+
+      const $code = $('#soc-cd-shortcode');
+      $code.text(slug ? '[countdown id="' + slug + '"]' : $code.data('empty'));
+
+      initPickers();
+      setStage($('#soc-cd-stage').attr('data-theme') || 'dark');
+      syncVisibility();
+      $form().show()[0].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function rowTimer($btn) {
+      const $row = $btn.closest('tr');
+
+      return { slug: $row.data('cd-slug'), timer: $row.data('cd-timer') };
+    }
+
+    $(document).on('change input' + ns, '#soc-cd-form input, #soc-cd-form select', function (e) {
+      if ($(e.target).hasClass('soc-cd-colorpicker') || $(e.target).closest('.wp-picker-container').length) return;
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '.soc-cd-align', function () {
+      $('#soc-cd-align').val($(this).data('align'));
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '.soc-cd__sw', function () {
+      $('#soc-cd-' + $(this).closest('[data-cd-color]').data('cd-color') + '-value').val($(this).data('value') || '');
+      syncVisibility();
+    });
+
+    $(document).on('click' + ns, '#soc-cd-stage-toggle button', function () {
+      setStage($(this).data('theme'));
+    });
+
+    // List filter tabs + search.
+    function filterRows() {
+      const status = $('#soc-cd-tabs .is-active').data('filter') || 'all';
+      const q = ($('#soc-cd-search').val() || '').trim().toLowerCase();
+      let visible = 0;
+
+      $('.soc-cd__tb tbody tr[data-cd-slug]').each(function () {
+        const show = (status === 'all' || $(this).data('cd-status') === status) && (!q || String($(this).data('cd-search')).indexOf(q) !== -1);
+
+        $(this).toggle(show);
+        visible += show ? 1 : 0;
+      });
+      $('.soc-cd__none').prop('hidden', visible > 0);
+    }
+
+    $(document).on('click' + ns, '#soc-cd-tabs button', function () {
+      $('#soc-cd-tabs button').removeClass('is-active');
+      $(this).addClass('is-active');
+      filterRows();
+    });
+
+    $(document).on('input' + ns, '#soc-cd-search', filterRows);
+
+    $(document).on('click' + ns, '#soc-cd-add', function () {
+      openForm('', null, 'New timer');
+    });
+
+    $(document).on('click' + ns, '.soc-cd-edit', function (e) {
+      e.preventDefault();
+      const row = rowTimer($(this));
+
+      openForm(row.slug, row.timer, 'Edit timer');
+    });
+
+    $(document).on('click' + ns, '.soc-cd-duplicate', function () {
+      const row = rowTimer($(this));
+      const timer = Object.assign({}, row.timer, { name: (row.timer.name || row.slug) + ' (copy)' });
+
+      openForm('', timer, 'New timer (copy)');
+    });
+
+    $(document).on('click' + ns, '#soc-cd-cancel', function () {
+      $form().hide();
+    });
+
+    // Clipboard API needs a secure context; fall back to execCommand on plain http / local hosts.
+    function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+      }
+
+      return new Promise(function (resolve, reject) {
+        const $tmp = $('<textarea readonly>').val(text).css({ position: 'fixed', top: 0, left: 0, opacity: 0 }).appendTo('body');
+
+        $tmp[0].select();
+
+        try {
+          document.execCommand('copy') ? resolve() : reject(new Error('copy failed'));
+        } catch (err) {
+          reject(err);
+        } finally {
+          $tmp.remove();
+        }
+      });
+    }
+
+    $(document).on('click' + ns, '.soc-cd-copy', function () {
+      const $btn = $(this);
+
+      copyText($btn.data('shortcode')).then(
+        function () {
+          SOC.showSuccess('Shortcode copied: ' + $btn.data('shortcode'));
+        },
+        function () {
+          SOC.showError('Could not copy the shortcode. Please copy it manually.');
+        }
+      );
+    });
+
+    // Delete confirmation dialog.
+    let deleteSlug = '';
+    let $deleteFocus = null;
+
+    function closeDeleteDialog() {
+      $('#soc-cd-delete-dialog').prop('hidden', true);
+      deleteSlug = '';
+      if ($deleteFocus) $deleteFocus.trigger('focus');
+    }
+
+    $(document).on('click' + ns, '.soc-cd-delete', function () {
+      const row = rowTimer($(this));
+
+      deleteSlug = row.slug;
+      $deleteFocus = $(this);
+      $('#soc-cd-dialog-name').text(row.timer.name || row.slug);
+      $('#soc-cd-delete-dialog').prop('hidden', false);
+      $('#soc-cd-delete-confirm').trigger('focus');
+    });
+
+    $(document).on('click' + ns, '[data-cd-dialog-close]', closeDeleteDialog);
+
+    $(document).on('keydown' + ns, function (e) {
+      if (e.key === 'Escape' && !$('#soc-cd-delete-dialog').prop('hidden')) closeDeleteDialog();
+    });
+
+    $(document).on('click' + ns, '#soc-cd-delete-confirm', function () {
+      const slug = deleteSlug;
+      const $btn = $(this).prop('disabled', true);
+
+      $('#soc-cd-delete-dialog').prop('hidden', true);
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_countdown_delete',
+        { slug: slug },
+        function () {
+          SOC.showSuccess('Timer deleted.');
+          SOC.reloadPanel('countdown-timers');
+        },
+        function (msg) {
+          SOC.showError(msg);
+          $btn.prop('disabled', false);
+        }
+      );
+    });
+
+    $(document).on('click' + ns, '#soc-cd-save', function () {
+      const $btn = $(this);
+      const units = $('.soc-cd-unit:checked')
+        .map(function () {
+          return $(this).val();
+        })
+        .get();
+
+      const timer = {
+        name: $('#soc-cd-name').val().trim(),
+        type: radio('soc-cd-type'),
+        end: $('#soc-cd-end').val(),
+        duration: $('#soc-cd-duration').val(),
+        duration_unit: $('#soc-cd-duration-unit').val(),
+        label: $('#soc-cd-label').val().trim(),
+        units: units,
+        style: radio('soc-cd-style'),
+        align: $('#soc-cd-align').val(),
+        expired_action: radio('soc-cd-expired-action'),
+        expired_text: $('#soc-cd-expired-text').val().trim(),
+        text_color: $('#soc-cd-text-value').val(),
+        bg_color: $('#soc-cd-bg-value').val(),
+      };
+
+      $btn.prop('disabled', true);
+      SOC.showLoading();
+
+      SOC.ajax(
+        'soc_countdown_save',
+        { slug: $('#soc-cd-slug').val(), timer: timer },
+        function () {
+          SOC.showSuccess('Timer saved.');
+          SOC.reloadPanel('countdown-timers');
         },
         function (msg) {
           SOC.showError(msg);

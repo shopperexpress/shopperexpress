@@ -105,6 +105,24 @@ defined( 'ABSPATH' ) || exit; ?>
 	<div id="soc-api-test-result" style="display:none; margin-top:8px; font-size:13px;"></div>
 </div>
 
+<!-- 3b. Twilio Test SMS -->
+<div class="soc-section">
+	<div class="soc-section__title"><?php esc_html_e( 'Twilio Test SMS', 'shopperexpress' ); ?></div>
+	<p class="description">
+		<?php esc_html_e( 'Sends a real SMS using the configured Twilio credentials to confirm end-to-end delivery (not just that the API key is valid).', 'shopperexpress' ); ?>
+	</p>
+	<div class="soc-action-bar">
+		<input type="tel"
+				id="soc-twilio-test-phone"
+				class="regular-text"
+				placeholder="<?php esc_attr_e( '+15551234567', 'shopperexpress' ); ?>" />
+		<button id="soc-twilio-test-sms-btn" class="button button-primary">
+			<?php esc_html_e( 'Send Test SMS', 'shopperexpress' ); ?>
+		</button>
+	</div>
+	<div id="soc-twilio-test-result" style="display:none; margin-top:8px; font-size:13px;"></div>
+</div>
+
 <!-- 4. Failed API Log -->
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Failed API Log', 'shopperexpress' ); ?></div>

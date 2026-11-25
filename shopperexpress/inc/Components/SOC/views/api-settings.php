@@ -7,10 +7,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$mode_enabled  = ! empty( $data['api_mode_enabled'] );
-$team_enabled  = ! empty( $data['team_mode_enabled'] );
-$cache_enabled = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
-$guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled'] : true;
+$mode_enabled         = ! empty( $data['api_mode_enabled'] );
+$team_enabled         = ! empty( $data['team_mode_enabled'] );
+$cache_enabled        = isset( $data['cache_enabled'] ) ? (bool) $data['cache_enabled'] : true;
+$llm_inventory_enabled = \App\Components\Base\Llm_Inventory::is_enabled();
 ?>
 
 <div id="soc-action-notice" class="soc-notice" role="alert"></div>
@@ -33,98 +33,41 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 <div class="soc-section">
 	<div class="soc-section__title"><?php esc_html_e( 'Listings Data Source', 'shopperexpress' ); ?></div>
 
-	<div class="soc-mode-cards-row">
-		<div class="soc-api-mode-card <?php echo $mode_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-			<div class="soc-api-mode-card__status">
-				<span class="soc-api-mode-indicator <?php echo $mode_enabled ? 'soc-api-mode-indicator--on' : ''; ?>"></span>
-				<strong id="soc-api-mode-label">
-					<?php echo $mode_enabled ? esc_html__( 'API Mode (Intice)', 'shopperexpress' ) : esc_html__( 'WordPress Mode', 'shopperexpress' ); ?>
-				</strong>
-				<span class="soc-badge <?php echo $mode_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-api-mode-badge">
-					<?php echo $mode_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
-				</span>
-			</div>
+	<div class="soc-toggle-list">
+		<?php
+		$soc_row = array(
+			'id'       => 'soc-api-mode-toggle',
+			'title'    => __( 'API Mode', 'shopperexpress' ),
+			'on'       => $mode_enabled,
+			'note_on'  => __( 'Source: Intice Nexus', 'shopperexpress' ),
+			'note_off' => __( 'Source: WordPress posts', 'shopperexpress' ),
+			'desc_on'  => __( 'Listings, Used listings for SRP and VDP pages pull data from Intice Nexus. WordPress posts are used as stubs only.', 'shopperexpress' ),
+			'desc_off' => __( 'Listings, Used listings for SRP and VDP pages use standard WordPress posts with ACF fields. Intice Nexus is not used for front-end rendering.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
 
-			<p class="soc-api-mode-card__desc">
-				<?php if ( $mode_enabled ) : ?>
-					<?php esc_html_e( 'Listings, Used listings for SRP and VDP pages pull data from Intice Nexus. WordPress posts are used as stubs only.', 'shopperexpress' ); ?>
-				<?php else : ?>
-					<?php esc_html_e( 'Listings, Used listings for SRP and VDP pages use standard WordPress posts with ACF fields. Intice Nexus is not used for front-end rendering.', 'shopperexpress' ); ?>
-				<?php endif; ?>
-			</p>
+		$soc_row = array(
+			'id'       => 'soc-team-mode-toggle',
+			'title'    => __( 'Team Members', 'shopperexpress' ),
+			'on'       => $team_enabled,
+			'note_on'  => __( 'Source: Intice', 'shopperexpress' ),
+			'note_off' => __( 'Source: ACF block', 'shopperexpress' ),
+			'desc_on'  => __( 'The "Team Section (Intice)" block pulls its members live from Intice Nexus (Content → Team Members). Independent of the API Mode toggle.', 'shopperexpress' ),
+			'desc_off' => __( 'The "Team Section (Intice)" block is inactive and renders nothing. Use the regular "Team Section" ACF block for manually-entered members instead.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
 
-			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle API mode', 'shopperexpress' ); ?>">
-				<input
-					type="checkbox"
-					id="soc-api-mode-toggle"
-					<?php checked( $mode_enabled ); ?>
-				/>
-				<span class="soc-toggle__slider"></span>
-			</label>
-		</div>
-
-		<div class="soc-api-mode-card <?php echo $team_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-			<div class="soc-api-mode-card__status">
-				<span class="soc-api-mode-indicator <?php echo $team_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-team-mode-indicator"></span>
-				<strong id="soc-team-mode-label">
-					<?php echo $team_enabled ? esc_html__( 'Team Members (Intice)', 'shopperexpress' ) : esc_html__( 'Team Members (ACF)', 'shopperexpress' ); ?>
-				</strong>
-				<span class="soc-badge <?php echo $team_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-team-mode-badge">
-					<?php echo $team_enabled ? esc_html__( 'ACTIVE', 'shopperexpress' ) : esc_html__( 'INACTIVE', 'shopperexpress' ); ?>
-				</span>
-			</div>
-
-			<p class="soc-api-mode-card__desc">
-				<?php if ( $team_enabled ) : ?>
-					<?php esc_html_e( 'The "Team Section (Intice)" block pulls its members live from Intice Nexus (Content → Team Members). Independent of the Listings Data Source toggle above.', 'shopperexpress' ); ?>
-				<?php else : ?>
-					<?php esc_html_e( 'The "Team Section (Intice)" block is inactive and renders nothing. Use the regular "Team Section" ACF block for manually-entered members instead.', 'shopperexpress' ); ?>
-				<?php endif; ?>
-			</p>
-
-			<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle Team Members mode', 'shopperexpress' ); ?>">
-				<input
-					type="checkbox"
-					id="soc-team-mode-toggle"
-					<?php checked( $team_enabled ); ?>
-				/>
-				<span class="soc-toggle__slider"></span>
-			</label>
-		</div>
-	</div>
-</div>
-
-<!-- 1b. Intice tool guard -->
-<div class="soc-section">
-	<div class="soc-section__title"><?php esc_html_e( 'Intice Tool Guard', 'shopperexpress' ); ?></div>
-
-	<div class="soc-api-mode-card <?php echo $guard_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>">
-		<div class="soc-api-mode-card__status">
-			<span class="soc-api-mode-indicator <?php echo $guard_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-guard-indicator"></span>
-			<strong id="soc-guard-label">
-				<?php echo $guard_enabled ? esc_html__( 'Guard Enabled', 'shopperexpress' ) : esc_html__( 'Guard Disabled', 'shopperexpress' ); ?>
-			</strong>
-			<span class="soc-badge <?php echo $guard_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-guard-badge">
-				<?php echo $guard_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
-			</span>
-		</div>
-
-		<p class="soc-api-mode-card__desc">
-			<?php if ( $guard_enabled ) : ?>
-				<?php esc_html_e( 'Intice shopping-tool buttons (Leadmaker, Trademaker, Dealmaker, Loanmaker, …) wait for inticeAllEvents to load and show a "This tool is temporarily unavailable" popup instead of a silent dead button if it never does.', 'shopperexpress' ); ?>
-			<?php else : ?>
-				<?php esc_html_e( 'Intice shopping-tool buttons run their raw inline onclick handler directly, with no wait and no "temporarily unavailable" popup. If inticeAllEvents has not loaded yet (e.g. blocked by a consent tool), the button will fail silently.', 'shopperexpress' ); ?>
-			<?php endif; ?>
-		</p>
-
-		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle Intice tool guard', 'shopperexpress' ); ?>">
-			<input
-				type="checkbox"
-				id="soc-intice-guard-toggle"
-				<?php checked( $guard_enabled ); ?>
-			/>
-			<span class="soc-toggle__slider"></span>
-		</label>
+		$soc_row = array(
+			'id'       => 'soc-llm-inventory-toggle',
+			'title'    => __( 'AI Inventory Page', 'shopperexpress' ),
+			'on'       => $llm_inventory_enabled,
+			'note_on'  => __( '/llm/inventory/ is live', 'shopperexpress' ),
+			'note_off' => __( 'Page disabled', 'shopperexpress' ),
+			'desc_on'  => __( 'Serves a server-rendered, JS-free /llm/inventory/ page listing current new/used/certified inventory for AI assistants and search crawlers (incl. OAI-SearchBot), plus /llms.txt and a child sitemap referenced from the main Yoast sitemap.', 'shopperexpress' ),
+		);
+		$soc_row['desc_off'] = $soc_row['desc_on'];
+		require __DIR__ . '/partials/toggle-row.php';
+		?>
 	</div>
 </div>
 
@@ -233,33 +176,30 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 	</p>
 	<?php endif; ?>
 
-	<!-- Cache enable / disable toggle -->
-	<div class="soc-api-mode-card <?php echo $cache_enabled ? 'soc-api-mode-card--api' : 'soc-api-mode-card--wp'; ?>" style="margin-bottom:16px;">
-		<div class="soc-api-mode-card__status">
-			<span class="soc-api-mode-indicator <?php echo $cache_enabled ? 'soc-api-mode-indicator--on' : ''; ?>" id="soc-cache-indicator"></span>
-			<strong id="soc-cache-label">
-				<?php echo $cache_enabled ? esc_html__( 'Cache Enabled', 'shopperexpress' ) : esc_html__( 'Cache Disabled', 'shopperexpress' ); ?>
-			</strong>
-			<span class="soc-badge <?php echo $cache_enabled ? 'soc-badge--ok' : 'soc-badge--neutral'; ?>" id="soc-cache-badge">
-				<?php echo $cache_enabled ? esc_html__( 'ON', 'shopperexpress' ) : esc_html__( 'OFF', 'shopperexpress' ); ?>
-			</span>
-		</div>
-		<p class="soc-api-mode-card__desc">
-			<?php if ( $cache_enabled ) : ?>
-				<?php esc_html_e( 'API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated.', 'shopperexpress' ); ?>
-			<?php else : ?>
-				<?php esc_html_e( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ); ?>
-			<?php endif; ?>
-		</p>
-		<label class="soc-toggle" title="<?php esc_attr_e( 'Toggle cache', 'shopperexpress' ); ?>">
-			<input
-				type="checkbox"
-				id="soc-intice-cache-toggle"
-				<?php checked( $cache_enabled ); ?>
-			/>
-			<span class="soc-toggle__slider"></span>
-		</label>
+	<div class="soc-toggle-list" style="margin-bottom:16px;">
+		<?php
+		$soc_row = array(
+			'id'       => 'soc-intice-cache-toggle',
+			'title'    => __( 'Response Cache', 'shopperexpress' ),
+			'on'       => $cache_enabled,
+			'note_on'  => __( 'Transients, stale copy served while rebuilding', 'shopperexpress' ),
+			'note_off' => __( 'Every request hits Intice Nexus', 'shopperexpress' ),
+			'desc_on'  => __( 'API responses are cached in WordPress transients. Old cache is served while a fresh one is being generated.', 'shopperexpress' ),
+			'desc_off' => __( 'Caching is disabled. Every request fetches data directly from the Intice Nexus API.', 'shopperexpress' ),
+		);
+		require __DIR__ . '/partials/toggle-row.php';
+		?>
 	</div>
+
+	<p style="margin:0 0 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+		<label for="soc-vdp-ttl"><strong><?php esc_html_e( 'Vehicle page (VDP) cache lifetime', 'shopperexpress' ); ?></strong></label>
+		<select id="soc-vdp-ttl">
+			<?php foreach ( \App\Components\SOC\Modules\Api_Settings::get_vdp_ttl_options() as $soc_ttl => $soc_ttl_label ) : ?>
+				<option value="<?php echo esc_attr( $soc_ttl ); ?>" <?php selected( (int) ( $data['vdp_ttl'] ?? 900 ), $soc_ttl ); ?>><?php echo esc_html( $soc_ttl_label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<span style="color:#666;font-size:12px;"><?php esc_html_e( 'How long a vehicle page is served from cache before it is re-fetched. Applies to entries written from now on; rebuilds and the Nexus refresh webhook keep it current regardless.', 'shopperexpress' ); ?></span>
+	</p>
 
 	<?php if ( ! empty( $data['api_cache'] ) ) : ?>
 	<table class="soc-table">
@@ -280,13 +220,14 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 				'missing' => array( 'class' => 'soc-badge--neutral', 'label' => 'Empty' ),
 			);
 
-			$group_keys = array( 'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+			$group_keys = array( 'vehicles', 'vehicle-new', 'vehicle-used', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 			// Plain-language explanation of each row, shown when its info icon is clicked.
 			// Keyed by position — must stay in the same order as collect_api_cache()'s $groups.
 			$group_info = array(
 				__( 'Caches the raw Nexus API response for vehicle list requests (GET /vehicles) — the data other lookups build on. Filled whenever any page requests a list of vehicles.', 'shopperexpress' ),
-				__( 'Caches the raw Nexus API response for a single vehicle (GET /vehicles/{vin}). Filled when a visitor opens that vehicle\'s detail page (VDP).', 'shopperexpress' ),
+				__( 'Caches the raw Nexus response for each NEW vehicle\'s detail page (GET /vehicles/{vin}), one entry per VIN. Filled automatically by every cache rebuild and by the Nexus per-VIN refresh webhook. "Build Cache" fills every VIN from one fresh vehicle-list request; "Flush" drops the live copies (old ones keep serving) and refills them the same way.', 'shopperexpress' ),
+				__( 'Same as New Vehicle Pages, but for USED vehicles.', 'shopperexpress' ),
 				__( 'Caches GET /meta — the filter reference data (makes, models, year/price ranges, conditions) used to render the SRP filter UI.', 'shopperexpress' ),
 				__( 'Caches GET /team-members — the Team Section (Intice) block\'s member list and categories. Nexus pings this site to flush just this group the moment a member or category is saved/reordered — vehicle/SRP caches are never touched by a team change.', 'shopperexpress' ),
 				__( 'Caches the fully assembled New Vehicles (listings) results — after filters, trim/drivetrain/photo resolution and default sorting are applied. This is what the New Vehicles SRP actually renders.', 'shopperexpress' ),
@@ -302,7 +243,7 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 				$group = $group_keys[ $i ] ?? '';
 				$info  = $group_info[ $i ] ?? '';
 				?>
-				<tr<?php echo 'vehicle' === $group ? ' style="display:none;"' : ''; ?>>
+				<tr>
 					<td>
 						<strong><?php echo esc_html( $row['label'] ); ?></strong>
 						<?php if ( $info ) : ?>
@@ -318,6 +259,9 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 						<span class="soc-badge <?php echo esc_attr( $badge['class'] ); ?>">
 							<?php echo esc_html( $badge['label'] ); ?>
 						</span>
+						<?php if ( ! empty( $row['vdp_detail'] ) ) : ?>
+							<br /><small class="soc-vdp-detail" style="color:#666;"><?php echo esc_html( $row['vdp_detail'] ); ?></small>
+						<?php endif; ?>
 					</td>
 					<td>
 						<?php if ( ! empty( $row['cleared_by'] ) ) : ?>
@@ -331,7 +275,24 @@ $guard_enabled = isset( $data['guard_enabled'] ) ? (bool) $data['guard_enabled']
 					</td>
 					<td><?php echo $row['cached_at'] ? esc_html( $row['cached_at'] ) : '—'; ?></td>
 					<td>
-						<?php if ( $st === 'missing' && 'vehicle' !== $group ) : ?>
+						<?php if ( ! empty( $row['vdp'] ) ) : ?>
+							<?php // VDP rows: Build fills the missing VINs, Flush drops live copies and refills. ?>
+							<?php if ( 'missing' === $st || ! empty( $row['vdp_gap'] ) ) : ?>
+								<button
+									class="button button-small button-primary soc-warm-api-cache-group"
+									data-group="<?php echo esc_attr( $group ); ?>"
+								>
+									<?php esc_html_e( 'Build Cache', 'shopperexpress' ); ?>
+								</button>
+							<?php endif; ?>
+							<button
+								class="button button-small soc-flush-api-cache-group"
+								data-group="<?php echo esc_attr( $group ); ?>"
+								<?php echo 'missing' === $st ? 'disabled' : ''; ?>
+							>
+								<?php esc_html_e( 'Flush', 'shopperexpress' ); ?>
+							</button>
+						<?php elseif ( $st === 'missing' ) : ?>
 							<button
 								class="button button-small button-primary soc-warm-api-cache-group"
 								data-group="<?php echo esc_attr( $group ); ?>"

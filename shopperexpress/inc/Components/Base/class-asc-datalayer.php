@@ -476,8 +476,8 @@ class ASC_Datalayer implements Theme_Component {
 			// get_post_type() reads global $post, which Intice_VDP never sets for
 			// its faked query (only queried_object) — use that instead.
 			'item_type'           => $this->resolve_item_type( (string) ( get_queried_object()->post_type ?? '' ) ),
-			'item_category'       => $this->normalize( $v['body_style'] ?? '' ),
-			'item_fuel_type'      => $this->normalize( $v['fuel_type'] ?? '' ),
+			'item_category'       => $this->normalize( \App\resolve_vehicle_field( $v, 'body_style' ) ),
+			'item_fuel_type'      => $this->normalize( \App\resolve_vehicle_field( $v, 'fuel_type' ) ),
 			'item_inventory_date' => $this->normalize( $v['dateinstock'] ?? '' ),
 		);
 	}

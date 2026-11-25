@@ -199,6 +199,31 @@ class Ajax implements Theme_Component {
 			wp_die( 'No post type.' );
 		}
 
+		// API mode: the legacy command below clears WP-mode caches and does nothing
+		// for Nexus data. Refresh the VDP, SRP and feed caches for this inventory
+		// directly instead (admins/editors only — same gate as the edit modal).
+		if ( \App\is_api_mode() ) {
+			if ( ! wps_check_current_usser() ) {
+				wp_send_json_error( array( 'message' => 'Unauthorized' ), 403 );
+			}
+
+			if ( ! in_array( $post_type, array( 'listings', 'used-listings' ), true ) ) {
+				wp_send_json_error( array( 'message' => 'Unknown inventory type.' ) );
+			}
+
+			$user   = wp_get_current_user();
+			$result = ( new \App\Components\Api\Intice_Rest() )->refresh_condition_cache(
+				'used-listings' === $post_type ? 'used' : 'new',
+				$user->user_email ?: 'unknown'
+			);
+
+			if ( is_wp_error( $result ) ) {
+				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+			}
+
+			wp_send_json_success( array( 'message' => __( 'Cache cleared and rebuilt.', 'shopperexpress' ) ) );
+		}
+
 		$command = "wp api clear {$post_type} --clear=true";
 		exec( escapeshellcmd( $command ) . ' > /dev/null 2>&1 &' );
 
@@ -993,7 +1018,10 @@ class Ajax implements Theme_Component {
 			wp_send_json_error( array( 'message' => 'Invalid VIN' ) );
 		}
 
-		// Top-level API vehicle fields.
+		// Top-level API vehicle fields. body_style, fuel_type and transmission are
+		// deliberately NOT here: Nexus only accepts them inside `payload` (a
+		// top-level PATCH of them is rejected with "No updatable fields provided"),
+		// and the VDP reads them payload-first (see resolve_vehicle_field()).
 		$top_level_fields = array(
 			'year',
 			'make',
@@ -1008,10 +1036,7 @@ class Ajax implements Theme_Component {
 			'stock',
 			'exterior_color',
 			'interior_color',
-			'body_style',
 			'drivetrain',
-			'fuel_type',
-			'transmission',
 			'certified',
 			'sold',
 			'use_images_list',
@@ -1055,7 +1080,31 @@ class Ajax implements Theme_Component {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Data saved successfully!', 'shopperexpress' ) ) );
+		// update_vehicle() dropped this VIN's cached copy. Re-read it now so the
+		// VDP shows the edit on the next load, and refresh the lists/SRP cards that
+		// embed it (the vehicle's own condition says which inventory to refresh).
+		$message = __( 'Data saved successfully!', 'shopperexpress' );
+		$client  = \App\Components\Api\Intice_Api_Client::instance();
+		$fresh   = \App\Components\Api\Intice_Api_Client::force_fresh( fn() => $client->get_vehicle( $vin ) );
+
+		$condition = ! is_wp_error( $fresh ) ? \App\Components\Api\Intice_Api_Client::condition_of( (array) ( $fresh['data'] ?? array() ) ) : '';
+		$user      = wp_get_current_user();
+		$refreshed = '' !== $condition
+			? ( new \App\Components\Api\Intice_Rest() )->refresh_condition_cache( $condition, $user->user_email ?: 'unknown', (array) $fresh['data'] )
+			: new \WP_Error( 'unknown_condition', 'Could not read the vehicle back from Nexus.' );
+
+		if ( is_wp_error( $refreshed ) ) {
+			// The edit itself is saved — fall back to the background (stale-while-
+			// revalidate) refresh so listing pages catch up shortly.
+			foreach ( array( 'listings', 'used-listings' ) as $pt ) {
+				\App\Components\Api\Intice_Rest::clear_cache( $pt, false );
+				\App\Components\Api\Intice_Rest::clear_cache( $pt, true );
+			}
+
+			$message .= ' ' . __( 'Listing pages will refresh shortly.', 'shopperexpress' );
+		}
+
+		wp_send_json_success( array( 'message' => $message ) );
 	}
 
 	/**

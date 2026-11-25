@@ -47,6 +47,7 @@ class SOC_Ajax {
 		'soc_view_pt_keys'       => 'handle_view_pt_keys',
 		'soc_pt_cache_status'    => 'handle_pt_cache_status',
 		'soc_test_api'           => 'handle_test_api',
+		'soc_twilio_test_sms'    => 'handle_twilio_test_sms',
 		'soc_dismiss_notice'     => 'handle_dismiss_notice',
 		'soc_vin_lookup'         => 'handle_vin_lookup',
 		'soc_vin_clear_history'  => 'handle_vin_clear_history',
@@ -55,12 +56,14 @@ class SOC_Ajax {
 		'soc_im_toggle'               => 'handle_im_toggle',
 		'soc_api_mode_toggle'         => 'handle_api_mode_toggle',
 		'soc_team_mode_toggle'        => 'handle_team_mode_toggle',
+		'soc_llm_inventory_toggle'    => 'handle_llm_inventory_toggle',
 		'soc_api_save_credentials'    => 'handle_api_save_credentials',
 		'soc_api_test_connection'     => 'handle_api_test_connection',
 		'soc_flush_api_cache'         => 'handle_flush_api_cache',
 		'soc_flush_api_cache_group'   => 'handle_flush_api_cache_group',
 		'soc_warm_api_cache_group'    => 'handle_warm_api_cache_group',
 		'soc_cache_rebuild_status'    => 'handle_cache_rebuild_status',
+		'soc_intice_vdp_ttl_save'     => 'handle_intice_vdp_ttl_save',
 		'soc_intice_cache_toggle'     => 'handle_intice_cache_toggle',
 		'soc_intice_guard_toggle'     => 'handle_intice_guard_toggle',
 		'soc_api_save_filters'        => 'handle_api_save_filters',
@@ -92,6 +95,9 @@ class SOC_Ajax {
 		'soc_google_reviews_save_min_rating' => 'handle_google_reviews_save_min_rating',
 		// Video Provider.
 		'soc_video_provider_save'            => 'handle_video_provider_save',
+		// Countdown Timers.
+		'soc_countdown_save'                 => 'handle_countdown_save',
+		'soc_countdown_delete'               => 'handle_countdown_delete',
 	);
 
 	/**
@@ -493,6 +499,32 @@ class SOC_Ajax {
 	}
 
 	/**
+	 * Sends a real test SMS via Twilio to confirm the configured credentials
+	 * and sender number can actually deliver a message.
+	 */
+	private function handle_twilio_test_sms(): void {
+		$phone = sanitize_text_field( wp_unslash( $_POST['phone'] ?? '' ) );
+
+		if ( empty( $phone ) ) {
+			SOC_Response::error( 'Phone number required.' );
+		}
+
+		$module = $this->modules['api-health'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Health module not available.' );
+		}
+
+		$result = $module->send_test_sms( $phone );
+
+		if ( ! $result['ok'] ) {
+			SOC_Response::error( $result['error'] ?? 'Twilio test SMS failed.' );
+		}
+
+		SOC_Response::success( $result );
+	}
+
+	/**
 	 * Dismisses a specific admin notice until changed in the DB/options.
 	 */
 	private function handle_dismiss_notice(): void {
@@ -664,6 +696,51 @@ class SOC_Ajax {
 	}
 
 	/**
+	 * Create or update a countdown timer.
+	 */
+	private function handle_countdown_save(): void {
+		$module = $this->modules['countdown-timers'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Countdown Timers module not available.' );
+		}
+
+		$slug = sanitize_key( wp_unslash( $_POST['slug'] ?? '' ) );
+		$raw  = isset( $_POST['timer'] ) && is_array( $_POST['timer'] ) ? wp_unslash( $_POST['timer'] ) : array();
+
+		$result = $module->save_timer( $slug, $raw );
+
+		if ( is_wp_error( $result ) ) {
+			SOC_Response::error( $result->get_error_message() );
+		}
+
+		SOC_Logger::write( 'general', 'Countdown timer saved: ' . $result );
+
+		SOC_Response::success( array( 'slug' => $result ) );
+	}
+
+	/**
+	 * Delete a countdown timer.
+	 */
+	private function handle_countdown_delete(): void {
+		$module = $this->modules['countdown-timers'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'Countdown Timers module not available.' );
+		}
+
+		$slug = sanitize_key( wp_unslash( $_POST['slug'] ?? '' ) );
+
+		if ( ! $module->delete_timer( $slug ) ) {
+			SOC_Response::error( 'Timer not found.' );
+		}
+
+		SOC_Logger::write( 'general', 'Countdown timer deleted: ' . $slug );
+
+		SOC_Response::success( array( 'slug' => $slug ) );
+	}
+
+	/**
 	 * Toggle the "Team Members (Intice)" block feed — independent of the
 	 * Listings API mode toggle above.
 	 */
@@ -679,6 +756,19 @@ class SOC_Ajax {
 		$new_state = $module->set_team_mode( $enabled );
 
 		SOC_Logger::write( 'general', 'Team Members mode toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
+
+		SOC_Response::success( array( 'enabled' => $new_state ) );
+	}
+
+	/**
+	 * Toggle the /llm/inventory/ AI-readable inventory page on/off (staged rollout).
+	 */
+	private function handle_llm_inventory_toggle(): void {
+		$enabled = (bool) absint( $_POST['enabled'] ?? 0 );
+
+		$new_state = \App\Components\Base\Llm_Inventory::set_enabled( $enabled );
+
+		SOC_Logger::write( 'general', 'AI inventory page (/llm/inventory/) toggled: ' . ( $new_state ? 'enabled' : 'disabled' ) );
 
 		SOC_Response::success( array( 'enabled' => $new_state ) );
 	}
@@ -745,10 +835,10 @@ class SOC_Ajax {
 	 */
 	private function handle_intice_guard_toggle(): void {
 		$enabled = (bool) absint( $_POST['enabled'] ?? 1 );
-		$module  = $this->modules['api-settings'] ?? null;
+		$module  = $this->modules['general-settings'] ?? null;
 
 		if ( ! $module ) {
-			SOC_Response::error( 'API Settings module not available.' );
+			SOC_Response::error( 'General Settings module not available.' );
 		}
 
 		$new_state = $module->set_guard_enabled( $enabled );
@@ -821,7 +911,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'vehicle', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'vehicle', 'vehicle-new', 'vehicle-used', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
@@ -846,7 +936,7 @@ class SOC_Ajax {
 			SOC_Response::error( 'API Settings module not available.' );
 		}
 
-		$valid_groups = array( 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed' );
+		$valid_groups = array( 'vehicles', 'meta', 'team', 'new', 'used', 'new-custom', 'used-custom', 'feed', 'vehicle-new', 'vehicle-used' );
 
 		if ( ! in_array( $group, $valid_groups, true ) ) {
 			SOC_Response::error( 'Invalid cache group.' );
@@ -861,6 +951,27 @@ class SOC_Ajax {
 		SOC_Logger::write( 'cache', "Intice API cache group [{$group}] built via SOC" );
 
 		SOC_Response::success( array( 'group' => $group ) );
+	}
+
+	/**
+	 * Save the VDP cache TTL.
+	 *
+	 * Expected POST: ttl (seconds, one of Api_Settings::get_vdp_ttl_options()).
+	 */
+	private function handle_intice_vdp_ttl_save(): void {
+		$module = $this->modules['api-settings'] ?? null;
+
+		if ( ! $module ) {
+			SOC_Response::error( 'API Settings module not available.' );
+		}
+
+		if ( ! $module->set_vdp_ttl( absint( $_POST['ttl'] ?? 0 ) ) ) {
+			SOC_Response::error( 'Invalid TTL.' );
+		}
+
+		SOC_Logger::write( 'cache', 'Intice VDP cache TTL set to ' . absint( $_POST['ttl'] ) . 's' );
+
+		SOC_Response::success( array( 'message' => 'VDP cache TTL saved.' ) );
 	}
 
 	/**

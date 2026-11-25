@@ -258,14 +258,19 @@ function initFormPagesHandler(form) {
   // WPForms renders page buttons as disabled and only enables them once, on
   // page load (wpforms-modern.js initPageBreakButtons), which never runs for
   // forms injected later. Enable them now and again after the re-injected
-  // wpforms.min.js finishes its own (async) init.
+  // wpforms.min.js finishes its own (async) init. "Next" stays disabled until
+  // every required field of its page is filled — WPForms' navigateToPage()
+  // ignores clicks on a .wpforms-disabled button.
   const enablePageButtons = () => {
-    pageButtons.removeClass('wpforms-disabled').attr('aria-disabled', 'false').attr('aria-describedby', '');
+    pageButtons.not('.wpforms-page-next').removeClass('wpforms-disabled').attr('aria-disabled', 'false').attr('aria-describedby', '');
+    updateNextButtons(form);
   };
 
   enablePageButtons();
   jQuery(document).one('wpformsReady', enablePageButtons);
   setTimeout(enablePageButtons, 0);
+
+  form.on('input change keyup', 'input, textarea, select', () => updateNextButtons(form));
 
   form.find('.wpforms-page-next').on('click', () => {
     // Wait for the last page to be shown
@@ -275,6 +280,53 @@ function initFormPagesHandler(form) {
       }
     }, 100);
   });
+}
+
+/**
+ * Enable each "Next" button only when all required fields on its page are filled.
+ *
+ * @param {jQuery} form
+ */
+function updateNextButtons(form) {
+  form.find('.wpforms-page-next').each(function () {
+    const button = jQuery(this);
+    const page = button.closest('.wpforms-page');
+    const isComplete = isPageComplete(page.length ? page : form);
+
+    button.toggleClass('wpforms-disabled', !isComplete).attr('aria-disabled', String(!isComplete)).attr('aria-describedby', '');
+  });
+}
+
+/**
+ * @param {jQuery} page
+ * @return {boolean}
+ */
+function isPageComplete(page) {
+  const checkedGroups = {};
+
+  return page
+    .find('input[required], textarea[required], select[required]')
+    .toArray()
+    .every((field) => {
+      // Fields hidden by conditional logic aren't submitted, so they don't count.
+      if (field.disabled || field.closest('.wpforms-conditional-hide')) return true;
+
+      if (field.type === 'checkbox' || field.type === 'radio') {
+        if (!(field.name in checkedGroups)) {
+          checkedGroups[field.name] = !!page.find(`input[name="${CSS.escape(field.name)}"]:checked`).length;
+        }
+
+        return checkedGroups[field.name];
+      }
+
+      if (!field.value.trim()) return false;
+
+      // Masked inputs (phone, ZIP) hold placeholder chars until fully typed.
+      if (field.inputmask && typeof field.inputmask.isComplete === 'function' && !field.inputmask.isComplete()) return false;
+
+      // Native type checks, e.g. a malformed e-mail.
+      return field.checkValidity();
+    });
 }
 
 function initTwillioAPI(form, isHideStep = true) {

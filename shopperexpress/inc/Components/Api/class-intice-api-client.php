@@ -197,8 +197,7 @@ class Intice_Api_Client {
 			// ghost VDP page until the stale entry's own ~2h TTL happens to lapse.
 			// Any other error (timeout, 5xx, network) is treated as transient, so
 			// still falls back to stale rather than taking down a working page.
-			if ( 404 === (int) ( $response->get_error_data()['status'] ?? 0 ) ) {
-				delete_transient( $live_key );
+			if ( 404 === (int) ( $response->get_error_data()['status'] ?? 0 ) ) {				delete_transient( $live_key );
 				delete_transient( $stale_key );
 				self::untrack_key( $live_key );
 				self::untrack_key( $stale_key );
@@ -212,10 +211,228 @@ class Intice_Api_Client {
 		}
 
 		if ( self::$regenerating || $this->is_cache_enabled() ) {
-			$this->store( $live_key, $stale_key, 'vehicle', self::CACHE_TTL_VEHICLE, $response );
+			$this->store(
+				$live_key,
+				$stale_key,
+				'vehicle',
+				self::get_vdp_ttl(),
+				$response,
+				array( 'condition' => self::condition_of( (array) ( $response['data'] ?? array() ) ) )
+			);
 		}
 
 		return $response;
+	}
+
+	/**
+	 * Live TTL for per-VIN VDP cache entries — admin-configurable in SOC → API
+	 * Settings (Api_Settings::OPTION_VDP_TTL), defaulting to CACHE_TTL_VEHICLE.
+	 *
+	 * @return int Seconds.
+	 */
+	public static function get_vdp_ttl(): int {
+		$ttl = (int) get_option( Api_Settings::OPTION_VDP_TTL, self::CACHE_TTL_VEHICLE );
+
+		return array_key_exists( $ttl, Api_Settings::get_vdp_ttl_options() ) ? $ttl : self::CACHE_TTL_VEHICLE;
+	}
+
+	/**
+	 * Which VDP cache bucket ('new' or 'used') a vehicle belongs to.
+	 *
+	 * @param array $vehicle Nexus vehicle array.
+	 * @return string 'new'|'used'
+	 */
+	public static function condition_of( array $vehicle ): string {
+		return 'used' === strtolower( (string) ( $vehicle['condition'] ?? '' ) ) ? 'used' : 'new';
+	}
+
+	/**
+	 * VINs from the already-cached vehicle list for a condition — reads the
+	 * transient only (live, then stale), never hits Nexus. Lets SOC show
+	 * "N of M cached" and the warm job pick its VINs without a network call.
+	 *
+	 * @param string $condition 'new'|'used'.
+	 * @return string[] Uppercase VINs, empty when no list is cached.
+	 */
+	public static function get_cached_vins( string $condition ): array {
+		// Same key derivation as get_vehicles()/commit_vehicles().
+		$filters         = array( 'condition' => 'used' === $condition ? 'used' : 'new' );
+		$filters['mode'] = 'full';
+		$hash            = md5( serialize( $filters ) );
+
+		$list = get_transient( self::CACHE_PREFIX . 'vehicles_' . $hash );
+		if ( false === $list ) {
+			$list = get_transient( self::CACHE_PREFIX_STALE . 'vehicles_' . $hash );
+		}
+
+		return self::extract_vins( is_array( $list ) ? $list : array() );
+	}
+
+	/**
+	 * The still-valid (live, not stale) cached vehicle list for a condition, or
+	 * null. Never hits Nexus.
+	 *
+	 * @param string $condition 'new'|'used'.
+	 * @return array|null Full list response (`data`, `meta`, ...).
+	 */
+	public static function get_live_cached_list( string $condition ): ?array {
+		$filters         = array( 'condition' => 'used' === $condition ? 'used' : 'new' );
+		$filters['mode'] = 'full';
+
+		$list = get_transient( self::CACHE_PREFIX . 'vehicles_' . md5( serialize( $filters ) ) );
+
+		return is_array( $list ) ? $list : null;
+	}
+
+	/**
+	 * Pull the VINs out of a Nexus vehicle-list response.
+	 *
+	 * @param array $response Response from get_vehicles()/fetch_vehicles_raw().
+	 * @return string[]
+	 */
+	public static function extract_vins( array $response ): array {
+		$vins = array();
+
+		foreach ( (array) ( $response['data'] ?? array() ) as $vehicle ) {
+			$vin = is_array( $vehicle ) ? strtoupper( trim( (string) ( $vehicle['vin'] ?? '' ) ) ) : '';
+
+			if ( '' !== $vin ) {
+				$vins[ $vin ] = $vin;
+			}
+		}
+
+		return array_values( $vins );
+	}
+
+	/**
+	 * Write per-VIN VDP cache entries straight from vehicle-list responses the
+	 * caller already holds, so no extra Nexus requests are needed — a list item
+	 * (mode=full) is the same object GET /vehicles/{vin} returns under `data`.
+	 *
+	 * VINs that were cached but are absent from the fresh lists (sold/deleted in
+	 * Nexus) are purged, live + stale. The purge only runs when at least one
+	 * vehicle was written, so an empty/failed list can never wipe the cache —
+	 * unless $prune_when_empty is set, for callers that just got a successful
+	 * (authoritative) response and want an empty inventory to clear the cache.
+	 *
+	 * @param array<string,array> $by_condition 'new'|'used' => list response.
+	 * @param bool                $prune_when_empty Prune even when nothing was written.
+	 * @return int Number of vehicles written.
+	 */
+	public function commit_vdp_from_lists( array $by_condition, bool $prune_when_empty = false ): int {
+		$ttl      = self::get_vdp_ttl();
+		$now      = time();
+		$registry = self::get_registry();
+		$keep     = array();
+		$written  = 0;
+		$scope    = array();
+
+		foreach ( $by_condition as $condition => $response ) {
+			if ( ! is_array( $response ) ) {
+				continue;
+			}
+
+			$condition = 'used' === $condition ? 'used' : 'new';
+			$scope[ $condition ] = true;
+
+			foreach ( (array) ( $response['data'] ?? array() ) as $vehicle ) {
+				$vin = is_array( $vehicle ) ? strtoupper( trim( (string) ( $vehicle['vin'] ?? '' ) ) ) : '';
+
+				if ( '' === $vin ) {
+					continue;
+				}
+
+				$payload = array( 'data' => $vehicle );
+				if ( isset( $response['site'] ) ) {
+					$payload = array( 'site' => $response['site'] ) + $payload;
+				}
+
+				$live_key  = self::CACHE_PREFIX . 'vehicle_' . $vin;
+				$stale_key = self::CACHE_PREFIX_STALE . 'vehicle_' . $vin;
+
+				set_transient( $live_key, $payload, $ttl );
+				set_transient( $stale_key, $payload, self::STALE_TTL );
+
+				$base = array(
+					'group'      => 'vehicle',
+					'fetched_at' => $now,
+					'condition'  => $condition,
+				);
+
+				$registry[ $live_key ]  = array( 'expires_at' => $now + $ttl ) + $base;
+				$registry[ $stale_key ] = array( 'expires_at' => $now + self::STALE_TTL ) + $base;
+
+				$keep[ $live_key ]  = true;
+				$keep[ $stale_key ] = true;
+				++$written;
+			}
+		}
+
+		if ( $written > 0 || ( $prune_when_empty && $scope ) ) {
+			foreach ( $registry as $key => $meta ) {
+				// Only prune the conditions whose full list was passed in — a
+				// single-condition build must not touch the other condition's entries
+				// (entries without a recorded condition are legacy: always prunable).
+				$in_scope = ! isset( $meta['condition'] ) || isset( $scope[ $meta['condition'] ] );
+
+				if ( 'vehicle' === ( $meta['group'] ?? '' ) && $in_scope && ! isset( $keep[ $key ] ) ) {
+					delete_transient( $key );
+					unset( $registry[ $key ] );
+				}
+			}
+		}
+
+		update_option( self::REGISTRY_OPTION, $registry, false );
+
+		return $written;
+	}
+
+	/**
+	 * Drop the live VDP copies for one condition (or all when null), keeping the
+	 * stale-while-revalidate copies so pages keep rendering while they refill.
+	 * Entries written before conditions were tracked match every condition.
+	 *
+	 * @param string|null $condition 'new'|'used'|null.
+	 * @return int Live entries removed.
+	 */
+	public static function purge_vdp_live( ?string $condition = null ): int {
+		$registry = self::get_registry();
+		$removed  = 0;
+
+		foreach ( $registry as $key => $meta ) {
+			if ( 'vehicle' !== ( $meta['group'] ?? '' ) || 0 !== strpos( $key, self::CACHE_PREFIX ) ) {
+				continue;
+			}
+
+			if ( null !== $condition && isset( $meta['condition'] ) && $meta['condition'] !== $condition ) {
+				continue;
+			}
+
+			delete_transient( $key );
+			unset( $registry[ $key ] );
+			++$removed;
+		}
+
+		update_option( self::REGISTRY_OPTION, $registry, false );
+
+		return $removed;
+	}
+
+	/**
+	 * Targeted refresh of one VIN (Nexus webhook): drop its live copy and queue a
+	 * background re-fetch. The stale copy keeps being served meanwhile, and a
+	 * 404 on re-fetch purges it for good (see get_vehicle()).
+	 *
+	 * @param string $vin 17-character VIN.
+	 * @return void
+	 */
+	public function refresh_vehicle( string $vin ): void {
+		$vin      = strtoupper( trim( $vin ) );
+		$live_key = self::CACHE_PREFIX . 'vehicle_' . $vin;
+
+		delete_transient( $live_key );
+		self::untrack_key( $live_key );
+		self::schedule_vdp_regen( $vin );
 	}
 
 	/**
@@ -477,7 +694,7 @@ class Intice_Api_Client {
 			if ( false !== $value ) {
 				$stale_key = str_replace( self::CACHE_PREFIX, self::CACHE_PREFIX_STALE, $key );
 				set_transient( $stale_key, $value, self::STALE_TTL );
-				self::track_key( $stale_key, $meta['group'] ?? '', self::STALE_TTL );
+				self::track_key( $stale_key, $meta['group'] ?? '', self::STALE_TTL, $meta['fetched_at'] ?? null );
 			}
 
 			delete_transient( $key );
@@ -560,11 +777,13 @@ class Intice_Api_Client {
 	 * @param mixed  $value
 	 * @return void
 	 */
-	private function store( string $live_key, string $stale_key, string $group, int $ttl, $value ): void {
+	private function store( string $live_key, string $stale_key, string $group, int $ttl, $value, array $extra = array() ): void {
 		set_transient( $live_key, $value, $ttl );
 		set_transient( $stale_key, $value, self::STALE_TTL );
-		self::track_key( $live_key, $group, $ttl );
-		self::track_key( $stale_key, $group, self::STALE_TTL );
+		$fetched_at = time();
+
+		self::track_key( $live_key, $group, $ttl, $fetched_at, $extra );
+		self::track_key( $stale_key, $group, self::STALE_TTL, $fetched_at, $extra );
 	}
 
 	/**
@@ -645,12 +864,15 @@ class Intice_Api_Client {
 	 * Record a cache key so status/flush works regardless of storage backend
 	 * (DB transients vs. persistent object cache).
 	 *
-	 * @param string $key   Transient key.
-	 * @param string $group 'vehicles', 'vehicle', or 'meta'.
-	 * @param int    $ttl   Seconds until expiry, from now.
+	 * @param string   $key        Transient key.
+	 * @param string   $group      'vehicles', 'vehicle', or 'meta'.
+	 * @param int      $ttl        Seconds until expiry, from now.
+	 * @param int|null $fetched_at When the cached data was fetched from Nexus
+	 *                             (kept when a live copy is re-saved as stale).
+	 * @param array    $extra      Extra registry fields (e.g. 'condition' for VDP entries).
 	 * @return void
 	 */
-	public static function track_key( string $key, string $group, int $ttl ): void {
+	public static function track_key( string $key, string $group, int $ttl, ?int $fetched_at = null, array $extra = array() ): void {
 		$registry = get_option( self::REGISTRY_OPTION, array() );
 
 		// Prune long-expired entries so the registry doesn't grow unbounded — unlike DB
@@ -663,11 +885,45 @@ class Intice_Api_Client {
 			}
 		}
 
-		$registry[ $key ] = array(
+		$registry[ $key ] = $extra + array(
 			'group'      => $group,
 			'expires_at' => $now + $ttl,
 		);
+
+		if ( null !== $fetched_at ) {
+			$registry[ $key ]['fetched_at'] = $fetched_at;
+		}
+
 		update_option( self::REGISTRY_OPTION, $registry, false );
+	}
+
+	/**
+	 * When the vehicle list for these filters was last successfully fetched from
+	 * Nexus — from whichever of its live/stale cache copies is still tracked.
+	 *
+	 * @param array $filters Same filters as get_vehicles().
+	 * @return int|null Unix time, or null when nothing is cached.
+	 */
+	public static function get_vehicles_fetched_at( array $filters ): ?int {
+		$filters['mode'] = 'full';
+
+		$hash     = md5( serialize( $filters ) );
+		$registry = self::get_registry();
+		$times    = array();
+
+		foreach ( array(
+			self::CACHE_PREFIX . 'vehicles_' . $hash       => self::CACHE_TTL_VEHICLES,
+			self::CACHE_PREFIX_STALE . 'vehicles_' . $hash => self::STALE_TTL,
+		) as $key => $ttl ) {
+			if ( empty( $registry[ $key ] ) ) {
+				continue;
+			}
+
+			// Entries written before fetched_at existed: expires_at - ttl is the write time.
+			$times[] = (int) ( $registry[ $key ]['fetched_at'] ?? ( $registry[ $key ]['expires_at'] - $ttl ) );
+		}
+
+		return $times ? max( $times ) : null;
 	}
 
 	/**

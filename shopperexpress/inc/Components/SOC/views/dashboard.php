@@ -67,7 +67,7 @@ defined( 'ABSPATH' ) || exit; ?>
 				<div class="soc-main__header">
 					<div class="soc-main__titles">
 						<nav class="soc-breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'shopperexpress' ); ?>">
-							<a href="<?php echo esc_url( admin_url( 'admin.php?page=soc-' . self::GROUPS['core']['modules'][0] ) ); ?>"><?php esc_html_e( 'Operation Center', 'shopperexpress' ); ?></a>
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $this->top_level_slug() ) ); ?>"><?php esc_html_e( 'Operation Center', 'shopperexpress' ); ?></a>
 							<span aria-hidden="true">/</span>
 							<span><?php echo esc_html( self::GROUPS[ $active_group ]['label'] ); ?></span>
 						</nav>
