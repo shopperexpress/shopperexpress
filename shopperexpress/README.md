@@ -285,6 +285,21 @@ Lead Delivery restricts which forms may use the API leg (everything else still d
 | Custom shortcodes | `inc/theme-functions.php` (`init` hook) | Admin-defined `[sc_{name}]` shortcodes from a Theme Options repeater — see Operation Center → Shortcodes |
 | Template/shortcode export | `class-export.php` | Admin export/import for ACF Flexible Content page templates and custom shortcodes |
 
+### AI-readable inventory page (`/llm/inventory/`)
+
+`class-llm-inventory.php` + `template-parts/llm/inventory.php`. A server-rendered, JS-free HTML
+list of eligible new / used / certified vehicles (50 per page, `/llm/inventory/page/N/`), for AI
+assistants and search crawlers. It improves discoverability only — it is **not** a guaranteed
+ChatGPT listing and **not** a Business Hub product feed (that is a separate integration).
+
+- **Off by default.** Enable in SOC → API Settings ("AI inventory page"). Disabled = routes fall through to a normal 404.
+- **Source of truth.** API mode: same lists and `Intice_Rest::apply_vehicle_filters()` as the SRP. CPT mode: published `listings` / `used-listings`. Missing fields are omitted, never invented; a missing price renders "Price not listed".
+- **Update frequency.** No separate snapshot — the page reads the SRP's vehicle cache: live copy 10 min, stale fallback 2 h, refetched after every Nexus import. CPT mode reads the DB on every request. Header shows "Last updated"; a warning banner appears when a feed failed, data is older than 3 h (`Llm_Inventory::STALE_AFTER`) or the last post-import rebuild failed.
+- **Discovery.** `llm-inventory-sitemap.xml` (listed in Yoast's `sitemap_index.xml`, `lastmod` = data refresh time), a "Vehicle Inventory" section in `/llms.txt` (appended to Yoast's file, or served by the theme if none exists), `rel=prev/next` + canonical on every page.
+- **Structured data.** The page emits only a `CollectionPage` + `ItemList` of VDP URLs — no `Vehicle`/`Offer` schema, so it can't duplicate or conflict with the VDP JSON-LD. VDP links come from `Intice_VDP::vdp_url()` (same canonical as the VDP).
+- **Known caveat.** The page's availability badge uses `payload['vehicle_status']`; the VDP JSON-LD availability is a static SOC setting (default `InStock`) and does not follow vehicle status.
+- **Not handled by the theme.** `robots.txt` and CDN/WAF rules (e.g. allowing `OAI-SearchBot`) are server/hosting config and must be confirmed with the client before any change.
+
 ### External integrations
 
 | Service | Location | Notes |

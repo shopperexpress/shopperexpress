@@ -333,7 +333,12 @@ class Llm_Inventory implements Theme_Component {
 			return $content;
 		}
 
-		$content .= '<sitemap><loc>' . esc_url( home_url( '/llm-inventory-sitemap.xml' ) ) . '</loc><lastmod>' . esc_html( gmdate( 'c' ) ) . "</lastmod></sitemap>\n";
+		// lastmod = when the inventory data was last refreshed (omitted when unknown,
+		// rather than claiming "now").
+		$data    = \App\get_llm_inventory_page( 1, self::PER_PAGE );
+		$lastmod = ! empty( $data['last_updated_ts'] ) ? '<lastmod>' . esc_html( gmdate( 'c', (int) $data['last_updated_ts'] ) ) . '</lastmod>' : '';
+
+		$content .= '<sitemap><loc>' . esc_url( home_url( '/llm-inventory-sitemap.xml' ) ) . '</loc>' . $lastmod . "</sitemap>\n";
 
 		return $content;
 	}
