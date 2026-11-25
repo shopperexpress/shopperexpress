@@ -78,7 +78,6 @@ class Export implements Theme_Component {
 			admin_url( 'admin-post.php' )
 		);
 
-		$confirm = __( 'Replace shortcodes in the page title, excerpt and SEO title/description with their rendered text and reload the page? Unsaved changes in the editor will be lost. This cannot be undone.', 'shopperexpress' );
 		?>
 		<style>
 			#acf_flexible_export .inside { margin: 0; padding: 0; }
@@ -97,6 +96,20 @@ class Export implements Theme_Component {
 			.se-xi-drop input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 			.se-xi-drop u { color: #2271b1; }
 			.se-xi-file { word-break: break-all; font-weight: 600; }
+			.se-modal[hidden] { display: none; }
+			.se-modal { position: fixed; inset: 0; z-index: 100100; display: flex; align-items: center; justify-content: center; padding: 16px; }
+			.se-modal__backdrop { position: absolute; inset: 0; background: rgba(29, 35, 39, .6); animation: se-fade .15s ease-out; }
+			.se-modal__dialog { position: relative; width: 100%; max-width: 420px; box-sizing: border-box; padding: 28px 28px 20px; background: #fff; border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, .3); text-align: center; animation: se-pop .18s ease-out; }
+			.se-modal__icon { width: 52px; height: 52px; margin: 0 auto 14px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: #fcf9e8; color: #dba617; }
+			.se-modal__icon .dashicons { width: 30px; height: 30px; font-size: 30px; }
+			.se-modal__title { margin: 0 0 8px; padding: 0; font-size: 18px; font-weight: 600; line-height: 1.3; color: #1d2327; }
+			.se-modal__text { margin: 0 0 12px; color: #50575e; font-size: 13px; line-height: 1.5; }
+			.se-modal__list { margin: 0 0 20px; padding: 10px 12px 10px 28px; text-align: left; list-style: disc; background: #f6f7f7; border-radius: 4px; color: #3c434a; font-size: 12px; line-height: 1.6; }
+			.se-modal__actions { display: flex; gap: 8px; justify-content: center; }
+			.se-modal__actions .button { margin: 0; min-width: 120px; height: 36px; display: inline-flex; align-items: center; justify-content: center; }
+			@keyframes se-fade { from { opacity: 0; } to { opacity: 1; } }
+			@keyframes se-pop { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+			@media (prefers-reduced-motion: reduce) { .se-modal__backdrop, .se-modal__dialog { animation: none; } }
 		</style>
 
 		<div class="se-xi-section">
@@ -124,10 +137,27 @@ class Export implements Theme_Component {
 
 		<div class="se-xi-section">
 			<div class="se-xi-label"><?php esc_html_e( 'Tools', 'shopperexpress' ); ?></div>
-			<a href="<?php echo esc_url( $flatten_url ); ?>" class="button" onclick="return confirm(<?php echo esc_attr( wp_json_encode( $confirm ) ); ?>);">
+			<a href="<?php echo esc_url( $flatten_url ); ?>" class="button" id="se-xi-flatten-<?php echo $id; ?>">
 				<?php esc_html_e( 'Convert title/SEO shortcodes to text', 'shopperexpress' ); ?>
 			</a>
 			<p class="se-xi-note"><?php esc_html_e( 'Replaces shortcodes in the title and SEO fields with their current values.', 'shopperexpress' ); ?></p>
+		</div>
+
+		<div class="se-modal" id="se-modal-<?php echo $id; ?>" hidden>
+			<div class="se-modal__backdrop" data-se-close></div>
+			<div class="se-modal__dialog" role="alertdialog" aria-modal="true" aria-labelledby="se-modal-title-<?php echo $id; ?>" aria-describedby="se-modal-desc-<?php echo $id; ?>">
+				<div class="se-modal__icon"><span class="dashicons dashicons-warning" aria-hidden="true"></span></div>
+				<h2 class="se-modal__title" id="se-modal-title-<?php echo $id; ?>"><?php esc_html_e( 'Convert shortcodes to text?', 'shopperexpress' ); ?></h2>
+				<p class="se-modal__text" id="se-modal-desc-<?php echo $id; ?>"><?php esc_html_e( 'Shortcodes in the page title, excerpt and SEO title/description will be replaced with their rendered text.', 'shopperexpress' ); ?></p>
+				<ul class="se-modal__list">
+					<li><?php esc_html_e( 'The page will reload — unsaved changes in the editor will be lost.', 'shopperexpress' ); ?></li>
+					<li><?php esc_html_e( 'This cannot be undone.', 'shopperexpress' ); ?></li>
+				</ul>
+				<div class="se-modal__actions">
+					<button type="button" class="button" data-se-close><?php esc_html_e( 'Cancel', 'shopperexpress' ); ?></button>
+					<a href="<?php echo esc_url( $flatten_url ); ?>" class="button button-primary" data-se-confirm><?php esc_html_e( 'Convert and reload', 'shopperexpress' ); ?></a>
+				</div>
+			</div>
 		</div>
 
 		<script>
@@ -137,6 +167,29 @@ class Export implements Theme_Component {
 				const btn = document.getElementById('se-xi-import-<?php echo $id; ?>');
 				const text = drop.querySelector('.se-xi-text');
 				const sub = drop.querySelector('.se-xi-sub');
+
+				// Convert-shortcodes confirmation modal (moved to <body> so it overlays the whole admin).
+				const modal = document.getElementById('se-modal-<?php echo $id; ?>');
+				const flatten = document.getElementById('se-xi-flatten-<?php echo $id; ?>');
+				document.body.appendChild(modal);
+
+				function openModal(ev) {
+					ev.preventDefault();
+					modal.hidden = false;
+					modal.querySelector('[data-se-close].button').focus();
+				}
+				function closeModal() {
+					modal.hidden = true;
+					flatten.focus();
+				}
+				flatten.addEventListener('click', openModal);
+				modal.addEventListener('click', function (ev) {
+					if (ev.target.closest('[data-se-close]')) { closeModal(); }
+				});
+				document.addEventListener('keydown', function (ev) {
+					if (modal.hidden) { return; }
+					if (ev.key === 'Escape') { closeModal(); }
+				});
 
 				function sync() {
 					const has = input.files.length > 0;
