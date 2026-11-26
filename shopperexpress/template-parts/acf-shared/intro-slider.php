@@ -45,9 +45,13 @@ switch ( $show_slider ) {
 		$html = $html_offers_slides;
 }
 
+// If the first slide hides the search/CTA widget, render that state on the server so the widget
+// is not visible before view.js runs (e.g. when a cache plugin delays JS until user interaction).
+$first_slide_hides_widget = (bool) preg_match( '/^\s*<div class="slide[^"]*\bwidget-invisible\b/', $html );
+
 if ( $html ) :
 	?>
-	<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="visual<?php echo $no_margin ? ' m-0' : ''; ?>">
+	<div<?php echo $anchor ? ' id="' . esc_attr( $anchor ) . '"' : ''; ?> class="visual<?php echo $no_margin ? ' m-0' : ''; ?><?php echo $first_slide_hides_widget ? ' hide-search-widget' : ''; ?>">
 		<div class="visual-holder">
 			<div class="visual-slider slick-item" data-speed="<?php echo esc_html( $slider_speed ); ?>" data-autoplay-speed="<?php echo esc_html( $autoplay_speed ); ?>">
 				<?php echo $html; ?>
